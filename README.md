@@ -8,6 +8,7 @@ Literals
 - Floating: `12345.6`
 - String: `"abc"`
 - Boolean: `true` and `false`
+- Optional: `null`
 
 Types
 - Integers: `byte`, `shortint`, `int`, `longint`
@@ -31,11 +32,16 @@ Operators:
 - `in` (element in collection)
 - `:=`, `+=`, `-=`, `*=`, `/=`, `^=`
 
+Other keywords:
+- `break`, `continue`
+- `return`
+- `begin`, `end` (code blocks)
+
 Miscellaneous:
 - Declaring `main` method optional when using no other methods
 - `;` can be specified or inferred from newline
 - Language is statically, strongly typed with some type inference 
-
+- `for` can't use already declared variable
 
 ## Examples
 ### Hello World
