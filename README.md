@@ -7,7 +7,7 @@ Literals
 - Integer: `12345`
 - Floating: `12345.6`
 - String: `"abc"`
-- Boolean: `true`
+- Boolean: `true` and `false`
 
 Types
 - Integers: `byte`, `shortint`, `int`, `longint`
@@ -17,19 +17,19 @@ Types
 - Generic types: `list<type>`, `optional<type>`, `dict<type,type>`, `range<type>`
 
 Declaring:
-- Method: `method name(param1 : type, param2 : type) : return_type` (`return_type` optional)
+- Method: `method name(param1 : type, param2 : type) : return_type` (parameters and `return_type` optional)
 - Variable: `let name : type` (type can be inferred)
-- Constant: `const name : type`
 - Conditional: `if condition then [block] otherwise [block]` (`otherwise` optional)
-- For loop: `for var in elems do [block]` (`elems` can be list, range, dictionary)
+- For loop: `for var in collection do [block]` (`in` keyword skipped when using `from to` construct)
 - While loop: `while condition do [block]`
 
 Operators:
 - `+`, `-`, `*`, `/`, `mod`, `^` (power)
-- `and`, `or`, `not`
+- `and`, `or`, `xor`, `not`,
 - `=`, `>`, `>=`, `<`, `<=`, `=/=`
-- `to`, `step` (range operators)
-- `:=`, `+=`, `-=`, `*=`, `/=`
+- `from`, `to`, `by` (range operators, `from 1 to 10 by 3`)
+- `in` (element in collection)
+- `:=`, `+=`, `-=`, `*=`, `/=`, `^=`
 
 Miscellaneous:
 - declaring `main` method optional when using no other methods
@@ -42,7 +42,7 @@ writeline("Hello, world!")
 ```
 ### FizzBuzz
 ```
-for i in 1 to 100 do begin
+for i from 1 to 100 do begin
     let my_text := ""
     if i mod 3 = 0 then
         my_text += "Fizz"
@@ -64,7 +64,7 @@ end
 
 method main()
 begin
-    for i in 1 to 10 do
+    for i from 1 to 10 do
         writeline(factorial(i))
 end
 
