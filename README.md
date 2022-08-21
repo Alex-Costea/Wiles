@@ -19,9 +19,9 @@ Types
 
 Declaring:
 - Method: `method name(param1 : type, param2 : type) : return_type`
-- Variable: `let name : type`
+- Variable: `let name : type` (type can be inferred)
 - Conditional: `if condition then [block] otherwise [block]` (`otherwise` optional)
-- For loop: `for var in elems do [block]` (elems can be list, range, dictionary)
+- For loop: `for var in elems do [block]` (`elems` can be list, range, dictionary)
 - While loop: `while condition do [block]`
 
 Operators:
@@ -29,6 +29,7 @@ Operators:
 - `and`, `or`, `not`
 - `=`, `>`, `>=`, `<`, `<=`, `=/=`
 - `from`, `to` (range operator)
+- `:=` (assignment)
 
 ## Example:
 
@@ -37,7 +38,7 @@ method factorial(x : int) : longint
 begin
     if x = 0 then return 1
     otherwise begin
-        let last_factorial : int = factorial(x - 1)
+        let last_factorial := factorial(x - 1)
         return x * last_factorial
     end
 end
