@@ -1,6 +1,6 @@
 # Wiles
 
-## THIS IS EXTREMELY WIP
+## THIS IS A VERY WIP SPECIFICATION OF THE LANGUAGE
 
 Literals
 
@@ -18,7 +18,7 @@ Types
 - Range: `range` (integer types only)
 
 Declaring:
-- Method: `method name(param1 : type, param2 : type) : return_type`
+- Method: `method name(param1 : type, param2 : type) : return_type` (`return_type` optional)
 - Variable: `let name : type` (type can be inferred)
 - Conditional: `if condition then [block] otherwise [block]` (`otherwise` optional)
 - For loop: `for var in elems do [block]` (`elems` can be list, range, dictionary)
@@ -31,7 +31,28 @@ Operators:
 - `from`, `to` (range operator)
 - `:=` (assignment)
 
-## Example:
+Miscellaneous:
+- declaring `main` method optional when using no other methods
+- `;` inferred from newline
+
+## Examples
+### Hello World
+```
+writeline("Hello, world!")
+```
+### FizzBuzz
+```
+for i from 1 to 100 do begin
+    let my_text := ""
+    if i modulo 3 = 0 then
+        my_text := text + "Fizz"
+    if i modulo 5 = 0 then
+        my_text := text + "Buzz"
+    if my_text = "" then writeline(i)
+        otherwise writeline(my_text)
+    
+```
+### Factorial
 
 ```
 method factorial(x : int) : longint
@@ -42,7 +63,7 @@ begin
         return x * last_factorial
     end
 end
-    
+
 method main()
 begin
     for i from 1 to 10 do
