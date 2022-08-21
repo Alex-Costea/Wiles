@@ -28,7 +28,7 @@ Operators:
 - `+`, `-`, `*`, `/`, `mod`, `^` (power)
 - `and`, `or`, `not`
 - `=`, `>`, `>=`, `<`, `<=`, `=/=`
-- `from`, `to` (range operator)
+- `to`, `step` (range operators)
 - `:=`, `+=`, `-=`, `*=`, `/=`
 
 Miscellaneous:
@@ -42,7 +42,7 @@ writeline("Hello, world!")
 ```
 ### FizzBuzz
 ```
-for i from 1 to 100 do begin
+for i in 1 to 100 do begin
     let my_text := ""
     if i mod 3 = 0 then
         my_text += "Fizz"
@@ -64,7 +64,7 @@ end
 
 method main()
 begin
-    for i from 1 to 10 do
+    for i in 1 to 10 do
         writeline(factorial(i))
 end
 
