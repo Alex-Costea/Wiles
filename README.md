@@ -25,7 +25,7 @@ Declaring:
 ```
 method factorial(x : int) : longint
 begin
-    if x=0 then return x
+    if x = 0 then return 1
     else begin
         let last_factorial = factorial(x - 1) //type is inferred
         return x * last_factorial
@@ -34,7 +34,7 @@ end
     
 method main()
 begin
-    writeln(factorial(10))
+    writeline(factorial(10))
 end
 
 ```
