@@ -14,11 +14,21 @@ Types
 - Boolean: `bit`
 - String: `text`
 - Floating point: `decimal` (eqivalent to double in other languages)
-- Generic types: `optional<type>`, `list<type>`, `dictionary<type,type>`
+- Generic types: `list<type>`, `optional<type>`, `dictionary<type,type>`
+- Range: `range` (integer types only)
 
 Declaring:
 - Method: `method name(param1 : type, param2 : type) : return_type`
 - Variable: `let name : type`
+- Conditional: `if condition then [block] otherwise [block]` (`otherwise` optional)
+- For loop: `for var in elems do [block]` (elems can be list, range, dictionary)
+- While loop: `while condition do [block]`
+
+Operators:
+- `+`, `-`, `*`, `/`, `modulo`
+- `and`, `or`, `not`
+- `=`, `>`, `>=`, `<`, `<=`, `=/=`
+- `from`, `to` (range operator)
 
 ## Example:
 
@@ -26,15 +36,16 @@ Declaring:
 method factorial(x : int) : longint
 begin
     if x = 0 then return 1
-    else begin
-        let last_factorial = factorial(x - 1) //type is inferred
+    otherwise begin
+        let last_factorial : int = factorial(x - 1)
         return x * last_factorial
     end
 end
     
 method main()
 begin
-    writeline(factorial(10))
+    for i from 1 to 10 do
+        writeline(factorial(i))
 end
 
 ```
