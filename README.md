@@ -14,26 +14,26 @@ Types
 - Boolean: `bit`
 - String: `text`
 - Floating point: `decimal` (eqivalent to double in other languages)
-- Generic types: `list<type>`, `optional<type>`, `dictionary<type,type>`
-- Range: `range` (integer types only)
+- Generic types: `list<type>`, `optional<type>`, `dict<type,type>`, `range<type>`
 
 Declaring:
 - Method: `method name(param1 : type, param2 : type) : return_type` (`return_type` optional)
 - Variable: `let name : type` (type can be inferred)
+- Constant: `const name : type`
 - Conditional: `if condition then [block] otherwise [block]` (`otherwise` optional)
 - For loop: `for var in elems do [block]` (`elems` can be list, range, dictionary)
 - While loop: `while condition do [block]`
 
 Operators:
-- `+`, `-`, `*`, `/`, `modulo`
+- `+`, `-`, `*`, `/`, `mod`, `^` (power)
 - `and`, `or`, `not`
 - `=`, `>`, `>=`, `<`, `<=`, `=/=`
 - `from`, `to` (range operator)
-- `:=` (assignment)
+- `:=`, `+=`, `-=`, `*=`, `/=`
 
 Miscellaneous:
 - declaring `main` method optional when using no other methods
-- `;` inferred from newline
+- `;` can be specified or inferred from newline
 
 ## Examples
 ### Hello World
@@ -44,12 +44,13 @@ writeline("Hello, world!")
 ```
 for i from 1 to 100 do begin
     let my_text := ""
-    if i modulo 3 = 0 then
-        my_text := text + "Fizz"
-    if i modulo 5 = 0 then
-        my_text := text + "Buzz"
+    if i mod 3 = 0 then
+        my_text += "Fizz"
+    if i mod 5 = 0 then
+        my_text += "Buzz"
     if my_text = "" then writeline(i)
         otherwise writeline(my_text)
+end
     
 ```
 ### Factorial
@@ -58,10 +59,7 @@ for i from 1 to 100 do begin
 method factorial(x : int) : longint
 begin
     if x = 0 then return 1
-    otherwise begin
-        let last_factorial := factorial(x - 1)
-        return x * last_factorial
-    end
+    otherwise return x * factorial(x - 1)
 end
 
 method main()
