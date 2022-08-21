@@ -25,15 +25,17 @@ Declaring:
 
 Operators:
 - `+`, `-`, `*`, `/`, `mod`, `^` (power)
-- `and`, `or`, `xor`, `not`,
+- `and`, `or`, `xor`, `not`
 - `=`, `>`, `>=`, `<`, `<=`, `=/=`
 - `from`, `to`, `by` (range operators, `from 1 to 10 by 3`)
 - `in` (element in collection)
 - `:=`, `+=`, `-=`, `*=`, `/=`, `^=`
 
 Miscellaneous:
-- declaring `main` method optional when using no other methods
+- Declaring `main` method optional when using no other methods
 - `;` can be specified or inferred from newline
+- Language is statically, strongly typed with some type inference 
+
 
 ## Examples
 ### Hello World
