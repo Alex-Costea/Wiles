@@ -1,9 +1,11 @@
-for i from 1 to 100 do begin
-    var my_text := ""
-    if i mod 3 = 0 then
-        my_text += "Fizz"
-    if i mod 5 = 0 then
-        my_text += "Buzz"
-    if my_text = "" then writeline(i)
-        otherwise writeline(my_text)
+method factorial(x : int) : longint
+begin
+    if x = 0 then return 1
+    otherwise return x * factorial(x - 1)
+end
+
+method main()
+begin
+    for i from 1 to 10 do
+        writeline(factorial(i))
 end

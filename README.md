@@ -42,8 +42,7 @@ Other keywords:
 Miscellaneous:
 - Declaring `main` method optional when using no other methods
 - `;` can be specified or inferred from newline
-- Language is statically, strongly typed with some type inference 
-- `for` can't use already declared variable
+- Language is statically, strongly typed with some type inference
 
 ## Examples
 ### Hello World
