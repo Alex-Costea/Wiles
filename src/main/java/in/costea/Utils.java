@@ -1,6 +1,8 @@
 package in.costea;
 
 public class Utils {
+    private Utils(){}
+
     public static boolean isAlphanumeric(char c)
     {
         return isAlphabetic(c) || isDigit(c);
