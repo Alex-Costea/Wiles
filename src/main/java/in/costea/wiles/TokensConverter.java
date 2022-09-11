@@ -46,11 +46,13 @@ public class TokensConverter {
     {
         int j = i;
         StringBuilder sb = new StringBuilder("#");
-        boolean dotFound=false;
-        while (j<input.length() && (isDigit(arrayChars[j]) || (!dotFound && arrayChars[j]=='.'))) {
+        boolean periodFound=false;
+        while (j<input.length() && (isDigit(arrayChars[j]) ||
+                //first period found, and not as the last digit
+                (!periodFound && arrayChars[j]=='.' && j+1<input.length() && isDigit(arrayChars[j+1])))) {
             sb.append(arrayChars[j]);
             if(arrayChars[j]=='.')
-                dotFound=true;
+                periodFound=true;
             j++;
         }
         i = j-1;
