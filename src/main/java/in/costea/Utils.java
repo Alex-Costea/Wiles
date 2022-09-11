@@ -3,7 +3,7 @@ package in.costea;
 public class Utils {
     public static boolean isAlphanumeric(char c)
     {
-        return isAlphabetic(c) || Character.isLetterOrDigit(c);
+        return isAlphabetic(c) || isDigit(c);
     }
 
     public static boolean isAlphabetic(char c)
