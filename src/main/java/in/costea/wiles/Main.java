@@ -9,8 +9,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Main {
-
-
     public static void main(String[] args) {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
         try(InputStream is = classloader.getResourceAsStream("input.wiles")) {
@@ -30,6 +28,4 @@ public class Main {
         List<String> tokens= new TokensConverter(input).convert();
         System.out.println(tokens);
     }
-
-
 }
