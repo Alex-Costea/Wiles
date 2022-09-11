@@ -1,4 +1,4 @@
-package in.costea;
+package in.costea.wiles;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,8 +27,8 @@ public class Main {
 
     public static void wilesToJava(String input)
     {
-        List<String> identifiers= new IdentifiersConverter(input).convert();
-        System.out.println(identifiers);
+        List<String> tokens= new TokensConverter(input).convert();
+        System.out.println(tokens);
     }
 
 

@@ -1,4 +1,4 @@
-package in.costea;
+package in.costea.wiles;
 
 public class Utils {
     private Utils(){}

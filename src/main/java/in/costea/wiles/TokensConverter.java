@@ -1,13 +1,12 @@
-package in.costea;
+package in.costea.wiles;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static in.costea.Utils.*;
-import static in.costea.Utils.isAlphanumeric;
+import static in.costea.wiles.Utils.*;
 
-public class IdentifiersConverter {
-    public IdentifiersConverter(String input) {
+public class TokensConverter {
+    public TokensConverter(String input) {
         this.input=input;
         arrayChars=input.toCharArray();
     }
@@ -40,7 +39,7 @@ public class IdentifiersConverter {
             j++;
         }
         i = j-1;
-        return Constants.keywords.getOrDefault(sb.toString(), sb.toString());
+        return Constants.KEYWORDS.getOrDefault(sb.toString(), sb.toString());
     }
 
     private String readNumeralLiteral()
@@ -62,48 +61,48 @@ public class IdentifiersConverter {
     {
         int j=i,maxJ=i;
         StringBuilder sb=new StringBuilder();
-        String id=null;
+        String token=null;
         while (!isAlphanumeric(arrayChars[j])) {
             sb.append(arrayChars[j]);
-            String tempId = Constants.operators.get(sb.toString());
+            String tempId = Constants.OPERATORS.get(sb.toString());
             if(tempId!=null)
             {
-                id=tempId;
+                token=tempId;
                 maxJ=j;
             }
             j++;
             if(j == input.length() || arrayChars[j]==' ')
                 break;
         }
-        if(id==null)
+        if(token==null)
             throw new CompilationException("Operator unknown: "+input.substring(i,j));
         i = maxJ;
-        return id;
+        return token;
     }
 
     public List<String> convert() {
-        var identifiers=new ArrayList<String>();
+        var tokens=new ArrayList<String>();
         for(i=0;i<arrayChars.length;i++)
         {
             if(arrayChars[i]=='"') //string literal
             {
-                identifiers.add(readStringLiteral());
+                tokens.add(readStringLiteral());
             }
             else if(isAlphabetic(arrayChars[i])) //identifier
             {
-                identifiers.add(readIdentifier());
+                tokens.add(readIdentifier());
             }
             else if(isDigit(arrayChars[i])) //numeral literal
             {
-                identifiers.add(readNumeralLiteral());
+                tokens.add(readNumeralLiteral());
             }
             else //operator
             {
                 String id=readOperator();
                 if(!id.equals("SPACE"))
-                    identifiers.add(id);
+                    tokens.add(id);
             }
         }
-        return identifiers;
+        return tokens;
     }
 }
