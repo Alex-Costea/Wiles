@@ -11,22 +11,23 @@ Literals
 - Optional: `null`
 
 Types
-- Integers: `byte`, `shortint`, `int`, `longint`
+- Integers: `byte`, `shortint`, `int`, `longint`, `infint` (infinite precision)
 - Boolean: `bit`
 - String: `text`
-- Floating point: `decimal` (eqivalent to double in other languages)
+- Floating point: `decimal` (equivalent to double in other languages), `exactdec` (equivalent to decimal)
 - Generic types: `list[type]`, `optional[type]`, `dict[type,type]`, `range[type]`, `set[type]`
 
 Declaring:
 - Method: `method name(param1 : type, param2 : type) : return_type` (parameters and `return_type` optional)
-- Variable: `let name : type` (type can be inferred)
+- Variable: `var name : type` (type can be inferred)
+- Constant: `let name : type`
 - Conditional: `if condition then [block] otherwise [block]` (`otherwise` optional)
 - For loop: `for var in collection do [block]` (`in` keyword skipped when using `from to` construct)
 - While loop: `while condition do [block]`
 
 Operators:
 - `+`, `-`, `*`, `/`, `mod`, `^` (power)
-- `and`, `or`, `xor`, `not`
+- `and`, `or`, `not`
 - `=`, `>`, `>=`, `<`, `<=`, `=/=`
 - `from`, `to`, `by` (range operators, `from 1 to 10 by 3`)
 - `in` (element in collection)
@@ -52,7 +53,7 @@ writeline("Hello, world!")
 ### FizzBuzz
 ```
 for i from 1 to 100 do begin
-    let my_text := ""
+    var my_text := ""
     if i mod 3 = 0 then
         my_text += "Fizz"
     if i mod 5 = 0 then

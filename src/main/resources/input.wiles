@@ -1,0 +1,9 @@
+for i from 1 to 100 do begin
+    var my_text := ""
+    if i mod 3 = 0 then
+        my_text += "Fizz"
+    if i mod 5 = 0 then
+        my_text += "Buzz"
+    if my_text = "" then writeline(i)
+        otherwise writeline(my_text)
+end
