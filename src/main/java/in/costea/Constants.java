@@ -80,5 +80,6 @@ public class Constants{
            operators.put("*=","ASSIGN_TIMES");
            operators.put("/=","ASSIGN_DIVIDE");
            operators.put("^=","ASSIGN_POWER");
+           //operators.put("$=","TEMP");
     }
 }

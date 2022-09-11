@@ -85,7 +85,7 @@ public class Main {
                 int j=i,maxJ=i;
                 StringBuilder sb=new StringBuilder();
                 String id=null;
-                while (j<input.length() && !isAlphanumeric(arrayChars[j])) {
+                while (!isAlphanumeric(arrayChars[j])) {
                     sb.append(arrayChars[j]);
                     String tempId = Constants.operators.get(sb.toString());
                     if(tempId!=null)
@@ -94,6 +94,8 @@ public class Main {
                         maxJ=j;
                     }
                     j++;
+                    if(j == input.length() || arrayChars[j]==' ')
+                        break;
                 }
                 if(id==null)
                     throw new CompilationException("Operator unknown: "+input.substring(i,j));
