@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class Main {
 
-    private static final ExceptionsList exceptions=new ExceptionsList();
+    private static final ExceptionsCollection exceptions=new ExceptionsCollection();
     public static void main(String[] args) {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
         try(InputStream is = classloader.getResourceAsStream("input.wiles")) {
@@ -36,6 +36,6 @@ public class Main {
         var converter=new TokensConverter(input);
         List<String> tokens= converter.convert();
         System.out.println(tokens);
-        exceptions.addAll(converter.getExceptions());
+        exceptions.add(converter.getExceptions());
     }
 }

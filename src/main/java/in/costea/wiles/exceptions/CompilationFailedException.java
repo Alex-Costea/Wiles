@@ -1,11 +1,11 @@
 package in.costea.wiles.exceptions;
 
-import in.costea.wiles.ExceptionsList;
+import in.costea.wiles.ExceptionsCollection;
 
 public class CompilationFailedException extends RuntimeException{
-    public CompilationFailedException(ExceptionsList exceptionsList)
+    public CompilationFailedException(ExceptionsCollection exceptionsCollection)
     {
-        super(exceptionsList.getExceptionsString());
+        super(exceptionsCollection.getExceptionsString());
     }
 }
 

@@ -5,13 +5,13 @@ import in.costea.wiles.exceptions.CompilationException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExceptionsList {
+public class ExceptionsCollection {
     private final List<CompilationException> exceptionList=new ArrayList<>();
     public int size() {
         return exceptionList.size();
     }
 
-    public void addAll(ExceptionsList exceptions) {
+    public void add(ExceptionsCollection exceptions) {
         exceptionList.addAll(exceptions.getList());
     }
 
