@@ -8,10 +8,10 @@ Literals
 - Floating: `12345.6`
 - String: `"abc"`
 - Boolean: `true` and `false`
-- Optional: `null`
+- Optional: `nothing` (null equivalent)
 
 Types
-- Integers: `byte`, `shortint`, `int`, `longint`, `infint` (infinite precision)
+- Integers: `byte`, `smallint`, `int`, `bigint`, `infint` (infinite precision)
 - Boolean: `bit`
 - String: `text`
 - Floating point: `decimal` (equivalent to double in other languages), `exactdec` (equivalent to decimal)
@@ -43,6 +43,7 @@ Miscellaneous:
 - Declaring `main` method optional when using no other methods
 - `;` can be specified or inferred from newline
 - Language is statically, strongly typed with some type inference
+- Comment using #
 
 ## Examples
 ### Hello World
@@ -65,7 +66,7 @@ end
 ### Factorial
 
 ```
-method factorial(x : int) : longint
+method factorial(x : int) : infint
 begin
     if x = 0 then return 1
     otherwise return x * factorial(x - 1)
@@ -73,7 +74,7 @@ end
 
 method main()
 begin
-    for i from 1 to 10 do
+    for i from 1 to 30 do
         writeline(factorial(i))
 end
 

@@ -90,6 +90,16 @@ public class TokensConverter {
         return token;
     }
 
+    private void readComment()
+    {
+        int j=i;
+        while(j<input.length() && arrayChars[j]!=COMMENT_END)
+        {
+            j++;
+        }
+        i=j-1;
+    }
+
     public List<String> convert() {
         var tokens=new ArrayList<String>();
         for(i=0;i<arrayChars.length;i++)
@@ -106,8 +116,11 @@ public class TokensConverter {
             {
                 tokens.add(readNumeralLiteral());
             }
-            else //operator
+            else if(arrayChars[i] == COMMENT_START) //operator
             {
+                readComment();
+            }
+            else {
                 String id=readOperator();
                 if(!id.equals(SPACE_ID))
                     tokens.add(id);

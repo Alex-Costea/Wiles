@@ -37,6 +37,15 @@ public class TokenConverterTests {
     }
 
     @Test
+    public void CommentTest()
+    {
+        TokenConverterEquals("#",new String[]{});
+        TokenConverterEquals("#\n",new String[]{"NEWLINE"});
+        TokenConverterEquals("abc#de\nfgh",new String[]{"!abc","NEWLINE","!fgh"});
+        TokenConverterEquals("abc#a b c d e f break end continue",new String[]{"!abc"});
+    }
+
+    @Test
     public void OperatorsTest()
     {
         TokenConverterEquals("=/=",new String[]{"NOT_EQUAL"});
@@ -45,7 +54,7 @@ public class TokenConverterTests {
         TokenConverterThrows("$", UnknownOperatorException.class);
         TokenConverterThrows("=$", UnknownOperatorException.class, "Operator unknown: $");
 
-        String invalidProgram="*$%^&*%#&";
+        String invalidProgram="*$%^&*%{&}";
         TokenConverterThrows(invalidProgram, UnknownOperatorException.class,
                 "Operator unknown: "+invalidProgram.substring(1, MAX_OPERATOR_LENGTH+1));
 
