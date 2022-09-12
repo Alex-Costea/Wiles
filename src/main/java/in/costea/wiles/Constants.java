@@ -3,6 +3,8 @@ package in.costea.wiles;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static java.util.Collections.max;
+
 public class Constants{
     private Constants(){}
 
@@ -82,4 +84,12 @@ public class Constants{
            OPERATORS.put("^=","ASSIGN_POWER");
            //operators.put("$=","TEMP");
     }
+
+    static final int MAX_OPERATOR_LENGTH= max(OPERATORS.keySet().stream().mapToInt(String::length).boxed().toList());
+    static final String STRING_START="@";
+    static final String NUM_START="#";
+    static final char STRING_DELIMITER='#';
+    static final char SPACE=' ';
+    static final char PERIOD='.';
+    static final String SPACE_ID=OPERATORS.get(""+SPACE);
 }
