@@ -20,7 +20,7 @@ public class TokensConverter {
     private int i;
     private final String input;
     private final char[] arrayChars;
-    private final List<CompilationException> exceptions=new ArrayList<>();
+    private final ExceptionsList exceptions=new ExceptionsList();
 
     private String readStringLiteral() throws StringUnfinishedException {
         int j=i+1;
@@ -149,7 +149,7 @@ public class TokensConverter {
             throw exceptions.get(0);
     }
 
-    public List<CompilationException> getExceptions() {
+    public ExceptionsList getExceptions() {
         return exceptions;
     }
 }
