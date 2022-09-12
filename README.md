@@ -15,7 +15,7 @@ Types
 - Boolean: `bit`
 - String: `text`
 - Floating point: `decimal` (equivalent to double in other languages), `exactdec` (equivalent to decimal)
-- Generic types: `list[type]`, `optional[type]`, `dict[type,type]`, `range[type]`, `set[type]`
+- Generic types: `list[type]`, `linkedlist[type]`, `optional[type]`, `dict[type,type]`, `range[type]`, `set[type]`
 
 Declaring:
 - Method: `method name(param1 : type, param2 : type) : return_type` (parameters and `return_type` optional)
@@ -35,8 +35,8 @@ Operators:
 - `[]`, `()`, `,`, `.`, `:`
 
 Other keywords:
-- `break`, `continue`
-- `return`
+- `break`, `continue` (break, continue equivalents)
+- `result` (return equivalent)
 - `begin`, `end` (code blocks)
 
 Miscellaneous:

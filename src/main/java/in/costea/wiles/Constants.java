@@ -26,9 +26,10 @@ public class Constants{
            KEYWORDS.put("text","STRING");
            KEYWORDS.put("decimal","DOUBLE");
            KEYWORDS.put("exactdec","DECIMAL");
-           KEYWORDS.put("list","ARRAYLIST");
+           KEYWORDS.put("list","ARRAY_LIST");
+           KEYWORDS.put("linkedlist","LINKED_LIST");
            KEYWORDS.put("optional","NULLABLE");
-           KEYWORDS.put("dictionary","MAP");
+           KEYWORDS.put("dictionary","LINKED_MAP");
            KEYWORDS.put("range","RANGE");
            KEYWORDS.put("set","SET");
            KEYWORDS.put("method","DECLARE_METHOD");
@@ -49,9 +50,9 @@ public class Constants{
            KEYWORDS.put("from","RANGE_FROM");
            KEYWORDS.put("to","RANGE_TO");
            KEYWORDS.put("by","RANGE_BY");
-           KEYWORDS.put("break","BREAK");
-           KEYWORDS.put("continue","CONTINUE");
-           KEYWORDS.put("return","RETURN");
+           KEYWORDS.put("stop","BREAK");
+           KEYWORDS.put("skip","CONTINUE");
+           KEYWORDS.put("result","RETURN");
            KEYWORDS.put("begin","START_BLOCK");
            KEYWORDS.put("end","END_BLOCK");
     }
