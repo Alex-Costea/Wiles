@@ -6,9 +6,12 @@ import java.util.Map;
 import static java.util.Collections.max;
 
 public class Constants{
-    private Constants(){}
+    private Constants()
+    {
 
-    static final Map<String,String> KEYWORDS =new LinkedHashMap<>();
+    }
+    public static final boolean DEBUG=true;
+    public static final Map<String,String> KEYWORDS =new LinkedHashMap<>();
     static
     {
            KEYWORDS.put("true","TRUE");
@@ -52,7 +55,7 @@ public class Constants{
            KEYWORDS.put("end","END_BLOCK");
     }
 
-    static final Map<String,String> OPERATORS =new LinkedHashMap<>();
+    public static final Map<String,String> OPERATORS =new LinkedHashMap<>();
     static
     {
            OPERATORS.put("+","PLUS");
@@ -60,7 +63,7 @@ public class Constants{
            OPERATORS.put("*","TIMES");
            OPERATORS.put("/","DIVIDE");
            OPERATORS.put("^","POWER");
-           OPERATORS.put("=","EQUALITY");
+           OPERATORS.put("=","EQUALS");
            OPERATORS.put(">","LARGER");
            OPERATORS.put("<","SMALLER");
            OPERATORS.put("(","ROUND_BRACKET_START");
@@ -82,14 +85,24 @@ public class Constants{
            OPERATORS.put("*=","ASSIGN_TIMES");
            OPERATORS.put("/=","ASSIGN_DIVIDE");
            OPERATORS.put("^=","ASSIGN_POWER");
-           //operators.put("$=","TEMP");
+           if(DEBUG)
+           {
+               OPERATORS.put("$=", "TEMP");
+               OPERATORS.put("=$=", "TEMP2");
+           }
     }
 
-    static final int MAX_OPERATOR_LENGTH= max(OPERATORS.keySet().stream().mapToInt(String::length).boxed().toList());
-    static final String STRING_START="@";
-    static final String NUM_START="#";
-    static final char STRING_DELIMITER='#';
-    static final char SPACE=' ';
-    static final char PERIOD='.';
-    static final String SPACE_ID=OPERATORS.get(""+SPACE);
+    public static final int MAX_OPERATOR_LENGTH = 5;
+    static
+    {
+        if(max(OPERATORS.keySet().stream().mapToInt(String::length).boxed().toList())>MAX_OPERATOR_LENGTH)
+            throw new IllegalArgumentException("MAX_OPERATOR_LENGTH smaller than length of largest operator!");
+    }
+    public static final String IDENTIFIER_START="!";
+    public static final String STRING_START="@";
+    public static final String NUM_START="#";
+    public static final char STRING_DELIMITER='"';
+    public static final char SPACE=' ';
+    public static final char PERIOD='.';
+    public static final String SPACE_ID=OPERATORS.get(""+SPACE);
 }

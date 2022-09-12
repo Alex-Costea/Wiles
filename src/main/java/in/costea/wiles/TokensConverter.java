@@ -2,6 +2,7 @@ package in.costea.wiles;
 
 import in.costea.wiles.exceptions.StringUnfinishedException;
 import in.costea.wiles.exceptions.UnknownOperatorException;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,7 @@ import static in.costea.wiles.Constants.*;
 import static in.costea.wiles.Utils.*;
 
 public class TokensConverter {
-    public TokensConverter(String input) {
+    public TokensConverter(@NotNull String input) {
         this.input=input;
         arrayChars=input.toCharArray();
     }
@@ -22,6 +23,9 @@ public class TokensConverter {
     private String readStringLiteral()
     {
         int j=i+1;
+        if(j>=input.length())
+            throw new StringUnfinishedException(input.substring(j));
+
         StringBuilder sb=new StringBuilder(STRING_START);
         while(arrayChars[j]!=STRING_DELIMITER)
         {
@@ -43,7 +47,7 @@ public class TokensConverter {
             j++;
         }
         i = j-1;
-        return KEYWORDS.getOrDefault(sb.toString(), sb.toString());
+        return KEYWORDS.getOrDefault(sb.toString(), IDENTIFIER_START + sb);
     }
 
     private String readNumeralLiteral()
