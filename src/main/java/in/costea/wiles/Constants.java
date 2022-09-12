@@ -109,4 +109,5 @@ public class Constants{
     public static final char COMMENT_START ='#';
     public static final char COMMENT_END='\n';
     public static final String SPACE_ID=OPERATORS.get(""+SPACE);
+    public static final String UNKNOWN_TOKEN="UNKNOWN_TOKEN";
 }

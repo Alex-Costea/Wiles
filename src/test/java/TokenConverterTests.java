@@ -19,19 +19,24 @@ public class TokenConverterTests {
 
     public void TokenConverterThrows(String input, Class<? extends Throwable> throwing,String message)
     {
-        assertThrows(throwing,() -> new TokensConverter(input).convert(),message);
+        var x=new TokensConverter(input);
+        x.convert();
+        assertThrows(throwing, x::throwFirstException,message);
     }
 
     public void TokenConverterThrows(String input, Class<? extends Throwable> throwing)
     {
-        assertThrows(throwing,() -> new TokensConverter(input).convert());
+        var x=new TokensConverter(input);
+        x.convert();
+        assertThrows(throwing, x::throwFirstException);
     }
 
 
     @Test
     public void EmptyInputsTest()
     {
-        TokenConverterThrows(null,IllegalArgumentException.class);
+        //noinspection ConstantConditions
+        assertThrows(IllegalArgumentException.class,() -> new TokensConverter(null));
         TokenConverterEquals("",new String[]{});
         TokenConverterEquals("     ",new String[]{});
     }
@@ -93,7 +98,7 @@ public class TokenConverterTests {
         TokenConverterEquals("2ab",new String[]{"#2","!ab"});
         TokenConverterEquals("français",new String[]{"!français"});
         TokenConverterEquals("日本語",new String[]{"!日本語"});
-        TokenConverterEquals("i do not break the end",new String[]{"!i","DO","NOT","BREAK","!the","END_BLOCK"});
+        TokenConverterEquals("i do not stop the end",new String[]{"!i","DO","NOT","BREAK","!the","END_BLOCK"});
     }
 
 }

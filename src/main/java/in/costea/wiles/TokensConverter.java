@@ -1,5 +1,6 @@
 package in.costea.wiles;
 
+import in.costea.wiles.exceptions.CompilationException;
 import in.costea.wiles.exceptions.StringUnfinishedException;
 import in.costea.wiles.exceptions.UnknownOperatorException;
 import org.jetbrains.annotations.NotNull;
@@ -19,23 +20,28 @@ public class TokensConverter {
     private int i;
     private final String input;
     private final char[] arrayChars;
+    private final List<CompilationException> exceptions=new ArrayList<>();
 
-    private String readStringLiteral()
-    {
+    private String readStringLiteral() throws StringUnfinishedException {
         int j=i+1;
-        if(j>=input.length())
-            throw new StringUnfinishedException(input.substring(j));
-
-        StringBuilder sb=new StringBuilder(STRING_START);
-        while(arrayChars[j]!=STRING_DELIMITER)
+        try
         {
-            sb.append(arrayChars[j]);
-            j++;
-            if(j>=input.length())
-                throw new StringUnfinishedException(input.substring(i));
+            if (j >= input.length())
+                throw new StringUnfinishedException(input.substring(j));
+
+            StringBuilder sb = new StringBuilder(STRING_START);
+            while (arrayChars[j] != STRING_DELIMITER) {
+                sb.append(arrayChars[j]);
+                j++;
+                if (j >= input.length())
+                    throw new StringUnfinishedException(input.substring(i));
+            }
+            return sb.toString();
         }
-        i=j;
-        return sb.toString();
+        finally
+        {
+            i=j;
+        }
     }
 
     private String readIdentifier()
@@ -67,8 +73,7 @@ public class TokensConverter {
         return sb.toString();
     }
 
-    private String readOperator()
-    {
+    private String readOperator() throws UnknownOperatorException {
         int j=i,maxJ=i;
         StringBuilder sb=new StringBuilder();
         String token=null;
@@ -84,9 +89,9 @@ public class TokensConverter {
             if(j == input.length() || arrayChars[j]==SPACE)
                 break;
         }
+        i = maxJ;
         if(token==null)
             throw new UnknownOperatorException(input.substring(i,j));
-        i = maxJ;
         return token;
     }
 
@@ -104,28 +109,47 @@ public class TokensConverter {
         var tokens=new ArrayList<String>();
         for(i=0;i<arrayChars.length;i++)
         {
-            if(arrayChars[i]==STRING_DELIMITER) //string literal
+            try
             {
-                tokens.add(readStringLiteral());
+                if (arrayChars[i] == STRING_DELIMITER) //string literal
+                {
+                    tokens.add(readStringLiteral());
+                }
+                else if (isAlphabetic(arrayChars[i])) //identifier
+                {
+                    tokens.add(readIdentifier());
+                }
+                else if (isDigit(arrayChars[i])) //numeral literal
+                {
+                    tokens.add(readNumeralLiteral());
+                }
+                else if (arrayChars[i] == COMMENT_START) //operator
+                {
+                    readComment();
+                } else
+                {
+                    String id = readOperator();
+                    if (!id.equals(SPACE_ID))
+                        tokens.add(id);
+                }
             }
-            else if(isAlphabetic(arrayChars[i])) //identifier
+            catch (CompilationException ex)
             {
-                tokens.add(readIdentifier());
-            }
-            else if(isDigit(arrayChars[i])) //numeral literal
-            {
-                tokens.add(readNumeralLiteral());
-            }
-            else if(arrayChars[i] == COMMENT_START) //operator
-            {
-                readComment();
-            }
-            else {
-                String id=readOperator();
-                if(!id.equals(SPACE_ID))
-                    tokens.add(id);
+                exceptions.add(ex);
+                if(ex instanceof UnknownOperatorException)
+                    tokens.add(UNKNOWN_TOKEN);
             }
         }
         return tokens;
+    }
+
+    public void throwFirstException() throws CompilationException
+    {
+        if(exceptions.size()>0)
+            throw exceptions.get(0);
+    }
+
+    public List<CompilationException> getExceptions() {
+        return exceptions;
     }
 }
