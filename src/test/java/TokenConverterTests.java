@@ -1,13 +1,14 @@
 import in.costea.wiles.TokensConverter;
 import in.costea.wiles.exceptions.StringUnfinishedException;
 import in.costea.wiles.exceptions.UnknownOperatorException;
-import org.junit.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.List;
 
-import static in.costea.wiles.Constants.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+import static in.costea.wiles.Constants.DEBUG;
+import static in.costea.wiles.Constants.MAX_OPERATOR_LENGTH;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TokenConverterTests {
     public void TokenConverterEquals(String input, String[] solution)
@@ -18,7 +19,7 @@ public class TokenConverterTests {
 
     public void TokenConverterThrows(String input, Class<? extends Throwable> throwing,String message)
     {
-        assertThrows(message,throwing,() -> new TokensConverter(input).convert());
+        assertThrows(throwing,() -> new TokensConverter(input).convert(),message);
     }
 
     public void TokenConverterThrows(String input, Class<? extends Throwable> throwing)
@@ -26,14 +27,18 @@ public class TokenConverterTests {
         assertThrows(throwing,() -> new TokensConverter(input).convert());
     }
 
+
     @Test
-    public void TokenConverterTest()
+    public void EmptyInputsTest()
     {
         TokenConverterThrows(null,IllegalArgumentException.class);
         TokenConverterEquals("",new String[]{});
         TokenConverterEquals("     ",new String[]{});
+    }
 
-        //Operators
+    @Test
+    public void OperatorsTest()
+    {
         TokenConverterEquals("=/=",new String[]{"NOT_EQUAL"});
         TokenConverterEquals("=/=/=/",new String[]{"NOT_EQUAL","ASSIGN_DIVIDE","DIVIDE"});
         TokenConverterEquals("=/=/=/",new String[]{"NOT_EQUAL","ASSIGN_DIVIDE","DIVIDE"});
@@ -44,27 +49,35 @@ public class TokenConverterTests {
         TokenConverterThrows(invalidProgram, UnknownOperatorException.class,
                 "Operator unknown: "+invalidProgram.substring(1, MAX_OPERATOR_LENGTH+1));
 
-        if(DEBUG)
-        {
+        if(DEBUG){
             TokenConverterEquals("$=", new String[]{"TEMP"});
             TokenConverterEquals("=$=", new String[]{"TEMP2"});
         }
+    }
 
-        //Numerical Literals
+    @Test
+    public void NumericalLiteralsTest()
+    {
         TokenConverterEquals("1",new String[]{"#1"});
         TokenConverterEquals(".1",new String[]{"DOT","#1"});
         TokenConverterEquals("1.",new String[]{"#1","DOT"});
         TokenConverterEquals("1.length",new String[]{"#1","DOT","!length"});
         TokenConverterEquals("1.2",new String[]{"#1.2"});
         TokenConverterEquals("1.2.3.4.5",new String[]{"#1.2","DOT","#3.4","DOT","#5"});
+    }
 
-        //String Literals
+    @Test
+    public void StringLiteralsTest()
+    {
         TokenConverterEquals("\"abc\"",new String[]{"@abc"});
         TokenConverterThrows("\"abc", StringUnfinishedException.class,"String unfinished: abc");
         TokenConverterEquals("\"\"\"\"",new String[]{"@","@"});
         TokenConverterThrows("\"\"\"\"\"", StringUnfinishedException.class,"String unfinished: ");
+    }
 
-        //Identifiers
+    @Test
+    public void IdentifiersTest()
+    {
         TokenConverterEquals("a b c",new String[]{"!a","!b","!c"});
         TokenConverterEquals("__xXx__",new String[]{"!__xXx__"});
         TokenConverterEquals("a12",new String[]{"!a12"});
