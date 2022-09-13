@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public record Token(String content, TokenLocation location) {
+public record Token(@NotNull String content, TokenLocation location) {
 
     public Token(String content,int line,int lineIndex)
     {
