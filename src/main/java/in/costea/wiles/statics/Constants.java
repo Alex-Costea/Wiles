@@ -57,6 +57,28 @@ public class Constants{
            KEYWORDS.put("end","END_BLOCK");
     }
 
+    public enum SYNTAX_TYPE {
+        PROGRAM,
+        METHOD,
+        METHOD_BODY,
+        VARIABLE,
+        CONSTANT,
+        IF,
+        THEN,
+        ELSE,
+        FOR,
+        FOR_BODY,
+        RANGE,
+        WHILE,
+        WHILE_BODY,
+        GENERIC_TYPE,
+        BINARY_OPERATION,
+        ROUND_BRACKETS,
+        ACCESS,
+        IDENTIFIER,
+        LITERAL
+    }
+
     public static final Map<String,String> OPERATORS =new LinkedHashMap<>();
     static
     {
@@ -87,6 +109,7 @@ public class Constants{
            OPERATORS.put("*=","ASSIGN_TIMES");
            OPERATORS.put("/=","ASSIGN_DIVIDE");
            OPERATORS.put("^=","ASSIGN_POWER");
+           OPERATORS.put("\\","CONTINUE_LINE");
            if(DEBUG)
            {
                OPERATORS.put("$=", "TEMP");
