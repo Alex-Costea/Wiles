@@ -1,6 +1,7 @@
 package in.costea.wiles;
 
 import in.costea.wiles.dataclasses.CompilationExceptionsCollection;
+import in.costea.wiles.dataclasses.Token;
 import in.costea.wiles.exceptions.CompilationException;
 import in.costea.wiles.exceptions.StringUnfinishedException;
 import in.costea.wiles.exceptions.UnknownOperatorException;
@@ -118,23 +119,28 @@ public class TokensConverter {
         index = currentIndex-1;
     }
 
-    public List<String> convert() {
-        var tokens=new ArrayList<String>();
+    public Token createToken(String token)
+    {
+        return new Token(token,line,getIndexOnCurrentLine());
+    }
+
+    public List<Token> convert() {
+        var tokens=new ArrayList<Token>();
         for(index =0; index <arrayChars.length; index++)
         {
             try
             {
                 if (arrayChars[index] == STRING_DELIMITER) //string literal
                 {
-                    tokens.add(readStringLiteral());
+                    tokens.add(createToken(readStringLiteral()));
                 }
                 else if (isAlphabetic(arrayChars[index])) //identifier
                 {
-                    tokens.add(readIdentifier());
+                    tokens.add(createToken(readIdentifier()));
                 }
                 else if (isDigit(arrayChars[index])) //numeral literal
                 {
-                    tokens.add(readNumeralLiteral());
+                    tokens.add(createToken(readNumeralLiteral()));
                 }
                 else if (arrayChars[index] == COMMENT_START) //operator
                 {
@@ -146,13 +152,13 @@ public class TokensConverter {
                     if(id.equals(NEWLINE_ID))
                         addNewLine();
                     if (!id.equals(SPACE_ID))
-                        tokens.add(id);
+                        tokens.add(createToken(id));
                 }
             }
             catch (CompilationException ex)
             {
                 exceptions.add(ex);
-                tokens.add(UNKNOWN_TOKEN);
+                tokens.add(createToken(UNKNOWN_TOKEN));
             }
         }
         return tokens;

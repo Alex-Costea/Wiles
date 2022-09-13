@@ -1,6 +1,7 @@
 package in.costea.wiles;
 
 import in.costea.wiles.dataclasses.CompilationExceptionsCollection;
+import in.costea.wiles.dataclasses.Token;
 import in.costea.wiles.exceptions.CompilationFailedException;
 
 import java.io.BufferedReader;
@@ -20,7 +21,12 @@ public class Main {
             Objects.requireNonNull(is);
             String input = new BufferedReader(new InputStreamReader(is))
                     .lines().collect(Collectors.joining("\n"));
-            wilesToJava(input);
+
+            List<Token> tokens = sourceToTokens(input);
+            for(Token token:tokens)
+                System.out.println(token);
+
+            AST ast=tokensToAST(tokens);
 
             //Print exceptions
             if(exceptions.size()>0)
@@ -32,11 +38,17 @@ public class Main {
         }
     }
 
-    public static void wilesToJava(String input)
+    public static List<Token> sourceToTokens(String input)
     {
         var converter=new TokensConverter(input);
-        List<String> tokens= converter.convert();
-        System.out.println(tokens);
+        List<Token> tokens= converter.convert();
         exceptions.add(converter.getExceptions());
+        return tokens;
+    }
+
+    public static AST tokensToAST(List<Token> tokens)
+    {
+        //TODO
+        return null;
     }
 }

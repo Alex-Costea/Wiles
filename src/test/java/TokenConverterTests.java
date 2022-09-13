@@ -1,9 +1,11 @@
 import in.costea.wiles.TokensConverter;
+import in.costea.wiles.dataclasses.Token;
 import in.costea.wiles.exceptions.CompilationException;
 import in.costea.wiles.exceptions.StringUnfinishedException;
 import in.costea.wiles.exceptions.UnknownOperatorException;
 import org.junit.jupiter.api.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static in.costea.wiles.statics.Constants.DEBUG;
@@ -15,7 +17,11 @@ import static org.junit.jupiter.api.Assumptions.*;
 public class TokenConverterTests {
     public void TokenConverterEquals(String input, String[] solution)
     {
-        List<String> solutionList=List.of(solution);
+        List<Token> solutionList=new ArrayList<>();
+        for(String s:solution)
+        {
+            solutionList.add(new Token(s,0,0));
+        }
         assertEquals(new TokensConverter(input).convert(), solutionList);
     }
 
