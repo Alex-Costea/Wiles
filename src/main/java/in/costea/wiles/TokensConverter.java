@@ -15,10 +15,12 @@ import static in.costea.wiles.statics.Utils.*;
 
 public class TokensConverter {
 
+
+
     public TokensConverter(@NotNull String input) {
         arrayChars=input.toCharArray();
     }
-
+    private int originalIndex;
     private int index;
     private int lineIndex=-1; //character at index -1 can be considered equivalent to newline
     private final char[] arrayChars;
@@ -130,6 +132,7 @@ public class TokensConverter {
         {
             try
             {
+                originalIndex=index;
                 if (arrayChars[index] == STRING_DELIMITER) //string literal
                 {
                     tokens.add(createToken(readStringLiteral()));
@@ -149,10 +152,10 @@ public class TokensConverter {
                 else
                 {
                     String id = readOperator();
-                    if(id.equals(NEWLINE_ID))
-                        addNewLine();
                     if (!id.equals(SPACE_ID))
                         tokens.add(createToken(id));
+                    if(id.equals(NEWLINE_ID))
+                        addNewLine();
                 }
             }
             catch (CompilationException ex)
@@ -172,7 +175,7 @@ public class TokensConverter {
 
     private int getIndexOnCurrentLine()
     {
-        return index-lineIndex;
+        return originalIndex-lineIndex;
     }
 
 
