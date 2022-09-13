@@ -1,4 +1,4 @@
-package in.costea.wiles.dataclasses;
+package in.costea.wiles.data;
 
 import java.util.Objects;
 

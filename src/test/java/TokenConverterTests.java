@@ -1,5 +1,5 @@
-import in.costea.wiles.TokensConverter;
-import in.costea.wiles.dataclasses.Token;
+import in.costea.wiles.InputToTokensConverter;
+import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.CompilationException;
 import in.costea.wiles.exceptions.StringUnfinishedException;
 import in.costea.wiles.exceptions.UnknownOperatorException;
@@ -22,12 +22,12 @@ public class TokenConverterTests {
         {
             solutionList.add(new Token(s,0,0));
         }
-        assertEquals(new TokensConverter(input).convert(), solutionList);
+        assertEquals(new InputToTokensConverter(input).convert(), solutionList);
     }
 
     public void TokenConverterThrows(Integer exceptionIndex,String input, Class<? extends Throwable> throwing, String message, Integer line)
     {
-        var x=new TokensConverter(input);
+        var x=new InputToTokensConverter(input);
         x.convert();
         Throwable t;
         if(message!=null) t = assertThrows(throwing, ()->x.throwExceptionIfExists(exceptionIndex),message);
@@ -56,7 +56,7 @@ public class TokenConverterTests {
     public void EmptyInputsTest()
     {
         //noinspection ConstantConditions
-        assertThrows(IllegalArgumentException.class,() -> new TokensConverter(null));
+        assertThrows(IllegalArgumentException.class,() -> new InputToTokensConverter(null));
         TokenConverterEquals("",new String[]{});
         TokenConverterEquals("     ",new String[]{});
     }

@@ -1,7 +1,7 @@
 package in.costea.wiles;
 
-import in.costea.wiles.dataclasses.CompilationExceptionsCollection;
-import in.costea.wiles.dataclasses.Token;
+import in.costea.wiles.data.CompilationExceptionsCollection;
+import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.CompilationException;
 import in.costea.wiles.exceptions.StringUnfinishedException;
 import in.costea.wiles.exceptions.UnknownOperatorException;
@@ -13,19 +13,59 @@ import java.util.List;
 import static in.costea.wiles.statics.Constants.*;
 import static in.costea.wiles.statics.Utils.*;
 
-public class TokensConverter {
+public class InputToTokensConverter {
 
-
-
-    public TokensConverter(@NotNull String input) {
-        arrayChars=input.toCharArray();
-    }
     private int originalIndex;
     private int index;
     private int lineIndex=-1; //character at index -1 can be considered equivalent to newline
     private final char[] arrayChars;
     private final CompilationExceptionsCollection exceptions=new CompilationExceptionsCollection();
     private int line=1;
+
+    public InputToTokensConverter(@NotNull String input) {
+        arrayChars=input.toCharArray();
+    }
+
+    public List<Token> convert() {
+        var tokens=new ArrayList<Token>();
+        for(index =0; index <arrayChars.length; index++)
+        {
+            try
+            {
+                originalIndex=index;
+                if (arrayChars[index] == STRING_DELIMITER) //string literal
+                {
+                    tokens.add(createToken(readStringLiteral()));
+                }
+                else if (isAlphabetic(arrayChars[index])) //identifier
+                {
+                    tokens.add(createToken(readIdentifier()));
+                }
+                else if (isDigit(arrayChars[index])) //numeral literal
+                {
+                    tokens.add(createToken(readNumeralLiteral()));
+                }
+                else if (arrayChars[index] == COMMENT_START) //operator
+                {
+                    readComment();
+                }
+                else
+                {
+                    String id = readOperator();
+                    if (!id.equals(SPACE_ID))
+                        tokens.add(createToken(id));
+                    if(id.equals(NEWLINE_ID))
+                        addNewLine();
+                }
+            }
+            catch (CompilationException ex)
+            {
+                exceptions.add(ex);
+                tokens.add(createToken(UNKNOWN_TOKEN));
+            }
+        }
+        return tokens;
+    }
 
     private String readStringLiteral() throws StringUnfinishedException {
         int currentIndex= index +1;
@@ -124,47 +164,6 @@ public class TokensConverter {
     public Token createToken(String token)
     {
         return new Token(token,line,getIndexOnCurrentLine());
-    }
-
-    public List<Token> convert() {
-        var tokens=new ArrayList<Token>();
-        for(index =0; index <arrayChars.length; index++)
-        {
-            try
-            {
-                originalIndex=index;
-                if (arrayChars[index] == STRING_DELIMITER) //string literal
-                {
-                    tokens.add(createToken(readStringLiteral()));
-                }
-                else if (isAlphabetic(arrayChars[index])) //identifier
-                {
-                    tokens.add(createToken(readIdentifier()));
-                }
-                else if (isDigit(arrayChars[index])) //numeral literal
-                {
-                    tokens.add(createToken(readNumeralLiteral()));
-                }
-                else if (arrayChars[index] == COMMENT_START) //operator
-                {
-                    readComment();
-                }
-                else
-                {
-                    String id = readOperator();
-                    if (!id.equals(SPACE_ID))
-                        tokens.add(createToken(id));
-                    if(id.equals(NEWLINE_ID))
-                        addNewLine();
-                }
-            }
-            catch (CompilationException ex)
-            {
-                exceptions.add(ex);
-                tokens.add(createToken(UNKNOWN_TOKEN));
-            }
-        }
-        return tokens;
     }
 
     private void addNewLine()

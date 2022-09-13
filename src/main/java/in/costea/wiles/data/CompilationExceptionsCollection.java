@@ -1,6 +1,7 @@
-package in.costea.wiles.dataclasses;
+package in.costea.wiles.data;
 
 import in.costea.wiles.exceptions.CompilationException;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -15,8 +16,8 @@ public class CompilationExceptionsCollection extends ArrayList<CompilationExcept
         super();
     }
 
-    public void add(CompilationExceptionsCollection ex) {
-        this.addAll(ex);
+    public void add(@NotNull CompilationExceptionsCollection objToAdd) {
+        this.addAll(objToAdd);
     }
 
     public String getExceptionsString() {
