@@ -57,6 +57,7 @@ public class Constants{
            KEYWORDS.put("end","END_BLOCK");
     }
 
+    @SuppressWarnings("unused")
     public enum SYNTAX_TYPE {
         PROGRAM,
         METHOD,

@@ -1,11 +1,1 @@
-method factorial(x : int) : infint
-begin
-    if x = 0 then return 1
-    otherwise return x * factorial(x - 1)
-end
-
-method main()
-begin
-    for i from 1 to 30 do
-        writeline(factorial(i))
-end
+method mymethod begin a b c end
