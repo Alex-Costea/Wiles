@@ -169,10 +169,10 @@ public class TokensConverter {
     }
 
 
-    public void throwFirstExceptionIfExists() throws CompilationException
+    public void throwExceptionIfExists(int exceptionIndex) throws CompilationException
     {
-        if(exceptions.size()>0)
-            throw exceptions.get(0);
+        if(exceptions.size()>exceptionIndex)
+            throw exceptions.get(exceptionIndex);
     }
 
     public CompilationExceptionsCollection getExceptions() {
