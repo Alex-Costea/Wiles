@@ -1,7 +1,7 @@
 package in.costea.wiles;
 
 import in.costea.wiles.converters.InputToTokensConverter;
-import in.costea.wiles.converters.TokensToASTConverter;
+import in.costea.wiles.converters.TokensToSyntaxTreeConverter;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.CompilationFailedException;
@@ -52,7 +52,7 @@ public class Main {
 
     public static SyntaxTree tokensToAST(List<Token> tokens)
     {
-        var converter=new TokensToASTConverter(tokens);
+        var converter=new TokensToSyntaxTreeConverter(tokens);
         SyntaxTree syntaxTree = converter.convert();
         exceptions.add(converter.getExceptions());
         return syntaxTree;

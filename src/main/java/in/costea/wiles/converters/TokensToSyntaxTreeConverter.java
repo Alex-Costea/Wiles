@@ -7,9 +7,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class TokensToASTConverter {
+public class TokensToSyntaxTreeConverter {
     private final List<Token> tokens;
-    public TokensToASTConverter(@NotNull List<Token> tokens)
+    public TokensToSyntaxTreeConverter(@NotNull List<Token> tokens)
     {
         this.tokens=tokens;
     }
