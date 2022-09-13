@@ -1,5 +1,7 @@
 package in.costea.wiles;
 
+import in.costea.wiles.converters.InputToTokensConverter;
+import in.costea.wiles.converters.TokensToSyntaxTreeConverter;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.CompilationFailedException;
@@ -32,8 +34,8 @@ public class Main {
         for(Token token:tokens)
             System.out.println(token);
 
-        AST ast=tokensToAST(tokens);
-        System.out.println(ast);
+        SyntaxTree syntaxTree =tokensToAST(tokens);
+        System.out.println(syntaxTree);
 
         //Print exceptions
         if(exceptions.size()>0)
@@ -48,11 +50,11 @@ public class Main {
         return tokens;
     }
 
-    public static AST tokensToAST(List<Token> tokens)
+    public static SyntaxTree tokensToAST(List<Token> tokens)
     {
-        var converter=new TokensToASTConverter(tokens);
-        AST ast= converter.convert();
+        var converter=new TokensToSyntaxTreeConverter(tokens);
+        SyntaxTree syntaxTree = converter.convert();
         exceptions.add(converter.getExceptions());
-        return ast;
+        return syntaxTree;
     }
 }

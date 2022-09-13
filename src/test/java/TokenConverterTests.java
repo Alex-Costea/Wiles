@@ -1,4 +1,4 @@
-import in.costea.wiles.InputToTokensConverter;
+import in.costea.wiles.converters.InputToTokensConverter;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.CompilationException;
 import in.costea.wiles.exceptions.StringUnfinishedException;
@@ -20,7 +20,7 @@ public class TokenConverterTests {
         List<Token> solutionList=new ArrayList<>();
         for(String s:solution)
         {
-            solutionList.add(new Token(s,0,0));
+            solutionList.add(new Token(s));
         }
         assertEquals(new InputToTokensConverter(input).convert(), solutionList);
     }

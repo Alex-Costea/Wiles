@@ -1,4 +1,4 @@
-package in.costea.wiles;
+package in.costea.wiles.converters;
 
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
