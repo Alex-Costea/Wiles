@@ -34,16 +34,17 @@ public class TokensConverter {
             StringBuilder sb = new StringBuilder();
             while (arrayChars[currentIndex] != STRING_DELIMITER && arrayChars[currentIndex] != '\n') {
                 sb.append(arrayChars[currentIndex]);
+                if (currentIndex+1 == arrayChars.length)
+                    break;
                 currentIndex++;
-                if (currentIndex >= arrayChars.length)
-                    throw new StringUnfinishedException(sb.toString(),line,getIndexOnCurrentLine());
             }
-            if(arrayChars[currentIndex] == '\n')
-            {
+            if(arrayChars[currentIndex]==STRING_DELIMITER)
+                return STRING_START+sb;
+
+            //String not properly finished
+            if(arrayChars[currentIndex]=='\n') //add the newline token regardless
                 currentIndex--;
-                throw new StringUnfinishedException(sb.toString(), line, getIndexOnCurrentLine());
-            }
-            return STRING_START + sb;
+            throw new StringUnfinishedException(sb.toString(), line, getIndexOnCurrentLine());
         }
         finally
         {
