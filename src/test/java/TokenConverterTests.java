@@ -1,4 +1,4 @@
-import in.costea.wiles.InputToTokensConverter;
+import in.costea.wiles.converters.InputToTokensConverter;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.CompilationException;
 import in.costea.wiles.exceptions.StringUnfinishedException;
