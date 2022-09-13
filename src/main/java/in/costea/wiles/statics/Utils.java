@@ -1,4 +1,4 @@
-package in.costea.wiles;
+package in.costea.wiles.statics;
 
 public class Utils {
     private Utils(){}

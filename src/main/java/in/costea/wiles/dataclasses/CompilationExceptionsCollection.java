@@ -1,10 +1,19 @@
-package in.costea.wiles;
+package in.costea.wiles.dataclasses;
 
 import in.costea.wiles.exceptions.CompilationException;
 
 import java.util.ArrayList;
 
 public class CompilationExceptionsCollection extends ArrayList<CompilationException> {
+
+    public CompilationExceptionsCollection(CompilationExceptionsCollection exceptions) {
+        super(exceptions);
+    }
+
+    public CompilationExceptionsCollection()
+    {
+        super();
+    }
 
     public void add(CompilationExceptionsCollection ex) {
         this.addAll(ex);

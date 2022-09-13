@@ -5,8 +5,8 @@ import org.junit.jupiter.api.*;
 
 import java.util.List;
 
-import static in.costea.wiles.Constants.DEBUG;
-import static in.costea.wiles.Constants.MAX_OPERATOR_LENGTH;
+import static in.costea.wiles.statics.Constants.DEBUG;
+import static in.costea.wiles.statics.Constants.MAX_OPERATOR_LENGTH;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

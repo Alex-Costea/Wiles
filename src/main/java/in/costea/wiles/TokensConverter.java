@@ -1,5 +1,6 @@
 package in.costea.wiles;
 
+import in.costea.wiles.dataclasses.CompilationExceptionsCollection;
 import in.costea.wiles.exceptions.CompilationException;
 import in.costea.wiles.exceptions.StringUnfinishedException;
 import in.costea.wiles.exceptions.UnknownOperatorException;
@@ -8,8 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import static in.costea.wiles.Constants.*;
-import static in.costea.wiles.Utils.*;
+import static in.costea.wiles.statics.Constants.*;
+import static in.costea.wiles.statics.Utils.*;
 
 public class TokensConverter {
 
@@ -142,7 +143,7 @@ public class TokensConverter {
                 {
                     String id = readOperator();
                     if(id.equals(NEWLINE_ID))
-                        newLine();
+                        addNewLine();
                     if (!id.equals(SPACE_ID))
                         tokens.add(id);
                 }
@@ -156,7 +157,7 @@ public class TokensConverter {
         return tokens;
     }
 
-    private void newLine()
+    private void addNewLine()
     {
         line++;
         lineIndex=index;
@@ -175,6 +176,6 @@ public class TokensConverter {
     }
 
     public CompilationExceptionsCollection getExceptions() {
-        return exceptions;
+        return new CompilationExceptionsCollection(exceptions);
     }
 }

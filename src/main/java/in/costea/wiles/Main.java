@@ -1,5 +1,6 @@
 package in.costea.wiles;
 
+import in.costea.wiles.dataclasses.CompilationExceptionsCollection;
 import in.costea.wiles.exceptions.CompilationFailedException;
 
 import java.io.BufferedReader;
