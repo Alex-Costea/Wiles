@@ -1,6 +1,6 @@
 package in.costea.wiles.factories;
 
-import in.costea.wiles.SyntaxTree;
+import in.costea.wiles.commands.SyntaxTree;
 import in.costea.wiles.commands.MethodCommand;
 import in.costea.wiles.commands.ProgramCommand;
 import in.costea.wiles.statics.Constants.*;

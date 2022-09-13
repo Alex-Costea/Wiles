@@ -1,4 +1,4 @@
-package in.costea.wiles;
+package in.costea.wiles.commands;
 
 import in.costea.wiles.exceptions.ComponentException;
 

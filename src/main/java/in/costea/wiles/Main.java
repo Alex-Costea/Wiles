@@ -1,34 +1,24 @@
 package in.costea.wiles;
 
+import in.costea.wiles.commands.SyntaxTree;
 import in.costea.wiles.converters.InputToTokensConverter;
 import in.costea.wiles.converters.TokensToSyntaxTreeConverter;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.CompilationFailedException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Main {
 
+    private Main(){}
+
     private static final CompilationExceptionsCollection exceptions=new CompilationExceptionsCollection();
     public static void main(String[] args) {
-        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-        String input=null;
-        try(InputStream is = classloader.getResourceAsStream("input.wiles")) {
-            Objects.requireNonNull(is);
-            input = new BufferedReader(new InputStreamReader(is))
-                    .lines().collect(Collectors.joining("\n"));
-        }
-        catch (NullPointerException | IOException ex)
-        {
-            System.out.println("IO exception!");
-        }
+        String input=loadFile();
 
         List<Token> tokens = sourceToTokens(input);
         for(Token token:tokens)
@@ -40,6 +30,22 @@ public class Main {
         //Print exceptions
         if(exceptions.size()>0)
             throw new CompilationFailedException(exceptions);
+    }
+
+    private static String loadFile()
+    {
+        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+        String input;
+        try(InputStream is = classloader.getResourceAsStream("input.wiles")) {
+            Objects.requireNonNull(is);
+            input = new BufferedReader(new InputStreamReader(is))
+                    .lines().collect(Collectors.joining("\n"));
+        }
+        catch (NullPointerException | IOException ex)
+        {
+            throw new Error("Error loading input file!");
+        }
+        return input;
     }
 
     public static List<Token> sourceToTokens(String input)

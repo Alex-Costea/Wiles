@@ -1,6 +1,5 @@
 package in.costea.wiles.commands;
 
-import in.costea.wiles.SyntaxTree;
 import in.costea.wiles.statics.Constants.SYNTAX_TYPE;
 
 import java.util.ArrayList;
