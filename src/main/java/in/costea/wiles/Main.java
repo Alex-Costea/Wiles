@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class Main {
 
-    private static final ExceptionsCollection exceptions=new ExceptionsCollection();
+    private static final CompilationExceptionsCollection exceptions=new CompilationExceptionsCollection();
     public static void main(String[] args) {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
         try(InputStream is = classloader.getResourceAsStream("input.wiles")) {

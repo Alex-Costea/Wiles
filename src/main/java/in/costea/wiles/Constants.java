@@ -104,10 +104,10 @@ public class Constants{
     public static final String STRING_START="@";
     public static final String NUM_START="#";
     public static final char STRING_DELIMITER='"';
-    public static final char SPACE=' ';
-    public static final char PERIOD='.';
+    public static final char DECIMAL_DELIMITER ='.';
     public static final char COMMENT_START ='#';
     public static final char COMMENT_END='\n';
-    public static final String SPACE_ID=OPERATORS.get(""+SPACE);
-    public static final String UNKNOWN_TOKEN="UNKNOWN_TOKEN";
+    public static final String SPACE_ID=OPERATORS.get(" ");
+    public static final String NEWLINE_ID=OPERATORS.get("\n");
+    public static final String UNKNOWN_TOKEN="ERROR_TOKEN";
 }

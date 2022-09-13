@@ -21,14 +21,14 @@ public class TokenConverterTests {
     {
         var x=new TokensConverter(input);
         x.convert();
-        assertThrows(throwing, x::throwFirstException,message);
+        assertThrows(throwing, x::throwFirstExceptionIfExists,message);
     }
 
     public void TokenConverterThrows(String input, Class<? extends Throwable> throwing)
     {
         var x=new TokensConverter(input);
         x.convert();
-        assertThrows(throwing, x::throwFirstException);
+        assertThrows(throwing, x::throwFirstExceptionIfExists);
     }
 
 
