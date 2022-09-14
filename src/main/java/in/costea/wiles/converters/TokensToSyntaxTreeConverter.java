@@ -3,7 +3,6 @@ package in.costea.wiles.converters;
 import in.costea.wiles.commands.SyntaxTree;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
-import in.costea.wiles.exceptions.UnexpectedEndException;
 import in.costea.wiles.factories.SyntaxTreeFactory;
 import in.costea.wiles.services.TokenTransmitter;
 import in.costea.wiles.statics.Constants.SYNTAX_TYPE;
@@ -23,18 +22,13 @@ public class TokensToSyntaxTreeConverter {
         SyntaxTree syntaxTree;
         TokenTransmitter tokenTransmitter = new TokenTransmitter(tokens);
         exceptions=new CompilationExceptionsCollection();
-        try {
-            while (!tokenTransmitter.tokensExhausted() && tokenTransmitter.requestToken().content().equals(NEWLINE_ID))
-                tokenTransmitter.removeToken();
-            if (!tokenTransmitter.tokensExhausted() && tokenTransmitter.requestToken().content().equals(METHOD_DECLARATION_ID))
-                syntaxTree = SyntaxTreeFactory.of(SYNTAX_TYPE.PROGRAM, tokenTransmitter);
-            else {
-                //TODO: implement
-                throw new Error("Body-only mode not yet implemented!");
-            }
-        } catch (UnexpectedEndException e) {
-            exceptions.add(e);
+        while (!tokenTransmitter.tokensExhausted() && tokenTransmitter.requestTokenAssertNotEmpty().content().equals(NEWLINE_ID))
+            tokenTransmitter.removeToken();
+        if (!tokenTransmitter.tokensExhausted() && tokenTransmitter.requestTokenAssertNotEmpty().content().equals(METHOD_DECLARATION_ID))
             syntaxTree = SyntaxTreeFactory.of(SYNTAX_TYPE.PROGRAM, tokenTransmitter);
+        else {
+            //TODO: implement
+            throw new Error("Body-only mode not yet implemented!");
         }
         this.syntaxTree = syntaxTree;
     }

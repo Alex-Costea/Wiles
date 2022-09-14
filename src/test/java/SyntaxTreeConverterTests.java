@@ -73,5 +73,11 @@ public class SyntaxTreeConverterTests {
         exceptions=new CompilationExceptionsCollection();
         exceptions.add(new UnexpectedEndException("Missing token: \")\""));
         assertEquals(exceptions,converter.getExceptions());
+
+        converter = createConverter(
+                METHOD_DECLARATION_ID);
+        exceptions=new CompilationExceptionsCollection();
+        exceptions.add(new UnexpectedEndException("Expected method name!"));
+        assertEquals(exceptions,converter.getExceptions());
     }
 }

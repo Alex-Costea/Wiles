@@ -15,9 +15,15 @@ public class TokenTransmitter {
         this.tokens = new LinkedList<>(tokens);
     }
 
-    public Token requestToken()  throws UnexpectedEndException
+    public Token requestToken(String message)  throws UnexpectedEndException
     {
-        if(tokensExhausted()) throw new UnexpectedEndException("Input ended unexpectedly!");
+        if(tokensExhausted()) throw new UnexpectedEndException(message);
+        return tokens.getFirst();
+    }
+
+    public Token requestTokenAssertNotEmpty()
+    {
+        if(tokensExhausted()) throw new Error("Input ended unexpectedly");
         return tokens.getFirst();
     }
     /**
@@ -30,7 +36,7 @@ public class TokenTransmitter {
         return tokens.getFirst();
     }
 
-    public void removeToken() throws UnexpectedEndException
+    public void removeToken()
     {
         if(tokensExhausted()) throw new Error("Tried removing token that didn't exist");
         tokens.pop();
