@@ -25,8 +25,8 @@ public class TokenTransmitter {
      */
     public Token requestTokenExpecting(String expectedToken)  throws UnexpectedEndException
     {
-        if(tokensExhausted()) throw new UnexpectedEndException("Missing token: "+
-                TOKENS_INVERSE.getOrDefault(expectedToken,"unknown token"));
+        if(tokensExhausted()) throw new UnexpectedEndException("Missing token: \""+
+                TOKENS_INVERSE.getOrDefault(expectedToken,"unknown token")+"\"");
         return tokens.getFirst();
     }
 

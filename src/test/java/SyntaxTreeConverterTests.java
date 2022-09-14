@@ -65,13 +65,13 @@ public class SyntaxTreeConverterTests {
         converter = createConverter(
                 METHOD_DECLARATION_ID,"!a",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID,START_BLOCK_ID);
         exceptions=new CompilationExceptionsCollection();
-        exceptions.add(new UnexpectedEndException("Missing token: end"));
+        exceptions.add(new UnexpectedEndException("Missing token: \"end\""));
         assertEquals(exceptions,converter.getExceptions());
 
         converter = createConverter(
-                METHOD_DECLARATION_ID,"!a",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID,START_BLOCK_ID);
+                METHOD_DECLARATION_ID,"!a",ROUND_BRACKET_START_ID);
         exceptions=new CompilationExceptionsCollection();
-        exceptions.add(new UnexpectedEndException("Missing token: end"));
+        exceptions.add(new UnexpectedEndException("Missing token: \")\""));
         assertEquals(exceptions,converter.getExceptions());
     }
 }
