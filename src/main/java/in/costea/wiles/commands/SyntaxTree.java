@@ -2,9 +2,13 @@ package in.costea.wiles.commands;
 
 import in.costea.wiles.converters.TokensToSyntaxTreeConverter;
 import in.costea.wiles.data.CompilationExceptionsCollection;
+import in.costea.wiles.data.Token;
+import in.costea.wiles.exceptions.TokenExpectedException;
+import in.costea.wiles.exceptions.UnexpectedEndException;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 import static in.costea.wiles.statics.Constants.SYNTAX_TYPE;
 
@@ -24,6 +28,16 @@ public abstract class SyntaxTree {
     @Override
     public String toString() {
         return toString("");
+    }
+
+    protected Token expect(Predicate<String> found, String message) throws TokenExpectedException, UnexpectedEndException {
+        Token token = converter.requestToken();
+        if(!found.test(token.content()))
+        {
+            throw new TokenExpectedException(message,token.location());
+        }
+        converter.removeToken();
+        return token;
     }
 
     public final String toString(String inside)

@@ -4,12 +4,10 @@ import in.costea.wiles.converters.TokensToSyntaxTreeConverter;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.CompilationException;
-import in.costea.wiles.exceptions.KeywordExpectedException;
 import in.costea.wiles.statics.Constants.SYNTAX_TYPE;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 import static in.costea.wiles.statics.Constants.*;
 
@@ -30,16 +28,6 @@ public class MethodCommand extends SyntaxTree {
     @Override
     public List<SyntaxTree> getComponents() {
         return components;
-    }
-
-    private Token expect(Predicate<String> found,String message) throws CompilationException {
-        Token token = converter.requestToken();
-        if(!found.test(token.content()))
-        {
-            throw new KeywordExpectedException(message,token.location());
-        }
-        converter.removeToken();
-        return token;
     }
 
     @Override

@@ -2,9 +2,7 @@ package in.costea.wiles.commands;
 
 import in.costea.wiles.converters.TokensToSyntaxTreeConverter;
 import in.costea.wiles.data.CompilationExceptionsCollection;
-import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.CompilationException;
-import in.costea.wiles.exceptions.NonMethodInProgramException;
 import in.costea.wiles.statics.Constants.SYNTAX_TYPE;
 
 import java.util.ArrayList;
@@ -34,19 +32,16 @@ public class ProgramCommand extends SyntaxTree {
     @Override
     public CompilationExceptionsCollection process() {
         exceptions=new CompilationExceptionsCollection();
-        Token token;
         try
         {
             while(!converter.tokensExhausted())
             {
-                token=converter.requestToken();
-                converter.removeToken();
-
-                if(token.content().equals(NEWLINE_ID))
+                if(converter.requestToken().content().equals(NEWLINE_ID))
+                {
+                    converter.removeToken();
                     continue;
-                if(!token.content().equals(METHOD_DECLARATION_ID))
-                    throw new NonMethodInProgramException("Method declaration expected!",token.location());
-
+                }
+                expect(x->x.equals(METHOD_DECLARATION_ID),"Method declaration expected!");
                 var methodCommand=new MethodCommand(converter);
                 exceptions.add(methodCommand.process());
                 components.add(methodCommand);
