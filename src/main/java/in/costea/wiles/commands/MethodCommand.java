@@ -3,6 +3,7 @@ package in.costea.wiles.commands;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.CompilationException;
+import in.costea.wiles.exceptions.UnexpectedEndException;
 import in.costea.wiles.services.TokenTransmitter;
 
 import java.util.ArrayList;
@@ -45,11 +46,16 @@ public class MethodCommand extends SyntaxTree {
                 components.add(new Identifier(token.content(), transmitter));
                 transmitter.removeToken();
             }
-            transmitter.removeToken();
+            transmitter.removeToken(); // remove "end"
+            try {
+                expect(x -> x.equals(NEWLINE_ID) || x.equals(END_STATEMENT), "Expected line end!");
+            }
+            catch(UnexpectedEndException ignored) {}
         }
         catch (CompilationException ex)
         {
             exceptions.add(ex);
+            readRestOfLineIgnoringErrors();
         }
         return exceptions;
     }

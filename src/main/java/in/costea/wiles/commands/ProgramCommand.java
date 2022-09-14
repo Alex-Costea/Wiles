@@ -8,7 +8,7 @@ import in.costea.wiles.statics.Constants.SYNTAX_TYPE;
 import java.util.ArrayList;
 import java.util.List;
 
-import static in.costea.wiles.statics.Constants.METHOD_DECLARATION_ID;
+import static in.costea.wiles.statics.Constants.DECLARE_METHOD_ID;
 
 public class ProgramCommand extends SyntaxTree {
     private final List<MethodCommand> components=new ArrayList<>();
@@ -35,7 +35,7 @@ public class ProgramCommand extends SyntaxTree {
         {
             while(!transmitter.tokensExhausted())
             {
-                expect(METHOD_DECLARATION_ID);
+                expect(DECLARE_METHOD_ID);
                 var methodCommand = new MethodCommand(transmitter);
                 exceptions.add(methodCommand.process());
                 components.add(methodCommand);

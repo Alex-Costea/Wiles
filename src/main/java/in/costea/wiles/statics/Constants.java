@@ -19,7 +19,9 @@ public class Constants{
     public static final String NEWLINE_ID="NEWLINE";
     public static final String ROUND_BRACKET_START_ID="ROUND_BRACKET_START";
     public static final String ROUND_BRACKET_END_ID="ROUND_BRACKET_END";
-    public static final String METHOD_DECLARATION_ID="DECLARE_METHOD";
+    public static final String DECLARE_METHOD_ID ="DECLARE_METHOD";
+    public static final String END_STATEMENT="END_STATEMENT";
+    public static final String CONTINUE_LINE="CONTINUE_LINE";
 
     public static final BiMap<String,String> KEYWORDS = HashBiMap.create();
     static
@@ -42,7 +44,7 @@ public class Constants{
            KEYWORDS.put("dictionary","LINKED_MAP");
            KEYWORDS.put("range","RANGE");
            KEYWORDS.put("set","SET");
-           KEYWORDS.put("method",METHOD_DECLARATION_ID);
+           KEYWORDS.put("method", DECLARE_METHOD_ID);
            KEYWORDS.put("var","DECLARE_VARIABLE");
            KEYWORDS.put("let","DECLARE_CONSTANT");
            KEYWORDS.put("if","IF");
@@ -93,6 +95,7 @@ public class Constants{
            OPERATORS.put(":","COLON");
            OPERATORS.put(";","END_STATEMENT");
            OPERATORS.put(" ",SPACE_ID);
+           OPERATORS.put("\\","CONTINUE_LINE");
            OPERATORS.put("\n",NEWLINE_ID);
            OPERATORS.put(":=","ASSIGN");
            OPERATORS.put(">=","LARGER_EQUALS");
@@ -103,7 +106,6 @@ public class Constants{
            OPERATORS.put("*=","ASSIGN_TIMES");
            OPERATORS.put("/=","ASSIGN_DIVIDE");
            OPERATORS.put("^=","ASSIGN_POWER");
-           OPERATORS.put("\\","CONTINUE_LINE");
            if(DEBUG)
            {
                OPERATORS.put("$=", "TEMP");

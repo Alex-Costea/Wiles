@@ -52,6 +52,12 @@ public class InputToTokensConverter {
                 else
                 {
                     String id = readOperator();
+                    int size=tokens.size();
+                    if(size>0 && id.equals(NEWLINE_ID) && tokens.get(size-1).content().equals(CONTINUE_LINE)) {
+                        tokens.remove(size-1);
+                        addNewLine();
+                        continue; // backslash followed by newline is ignored
+                    }
                     if (!id.equals(SPACE_ID))
                         tokens.add(createToken(id));
                     if(id.equals(NEWLINE_ID))

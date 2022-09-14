@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static in.costea.wiles.statics.Constants.METHOD_DECLARATION_ID;
+import static in.costea.wiles.statics.Constants.DECLARE_METHOD_ID;
 import static in.costea.wiles.statics.Constants.NEWLINE_ID;
 
 public class TokensToSyntaxTreeConverter {
@@ -24,7 +24,7 @@ public class TokensToSyntaxTreeConverter {
         exceptions=new CompilationExceptionsCollection();
         while (!tokenTransmitter.tokensExhausted() && tokenTransmitter.requestTokenAssertNotEmpty().content().equals(NEWLINE_ID))
             tokenTransmitter.removeToken();
-        if (!tokenTransmitter.tokensExhausted() && tokenTransmitter.requestTokenAssertNotEmpty().content().equals(METHOD_DECLARATION_ID))
+        if (!tokenTransmitter.tokensExhausted() && tokenTransmitter.requestTokenAssertNotEmpty().content().equals(DECLARE_METHOD_ID))
             syntaxTree = SyntaxTreeFactory.of(SYNTAX_TYPE.PROGRAM, tokenTransmitter);
         else {
             //TODO: implement
