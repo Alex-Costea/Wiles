@@ -4,6 +4,7 @@ import in.costea.wiles.exceptions.CompilationException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class CompilationExceptionsCollection extends ArrayList<CompilationException> {
@@ -15,6 +16,11 @@ public class CompilationExceptionsCollection extends ArrayList<CompilationExcept
     public CompilationExceptionsCollection()
     {
         super();
+    }
+
+    public void add(@NotNull CompilationException... exceptions)
+    {
+        this.addAll(List.of(exceptions));
     }
 
     public void add(@NotNull CompilationExceptionsCollection objToAdd) {

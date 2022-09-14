@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static in.costea.wiles.statics.Constants.METHOD_DECLARATION_ID;
-import static in.costea.wiles.statics.Constants.NEWLINE_ID;
 
 public class ProgramCommand extends SyntaxTree {
     private final List<MethodCommand> components=new ArrayList<>();
@@ -36,11 +35,6 @@ public class ProgramCommand extends SyntaxTree {
         {
             while(!transmitter.tokensExhausted())
             {
-                if(transmitter.requestToken().content().equals(NEWLINE_ID))
-                {
-                    transmitter.removeToken();
-                    continue;
-                }
                 expect(x->x.equals(METHOD_DECLARATION_ID),"Method declaration expected!");
                 var methodCommand=new MethodCommand(transmitter);
                 exceptions.add(methodCommand.process());

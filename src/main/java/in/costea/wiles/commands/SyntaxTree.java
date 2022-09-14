@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 
+import static in.costea.wiles.statics.Constants.NEWLINE_ID;
 import static in.costea.wiles.statics.Constants.SYNTAX_TYPE;
 
 public abstract class SyntaxTree {
@@ -31,12 +32,12 @@ public abstract class SyntaxTree {
     }
 
     protected Token expect(Predicate<String> found, String message) throws TokenExpectedException, UnexpectedEndException {
-        Token token = transmitter.requestToken();
-        if(!found.test(token.content()))
-        {
-            throw new TokenExpectedException(message,token.location());
-        }
+        Token token;
+        while((token = transmitter.requestToken()).content().equals(NEWLINE_ID))
+            transmitter.removeToken();
         transmitter.removeToken();
+        if(!found.test(token.content()))
+            throw new TokenExpectedException(message,token.location());
         return token;
     }
 
