@@ -1,7 +1,7 @@
 package in.costea.wiles.statics;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 
 import static java.util.Collections.max;
 
@@ -21,7 +21,7 @@ public class Constants{
     public static final String ROUND_BRACKET_END_ID="ROUND_BRACKET_END";
     public static final String METHOD_DECLARATION_ID="DECLARE_METHOD";
 
-    public static final Map<String,String> KEYWORDS =new LinkedHashMap<>();
+    public static final BiMap<String,String> KEYWORDS = HashBiMap.create();
     static
     {
            KEYWORDS.put("true","TRUE");
@@ -73,7 +73,7 @@ public class Constants{
         IDENTIFIER,
     }
 
-    public static final Map<String,String> OPERATORS =new LinkedHashMap<>();
+    public static final BiMap<String,String> OPERATORS =HashBiMap.create();
     static
     {
            OPERATORS.put("+","PLUS");
@@ -110,6 +110,12 @@ public class Constants{
                OPERATORS.put("=$=", "TEMP2");
            }
     }
+
+    public static final BiMap<String,String> TOKENS=HashBiMap.create(KEYWORDS);
+    static {
+        TOKENS.putAll(OPERATORS);
+    }
+    public static final BiMap<String,String> TOKENS_INVERSE=TOKENS.inverse();
 
     public static final int MAX_OPERATOR_LENGTH = 5;
     static

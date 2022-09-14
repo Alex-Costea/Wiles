@@ -35,11 +35,11 @@ public class MethodCommand extends SyntaxTree {
         try {
             token = expect(x->x.length()>1 && x.startsWith(IDENTIFIER_START),"Expected method name!");
             methodName=token.content().substring(1);
-            expect(x->x.equals(ROUND_BRACKET_START_ID),"Parenthesis expected!");
+            expect(ROUND_BRACKET_START_ID);
             //TODO: method declaration
-            expect(x->x.equals(ROUND_BRACKET_END_ID),"Parenthesis expected!");
-            expect(x->x.equals(START_BLOCK_ID),"Start block expected!");
-            while(!(token = transmitter.requestToken()).content().equals(END_BLOCK_ID))
+            expect(ROUND_BRACKET_END_ID);
+            expect(START_BLOCK_ID);
+            while(!(token = transmitter.requestTokenExpecting(END_BLOCK_ID)).content().equals(END_BLOCK_ID))
             {
                 //TODO: method body
                 components.add(new Identifier(token.content(), transmitter));

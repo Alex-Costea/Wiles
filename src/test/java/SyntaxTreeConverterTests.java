@@ -1,6 +1,7 @@
 import in.costea.wiles.converters.TokensToSyntaxTreeConverter;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.exceptions.TokenExpectedException;
+import in.costea.wiles.exceptions.UnexpectedEndException;
 import org.junit.jupiter.api.Test;
 import in.costea.wiles.data.Token;
 import static in.costea.wiles.statics.Constants.*;
@@ -15,14 +16,27 @@ public class SyntaxTreeConverterTests {
         temp.convert();
         return temp;
     }
+
     @Test
-    public void SyntaxTreeConverterTest()
+    void emptyBodyTest()
+    {
+        //Not yet implemented
+        assertThrows(Error.class, this::createConverter);
+        assertThrows(Error.class,()->createConverter(NEWLINE_ID));
+    }
+    @Test
+    public void methodDeclarationTest()
     {
         TokensToSyntaxTreeConverter converter;
         CompilationExceptionsCollection exceptions=new CompilationExceptionsCollection();
 
         converter = createConverter(
                 METHOD_DECLARATION_ID,"!a",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID
+                ,START_BLOCK_ID,END_BLOCK_ID);
+        assertEquals(exceptions,converter.getExceptions());
+
+        converter = createConverter(
+                NEWLINE_ID,NEWLINE_ID,METHOD_DECLARATION_ID,"!a",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID
                 ,START_BLOCK_ID,END_BLOCK_ID);
         assertEquals(exceptions,converter.getExceptions());
 
@@ -44,8 +58,20 @@ public class SyntaxTreeConverterTests {
                 METHOD_DECLARATION_ID,"!a",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID,
                 END_BLOCK_ID,"!b","!c");
         exceptions=new CompilationExceptionsCollection();
-        exceptions.add(new TokenExpectedException("Start block expected!",null),
+        exceptions.add(new TokenExpectedException("Token \"begin\" expected!",null),
                 new TokenExpectedException("Method declaration expected!",null));
+        assertEquals(exceptions,converter.getExceptions());
+
+        converter = createConverter(
+                METHOD_DECLARATION_ID,"!a",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID,START_BLOCK_ID);
+        exceptions=new CompilationExceptionsCollection();
+        exceptions.add(new UnexpectedEndException("Missing token: end"));
+        assertEquals(exceptions,converter.getExceptions());
+
+        converter = createConverter(
+                METHOD_DECLARATION_ID,"!a",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID,START_BLOCK_ID);
+        exceptions=new CompilationExceptionsCollection();
+        exceptions.add(new UnexpectedEndException("Missing token: end"));
         assertEquals(exceptions,converter.getExceptions());
     }
 }
