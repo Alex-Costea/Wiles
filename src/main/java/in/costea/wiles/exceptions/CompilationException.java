@@ -8,7 +8,7 @@ public abstract class CompilationException extends Exception {
     private final TokenLocation tokenLocation;
     public CompilationException(@NotNull String s, TokenLocation tokenLocation)
     {
-        super("Line "+tokenLocation.line()+", character "+tokenLocation.lineIndex()+": "+s);
+        super(tokenLocation!=null?("Line "+tokenLocation.line()+", character "+tokenLocation.lineIndex()+": "+s):s);
         this.tokenLocation=tokenLocation;
     }
 

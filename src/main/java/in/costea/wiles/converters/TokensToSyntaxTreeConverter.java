@@ -10,6 +10,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import static in.costea.wiles.statics.Constants.METHOD_DECLARATION_ID;
+
 public class TokensToSyntaxTreeConverter {
     private final SyntaxTree syntaxTree;
     private final CompilationExceptionsCollection exceptions;
@@ -17,7 +19,7 @@ public class TokensToSyntaxTreeConverter {
     public TokensToSyntaxTreeConverter(@NotNull List<Token> tokens)
     {
         TokenTransmitter tokenTransmitter = new TokenTransmitter(tokens);
-        if(tokens.get(0).equals(new Token("DECLARE_METHOD")))
+        if(tokens.get(0).equals(new Token(METHOD_DECLARATION_ID)))
             syntaxTree =  SyntaxTreeFactory.of(SYNTAX_TYPE.PROGRAM, tokenTransmitter);
         else
         {
