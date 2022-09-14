@@ -35,8 +35,8 @@ public class ProgramCommand extends SyntaxTree {
         {
             while(!transmitter.tokensExhausted())
             {
-                expect(x->x.equals(METHOD_DECLARATION_ID),"Method declaration expected!");
-                var methodCommand=new MethodCommand(transmitter);
+                expect(METHOD_DECLARATION_ID);
+                var methodCommand = new MethodCommand(transmitter);
                 exceptions.add(methodCommand.process());
                 components.add(methodCommand);
             }

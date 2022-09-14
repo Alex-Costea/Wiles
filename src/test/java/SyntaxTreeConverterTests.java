@@ -51,7 +51,7 @@ public class SyntaxTreeConverterTests {
                 METHOD_DECLARATION_ID,"!a",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID
                 ,START_BLOCK_ID,END_BLOCK_ID,"!b");
         exceptions=new CompilationExceptionsCollection();
-        exceptions.add(new TokenExpectedException("Method declaration expected!",null));
+        exceptions.add(new TokenExpectedException("Token \"method\" expected!",null));
         assertEquals(exceptions,converter.getExceptions());
 
         converter = createConverter(
@@ -59,7 +59,7 @@ public class SyntaxTreeConverterTests {
                 END_BLOCK_ID,"!b","!c");
         exceptions=new CompilationExceptionsCollection();
         exceptions.add(new TokenExpectedException("Token \"begin\" expected!",null),
-                new TokenExpectedException("Method declaration expected!",null));
+                new TokenExpectedException("Token \"method\" expected!",null));
         assertEquals(exceptions,converter.getExceptions());
 
         converter = createConverter(
