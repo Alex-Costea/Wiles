@@ -1,10 +1,9 @@
 package in.costea.wiles.commands;
 
-import in.costea.wiles.converters.TokensToSyntaxTreeConverter;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.CompilationException;
-import in.costea.wiles.statics.Constants.SYNTAX_TYPE;
+import in.costea.wiles.services.TokenTransmitter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +15,8 @@ public class MethodCommand extends SyntaxTree {
     private String methodName;
     CompilationExceptionsCollection exceptions=new CompilationExceptionsCollection();
 
-    public MethodCommand(TokensToSyntaxTreeConverter converter) {
-        super(converter);
+    public MethodCommand(TokenTransmitter transmitter) {
+        super(transmitter);
     }
 
     @Override
@@ -40,13 +39,13 @@ public class MethodCommand extends SyntaxTree {
             //TODO: method declaration
             expect(x->x.equals(ROUND_BRACKET_END_ID),"Parenthesis expected!");
             expect(x->x.equals(START_BLOCK_ID),"Start block expected!");
-            while(!(token = converter.requestToken()).content().equals(END_BLOCK_ID))
+            while(!(token = transmitter.requestToken()).content().equals(END_BLOCK_ID))
             {
                 //TODO: method body
-                components.add(new Identifier(token.content(),converter));
-                converter.removeToken();
+                components.add(new Identifier(token.content(), transmitter));
+                transmitter.removeToken();
             }
-            converter.removeToken();
+            transmitter.removeToken();
         }
         catch (CompilationException ex)
         {

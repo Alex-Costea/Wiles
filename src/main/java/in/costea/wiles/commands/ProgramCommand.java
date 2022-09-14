@@ -1,8 +1,8 @@
 package in.costea.wiles.commands;
 
-import in.costea.wiles.converters.TokensToSyntaxTreeConverter;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.exceptions.CompilationException;
+import in.costea.wiles.services.TokenTransmitter;
 import in.costea.wiles.statics.Constants.SYNTAX_TYPE;
 
 import java.util.ArrayList;
@@ -15,8 +15,8 @@ public class ProgramCommand extends SyntaxTree {
     private final List<MethodCommand> components=new ArrayList<>();
     CompilationExceptionsCollection exceptions;
 
-    public ProgramCommand(TokensToSyntaxTreeConverter converter) {
-        super(converter);
+    public ProgramCommand(TokenTransmitter transmitter) {
+        super(transmitter);
     }
 
     @Override
@@ -34,15 +34,15 @@ public class ProgramCommand extends SyntaxTree {
         exceptions=new CompilationExceptionsCollection();
         try
         {
-            while(!converter.tokensExhausted())
+            while(!transmitter.tokensExhausted())
             {
-                if(converter.requestToken().content().equals(NEWLINE_ID))
+                if(transmitter.requestToken().content().equals(NEWLINE_ID))
                 {
-                    converter.removeToken();
+                    transmitter.removeToken();
                     continue;
                 }
                 expect(x->x.equals(METHOD_DECLARATION_ID),"Method declaration expected!");
-                var methodCommand=new MethodCommand(converter);
+                var methodCommand=new MethodCommand(transmitter);
                 exceptions.add(methodCommand.process());
                 components.add(methodCommand);
             }

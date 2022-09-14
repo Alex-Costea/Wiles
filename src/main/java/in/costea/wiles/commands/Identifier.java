@@ -1,7 +1,7 @@
 package in.costea.wiles.commands;
 
-import in.costea.wiles.converters.TokensToSyntaxTreeConverter;
 import in.costea.wiles.data.CompilationExceptionsCollection;
+import in.costea.wiles.services.TokenTransmitter;
 import in.costea.wiles.statics.Constants;
 
 import java.util.ArrayList;
@@ -11,8 +11,8 @@ public class Identifier extends SyntaxTree {
     private final List<SyntaxTree> components=new ArrayList<>();
     private final String name;
 
-    public Identifier(String name,TokensToSyntaxTreeConverter converter) {
-        super(converter);
+    public Identifier(String name, TokenTransmitter transmitter) {
+        super(transmitter);
         this.name=name;
     }
 

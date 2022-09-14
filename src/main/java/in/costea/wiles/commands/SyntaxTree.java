@@ -1,10 +1,10 @@
 package in.costea.wiles.commands;
 
-import in.costea.wiles.converters.TokensToSyntaxTreeConverter;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.TokenExpectedException;
 import in.costea.wiles.exceptions.UnexpectedEndException;
+import in.costea.wiles.services.TokenTransmitter;
 
 import java.util.List;
 import java.util.Objects;
@@ -13,11 +13,11 @@ import java.util.function.Predicate;
 import static in.costea.wiles.statics.Constants.SYNTAX_TYPE;
 
 public abstract class SyntaxTree {
-    protected TokensToSyntaxTreeConverter converter;
+    protected TokenTransmitter transmitter;
 
-    public SyntaxTree(TokensToSyntaxTreeConverter converter)
+    public SyntaxTree(TokenTransmitter transmitter)
     {
-        this.converter=converter;
+        this.transmitter = transmitter;
 
     }
     public abstract SYNTAX_TYPE getType();
@@ -31,12 +31,12 @@ public abstract class SyntaxTree {
     }
 
     protected Token expect(Predicate<String> found, String message) throws TokenExpectedException, UnexpectedEndException {
-        Token token = converter.requestToken();
+        Token token = transmitter.requestToken();
         if(!found.test(token.content()))
         {
             throw new TokenExpectedException(message,token.location());
         }
-        converter.removeToken();
+        transmitter.removeToken();
         return token;
     }
 
