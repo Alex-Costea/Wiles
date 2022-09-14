@@ -22,6 +22,7 @@ public class TokensToSyntaxTreeConverter {
             syntaxTree =  SyntaxTreeFactory.of(SYNTAX_TYPE.PROGRAM,this);
         else
         {
+            //TODO: implement
             throw new Error("Body-only mode not yet implemented!");
         }
         exceptions=new CompilationExceptionsCollection();

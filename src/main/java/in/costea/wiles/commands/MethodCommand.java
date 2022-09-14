@@ -3,17 +3,20 @@ package in.costea.wiles.commands;
 import in.costea.wiles.converters.TokensToSyntaxTreeConverter;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
-import in.costea.wiles.exceptions.IdentifierExpectedException;
+import in.costea.wiles.exceptions.CompilationException;
 import in.costea.wiles.exceptions.KeywordExpectedException;
-import in.costea.wiles.exceptions.UnexpectedEndException;
 import in.costea.wiles.statics.Constants.SYNTAX_TYPE;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+
+import static in.costea.wiles.statics.Constants.*;
 
 public class MethodCommand extends SyntaxTree {
     private final List<SyntaxTree> components=new ArrayList<>();
     private String methodName;
+    CompilationExceptionsCollection exceptions=new CompilationExceptionsCollection();
 
     public MethodCommand(TokensToSyntaxTreeConverter converter) {
         super(converter);
@@ -29,40 +32,35 @@ public class MethodCommand extends SyntaxTree {
         return components;
     }
 
+    private Token expect(Predicate<String> found,String message) throws CompilationException {
+        Token token = converter.requestToken();
+        if(!found.test(token.content()))
+        {
+            throw new KeywordExpectedException(message,token.location());
+        }
+        converter.removeToken();
+        return token;
+    }
+
     @Override
     public CompilationExceptionsCollection process() {
-        CompilationExceptionsCollection exceptions=new CompilationExceptionsCollection();
         Token token;
         try {
-            token = converter.requestToken();
-            if(token.content().length()<2 || token.content().charAt(0)!='!')
-            {
-                exceptions.add(new IdentifierExpectedException("Expected method name!",token.location()));
-                return exceptions;
-            }
-            converter.removeToken();
+            token = expect(x->x.length()>1 && x.startsWith(IDENTIFIER_START),"Expected method name!");
             methodName=token.content().substring(1);
-
-            //TODO: method body
-
-            token = converter.requestToken();
-            if(!token.content().equals("START_BLOCK"))
+            expect(x->x.equals(ROUND_BRACKET_START_ID),"Parenthesis expected!");
+            //TODO: method declaration
+            expect(x->x.equals(ROUND_BRACKET_END_ID),"Parenthesis expected!");
+            expect(x->x.equals(START_BLOCK_ID),"Start block expected!");
+            while(!(token = converter.requestToken()).content().equals(END_BLOCK_ID))
             {
-                exceptions.add(new KeywordExpectedException("Start block expected!",token.location()));
-                return exceptions;
-            }
-            converter.removeToken();
-
-            //TODO: things between begin and end
-
-            while(!(token = converter.requestToken()).content().equals("END_BLOCK"))
-            {
+                //TODO: method body
                 components.add(new Identifier(token.content(),converter));
                 converter.removeToken();
             }
             converter.removeToken();
         }
-        catch (UnexpectedEndException ex)
+        catch (CompilationException ex)
         {
             exceptions.add(ex);
         }
@@ -71,6 +69,6 @@ public class MethodCommand extends SyntaxTree {
 
     @Override
     public String toString() {
-        return super.toString(methodName!=null?" "+methodName+" ":"");
+        return super.toString(methodName!=null?methodName:"");
     }
 }

@@ -11,6 +11,16 @@ public class Constants{
 
     }
     public static final boolean DEBUG=true;
+
+    public static final String UNKNOWN_TOKEN="ERROR_TOKEN";
+    public static final String START_BLOCK_ID ="START_BLOCK";
+    public static final String END_BLOCK_ID ="END_BLOCK";
+    public static final String SPACE_ID="SPACE";
+    public static final String NEWLINE_ID="NEWLINE";
+    public static final String ROUND_BRACKET_START_ID="ROUND_BRACKET_START";
+    public static final String ROUND_BRACKET_END_ID="ROUND_BRACKET_END";
+    public static final String METHOD_DECLARATION_ID="DECLARE_METHOD";
+
     public static final Map<String,String> KEYWORDS =new LinkedHashMap<>();
     static
     {
@@ -32,7 +42,7 @@ public class Constants{
            KEYWORDS.put("dictionary","LINKED_MAP");
            KEYWORDS.put("range","RANGE");
            KEYWORDS.put("set","SET");
-           KEYWORDS.put("method","DECLARE_METHOD");
+           KEYWORDS.put("method",METHOD_DECLARATION_ID);
            KEYWORDS.put("var","DECLARE_VARIABLE");
            KEYWORDS.put("let","DECLARE_CONSTANT");
            KEYWORDS.put("if","IF");
@@ -53,31 +63,14 @@ public class Constants{
            KEYWORDS.put("stop","BREAK");
            KEYWORDS.put("skip","CONTINUE");
            KEYWORDS.put("result","RETURN");
-           KEYWORDS.put("begin","START_BLOCK");
-           KEYWORDS.put("end","END_BLOCK");
+           KEYWORDS.put("begin", START_BLOCK_ID);
+           KEYWORDS.put("end", END_BLOCK_ID);
     }
 
-    @SuppressWarnings("unused")
     public enum SYNTAX_TYPE {
         PROGRAM,
         METHOD,
-        METHOD_BODY,
-        VARIABLE,
-        CONSTANT,
-        IF,
-        THEN,
-        ELSE,
-        FOR,
-        FOR_BODY,
-        RANGE,
-        WHILE,
-        WHILE_BODY,
-        GENERIC_TYPE,
-        BINARY_OPERATION,
-        ROUND_BRACKETS,
-        ACCESS,
         IDENTIFIER,
-        LITERAL
     }
 
     public static final Map<String,String> OPERATORS =new LinkedHashMap<>();
@@ -91,16 +84,16 @@ public class Constants{
            OPERATORS.put("=","EQUALS");
            OPERATORS.put(">","LARGER");
            OPERATORS.put("<","SMALLER");
-           OPERATORS.put("(","ROUND_BRACKET_START");
-           OPERATORS.put(")","ROUND_BRACKET_END");
+           OPERATORS.put("(",ROUND_BRACKET_START_ID);
+           OPERATORS.put(")",ROUND_BRACKET_END_ID);
            OPERATORS.put("[","SQUARE_BRACKET_START");
            OPERATORS.put("]","SQUARE_BRACKET_END");
            OPERATORS.put(",","COMMA");
            OPERATORS.put(".","DOT");
            OPERATORS.put(":","COLON");
            OPERATORS.put(";","END_STATEMENT");
-           OPERATORS.put(" ","SPACE");
-           OPERATORS.put("\n","NEWLINE");
+           OPERATORS.put(" ",SPACE_ID);
+           OPERATORS.put("\n",NEWLINE_ID);
            OPERATORS.put(":=","ASSIGN");
            OPERATORS.put(">=","LARGER_EQUALS");
            OPERATORS.put("<=","SMALLER_EQUALS");
@@ -131,7 +124,4 @@ public class Constants{
     public static final char DECIMAL_DELIMITER ='.';
     public static final char COMMENT_START ='#';
     public static final char COMMENT_END='\n';
-    public static final String SPACE_ID=OPERATORS.get(" ");
-    public static final String NEWLINE_ID=OPERATORS.get("\n");
-    public static final String UNKNOWN_TOKEN="ERROR_TOKEN";
 }

@@ -4,6 +4,7 @@ import in.costea.wiles.converters.TokensToSyntaxTreeConverter;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 
 import java.util.List;
+import java.util.Objects;
 
 import static in.costea.wiles.statics.Constants.SYNTAX_TYPE;
 
@@ -29,14 +30,18 @@ public abstract class SyntaxTree {
     {
         StringBuilder sb=new StringBuilder();
         sb.append(getType());
-        sb.append(inside);
+        if(!Objects.equals(inside, ""))
+            sb.append(" ").append(inside).append(" ");
         if(getComponents().size()>0)
         {
             sb.append("(");
+            int i=0;
             for (SyntaxTree component : getComponents())
             {
                 sb.append(component.toString());
-                sb.append(";");
+                if(i<getComponents().size()-1)
+                    sb.append("; ");
+                i++;
             }
             sb.append(")");
         }
