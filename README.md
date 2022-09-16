@@ -35,8 +35,7 @@ Operators:
 - `[]`, `()`, `,`, `.`, `:`
 
 Other keywords:
-- `break`, `continue` (break, continue equivalents)
-- `result` (return equivalent)
+- `stop`, `skip` (break, continue equivalents)
 - `begin`, `end` (code blocks)
 
 Miscellaneous:
@@ -44,6 +43,7 @@ Miscellaneous:
 - `;` can be specified or inferred from newline
 - Language is statically, strongly typed with some type inference
 - Comment using #
+- Returning value done with `method_name := result`
 
 ## Examples
 ### Hello World

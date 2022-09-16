@@ -1,7 +1,8 @@
 package in.costea.wiles.commands;
 
 import in.costea.wiles.data.CompilationExceptionsCollection;
-import in.costea.wiles.exceptions.UnexpectedEndException;
+import in.costea.wiles.exceptions.CompilationException;
+import in.costea.wiles.exceptions.UnexpectedTokenException;
 import in.costea.wiles.services.TokenTransmitter;
 import in.costea.wiles.statics.Constants;
 
@@ -31,24 +32,25 @@ public class MethodBodyCommand extends SyntaxTree {
     public CompilationExceptionsCollection process() {
         while(!transmitter.tokensExhausted())
         {
-            try {
+            try
+            {
                 var token = transmitter.requestToken("Input ended unexpectedly!");
-                if(token.content().equals(END_BLOCK_ID))
+                if (token.content().equals(END_BLOCK_ID))
                     break;
                 transmitter.removeToken();
-                if(token.content().equals(NEWLINE_ID))
+                if (token.content().equals(NEWLINE_ID) || token.content().equals(FINISH_STATEMENT))
                     continue;
-                if(token.content().startsWith(IDENTIFIER_START))
-                {
-                    var identifier=new Identifier(token.content(),transmitter);
+                if (token.content().equals(CONTINUE_LINE))
+                    throw new UnexpectedTokenException("\\", token.location());
+                if (token.content().startsWith(IDENTIFIER_START)) {
+                    var identifier = new Identifier(token.content(), transmitter);
                     exceptions.add(identifier.process());
                     components.add(identifier);
                 }
             }
-            catch(UnexpectedEndException ex)
+            catch(CompilationException ex)
             {
                 exceptions.add(ex);
-                break;
             }
         }
         return exceptions;

@@ -23,7 +23,7 @@ public class TokenTransmitter {
 
     public Token requestTokenAssertNotEmpty()
     {
-        if(tokensExhausted()) throw new Error("Input ended unexpectedly");
+        if(tokensExhausted()) throw new IllegalStateException("Input ended unexpectedly");
         return tokens.getFirst();
     }
     /**
@@ -38,7 +38,7 @@ public class TokenTransmitter {
 
     public void removeToken()
     {
-        if(tokensExhausted()) throw new Error("Tried removing token that didn't exist");
+        if(tokensExhausted()) throw new IllegalStateException("Tried removing token that didn't exist");
         tokens.pop();
     }
 

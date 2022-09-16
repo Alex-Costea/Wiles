@@ -64,7 +64,6 @@ public class Constants{
            KEYWORDS.put("by","RANGE_BY");
            KEYWORDS.put("stop","BREAK");
            KEYWORDS.put("skip","CONTINUE");
-           KEYWORDS.put("result","RETURN");
            KEYWORDS.put("begin", START_BLOCK_ID);
            KEYWORDS.put("end", END_BLOCK_ID);
     }
@@ -96,7 +95,7 @@ public class Constants{
            OPERATORS.put(":","COLON");
            OPERATORS.put(";","END_STATEMENT");
            OPERATORS.put(" ",SPACE_ID);
-           OPERATORS.put("\\","CONTINUE_LINE");
+           OPERATORS.put("\\",CONTINUE_LINE);
            OPERATORS.put("\n",NEWLINE_ID);
            OPERATORS.put(":=","ASSIGN");
            OPERATORS.put(">=","LARGER_EQUALS");
