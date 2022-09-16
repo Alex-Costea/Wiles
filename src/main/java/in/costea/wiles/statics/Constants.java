@@ -20,7 +20,7 @@ public class Constants{
     public static final String ROUND_BRACKET_START_ID="ROUND_BRACKET_START";
     public static final String ROUND_BRACKET_END_ID="ROUND_BRACKET_END";
     public static final String DECLARE_METHOD_ID ="DECLARE_METHOD";
-    public static final String END_STATEMENT="END_STATEMENT";
+    public static final String FINISH_STATEMENT ="FINISH_STATEMENT";
     public static final String CONTINUE_LINE="CONTINUE_LINE";
 
     public static final BiMap<String,String> KEYWORDS = HashBiMap.create();
@@ -73,6 +73,7 @@ public class Constants{
         PROGRAM,
         METHOD,
         IDENTIFIER,
+        METHOD_BODY
     }
 
     public static final BiMap<String,String> OPERATORS =HashBiMap.create();

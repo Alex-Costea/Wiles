@@ -1,7 +1,6 @@
 package in.costea.wiles.commands;
 
 import in.costea.wiles.data.CompilationExceptionsCollection;
-import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.CompilationException;
 import in.costea.wiles.exceptions.UnexpectedEndException;
 import in.costea.wiles.services.TokenTransmitter;
@@ -14,7 +13,7 @@ import static in.costea.wiles.statics.Constants.*;
 public class MethodCommand extends SyntaxTree {
     private final List<SyntaxTree> components=new ArrayList<>();
     private String methodName;
-    CompilationExceptionsCollection exceptions=new CompilationExceptionsCollection();
+    private final CompilationExceptionsCollection exceptions=new CompilationExceptionsCollection();
 
     public MethodCommand(TokenTransmitter transmitter) {
         super(transmitter);
@@ -32,23 +31,21 @@ public class MethodCommand extends SyntaxTree {
 
     @Override
     public CompilationExceptionsCollection process() {
-        Token token;
         try {
-            token = expect(x->x.length()>1 && x.startsWith(IDENTIFIER_START),"Expected method name!");
-            methodName=token.content().substring(1);
+            methodName=expect(x->x.length()>1 && x.startsWith(IDENTIFIER_START),"Expected method name!").
+                    content().substring(1);
             expect(ROUND_BRACKET_START_ID);
             //TODO: method declaration
             expect(ROUND_BRACKET_END_ID);
             expect(START_BLOCK_ID);
-            while(!(token = transmitter.requestTokenExpecting(END_BLOCK_ID)).content().equals(END_BLOCK_ID))
+            //method body
+            var MethodBodyCommand = new MethodBodyCommand(transmitter);
+            exceptions.add(MethodBodyCommand.process());
+            components.add(MethodBodyCommand);
+            expect(END_BLOCK_ID);
+            try
             {
-                //TODO: method body
-                components.add(new Identifier(token.content(), transmitter));
-                transmitter.removeToken();
-            }
-            transmitter.removeToken(); // remove "end"
-            try {
-                expect(x -> x.equals(NEWLINE_ID) || x.equals(END_STATEMENT), "Expected line end!");
+                expect(x -> x.equals(NEWLINE_ID) || x.equals(FINISH_STATEMENT), "Expected line end!");
             }
             catch(UnexpectedEndException ignored) {}
         }

@@ -25,7 +25,7 @@ public class SyntaxTreeConverterTests {
         assertThrows(Error.class,()->createConverter(NEWLINE_ID));
     }
     @Test
-    public void methodDeclarationTest()
+    public void methodDeclarationExceptionsTest()
     {
         TokensToSyntaxTreeConverter converter;
         CompilationExceptionsCollection exceptions=new CompilationExceptionsCollection();
@@ -81,8 +81,8 @@ public class SyntaxTreeConverterTests {
         assertEquals(exceptions,converter.getExceptions());
 
         converter = createConverter(
-                DECLARE_METHOD_ID,"!name",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID,END_STATEMENT,
-                DECLARE_METHOD_ID,"!name",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID,END_STATEMENT);
+                DECLARE_METHOD_ID,"!name",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID, FINISH_STATEMENT,
+                DECLARE_METHOD_ID,"!name",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID, FINISH_STATEMENT);
         exceptions=new CompilationExceptionsCollection();
         exceptions.add(new UnexpectedEndException("Token \"begin\" expected!"),
                 new UnexpectedEndException("Token \"begin\" expected!"));

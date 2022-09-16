@@ -1,11 +1,10 @@
 package in.costea.wiles.converters;
 
+import in.costea.wiles.commands.ProgramCommand;
 import in.costea.wiles.commands.SyntaxTree;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
-import in.costea.wiles.factories.SyntaxTreeFactory;
 import in.costea.wiles.services.TokenTransmitter;
-import in.costea.wiles.statics.Constants.SYNTAX_TYPE;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -25,7 +24,7 @@ public class TokensToSyntaxTreeConverter {
         while (!tokenTransmitter.tokensExhausted() && tokenTransmitter.requestTokenAssertNotEmpty().content().equals(NEWLINE_ID))
             tokenTransmitter.removeToken();
         if (!tokenTransmitter.tokensExhausted() && tokenTransmitter.requestTokenAssertNotEmpty().content().equals(DECLARE_METHOD_ID))
-            syntaxTree = SyntaxTreeFactory.of(SYNTAX_TYPE.PROGRAM, tokenTransmitter);
+            syntaxTree = new ProgramCommand(tokenTransmitter);
         else {
             //TODO: implement
             throw new Error("Body-only mode not yet implemented!");

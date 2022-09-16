@@ -12,7 +12,7 @@ import static in.costea.wiles.statics.Constants.DECLARE_METHOD_ID;
 
 public class ProgramCommand extends SyntaxTree {
     private final List<MethodCommand> components=new ArrayList<>();
-    CompilationExceptionsCollection exceptions;
+    private final CompilationExceptionsCollection exceptions=new CompilationExceptionsCollection();
 
     public ProgramCommand(TokenTransmitter transmitter) {
         super(transmitter);
@@ -30,7 +30,6 @@ public class ProgramCommand extends SyntaxTree {
 
     @Override
     public CompilationExceptionsCollection process() {
-        exceptions=new CompilationExceptionsCollection();
         try
         {
             while(!transmitter.tokensExhausted())
