@@ -6,7 +6,7 @@ This is a WIP programming language compiler for my own language. The goal is to 
 ### Why is the language called Wiles?
 As it is inspired by Pascal, I decided to also name my language after a mathematician, but unlike Pascal, one that is contemporary. As such, it's named after Andrew Wiles, who proved Fermat's Last Theorem.
 
-### Are there plans to make the language object-oriented? What about other cool features like lambda expressions etc.?
+### Are there plans to make the language object-oriented? What about other cool features, such as lambda expressions?
 This is a one-man project mostly meant for myself to try out making a compiler, so honestly, it depends on my time and motivation. I would like to first finish a functional draft of the language before looking into any advanced features.
 
 ## Language specification
