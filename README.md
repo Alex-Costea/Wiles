@@ -1,6 +1,16 @@
 # Wiles
 
-## THIS IS A VERY WIP SPECIFICATION OF THE LANGUAGE
+This is a WIP programming language compiler for my own language. The goal is to make a simple, C-style language with clean syntax inspired by Python and Pascal, that is also easier to understand for beginners. However, even more so, the goal is to learn how to make simple compilers 😄
+
+## FAQ
+### Why is the language called Wiles?
+As it is inspired by Pascal, I decided to also name my language after a mathematician, but unlike Pascal, one that is contemporary. As such, it's named after Andrew Wiles, who proved Fermat's Last Theorem.
+
+### Are there plans to make the language object-oriented? What about other cool features like lambda expressions etc.?
+This is a one-man project mostly meant for myself to try out making a compiler, so honestly, it depends on my time and motivation. I would like to first finish a functional draft of the language before looking into any advanced features.
+
+## Language specification
+### NOTE: WORK IN PROGRESS, SUBJECT TO CHANGE
 
 Literals
 
@@ -42,8 +52,9 @@ Miscellaneous:
 - Declaring `main` method optional when using no other methods
 - `;` can be specified or inferred from newline
 - Language is statically, strongly typed with some type inference
-- Comment using #
+- Comment using `#`
 - Returning value done with `method_name := result`
+- Garbage collection
 
 ## Examples
 ### Hello World
