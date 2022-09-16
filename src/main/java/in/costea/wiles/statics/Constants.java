@@ -93,7 +93,7 @@ public class Constants{
            OPERATORS.put(",","COMMA");
            OPERATORS.put(".","DOT");
            OPERATORS.put(":","COLON");
-           OPERATORS.put(";","END_STATEMENT");
+           OPERATORS.put(";",FINISH_STATEMENT);
            OPERATORS.put(" ",SPACE_ID);
            OPERATORS.put("\\",CONTINUE_LINE);
            OPERATORS.put("\n",NEWLINE_ID);

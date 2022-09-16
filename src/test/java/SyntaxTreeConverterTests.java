@@ -67,9 +67,13 @@ public class SyntaxTreeConverterTests {
                 NEWLINE_ID,START_BLOCK_ID,
                 NEWLINE_ID,END_BLOCK_ID);
 
-        assertResults(null, "PROGRAM(METHOD a (METHOD_BODY(IDENTIFIER !b ; IDENTIFIER !c )))",
-                DECLARE_METHOD_ID,"!a",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID
-                ,START_BLOCK_ID,"!b","!c",END_BLOCK_ID);
+        assertResults(null, "PROGRAM(METHOD main (METHOD_BODY(!b ASSIGN !c)))",
+                DECLARE_METHOD_ID,"!main",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID
+                ,START_BLOCK_ID,"!b","ASSIGN","!c",END_BLOCK_ID);
+
+        assertResults(null, "PROGRAM(METHOD main (METHOD_BODY(!b ASSIGN #3)))",
+                DECLARE_METHOD_ID,"!main",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID
+                ,START_BLOCK_ID,"!b","ASSIGN","#3",END_BLOCK_ID);
     }
 
     private CompilationExceptionsCollection createExceptions(CompilationException... list)
@@ -93,11 +97,11 @@ public class SyntaxTreeConverterTests {
                 DECLARE_METHOD_ID,"!a",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID,
                 END_BLOCK_ID,NEWLINE_ID,"!c","!d",NEWLINE_ID,"!e");
 
-        assertResults(createExceptions(new UnexpectedEndException("Missing token: \"end\"")),
+        assertResults(createExceptions(new UnexpectedEndException("Token \"end\" expected!")),
                 null,
                 DECLARE_METHOD_ID,"!a",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID,START_BLOCK_ID);
 
-        assertResults(createExceptions(new UnexpectedEndException("Missing token: \")\"")),
+        assertResults(createExceptions(new UnexpectedEndException("Token \")\" expected!")),
                 null,
                 DECLARE_METHOD_ID,"!a",ROUND_BRACKET_START_ID);
 

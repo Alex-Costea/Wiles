@@ -2,8 +2,10 @@ package in.costea.wiles.commands;
 
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
+import in.costea.wiles.exceptions.CompilationException;
 import in.costea.wiles.exceptions.TokenExpectedException;
 import in.costea.wiles.exceptions.UnexpectedEndException;
+import in.costea.wiles.exceptions.UnexpectedTokenException;
 import in.costea.wiles.services.TokenTransmitter;
 
 import java.util.List;
@@ -30,23 +32,20 @@ public abstract class SyntaxTree {
         return toString("");
     }
 
-    protected Token expect(Predicate<String> found, String message) throws TokenExpectedException, UnexpectedEndException {
+    protected Token expect(Predicate<String> found, String message) throws CompilationException {
         Token token;
         while((token = transmitter.requestToken(message)).content().equals(NEWLINE_ID))
             transmitter.removeToken();
-        transmitter.removeToken();
+        if (token.content().equals(CONTINUE_LINE))
+            throw new UnexpectedTokenException("\\", token.location());
         if(!found.test(token.content()))
             throw new TokenExpectedException(message,token.location());
+        transmitter.removeToken();
         return token;
     }
 
-    protected void expect(String expectedToken) throws TokenExpectedException, UnexpectedEndException {
-        Token token;
-        while((token = transmitter.requestTokenExpecting(expectedToken)).content().equals(NEWLINE_ID))
-            transmitter.removeToken();
-        if(!token.content().equals(expectedToken))
-            throw new TokenExpectedException("Token \""+TOKENS_INVERSE.get(expectedToken)+"\" expected!",token.location());
-        transmitter.removeToken();
+    protected void expect(String expectedToken) throws CompilationException {
+        expect(x-> Objects.equals(x, expectedToken),"Token \""+TOKENS_INVERSE.get(expectedToken)+"\" expected!");
     }
 
     protected void readRestOfLineIgnoringErrors()
