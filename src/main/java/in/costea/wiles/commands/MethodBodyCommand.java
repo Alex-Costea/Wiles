@@ -2,6 +2,7 @@ package in.costea.wiles.commands;
 
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.exceptions.CompilationException;
+import in.costea.wiles.exceptions.TokenExpectedException;
 import in.costea.wiles.services.TokenTransmitter;
 import in.costea.wiles.statics.Constants;
 
@@ -46,10 +47,12 @@ public class MethodBodyCommand extends SyntaxTree {
                     components.add(identifier);
                     //TODO: line end
                 }
+                else throw new TokenExpectedException("Identifier expected!",token.location());
             }
             catch(CompilationException ex)
             {
                 exceptions.add(ex);
+                readRestOfLineIgnoringErrors();
             }
         }
         return exceptions;
