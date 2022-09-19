@@ -42,7 +42,7 @@ public class MethodBodyCommand extends SyntaxTree
         {
             try
             {
-                var token = transmitter.requestToken("Input ended unexpectedly!");
+                var token = transmitter.requestToken("");
                 if (token.content().equals(END_BLOCK_ID) && !standAlone)
                     break;
                 transmitter.removeToken();

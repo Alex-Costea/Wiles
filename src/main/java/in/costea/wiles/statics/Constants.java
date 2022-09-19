@@ -22,8 +22,8 @@ public class Constants
     public static final String MINUS = "MINUS";
     public static final BiMap<String, String> KEYWORDS = HashBiMap.create();
     public static final BiMap<String, String> OPERATORS = HashBiMap.create();
-    public static final BiMap<String, String> TOKENS = HashBiMap.create(KEYWORDS);
-    public static final BiMap<String, String> TOKENS_INVERSE = TOKENS.inverse();
+    public static final BiMap<String, String> TOKENS;
+    public static final BiMap<String, String> TOKENS_INVERSE;
     public static final int MAX_OPERATOR_LENGTH = 5;
     public static final String IDENTIFIER_START = "!";
     public static final String STRING_START = "@";
@@ -116,18 +116,18 @@ public class Constants
 
     static
     {
+        TOKENS = HashBiMap.create(KEYWORDS);
         TOKENS.putAll(OPERATORS);
-    }
-
-    static
-    {
+        TOKENS_INVERSE = TOKENS.inverse();
         if (max(OPERATORS.keySet().stream().mapToInt(String::length).boxed().toList()) > MAX_OPERATOR_LENGTH)
             throw new IllegalArgumentException("MAX_OPERATOR_LENGTH smaller than length of largest operator!");
     }
+
     private Constants()
     {
 
     }
+
     public enum SYNTAX_TYPE
     {
         PROGRAM,

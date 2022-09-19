@@ -82,7 +82,7 @@ public class SyntaxTreeConverterTests {
         assertResults(null, "METHOD_BODY(OPERATION(!b; PLUS; #3; MINUS; #5))",
                 "!b",PLUS,"#3",MINUS,"#5");
 
-        assertResults(createExceptions(new UnexpectedEndException("Operation unfinished!")),
+        assertResults(createExceptions(new UnexpectedEndException("Operation unfinished!",null)),
                 null,
                 "!a", PLUS, "!b", PLUS);
 
@@ -129,20 +129,20 @@ public class SyntaxTreeConverterTests {
                 DECLARE_METHOD_ID,"!a",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID,
                 END_BLOCK_ID,NEWLINE_ID,"!c","!d",NEWLINE_ID,"!e");
 
-        assertResults(createExceptions(new UnexpectedEndException("Token \"end\" expected!")),
+        assertResults(createExceptions(new UnexpectedEndException("Token \"end\" expected!",null)),
                 null,
                 DECLARE_METHOD_ID,"!a",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID,START_BLOCK_ID);
 
-        assertResults(createExceptions(new UnexpectedEndException("Token \")\" expected!")),
+        assertResults(createExceptions(new UnexpectedEndException("Token \")\" expected!",null)),
                 null,
                 DECLARE_METHOD_ID,"!a",ROUND_BRACKET_START_ID);
 
-        assertResults(createExceptions(new UnexpectedEndException("Expected method name!")),
+        assertResults(createExceptions(new UnexpectedEndException("Expected method name!",null)),
                 null,
                 DECLARE_METHOD_ID);
 
-        assertResults(createExceptions(new UnexpectedEndException("Token \"begin\" expected!"),
-                        new UnexpectedEndException("Token \"begin\" expected!")),
+        assertResults(createExceptions(new UnexpectedEndException("Token \"begin\" expected!",null),
+                        new UnexpectedEndException("Token \"begin\" expected!",null)),
                 null,
                 DECLARE_METHOD_ID,"!name",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID, FINISH_STATEMENT,
                 DECLARE_METHOD_ID,"!name",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID, FINISH_STATEMENT);

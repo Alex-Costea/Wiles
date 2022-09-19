@@ -24,4 +24,9 @@ public abstract class CompilationException extends Exception
     {
         return tokenLocation.line();
     }
+
+    public TokenLocation getLocation()
+    {
+        return tokenLocation;
+    }
 }

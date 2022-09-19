@@ -32,7 +32,16 @@ public class CompilationExceptionsCollection extends ArrayList<CompilationExcept
 
     public String getExceptionsString()
     {
-        var optional = stream().map((Exception x) -> "\n    " + x.getMessage()).reduce((a, b) -> a + b);
+        var optional = stream().sorted((a, b) ->
+                {
+                    var loc1 = a.getLocation();
+                    var loc2 = b.getLocation();
+                    if (loc1 == null) return 1;
+                    if (loc2 == null) return -1;
+                    var comp = Integer.compare(loc1.line(), loc2.line());
+                    return comp == 0 ? Integer.compare(loc1.lineIndex(), loc2.lineIndex()) : comp;
+                }).
+                map((Exception x) -> "\n    " + x.getMessage()).reduce((a, b) -> a + b);
         if (optional.isEmpty())
             throw new IllegalStateException();
         return optional.get();

@@ -19,6 +19,7 @@ public class OperationCommand extends SyntaxTree
     private final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
     private final boolean mustHaveEffect;
     private final boolean insideParen;
+    private final Token firstToken;
     private boolean expectOperatorNext;
     //private final Token firstToken;
 
@@ -27,6 +28,7 @@ public class OperationCommand extends SyntaxTree
         super(transmitter);
         this.mustHaveEffect = mustHaveEffect;
         this.insideParen = insideParen;
+        this.firstToken = firstToken;
         components.add(new TokenCommand(transmitter, firstToken));
         expectOperatorNext = !OPERATORS.containsValue(firstToken.content());
     }
@@ -57,7 +59,7 @@ public class OperationCommand extends SyntaxTree
     @Override
     public CompilationExceptionsCollection process()
     {
-        Token token = null;
+        Token token = firstToken;
         SyntaxTree firstComponent = components.get(0);
         try
         {
@@ -84,7 +86,7 @@ public class OperationCommand extends SyntaxTree
         {
             try
             {
-                token = transmitter.requestToken("Token expected!");
+                token = transmitter.requestToken("");
                 String content = token.content();
                 if (content.equals(END_BLOCK_ID))
                     break;
@@ -125,10 +127,10 @@ public class OperationCommand extends SyntaxTree
                 break;
             }
         }
-        if (insideParen && (token == null || !token.content().equals(ROUND_BRACKET_END_ID)))
-            exceptions.add(new UnexpectedEndException("Closing parentheses expected"));
+        if (insideParen && (token == firstToken || !token.content().equals(ROUND_BRACKET_END_ID)))
+            exceptions.add(new UnexpectedEndException("Closing parentheses expected", token.location()));
         if (!expectOperatorNext && exceptions.size() == 0)
-            exceptions.add(new UnexpectedEndException("Operation unfinished!"));
+            exceptions.add(new UnexpectedEndException("Operation unfinished!", token.location()));
         //TODO: process order of operations and check if effect exists
         return exceptions;
     }
