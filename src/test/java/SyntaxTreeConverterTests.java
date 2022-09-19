@@ -45,7 +45,7 @@ public class SyntaxTreeConverterTests {
     }
 
     @Test
-    public void methodDeclarationTest()
+    public void newlineTests()
     {
         assertResults(null, "PROGRAM(METHOD a (METHOD_BODY))",
                 DECLARE_METHOD_ID,"!a",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID
@@ -61,6 +61,13 @@ public class SyntaxTreeConverterTests {
                 NEWLINE_ID,START_BLOCK_ID,
                 NEWLINE_ID,END_BLOCK_ID);
 
+        assertResults(null,null,
+                "!a", PLUS, ROUND_BRACKET_START_ID, ROUND_BRACKET_START_ID, "!b", PLUS, "!c",
+                ROUND_BRACKET_END_ID, PLUS, "!d", ROUND_BRACKET_END_ID);
+    }
+    @Test
+    public void OperationsTest()
+    {
         assertResults(null, "PROGRAM(METHOD main (METHOD_BODY(OPERATION(!b; ASSIGN; !c))))",
                 DECLARE_METHOD_ID,"!main",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID
                 ,START_BLOCK_ID,"!b","ASSIGN","!c",END_BLOCK_ID);
@@ -75,6 +82,19 @@ public class SyntaxTreeConverterTests {
         assertResults(null,"METHOD_BODY(OPERATION(!a; PLUS; !b); OPERATION(PLUS; !c); OPERATION(!a; PLUS; !b; PLUS; !c))",
                 "!a",PLUS,"!b",NEWLINE_ID,PLUS,"!c",NEWLINE_ID,NEWLINE_ID,
                 "!a",PLUS,NEWLINE_ID,"!b",PLUS,"!c");
+
+        assertResults(createExceptions(new UnexpectedEndException("Operation unfinished!")),
+                null,
+                "!a", PLUS, "!b", PLUS);
+
+        assertResults(createExceptions(new TokenExpectedException("Identifier expected!",null)),
+                null,
+                "!b",PLUS,"TIMES","#5");
+
+        assertResults(createExceptions(new UnexpectedTokenException("*",null)),
+                null,
+                "TIMES","!a");
+
     }
 
     private CompilationExceptionsCollection createExceptions(CompilationException... list)
@@ -116,17 +136,9 @@ public class SyntaxTreeConverterTests {
                 DECLARE_METHOD_ID,"!name",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID, FINISH_STATEMENT,
                 DECLARE_METHOD_ID,"!name",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID, FINISH_STATEMENT);
 
-        assertResults(createExceptions(new TokenExpectedException("Identifier expected!",null)),
-                null,
-                "!b",PLUS,"TIMES","#5");
-
         assertResults(createExceptions(new UnexpectedTokenException("Cannot declare method in body-only mode!",null)),
                 null,
                 "!a",PLUS,"!b",NEWLINE_ID,
                 DECLARE_METHOD_ID,"!main",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID,START_BLOCK_ID,END_BLOCK_ID);
-
-        assertResults(createExceptions(new UnexpectedEndException("Operation unfinished!")),
-                null,
-                "!a", PLUS, "!b", PLUS);
     }
 }

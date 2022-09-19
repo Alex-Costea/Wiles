@@ -2,7 +2,6 @@ package in.costea.wiles.commands;
 
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.exceptions.CompilationException;
-import in.costea.wiles.exceptions.TokenExpectedException;
 import in.costea.wiles.exceptions.UnexpectedTokenException;
 import in.costea.wiles.services.TokenTransmitter;
 import in.costea.wiles.statics.Constants;
@@ -45,16 +44,13 @@ public class MethodBodyCommand extends SyntaxTree {
                 if (token.content().equals(NEWLINE_ID) || token.content().equals(FINISH_STATEMENT))
                     continue;
                 OperationCommand operationCommand;
-                if (token.content().startsWith(IDENTIFIER_START)) {
-                    operationCommand = new OperationCommand(token,transmitter,true);
-                }
-                else if(token.content().equals(PLUS)||token.content().equals(MINUS))
+                if(token.content().equals(PLUS)||token.content().equals(MINUS)||!TOKENS.containsValue(token.content()))
                 {
-                    operationCommand = new OperationCommand(token,transmitter,false);
+                    operationCommand = new OperationCommand(token,transmitter,true,false);
                 }
                 else if(standAlone && token.content().equals(DECLARE_METHOD_ID))
                     throw new UnexpectedTokenException("Cannot declare method in body-only mode!",token.location());
-                else throw new TokenExpectedException("Identifier or unary operator expected!",token.location());
+                else throw new UnexpectedTokenException(TOKENS_INVERSE.get(token.content()),token.location());
                 CompilationExceptionsCollection newExceptions=operationCommand.process();
                 exceptions.add(newExceptions);
                 components.add(operationCommand);
