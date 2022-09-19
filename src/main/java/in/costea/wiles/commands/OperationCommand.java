@@ -14,9 +14,9 @@ import java.util.List;
 
 import static in.costea.wiles.statics.Constants.*;
 
-public class OperationCommand extends SyntaxTree
+public class OperationCommand extends AbstractOperationComponent
 {
-    private final List<SyntaxTree> components = new ArrayList<>();
+    private final List<AbstractOperationComponent> components = new ArrayList<>();
     private final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
     private final boolean innerOperation;
     private final Token firstToken;
@@ -38,7 +38,7 @@ public class OperationCommand extends SyntaxTree
     }
 
     @Override
-    public List<SyntaxTree> getComponents()
+    public List<AbstractOperationComponent> getComponents()
     {
         return components;
     }
@@ -78,40 +78,39 @@ public class OperationCommand extends SyntaxTree
             {
                 token = transmitter.requestToken("");
                 String content = token.content();
-                if (content.equals(END_BLOCK_ID) && !innerOperation)
+                if (content.equals(END_BLOCK_ID) && !innerOperation) //method end statement
                     break;
-                if(content.equals(END_BLOCK_ID))
+                if(content.equals(END_BLOCK_ID)) //end statement in inner operation
                     throw new UnexpectedTokenException("end",token.location());
                 if (expectOperatorNext && !innerOperation && (content.equals(FINISH_STATEMENT) || content.equals(NEWLINE_ID)))
-                    break;
+                    break; //finalize operation
                 if(content.equals(FINISH_STATEMENT))
                     throw new UnexpectedTokenException(";",token.location());
-
                 if(expectOperatorNext)
                     token = expect(x -> OPERATORS.containsValue(x) || x.equals(ROUND_BRACKET_START_ID)
                             || x.equals(ROUND_BRACKET_END_ID), "Operator expected!");
                 else
-                    token = expect((String x) -> x.equals(ROUND_BRACKET_START_ID) || x.equals(ROUND_BRACKET_END_ID) ||
+                    token = expect(x -> x.equals(ROUND_BRACKET_START_ID) || x.equals(ROUND_BRACKET_END_ID) ||
                             x.startsWith("!") || x.startsWith("@") || x.startsWith("#"), "Identifier expected!");
                 if (token.content().equals(ROUND_BRACKET_END_ID))
                 {
-                    if (innerOperation) break;
+                    if (innerOperation) break; //end of inner statement
                     else throw new UnexpectedTokenException("Extra parentheses found", token.location());
                 }
                 if (expectOperatorNext && token.content().equals(ROUND_BRACKET_START_ID))
+                    //TODO: implement
                     throw new Error("Method call not yet implemented!");
                 expectOperatorNext=!expectOperatorNext;
-                if (token.content().equals(ROUND_BRACKET_START_ID))
+                if (token.content().equals(ROUND_BRACKET_START_ID)) //inner operation, not method call
                     addInnerOperation();
                 else components.add(new TokenCommand(transmitter, token));
             }
 
-            if (innerOperation && exceptions.size() == 0 && (token == firstToken || !token.content().equals(ROUND_BRACKET_END_ID)))
+            if (innerOperation && exceptions.size() == 0 &&  !token.content().equals(ROUND_BRACKET_END_ID))
                 exceptions.add(new UnexpectedEndException("Closing parentheses expected", token.location()));
             if (!expectOperatorNext && exceptions.size() == 0)
                 exceptions.add(new UnexpectedEndException("Operation unfinished!", token.location()));
             //TODO: process order of operations and check if effect exists
-            return exceptions;
         } catch (CompilationException ex)
         {
             exceptions.add(ex);

@@ -8,7 +8,7 @@ import in.costea.wiles.statics.Constants;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TokenCommand extends SyntaxTree
+public class TokenCommand extends AbstractOperationComponent
 {
     private final Token token;
 
