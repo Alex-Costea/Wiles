@@ -81,27 +81,22 @@ public class InputToTokensConverter
                 throw new StringUnfinishedException("", line, getIndexOnCurrentLine());
 
             StringBuilder sb = new StringBuilder();
-            Character lastNonSpaceCharacter=null;
+            char lastNonSpaceCharacter='\0';
+            int lastNonSpaceCharacterIndex=-1;
             while (arrayChars[currentIndex] != STRING_DELIMITER)
             {
                 if(arrayChars[currentIndex] == '\n')
                 {
-                    if(lastNonSpaceCharacter!=null && lastNonSpaceCharacter =='\\')
-                    {
-                        int tempIndex=currentIndex;
-                        while(tempIndex>=0 && arrayChars[tempIndex]!='\\')
-                            tempIndex--;
-                        sb.setLength(tempIndex-1);
-                        if (currentIndex + 1 == arrayChars.length)
-                            break;
-                        currentIndex++;
-                        continue;
-                    }
-                    break;
+                    if(lastNonSpaceCharacter =='\\')
+                        sb.setLength(lastNonSpaceCharacterIndex-1);
+                    else break;
+                }
+                else if(arrayChars[currentIndex]!=' ')
+                {
+                    lastNonSpaceCharacterIndex=currentIndex;
+                    lastNonSpaceCharacter = arrayChars[currentIndex];
                 }
                 sb.append(arrayChars[currentIndex]);
-                if(arrayChars[currentIndex]!=' ')
-                    lastNonSpaceCharacter=arrayChars[currentIndex];
                 if (currentIndex + 1 == arrayChars.length)
                     break;
                 currentIndex++;
