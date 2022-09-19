@@ -79,7 +79,7 @@ end
 ```
 method min(my_list: list[int]) : int
 begin
-    if mylist.size = 0 then
+    if my_list.size = 0 then
         result -1
     min := my_list[0]
     for x in my_list do
