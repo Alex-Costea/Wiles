@@ -124,5 +124,9 @@ public class SyntaxTreeConverterTests {
                 null,
                 "!a",PLUS,"!b",NEWLINE_ID,
                 DECLARE_METHOD_ID,"!main",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID,START_BLOCK_ID,END_BLOCK_ID);
+
+        assertResults(createExceptions(new UnexpectedEndException("Operation unfinished!")),
+                null,
+                "!a", PLUS, "!b", PLUS);
     }
 }

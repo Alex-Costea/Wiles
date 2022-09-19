@@ -3,6 +3,7 @@ package in.costea.wiles.commands;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.CompilationException;
+import in.costea.wiles.exceptions.UnexpectedEndException;
 import in.costea.wiles.services.TokenTransmitter;
 import in.costea.wiles.statics.Constants;
 
@@ -68,6 +69,8 @@ public class OperationCommand extends SyntaxTree {
             }
             //TODO: process order of operations
         }
+        if(!expectOperatorNext && exceptions.size()==0)
+            exceptions.add(new UnexpectedEndException("Operation unfinished!"));
         return exceptions;
     }
 }
