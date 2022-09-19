@@ -98,8 +98,8 @@ public class OperationCommand extends AbstractOperationComponent
                 }
 
                 if(expectOperatorNext)
-                    token = expect(x -> OPERATORS.containsValue(x) || x.equals(ROUND_BRACKET_START_ID)
-                            || x.equals(ROUND_BRACKET_END_ID), "Operator expected!");
+                    token = expect(x ->  x.equals(ROUND_BRACKET_START_ID) || x.equals(ROUND_BRACKET_END_ID)
+                            || OPERATORS.containsValue(x), "Operator expected!");
                 else
                     token = expect(x -> x.equals(ROUND_BRACKET_START_ID) || x.equals(ROUND_BRACKET_END_ID) ||
                             x.startsWith("!") || x.startsWith("@") || x.startsWith("#"), "Identifier expected!");
@@ -111,10 +111,13 @@ public class OperationCommand extends AbstractOperationComponent
                 }
 
                 if (expectOperatorNext && token.content().equals(ROUND_BRACKET_START_ID))
+                {
                     //TODO: implement
                     throw new Error("Method call not yet implemented!");
 
-                expectOperatorNext=!expectOperatorNext;
+                }
+
+                expectOperatorNext=!expectOperatorNext; //toggle operators and identifiers
 
                 if (token.content().equals(ROUND_BRACKET_START_ID)) //inner operation, not method call
                     addInnerOperation();
