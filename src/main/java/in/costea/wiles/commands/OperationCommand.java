@@ -18,13 +18,13 @@ public class OperationCommand extends SyntaxTree {
     private final CompilationExceptionsCollection exceptions=new CompilationExceptionsCollection();
     private boolean expectOperatorNext;
     private final boolean mustHaveEffect;
-    private final boolean endAtParenthesis;
+    private final boolean insideParen;
     //private final Token firstToken;
 
-    public OperationCommand(Token firstToken, TokenTransmitter transmitter,boolean mustHaveEffect,boolean endAtParenthesis) {
+    public OperationCommand(Token firstToken, TokenTransmitter transmitter,boolean mustHaveEffect,boolean insideParen) {
         super(transmitter);
         this.mustHaveEffect = mustHaveEffect;
-        this.endAtParenthesis = endAtParenthesis;
+        this.insideParen = insideParen;
         components.add(new TokenCommand(transmitter,firstToken));
         expectOperatorNext = !OPERATORS.containsValue(firstToken.content());
     }
@@ -39,9 +39,42 @@ public class OperationCommand extends SyntaxTree {
         return components;
     }
 
+    private void addInnerOperation() throws UnexpectedEndException {
+        Token newToken=transmitter.requestToken("Parentheses must have content!");
+        transmitter.removeToken();
+        var newOperation=new OperationCommand(newToken,
+                transmitter,false,true);
+        exceptions.add(newOperation.process());
+        if(newOperation.components.size()>1)
+            components.add(newOperation);
+        else components.add(newOperation.components.get(0));
+    }
+
     @Override
     public CompilationExceptionsCollection process() {
         Token token=null;
+        SyntaxTree firstComponent=components.get(0);
+        try
+        {
+            if (firstComponent instanceof TokenCommand firstTokenCommand)
+            {
+                if (firstTokenCommand.getContent().equals(ROUND_BRACKET_START_ID))
+                {
+                    components.remove(0);
+                    addInnerOperation();
+                    expectOperatorNext=true;
+                }
+                if (firstTokenCommand.getContent().equals(ROUND_BRACKET_END_ID))
+                {
+                    throw new UnexpectedTokenException("Parentheses must have body!",firstTokenCommand.getToken().location());
+                }
+            }
+        }
+        catch(CompilationException ex)
+        {
+            exceptions.add(ex);
+            return exceptions;
+        }
         while(!transmitter.tokensExhausted())
         {
             try
@@ -58,7 +91,7 @@ public class OperationCommand extends SyntaxTree {
                             || x.equals(ROUND_BRACKET_END_ID), "Operator expected!");
                     if(token.content().equals(ROUND_BRACKET_END_ID))
                     {
-                        if (endAtParenthesis) break;
+                        if (insideParen) break;
                         else throw new UnexpectedTokenException("Extra parentheses found", token.location());
                     }
                     if(token.content().equals(ROUND_BRACKET_START_ID))
@@ -71,18 +104,13 @@ public class OperationCommand extends SyntaxTree {
                             x.startsWith("!") || x.startsWith("@") || x.startsWith("#"), "Identifier expected!");
                     if(token.content().equals(ROUND_BRACKET_END_ID))
                     {
-                        if (endAtParenthesis) break;
+                        if (insideParen) break;
                         else throw new UnexpectedTokenException("Extra parentheses found", token.location());
                     }
                     expectOperatorNext = true;
                     if(token.content().equals(ROUND_BRACKET_START_ID))
                     {
-                        Token newToken=transmitter.requestToken("Parentheses must have content!");
-                        transmitter.removeToken();
-                        var newOperation=new OperationCommand(newToken,
-                                transmitter,false,true);
-                        components.add(newOperation);
-                        exceptions.add(newOperation.process());
+                        addInnerOperation();
                         continue;
                     }
                 }
@@ -94,8 +122,7 @@ public class OperationCommand extends SyntaxTree {
                 break;
             }
         }
-        assert token!=null;
-        if(endAtParenthesis && !token.content().equals(ROUND_BRACKET_END_ID))
+        if(insideParen && (token == null || !token.content().equals(ROUND_BRACKET_END_ID)))
             exceptions.add(new UnexpectedEndException("Closing parentheses expected"));
         if(!expectOperatorNext && exceptions.size()==0)
             exceptions.add(new UnexpectedEndException("Operation unfinished!"));

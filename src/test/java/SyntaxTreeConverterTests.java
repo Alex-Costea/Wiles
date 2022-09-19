@@ -61,12 +61,12 @@ public class SyntaxTreeConverterTests {
                 NEWLINE_ID,START_BLOCK_ID,
                 NEWLINE_ID,END_BLOCK_ID);
 
-        assertResults(null,null,
+        assertResults(null,"METHOD_BODY(OPERATION(!a; PLUS; OPERATION(OPERATION(!b; PLUS; !c); PLUS; !d)))",
                 "!a", PLUS, ROUND_BRACKET_START_ID, ROUND_BRACKET_START_ID, "!b", PLUS, "!c",
                 ROUND_BRACKET_END_ID, PLUS, "!d", ROUND_BRACKET_END_ID);
     }
     @Test
-    public void OperationsTest()
+    public void operationsTest()
     {
         assertResults(null, "PROGRAM(METHOD main (METHOD_BODY(OPERATION(!b; ASSIGN; !c))))",
                 DECLARE_METHOD_ID,"!main",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID

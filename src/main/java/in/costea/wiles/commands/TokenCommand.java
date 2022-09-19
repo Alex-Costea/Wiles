@@ -9,7 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TokenCommand extends SyntaxTree{
-    Token token;
+    private final Token token;
+
+    public Token getToken() {
+        return token;
+    }
 
     public TokenCommand(TokenTransmitter transmitter, Token token)
     {
@@ -33,6 +37,11 @@ public class TokenCommand extends SyntaxTree{
 
     @Override
     public String toString()
+    {
+        return token.content();
+    }
+
+    public String getContent()
     {
         return token.content();
     }
