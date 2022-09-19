@@ -8,30 +8,36 @@ import in.costea.wiles.statics.Constants;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TokenCommand extends SyntaxTree{
+public class TokenCommand extends SyntaxTree
+{
     private final Token token;
-
-    public Token getToken() {
-        return token;
-    }
 
     public TokenCommand(TokenTransmitter transmitter, Token token)
     {
         super(transmitter);
-        this.token=token;
+        this.token = token;
     }
+
+    public Token getToken()
+    {
+        return token;
+    }
+
     @Override
-    public Constants.SYNTAX_TYPE getType() {
+    public Constants.SYNTAX_TYPE getType()
+    {
         return Constants.SYNTAX_TYPE.TOKEN;
     }
 
     @Override
-    public List<SyntaxTree> getComponents() {
+    public List<SyntaxTree> getComponents()
+    {
         return new ArrayList<>();
     }
 
     @Override
-    public CompilationExceptionsCollection process() {
+    public CompilationExceptionsCollection process()
+    {
         return new CompilationExceptionsCollection();
     }
 

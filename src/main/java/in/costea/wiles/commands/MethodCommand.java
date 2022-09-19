@@ -10,46 +10,52 @@ import java.util.List;
 
 import static in.costea.wiles.statics.Constants.*;
 
-public class MethodCommand extends SyntaxTree {
-    private final List<SyntaxTree> components=new ArrayList<>();
+public class MethodCommand extends SyntaxTree
+{
+    private final List<SyntaxTree> components = new ArrayList<>();
+    private final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
     private String methodName;
-    private final CompilationExceptionsCollection exceptions=new CompilationExceptionsCollection();
 
-    public MethodCommand(TokenTransmitter transmitter) {
+    public MethodCommand(TokenTransmitter transmitter)
+    {
         super(transmitter);
     }
 
     @Override
-    public SYNTAX_TYPE getType() {
+    public SYNTAX_TYPE getType()
+    {
         return SYNTAX_TYPE.METHOD;
     }
 
     @Override
-    public List<SyntaxTree> getComponents() {
+    public List<SyntaxTree> getComponents()
+    {
         return components;
     }
 
     @Override
-    public CompilationExceptionsCollection process() {
-        try {
-            methodName=expect(x->x.length()>1 && x.startsWith(IDENTIFIER_START),"Expected method name!").
+    public CompilationExceptionsCollection process()
+    {
+        try
+        {
+            methodName = expect(x -> x.length() > 1 && x.startsWith(IDENTIFIER_START), "Expected method name!").
                     content().substring(1);
             expect(ROUND_BRACKET_START_ID);
             //TODO: method declaration
             expect(ROUND_BRACKET_END_ID);
             expect(START_BLOCK_ID);
             //method body
-            var MethodBodyCommand = new MethodBodyCommand(transmitter,false);
+            var MethodBodyCommand = new MethodBodyCommand(transmitter, false);
             exceptions.add(MethodBodyCommand.process());
             components.add(MethodBodyCommand);
             expect(END_BLOCK_ID);
             try
             {
                 expect(x -> x.equals(NEWLINE_ID) || x.equals(FINISH_STATEMENT), "Expected line end!");
+            } catch (UnexpectedEndException ignored)
+            {
             }
-            catch(UnexpectedEndException ignored) {}
-        }
-        catch (CompilationException ex)
+        } catch (CompilationException ex)
         {
             exceptions.add(ex);
             readRestOfLineIgnoringErrors(false);
@@ -58,7 +64,8 @@ public class MethodCommand extends SyntaxTree {
     }
 
     @Override
-    public String toString() {
-        return super.toString(methodName!=null?methodName:"");
+    public String toString()
+    {
+        return super.toString(methodName != null ? methodName : "");
     }
 }

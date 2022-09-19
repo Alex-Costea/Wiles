@@ -14,38 +14,44 @@ import java.util.function.Predicate;
 
 import static in.costea.wiles.statics.Constants.*;
 
-public abstract class SyntaxTree {
-    protected TokenTransmitter transmitter;
+public abstract class SyntaxTree
+{
+    protected final TokenTransmitter transmitter;
 
     public SyntaxTree(TokenTransmitter transmitter)
     {
         this.transmitter = transmitter;
 
     }
+
     public abstract SYNTAX_TYPE getType();
+
     public abstract List<? extends SyntaxTree> getComponents();
 
     public abstract CompilationExceptionsCollection process();
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return toString("");
     }
 
-    protected Token expect(Predicate<String> found, String message) throws CompilationException {
+    protected Token expect(Predicate<String> found, String message) throws CompilationException
+    {
         Token token;
-        while((token = transmitter.requestToken(message)).content().equals(NEWLINE_ID))
+        while ((token = transmitter.requestToken(message)).content().equals(NEWLINE_ID))
             transmitter.removeToken();
         if (token.content().equals(CONTINUE_LINE))
             throw new UnexpectedTokenException("\\", token.location());
-        if(!found.test(token.content()))
-            throw new TokenExpectedException(message,token.location());
+        if (!found.test(token.content()))
+            throw new TokenExpectedException(message, token.location());
         transmitter.removeToken();
         return token;
     }
 
-    protected void expect(String expectedToken) throws CompilationException {
-        expect(x-> Objects.equals(x, expectedToken),"Token \""+TOKENS_INVERSE.get(expectedToken)+"\" expected!");
+    protected void expect(String expectedToken) throws CompilationException
+    {
+        expect(x -> Objects.equals(x, expectedToken), "Token \"" + TOKENS_INVERSE.get(expectedToken) + "\" expected!");
     }
 
     protected void readRestOfLineIgnoringErrors(boolean stopAtEndBlock)
@@ -55,30 +61,31 @@ public abstract class SyntaxTree {
         {
             do
             {
-                token=transmitter.requestToken("");
-                if(stopAtEndBlock && token.content().equals(END_BLOCK_ID))
+                token = transmitter.requestToken("");
+                if (stopAtEndBlock && token.content().equals(END_BLOCK_ID))
                     break;
                 transmitter.removeToken();
             }
-            while(!(token.content().equals(NEWLINE_ID) || token.content().equals(FINISH_STATEMENT)));
+            while (!(token.content().equals(NEWLINE_ID) || token.content().equals(FINISH_STATEMENT)));
+        } catch (UnexpectedEndException ignored)
+        {
         }
-        catch (UnexpectedEndException ignored) {}
     }
 
     public final String toString(String inside)
     {
-        StringBuilder sb=new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         sb.append(getType());
-        if(!Objects.equals(inside, ""))
+        if (!Objects.equals(inside, ""))
             sb.append(" ").append(inside).append(" ");
-        if(getComponents().size()>0)
+        if (getComponents().size() > 0)
         {
             sb.append("(");
-            int i=0;
+            int i = 0;
             for (SyntaxTree component : getComponents())
             {
                 sb.append(component.toString());
-                if(i<getComponents().size()-1)
+                if (i < getComponents().size() - 1)
                     sb.append("; ");
                 i++;
             }

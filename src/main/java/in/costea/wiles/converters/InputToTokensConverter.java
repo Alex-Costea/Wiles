@@ -13,58 +13,57 @@ import java.util.List;
 import static in.costea.wiles.statics.Constants.*;
 import static in.costea.wiles.statics.Utils.*;
 
-public class InputToTokensConverter {
+public class InputToTokensConverter
+{
 
+    private final char[] arrayChars;
+    private final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
     private int originalIndex;
     private int index;
-    private int lineIndex=-1; //character at index -1 can be considered equivalent to newline
-    private final char[] arrayChars;
-    private final CompilationExceptionsCollection exceptions=new CompilationExceptionsCollection();
-    private int line=1;
+    private int lineIndex = -1; //character at index -1 can be considered equivalent to newline
+    private int line = 1;
 
-    public InputToTokensConverter(@NotNull String input) {
-        arrayChars=input.toCharArray();
+    public InputToTokensConverter(@NotNull String input)
+    {
+        arrayChars = input.toCharArray();
     }
 
-    public List<Token> convert() {
-        var tokens=new ArrayList<Token>();
-        for(index =0; index <arrayChars.length; index++)
+    public List<Token> convert()
+    {
+        var tokens = new ArrayList<Token>();
+        for (index = 0; index < arrayChars.length; index++)
         {
             try
             {
-                originalIndex=index;
+                originalIndex = index;
                 if (arrayChars[index] == STRING_DELIMITER) //string literal
                 {
                     tokens.add(createToken(readStringLiteral()));
-                }
-                else if (isAlphabetic(arrayChars[index])) //identifier
+                } else if (isAlphabetic(arrayChars[index])) //identifier
                 {
                     tokens.add(createToken(readIdentifier()));
-                }
-                else if (isDigit(arrayChars[index])) //numeral literal
+                } else if (isDigit(arrayChars[index])) //numeral literal
                 {
                     tokens.add(createToken(readNumeralLiteral()));
-                }
-                else if (arrayChars[index] == COMMENT_START) //operator
+                } else if (arrayChars[index] == COMMENT_START) //operator
                 {
                     readComment();
-                }
-                else
+                } else
                 {
                     String id = readOperator();
-                    int size=tokens.size();
-                    if(size>0 && id.equals(NEWLINE_ID) && tokens.get(size-1).content().equals(CONTINUE_LINE)) {
-                        tokens.remove(size-1);
+                    int size = tokens.size();
+                    if (size > 0 && id.equals(NEWLINE_ID) && tokens.get(size - 1).content().equals(CONTINUE_LINE))
+                    {
+                        tokens.remove(size - 1);
                         addNewLine();
                         continue; // backslash followed by newline is ignored
                     }
                     if (!id.equals(SPACE_ID))
                         tokens.add(createToken(id));
-                    if(id.equals(NEWLINE_ID))
+                    if (id.equals(NEWLINE_ID))
                         addNewLine();
                 }
-            }
-            catch (CompilationException ex)
+            } catch (CompilationException ex)
             {
                 exceptions.add(ex);
                 tokens.add(createToken(UNKNOWN_TOKEN));
@@ -73,29 +72,30 @@ public class InputToTokensConverter {
         return tokens;
     }
 
-    private String readStringLiteral() throws StringUnfinishedException {
-        int currentIndex= index +1;
+    private String readStringLiteral() throws StringUnfinishedException
+    {
+        int currentIndex = index + 1;
         try
         {
             if (currentIndex >= arrayChars.length)
-                throw new StringUnfinishedException("",line,getIndexOnCurrentLine());
+                throw new StringUnfinishedException("", line, getIndexOnCurrentLine());
 
             StringBuilder sb = new StringBuilder();
-            while (arrayChars[currentIndex] != STRING_DELIMITER && arrayChars[currentIndex] != '\n') {
+            while (arrayChars[currentIndex] != STRING_DELIMITER && arrayChars[currentIndex] != '\n')
+            {
                 sb.append(arrayChars[currentIndex]);
-                if (currentIndex+1 == arrayChars.length)
+                if (currentIndex + 1 == arrayChars.length)
                     break;
                 currentIndex++;
             }
-            if(arrayChars[currentIndex]==STRING_DELIMITER)
-                return STRING_START+sb;
+            if (arrayChars[currentIndex] == STRING_DELIMITER)
+                return STRING_START + sb;
 
             //String not properly finished
-            if(arrayChars[currentIndex]=='\n') //add the newline token regardless
+            if (arrayChars[currentIndex] == '\n') //add the newline token regardless
                 currentIndex--;
             throw new StringUnfinishedException(sb.toString(), line, getIndexOnCurrentLine());
-        }
-        finally
+        } finally
         {
             index = currentIndex;
         }
@@ -105,11 +105,12 @@ public class InputToTokensConverter {
     {
         int currentIndex = index;
         StringBuilder sb = new StringBuilder();
-        while (currentIndex<arrayChars.length && isAlphanumeric(arrayChars[currentIndex])) {
+        while (currentIndex < arrayChars.length && isAlphanumeric(arrayChars[currentIndex]))
+        {
             sb.append(arrayChars[currentIndex]);
             currentIndex++;
         }
-        index = currentIndex-1;
+        index = currentIndex - 1;
         return KEYWORDS.getOrDefault(sb.toString(), IDENTIFIER_START + sb);
     }
 
@@ -117,41 +118,44 @@ public class InputToTokensConverter {
     {
         int currentIndex = index;
         StringBuilder sb = new StringBuilder(NUM_START);
-        boolean delimiterAlreadyFound=false;
-        while (currentIndex<arrayChars.length && (isDigit(arrayChars[currentIndex]) ||
+        boolean delimiterAlreadyFound = false;
+        while (currentIndex < arrayChars.length && (isDigit(arrayChars[currentIndex]) ||
                 //first delimiter found, and not as the last digit
                 (!delimiterAlreadyFound && arrayChars[currentIndex] == DECIMAL_DELIMITER &&
-                        currentIndex+1 < arrayChars.length && isDigit(arrayChars[currentIndex+1])))) {
+                        currentIndex + 1 < arrayChars.length && isDigit(arrayChars[currentIndex + 1]))))
+        {
             sb.append(arrayChars[currentIndex]);
-            if(arrayChars[currentIndex]== DECIMAL_DELIMITER)
-                delimiterAlreadyFound=true;
+            if (arrayChars[currentIndex] == DECIMAL_DELIMITER)
+                delimiterAlreadyFound = true;
             currentIndex++;
         }
-        index = currentIndex-1;
+        index = currentIndex - 1;
         return sb.toString();
     }
 
-    private String readOperator() throws UnknownOperatorException {
-        int currentIndex= index;
-        int operatorFoundIndex= index;
-        StringBuilder sb=new StringBuilder();
-        String token=null;
-        while (!isAlphanumeric(arrayChars[currentIndex]) && currentIndex - index < MAX_OPERATOR_LENGTH) {
+    private String readOperator() throws UnknownOperatorException
+    {
+        int currentIndex = index;
+        int operatorFoundIndex = index;
+        StringBuilder sb = new StringBuilder();
+        String token = null;
+        while (!isAlphanumeric(arrayChars[currentIndex]) && currentIndex - index < MAX_OPERATOR_LENGTH)
+        {
             sb.append(arrayChars[currentIndex]);
             String tempId = OPERATORS.get(sb.toString());
-            if(tempId!=null)
+            if (tempId != null)
             {
-                token=tempId;
-                operatorFoundIndex=currentIndex;
+                token = tempId;
+                operatorFoundIndex = currentIndex;
             }
             currentIndex++;
-            if(currentIndex == arrayChars.length || arrayChars[currentIndex]==' ' || arrayChars[currentIndex]=='\n')
+            if (currentIndex == arrayChars.length || arrayChars[currentIndex] == ' ' || arrayChars[currentIndex] == '\n')
                 break;
         }
         index = operatorFoundIndex;
-        if(token==null)
+        if (token == null)
         {
-            index=currentIndex-1;
+            index = currentIndex - 1;
             throw new UnknownOperatorException(sb.toString(), line, getIndexOnCurrentLine());
         }
         return token;
@@ -160,37 +164,38 @@ public class InputToTokensConverter {
     private void readComment()
     {
         int currentIndex = index;
-        while(currentIndex<arrayChars.length && arrayChars[currentIndex]!=COMMENT_END)
+        while (currentIndex < arrayChars.length && arrayChars[currentIndex] != COMMENT_END)
         {
             currentIndex++;
         }
-        index = currentIndex-1;
+        index = currentIndex - 1;
     }
 
     public Token createToken(String token)
     {
-        return new Token(token,line,getIndexOnCurrentLine());
+        return new Token(token, line, getIndexOnCurrentLine());
     }
 
     private void addNewLine()
     {
         line++;
-        lineIndex=index;
+        lineIndex = index;
     }
 
     private int getIndexOnCurrentLine()
     {
-        return originalIndex-lineIndex;
+        return originalIndex - lineIndex;
     }
 
 
     public void throwExceptionIfExists(int exceptionIndex) throws CompilationException
     {
-        if(exceptions.size()>exceptionIndex)
+        if (exceptions.size() > exceptionIndex)
             throw exceptions.get(exceptionIndex);
     }
 
-    public CompilationExceptionsCollection getExceptions() {
+    public CompilationExceptionsCollection getExceptions()
+    {
         return new CompilationExceptionsCollection(exceptions);
     }
 }

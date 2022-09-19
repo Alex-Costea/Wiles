@@ -60,10 +60,6 @@ public class SyntaxTreeConverterTests {
                 NEWLINE_ID,ROUND_BRACKET_END_ID,
                 NEWLINE_ID,START_BLOCK_ID,
                 NEWLINE_ID,END_BLOCK_ID);
-
-        assertResults(null,"METHOD_BODY(OPERATION(!a; PLUS; OPERATION(OPERATION(!b; PLUS; !c); PLUS; !d)))",
-                "!a", PLUS, ROUND_BRACKET_START_ID, ROUND_BRACKET_START_ID, "!b", PLUS, "!c",
-                ROUND_BRACKET_END_ID, PLUS, "!d", ROUND_BRACKET_END_ID);
     }
     @Test
     public void operationsTest()
@@ -83,6 +79,9 @@ public class SyntaxTreeConverterTests {
                 "!a",PLUS,"!b",NEWLINE_ID,PLUS,"!c",NEWLINE_ID,NEWLINE_ID,
                 "!a",PLUS,NEWLINE_ID,"!b",PLUS,"!c");
 
+        assertResults(null, "METHOD_BODY(OPERATION(!b; PLUS; #3; MINUS; #5))",
+                "!b",PLUS,"#3",MINUS,"#5");
+
         assertResults(createExceptions(new UnexpectedEndException("Operation unfinished!")),
                 null,
                 "!a", PLUS, "!b", PLUS);
@@ -95,6 +94,18 @@ public class SyntaxTreeConverterTests {
                 null,
                 "TIMES","!a");
 
+    }
+
+    @Test
+    public void parenthesesTests()
+    {
+        assertResults(null,"METHOD_BODY(OPERATION(!a; PLUS; OPERATION(OPERATION(!b; PLUS; !c); PLUS; !d)))",
+                "!a", PLUS, ROUND_BRACKET_START_ID, ROUND_BRACKET_START_ID, "!b", PLUS, "!c",
+                ROUND_BRACKET_END_ID, PLUS, "!d", ROUND_BRACKET_END_ID);
+        assertResults(null, "METHOD_BODY(OPERATION(!a; PLUS; OPERATION(!b; PLUS; !c)))",
+                "!a",PLUS,ROUND_BRACKET_START_ID,NEWLINE_ID,"!b",PLUS,"!c",ROUND_BRACKET_END_ID);
+        assertResults(null, "METHOD_BODY(OPERATION(!a; PLUS; OPERATION(!b; PLUS; !c)))",
+                "!a",PLUS,NEWLINE_ID,ROUND_BRACKET_START_ID,"!b",PLUS,"!c",ROUND_BRACKET_END_ID);
     }
 
     private CompilationExceptionsCollection createExceptions(CompilationException... list)

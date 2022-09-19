@@ -1,7 +1,10 @@
 package in.costea.wiles.statics;
 
-public class Utils {
-    private Utils(){}
+public class Utils
+{
+    private Utils()
+    {
+    }
 
     public static boolean isAlphanumeric(char c)
     {
@@ -10,7 +13,7 @@ public class Utils {
 
     public static boolean isAlphabetic(char c)
     {
-        return Character.isAlphabetic(c) || c=='_';
+        return Character.isAlphabetic(c) || c == '_';
     }
 
     public static boolean isDigit(char c)
