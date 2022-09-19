@@ -39,7 +39,10 @@ public class CompilationExceptionsCollection extends ArrayList<CompilationExcept
                     if (loc1 == null) return 1;
                     if (loc2 == null) return -1;
                     var comp = Integer.compare(loc1.line(), loc2.line());
-                    return comp == 0 ? Integer.compare(loc1.lineIndex(), loc2.lineIndex()) : comp;
+                    if (comp != 0) return comp;
+                    var comp2 = Integer.compare(loc1.lineIndex(), loc2.lineIndex());
+                    if (comp2 != 0) return comp2;
+                    return a.getMessage().compareTo(b.getMessage());
                 }).
                 map((Exception x) -> "\n    " + x.getMessage()).reduce((a, b) -> a + b);
         if (optional.isEmpty())
