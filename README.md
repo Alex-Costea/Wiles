@@ -53,7 +53,7 @@ Miscellaneous:
 - `;` can be specified or inferred from newline
 - Language is statically, strongly typed with some type inference
 - Comment using `#`
-- Returning value done with `method_name := result`
+- Returning value done with `method_name := result` or with `result` keyword
 - Garbage collection
 
 ## Examples
@@ -74,19 +74,17 @@ for i from 1 to 100 do begin
 end
     
 ```
-### Factorial
+### Minimum value
 
 ```
-method factorial(x : int) : infint
+method min(my_list: list[int]) : int
 begin
-    if x = 0 then return 1
-    otherwise return x * factorial(x - 1)
-end
-
-method main()
-begin
-    for i from 1 to 30 do
-        writeline(factorial(i))
+    if mylist.size = 0 then
+        result -1
+    min := my_list[0]
+    for x in my_list do
+        if x < min then
+            min := x
 end
 
 ```
