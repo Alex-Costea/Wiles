@@ -3,6 +3,7 @@ package in.costea.wiles.commands;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.exceptions.CompilationException;
 import in.costea.wiles.exceptions.TokenExpectedException;
+import in.costea.wiles.exceptions.UnexpectedTokenException;
 import in.costea.wiles.services.TokenTransmitter;
 import in.costea.wiles.statics.Constants;
 
@@ -14,8 +15,11 @@ import static in.costea.wiles.statics.Constants.*;
 public class MethodBodyCommand extends SyntaxTree {
     private final List<SyntaxTree> components=new ArrayList<>();
     private final CompilationExceptionsCollection exceptions=new CompilationExceptionsCollection();
-    public MethodBodyCommand(TokenTransmitter transmitter) {
+    private final boolean standAlone;
+
+    public MethodBodyCommand(TokenTransmitter transmitter,boolean standAlone) {
         super(transmitter);
+        this.standAlone=standAlone;
     }
 
     @Override
@@ -35,7 +39,7 @@ public class MethodBodyCommand extends SyntaxTree {
             try
             {
                 var token = transmitter.requestToken("Input ended unexpectedly!");
-                if (token.content().equals(END_BLOCK_ID))
+                if (token.content().equals(END_BLOCK_ID) && !standAlone)
                     break;
                 transmitter.removeToken();
                 if (token.content().equals(NEWLINE_ID) || token.content().equals(FINISH_STATEMENT))
@@ -48,17 +52,19 @@ public class MethodBodyCommand extends SyntaxTree {
                 {
                     operationCommand = new OperationCommand(token,transmitter,false);
                 }
+                else if(standAlone && token.content().equals(DECLARE_METHOD_ID))
+                    throw new UnexpectedTokenException("Cannot declare method in body-only mode!",token.location());
                 else throw new TokenExpectedException("Identifier or unary operator expected!",token.location());
                 CompilationExceptionsCollection newExceptions=operationCommand.process();
                 exceptions.add(newExceptions);
                 components.add(operationCommand);
                 if(newExceptions.size()>0)
-                    readRestOfLineIgnoringErrors();
+                    readRestOfLineIgnoringErrors(!standAlone);
             }
             catch(CompilationException ex)
             {
                 exceptions.add(ex);
-                readRestOfLineIgnoringErrors();
+                readRestOfLineIgnoringErrors(!standAlone);
             }
         }
         return exceptions;

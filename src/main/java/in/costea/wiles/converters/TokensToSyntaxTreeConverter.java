@@ -1,5 +1,6 @@
 package in.costea.wiles.converters;
 
+import in.costea.wiles.commands.MethodBodyCommand;
 import in.costea.wiles.commands.ProgramCommand;
 import in.costea.wiles.commands.SyntaxTree;
 import in.costea.wiles.data.CompilationExceptionsCollection;
@@ -26,8 +27,7 @@ public class TokensToSyntaxTreeConverter {
         if (!tokenTransmitter.tokensExhausted() && tokenTransmitter.requestTokenAssertNotEmpty().content().equals(DECLARE_METHOD_ID))
             syntaxTree = new ProgramCommand(tokenTransmitter);
         else {
-            //TODO: implement
-            throw new Error("Body-only mode not yet implemented!");
+            syntaxTree = new MethodBodyCommand(tokenTransmitter,true);
         }
         this.syntaxTree = syntaxTree;
     }

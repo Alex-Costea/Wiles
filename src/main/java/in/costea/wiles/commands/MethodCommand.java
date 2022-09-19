@@ -39,7 +39,7 @@ public class MethodCommand extends SyntaxTree {
             expect(ROUND_BRACKET_END_ID);
             expect(START_BLOCK_ID);
             //method body
-            var MethodBodyCommand = new MethodBodyCommand(transmitter);
+            var MethodBodyCommand = new MethodBodyCommand(transmitter,false);
             exceptions.add(MethodBodyCommand.process());
             components.add(MethodBodyCommand);
             expect(END_BLOCK_ID);
@@ -52,7 +52,7 @@ public class MethodCommand extends SyntaxTree {
         catch (CompilationException ex)
         {
             exceptions.add(ex);
-            readRestOfLineIgnoringErrors();
+            readRestOfLineIgnoringErrors(false);
         }
         return exceptions;
     }

@@ -48,7 +48,7 @@ public abstract class SyntaxTree {
         expect(x-> Objects.equals(x, expectedToken),"Token \""+TOKENS_INVERSE.get(expectedToken)+"\" expected!");
     }
 
-    protected void readRestOfLineIgnoringErrors()
+    protected void readRestOfLineIgnoringErrors(boolean stopAtEndBlock)
     {
         Token token;
         try
@@ -56,7 +56,7 @@ public abstract class SyntaxTree {
             do
             {
                 token=transmitter.requestToken("");
-                if(token.content().equals(END_BLOCK_ID))
+                if(stopAtEndBlock && token.content().equals(END_BLOCK_ID))
                     break;
                 transmitter.removeToken();
             }

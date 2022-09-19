@@ -19,11 +19,8 @@ public class Main {
     private static final CompilationExceptionsCollection exceptions=new CompilationExceptionsCollection();
     public static void main(String[] args) {
         String input=loadFile();
-
         List<Token> tokens = sourceToTokens(input);
-        for(Token token:tokens)
-            System.out.println(token);
-
+        System.out.println(tokens.stream().map(Token::content).toList());
         SyntaxTree syntaxTree =tokensToAST(tokens);
         System.out.println(syntaxTree);
 

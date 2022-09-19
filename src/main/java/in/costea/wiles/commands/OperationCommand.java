@@ -3,7 +3,6 @@ package in.costea.wiles.commands;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.CompilationException;
-import in.costea.wiles.exceptions.TokenExpectedException;
 import in.costea.wiles.services.TokenTransmitter;
 import in.costea.wiles.statics.Constants;
 
@@ -41,7 +40,9 @@ public class OperationCommand extends SyntaxTree {
             {
                 Token token=transmitter.requestToken("Token expected!");
                 String content=token.content();
-                if (content.equals(END_BLOCK_ID) || content.equals(FINISH_STATEMENT) || content.equals(NEWLINE_ID))
+                if (content.equals(END_BLOCK_ID))
+                    break;
+                if(expectOperatorNext && (content.equals(FINISH_STATEMENT) || content.equals(NEWLINE_ID)))
                     break;
                 if(content.equals(ROUND_BRACKET_START_ID))
                 {
@@ -63,18 +64,10 @@ public class OperationCommand extends SyntaxTree {
             catch(CompilationException ex)
             {
                 exceptions.add(ex);
-                if(ex instanceof TokenExpectedException)
-                {
-                    break;
-                }
+                break;
             }
             //TODO: process order of operations
         }
         return exceptions;
-    }
-
-    @Override
-    public String toString() {
-        return getType()+" "+components.stream().map(SyntaxTree::toString).reduce((String a,String b)->a+" "+b).orElseThrow();
     }
 }
