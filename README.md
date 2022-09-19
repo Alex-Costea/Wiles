@@ -21,11 +21,16 @@ Literals
 - Optional: `nothing` (null equivalent)
 
 Types
-- Integers: `byte`, `smallint`, `int`, `bigint`, `infint` (infinite precision)
+- Integers: `byte`, `smallint`, `int`, `bigint`
 - Boolean: `bit`
 - String: `text`
-- Floating point: `decimal` (equivalent to double in other languages), `exactdec` (equivalent to decimal)
-- Generic types: `list[type]`, `linkedlist[type]`, `optional[type]`, `dict[type,type]`, `range[type]`, `set[type]`
+- Floating point: `decimal` (equivalent to double in other languages)
+- Generic types: `list[type]`, `optional[type]`, `dict[type,type]`, `range[type]`
+
+Potential additions to types:
+- Integers: `infint` (infinite precision)
+- Floating point: `exactdec` (equivalent to decimal)
+- Generic types: `linkedlist[type]`, `set[type]`, `method[param1,param2][return_type]`
 
 Declaring:
 - Method: `method name(param1 : type, param2 : type) : return_type` (parameters and `return_type` optional)
