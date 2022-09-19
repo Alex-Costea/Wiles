@@ -40,14 +40,20 @@ public class MethodBodyCommand extends SyntaxTree {
                 transmitter.removeToken();
                 if (token.content().equals(NEWLINE_ID) || token.content().equals(FINISH_STATEMENT))
                     continue;
+                OperationCommand operationCommand;
                 if (token.content().startsWith(IDENTIFIER_START)) {
-                    var token2=expect(OPERATORS::containsValue,"Operator expected!");
-                    var identifier = new BinaryOperationCommand(token,token2, transmitter);
-                    exceptions.add(identifier.process());
-                    components.add(identifier);
-                    //TODO: line end
+                    operationCommand = new OperationCommand(token,transmitter,true);
                 }
-                else throw new TokenExpectedException("Identifier expected!",token.location());
+                else if(token.content().equals(PLUS)||token.content().equals(MINUS))
+                {
+                    operationCommand = new OperationCommand(token,transmitter,false);
+                }
+                else throw new TokenExpectedException("Identifier or unary operator expected!",token.location());
+                CompilationExceptionsCollection newExceptions=operationCommand.process();
+                exceptions.add(newExceptions);
+                components.add(operationCommand);
+                if(newExceptions.size()>0)
+                    readRestOfLineIgnoringErrors();
             }
             catch(CompilationException ex)
             {

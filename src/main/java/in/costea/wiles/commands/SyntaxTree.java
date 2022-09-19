@@ -56,6 +56,8 @@ public abstract class SyntaxTree {
             do
             {
                 token=transmitter.requestToken("");
+                if(token.content().equals(END_BLOCK_ID))
+                    break;
                 transmitter.removeToken();
             }
             while(!(token.content().equals(NEWLINE_ID) || token.content().equals(FINISH_STATEMENT)));

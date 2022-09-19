@@ -22,6 +22,8 @@ public class Constants{
     public static final String DECLARE_METHOD_ID ="DECLARE_METHOD";
     public static final String FINISH_STATEMENT ="FINISH_STATEMENT";
     public static final String CONTINUE_LINE="CONTINUE_LINE";
+    public static final String PLUS="PLUS";
+    public static final String MINUS="MINUS";
 
     public static final BiMap<String,String> KEYWORDS = HashBiMap.create();
     static
@@ -71,15 +73,16 @@ public class Constants{
     public enum SYNTAX_TYPE {
         PROGRAM,
         METHOD,
-        IDENTIFIER,
-        METHOD_BODY
+        OPERATION,
+        METHOD_BODY,
+        TOKEN
     }
 
     public static final BiMap<String,String> OPERATORS =HashBiMap.create();
     static
     {
-           OPERATORS.put("+","PLUS");
-           OPERATORS.put("-","MINUS");
+           OPERATORS.put("+",PLUS);
+           OPERATORS.put("-",MINUS);
            OPERATORS.put("*","TIMES");
            OPERATORS.put("/","DIVIDE");
            OPERATORS.put("^","POWER");

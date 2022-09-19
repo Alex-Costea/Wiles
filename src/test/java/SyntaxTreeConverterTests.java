@@ -67,13 +67,17 @@ public class SyntaxTreeConverterTests {
                 NEWLINE_ID,START_BLOCK_ID,
                 NEWLINE_ID,END_BLOCK_ID);
 
-        assertResults(null, "PROGRAM(METHOD main (METHOD_BODY(!b ASSIGN !c)))",
+        assertResults(null, "PROGRAM(METHOD main (METHOD_BODY(OPERATION !b ASSIGN !c)))",
                 DECLARE_METHOD_ID,"!main",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID
                 ,START_BLOCK_ID,"!b","ASSIGN","!c",END_BLOCK_ID);
 
-        assertResults(null, "PROGRAM(METHOD main (METHOD_BODY(!b ASSIGN #3)))",
+        assertResults(null, "PROGRAM(METHOD main (METHOD_BODY(OPERATION !b ASSIGN #3)))",
                 DECLARE_METHOD_ID,"!main",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID
                 ,START_BLOCK_ID,"!b","ASSIGN","#3",END_BLOCK_ID);
+
+        assertResults(null, "PROGRAM(METHOD main (METHOD_BODY(OPERATION !b PLUS #3 MINUS #5)))",
+                DECLARE_METHOD_ID,"!main",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID
+                ,START_BLOCK_ID,"!b",PLUS,"#3",MINUS,"#5",END_BLOCK_ID);
     }
 
     private CompilationExceptionsCollection createExceptions(CompilationException... list)
@@ -114,5 +118,10 @@ public class SyntaxTreeConverterTests {
                 null,
                 DECLARE_METHOD_ID,"!name",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID, FINISH_STATEMENT,
                 DECLARE_METHOD_ID,"!name",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID, FINISH_STATEMENT);
+
+        assertResults(createExceptions(new TokenExpectedException("Identifier expected!",null)),
+                null,
+                DECLARE_METHOD_ID,"!main",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID
+                ,START_BLOCK_ID,"!b",PLUS,"TIMES","#5",END_BLOCK_ID);
     }
 }
