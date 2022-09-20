@@ -34,8 +34,8 @@ Potential additions to types:
 
 Declaring:
 - Method: `method name(param1 : type, param2 : type) : return_type` (parameters and `return_type` optional)
-- Variable: `var name : type` (type can be inferred)
-- Constant: `let name : type`
+- Mutable variable: `var name : type` (type can be inferred)
+- Immutable variable: `val name : type`
 - Conditional: `if condition then [block] otherwise [block]` (`otherwise` optional)
 - For loop: `for var in collection do [block]` (`in` keyword skipped when using `from to` construct)
 - While loop: `while condition do [block]`
