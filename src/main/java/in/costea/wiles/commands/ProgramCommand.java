@@ -44,7 +44,8 @@ public class ProgramCommand extends SyntaxTree
                 exceptions.add(methodCommand.process());
                 components.add(methodCommand);
             }
-        } catch (CompilationException ex)
+        }
+        catch (CompilationException ex)
         {
             exceptions.add(ex);
         }

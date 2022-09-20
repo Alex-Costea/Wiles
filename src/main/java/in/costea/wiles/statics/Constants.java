@@ -24,7 +24,7 @@ public class Constants
     public static final BiMap<String, String> OPERATORS = HashBiMap.create();
     public static final BiMap<String, String> TOKENS;
     public static final BiMap<String, String> TOKENS_INVERSE;
-    public static final int MAX_OPERATOR_LENGTH = 5;
+    public static final int MAX_OPERATOR_LENGTH = 3;
     public static final String IDENTIFIER_START = "!";
     public static final String STRING_START = "@";
     public static final String NUM_START = "#";
@@ -43,19 +43,15 @@ public class Constants
         KEYWORDS.put("smallint", "INT16"); //16 bits
         KEYWORDS.put("int", "INT32"); //32 bits
         KEYWORDS.put("bigint", "INT64"); //64 bits
-        KEYWORDS.put("infint", "BIG_NUM"); //unlimited bits
         KEYWORDS.put("text", "STRING");
         KEYWORDS.put("decimal", "DOUBLE");
-        KEYWORDS.put("exactdec", "DECIMAL");
         KEYWORDS.put("list", "ARRAY_LIST");
-        KEYWORDS.put("linkedlist", "LINKED_LIST");
         KEYWORDS.put("optional", "NULLABLE");
         KEYWORDS.put("dictionary", "LINKED_MAP");
         KEYWORDS.put("range", "RANGE");
-        KEYWORDS.put("set", "SET");
         KEYWORDS.put("method", DECLARE_METHOD_ID);
         KEYWORDS.put("var", "DECLARE_VARIABLE");
-        KEYWORDS.put("let", "DECLARE_CONSTANT");
+        KEYWORDS.put("val", "DECLARE_CONSTANT");
         KEYWORDS.put("if", "IF");
         KEYWORDS.put("then", "THEN");
         KEYWORDS.put("otherwise", "ELSE");
@@ -73,6 +69,7 @@ public class Constants
         KEYWORDS.put("by", "RANGE_BY");
         KEYWORDS.put("stop", "BREAK");
         KEYWORDS.put("skip", "CONTINUE");
+        KEYWORDS.put("result", "RETURN");
         KEYWORDS.put("begin", START_BLOCK_ID);
         KEYWORDS.put("end", END_BLOCK_ID);
     }

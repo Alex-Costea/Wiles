@@ -67,7 +67,8 @@ public abstract class SyntaxTree
                 transmitter.removeToken();
             }
             while (!(token.content().equals(NEWLINE_ID) || token.content().equals(FINISH_STATEMENT)));
-        } catch (UnexpectedEndException ignored)
+        }
+        catch (UnexpectedEndException ignored)
         {
         }
     }

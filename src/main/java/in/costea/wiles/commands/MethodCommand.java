@@ -52,10 +52,12 @@ public class MethodCommand extends SyntaxTree
             try
             {
                 expect(x -> x.equals(NEWLINE_ID) || x.equals(FINISH_STATEMENT), "Expected line end!");
-            } catch (UnexpectedEndException ignored)
+            }
+            catch (UnexpectedEndException ignored)
             {
             }
-        } catch (CompilationException ex)
+        }
+        catch (CompilationException ex)
         {
             exceptions.add(ex);
             readRestOfLineIgnoringErrors(false);

@@ -39,16 +39,20 @@ public class InputToTokensConverter
                 if (arrayChars[index] == STRING_DELIMITER) //string literal
                 {
                     tokens.add(createToken(readStringLiteral()));
-                } else if (isAlphabetic(arrayChars[index])) //identifier
+                }
+                else if (isAlphabetic(arrayChars[index])) //identifier
                 {
                     tokens.add(createToken(readIdentifier()));
-                } else if (isDigit(arrayChars[index])) //numeral literal
+                }
+                else if (isDigit(arrayChars[index])) //numeral literal
                 {
                     tokens.add(createToken(readNumeralLiteral()));
-                } else if (arrayChars[index] == COMMENT_START) //operator
+                }
+                else if (arrayChars[index] == COMMENT_START) //operator
                 {
                     readComment();
-                } else
+                }
+                else
                 {
                     String id = readOperator();
                     int size = tokens.size();
@@ -63,7 +67,8 @@ public class InputToTokensConverter
                     if (id.equals(NEWLINE_ID))
                         addNewLine();
                 }
-            } catch (CompilationException ex)
+            }
+            catch (CompilationException ex)
             {
                 exceptions.add(ex);
                 tokens.add(createToken(UNKNOWN_TOKEN));
@@ -81,19 +86,19 @@ public class InputToTokensConverter
                 throw new StringUnfinishedException("", line, getIndexOnCurrentLine());
 
             StringBuilder sb = new StringBuilder();
-            char lastNonSpaceCharacter='\0';
-            int lastNonSpaceCharacterIndex=-1;
+            char lastNonSpaceCharacter = '\0';
+            int lastNonSpaceCharacterIndex = -1;
             while (arrayChars[currentIndex] != STRING_DELIMITER)
             {
-                if(arrayChars[currentIndex] == '\n')
+                if (arrayChars[currentIndex] == '\n')
                 {
-                    if(lastNonSpaceCharacter =='\\')
-                        sb.setLength(lastNonSpaceCharacterIndex-1);
+                    if (lastNonSpaceCharacter == '\\')
+                        sb.setLength(lastNonSpaceCharacterIndex - 1);
                     else break;
                 }
-                else if(arrayChars[currentIndex]!=' ')
+                else if (arrayChars[currentIndex] != ' ')
                 {
-                    lastNonSpaceCharacterIndex=currentIndex;
+                    lastNonSpaceCharacterIndex = currentIndex;
                     lastNonSpaceCharacter = arrayChars[currentIndex];
                 }
                 sb.append(arrayChars[currentIndex]);
@@ -108,7 +113,8 @@ public class InputToTokensConverter
             if (arrayChars[currentIndex] == '\n') //add the newline token regardless
                 currentIndex--;
             throw new StringUnfinishedException(sb.toString(), line, getIndexOnCurrentLine());
-        } finally
+        }
+        finally
         {
             index = currentIndex;
         }

@@ -12,7 +12,7 @@ This is a one-man project mostly meant for myself to try out making a compiler, 
 ## Language specification
 ### NOTE: WORK IN PROGRESS, SUBJECT TO CHANGE
 
-Literals
+### Literals
 
 - Integer: `12345`
 - Floating: `12345.6`
@@ -20,19 +20,19 @@ Literals
 - Boolean: `true` and `false`
 - Optional: `nothing` (null equivalent)
 
-Types
+### Types
 - Integers: `byte`, `smallint`, `int`, `bigint`
 - Boolean: `bit`
 - String: `text`
 - Floating point: `decimal` (equivalent to double in other languages)
 - Generic types: `list[type]`, `optional[type]`, `dict[type,type]`, `range[type]`
 
-Potential additions to types:
+### Potential additions to types
 - Integers: `infint` (infinite precision)
 - Floating point: `exactdec` (equivalent to decimal)
 - Generic types: `linkedlist[type]`, `set[type]`, `method[param1,param2][return_type]`
 
-Declaring:
+### Declaring
 - Method: `method name(param1 : type, param2 : type) : return_type` (parameters and `return_type` optional)
 - Mutable variable: `var name : type` (type can be inferred)
 - Immutable variable: `val name : type`
@@ -40,7 +40,7 @@ Declaring:
 - For loop: `for var in collection do [block]` (`in` keyword skipped when using `from to` construct)
 - While loop: `while condition do [block]`
 
-Operators:
+### Operators
 - `+`, `-`, `*`, `/`, `mod`, `^` (power)
 - `and`, `or`, `not`
 - `=`, `>`, `>=`, `<`, `<=`, `=/=`
@@ -49,11 +49,12 @@ Operators:
 - `:=`, `+=`, `-=`, `*=`, `/=`, `^=`
 - `[]`, `()`, `,`, `.`, `:`
 
-Other keywords:
+### Other keywords
 - `stop`, `skip` (break, continue equivalents)
 - `begin`, `end` (code blocks)
+- `result` (return equivalent)
 
-Miscellaneous:
+### Miscellaneous
 - Declaring `main` method optional when using no other methods
 - `;` can be specified or inferred from newline
 - Language is statically, strongly typed with some type inference

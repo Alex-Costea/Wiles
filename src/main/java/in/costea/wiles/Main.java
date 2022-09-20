@@ -46,7 +46,8 @@ public class Main
             Objects.requireNonNull(is);
             input = new BufferedReader(new InputStreamReader(is))
                     .lines().collect(Collectors.joining("\n"));
-        } catch (NullPointerException | IOException ex)
+        }
+        catch (NullPointerException | IOException ex)
         {
             throw new Error("Error loading input file!");
         }

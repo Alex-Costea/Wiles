@@ -52,7 +52,8 @@ public class MethodBodyCommand extends SyntaxTree
                 if (token.content().equals(PLUS) || token.content().equals(MINUS) || !TOKENS.containsValue(token.content()))
                 {
                     operationCommand = new OperationCommand(token, transmitter, false);
-                } else if (standAlone && token.content().equals(DECLARE_METHOD_ID))
+                }
+                else if (standAlone && token.content().equals(DECLARE_METHOD_ID))
                     throw new UnexpectedTokenException("Cannot declare method in body-only mode!", token.location());
                 else throw new UnexpectedTokenException(TOKENS_INVERSE.get(token.content()), token.location());
                 CompilationExceptionsCollection newExceptions = operationCommand.process();
@@ -60,7 +61,8 @@ public class MethodBodyCommand extends SyntaxTree
                 components.add(operationCommand);
                 if (newExceptions.size() > 0)
                     readRestOfLineIgnoringErrors(!standAlone);
-            } catch (CompilationException ex)
+            }
+            catch (CompilationException ex)
             {
                 exceptions.add(ex);
                 readRestOfLineIgnoringErrors(!standAlone);

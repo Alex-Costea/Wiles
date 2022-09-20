@@ -10,6 +10,7 @@ import in.costea.wiles.statics.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static in.costea.wiles.statics.Constants.*;
 
@@ -19,6 +20,7 @@ public class OperationCommand extends AbstractOperationComponent
     private final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
     private final boolean innerOperation;
     private final Token firstToken;
+    private final Set<String> allowedOperations = Set.of(PLUS, MINUS, "TIMES", "DIVIDE", "ASSIGN");
     private boolean expectOperatorNext;
 
     public OperationCommand(Token firstToken, TokenTransmitter transmitter, boolean innerOperation)
@@ -27,13 +29,13 @@ public class OperationCommand extends AbstractOperationComponent
         this.innerOperation = innerOperation;
         this.firstToken = firstToken;
         components.add(new TokenCommand(transmitter, firstToken));
-        expectOperatorNext = !OPERATORS.containsValue(firstToken.content());
+        expectOperatorNext = !allowedOperations.contains(firstToken.content());
     }
 
     @Override
     public Constants.SYNTAX_TYPE getType()
     {
-        return SYNTAX_TYPE.OPERATION;
+        return Constants.SYNTAX_TYPE.OPERATION;
     }
 
     @Override
@@ -47,7 +49,7 @@ public class OperationCommand extends AbstractOperationComponent
         Token newToken = expect((x) -> true, "Parentheses must have body!");
         var newOperation = new OperationCommand(newToken, transmitter, true);
         var newExceptions = newOperation.process();
-        if(newExceptions.size()>0)
+        if (newExceptions.size() > 0)
             throw newExceptions.get(0);
         if (newOperation.components.size() > 1)
             components.add(newOperation);
@@ -68,8 +70,8 @@ public class OperationCommand extends AbstractOperationComponent
                 addInnerOperation();
                 expectOperatorNext = true;
             }
-            if(content.equals(FINISH_STATEMENT))
-                throw new UnexpectedTokenException(";",token.location());
+            if (content.equals(FINISH_STATEMENT))
+                throw new UnexpectedTokenException(";", token.location());
             if (content.equals(ROUND_BRACKET_END_ID))
                 throw new UnexpectedTokenException("Parentheses must have body!", token.location());
 
@@ -82,7 +84,7 @@ public class OperationCommand extends AbstractOperationComponent
                 if (content.equals(END_BLOCK_ID) && !innerOperation) //method end statement
                     break;
 
-                if(content.equals(END_BLOCK_ID))//end statement in inner operation
+                if (content.equals(END_BLOCK_ID))//end statement in inner operation
                 {
                     transmitter.removeToken();
                     throw new UnexpectedTokenException("end", token.location());
@@ -91,15 +93,15 @@ public class OperationCommand extends AbstractOperationComponent
                 if (expectOperatorNext && !innerOperation && (content.equals(FINISH_STATEMENT) || content.equals(NEWLINE_ID)))
                     break; //finalize operation
 
-                if(content.equals(FINISH_STATEMENT))
+                if (content.equals(FINISH_STATEMENT))
                 {
                     transmitter.removeToken();
                     throw new UnexpectedTokenException(";", token.location());
                 }
 
-                if(expectOperatorNext)
-                    token = expect(x ->  x.equals(ROUND_BRACKET_START_ID) || x.equals(ROUND_BRACKET_END_ID)
-                            || OPERATORS.containsValue(x), "Operator expected!");
+                if (expectOperatorNext)
+                    token = expect(x -> x.equals(ROUND_BRACKET_START_ID) || x.equals(ROUND_BRACKET_END_ID)
+                            || allowedOperations.contains(x), "Operator expected!");
                 else
                     token = expect(x -> x.equals(ROUND_BRACKET_START_ID) || x.equals(ROUND_BRACKET_END_ID) ||
                             x.startsWith("!") || x.startsWith("@") || x.startsWith("#"), "Identifier expected!");
@@ -117,7 +119,7 @@ public class OperationCommand extends AbstractOperationComponent
 
                 }
 
-                expectOperatorNext=!expectOperatorNext; //toggle operators and identifiers
+                expectOperatorNext = !expectOperatorNext; //toggle operators and identifiers
 
                 if (token.content().equals(ROUND_BRACKET_START_ID)) //inner operation, not method call
                     addInnerOperation();
@@ -125,13 +127,14 @@ public class OperationCommand extends AbstractOperationComponent
             }
 
             //verifying operation finished well
-            if (innerOperation && exceptions.size() == 0 &&  !token.content().equals(ROUND_BRACKET_END_ID))
+            if (innerOperation && exceptions.size() == 0 && !token.content().equals(ROUND_BRACKET_END_ID))
                 throw new UnexpectedEndException("Closing parentheses expected", token.location());
             if (!expectOperatorNext && exceptions.size() == 0)
                 throw new UnexpectedEndException("Operation unfinished!", token.location());
 
             //TODO: process order of operations and check if effect exists
-        } catch (CompilationException ex)
+        }
+        catch (CompilationException ex)
         {
             exceptions.add(ex);
         }
