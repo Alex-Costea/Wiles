@@ -36,7 +36,7 @@ public class CodeBlockCommand extends SyntaxTree
         return components;
     }
 
-    public void readRestOfLineIgnoringErrors()
+    private void readRestOfLineIgnoringErrors()
     {
         final boolean stopAtEndBlock = !standAlone;
         readUntilIgnoringErrors(x -> STATEMENT_ENDERS.contains(x) || (stopAtEndBlock && x.equals(END_BLOCK_ID)));

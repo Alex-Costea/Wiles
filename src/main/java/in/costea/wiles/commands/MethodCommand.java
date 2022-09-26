@@ -40,9 +40,12 @@ public class MethodCommand extends SyntaxTree
 
     public void addNothingReturnType()
     {
-        var typeDefinitionCommand = new TypeDefinitionCommand(transmitter);
-        typeDefinitionCommand.name=NOTHING_ID;
-        components.add(0, typeDefinitionCommand);
+        if(components.size()==0 || components.get(0).getType()!=SYNTAX_TYPE.TYPE)
+        {
+            var typeDefinitionCommand = new TypeDefinitionCommand(transmitter);
+            typeDefinitionCommand.name = NOTHING_ID;
+            components.add(0, typeDefinitionCommand);
+        }
     }
 
     @Override
@@ -79,6 +82,12 @@ public class MethodCommand extends SyntaxTree
             }
 
             //Method body
+            if(expectMaybe(NOTHING_ID).isPresent())
+            {
+                var MethodBodyCommand = new CodeBlockCommand(transmitter, false);
+                components.add(MethodBodyCommand);
+                return exceptions;
+            }
             expect(START_BLOCK_ID);
             var MethodBodyCommand = new CodeBlockCommand(transmitter, false);
             exceptions.add(MethodBodyCommand.process());
