@@ -30,6 +30,7 @@ public class Constants
     public static final String STRING_START = "@";
     public static final String NUM_START = "#";
     public static final String MAIN_METHOD_NAME = "main";
+    public static final String COLON_ID="COLON";
     public static final BiMap<String, String> KEYWORDS = HashBiMap.create();
     public static final BiMap<String, String> OPERATORS = HashBiMap.create();
     public static final BiMap<String, String> TOKENS;
@@ -46,6 +47,7 @@ public class Constants
     public static final Set<String> UNARY_OPERATORS = Set.of(PLUS_ID, MINUS_ID);
     public static final Set<String> ROUND_BRACKETS = Set.of(ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID);
     public static final Set<String> STATEMENT_ENDERS = Set.of(NEWLINE_ID, FINISH_STATEMENT_ID);
+    public static final Set<String> SIMPLE_TYPES = Set.of("BOOLEAN","INT8","INT16","INT32","INT64","STRING","DOUBLE");
 
     static
     {
@@ -76,7 +78,6 @@ public class Constants
         KEYWORDS.put("mod", "MOD");
         KEYWORDS.put("and", "AND");
         KEYWORDS.put("or", "OR");
-        KEYWORDS.put("xor", "XOR");
         KEYWORDS.put("not", "NOT");
         KEYWORDS.put("from", "RANGE_FROM");
         KEYWORDS.put("to", "RANGE_TO");
@@ -98,21 +99,21 @@ public class Constants
         OPERATORS.put("=", "EQUALS");
         OPERATORS.put(">", "LARGER");
         OPERATORS.put("<", "SMALLER");
+        OPERATORS.put(">=", "LARGER_EQUALS");
+        OPERATORS.put("<=", "SMALLER_EQUALS");
+        OPERATORS.put("=/=", "NOT_EQUAL");
         OPERATORS.put("(", ROUND_BRACKET_START_ID);
         OPERATORS.put(")", ROUND_BRACKET_END_ID);
         OPERATORS.put("[", "SQUARE_BRACKET_START");
         OPERATORS.put("]", "SQUARE_BRACKET_END");
         OPERATORS.put(",", "COMMA");
         OPERATORS.put(".", "DOT");
-        OPERATORS.put(":", "COLON");
+        OPERATORS.put(":", COLON_ID);
         OPERATORS.put(";", FINISH_STATEMENT_ID);
         OPERATORS.put("" + SPACE, SPACE_ID);
         OPERATORS.put("" + CONTINUE_LINE, CONTINUE_LINE_ID);
         OPERATORS.put("" + NEWLINE, NEWLINE_ID);
         OPERATORS.put(":=", ASSIGN_ID);
-        OPERATORS.put(">=", "LARGER_EQUALS");
-        OPERATORS.put("<=", "SMALLER_EQUALS");
-        OPERATORS.put("=/=", "NOT_EQUAL");
         OPERATORS.put("+=", "ASSIGN_PLUS");
         OPERATORS.put("-=", "ASSIGN_MINUS");
         OPERATORS.put("*=", "ASSIGN_TIMES");
@@ -146,6 +147,8 @@ public class Constants
         METHOD,
         OPERATION,
         METHOD_BODY,
-        TOKEN
+        TOKEN,
+        DECLARATION,
+        TYPE
     }
 }

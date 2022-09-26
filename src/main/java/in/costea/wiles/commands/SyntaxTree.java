@@ -71,7 +71,6 @@ public abstract class SyntaxTree
         }
     }
 
-    @SuppressWarnings("unused")
     protected Optional<Token> expectMaybe(String expectedToken) throws CompilationException
     {
         return expectMaybe(x -> Objects.equals(x, expectedToken));

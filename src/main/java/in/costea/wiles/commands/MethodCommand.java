@@ -46,6 +46,12 @@ public class MethodCommand extends SyntaxTree
             expect(ROUND_BRACKET_START_ID);
             //TODO: method declaration
             expect(ROUND_BRACKET_END_ID);
+            if(expectMaybe(COLON_ID).isPresent())
+            {
+                var typeDefinitionCommand=new TypeDefinitionCommand(transmitter);
+                exceptions.add(typeDefinitionCommand.process());
+                components.add(0,typeDefinitionCommand);
+            }
             expect(START_BLOCK_ID);
             //method body
             var MethodBodyCommand = new MethodBodyCommand(transmitter, false);

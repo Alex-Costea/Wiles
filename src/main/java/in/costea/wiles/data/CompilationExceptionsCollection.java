@@ -4,8 +4,11 @@ import in.costea.wiles.exceptions.CompilationException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+
+import static in.costea.wiles.statics.Constants.DEBUG;
 
 public class CompilationExceptionsCollection extends ArrayList<CompilationException>
 {
@@ -44,7 +47,8 @@ public class CompilationExceptionsCollection extends ArrayList<CompilationExcept
                     if (comp2 != 0) return comp2;
                     return a.getMessage().compareTo(b.getMessage());
                 }).
-                map((Exception x) -> "\n    " + x.getMessage()).reduce((a, b) -> a + b);
+                map((Exception x) -> "\n    " + x.getMessage() +(DEBUG?Arrays.toString(x.getStackTrace()):"")).
+                reduce((a, b) -> a + b);
         if (optional.isEmpty())
             throw new IllegalStateException();
         return optional.get();

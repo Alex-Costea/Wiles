@@ -36,9 +36,8 @@ public class Main
                 disable(MapperFeature.AUTO_DETECT_FIELDS).disable(MapperFeature.AUTO_DETECT_GETTERS).
                 disable(MapperFeature.AUTO_DETECT_IS_GETTERS).build();
 
-        String JSON=mapper.writerWithDefaultPrettyPrinter().writeValueAsString(syntaxTree);
-        System.out.println("Syntax tree:");
-        System.out.println(JSON);
+        System.out.print("Syntax tree: ");
+        System.out.println(syntaxTree);
 
         ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
         writer.writeValue(new File("syntaxtree.json"),syntaxTree);
