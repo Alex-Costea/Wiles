@@ -60,9 +60,9 @@ public class MethodBodyCommand extends SyntaxTree
                 {
                     operationCommand = new OperationCommand(token, transmitter, false);
                 }
-                else if(token.content().equals(ROUND_BRACKET_START_ID))
+                else if (token.content().equals(ROUND_BRACKET_START_ID))
                 {
-                    Token newToken =expect((x) -> true, "Parentheses must have body!");
+                    Token newToken = expect((x) -> true, "Unexpected operation end!");
                     operationCommand = new OperationCommand(newToken, transmitter, true);
                 }
                 else if (standAlone && token.content().equals(DECLARE_METHOD_ID))

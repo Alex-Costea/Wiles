@@ -120,7 +120,7 @@ public class SyntaxTreeConverterTests
                 "!a", PLUS_ID, ROUND_BRACKET_START_ID, NEWLINE_ID, "!b", PLUS_ID, "!c", ROUND_BRACKET_END_ID);
         assertResults(null, "PROGRAM(METHOD main (METHOD_BODY(OPERATION(!a; PLUS; OPERATION(!b; PLUS; !c)))))",
                 "!a", PLUS_ID, NEWLINE_ID, ROUND_BRACKET_START_ID, "!b", PLUS_ID, "!c", ROUND_BRACKET_END_ID);
-        assertResults(null,"PROGRAM(METHOD main (METHOD_BODY(OPERATION(!a; PLUS; !b))))",
+        assertResults(null, "PROGRAM(METHOD main (METHOD_BODY(OPERATION(!a; PLUS; !b))))",
                 ROUND_BRACKET_START_ID, "!a", PLUS_ID, "!b", ROUND_BRACKET_END_ID);
     }
 

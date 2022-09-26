@@ -46,7 +46,7 @@ public class OperationCommand extends AbstractOperationComponent
 
     private void addInnerOperation() throws CompilationException
     {
-        Token newToken = expect((x) -> true, "Parentheses must have body!");
+        Token newToken = expect((x) -> true, "Unexpected operation end!");
         var newOperation = new OperationCommand(newToken, transmitter, true);
         var newExceptions = newOperation.process();
         if (newExceptions.size() > 0)
