@@ -18,9 +18,10 @@ This is a one-man project mostly meant for myself to try out making a compiler, 
 - Floating: `12345.6`
 - String: `"abc"`
 - Boolean: `true` and `false`
-- Optional: `nothing` (null equivalent)
+- Optional / Nothing: `nothing` (null/void equivalent)
 
 ### Types
+- Nothing: only valid value is `nothing`
 - Integers: `byte`, `smallint`, `int`, `bigint`
 - Boolean: `bit`
 - String: `text`
@@ -61,6 +62,7 @@ This is a one-man project mostly meant for myself to try out making a compiler, 
 - Comment using `#`
 - Returning value done with `method_name := result` or with `result` keyword
 - Garbage collection
+- `nothing` can also be used to mean "no operation"
 
 ## Examples
 ### Hello World
