@@ -66,11 +66,11 @@ public class SyntaxTreeConverterTests {
     {
         assertResults(null, "PROGRAM(METHOD main (METHOD_BODY(OPERATION(!b; ASSIGN; !c))))",
                 DECLARE_METHOD_ID,"!main",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID
-                ,START_BLOCK_ID,"!b","ASSIGN","!c",END_BLOCK_ID);
+                ,START_BLOCK_ID,"!b",ASSIGN,"!c",END_BLOCK_ID);
 
         assertResults(null, "PROGRAM(METHOD main (METHOD_BODY(OPERATION(!b; ASSIGN; #3))))",
                 DECLARE_METHOD_ID,"!main",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID
-                ,START_BLOCK_ID,"!b","ASSIGN","#3",END_BLOCK_ID);
+                ,START_BLOCK_ID,"!b",ASSIGN,"#3",END_BLOCK_ID);
 
         assertResults(null, "METHOD_BODY(OPERATION(!b; PLUS; #3; MINUS; #5))",
                 "!b",PLUS,"#3",MINUS,"#5");
@@ -82,18 +82,25 @@ public class SyntaxTreeConverterTests {
         assertResults(null, "METHOD_BODY(OPERATION(!b; PLUS; #3; MINUS; #5))",
                 "!b",PLUS,"#3",MINUS,"#5");
 
+        assertResults(null,"METHOD_BODY(OPERATION(!c; ASSIGN; #0; MINUS; @10; PLUS; #0; PLUS; OPERATION(#0; PLUS; @10)))",
+                "!c",ASSIGN,MINUS,"@10",PLUS,NEWLINE_ID,PLUS,ROUND_BRACKET_START_ID,PLUS,"@10",ROUND_BRACKET_END_ID);
+
+    }
+
+    @Test
+    public void operationsTestException()
+    {
         assertResults(createExceptions(new UnexpectedEndException("Operation unfinished!",null)),
                 null,
                 "!a", PLUS, "!b", PLUS);
 
         assertResults(createExceptions(new TokenExpectedException("Identifier or unary operator expected!",null)),
                 null,
-                "!b",PLUS,"TIMES","#5");
+                "!b",PLUS,TIMES,"#5");
 
         assertResults(createExceptions(new UnexpectedTokenException("*",null)),
                 null,
-                "TIMES","!a");
-
+                TIMES,"!a");
     }
 
     @Test
