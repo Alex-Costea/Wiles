@@ -16,6 +16,7 @@ public class TokenCommand extends AbstractOperationComponent
     {
         super(transmitter);
         this.token = token;
+        inside = token.content();
     }
 
     public Token getToken()
@@ -44,6 +45,6 @@ public class TokenCommand extends AbstractOperationComponent
     @Override
     public String toString()
     {
-        return token.content();
+        return inside;
     }
 }

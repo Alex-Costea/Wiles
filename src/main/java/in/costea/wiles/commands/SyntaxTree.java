@@ -18,6 +18,8 @@ import static in.costea.wiles.statics.Constants.*;
 public abstract class SyntaxTree
 {
     protected final TokenTransmitter transmitter;
+    protected String inside = "";
+    private int depth;
 
     public SyntaxTree(TokenTransmitter transmitter)
     {
@@ -25,17 +27,18 @@ public abstract class SyntaxTree
 
     }
 
+    public void setDepth(int depth)
+    {
+        this.depth = depth;
+        for (SyntaxTree component : getComponents())
+            component.setDepth(depth + 1);
+    }
+
     public abstract SYNTAX_TYPE getType();
 
     public abstract List<? extends SyntaxTree> getComponents();
 
     public abstract CompilationExceptionsCollection process();
-
-    @Override
-    public String toString()
-    {
-        return toString("");
-    }
 
     protected Token expect(Predicate<String> found, String message) throws CompilationException
     {
@@ -92,7 +95,9 @@ public abstract class SyntaxTree
         }
     }
 
-    public final String toString(String inside)
+
+    @Override
+    public String toString()
     {
         StringBuilder sb = new StringBuilder();
         sb.append(getType());
@@ -110,6 +115,30 @@ public abstract class SyntaxTree
                 i++;
             }
             sb.append(")");
+        }
+        return sb.toString();
+    }
+
+    public final String toStringFormatted()
+    {
+        String indentationString = "  ";
+        StringBuilder sb = new StringBuilder();
+        sb.append(getType());
+        if (!Objects.equals(inside, ""))
+            sb.append(" ").append(inside);
+        if (getComponents().size() > 0)
+        {
+            sb.append("\n").append(indentationString.repeat(depth - 1)).append("{");
+            sb.append("\n");
+            int i = 0;
+            for (SyntaxTree component : getComponents())
+            {
+                sb.append(indentationString.repeat(depth)).append(component.toStringFormatted());
+                if (i < getComponents().size() - 1)
+                    sb.append(",\n");
+                i++;
+            }
+            sb.append("\n").append(indentationString.repeat(depth - 1)).append("}");
         }
         return sb.toString();
     }

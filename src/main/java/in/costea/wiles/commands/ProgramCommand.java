@@ -49,6 +49,11 @@ public class ProgramCommand extends SyntaxTree
         {
             exceptions.add(ex);
         }
+        finally
+        {
+            setDepth(1);
+        }
         return exceptions;
     }
+
 }

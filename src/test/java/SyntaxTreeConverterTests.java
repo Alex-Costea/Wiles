@@ -134,7 +134,7 @@ public class SyntaxTreeConverterTests
     @Test
     public void programExceptionsTest()
     {
-        assertResults(createExceptions(new TokenExpectedException("Expected line end!", null)),
+        assertResults(createExceptions(new TokenExpectedException("Token \"method\" expected!", null)),
                 null,
                 DECLARE_METHOD_ID, "!a", ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID
                 , START_BLOCK_ID, END_BLOCK_ID, "!b");

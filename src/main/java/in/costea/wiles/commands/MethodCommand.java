@@ -2,7 +2,6 @@ package in.costea.wiles.commands;
 
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.exceptions.CompilationException;
-import in.costea.wiles.exceptions.UnexpectedEndException;
 import in.costea.wiles.services.TokenTransmitter;
 
 import java.util.ArrayList;
@@ -14,7 +13,6 @@ public class MethodCommand extends SyntaxTree
 {
     private final List<SyntaxTree> components = new ArrayList<>();
     private final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
-    private String methodName;
 
     public MethodCommand(TokenTransmitter transmitter)
     {
@@ -23,7 +21,7 @@ public class MethodCommand extends SyntaxTree
 
     public void setMethodName(String methodName)
     {
-        this.methodName = methodName;
+        inside = methodName;
     }
 
     @Override
@@ -43,7 +41,7 @@ public class MethodCommand extends SyntaxTree
     {
         try
         {
-            methodName = expect(x -> x.length() > 1 && x.startsWith(IDENTIFIER_START), "Expected method name!").
+            inside = expect(x -> x.length() > 1 && x.startsWith(IDENTIFIER_START), "Expected method name!").
                     content().substring(1);
             expect(ROUND_BRACKET_START_ID);
             //TODO: method declaration
@@ -54,13 +52,6 @@ public class MethodCommand extends SyntaxTree
             exceptions.add(MethodBodyCommand.process());
             components.add(MethodBodyCommand);
             expect(END_BLOCK_ID);
-            try
-            {
-                expect(STATEMENT_ENDERS::contains, "Expected line end!");
-            }
-            catch (UnexpectedEndException ignored) //program ending after method declaration is valid
-            {
-            }
         }
         catch (CompilationException ex)
         {
@@ -70,11 +61,5 @@ public class MethodCommand extends SyntaxTree
                 transmitter.removeToken();
         }
         return exceptions;
-    }
-
-    @Override
-    public String toString()
-    {
-        return super.toString(methodName != null ? methodName : "");
     }
 }

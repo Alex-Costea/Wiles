@@ -28,9 +28,11 @@ public class Main
     {
         String input = loadFile();
         List<Token> tokens = sourceToTokens(input);
-        System.out.println(tokens.stream().map(Token::content).toList());
+        //System.out.print("Tokens: ");
+        //System.out.println(tokens.stream().map(Token::content).toList());
         SyntaxTree syntaxTree = tokensToAST(tokens);
-        System.out.println(syntaxTree);
+        System.out.println("Syntax tree: ");
+        System.out.println(syntaxTree.toStringFormatted());
 
         //Print exceptions
         if (exceptions.size() > 0)
