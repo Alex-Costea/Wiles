@@ -31,6 +31,7 @@ public class Constants
     public static final String NUM_START = "#";
     public static final String MAIN_METHOD_NAME = "main";
     public static final String COLON_ID = "COLON";
+    public static final String NOTHING_ID="NOTHING";
     public static final BiMap<String, String> KEYWORDS = HashBiMap.create();
     public static final BiMap<String, String> OPERATORS = HashBiMap.create();
     public static final BiMap<String, String> TOKENS;
@@ -47,13 +48,13 @@ public class Constants
     public static final Set<String> UNARY_OPERATORS = Set.of(PLUS_ID, MINUS_ID);
     public static final Set<String> ROUND_BRACKETS = Set.of(ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID);
     public static final Set<String> STATEMENT_ENDERS = Set.of(NEWLINE_ID, FINISH_STATEMENT_ID);
-    public static final Set<String> SIMPLE_TYPES = Set.of("BOOLEAN", "INT8", "INT16", "INT32", "INT64", "STRING", "DOUBLE");
+    public static final Set<String> SIMPLE_TYPES = Set.of("BOOLEAN", "INT8", "INT16", "INT32", "INT64", "STRING", "DOUBLE",NOTHING_ID);
 
     static
     {
         KEYWORDS.put("true", "TRUE");
         KEYWORDS.put("false", "FALSE");
-        KEYWORDS.put("nothing", "NULL");
+        KEYWORDS.put("nothing", NOTHING_ID);
         KEYWORDS.put("bit", "BOOLEAN"); //1 bit
         KEYWORDS.put("byte", "INT8"); //8 bits
         KEYWORDS.put("smallint", "INT16"); //16 bits
@@ -146,7 +147,7 @@ public class Constants
         PROGRAM,
         METHOD,
         OPERATION,
-        METHOD_BODY,
+        CODE_BLOCK,
         TOKEN,
         DECLARATION,
         TYPE

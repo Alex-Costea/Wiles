@@ -1,9 +1,6 @@
 package in.costea.wiles.converters;
 
-import in.costea.wiles.commands.MethodBodyCommand;
-import in.costea.wiles.commands.MethodCommand;
-import in.costea.wiles.commands.ProgramCommand;
-import in.costea.wiles.commands.SyntaxTree;
+import in.costea.wiles.commands.*;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.services.TokenTransmitter;
@@ -29,7 +26,7 @@ public class TokensToSyntaxTreeConverter
             tokenTransmitter.removeToken();
         bodyOnlyMode = tokenTransmitter.tokensExhausted() || !tokenTransmitter.requestTokenAssertNotEmpty().content().equals(DECLARE_METHOD_ID);
         if (bodyOnlyMode)
-            syntaxTree = new MethodBodyCommand(tokenTransmitter, true);
+            syntaxTree = new CodeBlockCommand(tokenTransmitter, true);
         else syntaxTree = new ProgramCommand(tokenTransmitter);
         this.syntaxTree = syntaxTree;
     }
@@ -41,8 +38,9 @@ public class TokensToSyntaxTreeConverter
             var programCommand = new ProgramCommand(tokenTransmitter);
             var methodCommand = new MethodCommand(tokenTransmitter);
             methodCommand.setMethodName(MAIN_METHOD_NAME);
-            var methodBodyCommand = new MethodBodyCommand(tokenTransmitter, true);
+            var methodBodyCommand = new CodeBlockCommand(tokenTransmitter, true);
             methodCommand.getComponents().add(methodBodyCommand);
+            methodCommand.addNothingReturnType();
             programCommand.getComponents().add(methodCommand);
             exceptions.add(methodBodyCommand.process());
             return programCommand;

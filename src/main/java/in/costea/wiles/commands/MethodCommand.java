@@ -38,6 +38,13 @@ public class MethodCommand extends SyntaxTree
         return components;
     }
 
+    public void addNothingReturnType()
+    {
+        var typeDefinitionCommand = new TypeDefinitionCommand(transmitter);
+        typeDefinitionCommand.name=NOTHING_ID;
+        components.add(0, typeDefinitionCommand);
+    }
+
     @Override
     public CompilationExceptionsCollection process()
     {
@@ -66,10 +73,14 @@ public class MethodCommand extends SyntaxTree
                 exceptions.add(typeDefinitionCommand.process());
                 components.add(0, typeDefinitionCommand);
             }
+            else
+            {
+                addNothingReturnType();
+            }
 
             //Method body
             expect(START_BLOCK_ID);
-            var MethodBodyCommand = new MethodBodyCommand(transmitter, false);
+            var MethodBodyCommand = new CodeBlockCommand(transmitter, false);
             exceptions.add(MethodBodyCommand.process());
             components.add(MethodBodyCommand);
             expect(END_BLOCK_ID);

@@ -12,13 +12,13 @@ import java.util.List;
 
 import static in.costea.wiles.statics.Constants.*;
 
-public class MethodBodyCommand extends SyntaxTree
+public class CodeBlockCommand extends SyntaxTree
 {
     private final List<SyntaxTree> components = new ArrayList<>();
     private final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
     private final boolean standAlone;
 
-    public MethodBodyCommand(TokenTransmitter transmitter, boolean standAlone)
+    public CodeBlockCommand(TokenTransmitter transmitter, boolean standAlone)
     {
         super(transmitter);
         this.standAlone = standAlone;
@@ -27,7 +27,7 @@ public class MethodBodyCommand extends SyntaxTree
     @Override
     public Constants.SYNTAX_TYPE getType()
     {
-        return Constants.SYNTAX_TYPE.METHOD_BODY;
+        return Constants.SYNTAX_TYPE.CODE_BLOCK;
     }
 
     @Override
