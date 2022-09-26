@@ -73,24 +73,24 @@ public class SyntaxTreeConverterTests
     {
         assertResults(null, "PROGRAM(METHOD main (METHOD_BODY(OPERATION(!b; ASSIGN; !c))))",
                 DECLARE_METHOD_ID, "!main", ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID
-                , START_BLOCK_ID, "!b", ASSIGN, "!c", END_BLOCK_ID);
+                , START_BLOCK_ID, "!b", ASSIGN_ID, "!c", END_BLOCK_ID);
 
         assertResults(null, "PROGRAM(METHOD main (METHOD_BODY(OPERATION(!b; ASSIGN; #3))))",
                 DECLARE_METHOD_ID, "!main", ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID
-                , START_BLOCK_ID, "!b", ASSIGN, "#3", END_BLOCK_ID);
+                , START_BLOCK_ID, "!b", ASSIGN_ID, "#3", END_BLOCK_ID);
 
         assertResults(null, "PROGRAM(METHOD main (METHOD_BODY(OPERATION(!b; PLUS; #3; MINUS; #5))))",
-                "!b", PLUS, "#3", MINUS, "#5");
+                "!b", PLUS_ID, "#3", MINUS_ID, "#5");
 
         assertResults(null, "PROGRAM(METHOD main (METHOD_BODY(OPERATION(!a; PLUS; !b); OPERATION(#0; PLUS; !c); OPERATION(!a; PLUS; !b; PLUS; !c))))",
-                "!a", PLUS, "!b", NEWLINE_ID, PLUS, "!c", NEWLINE_ID, NEWLINE_ID,
-                "!a", PLUS, NEWLINE_ID, "!b", PLUS, "!c");
+                "!a", PLUS_ID, "!b", NEWLINE_ID, PLUS_ID, "!c", NEWLINE_ID, NEWLINE_ID,
+                "!a", PLUS_ID, NEWLINE_ID, "!b", PLUS_ID, "!c");
 
         assertResults(null, "PROGRAM(METHOD main (METHOD_BODY(OPERATION(!b; PLUS; #3; MINUS; #5))))",
-                "!b", PLUS, "#3", MINUS, "#5");
+                "!b", PLUS_ID, "#3", MINUS_ID, "#5");
 
         assertResults(null, "PROGRAM(METHOD main (METHOD_BODY(OPERATION(!c; ASSIGN; #0; MINUS; #10; PLUS; #0; PLUS; OPERATION(#0; PLUS; #10)))))",
-                "!c", ASSIGN, MINUS, "#10", PLUS, NEWLINE_ID, PLUS, ROUND_BRACKET_START_ID, PLUS, "#10", ROUND_BRACKET_END_ID);
+                "!c", ASSIGN_ID, MINUS_ID, "#10", PLUS_ID, NEWLINE_ID, PLUS_ID, ROUND_BRACKET_START_ID, PLUS_ID, "#10", ROUND_BRACKET_END_ID);
 
     }
 
@@ -99,27 +99,29 @@ public class SyntaxTreeConverterTests
     {
         assertResults(createExceptions(new UnexpectedEndException("Operation unfinished!", null)),
                 null,
-                "!a", PLUS, "!b", PLUS);
+                "!a", PLUS_ID, "!b", PLUS_ID);
 
         assertResults(createExceptions(new TokenExpectedException("Identifier or unary operator expected!", null)),
                 null,
-                "!b", PLUS, TIMES, "#5");
+                "!b", PLUS_ID, TIMES_ID, "#5");
 
         assertResults(createExceptions(new UnexpectedTokenException("*", null)),
                 null,
-                TIMES, "!a");
+                TIMES_ID, "!a");
     }
 
     @Test
     public void parenthesesTests()
     {
         assertResults(null, "PROGRAM(METHOD main (METHOD_BODY(OPERATION(!a; PLUS; OPERATION(OPERATION(!b; PLUS; !c); PLUS; !d)))))",
-                "!a", PLUS, ROUND_BRACKET_START_ID, ROUND_BRACKET_START_ID, "!b", PLUS, "!c",
-                ROUND_BRACKET_END_ID, PLUS, "!d", ROUND_BRACKET_END_ID);
+                "!a", PLUS_ID, ROUND_BRACKET_START_ID, ROUND_BRACKET_START_ID, "!b", PLUS_ID, "!c",
+                ROUND_BRACKET_END_ID, PLUS_ID, "!d", ROUND_BRACKET_END_ID);
         assertResults(null, "PROGRAM(METHOD main (METHOD_BODY(OPERATION(!a; PLUS; OPERATION(!b; PLUS; !c)))))",
-                "!a", PLUS, ROUND_BRACKET_START_ID, NEWLINE_ID, "!b", PLUS, "!c", ROUND_BRACKET_END_ID);
+                "!a", PLUS_ID, ROUND_BRACKET_START_ID, NEWLINE_ID, "!b", PLUS_ID, "!c", ROUND_BRACKET_END_ID);
         assertResults(null, "PROGRAM(METHOD main (METHOD_BODY(OPERATION(!a; PLUS; OPERATION(!b; PLUS; !c)))))",
-                "!a", PLUS, NEWLINE_ID, ROUND_BRACKET_START_ID, "!b", PLUS, "!c", ROUND_BRACKET_END_ID);
+                "!a", PLUS_ID, NEWLINE_ID, ROUND_BRACKET_START_ID, "!b", PLUS_ID, "!c", ROUND_BRACKET_END_ID);
+        assertResults(null,"PROGRAM(METHOD main (METHOD_BODY(OPERATION(!a; PLUS; !b))))",
+                ROUND_BRACKET_START_ID, "!a", PLUS_ID, "!b", ROUND_BRACKET_END_ID);
     }
 
     private CompilationExceptionsCollection createExceptions(CompilationException... list)
@@ -158,12 +160,12 @@ public class SyntaxTreeConverterTests
         assertResults(createExceptions(new UnexpectedEndException("Token \"begin\" expected!", null),
                         new UnexpectedEndException("Token \"method\" expected!", null)),
                 null,
-                DECLARE_METHOD_ID, "!name", ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, END_BLOCK_ID, FINISH_STATEMENT,
-                DECLARE_METHOD_ID, "!name", ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, FINISH_STATEMENT);
+                DECLARE_METHOD_ID, "!name", ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, END_BLOCK_ID, FINISH_STATEMENT_ID,
+                DECLARE_METHOD_ID, "!name", ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, FINISH_STATEMENT_ID);
 
         assertResults(createExceptions(new UnexpectedTokenException("Cannot declare method in body-only mode!", null)),
                 null,
-                "!a", PLUS, "!b", NEWLINE_ID,
+                "!a", PLUS_ID, "!b", NEWLINE_ID,
                 DECLARE_METHOD_ID, "!main", ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, START_BLOCK_ID, END_BLOCK_ID);
     }
 }

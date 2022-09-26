@@ -70,8 +70,8 @@ public class OperationCommand extends AbstractOperationComponent
                 addInnerOperation();
                 expectOperatorNext = true;
             }
-            if (content.equals(FINISH_STATEMENT))
-                throw new UnexpectedTokenException(TOKENS_INVERSE.get(FINISH_STATEMENT), token.location());
+            if (content.equals(FINISH_STATEMENT_ID))
+                throw new UnexpectedTokenException(TOKENS_INVERSE.get(FINISH_STATEMENT_ID), token.location());
             if (content.equals(ROUND_BRACKET_END_ID))
                 throw new UnexpectedTokenException("Parentheses must have body!", token.location());
 
@@ -93,7 +93,7 @@ public class OperationCommand extends AbstractOperationComponent
                 if (expectOperatorNext && !innerOperation && STATEMENT_ENDERS.contains(content))
                     break; //finalize operation
 
-                if (content.equals(FINISH_STATEMENT))
+                if (content.equals(FINISH_STATEMENT_ID))
                 {
                     transmitter.removeToken();
                     throw new UnexpectedTokenException(";", token.location());

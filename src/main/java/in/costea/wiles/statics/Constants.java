@@ -18,14 +18,14 @@ public class Constants
     public static final String ROUND_BRACKET_START_ID = "ROUND_BRACKET_START";
     public static final String ROUND_BRACKET_END_ID = "ROUND_BRACKET_END";
     public static final String DECLARE_METHOD_ID = "DECLARE_METHOD";
-    public static final String FINISH_STATEMENT = "FINISH_STATEMENT";
+    public static final String FINISH_STATEMENT_ID = "FINISH_STATEMENT";
     public static final String CONTINUE_LINE_ID = "CONTINUE_LINE";
-    public static final String PLUS = "PLUS";
-    public static final String MINUS = "MINUS";
-    public static final String TIMES = "TIMES";
-    public static final String DIVIDE = "DIVIDE";
-    public static final String POWER = "POWER";
-    public static final String ASSIGN = "ASSIGN";
+    public static final String PLUS_ID = "PLUS";
+    public static final String MINUS_ID = "MINUS";
+    public static final String TIMES_ID = "TIMES";
+    public static final String DIVIDE_ID = "DIVIDE";
+    public static final String POWER_ID = "POWER";
+    public static final String ASSIGN_ID = "ASSIGN";
     public static final String IDENTIFIER_START = "!";
     public static final String STRING_START = "@";
     public static final String NUM_START = "#";
@@ -42,10 +42,10 @@ public class Constants
     public static final char NEWLINE = '\n';
     public static final char SPACE = ' ';
     public static final char CONTINUE_LINE = '\\';
-    public static final Set<String> ALLOWED_OPERATORS_IN_OPERATION = Set.of(PLUS, MINUS, TIMES, DIVIDE, POWER, ASSIGN);
-    public static final Set<String> UNARY_OPERATORS = Set.of(PLUS, MINUS);
+    public static final Set<String> ALLOWED_OPERATORS_IN_OPERATION = Set.of(PLUS_ID, MINUS_ID, TIMES_ID, DIVIDE_ID, POWER_ID, ASSIGN_ID);
+    public static final Set<String> UNARY_OPERATORS = Set.of(PLUS_ID, MINUS_ID);
     public static final Set<String> ROUND_BRACKETS = Set.of(ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID);
-    public static final Set<String> STATEMENT_ENDERS = Set.of(NEWLINE_ID, FINISH_STATEMENT);
+    public static final Set<String> STATEMENT_ENDERS = Set.of(NEWLINE_ID, FINISH_STATEMENT_ID);
 
     static
     {
@@ -90,11 +90,11 @@ public class Constants
 
     static
     {
-        OPERATORS.put("+", PLUS);
-        OPERATORS.put("-", MINUS);
-        OPERATORS.put("*", TIMES);
-        OPERATORS.put("/", DIVIDE);
-        OPERATORS.put("^", POWER);
+        OPERATORS.put("+", PLUS_ID);
+        OPERATORS.put("-", MINUS_ID);
+        OPERATORS.put("*", TIMES_ID);
+        OPERATORS.put("/", DIVIDE_ID);
+        OPERATORS.put("^", POWER_ID);
         OPERATORS.put("=", "EQUALS");
         OPERATORS.put(">", "LARGER");
         OPERATORS.put("<", "SMALLER");
@@ -105,11 +105,11 @@ public class Constants
         OPERATORS.put(",", "COMMA");
         OPERATORS.put(".", "DOT");
         OPERATORS.put(":", "COLON");
-        OPERATORS.put(";", FINISH_STATEMENT);
+        OPERATORS.put(";", FINISH_STATEMENT_ID);
         OPERATORS.put("" + SPACE, SPACE_ID);
         OPERATORS.put("" + CONTINUE_LINE, CONTINUE_LINE_ID);
         OPERATORS.put("" + NEWLINE, NEWLINE_ID);
-        OPERATORS.put(":=", ASSIGN);
+        OPERATORS.put(":=", ASSIGN_ID);
         OPERATORS.put(">=", "LARGER_EQUALS");
         OPERATORS.put("<=", "SMALLER_EQUALS");
         OPERATORS.put("=/=", "NOT_EQUAL");

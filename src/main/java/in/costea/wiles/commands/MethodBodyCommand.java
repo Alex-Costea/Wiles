@@ -1,6 +1,7 @@
 package in.costea.wiles.commands;
 
 import in.costea.wiles.data.CompilationExceptionsCollection;
+import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.CompilationException;
 import in.costea.wiles.exceptions.UnexpectedTokenException;
 import in.costea.wiles.services.TokenTransmitter;
@@ -48,7 +49,7 @@ public class MethodBodyCommand extends SyntaxTree
         {
             try
             {
-                var token = transmitter.requestToken("");
+                Token token = transmitter.requestToken("");
                 if (token.content().equals(END_BLOCK_ID) && !standAlone)
                     break;
                 transmitter.removeToken();
@@ -58,6 +59,11 @@ public class MethodBodyCommand extends SyntaxTree
                 if (UNARY_OPERATORS.contains(token.content()) || !TOKENS.containsValue(token.content()))
                 {
                     operationCommand = new OperationCommand(token, transmitter, false);
+                }
+                else if(token.content().equals(ROUND_BRACKET_START_ID))
+                {
+                    Token newToken =expect((x) -> true, "Parentheses must have body!");
+                    operationCommand = new OperationCommand(newToken, transmitter, true);
                 }
                 else if (standAlone && token.content().equals(DECLARE_METHOD_ID))
                     throw new UnexpectedTokenException("Cannot declare method in body-only mode!", token.location());
