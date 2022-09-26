@@ -10,6 +10,7 @@ import in.costea.wiles.services.TokenTransmitter;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import static in.costea.wiles.statics.Constants.*;
@@ -54,7 +55,25 @@ public abstract class SyntaxTree
         expect(x -> Objects.equals(x, expectedToken), "Token \"" + TOKENS_INVERSE.get(expectedToken) + "\" expected!");
     }
 
-    protected void readRestOfLineIgnoringErrors(boolean stopAtEndBlock)
+    protected Optional<Token> expectMaybe(Predicate<String> found) throws CompilationException
+    {
+        try
+        {
+            return Optional.of(expect(found, ""));
+        }
+        catch (TokenExpectedException ex)
+        {
+            return Optional.empty();
+        }
+    }
+
+    @SuppressWarnings("unused")
+    protected Optional<Token> expectMaybe(String expectedToken) throws CompilationException
+    {
+        return expectMaybe(x -> Objects.equals(x, expectedToken));
+    }
+
+    protected void readUntilIgnoringErrors(Predicate<String> stop)
     {
         Token token;
         try
@@ -62,11 +81,11 @@ public abstract class SyntaxTree
             do
             {
                 token = transmitter.requestToken("");
-                if (stopAtEndBlock && token.content().equals(END_BLOCK_ID))
-                    break;
+                if (stop.test(token.content()))
+                    return;
                 transmitter.removeToken();
             }
-            while (!(STATEMENT_ENDERS.contains(token.content())));
+            while (true);
         }
         catch (UnexpectedEndException ignored)
         {

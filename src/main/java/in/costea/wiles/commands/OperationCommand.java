@@ -117,7 +117,6 @@ public class OperationCommand extends AbstractOperationComponent
                 {
                     //TODO: implement
                     throw new Error("Method call not yet implemented!");
-
                 }
 
                 if (!expectOperatorNext && UNARY_OPERATORS.contains(token.content())) //unary operation

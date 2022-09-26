@@ -114,6 +114,7 @@ public class Constants
         OPERATORS.put("*=", "ASSIGN_TIMES");
         OPERATORS.put("/=", "ASSIGN_DIVIDE");
         OPERATORS.put("^=", "ASSIGN_POWER");
+
         if (DEBUG)
         {
             OPERATORS.put("$=", "TEMP");
@@ -129,6 +130,7 @@ public class Constants
         if (max(OPERATORS.keySet().stream().mapToInt(String::length).boxed().toList()) > MAX_OPERATOR_LENGTH)
             throw new IllegalArgumentException("MAX_OPERATOR_LENGTH smaller than length of largest operator!");
     }
+
     private Constants()
     {
 

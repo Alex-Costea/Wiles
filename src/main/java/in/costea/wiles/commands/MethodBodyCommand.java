@@ -35,6 +35,12 @@ public class MethodBodyCommand extends SyntaxTree
         return components;
     }
 
+    public void readRestOfLineIgnoringErrors()
+    {
+        final boolean stopAtEndBlock = !standAlone;
+        readUntilIgnoringErrors(x -> STATEMENT_ENDERS.contains(x) || (stopAtEndBlock && x.equals(END_BLOCK_ID)));
+    }
+
     @Override
     public CompilationExceptionsCollection process()
     {
@@ -60,12 +66,12 @@ public class MethodBodyCommand extends SyntaxTree
                 exceptions.add(newExceptions);
                 components.add(operationCommand);
                 if (newExceptions.size() > 0)
-                    readRestOfLineIgnoringErrors(!standAlone);
+                    readRestOfLineIgnoringErrors();
             }
             catch (CompilationException ex)
             {
                 exceptions.add(ex);
-                readRestOfLineIgnoringErrors(!standAlone);
+                readRestOfLineIgnoringErrors();
             }
         }
         return exceptions;

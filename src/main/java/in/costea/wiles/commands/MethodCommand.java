@@ -60,7 +60,9 @@ public class MethodCommand extends SyntaxTree
         catch (CompilationException ex)
         {
             exceptions.add(ex);
-            readRestOfLineIgnoringErrors(false);
+            readUntilIgnoringErrors(x -> x.equals(END_BLOCK_ID) || STATEMENT_ENDERS.contains(x));
+            if (!transmitter.tokensExhausted())
+                transmitter.removeToken();
         }
         return exceptions;
     }
