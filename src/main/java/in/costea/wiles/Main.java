@@ -1,7 +1,8 @@
 package in.costea.wiles;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import in.costea.wiles.commands.SyntaxTree;
 import in.costea.wiles.converters.InputToTokensConverter;
@@ -10,10 +11,7 @@ import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.CompilationFailedException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -27,19 +25,23 @@ public class Main
     {
     }
 
-    public static void main(String[] args) throws JsonProcessingException
+    public static void main(String[] args) throws IOException
     {
         String input = loadFile();
         List<Token> tokens = sourceToTokens(input);
         System.out.print("Tokens: ");
         System.out.println(tokens.stream().map(Token::content).toList());
         SyntaxTree syntaxTree = tokensToAST(tokens);
-        JsonMapper objectMapper = JsonMapper.builder().disable(MapperFeature.AUTO_DETECT_CREATORS).
+        JsonMapper mapper = JsonMapper.builder().disable(MapperFeature.AUTO_DETECT_CREATORS).
                 disable(MapperFeature.AUTO_DETECT_FIELDS).disable(MapperFeature.AUTO_DETECT_GETTERS).
                 disable(MapperFeature.AUTO_DETECT_IS_GETTERS).build();
-        String JSON=objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(syntaxTree);
+
+        String JSON=mapper.writerWithDefaultPrettyPrinter().writeValueAsString(syntaxTree);
         System.out.println("Syntax tree:");
         System.out.println(JSON);
+
+        ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
+        writer.writeValue(new File("syntaxtree.json"),syntaxTree);
 
         //Print exceptions
         if (exceptions.size() > 0)
