@@ -149,9 +149,9 @@ public class SyntaxTreeConverterTests {
                 DECLARE_METHOD_ID);
 
         assertResults(createExceptions(new UnexpectedEndException("Token \"begin\" expected!",null),
-                        new UnexpectedEndException("Token \"begin\" expected!",null)),
+                        new UnexpectedEndException("Token \"method\" expected!",null)),
                 null,
-                DECLARE_METHOD_ID,"!name",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID, FINISH_STATEMENT,
+                DECLARE_METHOD_ID,"!name",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID,END_BLOCK_ID,FINISH_STATEMENT,
                 DECLARE_METHOD_ID,"!name",ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID, FINISH_STATEMENT);
 
         assertResults(createExceptions(new UnexpectedTokenException("Cannot declare method in body-only mode!",null)),
