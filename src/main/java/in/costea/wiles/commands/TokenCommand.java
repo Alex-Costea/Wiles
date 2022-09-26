@@ -46,9 +46,4 @@ public class TokenCommand extends AbstractOperationComponent
     {
         return token.content();
     }
-
-    public String getContent()
-    {
-        return token.content();
-    }
 }

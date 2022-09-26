@@ -26,9 +26,9 @@ public class OperationCommand extends AbstractOperationComponent
         super(transmitter);
         this.innerOperation = innerOperation;
         this.firstToken = firstToken;
-        expectOperatorNext = !allowedOperatorsInOperation.contains(firstToken.content());
-        if(!expectOperatorNext)
-            components.add(new TokenCommand(transmitter,new Token("#0",firstToken.location())));
+        expectOperatorNext = !ALLOWED_OPERATORS_IN_OPERATION.contains(firstToken.content());
+        if (!expectOperatorNext)
+            components.add(new TokenCommand(transmitter, new Token("#0", firstToken.location())));
         components.add(new TokenCommand(transmitter, firstToken));
     }
 
@@ -90,7 +90,7 @@ public class OperationCommand extends AbstractOperationComponent
                     throw new UnexpectedTokenException("end", token.location());
                 }
 
-                if (expectOperatorNext && !innerOperation && (content.equals(FINISH_STATEMENT) || content.equals(NEWLINE_ID)))
+                if (expectOperatorNext && !innerOperation && STATEMENT_ENDERS.contains(content))
                     break; //finalize operation
 
                 if (content.equals(FINISH_STATEMENT))
@@ -100,12 +100,12 @@ public class OperationCommand extends AbstractOperationComponent
                 }
 
                 if (expectOperatorNext)
-                    token = expect(x -> roundParenthesis.contains(x) || allowedOperatorsInOperation.contains(x),
+                    token = expect(x -> ROUND_BRACKETS.contains(x) || ALLOWED_OPERATORS_IN_OPERATION.contains(x),
                             "Operator expected!");
                 else
-                    token = expect(x -> roundParenthesis.contains(x) || unaryOperators.contains(x) ||
-                            x.startsWith("!") || x.startsWith("@") || x.startsWith("#")
-                            ,"Identifier or unary operator expected!");
+                    token = expect(x -> ROUND_BRACKETS.contains(x) || UNARY_OPERATORS.contains(x) ||
+                                    x.startsWith("!") || x.startsWith("@") || x.startsWith("#")
+                            , "Identifier or unary operator expected!");
 
                 if (token.content().equals(ROUND_BRACKET_END_ID))
                 {
@@ -120,8 +120,8 @@ public class OperationCommand extends AbstractOperationComponent
 
                 }
 
-                if(!expectOperatorNext && unaryOperators.contains(token.content())) //unary operation
-                    components.add(new TokenCommand(transmitter,new Token("#0",token.location())));
+                if (!expectOperatorNext && UNARY_OPERATORS.contains(token.content())) //unary operation
+                    components.add(new TokenCommand(transmitter, new Token("#0", token.location())));
                 else
                     expectOperatorNext = !expectOperatorNext; //toggle operators and identifiers
 

@@ -22,22 +22,26 @@ public class Constants
     public static final String CONTINUE_LINE = "CONTINUE_LINE";
     public static final String PLUS = "PLUS";
     public static final String MINUS = "MINUS";
-    public static final String TIMES="TIMES";
-    public static final String DIVIDE="DIVIDE";
-    public static final String POWER="POWER";
-    public static final String ASSIGN="ASSIGN";
+    public static final String TIMES = "TIMES";
+    public static final String DIVIDE = "DIVIDE";
+    public static final String POWER = "POWER";
+    public static final String ASSIGN = "ASSIGN";
+    public static final String IDENTIFIER_START = "!";
+    public static final String STRING_START = "@";
+    public static final String NUM_START = "#";
     public static final BiMap<String, String> KEYWORDS = HashBiMap.create();
     public static final BiMap<String, String> OPERATORS = HashBiMap.create();
     public static final BiMap<String, String> TOKENS;
     public static final BiMap<String, String> TOKENS_INVERSE;
     public static final int MAX_OPERATOR_LENGTH = 3;
-    public static final String IDENTIFIER_START = "!";
-    public static final String STRING_START = "@";
-    public static final String NUM_START = "#";
     public static final char STRING_DELIMITER = '"';
     public static final char DECIMAL_DELIMITER = '.';
     public static final char COMMENT_START = '#';
     public static final char COMMENT_END = '\n';
+    public static final Set<String> ALLOWED_OPERATORS_IN_OPERATION = Set.of(PLUS, MINUS, TIMES, DIVIDE, POWER, ASSIGN);
+    public static final Set<String> UNARY_OPERATORS = Set.of(PLUS, MINUS);
+    public static final Set<String> ROUND_BRACKETS = Set.of(ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID);
+    public static final Set<String> STATEMENT_ENDERS = Set.of(NEWLINE_ID, FINISH_STATEMENT);
 
     static
     {
@@ -125,7 +129,6 @@ public class Constants
         if (max(OPERATORS.keySet().stream().mapToInt(String::length).boxed().toList()) > MAX_OPERATOR_LENGTH)
             throw new IllegalArgumentException("MAX_OPERATOR_LENGTH smaller than length of largest operator!");
     }
-
     private Constants()
     {
 
@@ -139,8 +142,4 @@ public class Constants
         METHOD_BODY,
         TOKEN
     }
-
-    public static final Set<String> allowedOperatorsInOperation = Set.of(PLUS, MINUS, TIMES, DIVIDE, POWER, ASSIGN);
-    public static final Set<String> unaryOperators = Set.of(PLUS, MINUS);
-    public static final Set<String> roundParenthesis = Set.of(ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID);
 }

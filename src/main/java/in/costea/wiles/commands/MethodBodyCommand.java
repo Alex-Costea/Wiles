@@ -46,10 +46,10 @@ public class MethodBodyCommand extends SyntaxTree
                 if (token.content().equals(END_BLOCK_ID) && !standAlone)
                     break;
                 transmitter.removeToken();
-                if (token.content().equals(NEWLINE_ID) || token.content().equals(FINISH_STATEMENT))
+                if (STATEMENT_ENDERS.contains(token.content()))
                     continue;
                 OperationCommand operationCommand;
-                if (unaryOperators.contains(token.content()) || !TOKENS.containsValue(token.content()))
+                if (UNARY_OPERATORS.contains(token.content()) || !TOKENS.containsValue(token.content()))
                 {
                     operationCommand = new OperationCommand(token, transmitter, false);
                 }

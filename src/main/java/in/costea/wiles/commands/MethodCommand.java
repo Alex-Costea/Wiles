@@ -51,9 +51,9 @@ public class MethodCommand extends SyntaxTree
             expect(END_BLOCK_ID);
             try
             {
-                expect(x -> x.equals(NEWLINE_ID) || x.equals(FINISH_STATEMENT), "Expected line end!");
+                expect(STATEMENT_ENDERS::contains, "Expected line end!");
             }
-            catch (UnexpectedEndException ignored)
+            catch (UnexpectedEndException ignored) //program ending after method declaration is valid
             {
             }
         }

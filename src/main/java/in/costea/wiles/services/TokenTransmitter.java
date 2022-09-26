@@ -23,7 +23,7 @@ public class TokenTransmitter
 
     public Token requestToken(String message) throws UnexpectedEndException
     {
-        if (tokensExhausted()) throw new UnexpectedEndException(message, lastLocation); //TODO: get location?
+        if (tokensExhausted()) throw new UnexpectedEndException(message, lastLocation);
         return tokens.getFirst();
     }
 
