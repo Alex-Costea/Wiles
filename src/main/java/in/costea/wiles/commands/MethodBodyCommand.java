@@ -49,7 +49,7 @@ public class MethodBodyCommand extends SyntaxTree
                 if (token.content().equals(NEWLINE_ID) || token.content().equals(FINISH_STATEMENT))
                     continue;
                 OperationCommand operationCommand;
-                if (token.content().equals(PLUS) || token.content().equals(MINUS) || !TOKENS.containsValue(token.content()))
+                if (unaryOperators.contains(token.content()) || !TOKENS.containsValue(token.content()))
                 {
                     operationCommand = new OperationCommand(token, transmitter, false);
                 }

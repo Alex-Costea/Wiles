@@ -10,7 +10,6 @@ import in.costea.wiles.statics.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import static in.costea.wiles.statics.Constants.*;
 
@@ -20,7 +19,6 @@ public class OperationCommand extends AbstractOperationComponent
     private final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
     private final boolean innerOperation;
     private final Token firstToken;
-    private final Set<String> allowedOperations = Set.of(PLUS, MINUS, "TIMES", "DIVIDE", "ASSIGN");
     private boolean expectOperatorNext;
 
     public OperationCommand(Token firstToken, TokenTransmitter transmitter, boolean innerOperation)
@@ -28,8 +26,10 @@ public class OperationCommand extends AbstractOperationComponent
         super(transmitter);
         this.innerOperation = innerOperation;
         this.firstToken = firstToken;
+        expectOperatorNext = !allowedOperatorsInOperation.contains(firstToken.content());
+        if(!expectOperatorNext)
+            components.add(new TokenCommand(transmitter,new Token("#0",firstToken.location())));
         components.add(new TokenCommand(transmitter, firstToken));
-        expectOperatorNext = !allowedOperations.contains(firstToken.content());
     }
 
     @Override
@@ -100,11 +100,12 @@ public class OperationCommand extends AbstractOperationComponent
                 }
 
                 if (expectOperatorNext)
-                    token = expect(x -> x.equals(ROUND_BRACKET_START_ID) || x.equals(ROUND_BRACKET_END_ID)
-                            || allowedOperations.contains(x), "Operator expected!");
+                    token = expect(x -> roundParenthesis.contains(x) || allowedOperatorsInOperation.contains(x),
+                            "Operator expected!");
                 else
-                    token = expect(x -> x.equals(ROUND_BRACKET_START_ID) || x.equals(ROUND_BRACKET_END_ID) ||
-                            x.startsWith("!") || x.startsWith("@") || x.startsWith("#"), "Identifier expected!");
+                    token = expect(x -> roundParenthesis.contains(x) || unaryOperators.contains(x) ||
+                            x.startsWith("!") || x.startsWith("@") || x.startsWith("#")
+                            ,"Identifier or unary operator expected!");
 
                 if (token.content().equals(ROUND_BRACKET_END_ID))
                 {
@@ -119,7 +120,10 @@ public class OperationCommand extends AbstractOperationComponent
 
                 }
 
-                expectOperatorNext = !expectOperatorNext; //toggle operators and identifiers
+                if(!expectOperatorNext && unaryOperators.contains(token.content())) //unary operation
+                    components.add(new TokenCommand(transmitter,new Token("#0",token.location())));
+                else
+                    expectOperatorNext = !expectOperatorNext; //toggle operators and identifiers
 
                 if (token.content().equals(ROUND_BRACKET_START_ID)) //inner operation, not method call
                     addInnerOperation();

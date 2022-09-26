@@ -75,7 +75,7 @@ public class SyntaxTreeConverterTests {
         assertResults(null, "METHOD_BODY(OPERATION(!b; PLUS; #3; MINUS; #5))",
                 "!b",PLUS,"#3",MINUS,"#5");
 
-        assertResults(null,"METHOD_BODY(OPERATION(!a; PLUS; !b); OPERATION(PLUS; !c); OPERATION(!a; PLUS; !b; PLUS; !c))",
+        assertResults(null,"METHOD_BODY(OPERATION(!a; PLUS; !b); OPERATION(#0; PLUS; !c); OPERATION(!a; PLUS; !b; PLUS; !c))",
                 "!a",PLUS,"!b",NEWLINE_ID,PLUS,"!c",NEWLINE_ID,NEWLINE_ID,
                 "!a",PLUS,NEWLINE_ID,"!b",PLUS,"!c");
 
@@ -86,7 +86,7 @@ public class SyntaxTreeConverterTests {
                 null,
                 "!a", PLUS, "!b", PLUS);
 
-        assertResults(createExceptions(new TokenExpectedException("Identifier expected!",null)),
+        assertResults(createExceptions(new TokenExpectedException("Identifier or unary operator expected!",null)),
                 null,
                 "!b",PLUS,"TIMES","#5");
 

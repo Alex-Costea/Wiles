@@ -3,6 +3,8 @@ package in.costea.wiles.statics;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
+import java.util.Set;
+
 import static java.util.Collections.max;
 
 public class Constants
@@ -20,6 +22,10 @@ public class Constants
     public static final String CONTINUE_LINE = "CONTINUE_LINE";
     public static final String PLUS = "PLUS";
     public static final String MINUS = "MINUS";
+    public static final String TIMES="TIMES";
+    public static final String DIVIDE="DIVIDE";
+    public static final String POWER="POWER";
+    public static final String ASSIGN="ASSIGN";
     public static final BiMap<String, String> KEYWORDS = HashBiMap.create();
     public static final BiMap<String, String> OPERATORS = HashBiMap.create();
     public static final BiMap<String, String> TOKENS;
@@ -78,9 +84,9 @@ public class Constants
     {
         OPERATORS.put("+", PLUS);
         OPERATORS.put("-", MINUS);
-        OPERATORS.put("*", "TIMES");
-        OPERATORS.put("/", "DIVIDE");
-        OPERATORS.put("^", "POWER");
+        OPERATORS.put("*", TIMES);
+        OPERATORS.put("/", DIVIDE);
+        OPERATORS.put("^", POWER);
         OPERATORS.put("=", "EQUALS");
         OPERATORS.put(">", "LARGER");
         OPERATORS.put("<", "SMALLER");
@@ -95,7 +101,7 @@ public class Constants
         OPERATORS.put(" ", SPACE_ID);
         OPERATORS.put("\\", CONTINUE_LINE);
         OPERATORS.put("\n", NEWLINE_ID);
-        OPERATORS.put(":=", "ASSIGN");
+        OPERATORS.put(":=", ASSIGN);
         OPERATORS.put(">=", "LARGER_EQUALS");
         OPERATORS.put("<=", "SMALLER_EQUALS");
         OPERATORS.put("=/=", "NOT_EQUAL");
@@ -133,4 +139,8 @@ public class Constants
         METHOD_BODY,
         TOKEN
     }
+
+    public static final Set<String> allowedOperatorsInOperation = Set.of(PLUS, MINUS, TIMES, DIVIDE, POWER, ASSIGN);
+    public static final Set<String> unaryOperators = Set.of(PLUS, MINUS);
+    public static final Set<String> roundParenthesis = Set.of(ROUND_BRACKET_START_ID,ROUND_BRACKET_END_ID);
 }
