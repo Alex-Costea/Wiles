@@ -172,8 +172,8 @@ public class SyntaxTreeConverterTests
     @Test
     public void methodTest()
     {
-        assertResults(null,"PROGRAM(METHOD main (TYPE INT32 ; METHOD_BODY))",
+        assertResults(null, "PROGRAM(METHOD main (TYPE INT32 ; METHOD_BODY))",
                 DECLARE_METHOD_ID, "!main", ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, COLON_ID, "INT32",
-                 START_BLOCK_ID, END_BLOCK_ID);
+                START_BLOCK_ID, END_BLOCK_ID);
     }
 }

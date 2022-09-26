@@ -40,7 +40,7 @@ public class Main
         System.out.println(syntaxTree);
 
         ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
-        writer.writeValue(new File("syntaxtree.json"),syntaxTree);
+        writer.writeValue(new File("syntaxtree.json"), syntaxTree);
 
         //Print exceptions
         if (exceptions.size() > 0)

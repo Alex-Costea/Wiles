@@ -47,7 +47,7 @@ public class CompilationExceptionsCollection extends ArrayList<CompilationExcept
                     if (comp2 != 0) return comp2;
                     return a.getMessage().compareTo(b.getMessage());
                 }).
-                map((Exception x) -> "\n    " + x.getMessage() +(DEBUG?Arrays.toString(x.getStackTrace()):"")).
+                map((Exception x) -> "\n    " + x.getMessage() + "\n" + (DEBUG ? Arrays.toString(x.getStackTrace()) : "")).
                 reduce((a, b) -> a + b);
         if (optional.isEmpty())
             throw new IllegalStateException();

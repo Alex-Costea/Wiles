@@ -3,6 +3,7 @@ package in.costea.wiles.commands;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.CompilationException;
+import in.costea.wiles.exceptions.TokenExpectedException;
 import in.costea.wiles.services.TokenTransmitter;
 import in.costea.wiles.statics.Constants;
 
@@ -13,8 +14,9 @@ import static in.costea.wiles.statics.Constants.SIMPLE_TYPES;
 
 public class TypeDefinitionCommand extends SyntaxTree
 {
-    private final List<SyntaxTree> components=new ArrayList<>();
-    private final CompilationExceptionsCollection exceptions=new CompilationExceptionsCollection();
+    private final List<SyntaxTree> components = new ArrayList<>();
+    private final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
+
     public TypeDefinitionCommand(TokenTransmitter transmitter)
     {
         super(transmitter);
@@ -37,14 +39,15 @@ public class TypeDefinitionCommand extends SyntaxTree
     {
         try
         {
-            Token token=expect(SIMPLE_TYPES::contains,"Type expected!");
-            name=token.content();
+            Token token = expect(SIMPLE_TYPES::contains, "Type expected!");
+            name = token.content();
         }
         catch (CompilationException e)
         {
             exceptions.add(e);
-            if(!transmitter.tokensExhausted())
-                transmitter.removeToken();
+            if (e instanceof TokenExpectedException)
+                if (!transmitter.tokensExhausted())
+                    transmitter.removeToken();
         }
         return exceptions;
     }

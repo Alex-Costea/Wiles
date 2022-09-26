@@ -18,7 +18,7 @@ import java.util.function.Predicate;
 
 import static in.costea.wiles.statics.Constants.*;
 
-@JsonPropertyOrder({"name","type","components"})
+@JsonPropertyOrder({"name", "type", "components"})
 public abstract class SyntaxTree
 {
     protected final TokenTransmitter transmitter;
@@ -63,9 +63,9 @@ public abstract class SyntaxTree
     {
         try
         {
-            return Optional.of(expect(found, ""));
+            return Optional.of(expect(found, "Shouldn't happen"));
         }
-        catch (TokenExpectedException ex)
+        catch (TokenExpectedException | UnexpectedEndException ex)
         {
             return Optional.empty();
         }

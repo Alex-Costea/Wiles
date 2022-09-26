@@ -1,11 +1,13 @@
 package in.costea.wiles.commands;
 
 import in.costea.wiles.data.CompilationExceptionsCollection;
+import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.CompilationException;
 import in.costea.wiles.services.TokenTransmitter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static in.costea.wiles.statics.Constants.*;
 
@@ -43,17 +45,30 @@ public class MethodCommand extends SyntaxTree
         {
             name = expect(x -> x.length() > 1 && x.startsWith(IDENTIFIER_START), "Expected method name!").
                     content().substring(1);
+
+            //Parameters list
             expect(ROUND_BRACKET_START_ID);
-            //TODO: method declaration
-            expect(ROUND_BRACKET_END_ID);
-            if(expectMaybe(COLON_ID).isPresent())
+            Optional<Token> maybeToken;
+            while ((maybeToken = expectMaybe(x -> x.startsWith(IDENTIFIER_START))).isPresent())
             {
-                var typeDefinitionCommand=new TypeDefinitionCommand(transmitter);
-                exceptions.add(typeDefinitionCommand.process());
-                components.add(0,typeDefinitionCommand);
+                var parameterCommand = new ParameterCommand(transmitter, maybeToken.get());
+                exceptions.add(parameterCommand.process());
+                components.add(parameterCommand);
+                if (expectMaybe("COMMA").isEmpty())
+                    break;
             }
+            expect(ROUND_BRACKET_END_ID);
+
+            //Return type
+            if (expectMaybe(COLON_ID).isPresent())
+            {
+                var typeDefinitionCommand = new TypeDefinitionCommand(transmitter);
+                exceptions.add(typeDefinitionCommand.process());
+                components.add(0, typeDefinitionCommand);
+            }
+
+            //Method body
             expect(START_BLOCK_ID);
-            //method body
             var MethodBodyCommand = new MethodBodyCommand(transmitter, false);
             exceptions.add(MethodBodyCommand.process());
             components.add(MethodBodyCommand);
