@@ -1,5 +1,8 @@
 package in.costea.wiles.commands;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.CompilationException;
@@ -15,11 +18,13 @@ import java.util.function.Predicate;
 
 import static in.costea.wiles.statics.Constants.*;
 
+@JsonPropertyOrder({"name","type","components"})
 public abstract class SyntaxTree
 {
     protected final TokenTransmitter transmitter;
-    protected String inside = "";
-    private int depth;
+    @JsonProperty
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    protected String name = "";
 
     public SyntaxTree(TokenTransmitter transmitter)
     {
@@ -27,15 +32,11 @@ public abstract class SyntaxTree
 
     }
 
-    public void setDepth(int depth)
-    {
-        this.depth = depth;
-        for (SyntaxTree component : getComponents())
-            component.setDepth(depth + 1);
-    }
-
+    @JsonProperty
     public abstract SYNTAX_TYPE getType();
 
+    @JsonProperty
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     public abstract List<? extends SyntaxTree> getComponents();
 
     public abstract CompilationExceptionsCollection process();
@@ -101,8 +102,8 @@ public abstract class SyntaxTree
     {
         StringBuilder sb = new StringBuilder();
         sb.append(getType());
-        if (!Objects.equals(inside, ""))
-            sb.append(" ").append(inside).append(" ");
+        if (!Objects.equals(name, ""))
+            sb.append(" ").append(name).append(" ");
         if (getComponents().size() > 0)
         {
             sb.append("(");
@@ -119,27 +120,4 @@ public abstract class SyntaxTree
         return sb.toString();
     }
 
-    public final String toStringFormatted()
-    {
-        String indentationString = "  ";
-        StringBuilder sb = new StringBuilder();
-        sb.append(getType());
-        if (!Objects.equals(inside, ""))
-            sb.append(" ").append(inside);
-        if (getComponents().size() > 0)
-        {
-            sb.append("\n").append(indentationString.repeat(depth - 1)).append("{");
-            sb.append("\n");
-            int i = 0;
-            for (SyntaxTree component : getComponents())
-            {
-                sb.append(indentationString.repeat(depth)).append(component.toStringFormatted());
-                if (i < getComponents().size() - 1)
-                    sb.append(",\n");
-                i++;
-            }
-            sb.append("\n").append(indentationString.repeat(depth - 1)).append("}");
-        }
-        return sb.toString();
-    }
 }

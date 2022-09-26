@@ -21,7 +21,7 @@ public class MethodCommand extends SyntaxTree
 
     public void setMethodName(String methodName)
     {
-        inside = methodName;
+        name = methodName;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class MethodCommand extends SyntaxTree
     {
         try
         {
-            inside = expect(x -> x.length() > 1 && x.startsWith(IDENTIFIER_START), "Expected method name!").
+            name = expect(x -> x.length() > 1 && x.startsWith(IDENTIFIER_START), "Expected method name!").
                     content().substring(1);
             expect(ROUND_BRACKET_START_ID);
             //TODO: method declaration

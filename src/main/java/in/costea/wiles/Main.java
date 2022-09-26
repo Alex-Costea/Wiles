@@ -1,5 +1,8 @@
 package in.costea.wiles;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import in.costea.wiles.commands.SyntaxTree;
 import in.costea.wiles.converters.InputToTokensConverter;
 import in.costea.wiles.converters.TokensToSyntaxTreeConverter;
@@ -24,15 +27,19 @@ public class Main
     {
     }
 
-    public static void main(String[] args)
+    public static void main(String[] args) throws JsonProcessingException
     {
         String input = loadFile();
         List<Token> tokens = sourceToTokens(input);
-        //System.out.print("Tokens: ");
-        //System.out.println(tokens.stream().map(Token::content).toList());
+        System.out.print("Tokens: ");
+        System.out.println(tokens.stream().map(Token::content).toList());
         SyntaxTree syntaxTree = tokensToAST(tokens);
-        System.out.println("Syntax tree: ");
-        System.out.println(syntaxTree.toStringFormatted());
+        JsonMapper objectMapper = JsonMapper.builder().disable(MapperFeature.AUTO_DETECT_CREATORS).
+                disable(MapperFeature.AUTO_DETECT_FIELDS).disable(MapperFeature.AUTO_DETECT_GETTERS).
+                disable(MapperFeature.AUTO_DETECT_IS_GETTERS).build();
+        String JSON=objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(syntaxTree);
+        System.out.println("Syntax tree:");
+        System.out.println(JSON);
 
         //Print exceptions
         if (exceptions.size() > 0)
