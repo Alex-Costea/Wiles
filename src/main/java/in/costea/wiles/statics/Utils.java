@@ -1,5 +1,7 @@
 package in.costea.wiles.statics;
 
+import static in.costea.wiles.statics.Constants.DIGIT_SEPARATOR;
+
 public class Utils
 {
     private Utils()
@@ -13,7 +15,7 @@ public class Utils
 
     public static boolean isAlphabetic(char c)
     {
-        return Character.isAlphabetic(c) || c == '_';
+        return Character.isAlphabetic(c) || c == DIGIT_SEPARATOR;
     }
 
     public static boolean isDigit(char c)

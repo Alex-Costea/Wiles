@@ -21,6 +21,11 @@ public class MethodCommand extends SyntaxTree
         super(transmitter);
     }
 
+    public void setMethodName(String methodName)
+    {
+        this.methodName = methodName;
+    }
+
     @Override
     public SYNTAX_TYPE getType()
     {

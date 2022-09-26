@@ -1,6 +1,7 @@
 package in.costea.wiles.converters;
 
 import in.costea.wiles.commands.MethodBodyCommand;
+import in.costea.wiles.commands.MethodCommand;
 import in.costea.wiles.commands.ProgramCommand;
 import in.costea.wiles.commands.SyntaxTree;
 import in.costea.wiles.data.CompilationExceptionsCollection;
@@ -10,33 +11,43 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static in.costea.wiles.statics.Constants.DECLARE_METHOD_ID;
-import static in.costea.wiles.statics.Constants.NEWLINE_ID;
+import static in.costea.wiles.statics.Constants.*;
 
 public class TokensToSyntaxTreeConverter
 {
     private final SyntaxTree syntaxTree;
     private final CompilationExceptionsCollection exceptions;
+    private final boolean bodyOnlyMode;
+    private final TokenTransmitter tokenTransmitter;
 
     public TokensToSyntaxTreeConverter(@NotNull List<Token> tokens)
     {
         SyntaxTree syntaxTree;
-        TokenTransmitter tokenTransmitter = new TokenTransmitter(tokens);
+        tokenTransmitter = new TokenTransmitter(tokens);
         exceptions = new CompilationExceptionsCollection();
         while (!tokenTransmitter.tokensExhausted() && tokenTransmitter.requestTokenAssertNotEmpty().content().equals(NEWLINE_ID))
             tokenTransmitter.removeToken();
-        if (!tokenTransmitter.tokensExhausted() && tokenTransmitter.requestTokenAssertNotEmpty().content().equals(DECLARE_METHOD_ID))
-            syntaxTree = new ProgramCommand(tokenTransmitter);
-        else
-        {
+        bodyOnlyMode = tokenTransmitter.tokensExhausted() || !tokenTransmitter.requestTokenAssertNotEmpty().content().equals(DECLARE_METHOD_ID);
+        if (bodyOnlyMode)
             syntaxTree = new MethodBodyCommand(tokenTransmitter, true);
-        }
+        else syntaxTree = new ProgramCommand(tokenTransmitter);
         this.syntaxTree = syntaxTree;
     }
 
     public SyntaxTree convert()
     {
-        exceptions.add(syntaxTree.process());
+        if (bodyOnlyMode)
+        {
+            var programCommand = new ProgramCommand(tokenTransmitter);
+            var methodCommand = new MethodCommand(tokenTransmitter);
+            methodCommand.setMethodName(MAIN_METHOD_NAME);
+            var methodBodyCommand = new MethodBodyCommand(tokenTransmitter, true);
+            methodCommand.getComponents().add(methodBodyCommand);
+            programCommand.getComponents().add(methodCommand);
+            exceptions.add(methodBodyCommand.process());
+            return programCommand;
+        }
+        else exceptions.add(syntaxTree.process());
         return syntaxTree;
     }
 

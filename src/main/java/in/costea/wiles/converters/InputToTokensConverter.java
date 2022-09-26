@@ -56,7 +56,7 @@ public class InputToTokensConverter
                 {
                     String id = readOperator();
                     int size = tokens.size();
-                    if (size > 0 && id.equals(NEWLINE_ID) && tokens.get(size - 1).content().equals(CONTINUE_LINE))
+                    if (size > 0 && id.equals(NEWLINE_ID) && tokens.get(size - 1).content().equals(CONTINUE_LINE_ID))
                     {
                         tokens.remove(size - 1);
                         addNewLine();
@@ -86,17 +86,17 @@ public class InputToTokensConverter
                 throw new StringUnfinishedException("", line, getIndexOnCurrentLine());
 
             StringBuilder sb = new StringBuilder();
-            char lastNonSpaceCharacter = '\0';
+            char lastNonSpaceCharacter = 0;
             int lastNonSpaceCharacterIndex = -1;
             while (arrayChars[currentIndex] != STRING_DELIMITER)
             {
-                if (arrayChars[currentIndex] == '\n')
+                if (arrayChars[currentIndex] == NEWLINE)
                 {
-                    if (lastNonSpaceCharacter == '\\')
+                    if (lastNonSpaceCharacter == CONTINUE_LINE)
                         sb.setLength(lastNonSpaceCharacterIndex - 1);
                     else break;
                 }
-                else if (arrayChars[currentIndex] != ' ')
+                else if (arrayChars[currentIndex] != SPACE)
                 {
                     lastNonSpaceCharacterIndex = currentIndex;
                     lastNonSpaceCharacter = arrayChars[currentIndex];
@@ -110,7 +110,7 @@ public class InputToTokensConverter
                 return STRING_START + sb;
 
             //String not properly finished
-            if (arrayChars[currentIndex] == '\n') //add the newline token regardless
+            if (arrayChars[currentIndex] == NEWLINE) //add the newline token regardless
                 currentIndex--;
             throw new StringUnfinishedException(sb.toString(), line, getIndexOnCurrentLine());
         }
@@ -168,7 +168,7 @@ public class InputToTokensConverter
                 operatorFoundIndex = currentIndex;
             }
             currentIndex++;
-            if (currentIndex == arrayChars.length || arrayChars[currentIndex] == ' ' || arrayChars[currentIndex] == '\n')
+            if (currentIndex == arrayChars.length || arrayChars[currentIndex] == SPACE || arrayChars[currentIndex] == NEWLINE)
                 break;
         }
         index = operatorFoundIndex;
@@ -183,7 +183,7 @@ public class InputToTokensConverter
     private void readComment()
     {
         int currentIndex = index;
-        while (currentIndex < arrayChars.length && arrayChars[currentIndex] != COMMENT_END)
+        while (currentIndex < arrayChars.length && arrayChars[currentIndex] != NEWLINE)
         {
             currentIndex++;
         }

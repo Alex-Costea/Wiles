@@ -42,8 +42,8 @@ public abstract class SyntaxTree
         Token token;
         while ((token = transmitter.requestToken(message)).content().equals(NEWLINE_ID))
             transmitter.removeToken();
-        if (token.content().equals(CONTINUE_LINE))
-            throw new UnexpectedTokenException("\\", token.location());
+        if (token.content().equals(CONTINUE_LINE_ID))
+            throw new UnexpectedTokenException("" + CONTINUE_LINE, token.location());
         if (!found.test(token.content()))
             throw new TokenExpectedException(message, token.location());
         transmitter.removeToken();
