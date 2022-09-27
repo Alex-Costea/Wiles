@@ -1,13 +1,13 @@
 # Wiles
 
-This is a WIP programming language compiler for my own language. The goal is to make a simple, C-style language with clean syntax inspired by Python and Pascal, that is also easier to understand for beginners. However, even more so, the goal is to learn how to make simple compilers 😄
+This is a WIP programming language interpreter for my own language. The goal is to make a simple, C-style language with clean syntax inspired by Python and Pascal, that is also easier to understand for beginners. However, even more so, the goal is to learn how to make simple interpreters 😄
 
 ## FAQ
 ### Why is the language called Wiles?
 As it is inspired by Pascal, I decided to also name my language after a mathematician, but unlike Pascal, one that is contemporary. As such, it's named after Andrew Wiles, who proved Fermat's Last Theorem.
 
 ### Are there plans to make the language object-oriented? What about other cool features, such as lambda expressions?
-This is a one-man project mostly meant for myself to try out making a compiler, so honestly, it depends on my time and motivation. I would like to first finish a functional draft of the language before looking into any advanced features.
+This is a one-man project mostly meant for myself to try out making a interpreter, so honestly, it depends on my time and motivation. I would like to first finish a functional draft of the language and interpreter before looking into any advanced features.
 
 ## Language specification
 ### NOTE: WORK IN PROGRESS, SUBJECT TO CHANGE
@@ -18,10 +18,11 @@ This is a one-man project mostly meant for myself to try out making a compiler, 
 - Floating: `12345.6`
 - String: `"abc"`
 - Boolean: `true` and `false`
-- Optional / Nothing: `nothing` (null/void equivalent)
+- `nothing`
 
 ### Types
 - Nothing: only valid value is `nothing`
+- Optional[type]: either a value, or `nothing`
 - Integers: `byte`, `smallint`, `int`, `bigint`
 - Boolean: `bit`
 - String: `text`
