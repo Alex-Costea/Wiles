@@ -22,12 +22,12 @@ This is a one-man project mostly meant for myself to try out making a interprete
 
 ### Types
 - Nothing: only valid value is `nothing`
-- Optional[type]: either a value, or `nothing`
 - Integers: `byte`, `smallint`, `int`, `bigint`
 - Boolean: `bit`
 - String: `text`
 - Floating point: `decimal` (equivalent to double in other languages)
-- Generic types: `list[type]`, `optional[type]`, `dict[type,type]`, `range[type]`
+- `Optional[type]` either a value of `type`, or `nothing`
+- Other generic types: `list[type]`, `dict[type,type]`, `range[type]`
 
 ### Potential additions to types
 - Integers: `infint` (infinite precision)
