@@ -40,7 +40,7 @@ public class MethodCommand extends SyntaxTree
 
     public void addNothingReturnType()
     {
-        if(components.size()==0 || components.get(0).getType()!=SYNTAX_TYPE.TYPE)
+        if (components.size() == 0 || components.get(0).getType() != SYNTAX_TYPE.TYPE)
         {
             var typeDefinitionCommand = new TypeDefinitionCommand(transmitter);
             typeDefinitionCommand.name = NOTHING_ID;
@@ -82,7 +82,7 @@ public class MethodCommand extends SyntaxTree
             }
 
             //Method body
-            if(expectMaybe(NOTHING_ID).isPresent())
+            if (expectMaybe(NOTHING_ID).isPresent())
             {
                 var MethodBodyCommand = new CodeBlockCommand(transmitter, false);
                 components.add(MethodBodyCommand);

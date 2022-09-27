@@ -31,7 +31,7 @@ public class Constants
     public static final String NUM_START = "#";
     public static final String MAIN_METHOD_NAME = "main";
     public static final String COLON_ID = "COLON";
-    public static final String NOTHING_ID="NOTHING";
+    public static final String NOTHING_ID = "NOTHING";
     public static final BiMap<String, String> KEYWORDS = HashBiMap.create();
     public static final BiMap<String, String> OPERATORS = HashBiMap.create();
     public static final BiMap<String, String> TOKENS;
@@ -48,7 +48,7 @@ public class Constants
     public static final Set<String> UNARY_OPERATORS = Set.of(PLUS_ID, MINUS_ID);
     public static final Set<String> ROUND_BRACKETS = Set.of(ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID);
     public static final Set<String> STATEMENT_ENDERS = Set.of(NEWLINE_ID, FINISH_STATEMENT_ID);
-    public static final Set<String> SIMPLE_TYPES = Set.of("BOOLEAN", "INT8", "INT16", "INT32", "INT64", "STRING", "DOUBLE",NOTHING_ID);
+    public static final Set<String> SIMPLE_TYPES = Set.of("BOOLEAN", "INT8", "INT16", "INT32", "INT64", "STRING", "DOUBLE", NOTHING_ID, "RANGE");
 
     static
     {
