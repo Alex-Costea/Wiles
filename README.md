@@ -64,7 +64,7 @@ This is a one-man project mostly meant for myself to try out making a interprete
 - Returning value done with `method_name := result` or with `result` keyword
 - Garbage collection
 - `nothing` can also be used to mean "no operation"
-- `\` can be used
+- `\` can be used to continue a line after a newline (including string literals)
 
 ## Examples
 ### Hello World
