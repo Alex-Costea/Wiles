@@ -34,6 +34,7 @@ public class Constants
     public static final String NOTHING_ID = "NOTHING";
     public static final BiMap<String, String> KEYWORDS = HashBiMap.create();
     public static final BiMap<String, String> OPERATORS = HashBiMap.create();
+    public static final BiMap<String, String> TYPES = HashBiMap.create();
     public static final BiMap<String, String> TOKENS;
     public static final BiMap<String, String> TOKENS_INVERSE;
     public static final int MAX_OPERATOR_LENGTH = 3;
@@ -48,48 +49,54 @@ public class Constants
     public static final Set<String> UNARY_OPERATORS = Set.of(PLUS_ID, MINUS_ID);
     public static final Set<String> ROUND_BRACKETS = Set.of(ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID);
     public static final Set<String> STATEMENT_ENDERS = Set.of(NEWLINE_ID, FINISH_STATEMENT_ID);
-    public static final Set<String> SIMPLE_TYPES = Set.of("BOOLEAN", "INT8", "INT16", "INT32", "INT64", "STRING", "DOUBLE", NOTHING_ID, "RANGE");
 
     static
     {
-        KEYWORDS.put("true", "TRUE");
-        KEYWORDS.put("false", "FALSE");
         KEYWORDS.put("nothing", NOTHING_ID);
-        KEYWORDS.put("bit", "BOOLEAN"); //1 bit
-        KEYWORDS.put("byte", "INT8"); //8 bits
-        KEYWORDS.put("smallint", "INT16"); //16 bits
-        KEYWORDS.put("int", "INT32"); //32 bits
-        KEYWORDS.put("bigint", "INT64"); //64 bits
-        KEYWORDS.put("text", "STRING");
-        KEYWORDS.put("decimal", "DOUBLE");
-        KEYWORDS.put("list", "ARRAY_LIST");
-        KEYWORDS.put("optional", "NULLABLE");
-        KEYWORDS.put("dictionary", "LINKED_MAP");
-        KEYWORDS.put("range", "RANGE");
+
         KEYWORDS.put("method", DECLARE_METHOD_ID);
         KEYWORDS.put("let", "DECLARE_VARIABLE");
         KEYWORDS.put("var", "MUTABLE");
+
         KEYWORDS.put("if", "IF");
         KEYWORDS.put("then", "THEN");
         KEYWORDS.put("otherwise", "ELSE");
+
         KEYWORDS.put("for", "FOR");
         KEYWORDS.put("in", "IN");
         KEYWORDS.put("do", "DO");
         KEYWORDS.put("while", "WHILE");
+
         KEYWORDS.put("and", "AND");
         KEYWORDS.put("or", "OR");
         KEYWORDS.put("not", "NOT");
-        KEYWORDS.put("from", "RANGE_FROM");
-        KEYWORDS.put("to", "RANGE_TO");
-        KEYWORDS.put("by", "RANGE_BY");
+
         KEYWORDS.put("stop", "BREAK");
         KEYWORDS.put("skip", "CONTINUE");
-        KEYWORDS.put("result", "RETURN");
+
         KEYWORDS.put("begin", START_BLOCK_ID);
         KEYWORDS.put("end", END_BLOCK_ID);
+
+        KEYWORDS.put("class","ClASS");
         KEYWORDS.put("readonly","GETTABLE");
         KEYWORDS.put("public","PUBLIC");
-        KEYWORDS.put("class","ClASS");
+    }
+
+    static
+    {
+        TYPES.put("!bit", "BOOLEAN");
+        TYPES.put("!byte", "INT8");
+        TYPES.put("!smallint", "INT16");
+        TYPES.put("!int", "INT32");
+        TYPES.put("!bigint", "INT64");
+        TYPES.put("!text", "STRING");
+        TYPES.put("!decimal", "DOUBLE");
+        TYPES.put("!list", "ARRAY_LIST");
+        TYPES.put("!optional", "NULLABLE");
+        TYPES.put("!dictionary", "LINKED_MAP");
+        TYPES.put("!range", "RANGE");
+        TYPES.put(NOTHING_ID,"NOTHING");
+        //TYPES.put(DECLARE_METHOD_ID,"METHOD");
     }
 
     static
@@ -99,16 +106,22 @@ public class Constants
         OPERATORS.put("*", TIMES_ID);
         OPERATORS.put("/", DIVIDE_ID);
         OPERATORS.put("^", POWER_ID);
+
+        OPERATORS.put(":=", ASSIGN_ID);
+
         OPERATORS.put("=", "EQUALS");
         OPERATORS.put(">", "LARGER");
         OPERATORS.put("<", "SMALLER");
         OPERATORS.put(">=", "LARGER_EQUALS");
         OPERATORS.put("<=", "SMALLER_EQUALS");
         OPERATORS.put("=/=", "NOT_EQUAL");
+
         OPERATORS.put("(", ROUND_BRACKET_START_ID);
         OPERATORS.put(")", ROUND_BRACKET_END_ID);
+
         OPERATORS.put("[", "SQUARE_BRACKET_START");
         OPERATORS.put("]", "SQUARE_BRACKET_END");
+
         OPERATORS.put(",", "COMMA");
         OPERATORS.put(".", "DOT");
         OPERATORS.put(":", COLON_ID);
@@ -116,7 +129,6 @@ public class Constants
         OPERATORS.put("" + SPACE, SPACE_ID);
         OPERATORS.put("" + CONTINUE_LINE, CONTINUE_LINE_ID);
         OPERATORS.put("" + NEWLINE, NEWLINE_ID);
-        OPERATORS.put(":=", ASSIGN_ID);
 
         if (DEBUG)
         {

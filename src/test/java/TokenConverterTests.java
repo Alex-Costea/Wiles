@@ -76,8 +76,6 @@ public class TokenConverterTests
     public void OperatorsTest()
     {
         TokenConverterEquals("=/=", new String[]{"NOT_EQUAL"});
-        TokenConverterEquals("=/=/=/", new String[]{"NOT_EQUAL", "ASSIGN_DIVIDE", "DIVIDE"});
-        TokenConverterEquals("=/=/=/", new String[]{"NOT_EQUAL", "ASSIGN_DIVIDE", "DIVIDE"});
         TokenConverterThrows(0, "$", UnknownOperatorException.class);
         TokenConverterThrows(0, "=$", UnknownOperatorException.class, "Operator unknown: $");
 

@@ -10,7 +10,8 @@ import in.costea.wiles.statics.Constants;
 import java.util.ArrayList;
 import java.util.List;
 
-import static in.costea.wiles.statics.Constants.SIMPLE_TYPES;
+import static in.costea.wiles.statics.Constants.TYPES;
+
 
 public class TypeDefinitionCommand extends SyntaxTree
 {
@@ -39,8 +40,9 @@ public class TypeDefinitionCommand extends SyntaxTree
     {
         try
         {
-            Token token = expect(SIMPLE_TYPES::contains, "Type expected!");
-            name = token.content();
+            Token token = expect(TYPES::containsKey, "Type expected!");
+            name = TYPES.get(token.content());
+            assert name!=null;
         }
         catch (CompilationException e)
         {

@@ -17,7 +17,8 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Integer: `12345`
 - Floating: `12345.6`
 - String: `"abc"`
-- Boolean: `true` and `false`
+- Boolean: `true` (1) and `false` (0)
+- List: `[1,2,3]`
 - `nothing`
 
 ### Types
@@ -27,36 +28,33 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - String: `text`
 - Floating point: `decimal` (equivalent to double in other languages)
 - `Optional[type]` either a value of `type`, or `nothing`
-- Other generic types: `list[type]`, `dict[type,type]`, `range[type]`
+- Other generic types: `list[type]`, `range[type]`, `dict[type,type]`
 
 ### Potential additions to types
 - Integers: `infint` (infinite precision)
 - Floating point: `exactdec` (equivalent to decimal)
-- Generic types: `linkedlist[type]`, `set[type]`, `method[param1,param2][return_type]`
+- Generic types:  `linked_list[type]`, `set[type]`, `method[param1,param2][return_type]`
 
 ### Declaring
 - Method: `method name(param1 : type, param2 : type) : return_type` (parameters and `return_type` optional)
 - Immutable variable: `let name : type` (type can be inferred)
 - Mutable variable: `let var name : type`
 - Conditional: `if condition then [block] otherwise [block]` (`otherwise` optional)
-- For loop: `for x in collection do [block]` (`in` keyword skipped when using `from to` construct)
+- For loop: `for x in collection do [block]`
 - While loop: `while condition do [block]`
 
 ### Operators
 - `+`, `-`, `*`, `/`, `^` (power)
 - `and`, `or`, `not` (not bitwise!)
 - `=`, `>`, `>=`, `<`, `<=`, `=/=`
-- `from`, `to`, `by` (range operators, `from 1 to 10 by 3`)
-- `in` (element in collection)
 - `:=` (assign or declare)
-- `.` (method/field access)
-- `:` (type annotation)
+- `.` (method / field access)
+- `:` (type annotation and named parameters)
 - `[]`, `()`, `,`
 
 ### Other keywords
-- `stop`, `skip` (break, continue equivalents)
+- `stop`, `skip` (`break`/`return;`, `continue` equivalents)
 - `begin`, `end` (code blocks)
-- `result` (return equivalent)
 
 ### Miscellaneous
 - Declaring `main` method optional when using no other methods
@@ -67,6 +65,8 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Garbage collection
 - `nothing` can also be used to mean "no operation"
 - `\` can be used to continue a line after a newline (including string literals)
+- Methods can be called with named parameters: `range(1,10,3)` or `range(from: 1, to: 10, by: 3)`
+- Types are not reserved keywords and can be used as variable names
 
 ### Other potential additions
 - Classes (or at least structs) with `class` keyword
@@ -79,27 +79,32 @@ writeline("Hello, world!")
 ```
 ### FizzBuzz
 ```
-for i from 1 to 100 do begin
-    let var my_text := ""
+for i in range(from: 1, to: 100) do
+begin
+    let var text := ""
     if modulo(i, 3) = 0 then
-        my_text.append("Fizz")
+        text.append("Fizz")
     if modulo(i, 5) = 0 then
-        my_text.append("Buzz")
+        text.append("Buzz")
     if my_text = "" then 
-        my_text := i.as_text
-    writeline(my_text)
+        text := i.as_text
+    writeline(text)
 end 
 ```
 ### Minimum value
 
 ```
-method min(my_list: list[int]) : int
+method min(list: list[int]) : int
 begin
-    if my_list.size = 0 then
-        result -1
-    min := my_list.get(0)
-    for x in my_list do
+    min := -1
+    for x in list do
         if x < min then
             min := x
+end
+
+method main()
+begin
+    let list := [10, 4, 8]
+    writeline(min(list))
 end
 ```
