@@ -73,6 +73,7 @@ public class Constants
 
         KEYWORDS.put("stop", "BREAK");
         KEYWORDS.put("skip", "CONTINUE");
+        KEYWORDS.put("yield", "RETURN");
 
         KEYWORDS.put("begin", START_BLOCK_ID);
         KEYWORDS.put("end", END_BLOCK_ID);

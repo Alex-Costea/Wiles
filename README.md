@@ -54,6 +54,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 
 ### Other keywords
 - `stop`, `skip` (`break`/`return;`, `continue` equivalents)
+- `yield` (return equivalent)
 - `begin`, `end` (code blocks)
 
 ### Miscellaneous
@@ -61,7 +62,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - `;` can be specified or inferred from newline
 - Language is statically, strongly typed with some type inference
 - Comment using `#`
-- Returning value done with `method_name := result` or with `result` keyword
+- Returning value done with `method_name := result` or with `yield` keyword
 - Garbage collection
 - `nothing` can also be used to mean "no operation"
 - `\` can be used to continue a line after a newline (including string literals)
@@ -99,7 +100,7 @@ begin
     min := -1
     for x in list do
         if x < min then
-            min := x
+            yield x
 end
 
 method main()
