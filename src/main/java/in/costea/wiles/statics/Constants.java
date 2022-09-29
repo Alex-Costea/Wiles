@@ -67,8 +67,8 @@ public class Constants
         KEYWORDS.put("dictionary", "LINKED_MAP");
         KEYWORDS.put("range", "RANGE");
         KEYWORDS.put("method", DECLARE_METHOD_ID);
-        KEYWORDS.put("var", "DECLARE_VARIABLE");
-        KEYWORDS.put("val", "DECLARE_CONSTANT");
+        KEYWORDS.put("let", "DECLARE_VARIABLE");
+        KEYWORDS.put("var", "MUTABLE");
         KEYWORDS.put("if", "IF");
         KEYWORDS.put("then", "THEN");
         KEYWORDS.put("otherwise", "ELSE");
@@ -76,7 +76,6 @@ public class Constants
         KEYWORDS.put("in", "IN");
         KEYWORDS.put("do", "DO");
         KEYWORDS.put("while", "WHILE");
-        KEYWORDS.put("mod", "MOD");
         KEYWORDS.put("and", "AND");
         KEYWORDS.put("or", "OR");
         KEYWORDS.put("not", "NOT");
@@ -88,6 +87,9 @@ public class Constants
         KEYWORDS.put("result", "RETURN");
         KEYWORDS.put("begin", START_BLOCK_ID);
         KEYWORDS.put("end", END_BLOCK_ID);
+        KEYWORDS.put("readonly","GETTABLE");
+        KEYWORDS.put("public","PUBLIC");
+        KEYWORDS.put("class","ClASS");
     }
 
     static
@@ -115,11 +117,6 @@ public class Constants
         OPERATORS.put("" + CONTINUE_LINE, CONTINUE_LINE_ID);
         OPERATORS.put("" + NEWLINE, NEWLINE_ID);
         OPERATORS.put(":=", ASSIGN_ID);
-        OPERATORS.put("+=", "ASSIGN_PLUS");
-        OPERATORS.put("-=", "ASSIGN_MINUS");
-        OPERATORS.put("*=", "ASSIGN_TIMES");
-        OPERATORS.put("/=", "ASSIGN_DIVIDE");
-        OPERATORS.put("^=", "ASSIGN_POWER");
 
         if (DEBUG)
         {

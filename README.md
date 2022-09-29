@@ -7,7 +7,7 @@ This is a WIP programming language interpreter for my own language. The goal is 
 As it is inspired by Pascal, I decided to also name my language after a mathematician, but unlike Pascal, one that is contemporary. As such, it's named after Andrew Wiles, who proved Fermat's Last Theorem.
 
 ### Are there plans to make the language object-oriented? What about other cool features, such as lambda expressions?
-This is a one-man project mostly meant for myself to try out making a interpreter, so honestly, it depends on my time and motivation. I would like to first finish a functional draft of the language and interpreter before looking into any advanced features.
+This is a one-man project mostly meant for myself to try out making an interpreter, so honestly, it depends on my time and motivation. I would like to first finish a functional draft of the language and interpreter before looking into any advanced features.
 
 ## Language specification
 ### NOTE: WORK IN PROGRESS, SUBJECT TO CHANGE
@@ -36,20 +36,22 @@ This is a one-man project mostly meant for myself to try out making a interprete
 
 ### Declaring
 - Method: `method name(param1 : type, param2 : type) : return_type` (parameters and `return_type` optional)
-- Mutable variable: `var name : type` (type can be inferred)
-- Immutable variable: `val name : type`
+- Immutable variable: `let name : type` (type can be inferred)
+- Mutable variable: `let var name : type`
 - Conditional: `if condition then [block] otherwise [block]` (`otherwise` optional)
-- For loop: `for var in collection do [block]` (`in` keyword skipped when using `from to` construct)
+- For loop: `for x in collection do [block]` (`in` keyword skipped when using `from to` construct)
 - While loop: `while condition do [block]`
 
 ### Operators
-- `+`, `-`, `*`, `/`, `mod`, `^` (power)
-- `and`, `or`, `not`
+- `+`, `-`, `*`, `/`, `^` (power)
+- `and`, `or`, `not` (not bitwise!)
 - `=`, `>`, `>=`, `<`, `<=`, `=/=`
 - `from`, `to`, `by` (range operators, `from 1 to 10 by 3`)
 - `in` (element in collection)
-- `:=`, `+=`, `-=`, `*=`, `/=`, `^=`
-- `[]`, `()`, `,`, `.`, `:`
+- `:=` (assign or declare)
+- `.` (method/field access)
+- `:` (type annotation)
+- `[]`, `()`, `,`
 
 ### Other keywords
 - `stop`, `skip` (break, continue equivalents)
@@ -66,6 +68,10 @@ This is a one-man project mostly meant for myself to try out making a interprete
 - `nothing` can also be used to mean "no operation"
 - `\` can be used to continue a line after a newline (including string literals)
 
+### Other potential additions
+- Classes (or at least structs) with `class` keyword
+- Declare fields `readyonly` for getter with no setter, `public` for getter and setter
+
 ## Examples
 ### Hello World
 ```
@@ -74,15 +80,15 @@ writeline("Hello, world!")
 ### FizzBuzz
 ```
 for i from 1 to 100 do begin
-    var my_text := ""
-    if i mod 3 = 0 then
-        my_text += "Fizz"
-    if i mod 5 = 0 then
-        my_text += "Buzz"
-    if my_text = "" then writeline(i)
-        otherwise writeline(my_text)
-end
-    
+    let var my_text := ""
+    if modulo(i, 3) = 0 then
+        my_text.append("Fizz")
+    if modulo(i, 5) = 0 then
+        my_text.append("Buzz")
+    if my_text = "" then 
+        my_text := i.as_text
+    writeline(my_text)
+end 
 ```
 ### Minimum value
 
@@ -91,10 +97,9 @@ method min(my_list: list[int]) : int
 begin
     if my_list.size = 0 then
         result -1
-    min := my_list[0]
+    min := my_list.get(0)
     for x in my_list do
         if x < min then
             min := x
 end
-
 ```
