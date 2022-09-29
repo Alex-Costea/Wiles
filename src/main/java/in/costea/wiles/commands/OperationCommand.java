@@ -19,17 +19,13 @@ public class OperationCommand extends AbstractOperationComponent
     private final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
     private final boolean innerOperation;
     private final Token firstToken;
-    private boolean expectOperatorNext;
 
     public OperationCommand(Token firstToken, TokenTransmitter transmitter, boolean innerOperation)
     {
         super(transmitter);
         this.innerOperation = innerOperation;
         this.firstToken = firstToken;
-        expectOperatorNext = !ALLOWED_OPERATORS_IN_OPERATION.contains(firstToken.content());
-        if (!expectOperatorNext)
-            components.add(new TokenCommand(transmitter, new Token("" + NUM_START + "0", firstToken.location())));
-        components.add(new TokenCommand(transmitter, firstToken));
+
     }
 
     @Override
@@ -62,19 +58,33 @@ public class OperationCommand extends AbstractOperationComponent
         try
         {
             //verifying the first token
-            Token token = firstToken;
-            String content = token.content();
+            //Token token = firstToken;
+
+            boolean isOperator=ALLOWED_OPERATORS_IN_OPERATION.contains(firstToken.content());
+            boolean expectOperatorNext = !isOperator;
+            if (!expectOperatorNext)
+                components.add(new TokenCommand(transmitter, new Token("" + NUM_START + "0", firstToken.location())));
+            components.add(new TokenCommand(transmitter, firstToken));
+
+            String content = firstToken.content();
             if (content.equals(ROUND_BRACKET_START_ID))
             {
                 components.remove(0);
                 addInnerOperation();
                 expectOperatorNext = true;
             }
-            if (content.equals(FINISH_STATEMENT_ID))
-                throw new UnexpectedTokenException(TOKENS_INVERSE.get(FINISH_STATEMENT_ID), token.location());
-            if (content.equals(ROUND_BRACKET_END_ID))
-                throw new UnexpectedTokenException("Parentheses must have body!", token.location());
 
+            if (content.equals(FINISH_STATEMENT_ID))
+                throw new UnexpectedTokenException(TOKENS_INVERSE.get(FINISH_STATEMENT_ID), firstToken.location());
+
+            if (content.equals(ROUND_BRACKET_END_ID))
+                throw new UnexpectedTokenException("Parentheses must have body!", firstToken.location());
+
+            if(isOperator && content.startsWith(IDENTIFIER_START))
+                throw new UnexpectedTokenException("Identifier expected!",firstToken.location());
+
+
+            Token token=firstToken;
             //verifying other tokens
             while (!transmitter.tokensExhausted())
             {

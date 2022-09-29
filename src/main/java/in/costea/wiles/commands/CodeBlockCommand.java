@@ -56,14 +56,15 @@ public class CodeBlockCommand extends SyntaxTree
                 if (STATEMENT_ENDERS.contains(token.content()))
                     continue;
                 OperationCommand operationCommand;
+                boolean innerOperation=false;
+                if (token.content().equals(ROUND_BRACKET_START_ID))
+                {
+                    token = expect((x) -> true, "Unexpected operation end!");
+                    innerOperation=true;
+                }
                 if (UNARY_OPERATORS.contains(token.content()) || !TOKENS.containsValue(token.content()))
                 {
-                    operationCommand = new OperationCommand(token, transmitter, false);
-                }
-                else if (token.content().equals(ROUND_BRACKET_START_ID))
-                {
-                    Token newToken = expect((x) -> true, "Unexpected operation end!");
-                    operationCommand = new OperationCommand(newToken, transmitter, true);
+                    operationCommand = new OperationCommand(token, transmitter, innerOperation);
                 }
                 else if (standAlone && token.content().equals(DECLARE_METHOD_ID))
                     throw new UnexpectedTokenException("Cannot declare method in body-only mode!", token.location());
