@@ -5,13 +5,13 @@ import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.CompilationException;
 import in.costea.wiles.exceptions.UnexpectedEndException;
 import in.costea.wiles.exceptions.UnexpectedTokenException;
-import in.costea.wiles.services.WhenToRemoveToken;
 import in.costea.wiles.services.TokenTransmitter;
 import in.costea.wiles.statics.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static in.costea.wiles.builders.ExpectParamsBuilder.*;
 import static in.costea.wiles.statics.Constants.*;
 
 public class OperationCommand extends AbstractOperationComponentCommand
@@ -43,7 +43,7 @@ public class OperationCommand extends AbstractOperationComponentCommand
 
     private void addInnerOperation() throws CompilationException
     {
-        Token newToken = transmitter.expect((x) -> true, "Unexpected operation end!");
+        Token newToken = transmitter.expect(anyToken().withErrorMessage( "Unexpected operation end!"));
         var newOperation = new OperationCommand(newToken, transmitter, true);
         var newExceptions = newOperation.process();
         if (newExceptions.size() > 0)
@@ -89,7 +89,7 @@ public class OperationCommand extends AbstractOperationComponentCommand
             //verifying other tokens
             while (!transmitter.tokensExhausted())
             {
-                token = transmitter.expect((x)->true, WhenToRemoveToken.Never,false);
+                token = transmitter.expect(requestFirstToken);
                 content = token.content();
 
                 if (content.equals(END_BLOCK_ID) && !innerOperation) //method end statement
@@ -111,12 +111,12 @@ public class OperationCommand extends AbstractOperationComponentCommand
                 }
 
                 if (expectOperatorNext)
-                    token = transmitter.expect(x -> ROUND_BRACKETS.contains(x) || ALLOWED_OPERATORS_IN_OPERATION.contains(x),
-                            "Operator expected!");
+                    token = transmitter.expect(tokenOf(x -> ROUND_BRACKETS.contains(x) || ALLOWED_OPERATORS_IN_OPERATION.contains(x))
+                            .withErrorMessage("Operator expected!"));
                 else
-                    token = transmitter.expect(x -> ROUND_BRACKETS.contains(x) || UNARY_OPERATORS.contains(x) ||
-                                    x.startsWith("!") || x.startsWith("@") || x.startsWith("#")
-                            , "Identifier or unary operator expected!");
+                    token = transmitter.expect(tokenOf(x -> ROUND_BRACKETS.contains(x) || UNARY_OPERATORS.contains(x) ||
+                            x.startsWith("!") || x.startsWith("@") || x.startsWith("#"))
+                            .withErrorMessage("Identifier or unary operator expected!"));
 
                 if (token.content().equals(ROUND_BRACKET_END_ID))
                 {

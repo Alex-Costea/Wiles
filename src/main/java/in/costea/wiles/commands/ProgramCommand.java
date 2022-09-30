@@ -10,6 +10,7 @@ import in.costea.wiles.statics.Constants.SYNTAX_TYPE;
 import java.util.ArrayList;
 import java.util.List;
 
+import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
 import static in.costea.wiles.statics.Constants.DECLARE_METHOD_ID;
 
 public class ProgramCommand extends AbstractCommand
@@ -45,7 +46,7 @@ public class ProgramCommand extends AbstractCommand
         {
             while (!transmitter.tokensExhausted())
             {
-                transmitter.expect(DECLARE_METHOD_ID);
+                transmitter.expect(tokenOf(DECLARE_METHOD_ID));
                 var methodCommand = new MethodCommand(transmitter);
                 exceptions.add(methodCommand.process());
                 components.add(methodCommand);

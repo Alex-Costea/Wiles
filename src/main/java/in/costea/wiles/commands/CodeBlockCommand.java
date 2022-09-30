@@ -4,13 +4,14 @@ import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.CompilationException;
 import in.costea.wiles.exceptions.UnexpectedTokenException;
-import in.costea.wiles.services.WhenToRemoveToken;
 import in.costea.wiles.services.TokenTransmitter;
 import in.costea.wiles.statics.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static in.costea.wiles.builders.ExpectParamsBuilder.anyToken;
+import static in.costea.wiles.builders.ExpectParamsBuilder.requestFirstToken;
 import static in.costea.wiles.statics.Constants.*;
 
 public class CodeBlockCommand extends AbstractCommand
@@ -50,7 +51,7 @@ public class CodeBlockCommand extends AbstractCommand
         {
             try
             {
-                Token token = transmitter.expect((x)->true, WhenToRemoveToken.Never,false);
+                Token token = transmitter.expect(requestFirstToken);
                 if (token.content().equals(END_BLOCK_ID) && !standAlone)
                     break;
                 transmitter.removeToken();
@@ -60,7 +61,7 @@ public class CodeBlockCommand extends AbstractCommand
                 boolean innerOperation=false;
                 if (token.content().equals(ROUND_BRACKET_START_ID))
                 {
-                    token = transmitter.expect((x) -> true, "Unexpected operation end!");
+                    token = transmitter.expect(anyToken().withErrorMessage("Unexpected operation end!"));
                     innerOperation=true;
                 }
                 if (UNARY_OPERATORS.contains(token.content()) || !TOKENS.containsValue(token.content()))

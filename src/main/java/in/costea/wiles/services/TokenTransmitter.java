@@ -1,5 +1,6 @@
 package in.costea.wiles.services;
 
+import in.costea.wiles.builders.ExpectParamsBuilder;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.data.TokenLocation;
 import in.costea.wiles.exceptions.CompilationException;
@@ -10,10 +11,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+import static in.costea.wiles.builders.ExpectParamsBuilder.ALWAYS;
+import static in.costea.wiles.builders.ExpectParamsBuilder.NEVER;
 import static in.costea.wiles.statics.Constants.*;
 
 public class TokenTransmitter
@@ -65,66 +67,44 @@ public class TokenTransmitter
         return tokens.isEmpty();
     }
 
-    public Token expect(Predicate<String> found, String message, @NotNull WhenToRemoveToken removeTokenWhen,boolean ignoreNewline) throws CompilationException
+    public Token expect(ExpectParamsBuilder params) throws CompilationException
     {
         boolean succeeded=false;
+        String message= params.getErrorMessage();
+        boolean shouldIgnoreNewLine= params.isIgnoringNewLine();
+        Predicate<String> foundTest= params.getFoundTest();
+        var when = params.whenRemoveToken();
+
         try
         {
             Token token;
-            while ((token = requestToken(message)).content().equals(NEWLINE_ID) && ignoreNewline)
+            while ((token = requestToken(message)).content().equals(NEWLINE_ID) && shouldIgnoreNewLine)
                 removeToken();
             if (token.content().equals(CONTINUE_LINE_ID))
                 throw new UnexpectedTokenException("" + CONTINUE_LINE, token.location());
-            if (!found.test(token.content()))
+            if (!foundTest.test(token.content()))
                 throw new TokenExpectedException(message, token.location());
             succeeded=true;
             return token;
         }
         finally
         {
-            if((!succeeded && removeTokenWhen== WhenToRemoveToken.Always) ||
-                    (succeeded && removeTokenWhen!= WhenToRemoveToken.Never))
+            if((!succeeded && when == ALWAYS) || (succeeded && when != NEVER))
             {
                 removeToken();
             }
         }
     }
 
-    public Token
-    expect(Predicate<String> found, @NotNull WhenToRemoveToken removeTokenWhen) throws CompilationException
-    {
-        return expect(found,"Shouldn't happen",removeTokenWhen,true);
-    }
-
-    public Token expect(Predicate<String> found, String message) throws CompilationException
-    {
-        return expect(found,message, WhenToRemoveToken.WhenFound,true);
-    }
-
-    public Token expect(Predicate<String> found, @NotNull WhenToRemoveToken removeTokenWhen, boolean ignoreNewLine) throws CompilationException
-    {
-        return expect(found,"Shouldn't happen", removeTokenWhen,ignoreNewLine);
-    }
-
-    public void expect(String expectedToken) throws CompilationException
-    {
-        expect(x -> Objects.equals(x, expectedToken), "Token \"" + TOKENS_INVERSE.get(expectedToken) + "\" expected!");
-    }
-
-    public Optional<Token> expectMaybe(Predicate<String> found) throws CompilationException
+    public Optional<Token> expectMaybe(ExpectParamsBuilder expectParamsBuilder) throws CompilationException
     {
         try
         {
-            return Optional.of(expect(found, "Shouldn't happen"));
+            return Optional.of(expect(expectParamsBuilder));
         }
         catch (TokenExpectedException | UnexpectedEndException ex)
         {
             return Optional.empty();
         }
-    }
-
-    public Optional<Token> expectMaybe(String expectedToken) throws CompilationException
-    {
-        return expectMaybe(x -> Objects.equals(x, expectedToken));
     }
 }

@@ -9,6 +9,7 @@ import in.costea.wiles.statics.Constants;
 import java.util.ArrayList;
 import java.util.List;
 
+import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
 import static in.costea.wiles.statics.Constants.COLON_ID;
 
 public class ParameterCommand extends AbstractCommand
@@ -40,7 +41,7 @@ public class ParameterCommand extends AbstractCommand
     {
         try
         {
-            transmitter.expect(COLON_ID);
+            transmitter.expect(tokenOf(COLON_ID));
             var typeDefinitionCommand = new TypeDefinitionCommand(transmitter);
             exceptions.add(typeDefinitionCommand.process());
             components.add(typeDefinitionCommand);

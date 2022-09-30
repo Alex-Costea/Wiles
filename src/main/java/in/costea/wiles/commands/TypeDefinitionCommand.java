@@ -10,6 +10,7 @@ import in.costea.wiles.statics.Constants;
 import java.util.ArrayList;
 import java.util.List;
 
+import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
 import static in.costea.wiles.statics.Constants.TYPES;
 
 
@@ -40,7 +41,7 @@ public class TypeDefinitionCommand extends AbstractCommand
     {
         try
         {
-            Token token = transmitter.expect(TYPES::containsKey, "Type expected!");
+            Token token = transmitter.expect(tokenOf(TYPES::containsKey).withErrorMessage("Type expected!"));
             name = TYPES.get(token.content());
             assert name!=null;
         }

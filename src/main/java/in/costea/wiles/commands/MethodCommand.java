@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
 import static in.costea.wiles.statics.Constants.*;
 
 public class MethodCommand extends AbstractCommand
@@ -53,24 +54,24 @@ public class MethodCommand extends AbstractCommand
     {
         try
         {
-            name = transmitter.expect(x -> x.length() > 1 && x.startsWith(IDENTIFIER_START), "Expected method name!").
+            name = transmitter.expect(tokenOf(x -> x.length() > 1 && x.startsWith(IDENTIFIER_START)).withErrorMessage("Expected method name!")).
                     content().substring(1);
 
             //Parameters list
-            transmitter.expect(ROUND_BRACKET_START_ID);
+            transmitter.expect(tokenOf(ROUND_BRACKET_START_ID));
             Optional<Token> maybeToken;
-            while ((maybeToken = transmitter.expectMaybe(x -> x.startsWith(IDENTIFIER_START))).isPresent())
+            while ((maybeToken = transmitter.expectMaybe(tokenOf(x -> x.startsWith(IDENTIFIER_START)))).isPresent())
             {
                 var parameterCommand = new ParameterCommand(transmitter, maybeToken.get());
                 exceptions.add(parameterCommand.process());
                 components.add(parameterCommand);
-                if (transmitter.expectMaybe("COMMA").isEmpty())
+                if (transmitter.expectMaybe(tokenOf("COMMA")).isEmpty())
                     break;
             }
-            transmitter.expect(ROUND_BRACKET_END_ID);
+            transmitter.expect(tokenOf(ROUND_BRACKET_END_ID));
 
             //Return type
-            if (transmitter.expectMaybe(COLON_ID).isPresent())
+            if (transmitter.expectMaybe(tokenOf(COLON_ID)).isPresent())
             {
                 var typeDefinitionCommand = new TypeDefinitionCommand(transmitter);
                 exceptions.add(typeDefinitionCommand.process());
@@ -82,17 +83,17 @@ public class MethodCommand extends AbstractCommand
             }
 
             //Method body
-            if (transmitter.expectMaybe(NOTHING_ID).isPresent())
+            if (transmitter.expectMaybe(tokenOf(NOTHING_ID)).isPresent())
             {
                 var MethodBodyCommand = new CodeBlockCommand(transmitter, false);
                 components.add(MethodBodyCommand);
                 return exceptions;
             }
-            transmitter.expect(START_BLOCK_ID);
+            transmitter.expect(tokenOf(START_BLOCK_ID));
             var MethodBodyCommand = new CodeBlockCommand(transmitter, false);
             exceptions.add(MethodBodyCommand.process());
             components.add(MethodBodyCommand);
-            transmitter.expect(END_BLOCK_ID);
+            transmitter.expect(tokenOf(END_BLOCK_ID));
         }
         catch (CompilationException ex)
         {
