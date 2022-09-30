@@ -5,6 +5,7 @@ import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.CompilationException;
 import in.costea.wiles.exceptions.UnexpectedEndException;
 import in.costea.wiles.exceptions.UnexpectedTokenException;
+import in.costea.wiles.services.WhenToRemoveToken;
 import in.costea.wiles.services.TokenTransmitter;
 import in.costea.wiles.statics.Constants;
 
@@ -88,7 +89,7 @@ public class OperationCommand extends AbstractOperationComponentCommand
             //verifying other tokens
             while (!transmitter.tokensExhausted())
             {
-                token = transmitter.requestToken("");
+                token = transmitter.expect((x)->true, WhenToRemoveToken.Never,false);
                 content = token.content();
 
                 if (content.equals(END_BLOCK_ID) && !innerOperation) //method end statement

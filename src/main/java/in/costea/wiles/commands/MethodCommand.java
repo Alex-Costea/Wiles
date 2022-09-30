@@ -97,7 +97,7 @@ public class MethodCommand extends AbstractCommand
         catch (CompilationException ex)
         {
             exceptions.add(ex);
-            readUntilIgnoringErrors(x -> x.equals(END_BLOCK_ID));
+            transmitter.readUntilIgnoringErrors(x -> x.equals(END_BLOCK_ID));
             if (!transmitter.tokensExhausted())
                 transmitter.removeToken();
         }

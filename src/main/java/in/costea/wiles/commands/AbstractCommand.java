@@ -4,13 +4,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import in.costea.wiles.data.CompilationExceptionsCollection;
-import in.costea.wiles.data.Token;
-import in.costea.wiles.exceptions.UnexpectedEndException;
 import in.costea.wiles.services.TokenTransmitter;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Predicate;
 
 import static in.costea.wiles.statics.Constants.SYNTAX_TYPE;
 
@@ -25,7 +22,6 @@ public abstract class AbstractCommand
     public AbstractCommand(TokenTransmitter transmitter)
     {
         this.transmitter = transmitter;
-
     }
 
     @JsonProperty
@@ -36,26 +32,6 @@ public abstract class AbstractCommand
     public abstract List<? extends AbstractCommand> getComponents();
 
     public abstract CompilationExceptionsCollection process();
-
-    protected void readUntilIgnoringErrors(Predicate<String> stop)
-    {
-        Token token;
-        try
-        {
-            do
-            {
-                token = transmitter.requestToken("");
-                if (stop.test(token.content()))
-                    return;
-                transmitter.removeToken();
-            }
-            while (true);
-        }
-        catch (UnexpectedEndException ignored)
-        {
-        }
-    }
-
 
     @Override
     public String toString()

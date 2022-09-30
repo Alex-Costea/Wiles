@@ -29,17 +29,34 @@ public class TokenTransmitter
         else lastLocation = new TokenLocation(0, 0);
     }
 
-    //Make private
-    public Token requestToken(String message) throws UnexpectedEndException
+    public void readUntilIgnoringErrors(Predicate<String> stop)
+    {
+        Token token;
+        try
+        {
+            while(true)
+            {
+                token = requestToken("");
+                if (stop.test(token.content()))
+                    return;
+                removeToken();
+            }
+        }
+        catch (UnexpectedEndException ignored)
+        {
+        }
+    }
+
+    private Token requestToken(String message) throws UnexpectedEndException
     {
         if (tokensExhausted()) throw new UnexpectedEndException(message, lastLocation);
         return tokens.getFirst();
     }
 
-    //Make private
     public void removeToken()
     {
-        if (tokensExhausted()) throw new IllegalStateException("Tried removing token that didn't exist");
+        if (tokensExhausted())
+            throw new IllegalStateException("Tried removing token that didn't exist");
         tokens.pop();
     }
 
@@ -48,13 +65,13 @@ public class TokenTransmitter
         return tokens.isEmpty();
     }
 
-    public Token expect(Predicate<String> found, String message, @NotNull RemoveTokenEnum removeTokenWhen) throws CompilationException
+    public Token expect(Predicate<String> found, String message, @NotNull WhenToRemoveToken removeTokenWhen,boolean ignoreNewline) throws CompilationException
     {
         boolean succeeded=false;
         try
         {
             Token token;
-            while ((token = requestToken(message)).content().equals(NEWLINE_ID))
+            while ((token = requestToken(message)).content().equals(NEWLINE_ID) && ignoreNewline)
                 removeToken();
             if (token.content().equals(CONTINUE_LINE_ID))
                 throw new UnexpectedTokenException("" + CONTINUE_LINE, token.location());
@@ -65,17 +82,28 @@ public class TokenTransmitter
         }
         finally
         {
-            if((!succeeded && removeTokenWhen==RemoveTokenEnum.Always) ||
-                    (succeeded && removeTokenWhen!=RemoveTokenEnum.Never))
+            if((!succeeded && removeTokenWhen== WhenToRemoveToken.Always) ||
+                    (succeeded && removeTokenWhen!= WhenToRemoveToken.Never))
             {
                 removeToken();
             }
         }
     }
 
+    public Token
+    expect(Predicate<String> found, @NotNull WhenToRemoveToken removeTokenWhen) throws CompilationException
+    {
+        return expect(found,"Shouldn't happen",removeTokenWhen,true);
+    }
+
     public Token expect(Predicate<String> found, String message) throws CompilationException
     {
-        return expect(found,message, RemoveTokenEnum.WhenFound);
+        return expect(found,message, WhenToRemoveToken.WhenFound,true);
+    }
+
+    public Token expect(Predicate<String> found, @NotNull WhenToRemoveToken removeTokenWhen, boolean ignoreNewLine) throws CompilationException
+    {
+        return expect(found,"Shouldn't happen", removeTokenWhen,ignoreNewLine);
     }
 
     public void expect(String expectedToken) throws CompilationException

@@ -1,6 +1,6 @@
 package in.costea.wiles.services;
 
-public enum RemoveTokenEnum {
+public enum WhenToRemoveToken {
     Always,
     WhenFound,
     Never

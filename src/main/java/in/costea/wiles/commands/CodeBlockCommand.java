@@ -4,6 +4,7 @@ import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.CompilationException;
 import in.costea.wiles.exceptions.UnexpectedTokenException;
+import in.costea.wiles.services.WhenToRemoveToken;
 import in.costea.wiles.services.TokenTransmitter;
 import in.costea.wiles.statics.Constants;
 
@@ -39,7 +40,7 @@ public class CodeBlockCommand extends AbstractCommand
     private void readRestOfLineIgnoringErrors()
     {
         final boolean stopAtEndBlock = !standAlone;
-        readUntilIgnoringErrors(x -> STATEMENT_ENDERS.contains(x) || (stopAtEndBlock && x.equals(END_BLOCK_ID)));
+        transmitter.readUntilIgnoringErrors(x -> STATEMENT_ENDERS.contains(x) || (stopAtEndBlock && x.equals(END_BLOCK_ID)));
     }
 
     @Override
@@ -49,7 +50,7 @@ public class CodeBlockCommand extends AbstractCommand
         {
             try
             {
-                Token token = transmitter.requestToken("");
+                Token token = transmitter.expect((x)->true, WhenToRemoveToken.Never,false);
                 if (token.content().equals(END_BLOCK_ID) && !standAlone)
                     break;
                 transmitter.removeToken();

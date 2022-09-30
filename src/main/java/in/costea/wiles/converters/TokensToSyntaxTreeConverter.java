@@ -6,7 +6,7 @@ import in.costea.wiles.commands.ProgramCommand;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.CompilationException;
-import in.costea.wiles.services.RemoveTokenEnum;
+import in.costea.wiles.services.WhenToRemoveToken;
 import in.costea.wiles.services.TokenTransmitter;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,7 +28,7 @@ public class TokensToSyntaxTreeConverter
 
         boolean bodyOnlyMode;
         try {
-            tokenTransmitter.expect(x->x.equals(DECLARE_METHOD_ID),"", RemoveTokenEnum.Never);
+            tokenTransmitter.expect(x->x.equals(DECLARE_METHOD_ID), WhenToRemoveToken.Never);
             bodyOnlyMode = false;
         } catch (CompilationException e) {
             bodyOnlyMode = true;
