@@ -10,8 +10,7 @@ import in.costea.wiles.statics.Constants;
 import java.util.ArrayList;
 import java.util.List;
 
-import static in.costea.wiles.builders.ExpectParamsBuilder.anyToken;
-import static in.costea.wiles.builders.ExpectParamsBuilder.requestFirstToken;
+import static in.costea.wiles.builders.ExpectParamsBuilder.*;
 import static in.costea.wiles.statics.Constants.*;
 
 public class CodeBlockCommand extends AbstractCommand
@@ -51,7 +50,7 @@ public class CodeBlockCommand extends AbstractCommand
         {
             try
             {
-                Token token = transmitter.expect(requestFirstToken);
+                Token token = transmitter.expect(REQUEST_FIRST_TOKEN);
                 if (token.content().equals(END_BLOCK_ID) && !standAlone)
                     break;
                 transmitter.removeToken();
@@ -61,7 +60,7 @@ public class CodeBlockCommand extends AbstractCommand
                 boolean innerOperation=false;
                 if (token.content().equals(ROUND_BRACKET_START_ID))
                 {
-                    token = transmitter.expect(anyToken().withErrorMessage("Unexpected operation end!"));
+                    token = transmitter.expect(tokenOf(ANYTHING).withErrorMessage("Unexpected operation end!"));
                     innerOperation=true;
                 }
                 if (UNARY_OPERATORS.contains(token.content()) || !TOKENS.containsValue(token.content()))

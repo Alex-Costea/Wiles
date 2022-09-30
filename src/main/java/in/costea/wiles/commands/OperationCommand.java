@@ -43,7 +43,7 @@ public class OperationCommand extends AbstractOperationComponentCommand
 
     private void addInnerOperation() throws CompilationException
     {
-        Token newToken = transmitter.expect(anyToken().withErrorMessage( "Unexpected operation end!"));
+        Token newToken = transmitter.expect(tokenOf(ANYTHING).withErrorMessage( "Unexpected operation end!"));
         var newOperation = new OperationCommand(newToken, transmitter, true);
         var newExceptions = newOperation.process();
         if (newExceptions.size() > 0)
@@ -89,7 +89,7 @@ public class OperationCommand extends AbstractOperationComponentCommand
             //verifying other tokens
             while (!transmitter.tokensExhausted())
             {
-                token = transmitter.expect(requestFirstToken);
+                token = transmitter.expect(REQUEST_FIRST_TOKEN);
                 content = token.content();
 
                 if (content.equals(END_BLOCK_ID) && !innerOperation) //method end statement
@@ -111,12 +111,12 @@ public class OperationCommand extends AbstractOperationComponentCommand
                 }
 
                 if (expectOperatorNext)
-                    token = transmitter.expect(tokenOf(x -> ROUND_BRACKETS.contains(x) || ALLOWED_OPERATORS_IN_OPERATION.contains(x))
+                    token = transmitter.expect(tokenOf(isContainedIn(ROUND_BRACKETS))
+                            .or(isContainedIn(ALLOWED_OPERATORS_IN_OPERATION))
                             .withErrorMessage("Operator expected!"));
                 else
-                    token = transmitter.expect(tokenOf(x -> ROUND_BRACKETS.contains(x) || UNARY_OPERATORS.contains(x) ||
-                            x.startsWith("!") || x.startsWith("@") || x.startsWith("#"))
-                            .withErrorMessage("Identifier or unary operator expected!"));
+                    token = transmitter.expect(tokenOf(isContainedIn(ROUND_BRACKETS)).or(isContainedIn(UNARY_OPERATORS))
+                            .or(IS_LITERAL).withErrorMessage("Identifier or unary operator expected!"));
 
                 if (token.content().equals(ROUND_BRACKET_END_ID))
                 {

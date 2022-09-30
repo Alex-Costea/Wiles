@@ -54,18 +54,18 @@ public class MethodCommand extends AbstractCommand
     {
         try
         {
-            name = transmitter.expect(tokenOf(x -> x.length() > 1 && x.startsWith(IDENTIFIER_START)).withErrorMessage("Expected method name!")).
+            name = transmitter.expect(tokenOf(IS_IDENTIFIER).withErrorMessage("Expected method name!")).
                     content().substring(1);
 
             //Parameters list
             transmitter.expect(tokenOf(ROUND_BRACKET_START_ID));
             Optional<Token> maybeToken;
-            while ((maybeToken = transmitter.expectMaybe(tokenOf(x -> x.startsWith(IDENTIFIER_START)))).isPresent())
+            while ((maybeToken = transmitter.expectMaybe(tokenOf(IS_IDENTIFIER))).isPresent())
             {
                 var parameterCommand = new ParameterCommand(transmitter, maybeToken.get());
                 exceptions.add(parameterCommand.process());
                 components.add(parameterCommand);
-                if (transmitter.expectMaybe(tokenOf("COMMA")).isEmpty())
+                if (transmitter.expectMaybe(tokenOf(COMMA_ID)).isEmpty())
                     break;
             }
             transmitter.expect(tokenOf(ROUND_BRACKET_END_ID));

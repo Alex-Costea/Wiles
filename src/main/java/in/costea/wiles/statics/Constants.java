@@ -4,6 +4,7 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
 import java.util.Set;
+import java.util.function.Predicate;
 
 import static java.util.Collections.max;
 
@@ -32,6 +33,7 @@ public class Constants
     public static final String MAIN_METHOD_NAME = "main";
     public static final String COLON_ID = "COLON";
     public static final String NOTHING_ID = "NOTHING";
+    public static final String COMMA_ID = "COMMA";
     public static final BiMap<String, String> KEYWORDS = HashBiMap.create();
     public static final BiMap<String, String> OPERATORS = HashBiMap.create();
     public static final BiMap<String, String> TYPES = HashBiMap.create();
@@ -49,6 +51,7 @@ public class Constants
     public static final Set<String> UNARY_OPERATORS = Set.of(PLUS_ID, MINUS_ID);
     public static final Set<String> ROUND_BRACKETS = Set.of(ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID);
     public static final Set<String> STATEMENT_ENDERS = Set.of(NEWLINE_ID, FINISH_STATEMENT_ID);
+
 
     static
     {
@@ -123,7 +126,7 @@ public class Constants
         OPERATORS.put("[", "SQUARE_BRACKET_START");
         OPERATORS.put("]", "SQUARE_BRACKET_END");
 
-        OPERATORS.put(",", "COMMA");
+        OPERATORS.put(",", COMMA_ID);
         OPERATORS.put(".", "DOT");
         OPERATORS.put(":", COLON_ID);
         OPERATORS.put(";", FINISH_STATEMENT_ID);
@@ -162,4 +165,9 @@ public class Constants
         DECLARATION,
         TYPE
     }
+
+    public static final Predicate<String> IS_IDENTIFIER = x -> x.length() > 1 && x.startsWith(IDENTIFIER_START);
+    public static final Predicate<String> IS_TEXT_LITERAL = x -> x.length() > 1 && x.startsWith(STRING_START);
+    public static final Predicate<String> IS_NUMBER_LITERAL = x -> x.length() > 1 && x.startsWith(NUM_START);
+    public static final Predicate<String> IS_LITERAL = IS_IDENTIFIER.or(IS_TEXT_LITERAL).or(IS_NUMBER_LITERAL);
 }

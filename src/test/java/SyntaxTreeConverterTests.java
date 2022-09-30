@@ -175,5 +175,14 @@ public class SyntaxTreeConverterTests
         assertResults(null, "PROGRAM(METHOD main (TYPE INT32 ; CODE_BLOCK))",
                 DECLARE_METHOD_ID, "!main", ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, COLON_ID, "!int",
                 START_BLOCK_ID, END_BLOCK_ID);
+        assertResults(null, "PROGRAM(METHOD main (TYPE INT32 ; DECLARATION(!a; TYPE INT32 ); CODE_BLOCK))",
+                DECLARE_METHOD_ID, "!main", ROUND_BRACKET_START_ID,"!a", COLON_ID,"!int",ROUND_BRACKET_END_ID,
+                COLON_ID, "!int", START_BLOCK_ID, END_BLOCK_ID);
+        assertResults(null, "PROGRAM(METHOD main (TYPE INT32 ; DECLARATION(!a; TYPE INT32 ); DECLARATION(!b; TYPE STRING ); CODE_BLOCK))",
+                DECLARE_METHOD_ID, "!main", ROUND_BRACKET_START_ID,"!a", COLON_ID,"!int",
+                "COMMA","!b",COLON_ID,"!text", ROUND_BRACKET_END_ID, COLON_ID, "!int", START_BLOCK_ID, END_BLOCK_ID);
+        assertResults(null, "PROGRAM(METHOD main (TYPE INT32 ; DECLARATION(!a; TYPE NOTHING ); CODE_BLOCK))",
+                DECLARE_METHOD_ID, "!main", ROUND_BRACKET_START_ID,"!a", COLON_ID,NOTHING_ID,ROUND_BRACKET_END_ID,
+                COLON_ID, "!int", START_BLOCK_ID, END_BLOCK_ID);
     }
 }
