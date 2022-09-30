@@ -1,5 +1,7 @@
 package in.costea.wiles.commands;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.exceptions.CompilationException;
 import in.costea.wiles.services.TokenTransmitter;
@@ -10,7 +12,7 @@ import java.util.List;
 
 import static in.costea.wiles.statics.Constants.DECLARE_METHOD_ID;
 
-public class ProgramCommand extends SyntaxTree
+public class ProgramCommand extends AbstractCommand
 {
     private final List<MethodCommand> components = new ArrayList<>();
     private final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
@@ -19,6 +21,10 @@ public class ProgramCommand extends SyntaxTree
     {
         super(transmitter);
     }
+
+    @JsonProperty
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    protected Boolean compiledSuccessfully = null;
 
     @Override
     public SYNTAX_TYPE getType()
@@ -51,5 +57,8 @@ public class ProgramCommand extends SyntaxTree
         }
         return exceptions;
     }
-
+    public void setCompiledSuccessfully(boolean compiledSuccessfully)
+    {
+        this.compiledSuccessfully = compiledSuccessfully;
+    }
 }

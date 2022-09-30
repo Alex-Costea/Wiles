@@ -31,7 +31,7 @@ public class TokenCommand extends AbstractOperationComponent
     }
 
     @Override
-    public List<SyntaxTree> getComponents()
+    public List<AbstractCommand> getComponents()
     {
         return new ArrayList<>();
     }

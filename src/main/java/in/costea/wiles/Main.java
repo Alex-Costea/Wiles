@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.json.JsonMapper;
-import in.costea.wiles.commands.SyntaxTree;
+import in.costea.wiles.commands.ProgramCommand;
 import in.costea.wiles.converters.InputToTokensConverter;
 import in.costea.wiles.converters.TokensToSyntaxTreeConverter;
 import in.costea.wiles.data.CompilationExceptionsCollection;
@@ -31,18 +31,17 @@ public class Main
         List<Token> tokens = sourceToTokens(input);
         System.out.print("Tokens: ");
         System.out.println(tokens.stream().map(Token::content).toList());
-        SyntaxTree syntaxTree = tokensToAST(tokens);
+        ProgramCommand AST = tokensToAST(tokens);
         JsonMapper mapper = JsonMapper.builder().disable(MapperFeature.AUTO_DETECT_CREATORS).
                 disable(MapperFeature.AUTO_DETECT_FIELDS).disable(MapperFeature.AUTO_DETECT_GETTERS).
                 disable(MapperFeature.AUTO_DETECT_IS_GETTERS).build();
 
         System.out.print("Syntax tree: ");
-        System.out.println(syntaxTree);
-
-        ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
-        writer.writeValue(new File("syntaxtree.json"), syntaxTree);
+        System.out.println(AST);
 
         //Print exceptions
+        ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
+        writer.writeValue(new File("syntaxtree.json"), AST);
         if (exceptions.size() > 0)
             throw new CompilationFailedException(exceptions);
     }
@@ -72,11 +71,12 @@ public class Main
         return tokens;
     }
 
-    public static SyntaxTree tokensToAST(List<Token> tokens)
+    public static ProgramCommand tokensToAST(List<Token> tokens)
     {
         var converter = new TokensToSyntaxTreeConverter(tokens);
-        SyntaxTree syntaxTree = converter.convert();
+        ProgramCommand programCommand = converter.convert();
         exceptions.add(converter.getExceptions());
-        return syntaxTree;
+        programCommand.setCompiledSuccessfully(exceptions.size()==0);
+        return programCommand;
     }
 }

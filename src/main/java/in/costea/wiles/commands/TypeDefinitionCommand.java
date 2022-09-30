@@ -13,9 +13,9 @@ import java.util.List;
 import static in.costea.wiles.statics.Constants.TYPES;
 
 
-public class TypeDefinitionCommand extends SyntaxTree
+public class TypeDefinitionCommand extends AbstractCommand
 {
-    private final List<SyntaxTree> components = new ArrayList<>();
+    private final List<AbstractCommand> components = new ArrayList<>();
     private final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
 
     public TypeDefinitionCommand(TokenTransmitter transmitter)
@@ -30,7 +30,7 @@ public class TypeDefinitionCommand extends SyntaxTree
     }
 
     @Override
-    public List<? extends SyntaxTree> getComponents()
+    public List<? extends AbstractCommand> getComponents()
     {
         return components;
     }

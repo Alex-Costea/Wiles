@@ -1,4 +1,4 @@
-import in.costea.wiles.commands.SyntaxTree;
+import in.costea.wiles.commands.AbstractCommand;
 import in.costea.wiles.converters.TokensToSyntaxTreeConverter;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
@@ -17,7 +17,7 @@ class CreateConverter
 {
     TokensToSyntaxTreeConverter converter;
     CompilationExceptionsCollection exceptions;
-    SyntaxTree tree;
+    AbstractCommand tree;
 
     public CreateConverter(String... tokens)
     {

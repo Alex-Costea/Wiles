@@ -18,15 +18,15 @@ import java.util.function.Predicate;
 
 import static in.costea.wiles.statics.Constants.*;
 
-@JsonPropertyOrder({"name", "type", "components"})
-public abstract class SyntaxTree
+@JsonPropertyOrder({"compiledSuccessfully","name", "type", "components"})
+public abstract class AbstractCommand
 {
     protected final TokenTransmitter transmitter;
     @JsonProperty
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     protected String name = "";
 
-    public SyntaxTree(TokenTransmitter transmitter)
+    public AbstractCommand(TokenTransmitter transmitter)
     {
         this.transmitter = transmitter;
 
@@ -37,7 +37,7 @@ public abstract class SyntaxTree
 
     @JsonProperty
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    public abstract List<? extends SyntaxTree> getComponents();
+    public abstract List<? extends AbstractCommand> getComponents();
 
     public abstract CompilationExceptionsCollection process();
 
@@ -107,7 +107,7 @@ public abstract class SyntaxTree
         {
             sb.append("(");
             int i = 0;
-            for (SyntaxTree component : getComponents())
+            for (AbstractCommand component : getComponents())
             {
                 sb.append(component.toString());
                 if (i < getComponents().size() - 1)

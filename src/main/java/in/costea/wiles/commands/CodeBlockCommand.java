@@ -12,9 +12,9 @@ import java.util.List;
 
 import static in.costea.wiles.statics.Constants.*;
 
-public class CodeBlockCommand extends SyntaxTree
+public class CodeBlockCommand extends AbstractCommand
 {
-    private final List<SyntaxTree> components = new ArrayList<>();
+    private final List<AbstractCommand> components = new ArrayList<>();
     private final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
     private final boolean standAlone;
 
@@ -31,7 +31,7 @@ public class CodeBlockCommand extends SyntaxTree
     }
 
     @Override
-    public List<? extends SyntaxTree> getComponents()
+    public List<? extends AbstractCommand> getComponents()
     {
         return components;
     }

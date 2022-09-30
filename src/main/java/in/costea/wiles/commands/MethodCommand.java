@@ -11,9 +11,9 @@ import java.util.Optional;
 
 import static in.costea.wiles.statics.Constants.*;
 
-public class MethodCommand extends SyntaxTree
+public class MethodCommand extends AbstractCommand
 {
-    private final List<SyntaxTree> components = new ArrayList<>();
+    private final List<AbstractCommand> components = new ArrayList<>();
     private final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
 
     public MethodCommand(TokenTransmitter transmitter)
@@ -33,7 +33,7 @@ public class MethodCommand extends SyntaxTree
     }
 
     @Override
-    public List<SyntaxTree> getComponents()
+    public List<AbstractCommand> getComponents()
     {
         return components;
     }

@@ -11,9 +11,9 @@ import java.util.List;
 
 import static in.costea.wiles.statics.Constants.COLON_ID;
 
-public class ParameterCommand extends SyntaxTree
+public class ParameterCommand extends AbstractCommand
 {
-    private final List<SyntaxTree> components = new ArrayList<>();
+    private final List<AbstractCommand> components = new ArrayList<>();
 
     private final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
 
@@ -30,7 +30,7 @@ public class ParameterCommand extends SyntaxTree
     }
 
     @Override
-    public List<? extends SyntaxTree> getComponents()
+    public List<? extends AbstractCommand> getComponents()
     {
         return components;
     }
