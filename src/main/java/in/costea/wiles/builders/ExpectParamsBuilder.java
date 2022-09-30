@@ -6,14 +6,14 @@ import java.util.function.Predicate;
 
 import static in.costea.wiles.statics.Constants.*;
 
-enum WhenRemoveToken {
-    Always,
-    WhenFound,
-    Never
-}
-
 public class ExpectParamsBuilder
 {
+
+    private enum WhenRemoveToken {
+        Always,
+        WhenFound,
+        Never
+    }
     public static final WhenRemoveToken ALWAYS=WhenRemoveToken.Always;
     public static final WhenRemoveToken WHEN_FOUND=WhenRemoveToken.WhenFound;
     public static final WhenRemoveToken NEVER=WhenRemoveToken.Never;

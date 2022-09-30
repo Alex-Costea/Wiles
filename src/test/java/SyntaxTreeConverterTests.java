@@ -13,34 +13,36 @@ import java.util.Arrays;
 import static in.costea.wiles.statics.Constants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class CreateConverter
-{
-    TokensToSyntaxTreeConverter converter;
-    CompilationExceptionsCollection exceptions;
-    AbstractCommand tree;
 
-    public CreateConverter(String... tokens)
-    {
-        converter = new TokensToSyntaxTreeConverter(Arrays.stream(tokens).map(Token::new).toList());
-        tree = converter.convert();
-        exceptions = converter.getExceptions();
-    }
-
-    public CompilationExceptionsCollection getExceptions()
-    {
-        return exceptions;
-    }
-
-    public String getResult()
-    {
-        return tree.toString();
-    }
-}
 
 public class SyntaxTreeConverterTests
 {
 
-    public void assertResults(CompilationExceptionsCollection exceptions, String expectedResult, String... tokens)
+    private static class CreateConverter
+    {
+        TokensToSyntaxTreeConverter converter;
+        CompilationExceptionsCollection exceptions;
+        AbstractCommand tree;
+
+        public CreateConverter(String... tokens)
+        {
+            converter = new TokensToSyntaxTreeConverter(Arrays.stream(tokens).map(Token::new).toList());
+            tree = converter.convert();
+            exceptions = converter.getExceptions();
+        }
+
+        public CompilationExceptionsCollection getExceptions()
+        {
+            return exceptions;
+        }
+
+        public String getResult()
+        {
+            return tree.toString();
+        }
+    }
+
+    private void assertResults(CompilationExceptionsCollection exceptions, String expectedResult, String... tokens)
     {
         CreateConverter converter = new CreateConverter(tokens);
         if (exceptions == null)
@@ -48,6 +50,13 @@ public class SyntaxTreeConverterTests
         assertEquals(exceptions, converter.getExceptions());
         if (expectedResult != null)
             assertEquals(expectedResult, converter.getResult());
+    }
+
+    private CompilationExceptionsCollection createExceptions(CompilationException... list)
+    {
+        CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
+        exceptions.add(list);
+        return exceptions;
     }
 
     @Test
@@ -122,13 +131,6 @@ public class SyntaxTreeConverterTests
                 "!a", PLUS_ID, NEWLINE_ID, ROUND_BRACKET_START_ID, "!b", PLUS_ID, "!c", ROUND_BRACKET_END_ID);
         assertResults(null, "PROGRAM(METHOD main (TYPE NOTHING ; CODE_BLOCK(OPERATION(!a; PLUS; !b))))",
                 ROUND_BRACKET_START_ID, "!a", PLUS_ID, "!b", ROUND_BRACKET_END_ID);
-    }
-
-    private CompilationExceptionsCollection createExceptions(CompilationException... list)
-    {
-        CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
-        exceptions.add(list);
-        return exceptions;
     }
 
     @Test
