@@ -81,7 +81,7 @@ public class ExpectParamsBuilder
         return errorMessage;
     }
 
-    public WhenRemoveToken whenRemoveToken() {
+    public WhenRemoveToken getWhenRemoveToken() {
         return when;
     }
 

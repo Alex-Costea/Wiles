@@ -91,7 +91,7 @@ public class TokenTransmitter
         }
         finally
         {
-            var whenRemoveToken = params.whenRemoveToken();
+            var whenRemoveToken = params.getWhenRemoveToken();
             if((!succeeded && whenRemoveToken == ALWAYS) || (succeeded && whenRemoveToken != NEVER))
             {
                 removeToken();

@@ -63,7 +63,7 @@ public class Main
         return input;
     }
 
-    public static List<Token> sourceToTokens(String input)
+    private static List<Token> sourceToTokens(String input)
     {
         var converter = new InputToTokensConverter(input);
         List<Token> tokens = converter.convert();
@@ -71,7 +71,7 @@ public class Main
         return tokens;
     }
 
-    public static ProgramCommand tokensToAST(List<Token> tokens)
+    private static ProgramCommand tokensToAST(List<Token> tokens)
     {
         var converter = new TokensToSyntaxTreeConverter(tokens);
         ProgramCommand programCommand = converter.convert();

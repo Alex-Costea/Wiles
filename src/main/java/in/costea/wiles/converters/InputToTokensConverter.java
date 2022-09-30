@@ -190,7 +190,7 @@ public class InputToTokensConverter
         index = currentIndex - 1;
     }
 
-    public Token createToken(String token)
+    private Token createToken(String token)
     {
         return new Token(token, line, getIndexOnCurrentLine());
     }
