@@ -14,12 +14,17 @@ import static in.costea.wiles.statics.Constants.*;
 
 public class MethodCommand extends AbstractCommand
 {
-    private final List<AbstractCommand> components = new ArrayList<>();
+    //private final List<AbstractCommand> components = new ArrayList<>();
+    private TypeDefinitionCommand returnType;
+    private CodeBlockCommand methodBody;
+    private final List<ParameterCommand> parameters=new ArrayList<>();
     private final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
 
     public MethodCommand(TokenTransmitter transmitter)
     {
         super(transmitter);
+        returnType = new TypeDefinitionCommand(transmitter);
+        returnType.name = NOTHING_ID;
     }
 
     public void setMethodName(String methodName)
@@ -33,20 +38,18 @@ public class MethodCommand extends AbstractCommand
         return SYNTAX_TYPE.METHOD;
     }
 
+    public void setMethodBody(CodeBlockCommand methodBody) {
+        this.methodBody = methodBody;
+    }
+
     @Override
     public List<AbstractCommand> getComponents()
     {
+        final ArrayList<AbstractCommand> components=new ArrayList<>();
+        components.add(returnType);
+        components.addAll(parameters);
+        components.add(methodBody);
         return components;
-    }
-
-    public void addNothingReturnType()
-    {
-        if (components.size() == 0 || components.get(0).getType() != SYNTAX_TYPE.TYPE)
-        {
-            var typeDefinitionCommand = new TypeDefinitionCommand(transmitter);
-            typeDefinitionCommand.name = NOTHING_ID;
-            components.add(0, typeDefinitionCommand);
-        }
     }
 
     @Override
@@ -64,7 +67,7 @@ public class MethodCommand extends AbstractCommand
             {
                 var parameterCommand = new ParameterCommand(transmitter, maybeToken.get());
                 exceptions.add(parameterCommand.process());
-                components.add(parameterCommand);
+                parameters.add(parameterCommand);
                 if (transmitter.expectMaybe(tokenOf(COMMA_ID)).isEmpty())
                     break;
             }
@@ -73,26 +76,19 @@ public class MethodCommand extends AbstractCommand
             //Return type
             if (transmitter.expectMaybe(tokenOf(COLON_ID)).isPresent())
             {
-                var typeDefinitionCommand = new TypeDefinitionCommand(transmitter);
-                exceptions.add(typeDefinitionCommand.process());
-                components.add(0, typeDefinitionCommand);
-            }
-            else
-            {
-                addNothingReturnType();
+                returnType = new TypeDefinitionCommand(transmitter);
+                exceptions.add(returnType.process());
             }
 
             //Method body
             if (transmitter.expectMaybe(tokenOf(NOTHING_ID)).isPresent())
             {
-                var MethodBodyCommand = new CodeBlockCommand(transmitter, false);
-                components.add(MethodBodyCommand);
+                methodBody = new CodeBlockCommand(transmitter, false);
                 return exceptions;
             }
             transmitter.expect(tokenOf(START_BLOCK_ID));
-            var MethodBodyCommand = new CodeBlockCommand(transmitter, false);
-            exceptions.add(MethodBodyCommand.process());
-            components.add(MethodBodyCommand);
+            methodBody = new CodeBlockCommand(transmitter, false);
+            exceptions.add(methodBody.process());
             transmitter.expect(tokenOf(END_BLOCK_ID));
         }
         catch (CompilationException ex)

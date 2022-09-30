@@ -6,7 +6,6 @@ import in.costea.wiles.exceptions.CompilationException;
 import in.costea.wiles.services.TokenTransmitter;
 import in.costea.wiles.statics.Constants;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
@@ -14,14 +13,15 @@ import static in.costea.wiles.statics.Constants.COLON_ID;
 
 public class ParameterCommand extends AbstractCommand
 {
-    private final List<AbstractCommand> components = new ArrayList<>();
+    private final TokenCommand tokenCommand;
+    private TypeDefinitionCommand typeDefinition;
 
     private final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
 
     public ParameterCommand(TokenTransmitter transmitter, Token firstToken)
     {
         super(transmitter);
-        components.add(new TokenCommand(transmitter, firstToken));
+        tokenCommand=new TokenCommand(transmitter, firstToken);
     }
 
     @Override
@@ -31,9 +31,9 @@ public class ParameterCommand extends AbstractCommand
     }
 
     @Override
-    public List<? extends AbstractCommand> getComponents()
+    public List<AbstractCommand> getComponents()
     {
-        return components;
+        return List.of(tokenCommand,typeDefinition);
     }
 
     @Override
@@ -42,9 +42,8 @@ public class ParameterCommand extends AbstractCommand
         try
         {
             transmitter.expect(tokenOf(COLON_ID));
-            var typeDefinitionCommand = new TypeDefinitionCommand(transmitter);
-            exceptions.add(typeDefinitionCommand.process());
-            components.add(typeDefinitionCommand);
+            typeDefinition = new TypeDefinitionCommand(transmitter);
+            exceptions.add(typeDefinition.process());
         }
         catch (CompilationException e)
         {

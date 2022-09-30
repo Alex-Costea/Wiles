@@ -14,9 +14,8 @@ import java.util.List;
 import static in.costea.wiles.builders.ExpectParamsBuilder.*;
 import static in.costea.wiles.statics.Constants.*;
 
-public class OperationCommand extends AbstractOperationComponentCommand
-{
-    private final List<AbstractOperationComponentCommand> components = new ArrayList<>();
+public class OperationCommand extends AbstractCommand {
+    private final List<OperationCommand> components = new ArrayList<>();
     private final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
     private final boolean innerOperation;
     private final Token firstToken;
@@ -36,7 +35,7 @@ public class OperationCommand extends AbstractOperationComponentCommand
     }
 
     @Override
-    public List<AbstractOperationComponentCommand> getComponents()
+    public List<OperationCommand> getComponents()
     {
         return components;
     }

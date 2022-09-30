@@ -15,7 +15,7 @@ import static in.costea.wiles.statics.Constants.*;
 
 public class CodeBlockCommand extends AbstractCommand
 {
-    private final List<AbstractCommand> components = new ArrayList<>();
+    private final List<OperationCommand> components = new ArrayList<>();
     private final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
     private final boolean standAlone;
 
@@ -32,7 +32,7 @@ public class CodeBlockCommand extends AbstractCommand
     }
 
     @Override
-    public List<? extends AbstractCommand> getComponents()
+    public List<OperationCommand> getComponents()
     {
         return components;
     }

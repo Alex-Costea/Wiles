@@ -39,6 +39,11 @@ public class ProgramCommand extends AbstractCommand
         return components;
     }
 
+    public void addMethod(MethodCommand command)
+    {
+        components.add(command);
+    }
+
     @Override
     public CompilationExceptionsCollection process()
     {

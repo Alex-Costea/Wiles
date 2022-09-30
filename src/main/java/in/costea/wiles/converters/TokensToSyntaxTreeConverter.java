@@ -44,9 +44,8 @@ public class TokensToSyntaxTreeConverter
             var methodCommand = new MethodCommand(tokenTransmitter);
             methodCommand.setMethodName(MAIN_METHOD_NAME);
             var methodBodyCommand = new CodeBlockCommand(tokenTransmitter, true);
-            methodCommand.getComponents().add(methodBodyCommand);
-            methodCommand.addNothingReturnType();
-            programCommand.getComponents().add(methodCommand);
+            methodCommand.setMethodBody(methodBodyCommand);
+            programCommand.addMethod(methodCommand);
             exceptions.add(methodBodyCommand.process());
             return programCommand;
         }

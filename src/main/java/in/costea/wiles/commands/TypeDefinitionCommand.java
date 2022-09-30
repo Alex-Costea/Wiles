@@ -17,7 +17,6 @@ import static in.costea.wiles.statics.Constants.TYPES;
 
 public class TypeDefinitionCommand extends AbstractCommand
 {
-    private final List<AbstractCommand> components = new ArrayList<>();
     private final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
 
     public TypeDefinitionCommand(TokenTransmitter transmitter)
@@ -34,7 +33,7 @@ public class TypeDefinitionCommand extends AbstractCommand
     @Override
     public List<? extends AbstractCommand> getComponents()
     {
-        return components;
+        return new ArrayList<>();
     }
 
     @Override
