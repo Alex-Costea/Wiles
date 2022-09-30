@@ -39,7 +39,7 @@ public abstract class AbstractCommand
         StringBuilder sb = new StringBuilder();
         sb.append(getType());
         if (!Objects.equals(name, ""))
-            sb.append(" ").append(name).append(" ");
+            sb.append(" ").append(name);
         if (getComponents().size() > 0)
         {
             sb.append("(");

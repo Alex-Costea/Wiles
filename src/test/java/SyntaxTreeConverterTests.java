@@ -62,15 +62,15 @@ public class SyntaxTreeConverterTests
     @Test
     public void newlineTests()
     {
-        assertResults(null, "PROGRAM(METHOD a (TYPE NOTHING ; CODE_BLOCK))",
+        assertResults(null, "PROGRAM(METHOD a(TYPE NOTHING; CODE_BLOCK))",
                 DECLARE_METHOD_ID, "!a", ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID
                 , START_BLOCK_ID, END_BLOCK_ID);
 
-        assertResults(null, "PROGRAM(METHOD a (TYPE NOTHING ; CODE_BLOCK))",
+        assertResults(null, "PROGRAM(METHOD a(TYPE NOTHING; CODE_BLOCK))",
                 NEWLINE_ID, NEWLINE_ID, DECLARE_METHOD_ID, "!a", ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID
                 , START_BLOCK_ID, END_BLOCK_ID);
 
-        assertResults(null, "PROGRAM(METHOD a (TYPE NOTHING ; CODE_BLOCK))",
+        assertResults(null, "PROGRAM(METHOD a(TYPE NOTHING; CODE_BLOCK))",
                 DECLARE_METHOD_ID, "!a", ROUND_BRACKET_START_ID,
                 NEWLINE_ID, ROUND_BRACKET_END_ID,
                 NEWLINE_ID, START_BLOCK_ID,
@@ -80,25 +80,25 @@ public class SyntaxTreeConverterTests
     @Test
     public void operationsTest()
     {
-        assertResults(null, "PROGRAM(METHOD main (TYPE NOTHING ; CODE_BLOCK(OPERATION(!b; ASSIGN; !c))))",
+        assertResults(null, "PROGRAM(METHOD main(TYPE NOTHING; CODE_BLOCK(OPERATION(!b; ASSIGN; !c))))",
                 DECLARE_METHOD_ID, "!main", ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID
                 , START_BLOCK_ID, "!b", ASSIGN_ID, "!c", END_BLOCK_ID);
 
-        assertResults(null, "PROGRAM(METHOD main (TYPE NOTHING ; CODE_BLOCK(OPERATION(!b; ASSIGN; #3))))",
+        assertResults(null, "PROGRAM(METHOD main(TYPE NOTHING; CODE_BLOCK(OPERATION(!b; ASSIGN; #3))))",
                 DECLARE_METHOD_ID, "!main", ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID
                 , START_BLOCK_ID, "!b", ASSIGN_ID, "#3", END_BLOCK_ID);
 
-        assertResults(null, "PROGRAM(METHOD main (TYPE NOTHING ; CODE_BLOCK(OPERATION(!b; PLUS; #3; MINUS; #5))))",
+        assertResults(null, "PROGRAM(METHOD main(TYPE NOTHING; CODE_BLOCK(OPERATION(!b; PLUS; #3; MINUS; #5))))",
                 "!b", PLUS_ID, "#3", MINUS_ID, "#5");
 
-        assertResults(null, "PROGRAM(METHOD main (TYPE NOTHING ; CODE_BLOCK(OPERATION(!a; PLUS; !b); OPERATION(#0; PLUS; !c); OPERATION(!a; PLUS; !b; PLUS; !c))))",
+        assertResults(null, "PROGRAM(METHOD main(TYPE NOTHING; CODE_BLOCK(OPERATION(!a; PLUS; !b); OPERATION(#0; PLUS; !c); OPERATION(!a; PLUS; !b; PLUS; !c))))",
                 "!a", PLUS_ID, "!b", NEWLINE_ID, PLUS_ID, "!c", NEWLINE_ID, NEWLINE_ID,
                 "!a", PLUS_ID, NEWLINE_ID, "!b", PLUS_ID, "!c");
 
-        assertResults(null, "PROGRAM(METHOD main (TYPE NOTHING ; CODE_BLOCK(OPERATION(!b; PLUS; #3; MINUS; #5))))",
+        assertResults(null, "PROGRAM(METHOD main(TYPE NOTHING; CODE_BLOCK(OPERATION(!b; PLUS; #3; MINUS; #5))))",
                 "!b", PLUS_ID, "#3", MINUS_ID, "#5");
 
-        assertResults(null, "PROGRAM(METHOD main (TYPE NOTHING ; CODE_BLOCK(OPERATION(!c; ASSIGN; #0; MINUS; #10; PLUS; #0; PLUS; OPERATION(#0; PLUS; #10)))))",
+        assertResults(null, "PROGRAM(METHOD main(TYPE NOTHING; CODE_BLOCK(OPERATION(!c; ASSIGN; #0; MINUS; #10; PLUS; #0; PLUS; OPERATION(#0; PLUS; #10)))))",
                 "!c", ASSIGN_ID, MINUS_ID, "#10", PLUS_ID, NEWLINE_ID, PLUS_ID, ROUND_BRACKET_START_ID, PLUS_ID, "#10", ROUND_BRACKET_END_ID);
 
     }
@@ -122,14 +122,14 @@ public class SyntaxTreeConverterTests
     @Test
     public void parenthesesTests()
     {
-        assertResults(null, "PROGRAM(METHOD main (TYPE NOTHING ; CODE_BLOCK(OPERATION(!a; PLUS; OPERATION(OPERATION(!b; PLUS; !c); PLUS; !d)))))",
+        assertResults(null, "PROGRAM(METHOD main(TYPE NOTHING; CODE_BLOCK(OPERATION(!a; PLUS; OPERATION(OPERATION(!b; PLUS; !c); PLUS; !d)))))",
                 "!a", PLUS_ID, ROUND_BRACKET_START_ID, ROUND_BRACKET_START_ID, "!b", PLUS_ID, "!c",
                 ROUND_BRACKET_END_ID, PLUS_ID, "!d", ROUND_BRACKET_END_ID);
-        assertResults(null, "PROGRAM(METHOD main (TYPE NOTHING ; CODE_BLOCK(OPERATION(!a; PLUS; OPERATION(!b; PLUS; !c)))))",
+        assertResults(null, "PROGRAM(METHOD main(TYPE NOTHING; CODE_BLOCK(OPERATION(!a; PLUS; OPERATION(!b; PLUS; !c)))))",
                 "!a", PLUS_ID, ROUND_BRACKET_START_ID, NEWLINE_ID, "!b", PLUS_ID, "!c", ROUND_BRACKET_END_ID);
-        assertResults(null, "PROGRAM(METHOD main (TYPE NOTHING ; CODE_BLOCK(OPERATION(!a; PLUS; OPERATION(!b; PLUS; !c)))))",
+        assertResults(null, "PROGRAM(METHOD main(TYPE NOTHING; CODE_BLOCK(OPERATION(!a; PLUS; OPERATION(!b; PLUS; !c)))))",
                 "!a", PLUS_ID, NEWLINE_ID, ROUND_BRACKET_START_ID, "!b", PLUS_ID, "!c", ROUND_BRACKET_END_ID);
-        assertResults(null, "PROGRAM(METHOD main (TYPE NOTHING ; CODE_BLOCK(OPERATION(!a; PLUS; !b))))",
+        assertResults(null, "PROGRAM(METHOD main(TYPE NOTHING; CODE_BLOCK(OPERATION(!a; PLUS; !b))))",
                 ROUND_BRACKET_START_ID, "!a", PLUS_ID, "!b", ROUND_BRACKET_END_ID);
     }
 
@@ -174,16 +174,16 @@ public class SyntaxTreeConverterTests
     @Test
     public void methodTest()
     {
-        assertResults(null, "PROGRAM(METHOD main (TYPE INT32 ; CODE_BLOCK))",
+        assertResults(null, "PROGRAM(METHOD main(TYPE INT32; CODE_BLOCK))",
                 DECLARE_METHOD_ID, "!main", ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, COLON_ID, "!int",
                 START_BLOCK_ID, END_BLOCK_ID);
-        assertResults(null, "PROGRAM(METHOD main (TYPE INT32 ; DECLARATION(!a; TYPE INT32 ); CODE_BLOCK))",
+        assertResults(null, "PROGRAM(METHOD main(TYPE INT32; DECLARATION(!a; TYPE INT32); CODE_BLOCK))",
                 DECLARE_METHOD_ID, "!main", ROUND_BRACKET_START_ID,"!a", COLON_ID,"!int",ROUND_BRACKET_END_ID,
                 COLON_ID, "!int", START_BLOCK_ID, END_BLOCK_ID);
-        assertResults(null, "PROGRAM(METHOD main (TYPE INT32 ; DECLARATION(!a; TYPE INT32 ); DECLARATION(!b; TYPE STRING ); CODE_BLOCK))",
+        assertResults(null, "PROGRAM(METHOD main(TYPE INT32; DECLARATION(!a; TYPE INT32); DECLARATION(!b; TYPE STRING); CODE_BLOCK))",
                 DECLARE_METHOD_ID, "!main", ROUND_BRACKET_START_ID,"!a", COLON_ID,"!int",
                 "COMMA","!b",COLON_ID,"!text", ROUND_BRACKET_END_ID, COLON_ID, "!int", START_BLOCK_ID, END_BLOCK_ID);
-        assertResults(null, "PROGRAM(METHOD main (TYPE INT32 ; DECLARATION(!a; TYPE NOTHING ); CODE_BLOCK))",
+        assertResults(null, "PROGRAM(METHOD main(TYPE INT32; DECLARATION(!a; TYPE NOTHING); CODE_BLOCK))",
                 DECLARE_METHOD_ID, "!main", ROUND_BRACKET_START_ID,"!a", COLON_ID,NOTHING_ID,ROUND_BRACKET_END_ID,
                 COLON_ID, "!int", START_BLOCK_ID, END_BLOCK_ID);
     }
