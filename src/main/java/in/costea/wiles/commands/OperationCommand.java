@@ -42,7 +42,7 @@ public class OperationCommand extends AbstractOperationComponentCommand
 
     private void addInnerOperation() throws CompilationException
     {
-        Token newToken = expect((x) -> true, "Unexpected operation end!");
+        Token newToken = transmitter.expect((x) -> true, "Unexpected operation end!");
         var newOperation = new OperationCommand(newToken, transmitter, true);
         var newExceptions = newOperation.process();
         if (newExceptions.size() > 0)
@@ -110,10 +110,10 @@ public class OperationCommand extends AbstractOperationComponentCommand
                 }
 
                 if (expectOperatorNext)
-                    token = expect(x -> ROUND_BRACKETS.contains(x) || ALLOWED_OPERATORS_IN_OPERATION.contains(x),
+                    token = transmitter.expect(x -> ROUND_BRACKETS.contains(x) || ALLOWED_OPERATORS_IN_OPERATION.contains(x),
                             "Operator expected!");
                 else
-                    token = expect(x -> ROUND_BRACKETS.contains(x) || UNARY_OPERATORS.contains(x) ||
+                    token = transmitter.expect(x -> ROUND_BRACKETS.contains(x) || UNARY_OPERATORS.contains(x) ||
                                     x.startsWith("!") || x.startsWith("@") || x.startsWith("#")
                             , "Identifier or unary operator expected!");
 

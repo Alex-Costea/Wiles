@@ -53,24 +53,24 @@ public class MethodCommand extends AbstractCommand
     {
         try
         {
-            name = expect(x -> x.length() > 1 && x.startsWith(IDENTIFIER_START), "Expected method name!").
+            name = transmitter.expect(x -> x.length() > 1 && x.startsWith(IDENTIFIER_START), "Expected method name!").
                     content().substring(1);
 
             //Parameters list
-            expect(ROUND_BRACKET_START_ID);
+            transmitter.expect(ROUND_BRACKET_START_ID);
             Optional<Token> maybeToken;
-            while ((maybeToken = expectMaybe(x -> x.startsWith(IDENTIFIER_START))).isPresent())
+            while ((maybeToken = transmitter.expectMaybe(x -> x.startsWith(IDENTIFIER_START))).isPresent())
             {
                 var parameterCommand = new ParameterCommand(transmitter, maybeToken.get());
                 exceptions.add(parameterCommand.process());
                 components.add(parameterCommand);
-                if (expectMaybe("COMMA").isEmpty())
+                if (transmitter.expectMaybe("COMMA").isEmpty())
                     break;
             }
-            expect(ROUND_BRACKET_END_ID);
+            transmitter.expect(ROUND_BRACKET_END_ID);
 
             //Return type
-            if (expectMaybe(COLON_ID).isPresent())
+            if (transmitter.expectMaybe(COLON_ID).isPresent())
             {
                 var typeDefinitionCommand = new TypeDefinitionCommand(transmitter);
                 exceptions.add(typeDefinitionCommand.process());
@@ -82,17 +82,17 @@ public class MethodCommand extends AbstractCommand
             }
 
             //Method body
-            if (expectMaybe(NOTHING_ID).isPresent())
+            if (transmitter.expectMaybe(NOTHING_ID).isPresent())
             {
                 var MethodBodyCommand = new CodeBlockCommand(transmitter, false);
                 components.add(MethodBodyCommand);
                 return exceptions;
             }
-            expect(START_BLOCK_ID);
+            transmitter.expect(START_BLOCK_ID);
             var MethodBodyCommand = new CodeBlockCommand(transmitter, false);
             exceptions.add(MethodBodyCommand.process());
             components.add(MethodBodyCommand);
-            expect(END_BLOCK_ID);
+            transmitter.expect(END_BLOCK_ID);
         }
         catch (CompilationException ex)
         {

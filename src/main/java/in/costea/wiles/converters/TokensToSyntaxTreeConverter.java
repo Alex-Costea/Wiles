@@ -5,12 +5,15 @@ import in.costea.wiles.commands.MethodCommand;
 import in.costea.wiles.commands.ProgramCommand;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
+import in.costea.wiles.exceptions.CompilationException;
+import in.costea.wiles.services.RemoveTokenEnum;
 import in.costea.wiles.services.TokenTransmitter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static in.costea.wiles.statics.Constants.*;
+import static in.costea.wiles.statics.Constants.DECLARE_METHOD_ID;
+import static in.costea.wiles.statics.Constants.MAIN_METHOD_NAME;
 
 public class TokensToSyntaxTreeConverter
 {
@@ -22,11 +25,15 @@ public class TokensToSyntaxTreeConverter
     {
         tokenTransmitter = new TokenTransmitter(tokens);
         exceptions = new CompilationExceptionsCollection();
-        while(!tokenTransmitter.tokensExhausted() && tokenTransmitter.requestTokenAssertNotEmpty().content().equals(NEWLINE_ID))
-        {
-            tokenTransmitter.removeToken();
+
+        boolean bodyOnlyMode;
+        try {
+            tokenTransmitter.expect(x->x.equals(DECLARE_METHOD_ID),"", RemoveTokenEnum.Never);
+            bodyOnlyMode = false;
+        } catch (CompilationException e) {
+            bodyOnlyMode = true;
         }
-        bodyOnlyMode = tokenTransmitter.tokensExhausted() || !tokenTransmitter.requestTokenAssertNotEmpty().content().equals(DECLARE_METHOD_ID);
+        this.bodyOnlyMode = bodyOnlyMode;
     }
 
     public ProgramCommand convert()

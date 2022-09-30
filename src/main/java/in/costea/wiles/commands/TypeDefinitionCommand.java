@@ -40,7 +40,7 @@ public class TypeDefinitionCommand extends AbstractCommand
     {
         try
         {
-            Token token = expect(TYPES::containsKey, "Type expected!");
+            Token token = transmitter.expect(TYPES::containsKey, "Type expected!");
             name = TYPES.get(token.content());
             assert name!=null;
         }

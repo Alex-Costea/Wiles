@@ -40,7 +40,7 @@ public class ParameterCommand extends AbstractCommand
     {
         try
         {
-            expect(COLON_ID);
+            transmitter.expect(COLON_ID);
             var typeDefinitionCommand = new TypeDefinitionCommand(transmitter);
             exceptions.add(typeDefinitionCommand.process());
             components.add(typeDefinitionCommand);

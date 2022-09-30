@@ -45,7 +45,7 @@ public class ProgramCommand extends AbstractCommand
         {
             while (!transmitter.tokensExhausted())
             {
-                expect(DECLARE_METHOD_ID);
+                transmitter.expect(DECLARE_METHOD_ID);
                 var methodCommand = new MethodCommand(transmitter);
                 exceptions.add(methodCommand.process());
                 components.add(methodCommand);

@@ -59,7 +59,7 @@ public class CodeBlockCommand extends AbstractCommand
                 boolean innerOperation=false;
                 if (token.content().equals(ROUND_BRACKET_START_ID))
                 {
-                    token = expect((x) -> true, "Unexpected operation end!");
+                    token = transmitter.expect((x) -> true, "Unexpected operation end!");
                     innerOperation=true;
                 }
                 if (UNARY_OPERATORS.contains(token.content()) || !TOKENS.containsValue(token.content()))
