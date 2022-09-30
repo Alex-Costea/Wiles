@@ -69,27 +69,30 @@ public class TokenTransmitter
 
     public Token expect(ExpectParamsBuilder params) throws CompilationException
     {
-        boolean succeeded=false;
-        String message= params.getErrorMessage();
-        boolean shouldIgnoreNewLine= params.isIgnoringNewLine();
-        Predicate<String> foundTest= params.getFoundTest();
-        var when = params.whenRemoveToken();
-
+        boolean succeeded = false;
         try
         {
             Token token;
+            String message = params.getErrorMessage();
+
+            boolean shouldIgnoreNewLine = params.isIgnoringNewLine();
             while ((token = requestToken(message)).content().equals(NEWLINE_ID) && shouldIgnoreNewLine)
                 removeToken();
+
             if (token.content().equals(CONTINUE_LINE_ID))
                 throw new UnexpectedTokenException("" + CONTINUE_LINE, token.location());
+
+            Predicate<String> foundTest= params.getFoundTest();
             if (!foundTest.test(token.content()))
                 throw new TokenExpectedException(message, token.location());
+
             succeeded=true;
             return token;
         }
         finally
         {
-            if((!succeeded && when == ALWAYS) || (succeeded && when != NEVER))
+            var whenRemoveToken = params.whenRemoveToken();
+            if((!succeeded && whenRemoveToken == ALWAYS) || (succeeded && whenRemoveToken != NEVER))
             {
                 removeToken();
             }
