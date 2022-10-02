@@ -36,7 +36,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Value `let {var} name {: type} := value` (`var` makes it mutable, type can be inferred)
 - Conditional: `if condition then [block] {otherwise [block]}`
 - For-in loop: `for x in collection do [block]`
-- For-from loop: `for i from a {to b} {by c}` (syntactic sugar for `for i in range(a,b)`)
+- For-from loop: `for i from a to b` (syntactic sugar for `for i in range(a,b)`)
 - While loop: `while condition do [block]`
 
 ### Operators
@@ -62,6 +62,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - `nothing` can also be used to mean "no operation"
 - `\` can be used to continue a line after a newline (including string literals)
 - Types are not reserved keywords and can be used as variable names
+- Method potentially not returning value and potentially unreachable code are compilation errors 
 
 ### Potential additions (no promises!)
 - `infint` (infinite precision integer)
@@ -71,7 +72,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Classes with `class` keyword. Internally, maybe something like `dict[text,method]`?
 - Declare fields `readonly` for getter with no setter, `public` for getter and setter
 - Direct field access is impossible, instead it is trasferred to getters/setters
-- Methods calling with named parameters: `range(1,10,3)` or `range(from: 1, to: 10, by: 3)`
+- Methods calling with named parameters: `range(1,10)` or `range(from: 1, to: 10)`
 - Garbage collection
 
 ## Examples
