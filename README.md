@@ -33,7 +33,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 ### Declaring
 #### Note: {} means optional
 - Method: `method name({param1 : type, param2 : type}) {: return_type}` (return assumed `nothing` if unspecified)
-- Value `let {var} name {: type} {:= value}` (`var` makes it mutable, type can be inferred)
+- Value `let {var} name {: type} := value` (`var` makes it mutable, type can be inferred)
 - Conditional: `if condition then [block] {otherwise [block]}`
 - For-in loop: `for x in collection do [block]`
 - For-from loop: `for i from a {to b} {by c}` (syntactic sugar for `for i in range(a,b)`)
@@ -45,7 +45,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - `=`, `>`, `>=`, `<`, `<=`, `=/=`
 - `:=` (assign or declare)
 - `.` (method / field access)
-- `:` (type annotation and named parameters)
+- `:` (type annotation)
 - `[]`, `()`, `,`
 
 ### Other keywords
