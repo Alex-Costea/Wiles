@@ -99,7 +99,9 @@ end
 ```
 method min(list: list[int]) : int
 begin
-    min := -1
+    if list.size = 0 do
+        yield -1
+    min := list.get(0)
     for x in list do
         if x < min do
             min := x
