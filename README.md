@@ -38,7 +38,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 ### Declaring
 - Method: `method name(param1 : type, param2 : type) : return_type` (parameters and `return_type` optional)
 - Immutable variable: `let name : type` (type can be inferred)
-- Mutable variable: `let var name : type`
+- Mutable variable: `let var name : type` (type can be inferred)
 - Conditional: `if condition then [block] otherwise [block]` (`otherwise` optional)
 - For-in loop: `for x in collection do [block]`
 - For-from loop: `for i from a to b` (syntactic sugar for `for i in range(a,b)`)
@@ -69,8 +69,9 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Types are not reserved keywords and can be used as variable names
 
 ### Other potential additions
-- Classes with `class` keyword. Internally, probably something like `dict[text,method]`, with `a.b() = a["b"]()`
+- Classes with `class` keyword. Internally, maybe something like `dict[text,method]`?
 - Declare fields `readonly` for getter with no setter, `public` for getter and setter
+- Direct field access is impossible, instead it is trasferred to getters/setters
 - Methods can be called with named parameters: `range(1,10,3)` or `range(from: 1, to: 10, by: 3)`
 - Garbage collection?
 
