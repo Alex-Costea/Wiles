@@ -3,7 +3,7 @@ package in.costea.wiles.commands;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import in.costea.wiles.data.CompilationExceptionsCollection;
-import in.costea.wiles.exceptions.CompilationException;
+import in.costea.wiles.exceptions.AbstractCompilationException;
 import in.costea.wiles.services.TokenTransmitter;
 import in.costea.wiles.statics.Constants.SYNTAX_TYPE;
 
@@ -57,7 +57,7 @@ public class ProgramCommand extends AbstractCommand
                 components.add(methodCommand);
             }
         }
-        catch (CompilationException ex)
+        catch (AbstractCompilationException ex)
         {
             exceptions.add(ex);
         }

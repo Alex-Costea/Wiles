@@ -2,7 +2,7 @@ package in.costea.wiles.commands;
 
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
-import in.costea.wiles.exceptions.CompilationException;
+import in.costea.wiles.exceptions.AbstractCompilationException;
 import in.costea.wiles.exceptions.UnexpectedEndException;
 import in.costea.wiles.exceptions.UnexpectedTokenException;
 import in.costea.wiles.services.TokenTransmitter;
@@ -41,7 +41,7 @@ public class ExpressionCommand extends AbstractCommand {
         return components;
     }
 
-    private void addInnerOperation() throws CompilationException
+    private void addInnerOperation() throws AbstractCompilationException
     {
         Token newToken = transmitter.expect(tokenOf(ANYTHING).withErrorMessage( "Unexpected operation end!"));
         var newOperation = new ExpressionCommand(newToken, transmitter, true);
@@ -53,7 +53,7 @@ public class ExpressionCommand extends AbstractCommand {
         else components.add(newOperation.components.get(0));
     }
 
-    private void verifyOtherTokens() throws CompilationException
+    private void verifyOtherTokens() throws AbstractCompilationException
     {
         Token mainToken=firstToken;
         while (!transmitter.tokensExhausted())
@@ -145,7 +145,7 @@ public class ExpressionCommand extends AbstractCommand {
             verifyOtherTokens();
 
         }
-        catch (CompilationException ex)
+        catch (AbstractCompilationException ex)
         {
             exceptions.add(ex);
         }

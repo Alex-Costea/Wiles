@@ -1,6 +1,6 @@
 import in.costea.wiles.converters.InputToTokensConverter;
 import in.costea.wiles.data.Token;
-import in.costea.wiles.exceptions.CompilationException;
+import in.costea.wiles.exceptions.AbstractCompilationException;
 import in.costea.wiles.exceptions.StringUnfinishedException;
 import in.costea.wiles.exceptions.UnknownOperatorException;
 import org.junit.jupiter.api.Test;
@@ -32,9 +32,9 @@ public class TokenConverterTests
         Throwable t;
         if (message != null) t = assertThrows(throwing, () -> x.throwExceptionIfExists(exceptionIndex), message);
         else t = assertThrows(throwing, () -> x.throwExceptionIfExists(exceptionIndex));
-        assert t instanceof CompilationException;
+        assert t instanceof AbstractCompilationException;
         if (line != null)
-            assertEquals(line, ((CompilationException) t).getLine());
+            assertEquals(line, ((AbstractCompilationException) t).getLine());
     }
 
     @SuppressWarnings("SameParameterValue")

@@ -2,7 +2,7 @@ import in.costea.wiles.commands.AbstractCommand;
 import in.costea.wiles.converters.TokensToSyntaxTreeConverter;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
-import in.costea.wiles.exceptions.CompilationException;
+import in.costea.wiles.exceptions.AbstractCompilationException;
 import in.costea.wiles.exceptions.TokenExpectedException;
 import in.costea.wiles.exceptions.UnexpectedEndException;
 import in.costea.wiles.exceptions.UnexpectedTokenException;
@@ -52,7 +52,7 @@ public class SyntaxTreeConverterTests
             assertEquals(expectedResult, converter.getResult());
     }
 
-    private CompilationExceptionsCollection createExceptions(CompilationException... list)
+    private CompilationExceptionsCollection createExceptions(AbstractCompilationException... list)
     {
         CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
         exceptions.add(list);

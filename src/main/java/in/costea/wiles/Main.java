@@ -9,7 +9,7 @@ import in.costea.wiles.converters.InputToTokensConverter;
 import in.costea.wiles.converters.TokensToSyntaxTreeConverter;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
-import in.costea.wiles.exceptions.CompilationFailedException;
+import in.costea.wiles.exceptions.CompilationFailed;
 
 import java.io.*;
 import java.util.List;
@@ -43,7 +43,7 @@ public class Main
         ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
         writer.writeValue(new File("syntaxtree.json"), AST);
         if (exceptions.size() > 0)
-            throw new CompilationFailedException(exceptions);
+            throw new CompilationFailed(exceptions);
     }
 
     private static String loadFile()

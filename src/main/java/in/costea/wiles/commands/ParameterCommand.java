@@ -2,7 +2,7 @@ package in.costea.wiles.commands;
 
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
-import in.costea.wiles.exceptions.CompilationException;
+import in.costea.wiles.exceptions.AbstractCompilationException;
 import in.costea.wiles.services.TokenTransmitter;
 import in.costea.wiles.statics.Constants;
 
@@ -45,7 +45,7 @@ public class ParameterCommand extends AbstractCommand
             typeDefinition = new TypeDefinitionCommand(transmitter);
             exceptions.add(typeDefinition.process());
         }
-        catch (CompilationException e)
+        catch (AbstractCompilationException e)
         {
             exceptions.add(e);
         }

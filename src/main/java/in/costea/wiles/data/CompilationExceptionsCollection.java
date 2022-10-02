@@ -1,6 +1,6 @@
 package in.costea.wiles.data;
 
-import in.costea.wiles.exceptions.CompilationException;
+import in.costea.wiles.exceptions.AbstractCompilationException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.Objects;
 
 import static in.costea.wiles.statics.Constants.DEBUG;
 
-public class CompilationExceptionsCollection extends ArrayList<CompilationException>
+public class CompilationExceptionsCollection extends ArrayList<AbstractCompilationException>
 {
 
     public CompilationExceptionsCollection(CompilationExceptionsCollection exceptions)
@@ -23,7 +23,7 @@ public class CompilationExceptionsCollection extends ArrayList<CompilationExcept
         super();
     }
 
-    public void add(@NotNull CompilationException... exceptions)
+    public void add(@NotNull AbstractCompilationException... exceptions)
     {
         this.addAll(List.of(exceptions));
     }

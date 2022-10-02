@@ -5,7 +5,7 @@ import in.costea.wiles.commands.MethodCommand;
 import in.costea.wiles.commands.ProgramCommand;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
-import in.costea.wiles.exceptions.CompilationException;
+import in.costea.wiles.exceptions.AbstractCompilationException;
 import in.costea.wiles.services.TokenTransmitter;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,7 +30,7 @@ public class TokensToSyntaxTreeConverter
         try {
             tokenTransmitter.expect(tokenOf(DECLARE_METHOD_ID).removeTokenWhen(NEVER));
             bodyOnlyMode = false;
-        } catch (CompilationException e) {
+        } catch (AbstractCompilationException e) {
             bodyOnlyMode = true;
         }
         this.bodyOnlyMode = bodyOnlyMode;

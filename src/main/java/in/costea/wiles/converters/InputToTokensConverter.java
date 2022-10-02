@@ -2,7 +2,7 @@ package in.costea.wiles.converters;
 
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
-import in.costea.wiles.exceptions.CompilationException;
+import in.costea.wiles.exceptions.AbstractCompilationException;
 import in.costea.wiles.exceptions.StringUnfinishedException;
 import in.costea.wiles.exceptions.UnknownOperatorException;
 import org.jetbrains.annotations.NotNull;
@@ -68,7 +68,7 @@ public class InputToTokensConverter
                         addNewLine();
                 }
             }
-            catch (CompilationException ex)
+            catch (AbstractCompilationException ex)
             {
                 exceptions.add(ex);
                 tokens.add(createToken(UNKNOWN_TOKEN));
@@ -207,7 +207,7 @@ public class InputToTokensConverter
     }
 
 
-    public void throwExceptionIfExists(int exceptionIndex) throws CompilationException
+    public void throwExceptionIfExists(int exceptionIndex) throws AbstractCompilationException
     {
         if (exceptions.size() > exceptionIndex)
             throw exceptions.get(exceptionIndex);

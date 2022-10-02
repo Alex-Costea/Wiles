@@ -1,8 +1,7 @@
 package in.costea.wiles.commands;
 
 import in.costea.wiles.data.CompilationExceptionsCollection;
-import in.costea.wiles.data.Token;
-import in.costea.wiles.exceptions.CompilationException;
+import in.costea.wiles.exceptions.AbstractCompilationException;
 import in.costea.wiles.exceptions.UnexpectedTokenException;
 import in.costea.wiles.services.TokenTransmitter;
 import in.costea.wiles.statics.Constants;
@@ -40,10 +39,10 @@ public class CodeBlockCommand extends AbstractCommand
     private void readRestOfLineIgnoringErrors()
     {
         final boolean stopAtEndBlock = !standAlone;
-        transmitter.readUntilIgnoringErrors(x -> STATEMENT_TERMINATORS.contains(x) || (stopAtEndBlock && x.equals(END_BLOCK_ID)));
+        transmitter.forceReadUntil(x -> STATEMENT_TERMINATORS.contains(x) || (stopAtEndBlock && x.equals(END_BLOCK_ID)));
     }
 
-    private void readOneStatement() throws CompilationException {
+    private void readOneStatement() throws AbstractCompilationException {
         if (transmitter.expectMaybe(tokenOf(isContainedIn(STATEMENT_TERMINATORS)).dontIgnoreNewLine()).isPresent())
             return;
         ExpressionCommand expressionCommand;
@@ -59,7 +58,7 @@ public class CodeBlockCommand extends AbstractCommand
                 throw new UnexpectedTokenException("Cannot declare method in body-only mode!", optionalToken.get().location());
             else
             {
-                Token token=transmitter.expect(tokenOf(ANYTHING));
+                var token=transmitter.expect(tokenOf(ANYTHING));
                 throw new UnexpectedTokenException(TOKENS_INVERSE.get(token.content()), token.location());
             }
         }
@@ -88,14 +87,16 @@ public class CodeBlockCommand extends AbstractCommand
             {
                 if(!standAlone)
                     transmitter.expect(tokenOf(START_BLOCK_ID));
-                while(!transmitter.tokensExhausted() &&
-                        (standAlone || transmitter.expectMaybe(tokenOf(END_BLOCK_ID).removeTokenWhen(NEVER)).isEmpty()))
+                while(!transmitter.tokensExhausted())
+                {
+                    if(!standAlone && transmitter.expectMaybe(tokenOf(END_BLOCK_ID).removeTokenWhen(NEVER)).isPresent())
+                        break;
                     readOneStatement();
-                if(!standAlone)
-                    transmitter.expect(tokenOf(END_BLOCK_ID));
+                }
+                if(!standAlone) transmitter.expect(tokenOf(END_BLOCK_ID));
             }
         }
-        catch (CompilationException ex)
+        catch (AbstractCompilationException ex)
         {
             exceptions.add(ex);
             readRestOfLineIgnoringErrors();

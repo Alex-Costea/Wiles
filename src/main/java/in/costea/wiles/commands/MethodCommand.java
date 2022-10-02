@@ -2,7 +2,7 @@ package in.costea.wiles.commands;
 
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
-import in.costea.wiles.exceptions.CompilationException;
+import in.costea.wiles.exceptions.AbstractCompilationException;
 import in.costea.wiles.services.TokenTransmitter;
 
 import java.util.ArrayList;
@@ -84,10 +84,10 @@ public class MethodCommand extends AbstractCommand
             //Read body
             exceptions.add(methodBody.process());
         }
-        catch (CompilationException ex)
+        catch (AbstractCompilationException ex)
         {
             exceptions.add(ex);
-            transmitter.readUntilIgnoringErrors(x -> x.equals(END_BLOCK_ID));
+            transmitter.forceReadUntil(x -> x.equals(END_BLOCK_ID));
         }
         return exceptions;
     }

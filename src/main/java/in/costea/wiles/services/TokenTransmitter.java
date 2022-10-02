@@ -1,12 +1,12 @@
 package in.costea.wiles.services;
 
 import in.costea.wiles.builders.ExpectParamsBuilder;
-import in.costea.wiles.data.Token;
-import in.costea.wiles.data.TokenLocation;
-import in.costea.wiles.exceptions.CompilationException;
+import in.costea.wiles.exceptions.AbstractCompilationException;
 import in.costea.wiles.exceptions.TokenExpectedException;
 import in.costea.wiles.exceptions.UnexpectedEndException;
 import in.costea.wiles.exceptions.UnexpectedTokenException;
+import in.costea.wiles.data.Token;
+import in.costea.wiles.data.TokenLocation;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
@@ -28,38 +28,24 @@ public class TokenTransmitter
         this.tokens = new LinkedList<>(tokens);
         if (tokens.size() > 0)
             lastLocation = tokens.get(tokens.size() - 1).location();
-        else lastLocation = new TokenLocation(0, 0);
+        else lastLocation = null;
     }
 
-    public void readUntilIgnoringErrors(Predicate<String> stop)
+    public void forceReadUntil(Predicate<String> stop)
     {
         Token token;
-        try
+        while(!tokensExhausted())
         {
-            while(true)
-            {
-                token = requestToken("");
-                removeToken();
-                if (stop.test(token.content()))
-                    return;
-            }
-        }
-        catch (UnexpectedEndException ignored)
-        {
+            token = popToken();
+            if (stop.test(token.content()))
+                return;
         }
     }
 
-    private Token requestToken(String message) throws UnexpectedEndException
-    {
-        if (tokensExhausted()) throw new UnexpectedEndException(message, lastLocation);
-        return tokens.getFirst();
-    }
-
-    private void removeToken()
-    {
+    private Token popToken() {
         if (tokensExhausted())
-            throw new IllegalStateException("Tried removing token that didn't exist");
-        tokens.pop();
+            throw new IllegalStateException("Tokens exhausted!");
+        return tokens.pop();
     }
 
     public boolean tokensExhausted()
@@ -67,18 +53,28 @@ public class TokenTransmitter
         return tokens.isEmpty();
     }
 
-    public Token expect(ExpectParamsBuilder params) throws CompilationException
+    public Token expect(ExpectParamsBuilder params) throws AbstractCompilationException
     {
+        String message = params.getErrorMessage();
         boolean succeeded = false;
         try
         {
+            if(tokensExhausted())
+                throw new UnexpectedEndException(message,lastLocation);
             Token token;
-            String message = params.getErrorMessage();
 
             boolean shouldIgnoreNewLine = params.isIgnoringNewLine();
-            while ((token = requestToken(message)).content().equals(NEWLINE_ID) && shouldIgnoreNewLine)
-                removeToken();
+            if(shouldIgnoreNewLine)
+            {
+                while ((token=tokens.getFirst()).content().equals(NEWLINE_ID))
+                {
+                    if (tokensExhausted())
+                        throw new UnexpectedEndException(message, token.location());
+                    popToken();
+                }
+            }
 
+            token=tokens.getFirst();
             if (token.content().equals(CONTINUE_LINE_ID))
                 throw new UnexpectedTokenException("" + CONTINUE_LINE, token.location());
 
@@ -94,11 +90,11 @@ public class TokenTransmitter
             var whenRemoveToken = params.getWhenRemoveToken();
             if((!succeeded && whenRemoveToken == ALWAYS) || (succeeded && whenRemoveToken != NEVER))
                 if(!tokensExhausted())
-                    removeToken();
+                    popToken();
         }
     }
 
-    public Optional<Token> expectMaybe(ExpectParamsBuilder expectParamsBuilder) throws CompilationException
+    public Optional<Token> expectMaybe(ExpectParamsBuilder expectParamsBuilder) throws AbstractCompilationException
     {
         try
         {
