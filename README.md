@@ -38,7 +38,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - For-in loop: `for x in collection [block]`
 - For-from loop: `for i from a to b` (syntactic sugar for `for i in range(a,b)`)
 - While loop: `while condition [block]`
-- Code block: `do [operation]` or `begin [op1];[op2]; end`
+- Code block: `do nothing` (no operation), `do [operation]` or `begin [op1];[op2]; end`
 
 ### Operators
 - `+`, `-`, `*`, `/`, `^` (power)
@@ -60,7 +60,6 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Language is statically, strongly typed with some type inference
 - Comment using `#`
 - Returning value done with `method_name := result` or with `yield` keyword
-- `nothing` can also be used to mean "no operation"
 - `\` can be used to continue a line after a newline (including string literals)
 - Types are not reserved keywords and can be used as variable names
 - Method potentially not returning value and unreachable code are compilation errors 
