@@ -34,10 +34,11 @@ This is a one-man project mostly meant for myself to try out making an interpret
 #### Note: {} means optional
 - Method: `method name({param1 : type, param2 : type}) {: return_type}` (return assumed `nothing` if unspecified)
 - Value `let {var} name {: type} := value` (`var` makes it mutable, type can be inferred)
-- Conditional: `if condition then [block] {otherwise [block]}`
-- For-in loop: `for x in collection do [block]`
+- Conditional: `if condition [block] {otherwise [block]}`
+- For-in loop: `for x in collection [block]`
 - For-from loop: `for i from a to b` (syntactic sugar for `for i in range(a,b)`)
-- While loop: `while condition do [block]`
+- While loop: `while condition [block]`
+- Code block: `do [operation]` or `begin [op1];[op2]; end`
 
 ### Operators
 - `+`, `-`, `*`, `/`, `^` (power)
@@ -82,14 +83,14 @@ writeline("Hello, world!")
 ```
 ### FizzBuzz
 ```
-for i from 1 to 100 do
+for i from 1 to 100
 begin
     let var text := ""
-    if modulo(i, 3) = 0 then
+    if modulo(i, 3) = 0 do
         text.append("Fizz")
-    if modulo(i, 5) = 0 then
+    if modulo(i, 5) = 0 do
         text.append("Buzz")
-    if my_text = "" then 
+    if my_text = "" do
         text := i.as_text
     writeline(text)
 end 
@@ -101,7 +102,7 @@ method min(list: list[int]) : int
 begin
     min := -1
     for x in list do
-        if x < min then
+        if x < min do
             yield x
 end
 
