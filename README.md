@@ -31,12 +31,12 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Other generic types: `list[type]`, `range[type]`, `dict[type,type]`
 
 ### Declaring
-- Method: `method name(param1 : type, param2 : type) : return_type` (parameters and `return_type` optional)
-- Immutable variable: `let name : type` (type can be inferred)
-- Mutable variable: `let var name : type` (type can be inferred)
-- Conditional: `if condition then [block] otherwise [block]` (`otherwise` optional)
+#### Note: {} means optional
+- Method: `method name({param1 : type, param2 : type}) {: return_type}` (return assumed `nothing` if unspecified)
+- Value `let {var} name {: type} {:= value}` (`var` makes it mutable, type can be inferred)
+- Conditional: `if condition then [block] {otherwise [block]}`
 - For-in loop: `for x in collection do [block]`
-- For-from loop: `for i from a to b` (syntactic sugar for `for i in range(a,b)`)
+- For-from loop: `for i from a {to b} {by c}` (syntactic sugar for `for i in range(a,b)`)
 - While loop: `while condition do [block]`
 
 ### Operators
