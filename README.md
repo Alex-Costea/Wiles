@@ -62,7 +62,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - `nothing` can also be used to mean "no operation"
 - `\` can be used to continue a line after a newline (including string literals)
 - Types are not reserved keywords and can be used as variable names
-- Method potentially not returning value and potentially unreachable code are compilation errors 
+- Method potentially not returning value and unreachable code are compilation errors 
 
 ### Potential additions (no promises!)
 - `infint` (infinite precision integer)
