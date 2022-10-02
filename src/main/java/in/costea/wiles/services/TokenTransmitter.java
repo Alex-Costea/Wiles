@@ -1,12 +1,11 @@
 package in.costea.wiles.services;
 
 import in.costea.wiles.builders.ExpectParamsBuilder;
-import in.costea.wiles.exceptions.AbstractCompilationException;
+import in.costea.wiles.data.Token;
+import in.costea.wiles.data.TokenLocation;
 import in.costea.wiles.exceptions.TokenExpectedException;
 import in.costea.wiles.exceptions.UnexpectedEndException;
 import in.costea.wiles.exceptions.UnexpectedTokenException;
-import in.costea.wiles.data.Token;
-import in.costea.wiles.data.TokenLocation;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
@@ -53,8 +52,7 @@ public class TokenTransmitter
         return tokens.isEmpty();
     }
 
-    public Token expect(ExpectParamsBuilder params) throws AbstractCompilationException
-    {
+    public Token expect(ExpectParamsBuilder params) throws UnexpectedEndException, UnexpectedTokenException, TokenExpectedException {
         String message = params.getErrorMessage();
         boolean succeeded = false;
         try
@@ -94,7 +92,7 @@ public class TokenTransmitter
         }
     }
 
-    public Optional<Token> expectMaybe(ExpectParamsBuilder expectParamsBuilder) throws AbstractCompilationException
+    public Optional<Token> expectMaybe(ExpectParamsBuilder expectParamsBuilder) throws UnexpectedTokenException
     {
         try
         {
