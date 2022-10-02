@@ -97,19 +97,13 @@ end
 ### Minimum value
 
 ```
-method min(list: list[int]) : int
+method min(list: list[int]) : optional[int]
 begin
     if list.size = 0 do
-        yield -1
+        yield nothing 
     min := list.get(0)
     for x in list do
         if x < min do
             min := x
-end
-
-method main()
-begin
-    let list := [10, 4, 8]
-    writeline(min(list))
 end
 ```
