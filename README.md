@@ -32,15 +32,16 @@ This is a one-man project mostly meant for myself to try out making an interpret
 
 ### Potential additions to types
 - Integers: `infint` (infinite precision)
-- Floating point: `exactdec` (equivalent to decimal)
-- Generic types:  `linked_list[type]`, `set[type]`, `method[param1,param2][return_type]`
+- Floating point: `exactdec` (stored as fraction, not as float)
+- Generic types:  `linkedlist[type]`, `set[type]`, `method[param1,param2][return_type]`
 
 ### Declaring
 - Method: `method name(param1 : type, param2 : type) : return_type` (parameters and `return_type` optional)
 - Immutable variable: `let name : type` (type can be inferred)
 - Mutable variable: `let var name : type`
 - Conditional: `if condition then [block] otherwise [block]` (`otherwise` optional)
-- For loop: `for x in collection do [block]`
+- For-in loop: `for x in collection do [block]`
+- For-from loop: `for i from a to b` (syntactic sugar for `for i in range(a,b)`)
 - While loop: `while condition do [block]`
 
 ### Operators
@@ -63,15 +64,15 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Language is statically, strongly typed with some type inference
 - Comment using `#`
 - Returning value done with `method_name := result` or with `yield` keyword
-- Garbage collection
 - `nothing` can also be used to mean "no operation"
 - `\` can be used to continue a line after a newline (including string literals)
-- Methods can be called with named parameters: `range(1,10,3)` or `range(from: 1, to: 10, by: 3)`
 - Types are not reserved keywords and can be used as variable names
 
 ### Other potential additions
-- Classes (or at least structs) with `class` keyword
-- Declare fields `readyonly` for getter with no setter, `public` for getter and setter
+- Classes with `class` keyword. Internally, probably something like `dict[text,method]`, with `a.b() = a["b"]()`
+- Declare fields `readonly` for getter with no setter, `public` for getter and setter
+- Methods can be called with named parameters: `range(1,10,3)` or `range(from: 1, to: 10, by: 3)`
+- Garbage collection?
 
 ## Examples
 ### Hello World
@@ -80,7 +81,7 @@ writeline("Hello, world!")
 ```
 ### FizzBuzz
 ```
-for i in range(from: 1, to: 100) do
+for i from 1 to 100 do
 begin
     let var text := ""
     if modulo(i, 3) = 0 then
