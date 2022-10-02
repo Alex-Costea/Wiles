@@ -102,7 +102,7 @@ begin
     min := -1
     for x in list do
         if x < min do
-            yield x
+            min := x
 end
 
 method main()
