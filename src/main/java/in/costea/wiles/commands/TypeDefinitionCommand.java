@@ -3,15 +3,13 @@ package in.costea.wiles.commands;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.CompilationException;
-import in.costea.wiles.exceptions.TokenExpectedException;
 import in.costea.wiles.services.TokenTransmitter;
 import in.costea.wiles.statics.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static in.costea.wiles.builders.ExpectParamsBuilder.isContainedIn;
-import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
+import static in.costea.wiles.builders.ExpectParamsBuilder.*;
 import static in.costea.wiles.statics.Constants.TYPES;
 
 
@@ -41,16 +39,14 @@ public class TypeDefinitionCommand extends AbstractCommand
     {
         try
         {
-            Token token = transmitter.expect(tokenOf(isContainedIn(TYPES.keySet())).withErrorMessage("Type expected!"));
+            Token token = transmitter.expect(tokenOf(isContainedIn(TYPES.keySet())).removeTokenWhen(ALWAYS).
+                    withErrorMessage("Type expected!"));
             name = TYPES.get(token.content());
             assert name!=null;
         }
         catch (CompilationException e)
         {
             exceptions.add(e);
-            if (e instanceof TokenExpectedException)
-                if (!transmitter.tokensExhausted())
-                    transmitter.removeToken();
         }
         return exceptions;
     }

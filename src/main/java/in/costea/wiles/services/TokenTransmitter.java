@@ -39,9 +39,9 @@ public class TokenTransmitter
             while(true)
             {
                 token = requestToken("");
+                removeToken();
                 if (stop.test(token.content()))
                     return;
-                removeToken();
             }
         }
         catch (UnexpectedEndException ignored)
@@ -55,7 +55,7 @@ public class TokenTransmitter
         return tokens.getFirst();
     }
 
-    public void removeToken()
+    private void removeToken()
     {
         if (tokensExhausted())
             throw new IllegalStateException("Tried removing token that didn't exist");
@@ -93,9 +93,8 @@ public class TokenTransmitter
         {
             var whenRemoveToken = params.getWhenRemoveToken();
             if((!succeeded && whenRemoveToken == ALWAYS) || (succeeded && whenRemoveToken != NEVER))
-            {
-                removeToken();
-            }
+                if(!tokensExhausted())
+                    removeToken();
         }
     }
 

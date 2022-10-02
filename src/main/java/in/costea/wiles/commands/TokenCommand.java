@@ -8,7 +8,7 @@ import in.costea.wiles.statics.Constants;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TokenCommand extends OperationCommand {
+public class TokenCommand extends ExpressionCommand {
     private final Token token;
 
     public TokenCommand(TokenTransmitter transmitter, Token token)
@@ -30,7 +30,7 @@ public class TokenCommand extends OperationCommand {
     }
 
     @Override
-    public List<OperationCommand> getComponents()
+    public List<ExpressionCommand> getComponents()
     {
         return new ArrayList<>();
     }

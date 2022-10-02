@@ -162,8 +162,8 @@ public class SyntaxTreeConverterTests
         assertResults(createExceptions(new UnexpectedEndException("Token \"begin\" expected!", null),
                         new UnexpectedEndException("Token \"method\" expected!", null)),
                 null,
-                DECLARE_METHOD_ID, "!name", ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, END_BLOCK_ID, FINISH_STATEMENT_ID,
-                DECLARE_METHOD_ID, "!name", ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, FINISH_STATEMENT_ID);
+                DECLARE_METHOD_ID, "!name", ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, END_BLOCK_ID, STATEMENT_TERMINATOR_ID,
+                DECLARE_METHOD_ID, "!name", ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, STATEMENT_TERMINATOR_ID);
 
         assertResults(createExceptions(new UnexpectedTokenException("Cannot declare method in body-only mode!", null)),
                 null,
@@ -186,5 +186,15 @@ public class SyntaxTreeConverterTests
         assertResults(null, "PROGRAM(METHOD main(TYPE INT32; DECLARATION(!a; TYPE NOTHING); CODE_BLOCK))",
                 DECLARE_METHOD_ID, "!main", ROUND_BRACKET_START_ID,"!a", COLON_ID,NOTHING_ID,ROUND_BRACKET_END_ID,
                 COLON_ID, "!int", START_BLOCK_ID, END_BLOCK_ID);
+        assertResults(null,"PROGRAM(METHOD a(TYPE NOTHING; CODE_BLOCK))",
+                DECLARE_METHOD_ID, "!a", ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, DO_ID, NOTHING_ID);
+        assertResults(null, "PROGRAM(METHOD main(TYPE NOTHING; CODE_BLOCK(OPERATION(!b; ASSIGN; #3))))",
+                DECLARE_METHOD_ID, "!main", ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID
+                ,DO_ID, "!b", ASSIGN_ID, "#3");
+        assertResults(null,"PROGRAM(METHOD product(TYPE INT64; DECLARATION(!a; TYPE INT32); DECLARATION(!b; TYPE INT32); CODE_BLOCK(OPERATION(!product; ASSIGN; !a; TIMES; !b))))",
+                DECLARE_METHOD_ID, "!product", ROUND_BRACKET_START_ID, "!a", COLON_ID, "!int",
+                COMMA_ID, "!b", COLON_ID, "!int", ROUND_BRACKET_END_ID, COLON_ID, "!bigint", NEWLINE_ID,
+                DO_ID, "!product", ASSIGN_ID, "!a", TIMES_ID, "!b");
+
     }
 }

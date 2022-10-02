@@ -8,8 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static in.costea.wiles.statics.Constants.DEBUG;
-import static in.costea.wiles.statics.Constants.MAX_OPERATOR_LENGTH;
+import static in.costea.wiles.statics.Constants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assumptions.assumingThat;
@@ -135,7 +134,7 @@ public class TokenConverterTests
         TokenConverterEquals("2ab", new String[]{"#2", "!ab"});
         TokenConverterEquals("français", new String[]{"!français"});
         TokenConverterEquals("日本語", new String[]{"!日本語"});
-        TokenConverterEquals("i do not stop the end", new String[]{"!i", "DO", "NOT", "BREAK", "!the", "END_BLOCK"});
+        TokenConverterEquals("i do not stop the end", new String[]{"!i", DO_ID, "NOT", "BREAK", "!the", "END_BLOCK"});
     }
 
 }

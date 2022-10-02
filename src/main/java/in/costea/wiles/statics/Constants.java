@@ -19,7 +19,7 @@ public class Constants
     public static final String ROUND_BRACKET_START_ID = "ROUND_BRACKET_START";
     public static final String ROUND_BRACKET_END_ID = "ROUND_BRACKET_END";
     public static final String DECLARE_METHOD_ID = "DECLARE_METHOD";
-    public static final String FINISH_STATEMENT_ID = "FINISH_STATEMENT";
+    public static final String STATEMENT_TERMINATOR_ID = "TERMINATOR";
     public static final String CONTINUE_LINE_ID = "CONTINUE_LINE";
     public static final String PLUS_ID = "PLUS";
     public static final String MINUS_ID = "MINUS";
@@ -34,6 +34,7 @@ public class Constants
     public static final String COLON_ID = "COLON";
     public static final String NOTHING_ID = "NOTHING";
     public static final String COMMA_ID = "COMMA";
+    public static final String DO_ID = "DO";
     public static final BiMap<String, String> KEYWORDS = HashBiMap.create();
     public static final BiMap<String, String> OPERATORS = HashBiMap.create();
     public static final BiMap<String, String> TYPES = HashBiMap.create();
@@ -50,7 +51,7 @@ public class Constants
     public static final Set<String> ALLOWED_OPERATORS_IN_OPERATION = Set.of(PLUS_ID, MINUS_ID, TIMES_ID, DIVIDE_ID, POWER_ID, ASSIGN_ID);
     public static final Set<String> UNARY_OPERATORS = Set.of(PLUS_ID, MINUS_ID);
     public static final Set<String> ROUND_BRACKETS = Set.of(ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID);
-    public static final Set<String> STATEMENT_ENDERS = Set.of(NEWLINE_ID, FINISH_STATEMENT_ID);
+    public static final Set<String> STATEMENT_TERMINATORS = Set.of(NEWLINE_ID, STATEMENT_TERMINATOR_ID);
 
 
     static
@@ -129,7 +130,7 @@ public class Constants
         OPERATORS.put(",", COMMA_ID);
         OPERATORS.put(".", "DOT");
         OPERATORS.put(":", COLON_ID);
-        OPERATORS.put(";", FINISH_STATEMENT_ID);
+        OPERATORS.put(";", STATEMENT_TERMINATOR_ID);
         OPERATORS.put("" + SPACE, SPACE_ID);
         OPERATORS.put("" + CONTINUE_LINE, CONTINUE_LINE_ID);
         OPERATORS.put("" + NEWLINE, NEWLINE_ID);

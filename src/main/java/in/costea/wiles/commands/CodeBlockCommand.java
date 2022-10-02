@@ -15,7 +15,7 @@ import static in.costea.wiles.statics.Constants.*;
 
 public class CodeBlockCommand extends AbstractCommand
 {
-    private final List<OperationCommand> components = new ArrayList<>();
+    private final List<ExpressionCommand> components = new ArrayList<>();
     private final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
     private final boolean standAlone;
 
@@ -32,7 +32,7 @@ public class CodeBlockCommand extends AbstractCommand
     }
 
     @Override
-    public List<OperationCommand> getComponents()
+    public List<ExpressionCommand> getComponents()
     {
         return components;
     }
@@ -40,47 +40,65 @@ public class CodeBlockCommand extends AbstractCommand
     private void readRestOfLineIgnoringErrors()
     {
         final boolean stopAtEndBlock = !standAlone;
-        transmitter.readUntilIgnoringErrors(x -> STATEMENT_ENDERS.contains(x) || (stopAtEndBlock && x.equals(END_BLOCK_ID)));
+        transmitter.readUntilIgnoringErrors(x -> STATEMENT_TERMINATORS.contains(x) || (stopAtEndBlock && x.equals(END_BLOCK_ID)));
+    }
+
+    private void readOneStatement() throws CompilationException {
+        if (transmitter.expectMaybe(tokenOf(isContainedIn(STATEMENT_TERMINATORS)).dontIgnoreNewLine()).isPresent())
+            return;
+        ExpressionCommand expressionCommand;
+        boolean innerOperation = transmitter.expectMaybe(tokenOf(ROUND_BRACKET_START_ID)).isPresent();
+
+        var optionalToken=transmitter.expectMaybe(tokenOf(isContainedIn(UNARY_OPERATORS)).or(IS_IDENTIFIER));
+        if (optionalToken.isPresent())
+            expressionCommand = new ExpressionCommand(optionalToken.get(), transmitter, innerOperation);
+        else
+        {
+            optionalToken=transmitter.expectMaybe(tokenOf(DECLARE_METHOD_ID));
+            if (standAlone && optionalToken.isPresent())
+                throw new UnexpectedTokenException("Cannot declare method in body-only mode!", optionalToken.get().location());
+            else
+            {
+                Token token=transmitter.expect(tokenOf(ANYTHING));
+                throw new UnexpectedTokenException(TOKENS_INVERSE.get(token.content()), token.location());
+            }
+        }
+
+        CompilationExceptionsCollection newExceptions = expressionCommand.process();
+        exceptions.add(newExceptions);
+        components.add(expressionCommand);
+        if (newExceptions.size() > 0)
+            readRestOfLineIgnoringErrors();
     }
 
     @Override
     public CompilationExceptionsCollection process()
     {
-        while (!transmitter.tokensExhausted())
+        try
         {
-            try
+            if (!standAlone && transmitter.expectMaybe(tokenOf(DO_ID)).isPresent())
             {
-                Token token = transmitter.expect(REQUEST_FIRST_TOKEN);
-                if (token.content().equals(END_BLOCK_ID) && !standAlone)
-                    break;
-                transmitter.removeToken();
-                if (STATEMENT_ENDERS.contains(token.content()))
-                    continue;
-                OperationCommand operationCommand;
-                boolean innerOperation=false;
-                if (token.content().equals(ROUND_BRACKET_START_ID))
+                if(transmitter.expectMaybe(tokenOf(NOTHING_ID)).isEmpty())
                 {
-                    token = transmitter.expect(tokenOf(ANYTHING).withErrorMessage("Unexpected operation end!"));
-                    innerOperation=true;
+                    readOneStatement();
                 }
-                if (UNARY_OPERATORS.contains(token.content()) || !TOKENS.containsValue(token.content()))
-                {
-                    operationCommand = new OperationCommand(token, transmitter, innerOperation);
-                }
-                else if (standAlone && token.content().equals(DECLARE_METHOD_ID))
-                    throw new UnexpectedTokenException("Cannot declare method in body-only mode!", token.location());
-                else throw new UnexpectedTokenException(TOKENS_INVERSE.get(token.content()), token.location());
-                CompilationExceptionsCollection newExceptions = operationCommand.process();
-                exceptions.add(newExceptions);
-                components.add(operationCommand);
-                if (newExceptions.size() > 0)
-                    readRestOfLineIgnoringErrors();
+                return exceptions;
             }
-            catch (CompilationException ex)
+            else
             {
-                exceptions.add(ex);
-                readRestOfLineIgnoringErrors();
+                if(!standAlone)
+                    transmitter.expect(tokenOf(START_BLOCK_ID));
+                while(!transmitter.tokensExhausted() &&
+                        (standAlone || transmitter.expectMaybe(tokenOf(END_BLOCK_ID).removeTokenWhen(NEVER)).isEmpty()))
+                    readOneStatement();
+                if(!standAlone)
+                    transmitter.expect(tokenOf(END_BLOCK_ID));
             }
+        }
+        catch (CompilationException ex)
+        {
+            exceptions.add(ex);
+            readRestOfLineIgnoringErrors();
         }
         return exceptions;
     }

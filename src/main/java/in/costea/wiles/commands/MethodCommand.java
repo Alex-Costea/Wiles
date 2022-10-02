@@ -24,6 +24,7 @@ public class MethodCommand extends AbstractCommand
     {
         super(transmitter);
         returnType = new TypeDefinitionCommand(transmitter);
+        methodBody = new CodeBlockCommand(transmitter, false);
         returnType.name = NOTHING_ID;
     }
 
@@ -80,23 +81,13 @@ public class MethodCommand extends AbstractCommand
                 exceptions.add(returnType.process());
             }
 
-            //Method body
-            if (transmitter.expectMaybe(tokenOf(NOTHING_ID)).isPresent())
-            {
-                methodBody = new CodeBlockCommand(transmitter, false);
-                return exceptions;
-            }
-            transmitter.expect(tokenOf(START_BLOCK_ID));
-            methodBody = new CodeBlockCommand(transmitter, false);
+            //Read body
             exceptions.add(methodBody.process());
-            transmitter.expect(tokenOf(END_BLOCK_ID));
         }
         catch (CompilationException ex)
         {
             exceptions.add(ex);
             transmitter.readUntilIgnoringErrors(x -> x.equals(END_BLOCK_ID));
-            if (!transmitter.tokensExhausted())
-                transmitter.removeToken();
         }
         return exceptions;
     }

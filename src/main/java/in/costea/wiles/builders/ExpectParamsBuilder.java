@@ -19,8 +19,6 @@ public class ExpectParamsBuilder
     public static final WhenRemoveToken NEVER=WhenRemoveToken.Never;
     public static final Predicate<String> ANYTHING = (x) -> true;
 
-    public static final ExpectParamsBuilder REQUEST_FIRST_TOKEN = tokenOf(ANYTHING).removeTokenWhen(NEVER).dontIgnoreNewLine();
-
     public static Predicate<String> isContainedIn(Collection<String> set)
     {
         return set::contains;
