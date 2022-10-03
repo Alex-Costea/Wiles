@@ -39,8 +39,7 @@ public class TypeDefinitionCommand extends AbstractCommand
     {
         try
         {
-            Token token = transmitter.expect(tokenOf(isContainedIn(TYPES.keySet())).removeTokenWhen(ALWAYS).
-                    withErrorMessage("Type expected!"));
+            Token token = transmitter.expect(tokenOf(isContainedIn(TYPES.keySet())).withErrorMessage("Type expected!"));
             name = TYPES.get(token.content());
             assert name!=null;
         }

@@ -65,8 +65,7 @@ public class ExpressionCommand extends AbstractCommand {
     private void addInnerExpression(ExpressionType expressionType, boolean flatten) throws AbstractCompilationException
     {
         Token newToken = transmitter.expect(tokenOf(isContainedIn(UNARY_OPERATORS)).or(IS_LITERAL)
-                .or(isContainedIn(BRACKETS)).removeTokenWhen(ALWAYS)
-                .withErrorMessage("Identifier or unary operator expected!"));
+                .or(isContainedIn(BRACKETS)).withErrorMessage("Identifier or unary operator expected!"));
         var newExpression = new ExpressionCommand(newToken, transmitter, expressionType);
         var newExceptions = newExpression.process();
         if (newExceptions.size() > 0)
@@ -120,8 +119,7 @@ public class ExpressionCommand extends AbstractCommand {
 
             if (expectNext==ExpectNext.OPERATOR)
                 mainToken = transmitter.expect(tokenOf(isContainedIn(BRACKETS))
-                        .or(isContainedIn(INFIX_OPERATORS))
-                        .withErrorMessage("Operator expected!").removeTokenWhen(ALWAYS));
+                        .or(isContainedIn(INFIX_OPERATORS)).withErrorMessage("Operator expected!"));
             else
                 mainToken = transmitter.expect(tokenOf(isContainedIn(BRACKETS)).or(isContainedIn(UNARY_OPERATORS))
                         .or(IS_LITERAL).withErrorMessage("Identifier or unary operator expected!").removeTokenWhen(ALWAYS));

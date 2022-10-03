@@ -22,7 +22,7 @@ public class Constants
     public static final String SQUARE_BRACKET_END_ID = "SQUARE_BRACKET_END";
     public static final String DECLARE_METHOD_ID = "DECLARE_METHOD";
     public static final String STATEMENT_TERMINATOR_ID = "TERMINATOR";
-    public static final String CONTINUE_LINE_ID = "CONTINUE_LINE";
+    public static final String BACKSLASH_ID = "BACKSLASH";
     public static final String PLUS_ID = "PLUS";
     public static final String MINUS_ID = "MINUS";
     public static final String TIMES_ID = "TIMES";
@@ -142,7 +142,7 @@ public class Constants
         OPERATORS.put(":", COLON_ID);
         OPERATORS.put(";", STATEMENT_TERMINATOR_ID);
         OPERATORS.put("" + SPACE, SPACE_ID);
-        OPERATORS.put("" + CONTINUE_LINE, CONTINUE_LINE_ID);
+        OPERATORS.put("" + CONTINUE_LINE, BACKSLASH_ID);
         OPERATORS.put("" + NEWLINE, NEWLINE_ID);
 
         if (DEBUG)

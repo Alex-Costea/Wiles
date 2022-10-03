@@ -13,8 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import static in.costea.wiles.builders.ExpectParamsBuilder.ALWAYS;
-import static in.costea.wiles.builders.ExpectParamsBuilder.NEVER;
+import static in.costea.wiles.builders.ExpectParamsBuilder.*;
 import static in.costea.wiles.statics.Constants.*;
 
 public class TokenTransmitter
@@ -44,6 +43,8 @@ public class TokenTransmitter
     public Token expect(ExpectParamsBuilder params) throws UnexpectedEndException, UnexpectedTokenException, TokenExpectedException {
         String message = params.getErrorMessage();
         boolean succeeded = false;
+        if(params.getWhenRemoveToken()==DEFAULT)
+            params.removeTokenWhen(ALWAYS);
         try
         {
             if(tokensExhausted())
@@ -62,9 +63,6 @@ public class TokenTransmitter
             }
 
             token=tokens.getFirst();
-            if (token.content().equals(CONTINUE_LINE_ID))
-                throw new UnexpectedTokenException("" + CONTINUE_LINE, token.location());
-
             Predicate<String> foundTest= params.getFoundTest();
             if (!foundTest.test(token.content()))
                 throw new TokenExpectedException(message, token.location());
@@ -85,6 +83,8 @@ public class TokenTransmitter
     {
         try
         {
+            if(expectParamsBuilder.getWhenRemoveToken()==DEFAULT)
+                expectParamsBuilder.removeTokenWhen(WHEN_FOUND);
             return Optional.of(expect(expectParamsBuilder));
         }
         catch (TokenExpectedException | UnexpectedEndException ex)

@@ -58,8 +58,8 @@ public class MethodCommand extends AbstractCommand
     {
         try
         {
-            name = transmitter.expect(tokenOf(IS_IDENTIFIER).withErrorMessage("Expected method name!")).
-                    content().substring(1);
+            name = transmitter.expect(tokenOf(IS_IDENTIFIER).withErrorMessage("Expected method name!"))
+                    .content().substring(1);
 
             //Parameters list
             transmitter.expect(tokenOf(ROUND_BRACKET_START_ID));

@@ -56,7 +56,7 @@ public class InputToTokensConverter
                 {
                     String id = readOperator();
                     int size = tokens.size();
-                    if (size > 0 && id.equals(NEWLINE_ID) && tokens.get(size - 1).content().equals(CONTINUE_LINE_ID))
+                    if (size > 0 && id.equals(NEWLINE_ID) && tokens.get(size - 1).content().equals(BACKSLASH_ID))
                     {
                         tokens.remove(size - 1);
                         addNewLine();

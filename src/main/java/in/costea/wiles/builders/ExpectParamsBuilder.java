@@ -12,10 +12,12 @@ public class ExpectParamsBuilder
     private enum WhenRemoveToken {
         Always,
         WhenFound,
-        Never
+        Never,
+        Default
     }
     public static final WhenRemoveToken ALWAYS=WhenRemoveToken.Always;
     public static final WhenRemoveToken WHEN_FOUND=WhenRemoveToken.WhenFound;
+    public static final WhenRemoveToken DEFAULT=WhenRemoveToken.Default;
     public static final WhenRemoveToken NEVER=WhenRemoveToken.Never;
     public static final Predicate<String> ANYTHING = (x) -> true;
 
@@ -39,7 +41,7 @@ public class ExpectParamsBuilder
 
     private Predicate<String> foundTest;
     private String errorMessage = "Shouldn't happen";
-    private WhenRemoveToken when = WHEN_FOUND;
+    private WhenRemoveToken when = DEFAULT;
     private boolean ignoringNewLine = true;
 
     private ExpectParamsBuilder(Predicate<String> foundTest)
