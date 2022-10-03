@@ -65,7 +65,7 @@ public class ExpressionCommand extends AbstractCommand {
     private void addInnerExpression(ExpressionType expressionType, boolean flatten) throws AbstractCompilationException
     {
         Token newToken = transmitter.expect(tokenOf(isContainedIn(UNARY_OPERATORS)).or(IS_LITERAL)
-                .or(isContainedIn(BRACKETS))
+                .or(isContainedIn(BRACKETS)).removeTokenWhen(ALWAYS)
                 .withErrorMessage("Identifier or unary operator expected!"));
         var newExpression = new ExpressionCommand(newToken, transmitter, expressionType);
         var newExceptions = newExpression.process();
@@ -76,41 +76,28 @@ public class ExpressionCommand extends AbstractCommand {
         else components.add(newExpression.components.get(0));
     }
 
-    private void addInnerExpression() throws AbstractCompilationException {
-        addInnerExpression(ExpressionCommand.INSIDE_ROUND,true);
-    }
-
     // Method assumes first token is valid in an expression
     private void processFirstToken() throws AbstractCompilationException
     {
-        boolean isUnaryOperator=UNARY_OPERATORS.contains(firstToken.content());
+        boolean isUnaryOperator = UNARY_OPERATORS.contains(firstToken.content());
         boolean isOperator =  isUnaryOperator || INFIX_OPERATORS.contains(firstToken.content());
         expectNext = isOperator?ExpectNext.TOKEN:ExpectNext.OPERATOR;
+
         if (isUnaryOperator)
             if (!firstToken.content().equals(NOT_ID))
                 components.add(new TokenCommand(transmitter, new Token("" + NUM_START + "0", firstToken.location())));
         components.add(new TokenCommand(transmitter, firstToken));
 
         String content = firstToken.content();
-
         if (content.equals(ROUND_BRACKET_START_ID))
         {
             components.remove(0);
-            addInnerExpression();
+            addInnerExpression(INSIDE_ROUND,true);
             expectNext = ExpectNext.OPERATOR;
         }
 
-        if (content.equals(STATEMENT_TERMINATOR_ID))
-            throw new UnexpectedTokenException(TOKENS_INVERSE.get(STATEMENT_TERMINATOR_ID), firstToken.location());
-
-        if (content.equals(ROUND_BRACKET_END_ID))
+        if (content.equals(ROUND_BRACKET_END_ID) || content.equals(SQUARE_BRACKET_END_ID))
             throw new UnexpectedTokenException("Parentheses must have body!", firstToken.location());
-
-        if (content.equals(SQUARE_BRACKET_END_ID)) //probably shouldn't be here
-            throw new UnexpectedTokenException("Parentheses must have body!", firstToken.location());
-
-        if(isOperator && content.startsWith(IDENTIFIER_START))
-            throw new UnexpectedTokenException("Identifier expected!",firstToken.location());
     }
 
     private void verifyOtherTokens() throws AbstractCompilationException
@@ -118,10 +105,12 @@ public class ExpressionCommand extends AbstractCommand {
         Token mainToken=firstToken;
         while (!transmitter.tokensExhausted())
         {
+            // finalize expression at newline/semicolon if correctly finalized
             if ((expectNext==ExpectNext.OPERATOR) && expressionType == REGULAR &&
                     transmitter.expectMaybe(tokenOf(isContainedIn(STATEMENT_TERMINATORS)).dontIgnoreNewLine()).isPresent())
-                break; //finalize expression
+                break;
 
+            // finalize expression at "end" if correct
             var tempToken=transmitter.expectMaybe(tokenOf(END_BLOCK_ID).removeTokenWhen(NEVER));
             if (tempToken.isPresent()) {
                 if (expressionType == REGULAR)
@@ -137,10 +126,10 @@ public class ExpressionCommand extends AbstractCommand {
             if (expectNext==ExpectNext.OPERATOR)
                 mainToken = transmitter.expect(tokenOf(isContainedIn(BRACKETS))
                         .or(isContainedIn(INFIX_OPERATORS))
-                        .withErrorMessage("Operator expected!"));
+                        .withErrorMessage("Operator expected!").removeTokenWhen(ALWAYS));
             else
                 mainToken = transmitter.expect(tokenOf(isContainedIn(BRACKETS)).or(isContainedIn(UNARY_OPERATORS))
-                        .or(IS_LITERAL).withErrorMessage("Identifier or unary operator expected!"));
+                        .or(IS_LITERAL).withErrorMessage("Identifier or unary operator expected!").removeTokenWhen(ALWAYS));
 
             var ex=new UnexpectedTokenException("Brackets don't close properly", mainToken.location());
             if (mainToken.content().equals(ROUND_BRACKET_END_ID))
@@ -172,7 +161,7 @@ public class ExpressionCommand extends AbstractCommand {
                 expectNext = expectNext==ExpectNext.OPERATOR?ExpectNext.TOKEN:ExpectNext.OPERATOR;
 
             if (mainToken.content().equals(ROUND_BRACKET_START_ID)) //inner expression, not method call
-                addInnerExpression();
+                addInnerExpression(INSIDE_ROUND,true);
             else components.add(new TokenCommand(transmitter, mainToken));
         }
 

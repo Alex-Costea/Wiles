@@ -37,12 +37,6 @@ public class CodeBlockCommand extends AbstractCommand
         return components;
     }
 
-    private void readRestOfLineIgnoringErrors()
-    {
-        final boolean stopAtEndBlock = !standAlone;
-        transmitter.forceReadUntil(x -> STATEMENT_TERMINATORS.contains(x) || (stopAtEndBlock && x.equals(END_BLOCK_ID)));
-    }
-
     private void readOneStatement() throws AbstractCompilationException {
         if (transmitter.expectMaybe(tokenOf(isContainedIn(STATEMENT_TERMINATORS)).dontIgnoreNewLine()).isPresent())
             return;
@@ -67,8 +61,6 @@ public class CodeBlockCommand extends AbstractCommand
         CompilationExceptionsCollection newExceptions = expressionCommand.process();
         exceptions.add(newExceptions);
         components.add(expressionCommand);
-        if (newExceptions.size() > 0)
-            readRestOfLineIgnoringErrors();
     }
 
     @Override
@@ -100,7 +92,6 @@ public class CodeBlockCommand extends AbstractCommand
         catch (AbstractCompilationException ex)
         {
             exceptions.add(ex);
-            readRestOfLineIgnoringErrors();
         }
         return exceptions;
     }

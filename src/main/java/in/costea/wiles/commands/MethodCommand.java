@@ -87,7 +87,6 @@ public class MethodCommand extends AbstractCommand
         catch (AbstractCompilationException ex)
         {
             exceptions.add(ex);
-            transmitter.forceReadUntil(x -> x.equals(END_BLOCK_ID));
         }
         return exceptions;
     }

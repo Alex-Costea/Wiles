@@ -30,21 +30,10 @@ public class TokenTransmitter
         else lastLocation = null;
     }
 
-    public void forceReadUntil(Predicate<String> stop)
-    {
-        Token token;
-        while(!tokensExhausted())
-        {
-            token = popToken();
-            if (stop.test(token.content()))
-                return;
-        }
-    }
-
-    private Token popToken() {
+    private void removeToken() {
         if (tokensExhausted())
             throw new IllegalStateException("Tokens exhausted!");
-        return tokens.pop();
+        tokens.pop();
     }
 
     public boolean tokensExhausted()
@@ -68,7 +57,7 @@ public class TokenTransmitter
                 {
                     if (tokensExhausted())
                         throw new UnexpectedEndException(message, token.location());
-                    popToken();
+                    removeToken();
                 }
             }
 
@@ -88,7 +77,7 @@ public class TokenTransmitter
             var whenRemoveToken = params.getWhenRemoveToken();
             if((!succeeded && whenRemoveToken == ALWAYS) || (succeeded && whenRemoveToken != NEVER))
                 if(!tokensExhausted())
-                    popToken();
+                    removeToken();
         }
     }
 

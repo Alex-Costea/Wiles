@@ -63,8 +63,8 @@ public class Constants
     public static final Set<String> INFIX_OPERATORS = Set.of(
             PLUS_ID, MINUS_ID, TIMES_ID, DIVIDE_ID, POWER_ID, ASSIGN_ID,
             EQUALS_ID,LARGER_ID,SMALLER_ID,LARGER_EQUALS_ID,SMALLER_EQUALS_ID,NOT_EQUAL_ID,
-            DOT_ID, COMMA_ID, AND_ID,OR_ID);
-    public static final Set<String> UNARY_OPERATORS = Set.of(PLUS_ID, MINUS_ID,NOT_ID);
+            DOT_ID, COMMA_ID, AND_ID, OR_ID);
+    public static final Set<String> UNARY_OPERATORS = Set.of(PLUS_ID, MINUS_ID, NOT_ID);
     public static final Set<String> BRACKETS = Set.of(ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID,
             SQUARE_BRACKET_START_ID,SQUARE_BRACKET_END_ID);
     public static final Set<String> STATEMENT_TERMINATORS = Set.of(NEWLINE_ID, STATEMENT_TERMINATOR_ID);
