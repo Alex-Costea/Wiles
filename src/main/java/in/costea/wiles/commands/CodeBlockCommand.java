@@ -59,7 +59,9 @@ public class CodeBlockCommand extends AbstractCommand
         }
 
         CompilationExceptionsCollection newExceptions = expressionCommand.process();
-        exceptions.add(newExceptions);
+        if(newExceptions.size()>0)
+            throw newExceptions.get(0);
+
         components.add(expressionCommand);
     }
 

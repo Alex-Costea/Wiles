@@ -118,8 +118,7 @@ public class SyntaxTreeConverterTests
                 null,
                 TIMES_ID, "!a");
 
-        assertResults(createExceptions(new TokenExpectedException("Identifier or unary operator expected!",null),
-                        new UnexpectedTokenException(")",null)),
+        assertResults(createExceptions(new TokenExpectedException("Identifier or unary operator expected!",null)),
                 null,
                 "!a", PLUS_ID, ROUND_BRACKET_START_ID, "BREAK", ROUND_BRACKET_END_ID);
     }

@@ -118,11 +118,6 @@ public class ExpressionCommand extends AbstractCommand {
                 else throw new UnexpectedTokenException("end", tempToken.get().location());
             }
 
-            tempToken=transmitter.expectMaybe(tokenOf(STATEMENT_TERMINATOR_ID));
-            if (tempToken.isPresent())
-                throw new UnexpectedTokenException(";", tempToken.get().location());
-
-
             if (expectNext==ExpectNext.OPERATOR)
                 mainToken = transmitter.expect(tokenOf(isContainedIn(BRACKETS))
                         .or(isContainedIn(INFIX_OPERATORS))
@@ -131,16 +126,15 @@ public class ExpressionCommand extends AbstractCommand {
                 mainToken = transmitter.expect(tokenOf(isContainedIn(BRACKETS)).or(isContainedIn(UNARY_OPERATORS))
                         .or(IS_LITERAL).withErrorMessage("Identifier or unary operator expected!").removeTokenWhen(ALWAYS));
 
-            var ex=new UnexpectedTokenException("Brackets don't close properly", mainToken.location());
             if (mainToken.content().equals(ROUND_BRACKET_END_ID))
             {
                 if (expressionType == INSIDE_ROUND) break; //end of inner statement
-                else throw ex;
+                else throw new UnexpectedTokenException("Brackets don't close properly", mainToken.location());
             }
             if (mainToken.content().equals(SQUARE_BRACKET_END_ID))
             {
                 if (expressionType == INSIDE_SQUARE) break; //end of inner statement
-                else throw ex;
+                else throw new UnexpectedTokenException("Brackets don't close properly", mainToken.location());
             }
 
             if ((expectNext==ExpectNext.OPERATOR) && mainToken.content().equals(ROUND_BRACKET_START_ID))
