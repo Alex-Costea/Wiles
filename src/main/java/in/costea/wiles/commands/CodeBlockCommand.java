@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static in.costea.wiles.builders.ExpectParamsBuilder.*;
+import static in.costea.wiles.commands.ExpressionCommand.*;
 import static in.costea.wiles.statics.Constants.*;
 
 public class CodeBlockCommand extends AbstractCommand
@@ -46,11 +47,11 @@ public class CodeBlockCommand extends AbstractCommand
         if (transmitter.expectMaybe(tokenOf(isContainedIn(STATEMENT_TERMINATORS)).dontIgnoreNewLine()).isPresent())
             return;
         ExpressionCommand expressionCommand;
-        boolean innerOperation = transmitter.expectMaybe(tokenOf(ROUND_BRACKET_START_ID)).isPresent();
+        boolean innerExpression = transmitter.expectMaybe(tokenOf(ROUND_BRACKET_START_ID)).isPresent();
 
-        var optionalToken=transmitter.expectMaybe(tokenOf(isContainedIn(UNARY_OPERATORS)).or(IS_IDENTIFIER));
+        var optionalToken=transmitter.expectMaybe(tokenOf(isContainedIn(UNARY_OPERATORS)).or(IS_LITERAL));
         if (optionalToken.isPresent())
-            expressionCommand = new ExpressionCommand(optionalToken.get(), transmitter, innerOperation);
+            expressionCommand = new ExpressionCommand(optionalToken.get(), transmitter, innerExpression?INSIDE_ROUND:REGULAR);
         else
         {
             optionalToken=transmitter.expectMaybe(tokenOf(DECLARE_METHOD_ID));

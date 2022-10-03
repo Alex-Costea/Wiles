@@ -71,7 +71,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Method type: `method[param1,param2][return_type]`
 - Classes with `class` keyword. Internally, maybe something like `dict[text,method]`?
 - Declare fields `readonly` for getter with no setter, `public` for getter and setter
-- Direct field access is impossible, instead it is trasferred to getters/setters
+- Direct field access is impossible, instead it is transferred to getters/setters
 - Methods calling with named parameters: `range(1,10)` or `range(from: 1, to: 10)`
 - Warnings, e.g. unreachable code
 - Garbage collection
@@ -102,7 +102,7 @@ method min(list: list[int]) : optional[int]
 begin
     if list.size = 0 do
         yield nothing 
-    min := list.get(0)
+    min := list[0]
     for x in list do
         if x < min do
             min := x

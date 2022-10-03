@@ -71,6 +71,13 @@ public class ExpectParamsBuilder
         return this;
     }
 
+    @SuppressWarnings("unused")
+    public ExpectParamsBuilder or(String token)
+    {
+        foundTest = foundTest.or(x->x.equals(token));
+        return this;
+    }
+
     public Predicate<String> getFoundTest() {
         return foundTest;
     }

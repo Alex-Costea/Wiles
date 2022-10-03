@@ -8,12 +8,12 @@ import in.costea.wiles.statics.Constants;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TokenCommand extends ExpressionCommand {
+public class TokenCommand extends AbstractCommand{
     private final Token token;
 
     public TokenCommand(TokenTransmitter transmitter, Token token)
     {
-        super(token,transmitter,true);
+        super(transmitter);
         this.token = token;
         name = token.content();
     }
