@@ -214,5 +214,9 @@ public class SyntaxTreeConverterTests
 
         assertResults(null,"PROGRAM(METHOD main(TYPE NOTHING; CODE_BLOCK(EXPRESSION(!a; ASSIGN; EXPRESSION SQUARE(#3; COMMA; #4; COMMA; #5)))))",
                 "!a", ASSIGN_ID, SQUARE_BRACKET_START_ID, "#3", COMMA_ID, "#4", COMMA_ID, "#5",COMMA_ID, SQUARE_BRACKET_END_ID);
+
+        assertResults(null,"PROGRAM(METHOD main(TYPE NOTHING; CODE_BLOCK(EXPRESSION(!a; ASSIGN; !b; EXPRESSION SQUARE(!c; COMMA; !d; EXPRESSION SQUARE(!e)); PLUS; !f))))",
+                "!a", ASSIGN_ID, "!b", SQUARE_BRACKET_START_ID, "!c", COMMA_ID, "!d",
+                SQUARE_BRACKET_START_ID, "!e", SQUARE_BRACKET_END_ID, SQUARE_BRACKET_END_ID, PLUS_ID, "!f");
     }
 }

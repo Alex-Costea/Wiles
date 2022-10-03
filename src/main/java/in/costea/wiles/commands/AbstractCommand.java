@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.services.TokenTransmitter;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Objects;
@@ -17,7 +18,7 @@ public abstract class AbstractCommand
     protected final TokenTransmitter transmitter;
     @JsonProperty
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    protected String name = "";
+    @NotNull protected String name = "";
 
     public AbstractCommand(TokenTransmitter transmitter)
     {
