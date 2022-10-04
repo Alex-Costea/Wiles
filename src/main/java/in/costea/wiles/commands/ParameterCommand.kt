@@ -1,46 +1,37 @@
-package in.costea.wiles.commands;
+package `in`.costea.wiles.commands
 
-import in.costea.wiles.data.CompilationExceptionsCollection;
-import in.costea.wiles.data.Token;
-import in.costea.wiles.enums.SyntaxType;
-import in.costea.wiles.exceptions.AbstractCompilationException;
-import in.costea.wiles.services.TokenTransmitter;
-import org.jetbrains.annotations.NotNull;
+import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
+import `in`.costea.wiles.data.CompilationExceptionsCollection
+import `in`.costea.wiles.data.Token
+import `in`.costea.wiles.enums.SyntaxType
+import `in`.costea.wiles.exceptions.AbstractCompilationException
+import `in`.costea.wiles.services.TokenTransmitter
+import `in`.costea.wiles.statics.Constants.COLON_ID
 
-import java.util.List;
+class ParameterCommand(transmitter: TokenTransmitter, firstToken: Token) : AbstractCommand(transmitter) {
+    private val tokenCommand: TokenCommand
+    private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
+    private var typeDefinition: TypeDefinitionCommand
 
-import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
-import static in.costea.wiles.statics.Constants.COLON_ID;
-
-public class ParameterCommand extends AbstractCommand {
-    private final TokenCommand tokenCommand;
-    private final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
-    private TypeDefinitionCommand typeDefinition;
-
-    public ParameterCommand(TokenTransmitter transmitter, Token firstToken) {
-        super(transmitter);
-        tokenCommand = new TokenCommand(transmitter, firstToken);
+    init {
+        tokenCommand = TokenCommand(transmitter, firstToken)
+        typeDefinition = TypeDefinitionCommand(transmitter)
     }
 
-    @Override
-    public @NotNull SyntaxType getType() {
-        return SyntaxType.DECLARATION;
+    override val type: SyntaxType
+        get() = SyntaxType.DECLARATION
+
+    override fun getComponents(): List<AbstractCommand> {
+        return listOf(tokenCommand, typeDefinition)
     }
 
-    @Override
-    public @NotNull List<AbstractCommand> getComponents() {
-        return List.of(tokenCommand, typeDefinition);
-    }
-
-    @Override
-    public @NotNull CompilationExceptionsCollection process() {
+    override fun process(): CompilationExceptionsCollection {
         try {
-            transmitter.expect(tokenOf(COLON_ID));
-            typeDefinition = new TypeDefinitionCommand(transmitter);
-            exceptions.addAll(typeDefinition.process());
-        } catch (AbstractCompilationException e) {
-            exceptions.add(e);
+            transmitter.expect(tokenOf(COLON_ID))
+            exceptions.addAll(typeDefinition.process())
+        } catch (e: AbstractCompilationException) {
+            exceptions.add(e)
         }
-        return exceptions;
+        return exceptions
     }
 }
