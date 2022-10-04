@@ -56,6 +56,13 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - `begin`, `end` (code blocks)
 - `anon` (marks parameters as unneeding to be named when calling method)
 
+### Named parameters
+- Methods calling with named parameters by default: `range(from <- 1, to <- 10)`
+- Naming parameters can be made optional with `anon` keyword for each parameter
+- `anon` params must always be first in declaration
+- When using one `anon` list, `my_method(a,b,c)` is the same as `my_method([a,b,c])`
+- If parameter name and value sent are the same, `my_method(name<-name)` can be simplified to `my_method(<-name)`
+
 ### Miscellaneous
 - Declaring `main` method optional when using no other methods
 - `;` can be specified or inferred from newline
@@ -65,8 +72,6 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - `\` can be used to continue a line after a newline (including string literals, not including comments)
 - Types are not reserved keywords and can be used as variable names
 - Method potentially not returning value is a compilation error
-- Methods calling with named parameters by default: `range(from <- 1, to <- 10)`
-- Naming parameters can be made optional with `anon` keyword for each parameter. `anon` params must always be first in declaration
 
 ### Potential additions (no promises!)
 - `infint` (infinite precision integer)
@@ -77,7 +82,6 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Declare fields `readonly` for getter with no setter, `public` for getter and setter
 - Direct field access is impossible, instead it is transferred to getters/setters
 - Warnings, e.g. unreachable code
-- When using one `anon` list, `my_method(a,b,c)` is sugar for `my_method([a,b,c])`
 - Garbage collection
 
 ## Examples
