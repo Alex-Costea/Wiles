@@ -63,6 +63,8 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - `\` can be used to continue a line after a newline (including string literals)
 - Types are not reserved keywords and can be used as variable names
 - Method potentially not returning value is a compilatio error
+- Methods calling with named parameters: `range(1,10)` or `range(from <- 1, to <- 10)`
+
 
 ### Potential additions (no promises!)
 - `infint` (infinite precision integer)
@@ -72,7 +74,6 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Classes with `class` keyword. Internally, maybe something like `dict[text,method]`?
 - Declare fields `readonly` for getter with no setter, `public` for getter and setter
 - Direct field access is impossible, instead it is transferred to getters/setters
-- Methods calling with named parameters: `range(1,10)` or `range(from: 1, to: 10)`
 - Warnings, e.g. unreachable code
 - Garbage collection
 
