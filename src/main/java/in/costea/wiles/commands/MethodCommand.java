@@ -5,6 +5,7 @@ import in.costea.wiles.data.Token;
 import in.costea.wiles.enums.SyntaxType;
 import in.costea.wiles.exceptions.AbstractCompilationException;
 import in.costea.wiles.services.TokenTransmitter;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ public class MethodCommand extends AbstractCommand {
     }
 
     @Override
-    public SyntaxType getType() {
+    public @NotNull SyntaxType getType() {
         return SyntaxType.METHOD;
     }
 
@@ -41,7 +42,7 @@ public class MethodCommand extends AbstractCommand {
     }
 
     @Override
-    public List<AbstractCommand> getComponents() {
+    public @NotNull List<AbstractCommand> getComponents() {
         final ArrayList<AbstractCommand> components = new ArrayList<>();
         components.add(returnType);
         components.addAll(parameters);
@@ -50,7 +51,7 @@ public class MethodCommand extends AbstractCommand {
     }
 
     @Override
-    public CompilationExceptionsCollection process() {
+    public @NotNull CompilationExceptionsCollection process() {
         try {
             name = transmitter.expect(tokenOf(IS_IDENTIFIER).withErrorMessage("Expected method name!"))
                     .getContent().substring(1);

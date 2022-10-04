@@ -5,6 +5,7 @@ import in.costea.wiles.data.Token;
 import in.costea.wiles.enums.SyntaxType;
 import in.costea.wiles.exceptions.AbstractCompilationException;
 import in.costea.wiles.services.TokenTransmitter;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -22,17 +23,17 @@ public class ParameterCommand extends AbstractCommand {
     }
 
     @Override
-    public SyntaxType getType() {
+    public @NotNull SyntaxType getType() {
         return SyntaxType.DECLARATION;
     }
 
     @Override
-    public List<AbstractCommand> getComponents() {
+    public @NotNull List<AbstractCommand> getComponents() {
         return List.of(tokenCommand, typeDefinition);
     }
 
     @Override
-    public CompilationExceptionsCollection process() {
+    public @NotNull CompilationExceptionsCollection process() {
         try {
             transmitter.expect(tokenOf(COLON_ID));
             typeDefinition = new TypeDefinitionCommand(transmitter);

@@ -5,6 +5,7 @@ import in.costea.wiles.data.Token;
 import in.costea.wiles.enums.SyntaxType;
 import in.costea.wiles.exceptions.AbstractCompilationException;
 import in.costea.wiles.services.TokenTransmitter;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,17 +23,17 @@ public class TypeDefinitionCommand extends AbstractCommand {
     }
 
     @Override
-    public SyntaxType getType() {
+    public @NotNull SyntaxType getType() {
         return SyntaxType.TYPE;
     }
 
     @Override
-    public List<? extends AbstractCommand> getComponents() {
+    public @NotNull List<AbstractCommand> getComponents() {
         return new ArrayList<>();
     }
 
     @Override
-    public CompilationExceptionsCollection process() {
+    public @NotNull CompilationExceptionsCollection process() {
         try {
             Token token = transmitter.expect(tokenOf(isContainedIn(TYPES.keySet())).withErrorMessage("Type expected!"));
             name = TYPES.get(token.getContent());

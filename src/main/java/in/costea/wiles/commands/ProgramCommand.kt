@@ -1,59 +1,47 @@
-package in.costea.wiles.commands;
+package `in`.costea.wiles.commands
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import in.costea.wiles.data.CompilationExceptionsCollection;
-import in.costea.wiles.enums.SyntaxType;
-import in.costea.wiles.exceptions.AbstractCompilationException;
-import in.costea.wiles.services.TokenTransmitter;
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonProperty
+import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
+import `in`.costea.wiles.data.CompilationExceptionsCollection
+import `in`.costea.wiles.enums.SyntaxType
+import `in`.costea.wiles.exceptions.AbstractCompilationException
+import `in`.costea.wiles.services.TokenTransmitter
+import `in`.costea.wiles.statics.Constants.DECLARE_METHOD_ID
 
-import java.util.ArrayList;
-import java.util.List;
+class ProgramCommand(transmitter: TokenTransmitter) : AbstractCommand(transmitter) {
+    private val components: MutableList<MethodCommand> = ArrayList()
+    private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
 
-import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
-import static in.costea.wiles.statics.Constants.DECLARE_METHOD_ID;
-
-public class ProgramCommand extends AbstractCommand {
-    private final List<MethodCommand> components = new ArrayList<>();
-    private final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
     @JsonProperty
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    protected Boolean compiledSuccessfully = null;
+    var compiledSuccessfully: Boolean? = null
+    override val type: SyntaxType
+        get() = SyntaxType.PROGRAM
 
-    public ProgramCommand(TokenTransmitter transmitter) {
-        super(transmitter);
+    override fun getComponents(): List<MethodCommand> {
+        return components
     }
 
-    @Override
-    public SyntaxType getType() {
-        return SyntaxType.PROGRAM;
+    fun addMethod(command: MethodCommand) {
+        components.add(command)
     }
 
-    @Override
-    public List<MethodCommand> getComponents() {
-        return components;
-    }
-
-    public void addMethod(MethodCommand command) {
-        components.add(command);
-    }
-
-    @Override
-    public CompilationExceptionsCollection process() {
+    override fun process(): CompilationExceptionsCollection {
         try {
             while (!transmitter.tokensExhausted()) {
-                transmitter.expect(tokenOf(DECLARE_METHOD_ID));
-                var methodCommand = new MethodCommand(transmitter);
-                exceptions.addAll(methodCommand.process());
-                components.add(methodCommand);
+                transmitter.expect(tokenOf(DECLARE_METHOD_ID))
+                val methodCommand = MethodCommand(transmitter)
+                exceptions.addAll(methodCommand.process())
+                components.add(methodCommand)
             }
-        } catch (AbstractCompilationException ex) {
-            exceptions.add(ex);
+        } catch (ex: AbstractCompilationException) {
+            exceptions.add(ex)
         }
-        return exceptions;
+        return exceptions
     }
 
-    public void setCompiledSuccessfully(boolean compiledSuccessfully) {
-        this.compiledSuccessfully = compiledSuccessfully;
+    fun setCompiledSuccessfully(compiledSuccessfully: Boolean) {
+        this.compiledSuccessfully = compiledSuccessfully
     }
 }
