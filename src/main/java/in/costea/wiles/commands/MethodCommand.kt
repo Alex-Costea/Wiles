@@ -1,84 +1,79 @@
-package in.costea.wiles.commands;
+package `in`.costea.wiles.commands
 
-import in.costea.wiles.data.CompilationExceptionsCollection;
-import in.costea.wiles.data.Token;
-import in.costea.wiles.enums.SyntaxType;
-import in.costea.wiles.exceptions.AbstractCompilationException;
-import in.costea.wiles.services.TokenTransmitter;
-import org.jetbrains.annotations.NotNull;
+import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
+import `in`.costea.wiles.data.CompilationExceptionsCollection
+import `in`.costea.wiles.data.Token
+import `in`.costea.wiles.enums.SyntaxType
+import `in`.costea.wiles.exceptions.AbstractCompilationException
+import `in`.costea.wiles.services.TokenTransmitter
+import `in`.costea.wiles.statics.Constants.COLON_ID
+import `in`.costea.wiles.statics.Constants.COMMA_ID
+import `in`.costea.wiles.statics.Constants.IS_IDENTIFIER
+import `in`.costea.wiles.statics.Constants.NOTHING_ID
+import `in`.costea.wiles.statics.Constants.ROUND_BRACKET_END_ID
+import `in`.costea.wiles.statics.Constants.ROUND_BRACKET_START_ID
+import java.util.*
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+class MethodCommand(transmitter: TokenTransmitter) : AbstractCommand(transmitter) {
+    private val parameters: MutableList<ParameterCommand> = ArrayList()
+    private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
 
-import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
-import static in.costea.wiles.statics.Constants.*;
-
-public class MethodCommand extends AbstractCommand {
-    private final List<ParameterCommand> parameters = new ArrayList<>();
-    private final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
     //private final List<AbstractCommand> components = new ArrayList<>();
-    private TypeDefinitionCommand returnType;
-    private CodeBlockCommand methodBody;
+    private var returnType: TypeDefinitionCommand
+    private var methodBody: CodeBlockCommand
 
-    public MethodCommand(TokenTransmitter transmitter) {
-        super(transmitter);
-        returnType = new TypeDefinitionCommand(transmitter);
-        methodBody = new CodeBlockCommand(transmitter, false);
-        returnType.name = NOTHING_ID;
+    init {
+        returnType = TypeDefinitionCommand(transmitter)
+        methodBody = CodeBlockCommand(transmitter, false)
+        returnType.name = NOTHING_ID
     }
 
-    public void setMethodName(String methodName) {
-        name = methodName;
+    fun setMethodName(methodName: String) {
+        name = methodName
     }
 
-    @Override
-    public @NotNull SyntaxType getType() {
-        return SyntaxType.METHOD;
+    override val type: SyntaxType
+        get() = SyntaxType.METHOD
+
+    fun setMethodBody(methodBody: CodeBlockCommand) {
+        this.methodBody = methodBody
     }
 
-    public void setMethodBody(CodeBlockCommand methodBody) {
-        this.methodBody = methodBody;
+    override fun getComponents(): List<AbstractCommand> {
+        val components = ArrayList<AbstractCommand>()
+        components.add(returnType)
+        components.addAll(parameters)
+        components.add(methodBody)
+        return components
     }
 
-    @Override
-    public @NotNull List<AbstractCommand> getComponents() {
-        final ArrayList<AbstractCommand> components = new ArrayList<>();
-        components.add(returnType);
-        components.addAll(parameters);
-        components.add(methodBody);
-        return components;
-    }
-
-    @Override
-    public @NotNull CompilationExceptionsCollection process() {
+    override fun process(): CompilationExceptionsCollection {
         try {
             name = transmitter.expect(tokenOf(IS_IDENTIFIER).withErrorMessage("Expected method name!"))
-                    .getContent().substring(1);
+                .content.substring(1)
 
             //Parameters list
-            transmitter.expect(tokenOf(ROUND_BRACKET_START_ID));
-            Optional<Token> maybeToken;
-            while ((maybeToken = transmitter.expectMaybe(tokenOf(IS_IDENTIFIER))).isPresent()) {
-                var parameterCommand = new ParameterCommand(transmitter, maybeToken.get());
-                exceptions.addAll(parameterCommand.process());
-                parameters.add(parameterCommand);
-                if (transmitter.expectMaybe(tokenOf(COMMA_ID)).isEmpty())
-                    break;
+            transmitter.expect(tokenOf(ROUND_BRACKET_START_ID))
+            var maybeToken: Optional<Token>
+            while (transmitter.expectMaybe(tokenOf(IS_IDENTIFIER)).also{ maybeToken = it }.isPresent) {
+                val parameterCommand = ParameterCommand(transmitter, maybeToken.get())
+                exceptions.addAll(parameterCommand.process())
+                parameters.add(parameterCommand)
+                if (transmitter.expectMaybe(tokenOf(COMMA_ID)).isEmpty) break
             }
-            transmitter.expect(tokenOf(ROUND_BRACKET_END_ID));
+            transmitter.expect(tokenOf(ROUND_BRACKET_END_ID))
 
             //Return type
-            if (transmitter.expectMaybe(tokenOf(COLON_ID)).isPresent()) {
-                returnType = new TypeDefinitionCommand(transmitter);
-                exceptions.addAll(returnType.process());
+            if (transmitter.expectMaybe(tokenOf(COLON_ID)).isPresent) {
+                returnType = TypeDefinitionCommand(transmitter)
+                exceptions.addAll(returnType.process())
             }
 
             //Read body
-            exceptions.addAll(methodBody.process());
-        } catch (AbstractCompilationException ex) {
-            exceptions.add(ex);
+            exceptions.addAll(methodBody.process())
+        } catch (ex: AbstractCompilationException) {
+            exceptions.add(ex)
         }
-        return exceptions;
+        return exceptions
     }
 }
