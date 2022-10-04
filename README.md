@@ -36,7 +36,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Value `let {var} name {: type} := value` (`var` makes it mutable, type can be inferred)
 - Conditional: `if condition [block] {otherwise [block]}`
 - For-in loop: `for x in collection [block]`
-- For-from loop: `for i from a to b` (syntactic sugar for `for i in range(a,b)`)
+- For-from loop: `for i from a to b` (syntactic sugar for `for i in range(from <- a, to <- b)`)
 - While loop: `while condition [block]`
 - Code block: `do nothing` (no operation), `do [operation]` or `begin [op1];[op2]; end`
 
@@ -62,10 +62,11 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Language is statically, strongly typed with some type inference
 - Comment using `#`
 - Returning value done with `method_name := result` or with `yield` keyword
-- `\` can be used to continue a line after a newline (including string literals)
+- `\` can be used to continue a line after a newline (including string literals, not including comments)
 - Types are not reserved keywords and can be used as variable names
-- Method potentially not returning value is a compilatio error
-- Methods calling with named parameters by default, unless `anon` keyword is used: `range(from <- 1, to <- 10)`
+- Method potentially not returning value is a compilation error
+- Methods calling with named parameters by default: `range(from <- 1, to <- 10)`
+- Naming parameters can be made optional with `anon` keyword for each parameter. `anon` params must always be first in declaration
 
 ### Potential additions (no promises!)
 - `infint` (infinite precision integer)
@@ -76,6 +77,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Declare fields `readonly` for getter with no setter, `public` for getter and setter
 - Direct field access is impossible, instead it is transferred to getters/setters
 - Warnings, e.g. unreachable code
+- When using one `anon` list, my_method([a,b,c]) = my_method(a,b,c)
 - Garbage collection
 
 ## Examples
