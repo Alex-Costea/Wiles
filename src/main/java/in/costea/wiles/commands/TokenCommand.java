@@ -14,7 +14,7 @@ public class TokenCommand extends AbstractCommand {
     public TokenCommand(TokenTransmitter transmitter, Token token) {
         super(transmitter);
         this.token = token;
-        name = token.content();
+        name = token.getContent();
     }
 
     public Token getToken() {

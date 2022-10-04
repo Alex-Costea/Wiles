@@ -60,16 +60,16 @@ public class ExpressionCommand extends AbstractCommand {
 
     // Method assumes first token is valid in an expression
     private void processFirstToken() throws AbstractCompilationException {
-        boolean isUnaryOperator = UNARY_OPERATORS.contains(firstToken.content());
-        boolean isOperator = isUnaryOperator || INFIX_OPERATORS.contains(firstToken.content());
+        boolean isUnaryOperator = UNARY_OPERATORS.contains(firstToken.getContent());
+        boolean isOperator = isUnaryOperator || INFIX_OPERATORS.contains(firstToken.getContent());
         expectNext = isOperator ? ExpectNext.TOKEN : ExpectNext.OPERATOR;
 
         if (isUnaryOperator)
-            if (!firstToken.content().equals(NOT_ID))
-                components.add(new TokenCommand(transmitter, new Token("" + NUM_START + "0", firstToken.location())));
+            if (!firstToken.getContent().equals(NOT_ID))
+                components.add(new TokenCommand(transmitter, new Token("" + NUM_START + "0", firstToken.getLocation())));
         components.add(new TokenCommand(transmitter, firstToken));
 
-        String content = firstToken.content();
+        String content = firstToken.getContent();
         if (content.equals(ROUND_BRACKET_START_ID)) {
             components.remove(0);
             addInnerExpression(INSIDE_ROUND, true);
@@ -77,7 +77,7 @@ public class ExpressionCommand extends AbstractCommand {
         }
 
         if (content.equals(ROUND_BRACKET_END_ID) || content.equals(SQUARE_BRACKET_END_ID))
-            throw new UnexpectedTokenException("Parentheses must have body!", firstToken.location());
+            throw new UnexpectedTokenException("Parentheses must have body!", firstToken.getLocation());
     }
 
     private void verifyOtherTokens() throws AbstractCompilationException {
@@ -93,7 +93,7 @@ public class ExpressionCommand extends AbstractCommand {
             if (tempToken.isPresent()) {
                 if (expressionType == REGULAR)
                     break;
-                else throw new UnexpectedTokenException("end", tempToken.get().location());
+                else throw new UnexpectedTokenException("end", tempToken.get().getLocation());
             }
 
             if (expectNext == ExpectNext.OPERATOR)
@@ -103,47 +103,47 @@ public class ExpressionCommand extends AbstractCommand {
                 mainToken = transmitter.expect(tokenOf(isContainedIn(BRACKETS)).or(isContainedIn(UNARY_OPERATORS))
                         .or(IS_LITERAL).withErrorMessage("Identifier or unary operator expected!").removeTokenWhen(WhenRemoveToken.Always));
 
-            if (mainToken.content().equals(ROUND_BRACKET_END_ID)) {
+            if (mainToken.getContent().equals(ROUND_BRACKET_END_ID)) {
                 if (expressionType == INSIDE_ROUND) break; //end of inner statement
-                else throw new UnexpectedTokenException("Brackets don't close properly", mainToken.location());
+                else throw new UnexpectedTokenException("Brackets don't close properly", mainToken.getLocation());
             }
-            if (mainToken.content().equals(SQUARE_BRACKET_END_ID)) {
+            if (mainToken.getContent().equals(SQUARE_BRACKET_END_ID)) {
                 if (expressionType == INSIDE_SQUARE) break; //end of inner statement
-                else throw new UnexpectedTokenException("Brackets don't close properly", mainToken.location());
+                else throw new UnexpectedTokenException("Brackets don't close properly", mainToken.getLocation());
             }
 
-            if ((expectNext == ExpectNext.OPERATOR) && mainToken.content().equals(ROUND_BRACKET_START_ID)) {
+            if ((expectNext == ExpectNext.OPERATOR) && mainToken.getContent().equals(ROUND_BRACKET_START_ID)) {
                 //TODO: implement
                 throw new Error("Method call not yet implemented!");
             }
-            if (mainToken.content().equals(SQUARE_BRACKET_START_ID)) {
+            if (mainToken.getContent().equals(SQUARE_BRACKET_START_ID)) {
                 addInnerExpression(INSIDE_SQUARE, false);
                 expectNext = ExpectNext.OPERATOR;
                 continue;
             }
 
-            if (expectNext == ExpectNext.TOKEN && UNARY_OPERATORS.contains(mainToken.content())) //unary +/-
-                components.add(new TokenCommand(transmitter, new Token("#0", mainToken.location())));
+            if (expectNext == ExpectNext.TOKEN && UNARY_OPERATORS.contains(mainToken.getContent())) //unary +/-
+                components.add(new TokenCommand(transmitter, new Token("#0", mainToken.getLocation())));
             else
                 expectNext = expectNext == ExpectNext.OPERATOR ? ExpectNext.TOKEN : ExpectNext.OPERATOR;
 
-            if (mainToken.content().equals(ROUND_BRACKET_START_ID)) //inner expression, not method call
+            if (mainToken.getContent().equals(ROUND_BRACKET_START_ID)) //inner expression, not method call
                 addInnerExpression(INSIDE_ROUND, true);
             else components.add(new TokenCommand(transmitter, mainToken));
         }
 
         //verifying expression finished well
-        if (expressionType == INSIDE_ROUND && exceptions.size() == 0 && !mainToken.content().equals(ROUND_BRACKET_END_ID))
-            throw new UnexpectedEndException("Closing parentheses expected", mainToken.location());
-        if (expressionType == INSIDE_SQUARE && exceptions.size() == 0 && !mainToken.content().equals(SQUARE_BRACKET_END_ID))
-            throw new UnexpectedEndException("Closing parentheses expected", mainToken.location());
+        if (expressionType == INSIDE_ROUND && exceptions.size() == 0 && !mainToken.getContent().equals(ROUND_BRACKET_END_ID))
+            throw new UnexpectedEndException("Closing parentheses expected", mainToken.getLocation());
+        if (expressionType == INSIDE_SQUARE && exceptions.size() == 0 && !mainToken.getContent().equals(SQUARE_BRACKET_END_ID))
+            throw new UnexpectedEndException("Closing parentheses expected", mainToken.getLocation());
         if (expectNext == ExpectNext.TOKEN && exceptions.size() == 0) {
             if (components.size() > 0 && components.get(components.size() - 1) instanceof TokenCommand tokenCommand)
-                if (tokenCommand.getToken().content().equals(COMMA_ID)) {
+                if (tokenCommand.getToken().getContent().equals(COMMA_ID)) {
                     components.remove(components.size() - 1);
                     return;
                 }
-            throw new UnexpectedEndException("Expression unfinished!", mainToken.location());
+            throw new UnexpectedEndException("Expression unfinished!", mainToken.getLocation());
         }
         //TODO: process order of operations and check if effect exists
     }

@@ -16,7 +16,7 @@ class TokenTransmitter(tokens: List<Token>) {
 
     init {
         this.tokens = LinkedList(tokens)
-        lastLocation = if (tokens.isNotEmpty()) tokens[tokens.size - 1].location() else null
+        lastLocation = if (tokens.isNotEmpty()) tokens[tokens.size - 1].location else null
     }
 
     private fun removeToken() {
@@ -37,15 +37,15 @@ class TokenTransmitter(tokens: List<Token>) {
         return try {
             if (tokensExhausted()) throw UnexpectedEndException(message, lastLocation)
             if (params.isIgnoringNewLine) {
-                while (tokens.first.content() == Constants.NEWLINE_ID) {
-                    if (tokensExhausted()) throw UnexpectedEndException(message, tokens.first.location())
+                while (tokens.first.content == Constants.NEWLINE_ID) {
+                    if (tokensExhausted()) throw UnexpectedEndException(message, tokens.first.location)
                     removeToken()
                 }
             }
             val token: Token = tokens.first
             val foundTest = params.foundTest
-            if (!foundTest.test(token.content()))
-                throw TokenExpectedException(message, token.location())
+            if (!foundTest.test(token.content))
+                throw TokenExpectedException(message, token.location)
             succeeded = true
             token
         } finally {

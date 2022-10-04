@@ -2,6 +2,7 @@ package in.costea.wiles.converters;
 
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
+import in.costea.wiles.data.TokenLocation;
 import in.costea.wiles.exceptions.AbstractCompilationException;
 import in.costea.wiles.exceptions.StringUnfinishedException;
 import in.costea.wiles.exceptions.UnknownOperatorException;
@@ -46,7 +47,7 @@ public class InputToTokensConverter {
                 } else {
                     String id = readOperator();
                     int size = tokens.size();
-                    if (size > 0 && id.equals(NEWLINE_ID) && tokens.get(size - 1).content().equals(BACKSLASH_ID)) {
+                    if (size > 0 && id.equals(NEWLINE_ID) && tokens.get(size - 1).getContent().equals(BACKSLASH_ID)) {
                         tokens.remove(size - 1);
                         addNewLine();
                         continue; // backslash followed by newline is ignored
@@ -160,7 +161,7 @@ public class InputToTokensConverter {
     }
 
     private Token createToken(String token) {
-        return new Token(token, line, getIndexOnCurrentLine());
+        return new Token(token, new TokenLocation(line, getIndexOnCurrentLine()));
     }
 
     private void addNewLine() {

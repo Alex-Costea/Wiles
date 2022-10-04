@@ -53,7 +53,7 @@ public class MethodCommand extends AbstractCommand {
     public CompilationExceptionsCollection process() {
         try {
             name = transmitter.expect(tokenOf(IS_IDENTIFIER).withErrorMessage("Expected method name!"))
-                    .content().substring(1);
+                    .getContent().substring(1);
 
             //Parameters list
             transmitter.expect(tokenOf(ROUND_BRACKET_START_ID));

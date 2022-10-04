@@ -174,7 +174,7 @@ class SyntaxTreeConverterTests {
         var tree: AbstractCommand
 
         init {
-            converter = TokensToSyntaxTreeConverter(tokens.map { content: String? -> Token(content) })
+            converter = TokensToSyntaxTreeConverter(tokens.map { content-> Token(content,null) })
             tree = converter.convert()
             exceptions = converter.exceptions
         }

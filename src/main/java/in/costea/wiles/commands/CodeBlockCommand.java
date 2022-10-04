@@ -47,10 +47,10 @@ public class CodeBlockCommand extends AbstractCommand {
         else {
             optionalToken = transmitter.expectMaybe(tokenOf(DECLARE_METHOD_ID));
             if (standAlone && optionalToken.isPresent())
-                throw new UnexpectedTokenException("Cannot declare method in body-only mode!", optionalToken.get().location());
+                throw new UnexpectedTokenException("Cannot declare method in body-only mode!", optionalToken.get().getLocation());
             else {
                 var token = transmitter.expect(tokenOf(ANYTHING));
-                throw new UnexpectedTokenException(TOKENS_INVERSE.get(token.content()), token.location());
+                throw new UnexpectedTokenException(TOKENS_INVERSE.get(token.getContent()), token.getLocation());
             }
         }
 

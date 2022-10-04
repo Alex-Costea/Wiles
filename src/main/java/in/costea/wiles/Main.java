@@ -27,7 +27,7 @@ public class Main {
         String input = loadFile();
         List<Token> tokens = sourceToTokens(input);
         System.out.print("Tokens: ");
-        System.out.println(tokens.stream().map(Token::content).toList());
+        System.out.println(tokens.stream().map(Token::getContent).toList());
         ProgramCommand AST = tokensToAST(tokens);
         JsonMapper mapper = JsonMapper.builder().disable(MapperFeature.AUTO_DETECT_CREATORS).
                 disable(MapperFeature.AUTO_DETECT_FIELDS).disable(MapperFeature.AUTO_DETECT_GETTERS).

@@ -35,7 +35,7 @@ public class TypeDefinitionCommand extends AbstractCommand {
     public CompilationExceptionsCollection process() {
         try {
             Token token = transmitter.expect(tokenOf(isContainedIn(TYPES.keySet())).withErrorMessage("Type expected!"));
-            name = TYPES.get(token.content());
+            name = TYPES.get(token.getContent());
             assert name != null;
         } catch (AbstractCompilationException e) {
             exceptions.add(e);

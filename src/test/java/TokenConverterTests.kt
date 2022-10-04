@@ -17,7 +17,7 @@ class TokenConverterTests {
     private fun tokenConverterEquals(input: String, solution: Array<String>) {
         val solutionList: MutableList<Token> = ArrayList()
         for (s in solution) {
-            solutionList.add(Token(s))
+            solutionList.add(Token(s,null))
         }
         Assertions.assertEquals(InputToTokensConverter(input).convert(), solutionList)
     }
@@ -27,7 +27,7 @@ class TokenConverterTests {
         x.convert()
         val t = if (message != null) Assertions.assertThrows(throwing, { x.throwExceptionIfExists(exceptionIndex) }, message) else Assertions.assertThrows(throwing) { x.throwExceptionIfExists(exceptionIndex) }
         assert(t is AbstractCompilationException)
-        if (line != null) Assertions.assertEquals(line, Objects.requireNonNull<TokenLocation>((t as AbstractCompilationException).getTokenLocation()).line())
+        if (line != null) Assertions.assertEquals(line, Objects.requireNonNull<TokenLocation>((t as AbstractCompilationException).getTokenLocation()).line)
     }
 
     @Test
