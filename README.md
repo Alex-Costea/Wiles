@@ -77,7 +77,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Declare fields `readonly` for getter with no setter, `public` for getter and setter
 - Direct field access is impossible, instead it is transferred to getters/setters
 - Warnings, e.g. unreachable code
-- When using one `anon` list, my_method([a,b,c]) = my_method(a,b,c)
+- When using one `anon` list, `my_method(a,b,c)` is sugar for `my_method([a,b,c])`
 - Garbage collection
 
 ## Examples
