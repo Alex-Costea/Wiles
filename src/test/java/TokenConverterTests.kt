@@ -1,128 +1,101 @@
-import in.costea.wiles.converters.InputToTokensConverter;
-import in.costea.wiles.data.Token;
-import in.costea.wiles.exceptions.AbstractCompilationException;
-import in.costea.wiles.exceptions.StringUnfinishedException;
-import in.costea.wiles.exceptions.UnknownOperatorException;
-import org.junit.jupiter.api.Test;
+import `in`.costea.wiles.converters.InputToTokensConverter
+import `in`.costea.wiles.data.Token
+import `in`.costea.wiles.data.TokenLocation
+import `in`.costea.wiles.exceptions.AbstractCompilationException
+import `in`.costea.wiles.exceptions.StringUnfinishedException
+import `in`.costea.wiles.exceptions.UnknownOperatorException
+import `in`.costea.wiles.statics.Constants.DEBUG
+import `in`.costea.wiles.statics.Constants.DO_ID
+import `in`.costea.wiles.statics.Constants.MAX_OPERATOR_LENGTH
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assumptions
+import org.junit.jupiter.api.Test
+import java.util.*
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+class TokenConverterTests {
 
-import static in.costea.wiles.statics.Constants.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assumptions.assumingThat;
-
-public class TokenConverterTests {
-    private void TokenConverterEquals(String input, String[] solution) {
-        List<Token> solutionList = new ArrayList<>();
-        for (String s : solution) {
-            solutionList.add(new Token(s));
+    private fun tokenConverterEquals(input: String, solution: Array<String>) {
+        val solutionList: MutableList<Token> = ArrayList()
+        for (s in solution) {
+            solutionList.add(Token(s))
         }
-        assertEquals(new InputToTokensConverter(input).convert(), solutionList);
+        Assertions.assertEquals(InputToTokensConverter(input).convert(), solutionList)
     }
 
-    private void TokenConverterThrows(Integer exceptionIndex, String input, Class<? extends Throwable> throwing, String message, Integer line) {
-        var x = new InputToTokensConverter(input);
-        x.convert();
-        Throwable t;
-        if (message != null) t = assertThrows(throwing, () -> x.throwExceptionIfExists(exceptionIndex), message);
-        else t = assertThrows(throwing, () -> x.throwExceptionIfExists(exceptionIndex));
-        assert t instanceof AbstractCompilationException;
-        if (line != null)
-            assertEquals(line, Objects.requireNonNull(((AbstractCompilationException) t).getTokenLocationNullable()).line());
-    }
-
-    @SuppressWarnings("SameParameterValue")
-    private void TokenConverterThrows(Integer exceptionIndex, String input, Class<? extends Throwable> throwing, Integer line) {
-        TokenConverterThrows(exceptionIndex, input, throwing, null, line);
-    }
-
-    private void TokenConverterThrows(Integer exceptionIndex, String input, Class<? extends Throwable> throwing, String message) {
-        TokenConverterThrows(exceptionIndex, input, throwing, message, null);
-    }
-
-
-    @Test
-    public void EmptyInputsTest() {
-        //noinspection ConstantConditions
-        assertThrows(IllegalArgumentException.class, () -> new InputToTokensConverter(null));
-        TokenConverterEquals("", new String[]{});
-        TokenConverterEquals("     ", new String[]{});
+    private fun tokenConverterThrows(exceptionIndex: Int, input: String, throwing: Class<out Throwable>, message: String? = null, line: Int? = null) {
+        val x = InputToTokensConverter(input)
+        x.convert()
+        val t = if (message != null) Assertions.assertThrows(throwing, { x.throwExceptionIfExists(exceptionIndex) }, message) else Assertions.assertThrows(throwing) { x.throwExceptionIfExists(exceptionIndex) }
+        assert(t is AbstractCompilationException)
+        if (line != null) Assertions.assertEquals(line, Objects.requireNonNull<TokenLocation>((t as AbstractCompilationException).getTokenLocation()).line())
     }
 
     @Test
-    public void CommentTest() {
-        TokenConverterEquals("#", new String[]{});
-        TokenConverterEquals("#\n", new String[]{"NEWLINE"});
-        TokenConverterEquals("abc#de\nfgh", new String[]{"!abc", "NEWLINE", "!fgh"});
-        TokenConverterEquals("abc#a b c d e f break end continue", new String[]{"!abc"});
+    fun emptyInputsTest() {
+        tokenConverterEquals("", arrayOf())
+        tokenConverterEquals("     ", arrayOf())
     }
 
     @Test
-    @SuppressWarnings("ConstantConditions")
-    public void OperatorsTest() {
-        TokenConverterEquals("=/=", new String[]{"NOT_EQUAL"});
-        TokenConverterThrows(0, "$", UnknownOperatorException.class, null, null);
-        TokenConverterThrows(0, "=$", UnknownOperatorException.class, "Operator unknown: $");
+    fun commentTest() {
+        tokenConverterEquals("#", arrayOf())
+        tokenConverterEquals("#\n", arrayOf("NEWLINE"))
+        tokenConverterEquals("abc#de\nfgh", arrayOf("!abc", "NEWLINE", "!fgh"))
+        tokenConverterEquals("abc#a b c d e f break end continue", arrayOf("!abc"))
+    }
 
-        String invalidProgram = "${}{}{}{}{}";
-
-        assumingThat(invalidProgram.length() >= (MAX_OPERATOR_LENGTH + 1), () ->
-        {
-            String substring1 = invalidProgram.substring(1, MAX_OPERATOR_LENGTH + 1);
-            TokenConverterThrows(0, invalidProgram, UnknownOperatorException.class, "Operator unknown: " + substring1);
-
-            assumingThat(invalidProgram.length() >= 2 * MAX_OPERATOR_LENGTH + 1, () ->
-            {
-                String substring2 = invalidProgram.substring(MAX_OPERATOR_LENGTH + 1, 2 * MAX_OPERATOR_LENGTH + 1);
-                TokenConverterThrows(1, invalidProgram, UnknownOperatorException.class, "Operator unknown: " + substring2);
-            });
-
-        });
-
-
+    @Test
+    fun operatorsTest() {
+        tokenConverterEquals("=/=", arrayOf("NOT_EQUAL"))
+        tokenConverterThrows(0, "$", UnknownOperatorException::class.java, null, null)
+        tokenConverterThrows(0, "=$", UnknownOperatorException::class.java, "Operator unknown: $")
+        val invalidProgram = "\${}{}{}{}{}"
+        Assumptions.assumingThat(invalidProgram.length >= MAX_OPERATOR_LENGTH + 1) {
+            val substring1 = invalidProgram.substring(1, MAX_OPERATOR_LENGTH + 1)
+            tokenConverterThrows(0, invalidProgram, UnknownOperatorException::class.java, "Operator unknown: $substring1")
+            Assumptions.assumingThat(invalidProgram.length >= 2 * MAX_OPERATOR_LENGTH + 1) {
+                val substring2 = invalidProgram.substring(MAX_OPERATOR_LENGTH + 1, 2 * MAX_OPERATOR_LENGTH + 1)
+                tokenConverterThrows(1, invalidProgram, UnknownOperatorException::class.java, "Operator unknown: $substring2")
+            }
+        }
         if (DEBUG) {
-            TokenConverterEquals("$=", new String[]{"TEMP"});
-            TokenConverterEquals("=$=", new String[]{"TEMP2"});
+            tokenConverterEquals("$=", arrayOf("TEMP"))
+            tokenConverterEquals("=$=", arrayOf("TEMP2"))
         }
-
-        TokenConverterThrows(0, "$\n@", UnknownOperatorException.class, "Operator unknown: $");
-        TokenConverterThrows(1, "$\n@", UnknownOperatorException.class, "Operator unknown: @");
+        tokenConverterThrows(0, "$\n@", UnknownOperatorException::class.java, "Operator unknown: $")
+        tokenConverterThrows(1, "$\n@", UnknownOperatorException::class.java, "Operator unknown: @")
     }
 
     @Test
-    public void NumericalLiteralsTest() {
-        TokenConverterEquals("1", new String[]{"#1"});
-        TokenConverterEquals(".1", new String[]{"DOT", "#1"});
-        TokenConverterEquals("1.", new String[]{"#1", "DOT"});
-        TokenConverterEquals("1.length", new String[]{"#1", "DOT", "!length"});
-        TokenConverterEquals("1.2", new String[]{"#1.2"});
-        TokenConverterEquals("1.2.3.4.5", new String[]{"#1.2", "DOT", "#3.4", "DOT", "#5"});
+    fun numericalLiteralsTest() {
+        tokenConverterEquals("1", arrayOf("#1"))
+        tokenConverterEquals(".1", arrayOf("DOT", "#1"))
+        tokenConverterEquals("1.", arrayOf("#1", "DOT"))
+        tokenConverterEquals("1.length", arrayOf("#1", "DOT", "!length"))
+        tokenConverterEquals("1.2", arrayOf("#1.2"))
+        tokenConverterEquals("1.2.3.4.5", arrayOf("#1.2", "DOT", "#3.4", "DOT", "#5"))
     }
 
     @Test
-    public void StringLiteralsTest() {
-        TokenConverterEquals("\"abc\"", new String[]{"@abc"});
-        TokenConverterThrows(0, "\"abc", StringUnfinishedException.class, "String unfinished: abc");
-        TokenConverterEquals("\"\"\"\"", new String[]{"@", "@"});
-        TokenConverterThrows(0, "\"\"\"\"\"", StringUnfinishedException.class, "String unfinished: ");
-        TokenConverterThrows(0, "abc\"def\nghi\"jkl", StringUnfinishedException.class, null, null);
-        TokenConverterThrows(0, "true\n\nhello\"\n\"", StringUnfinishedException.class, 3);
-        TokenConverterThrows(1, "@\n\"\n\"\n", StringUnfinishedException.class, 2);
-        TokenConverterThrows(2, "@\n\"\n\"\n", StringUnfinishedException.class, 3);
+    fun stringLiteralsTest() {
+        tokenConverterEquals("\"abc\"", arrayOf("@abc"))
+        tokenConverterThrows(0, "\"abc", StringUnfinishedException::class.java, "String unfinished: abc")
+        tokenConverterEquals("\"\"\"\"", arrayOf("@", "@"))
+        tokenConverterThrows(0, "\"\"\"\"\"", StringUnfinishedException::class.java, "String unfinished: ")
+        tokenConverterThrows(0, "abc\"def\nghi\"jkl", StringUnfinishedException::class.java, null, null)
+        tokenConverterThrows(0, "true\n\nhello\"\n\"", StringUnfinishedException::class.java, null,3)
+        tokenConverterThrows(1, "@\n\"\n\"\n", StringUnfinishedException::class.java,null, 2)
+        tokenConverterThrows(2, "@\n\"\n\"\n", StringUnfinishedException::class.java, null,3)
     }
 
     @Test
-    public void IdentifiersTest() {
-        TokenConverterEquals("a b c", new String[]{"!a", "!b", "!c"});
-        TokenConverterEquals("__xXx__", new String[]{"!__xXx__"});
-        TokenConverterEquals("a12", new String[]{"!a12"});
-        TokenConverterEquals("2ab", new String[]{"#2", "!ab"});
-        TokenConverterEquals("français", new String[]{"!français"});
-        TokenConverterEquals("日本語", new String[]{"!日本語"});
-        TokenConverterEquals("i do not stop the end", new String[]{"!i", DO_ID, "NOT", "BREAK", "!the", "END_BLOCK"});
+    fun identifiersTest() {
+        tokenConverterEquals("a b c", arrayOf("!a", "!b", "!c"))
+        tokenConverterEquals("__xXx__", arrayOf("!__xXx__"))
+        tokenConverterEquals("a12", arrayOf("!a12"))
+        tokenConverterEquals("2ab", arrayOf("#2", "!ab"))
+        tokenConverterEquals("français", arrayOf("!français"))
+        tokenConverterEquals("日本語", arrayOf("!日本語"))
+        tokenConverterEquals("i do not stop the end", arrayOf("!i", DO_ID, "NOT", "BREAK", "!the", "END_BLOCK"))
     }
-
 }
