@@ -5,64 +5,54 @@ import in.costea.wiles.commands.MethodCommand;
 import in.costea.wiles.commands.ProgramCommand;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
+import in.costea.wiles.enums.WhenRemoveToken;
 import in.costea.wiles.exceptions.UnexpectedTokenException;
 import in.costea.wiles.services.TokenTransmitter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static in.costea.wiles.builders.ExpectParamsBuilder.NEVER;
 import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
 import static in.costea.wiles.statics.Constants.DECLARE_METHOD_ID;
 import static in.costea.wiles.statics.Constants.MAIN_METHOD_NAME;
 
-public class TokensToSyntaxTreeConverter
-{
+public class TokensToSyntaxTreeConverter {
     private final CompilationExceptionsCollection exceptions;
     private final boolean bodyOnlyMode;
     private final TokenTransmitter tokenTransmitter;
 
-    public TokensToSyntaxTreeConverter(@NotNull List<Token> tokens)
-    {
+    public TokensToSyntaxTreeConverter(@NotNull List<Token> tokens) {
 
         tokenTransmitter = new TokenTransmitter(tokens);
         exceptions = new CompilationExceptionsCollection();
 
         boolean bodyOnlyMode;
-        try
-        {
-            bodyOnlyMode = tokenTransmitter.expectMaybe(tokenOf(DECLARE_METHOD_ID).removeTokenWhen(NEVER)).isEmpty();
-        }
-        catch (UnexpectedTokenException e)
-        {
+        try {
+            bodyOnlyMode = tokenTransmitter.expectMaybe(tokenOf(DECLARE_METHOD_ID).removeTokenWhen(WhenRemoveToken.Never)).isEmpty();
+        } catch (UnexpectedTokenException e) {
             bodyOnlyMode = true;
         }
         this.bodyOnlyMode = bodyOnlyMode;
     }
 
-    public ProgramCommand convert()
-    {
-        if (bodyOnlyMode)
-        {
+    public ProgramCommand convert() {
+        if (bodyOnlyMode) {
             var programCommand = new ProgramCommand(tokenTransmitter);
             var methodCommand = new MethodCommand(tokenTransmitter);
             methodCommand.setMethodName(MAIN_METHOD_NAME);
             var methodBodyCommand = new CodeBlockCommand(tokenTransmitter, true);
             methodCommand.setMethodBody(methodBodyCommand);
             programCommand.addMethod(methodCommand);
-            exceptions.add(methodBodyCommand.process());
+            exceptions.addAll(methodBodyCommand.process());
             return programCommand;
-        }
-        else
-        {
+        } else {
             ProgramCommand syntaxTree = new ProgramCommand(tokenTransmitter);
-            exceptions.add(syntaxTree.process());
+            exceptions.addAll(syntaxTree.process());
             return syntaxTree;
         }
     }
 
-    public CompilationExceptionsCollection getExceptions()
-    {
+    public CompilationExceptionsCollection getExceptions() {
         return exceptions;
     }
 }
