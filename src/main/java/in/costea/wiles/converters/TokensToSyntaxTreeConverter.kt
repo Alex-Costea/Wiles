@@ -1,58 +1,47 @@
-package in.costea.wiles.converters;
+package `in`.costea.wiles.converters
 
-import in.costea.wiles.commands.CodeBlockCommand;
-import in.costea.wiles.commands.MethodCommand;
-import in.costea.wiles.commands.ProgramCommand;
-import in.costea.wiles.data.CompilationExceptionsCollection;
-import in.costea.wiles.data.Token;
-import in.costea.wiles.enums.WhenRemoveToken;
-import in.costea.wiles.exceptions.UnexpectedTokenException;
-import in.costea.wiles.services.TokenTransmitter;
-import org.jetbrains.annotations.NotNull;
+import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
+import `in`.costea.wiles.commands.CodeBlockCommand
+import `in`.costea.wiles.commands.MethodCommand
+import `in`.costea.wiles.commands.ProgramCommand
+import `in`.costea.wiles.data.CompilationExceptionsCollection
+import `in`.costea.wiles.data.Token
+import `in`.costea.wiles.enums.WhenRemoveToken
+import `in`.costea.wiles.exceptions.UnexpectedTokenException
+import `in`.costea.wiles.services.TokenTransmitter
+import `in`.costea.wiles.statics.Constants.DECLARE_METHOD_ID
+import `in`.costea.wiles.statics.Constants.MAIN_METHOD_NAME
 
-import java.util.List;
+class TokensToSyntaxTreeConverter(tokens: List<Token>) {
+    val exceptions: CompilationExceptionsCollection
+    private val bodyOnlyMode: Boolean
+    private val tokenTransmitter: TokenTransmitter
 
-import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
-import static in.costea.wiles.statics.Constants.DECLARE_METHOD_ID;
-import static in.costea.wiles.statics.Constants.MAIN_METHOD_NAME;
-
-public class TokensToSyntaxTreeConverter {
-    private final CompilationExceptionsCollection exceptions;
-    private final boolean bodyOnlyMode;
-    private final TokenTransmitter tokenTransmitter;
-
-    public TokensToSyntaxTreeConverter(@NotNull List<Token> tokens) {
-
-        tokenTransmitter = new TokenTransmitter(tokens);
-        exceptions = new CompilationExceptionsCollection();
-
-        boolean bodyOnlyMode;
-        try {
-            bodyOnlyMode = tokenTransmitter.expectMaybe(tokenOf(DECLARE_METHOD_ID).removeTokenWhen(WhenRemoveToken.Never)).isEmpty();
-        } catch (UnexpectedTokenException e) {
-            bodyOnlyMode = true;
+    init {
+        tokenTransmitter = TokenTransmitter(tokens)
+        exceptions = CompilationExceptionsCollection()
+        val bodyOnlyMode: Boolean = try {
+            tokenTransmitter.expectMaybe(tokenOf(DECLARE_METHOD_ID).removeTokenWhen(WhenRemoveToken.Never)).isEmpty
+        } catch (e: UnexpectedTokenException) {
+            true
         }
-        this.bodyOnlyMode = bodyOnlyMode;
+        this.bodyOnlyMode = bodyOnlyMode
     }
 
-    public ProgramCommand convert() {
-        if (bodyOnlyMode) {
-            var programCommand = new ProgramCommand(tokenTransmitter);
-            var methodCommand = new MethodCommand(tokenTransmitter);
-            methodCommand.setMethodName(MAIN_METHOD_NAME);
-            var methodBodyCommand = new CodeBlockCommand(tokenTransmitter, true);
-            methodCommand.setMethodBody(methodBodyCommand);
-            programCommand.addMethod(methodCommand);
-            exceptions.addAll(methodBodyCommand.process());
-            return programCommand;
+    fun convert(): ProgramCommand {
+        return if (bodyOnlyMode) {
+            val programCommand = ProgramCommand(tokenTransmitter)
+            val methodCommand = MethodCommand(tokenTransmitter)
+            methodCommand.setMethodName(MAIN_METHOD_NAME)
+            val methodBodyCommand = CodeBlockCommand(tokenTransmitter, true)
+            methodCommand.setMethodBody(methodBodyCommand)
+            programCommand.addMethod(methodCommand)
+            exceptions.addAll(methodBodyCommand.process())
+            programCommand
         } else {
-            ProgramCommand syntaxTree = new ProgramCommand(tokenTransmitter);
-            exceptions.addAll(syntaxTree.process());
-            return syntaxTree;
+            val syntaxTree = ProgramCommand(tokenTransmitter)
+            exceptions.addAll(syntaxTree.process())
+            syntaxTree
         }
-    }
-
-    public CompilationExceptionsCollection getExceptions() {
-        return exceptions;
     }
 }
