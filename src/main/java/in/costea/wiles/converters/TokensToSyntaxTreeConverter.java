@@ -5,13 +5,14 @@ import in.costea.wiles.commands.MethodCommand;
 import in.costea.wiles.commands.ProgramCommand;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
+import in.costea.wiles.enums.WhenRemoveToken;
 import in.costea.wiles.exceptions.UnexpectedTokenException;
 import in.costea.wiles.services.TokenTransmitter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static in.costea.wiles.builders.ExpectParamsBuilder.NEVER;
+
 import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
 import static in.costea.wiles.statics.Constants.DECLARE_METHOD_ID;
 import static in.costea.wiles.statics.Constants.MAIN_METHOD_NAME;
@@ -31,7 +32,7 @@ public class TokensToSyntaxTreeConverter
         boolean bodyOnlyMode;
         try
         {
-            bodyOnlyMode = tokenTransmitter.expectMaybe(tokenOf(DECLARE_METHOD_ID).removeTokenWhen(NEVER)).isEmpty();
+            bodyOnlyMode = tokenTransmitter.expectMaybe(tokenOf(DECLARE_METHOD_ID).removeTokenWhen(WhenRemoveToken.Never)).isEmpty();
         }
         catch (UnexpectedTokenException e)
         {

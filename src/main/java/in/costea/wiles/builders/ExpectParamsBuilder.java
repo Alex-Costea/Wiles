@@ -5,20 +5,12 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 import static in.costea.wiles.statics.Constants.*;
+import in.costea.wiles.enums.WhenRemoveToken;
 
 public class ExpectParamsBuilder
 {
 
-    private enum WhenRemoveToken {
-        Always,
-        WhenFound,
-        Never,
-        Default
-    }
-    public static final WhenRemoveToken ALWAYS=WhenRemoveToken.Always;
-    public static final WhenRemoveToken WHEN_FOUND=WhenRemoveToken.WhenFound;
-    public static final WhenRemoveToken DEFAULT=WhenRemoveToken.Default;
-    public static final WhenRemoveToken NEVER=WhenRemoveToken.Never;
+
     public static final Predicate<String> ANYTHING = (x) -> true;
 
     public static Predicate<String> isContainedIn(Collection<String> set)
@@ -41,7 +33,7 @@ public class ExpectParamsBuilder
 
     private Predicate<String> foundTest;
     private String errorMessage = "Shouldn't happen";
-    private WhenRemoveToken when = DEFAULT;
+    private WhenRemoveToken when = WhenRemoveToken.Default;
     private boolean ignoringNewLine = true;
 
     private ExpectParamsBuilder(Predicate<String> foundTest)

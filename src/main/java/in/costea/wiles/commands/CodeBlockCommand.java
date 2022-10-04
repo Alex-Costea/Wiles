@@ -1,6 +1,7 @@
 package in.costea.wiles.commands;
 
 import in.costea.wiles.data.CompilationExceptionsCollection;
+import in.costea.wiles.enums.WhenRemoveToken;
 import in.costea.wiles.exceptions.AbstractCompilationException;
 import in.costea.wiles.exceptions.UnexpectedTokenException;
 import in.costea.wiles.services.TokenTransmitter;
@@ -84,7 +85,7 @@ public class CodeBlockCommand extends AbstractCommand
                     transmitter.expect(tokenOf(START_BLOCK_ID));
                 while(!transmitter.tokensExhausted())
                 {
-                    if(!standAlone && transmitter.expectMaybe(tokenOf(END_BLOCK_ID).removeTokenWhen(NEVER)).isPresent())
+                    if(!standAlone && transmitter.expectMaybe(tokenOf(END_BLOCK_ID).removeTokenWhen(WhenRemoveToken.Never)).isPresent())
                         break;
                     readOneStatement();
                 }

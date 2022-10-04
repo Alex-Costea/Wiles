@@ -2,6 +2,7 @@ package in.costea.wiles.commands;
 
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
+import in.costea.wiles.enums.WhenRemoveToken;
 import in.costea.wiles.exceptions.AbstractCompilationException;
 import in.costea.wiles.exceptions.UnexpectedEndException;
 import in.costea.wiles.exceptions.UnexpectedTokenException;
@@ -110,7 +111,7 @@ public class ExpressionCommand extends AbstractCommand {
                 break;
 
             // finalize expression at "end" if correct
-            var tempToken=transmitter.expectMaybe(tokenOf(END_BLOCK_ID).removeTokenWhen(NEVER));
+            var tempToken=transmitter.expectMaybe(tokenOf(END_BLOCK_ID).removeTokenWhen(WhenRemoveToken.Never));
             if (tempToken.isPresent()) {
                 if (expressionType == REGULAR)
                     break;
@@ -122,7 +123,7 @@ public class ExpressionCommand extends AbstractCommand {
                         .or(isContainedIn(INFIX_OPERATORS)).withErrorMessage("Operator expected!"));
             else
                 mainToken = transmitter.expect(tokenOf(isContainedIn(BRACKETS)).or(isContainedIn(UNARY_OPERATORS))
-                        .or(IS_LITERAL).withErrorMessage("Identifier or unary operator expected!").removeTokenWhen(ALWAYS));
+                        .or(IS_LITERAL).withErrorMessage("Identifier or unary operator expected!").removeTokenWhen(WhenRemoveToken.Always));
 
             if (mainToken.content().equals(ROUND_BRACKET_END_ID))
             {
