@@ -36,13 +36,13 @@ class TokenTransmitter(tokens: List<Token>) {
             params.removeTokenWhen(WhenRemoveToken.Always)
         return try {
             if (tokensExhausted()) throw UnexpectedEndException(message, lastLocation)
-            val token: Token = tokens.first
             if (params.isIgnoringNewLine) {
                 while (tokens.first.content() == Constants.NEWLINE_ID) {
-                    if (tokensExhausted()) throw UnexpectedEndException(message, token.location())
+                    if (tokensExhausted()) throw UnexpectedEndException(message, tokens.first.location())
                     removeToken()
                 }
             }
+            val token: Token = tokens.first
             val foundTest = params.foundTest
             if (!foundTest.test(token.content()))
                 throw TokenExpectedException(message, token.location())
@@ -50,7 +50,8 @@ class TokenTransmitter(tokens: List<Token>) {
             token
         } finally {
             val whenRemoveToken: WhenRemoveToken = params.whenRemoveToken
-            if ((!succeeded && whenRemoveToken == WhenRemoveToken.Always || succeeded) && whenRemoveToken != WhenRemoveToken.Never)
+            assert(whenRemoveToken!=WhenRemoveToken.Default)
+            if ((!succeeded && whenRemoveToken == WhenRemoveToken.Always) || (succeeded && whenRemoveToken != WhenRemoveToken.Never))
                 if (!tokensExhausted())
                     removeToken()
         }
