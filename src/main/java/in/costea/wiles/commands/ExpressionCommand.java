@@ -19,13 +19,18 @@ import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
 import static in.costea.wiles.statics.Constants.*;
 
 public class ExpressionCommand extends AbstractCommand {
+    @NotNull
     private final List<AbstractCommand> components = new ArrayList<>();
+    @NotNull
     private final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
+    @NotNull
     private final Token firstToken;
+    @NotNull
     private final ExpressionType expressionType;
-    private ExpectNext expectNext;
+    @NotNull
+    private ExpectNext expectNext=ExpectNext.INIT;
 
-    public ExpressionCommand(Token firstToken, TokenTransmitter transmitter, ExpressionType expressionType) {
+    public ExpressionCommand(@NotNull Token firstToken, @NotNull TokenTransmitter transmitter, @NotNull ExpressionType expressionType) {
         super(transmitter);
         this.expressionType = expressionType;
         this.firstToken = firstToken;
@@ -48,6 +53,7 @@ public class ExpressionCommand extends AbstractCommand {
     private void addInnerExpression(ExpressionType expressionType, boolean flatten) throws AbstractCompilationException {
         Token newToken = transmitter.expect(tokenOf(isContainedIn(UNARY_OPERATORS)).or(IS_LITERAL)
                 .or(isContainedIn(BRACKETS)).withErrorMessage("Identifier or unary operator expected!"));
+        @NotNull
         var newExpression = new ExpressionCommand(newToken, transmitter, expressionType);
         var newExceptions = newExpression.process();
         if (newExceptions.size() > 0)
@@ -160,6 +166,7 @@ public class ExpressionCommand extends AbstractCommand {
 
     private enum ExpectNext {
         OPERATOR,
-        TOKEN
+        TOKEN,
+        INIT
     }
 }

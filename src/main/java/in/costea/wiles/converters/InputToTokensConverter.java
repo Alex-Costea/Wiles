@@ -17,6 +17,7 @@ import static in.costea.wiles.statics.Utils.*;
 public class InputToTokensConverter {
 
     private final char[] arrayChars;
+    @NotNull
     private final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
     private int originalIndex;
     private int index;
@@ -27,7 +28,9 @@ public class InputToTokensConverter {
         arrayChars = input.toCharArray();
     }
 
+    @NotNull
     public List<Token> convert() {
+        @NotNull
         var tokens = new ArrayList<Token>();
         for (index = 0; index < arrayChars.length; index++) {
             try {
@@ -65,12 +68,14 @@ public class InputToTokensConverter {
         return tokens;
     }
 
+    @NotNull
     private String readStringLiteral() throws StringUnfinishedException {
         int currentIndex = index + 1;
         try {
             if (currentIndex >= arrayChars.length)
                 throw new StringUnfinishedException("", line, getIndexOnCurrentLine());
 
+            @NotNull
             StringBuilder sb = new StringBuilder();
             char lastNonSpaceCharacter = 0;
             int lastNonSpaceCharacterIndex = -1;
@@ -100,8 +105,10 @@ public class InputToTokensConverter {
         }
     }
 
+    @NotNull
     private String readIdentifier() {
         int currentIndex = index;
+        @NotNull
         StringBuilder sb = new StringBuilder();
         while (currentIndex < arrayChars.length && isAlphanumeric(arrayChars[currentIndex])) {
             sb.append(arrayChars[currentIndex]);
@@ -111,8 +118,10 @@ public class InputToTokensConverter {
         return KEYWORDS.getOrDefault(sb.toString(), IDENTIFIER_START + sb);
     }
 
+    @NotNull
     private String readNumeralLiteral() {
         int currentIndex = index;
+        @NotNull
         StringBuilder sb = new StringBuilder(NUM_START);
         boolean delimiterAlreadyFound = false;
         while (currentIndex < arrayChars.length && (isDigit(arrayChars[currentIndex]) ||
@@ -127,10 +136,11 @@ public class InputToTokensConverter {
         index = currentIndex - 1;
         return sb.toString();
     }
-
+    @NotNull
     private String readOperator() throws UnknownOperatorException {
         int currentIndex = index;
         int operatorFoundIndex = index;
+        @NotNull
         StringBuilder sb = new StringBuilder();
         String token = null;
         while (!isAlphanumeric(arrayChars[currentIndex]) && currentIndex - index < MAX_OPERATOR_LENGTH) {
@@ -160,6 +170,7 @@ public class InputToTokensConverter {
         index = currentIndex - 1;
     }
 
+    @NotNull
     private Token createToken(String token) {
         return new Token(token, new TokenLocation(line, getIndexOnCurrentLine()));
     }
@@ -179,6 +190,7 @@ public class InputToTokensConverter {
             throw exceptions.get(exceptionIndex);
     }
 
+    @NotNull
     public CompilationExceptionsCollection getExceptions() {
         return (CompilationExceptionsCollection) exceptions.clone();
     }
