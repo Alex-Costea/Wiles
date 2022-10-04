@@ -47,12 +47,14 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - `:=` (assign or declare)
 - `.` (method / field access)
 - `:` (type annotation)
+- `<-` (naming parameters, or just "smaller than minus" depending on context)
 - `[]`, `()`, `,`
 
 ### Other keywords
 - `stop`, `skip` (`break`/`return;`, `continue` equivalents)
 - `yield` (return equivalent)
 - `begin`, `end` (code blocks)
+- `anon` (marks parameters as unneeding to be named when calling method)
 
 ### Miscellaneous
 - Declaring `main` method optional when using no other methods
@@ -63,8 +65,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - `\` can be used to continue a line after a newline (including string literals)
 - Types are not reserved keywords and can be used as variable names
 - Method potentially not returning value is a compilatio error
-- Methods calling with named parameters: `range(1,10)` or `range(from <- 1, to <- 10)`
-
+- Methods calling with named parameters by default, unless `anon` keyword is used: `range(from <- 1, to <- 10)`
 
 ### Potential additions (no promises!)
 - `infint` (infinite precision integer)
@@ -99,7 +100,7 @@ end
 ### Minimum value
 
 ```
-method min(list: list[int]) : optional[int]
+method min(anon list: list[int]) : optional[int]
 begin
     if list.size = 0 do
         yield nothing 
