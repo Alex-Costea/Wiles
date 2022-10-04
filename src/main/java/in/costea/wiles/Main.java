@@ -16,17 +16,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class Main
-{
+public class Main {
 
     private static final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
 
-    private Main()
-    {
+    private Main() {
     }
 
-    public static void main(String[] args) throws IOException
-    {
+    public static void main(String[] args) throws IOException {
         String input = loadFile();
         List<Token> tokens = sourceToTokens(input);
         System.out.print("Tokens: ");
@@ -46,37 +43,31 @@ public class Main
             throw new CompilationFailed(exceptions);
     }
 
-    private static String loadFile()
-    {
+    private static String loadFile() {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
         String input;
-        try (InputStream is = classloader.getResourceAsStream("input.wiles"))
-        {
+        try (InputStream is = classloader.getResourceAsStream("input.wiles")) {
             Objects.requireNonNull(is);
             input = new BufferedReader(new InputStreamReader(is))
                     .lines().collect(Collectors.joining("\n"));
-        }
-        catch (NullPointerException | IOException ex)
-        {
+        } catch (NullPointerException | IOException ex) {
             throw new Error("Error loading input file!");
         }
         return input;
     }
 
-    private static List<Token> sourceToTokens(String input)
-    {
+    private static List<Token> sourceToTokens(String input) {
         var converter = new InputToTokensConverter(input);
         List<Token> tokens = converter.convert();
-        exceptions.add(converter.getExceptions());
+        exceptions.addAll(converter.getExceptions());
         return tokens;
     }
 
-    private static ProgramCommand tokensToAST(List<Token> tokens)
-    {
+    private static ProgramCommand tokensToAST(List<Token> tokens) {
         var converter = new TokensToSyntaxTreeConverter(tokens);
         ProgramCommand programCommand = converter.convert();
-        exceptions.add(converter.getExceptions());
-        programCommand.setCompiledSuccessfully(exceptions.size()==0);
+        exceptions.addAll(converter.getExceptions());
+        programCommand.setCompiledSuccessfully(exceptions.size() == 0);
         return programCommand;
     }
 }

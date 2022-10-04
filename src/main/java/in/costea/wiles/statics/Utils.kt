@@ -1,25 +1,20 @@
-package in.costea.wiles.statics;
+package `in`.costea.wiles.statics
 
-import static in.costea.wiles.statics.Constants.DIGIT_SEPARATOR;
+import `in`.costea.wiles.statics.Constants.DIGIT_SEPARATOR
 
-public class Utils
-{
-    private Utils()
-    {
+object Utils {
+    @JvmStatic
+    fun isAlphanumeric(c: Char): Boolean {
+        return isAlphabetic(c) || isDigit(c)
     }
 
-    public static boolean isAlphanumeric(char c)
-    {
-        return isAlphabetic(c) || isDigit(c);
+    @JvmStatic
+    fun isAlphabetic(c: Char): Boolean {
+        return Character.isAlphabetic(c.code) || c == DIGIT_SEPARATOR
     }
 
-    public static boolean isAlphabetic(char c)
-    {
-        return Character.isAlphabetic(c) || c == DIGIT_SEPARATOR;
-    }
-
-    public static boolean isDigit(char c)
-    {
-        return Character.isDigit(c);
+    @JvmStatic
+    fun isDigit(c: Char): Boolean {
+        return Character.isDigit(c)
     }
 }

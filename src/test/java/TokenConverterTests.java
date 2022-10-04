@@ -13,20 +13,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assumptions.assumingThat;
 
-public class TokenConverterTests
-{
-    private void TokenConverterEquals(String input, String[] solution)
-    {
+public class TokenConverterTests {
+    private void TokenConverterEquals(String input, String[] solution) {
         List<Token> solutionList = new ArrayList<>();
-        for (String s : solution)
-        {
+        for (String s : solution) {
             solutionList.add(new Token(s));
         }
         assertEquals(new InputToTokensConverter(input).convert(), solutionList);
     }
 
-    private void TokenConverterThrows(Integer exceptionIndex, String input, Class<? extends Throwable> throwing, String message, Integer line)
-    {
+    private void TokenConverterThrows(Integer exceptionIndex, String input, Class<? extends Throwable> throwing, String message, Integer line) {
         var x = new InputToTokensConverter(input);
         x.convert();
         Throwable t;
@@ -34,24 +30,21 @@ public class TokenConverterTests
         else t = assertThrows(throwing, () -> x.throwExceptionIfExists(exceptionIndex));
         assert t instanceof AbstractCompilationException;
         if (line != null)
-            assertEquals(line, ((AbstractCompilationException) t).getLine());
+            assertEquals(line, ((AbstractCompilationException) t).getTokenLocation().line());
     }
 
     @SuppressWarnings("SameParameterValue")
-    private void TokenConverterThrows(Integer exceptionIndex, String input, Class<? extends Throwable> throwing, Integer line)
-    {
+    private void TokenConverterThrows(Integer exceptionIndex, String input, Class<? extends Throwable> throwing, Integer line) {
         TokenConverterThrows(exceptionIndex, input, throwing, null, line);
     }
 
-    private void TokenConverterThrows(Integer exceptionIndex, String input, Class<? extends Throwable> throwing, String message)
-    {
+    private void TokenConverterThrows(Integer exceptionIndex, String input, Class<? extends Throwable> throwing, String message) {
         TokenConverterThrows(exceptionIndex, input, throwing, message, null);
     }
 
 
     @Test
-    public void EmptyInputsTest()
-    {
+    public void EmptyInputsTest() {
         //noinspection ConstantConditions
         assertThrows(IllegalArgumentException.class, () -> new InputToTokensConverter(null));
         TokenConverterEquals("", new String[]{});
@@ -59,8 +52,7 @@ public class TokenConverterTests
     }
 
     @Test
-    public void CommentTest()
-    {
+    public void CommentTest() {
         TokenConverterEquals("#", new String[]{});
         TokenConverterEquals("#\n", new String[]{"NEWLINE"});
         TokenConverterEquals("abc#de\nfgh", new String[]{"!abc", "NEWLINE", "!fgh"});
@@ -69,10 +61,9 @@ public class TokenConverterTests
 
     @Test
     @SuppressWarnings("ConstantConditions")
-    public void OperatorsTest()
-    {
+    public void OperatorsTest() {
         TokenConverterEquals("=/=", new String[]{"NOT_EQUAL"});
-        TokenConverterThrows(0, "$", UnknownOperatorException.class,null,null);
+        TokenConverterThrows(0, "$", UnknownOperatorException.class, null, null);
         TokenConverterThrows(0, "=$", UnknownOperatorException.class, "Operator unknown: $");
 
         String invalidProgram = "${}{}{}{}{}";
@@ -91,8 +82,7 @@ public class TokenConverterTests
         });
 
 
-        if (DEBUG)
-        {
+        if (DEBUG) {
             TokenConverterEquals("$=", new String[]{"TEMP"});
             TokenConverterEquals("=$=", new String[]{"TEMP2"});
         }
@@ -102,8 +92,7 @@ public class TokenConverterTests
     }
 
     @Test
-    public void NumericalLiteralsTest()
-    {
+    public void NumericalLiteralsTest() {
         TokenConverterEquals("1", new String[]{"#1"});
         TokenConverterEquals(".1", new String[]{"DOT", "#1"});
         TokenConverterEquals("1.", new String[]{"#1", "DOT"});
@@ -113,21 +102,19 @@ public class TokenConverterTests
     }
 
     @Test
-    public void StringLiteralsTest()
-    {
+    public void StringLiteralsTest() {
         TokenConverterEquals("\"abc\"", new String[]{"@abc"});
         TokenConverterThrows(0, "\"abc", StringUnfinishedException.class, "String unfinished: abc");
         TokenConverterEquals("\"\"\"\"", new String[]{"@", "@"});
         TokenConverterThrows(0, "\"\"\"\"\"", StringUnfinishedException.class, "String unfinished: ");
-        TokenConverterThrows(0, "abc\"def\nghi\"jkl", StringUnfinishedException.class,null,null);
+        TokenConverterThrows(0, "abc\"def\nghi\"jkl", StringUnfinishedException.class, null, null);
         TokenConverterThrows(0, "true\n\nhello\"\n\"", StringUnfinishedException.class, 3);
         TokenConverterThrows(1, "@\n\"\n\"\n", StringUnfinishedException.class, 2);
         TokenConverterThrows(2, "@\n\"\n\"\n", StringUnfinishedException.class, 3);
     }
 
     @Test
-    public void IdentifiersTest()
-    {
+    public void IdentifiersTest() {
         TokenConverterEquals("a b c", new String[]{"!a", "!b", "!c"});
         TokenConverterEquals("__xXx__", new String[]{"!__xXx__"});
         TokenConverterEquals("a12", new String[]{"!a12"});

@@ -50,7 +50,7 @@ class TokenTransmitter(tokens: List<Token>) {
             token
         } finally {
             val whenRemoveToken: WhenRemoveToken = params.whenRemoveToken
-            assert(whenRemoveToken!=WhenRemoveToken.Default)
+            assert(whenRemoveToken != WhenRemoveToken.Default)
             if ((!succeeded && whenRemoveToken == WhenRemoveToken.Always) || (succeeded && whenRemoveToken != WhenRemoveToken.Never))
                 if (!tokensExhausted())
                     removeToken()

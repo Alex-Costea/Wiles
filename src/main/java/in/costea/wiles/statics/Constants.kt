@@ -1,184 +1,160 @@
-package in.costea.wiles.statics;
+package `in`.costea.wiles.statics
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
+import com.google.common.collect.BiMap
+import com.google.common.collect.HashBiMap
+import java.util.*
+import java.util.function.Predicate
 
-import java.util.Set;
-import java.util.function.Predicate;
+object Constants {
+    const val DEBUG = true
+    const val UNKNOWN_TOKEN = "ERROR_TOKEN"
+    const val START_BLOCK_ID = "START_BLOCK"
+    const val END_BLOCK_ID = "END_BLOCK"
+    const val SPACE_ID = "SPACE"
+    const val NEWLINE_ID = "NEWLINE"
+    const val ROUND_BRACKET_START_ID = "ROUND_BRACKET_START"
+    const val ROUND_BRACKET_END_ID = "ROUND_BRACKET_END"
+    const val SQUARE_BRACKET_START_ID = "SQUARE_BRACKET_START"
+    const val SQUARE_BRACKET_END_ID = "SQUARE_BRACKET_END"
+    const val DECLARE_METHOD_ID = "DECLARE_METHOD"
+    const val STATEMENT_TERMINATOR_ID = "TERMINATOR"
+    const val BACKSLASH_ID = "BACKSLASH"
+    const val PLUS_ID = "PLUS"
+    const val MINUS_ID = "MINUS"
+    const val TIMES_ID = "TIMES"
+    private const val DIVIDE_ID = "DIVIDE"
+    const val POWER_ID = "POWER"
+    const val ASSIGN_ID = "ASSIGN"
+    const val IDENTIFIER_START = "!"
+    const val STRING_START = "@"
+    const val NUM_START = "#"
+    const val MAIN_METHOD_NAME = "main"
+    const val COLON_ID = "COLON"
+    const val NOTHING_ID = "NOTHING"
+    const val COMMA_ID = "COMMA"
+    const val DO_ID = "DO"
+    private const val EQUALS_ID = "EQUALS"
+    private const val LARGER_ID = "LARGER"
+    private const val SMALLER_ID = "SMALLER"
+    private const val LARGER_EQUALS_ID = "LARGER_EQUALS"
+    private const val SMALLER_EQUALS_ID = "SMALLER_EQUALS"
+    private const val NOT_EQUAL_ID = "NOT_EQUAL"
+    private const val DOT_ID = "DOT"
+    private const val AND_ID = "AND"
+    private const val OR_ID = "OR"
+    const val NOT_ID = "NOT"
 
-import static java.util.Collections.max;
+    @JvmField
+    val KEYWORDS: BiMap<String, String> = HashBiMap.create()
 
-public class Constants
-{
-    public static final boolean DEBUG = true;
-    public static final String UNKNOWN_TOKEN = "ERROR_TOKEN";
-    public static final String START_BLOCK_ID = "START_BLOCK";
-    public static final String END_BLOCK_ID = "END_BLOCK";
-    public static final String SPACE_ID = "SPACE";
-    public static final String NEWLINE_ID = "NEWLINE";
-    public static final String ROUND_BRACKET_START_ID = "ROUND_BRACKET_START";
-    public static final String ROUND_BRACKET_END_ID = "ROUND_BRACKET_END";
-    public static final String SQUARE_BRACKET_START_ID = "SQUARE_BRACKET_START";
-    public static final String SQUARE_BRACKET_END_ID = "SQUARE_BRACKET_END";
-    public static final String DECLARE_METHOD_ID = "DECLARE_METHOD";
-    public static final String STATEMENT_TERMINATOR_ID = "TERMINATOR";
-    public static final String BACKSLASH_ID = "BACKSLASH";
-    public static final String PLUS_ID = "PLUS";
-    public static final String MINUS_ID = "MINUS";
-    public static final String TIMES_ID = "TIMES";
-    public static final String DIVIDE_ID = "DIVIDE";
-    public static final String POWER_ID = "POWER";
-    public static final String ASSIGN_ID = "ASSIGN";
-    public static final String IDENTIFIER_START = "!";
-    public static final String STRING_START = "@";
-    public static final String NUM_START = "#";
-    public static final String MAIN_METHOD_NAME = "main";
-    public static final String COLON_ID = "COLON";
-    public static final String NOTHING_ID = "NOTHING";
-    public static final String COMMA_ID = "COMMA";
-    public static final String DO_ID = "DO";
-    public static final String EQUALS_ID="EQUALS";
-    public static final String LARGER_ID="LARGER";
-    public static final String SMALLER_ID="SMALLER";
-    public static final String LARGER_EQUALS_ID="LARGER_EQUALS";
-    public static final String SMALLER_EQUALS_ID="SMALLER_EQUALS";
-    public static final String NOT_EQUAL_ID="NOT_EQUAL";
-    public static final String DOT_ID="DOT";
-    public static final String AND_ID="AND";
-    public static final String OR_ID="OR";
-    public static final String NOT_ID="NOT";
-    public static final BiMap<String, String> KEYWORDS = HashBiMap.create();
-    public static final BiMap<String, String> OPERATORS = HashBiMap.create();
-    public static final BiMap<String, String> TYPES = HashBiMap.create();
-    public static final BiMap<String, String> TOKENS;
-    public static final BiMap<String, String> TOKENS_INVERSE;
-    public static final int MAX_OPERATOR_LENGTH = 3;
-    public static final char STRING_DELIMITER = '"';
-    public static final char DECIMAL_DELIMITER = '.';
-    public static final char DIGIT_SEPARATOR = '_';
-    public static final char COMMENT_START = '#';
-    public static final char NEWLINE = '\n';
-    public static final char SPACE = ' ';
-    public static final char CONTINUE_LINE = '\\';
-    public static final Set<String> INFIX_OPERATORS = Set.of(
+    @JvmField
+    val OPERATORS: BiMap<String, String> = HashBiMap.create()
+
+    @JvmField
+    val TYPES: BiMap<String, String> = HashBiMap.create()
+    private val TOKENS: BiMap<String, String>
+
+    @JvmField
+    val TOKENS_INVERSE: BiMap<String, String>
+    const val MAX_OPERATOR_LENGTH = 3
+    const val STRING_DELIMITER = '"'
+    const val DECIMAL_DELIMITER = '.'
+    const val DIGIT_SEPARATOR = '_'
+    const val COMMENT_START = '#'
+    const val NEWLINE = '\n'
+    const val SPACE = ' '
+    const val CONTINUE_LINE = '\\'
+
+    @JvmField
+    val INFIX_OPERATORS = setOf(
             PLUS_ID, MINUS_ID, TIMES_ID, DIVIDE_ID, POWER_ID, ASSIGN_ID,
-            EQUALS_ID,LARGER_ID,SMALLER_ID,LARGER_EQUALS_ID,SMALLER_EQUALS_ID,NOT_EQUAL_ID,
-            DOT_ID, COMMA_ID, AND_ID, OR_ID);
-    public static final Set<String> UNARY_OPERATORS = Set.of(PLUS_ID, MINUS_ID, NOT_ID);
-    public static final Set<String> BRACKETS = Set.of(ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID,
-            SQUARE_BRACKET_START_ID,SQUARE_BRACKET_END_ID);
-    public static final Set<String> STATEMENT_TERMINATORS = Set.of(NEWLINE_ID, STATEMENT_TERMINATOR_ID);
+            EQUALS_ID, LARGER_ID, SMALLER_ID, LARGER_EQUALS_ID, SMALLER_EQUALS_ID, NOT_EQUAL_ID,
+            DOT_ID, COMMA_ID, AND_ID, OR_ID)
+
+    @JvmField
+    val UNARY_OPERATORS = setOf(PLUS_ID, MINUS_ID, NOT_ID)
+
+    @JvmField
+    val BRACKETS = setOf(ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID,
+            SQUARE_BRACKET_START_ID, SQUARE_BRACKET_END_ID)
+
+    @JvmField
+    val STATEMENT_TERMINATORS = setOf(NEWLINE_ID, STATEMENT_TERMINATOR_ID)
 
 
-    static
-    {
-        KEYWORDS.put("nothing", NOTHING_ID);
+    @JvmField
+    val IS_IDENTIFIER = Predicate { x: String -> x.length > 1 && x.startsWith(IDENTIFIER_START) }
+    private val IS_TEXT_LITERAL = Predicate { x: String -> x.length > 1 && x.startsWith(STRING_START) }
+    private val IS_NUMBER_LITERAL = Predicate { x: String -> x.length > 1 && x.startsWith(NUM_START) }
 
-        KEYWORDS.put("method", DECLARE_METHOD_ID);
-        KEYWORDS.put("let", "DECLARE_VARIABLE");
-        KEYWORDS.put("var", "MUTABLE");
+    @JvmField
+    val IS_LITERAL: Predicate<String> = IS_IDENTIFIER.or(IS_TEXT_LITERAL).or(IS_NUMBER_LITERAL)
 
-        KEYWORDS.put("if", "IF");
-        KEYWORDS.put("otherwise", "ELSE");
+    init {
+        KEYWORDS["nothing"] = NOTHING_ID
+        KEYWORDS["method"] = DECLARE_METHOD_ID
+        KEYWORDS["let"] = "DECLARE_VARIABLE"
+        KEYWORDS["var"] = "MUTABLE"
+        KEYWORDS["if"] = "IF"
+        KEYWORDS["otherwise"] = "ELSE"
+        KEYWORDS["for"] = "FOR"
+        KEYWORDS["while"] = "WHILE"
+        KEYWORDS["and"] = AND_ID
+        KEYWORDS["or"] = OR_ID
+        KEYWORDS["not"] = NOT_ID
+        KEYWORDS["stop"] = "BREAK"
+        KEYWORDS["skip"] = "CONTINUE"
+        KEYWORDS["yield"] = "RETURN"
+        KEYWORDS["do"] = "DO"
+        KEYWORDS["begin"] = START_BLOCK_ID
+        KEYWORDS["end"] = END_BLOCK_ID
 
-        KEYWORDS.put("for", "FOR");
-        KEYWORDS.put("while", "WHILE");
+        TYPES["!bit"] = "BOOLEAN"
+        TYPES["!byte"] = "INT8"
+        TYPES["!smallint"] = "INT16"
+        TYPES["!int"] = "INT32"
+        TYPES["!bigint"] = "INT64"
+        TYPES["!text"] = "STRING"
+        TYPES["!decimal"] = "DOUBLE"
+        TYPES["!list"] = "ARRAY_LIST"
+        TYPES["!optional"] = "NULLABLE"
+        TYPES["!dictionary"] = "LINKED_MAP"
+        TYPES["!range"] = "RANGE"
+        TYPES[NOTHING_ID] = "NOTHING"
 
-        KEYWORDS.put("and", AND_ID);
-        KEYWORDS.put("or", OR_ID);
-        KEYWORDS.put("not", NOT_ID);
-
-        KEYWORDS.put("stop", "BREAK");
-        KEYWORDS.put("skip", "CONTINUE");
-        KEYWORDS.put("yield", "RETURN");
-
-        KEYWORDS.put("do", "DO");
-        KEYWORDS.put("begin", START_BLOCK_ID);
-        KEYWORDS.put("end", END_BLOCK_ID);
-    }
-
-    static
-    {
-        TYPES.put("!bit", "BOOLEAN");
-        TYPES.put("!byte", "INT8");
-        TYPES.put("!smallint", "INT16");
-        TYPES.put("!int", "INT32");
-        TYPES.put("!bigint", "INT64");
-        TYPES.put("!text", "STRING");
-        TYPES.put("!decimal", "DOUBLE");
-        TYPES.put("!list", "ARRAY_LIST");
-        TYPES.put("!optional", "NULLABLE");
-        TYPES.put("!dictionary", "LINKED_MAP");
-        TYPES.put("!range", "RANGE");
-        TYPES.put(NOTHING_ID,"NOTHING");
-        //TYPES.put(DECLARE_METHOD_ID,"METHOD");
-    }
-
-    static
-    {
-        OPERATORS.put("+", PLUS_ID);
-        OPERATORS.put("-", MINUS_ID);
-        OPERATORS.put("*", TIMES_ID);
-        OPERATORS.put("/", DIVIDE_ID);
-        OPERATORS.put("^", POWER_ID);
-
-        OPERATORS.put(":=", ASSIGN_ID);
-
-        OPERATORS.put("=", EQUALS_ID);
-        OPERATORS.put(">", LARGER_ID);
-        OPERATORS.put("<", SMALLER_ID);
-        OPERATORS.put(">=", LARGER_EQUALS_ID);
-        OPERATORS.put("<=", SMALLER_EQUALS_ID);
-        OPERATORS.put("=/=", NOT_EQUAL_ID);
-
-        OPERATORS.put("(", ROUND_BRACKET_START_ID);
-        OPERATORS.put(")", ROUND_BRACKET_END_ID);
-
-        OPERATORS.put("[", SQUARE_BRACKET_START_ID);
-        OPERATORS.put("]", SQUARE_BRACKET_END_ID);
-
-        OPERATORS.put(",", COMMA_ID);
-        OPERATORS.put(".", DOT_ID);
-        OPERATORS.put(":", COLON_ID);
-        OPERATORS.put(";", STATEMENT_TERMINATOR_ID);
-        OPERATORS.put("" + SPACE, SPACE_ID);
-        OPERATORS.put("" + CONTINUE_LINE, BACKSLASH_ID);
-        OPERATORS.put("" + NEWLINE, NEWLINE_ID);
-
-        if (DEBUG)
-        {
-            OPERATORS.put("$=", "TEMP");
-            OPERATORS.put("=$=", "TEMP2");
+        OPERATORS["+"] = PLUS_ID
+        OPERATORS["-"] = MINUS_ID
+        OPERATORS["*"] = TIMES_ID
+        OPERATORS["/"] = DIVIDE_ID
+        OPERATORS["^"] = POWER_ID
+        OPERATORS[":="] = ASSIGN_ID
+        OPERATORS["="] = EQUALS_ID
+        OPERATORS[">"] = LARGER_ID
+        OPERATORS["<"] = SMALLER_ID
+        OPERATORS[">="] = LARGER_EQUALS_ID
+        OPERATORS["<="] = SMALLER_EQUALS_ID
+        OPERATORS["=/="] = NOT_EQUAL_ID
+        OPERATORS["("] = ROUND_BRACKET_START_ID
+        OPERATORS[")"] = ROUND_BRACKET_END_ID
+        OPERATORS["["] = SQUARE_BRACKET_START_ID
+        OPERATORS["]"] = SQUARE_BRACKET_END_ID
+        OPERATORS[","] = COMMA_ID
+        OPERATORS["."] = DOT_ID
+        OPERATORS[":"] = COLON_ID
+        OPERATORS[";"] = STATEMENT_TERMINATOR_ID
+        OPERATORS["" + SPACE] = SPACE_ID
+        OPERATORS["" + CONTINUE_LINE] = BACKSLASH_ID
+        OPERATORS["" + NEWLINE] = NEWLINE_ID
+        if (DEBUG) {
+            OPERATORS["$="] = "TEMP"
+            OPERATORS["=$="] = "TEMP2"
         }
+        TOKENS = HashBiMap.create(KEYWORDS)
+        TOKENS.putAll(OPERATORS)
+        TOKENS_INVERSE = TOKENS.inverse()
+        require(Collections.max(OPERATORS.keys.stream().mapToInt { obj: String? ->
+            obj?.length ?: 0
+        }.boxed().toList()) <= MAX_OPERATOR_LENGTH)
+        { "MAX_OPERATOR_LENGTH smaller than length of largest operator!" }
     }
-
-    static
-    {
-        TOKENS = HashBiMap.create(KEYWORDS);
-        TOKENS.putAll(OPERATORS);
-        TOKENS_INVERSE = TOKENS.inverse();
-        if (max(OPERATORS.keySet().stream().mapToInt(String::length).boxed().toList()) > MAX_OPERATOR_LENGTH)
-            throw new IllegalArgumentException("MAX_OPERATOR_LENGTH smaller than length of largest operator!");
-    }
-
-    private Constants()
-    {
-
-    }
-
-    public enum SYNTAX_TYPE
-    {
-        PROGRAM,
-        METHOD,
-        EXPRESSION,
-        CODE_BLOCK,
-        TOKEN,
-        DECLARATION,
-        TYPE
-    }
-
-    public static final Predicate<String> IS_IDENTIFIER = x -> x.length() > 1 && x.startsWith(IDENTIFIER_START);
-    public static final Predicate<String> IS_TEXT_LITERAL = x -> x.length() > 1 && x.startsWith(STRING_START);
-    public static final Predicate<String> IS_NUMBER_LITERAL = x -> x.length() > 1 && x.startsWith(NUM_START);
-    public static final Predicate<String> IS_LITERAL = IS_IDENTIFIER.or(IS_TEXT_LITERAL).or(IS_NUMBER_LITERAL);
 }
