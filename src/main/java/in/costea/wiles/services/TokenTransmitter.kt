@@ -32,7 +32,7 @@ class TokenTransmitter(tokens: List<Token>) {
     fun expect(params: ExpectParamsBuilder): Token {
         val message = params.errorMessage
         var succeeded = false
-        if (params.whenRemoveToken == WhenRemoveToken.Default)
+        if (params.whenRemove == WhenRemoveToken.Default)
             params.removeTokenWhen(WhenRemoveToken.Always)
         return try {
             if (tokensExhausted()) throw UnexpectedEndException(message, lastLocation)
@@ -49,7 +49,7 @@ class TokenTransmitter(tokens: List<Token>) {
             succeeded = true
             token
         } finally {
-            val whenRemoveToken: WhenRemoveToken = params.whenRemoveToken
+            val whenRemoveToken: WhenRemoveToken = params.whenRemove
             assert(whenRemoveToken != WhenRemoveToken.Default)
             if ((!succeeded && whenRemoveToken == WhenRemoveToken.Always) || (succeeded && whenRemoveToken != WhenRemoveToken.Never))
                 if (!tokensExhausted())
@@ -60,7 +60,7 @@ class TokenTransmitter(tokens: List<Token>) {
     @Throws(UnexpectedTokenException::class)
     fun expectMaybe(expectParamsBuilder: ExpectParamsBuilder): Optional<Token> {
         return try {
-            if (expectParamsBuilder.whenRemoveToken == WhenRemoveToken.Default) expectParamsBuilder.removeTokenWhen(WhenRemoveToken.WhenFound)
+            if (expectParamsBuilder.whenRemove == WhenRemoveToken.Default) expectParamsBuilder.removeTokenWhen(WhenRemoveToken.WhenFound)
             Optional.of(expect(expectParamsBuilder))
         } catch (ex: TokenExpectedException) {
             Optional.empty()

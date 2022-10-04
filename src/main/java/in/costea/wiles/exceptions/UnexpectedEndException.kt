@@ -1,10 +1,5 @@
-package in.costea.wiles.exceptions;
+package `in`.costea.wiles.exceptions
 
-import in.costea.wiles.data.TokenLocation;
-import org.jetbrains.annotations.NotNull;
+import `in`.costea.wiles.data.TokenLocation
 
-public class UnexpectedEndException extends AbstractCompilationException {
-    public UnexpectedEndException(@NotNull String s, TokenLocation location) {
-        super(s, location);
-    }
-}
+class UnexpectedEndException(s: String, location: TokenLocation?) : AbstractCompilationException(s, location)

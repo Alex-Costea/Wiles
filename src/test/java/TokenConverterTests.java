@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static in.costea.wiles.statics.Constants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,7 +31,7 @@ public class TokenConverterTests {
         else t = assertThrows(throwing, () -> x.throwExceptionIfExists(exceptionIndex));
         assert t instanceof AbstractCompilationException;
         if (line != null)
-            assertEquals(line, ((AbstractCompilationException) t).getTokenLocation().line());
+            assertEquals(line, Objects.requireNonNull(((AbstractCompilationException) t).getTokenLocationNullable()).line());
     }
 
     @SuppressWarnings("SameParameterValue")

@@ -1,10 +1,5 @@
-package in.costea.wiles.exceptions;
+package `in`.costea.wiles.exceptions
 
-import in.costea.wiles.data.TokenLocation;
-import org.jetbrains.annotations.NotNull;
+import `in`.costea.wiles.data.TokenLocation
 
-public class UnexpectedTokenException extends AbstractCompilationException {
-    public UnexpectedTokenException(@NotNull String s, TokenLocation where) {
-        super("Unexpected token: " + s, where);
-    }
-}
+class UnexpectedTokenException(s: String, where: TokenLocation?) : AbstractCompilationException("Unexpected token: $s", where)

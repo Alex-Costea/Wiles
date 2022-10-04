@@ -1,12 +1,5 @@
-package in.costea.wiles.exceptions;
+package `in`.costea.wiles.exceptions
 
+import `in`.costea.wiles.data.TokenLocation
 
-import in.costea.wiles.data.TokenLocation;
-import org.jetbrains.annotations.NotNull;
-
-public class StringUnfinishedException extends AbstractCompilationException {
-
-    public StringUnfinishedException(@NotNull String s, int line, int lineIndex) {
-        super("String unfinished: \"" + s, new TokenLocation(line, lineIndex));
-    }
-}
+class StringUnfinishedException(s: String, line: Int, lineIndex: Int) : AbstractCompilationException("String unfinished: \"$s", TokenLocation(line, lineIndex))

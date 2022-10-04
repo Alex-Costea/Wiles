@@ -1,77 +1,55 @@
-package in.costea.wiles.builders;
+package `in`.costea.wiles.builders
 
-import in.costea.wiles.enums.WhenRemoveToken;
+import `in`.costea.wiles.enums.WhenRemoveToken
+import `in`.costea.wiles.statics.Constants.TOKENS_INVERSE
+import java.util.function.Predicate
 
-import java.util.Collection;
-import java.util.Objects;
-import java.util.function.Predicate;
+class ExpectParamsBuilder private constructor(var foundTest: Predicate<String>) {
+    var errorMessage = "Shouldn't happen"
+        private set
+    var whenRemove: WhenRemoveToken = WhenRemoveToken.Default
+        private set
+    var isIgnoringNewLine = true
+        private set
 
-import static in.costea.wiles.statics.Constants.TOKENS_INVERSE;
-
-public class ExpectParamsBuilder {
-
-
-    public static final Predicate<String> ANYTHING = (x) -> true;
-    private Predicate<String> foundTest;
-    private String errorMessage = "Shouldn't happen";
-    private WhenRemoveToken when = WhenRemoveToken.Default;
-    private boolean ignoringNewLine = true;
-    private ExpectParamsBuilder(Predicate<String> foundTest) {
-        this.foundTest = foundTest;
+    fun withErrorMessage(message: String): ExpectParamsBuilder {
+        errorMessage = message
+        return this
     }
 
-    public static Predicate<String> isContainedIn(Collection<String> set) {
-        return set::contains;
+    fun removeTokenWhen(whenRemove: WhenRemoveToken): ExpectParamsBuilder {
+        this.whenRemove = whenRemove
+        return this
     }
 
-    public static ExpectParamsBuilder tokenOf(String expectedToken) {
-        return new ExpectParamsBuilder(x -> Objects.equals(x, expectedToken))
-                .withErrorMessage("Token \"" + TOKENS_INVERSE.get(expectedToken) + "\" expected!");
+    fun dontIgnoreNewLine(): ExpectParamsBuilder {
+        isIgnoringNewLine = false
+        return this
     }
 
-    public static ExpectParamsBuilder tokenOf(Predicate<String> found) {
-        return new ExpectParamsBuilder(found);
+    fun or(otherTest: Predicate<String>): ExpectParamsBuilder {
+        foundTest = foundTest.or(otherTest)
+        return this
     }
 
-    public ExpectParamsBuilder withErrorMessage(String message) {
-        this.errorMessage = message;
-        return this;
-    }
+    companion object {
+        @JvmField
+        val ANYTHING = Predicate { _: String? -> true }
 
-    public ExpectParamsBuilder removeTokenWhen(WhenRemoveToken when) {
-        this.when = when;
-        return this;
-    }
+        @JvmStatic
+        fun isContainedIn(set: Collection<String?>): Predicate<String> {
+            return Predicate { o: String? -> set.contains(o) }
+        }
 
-    public ExpectParamsBuilder dontIgnoreNewLine() {
-        ignoringNewLine = false;
-        return this;
-    }
+        @JvmStatic
+        fun tokenOf(expectedToken: String?): ExpectParamsBuilder {
+            return ExpectParamsBuilder { x: String? -> x == expectedToken }
+                    .withErrorMessage("Token \"" + TOKENS_INVERSE[expectedToken] + "\" expected!")
+        }
 
-    public ExpectParamsBuilder or(Predicate<String> otherTest) {
-        foundTest = foundTest.or(otherTest);
-        return this;
-    }
-
-    @SuppressWarnings("unused")
-    public ExpectParamsBuilder or(String token) {
-        foundTest = foundTest.or(x -> x.equals(token));
-        return this;
-    }
-
-    public Predicate<String> getFoundTest() {
-        return foundTest;
-    }
-
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
-    public WhenRemoveToken getWhenRemoveToken() {
-        return when;
-    }
-
-    public boolean isIgnoringNewLine() {
-        return ignoringNewLine;
+        @JvmStatic
+        fun tokenOf(found: Predicate<String>): ExpectParamsBuilder {
+            return ExpectParamsBuilder(found)
+        }
     }
 }

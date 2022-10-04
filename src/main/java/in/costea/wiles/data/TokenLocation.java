@@ -10,4 +10,9 @@ public record TokenLocation(int line, int lineIndex) {
             return line() == locationObj.line() || lineIndex() == locationObj.lineIndex();
         return false;
     }
+
+    @Override
+    public String toString() {
+       return "Line " + line + ", character " + lineIndex + ": ";
+    }
 }

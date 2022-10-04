@@ -1,10 +1,5 @@
-package in.costea.wiles.exceptions;
+package `in`.costea.wiles.exceptions
 
-import in.costea.wiles.data.TokenLocation;
-import org.jetbrains.annotations.NotNull;
+import `in`.costea.wiles.data.TokenLocation
 
-public class UnknownOperatorException extends AbstractCompilationException {
-    public UnknownOperatorException(@NotNull String s, int line, int lineIndex) {
-        super("Operator unknown: " + s, new TokenLocation(line, lineIndex));
-    }
-}
+class UnknownOperatorException(s: String, line: Int, lineIndex: Int) : AbstractCompilationException("Operator unknown: $s", TokenLocation(line, lineIndex))

@@ -1,23 +1,22 @@
-package in.costea.wiles.exceptions;
+package `in`.costea.wiles.exceptions
 
-import in.costea.wiles.data.TokenLocation;
-import org.jetbrains.annotations.NotNull;
+import `in`.costea.wiles.data.TokenLocation
 
-public abstract class AbstractCompilationException extends Exception {
+abstract class AbstractCompilationException : Exception {
 
-    private final TokenLocation tokenLocation;
+    @JvmField
+    val tokenLocation: TokenLocation?
 
-    public AbstractCompilationException(@NotNull String s, TokenLocation tokenLocation) {
-        super(tokenLocation != null ? ("Line " + tokenLocation.line() + ", character " + tokenLocation.lineIndex() + ": " + s) : s);
-        this.tokenLocation = tokenLocation;
+    constructor(s: String, tokenLocation: TokenLocation?) : super(""+(tokenLocation?:"")+s) {
+        this.tokenLocation = tokenLocation
     }
 
-    public AbstractCompilationException(@NotNull String s) {
-        super(s);
-        this.tokenLocation = null;
+    constructor(s: String) : super(s) {
+        tokenLocation = null
     }
 
-    public TokenLocation getTokenLocation() {
-        return tokenLocation;
+    @JvmName("getTokenLocationNullable")
+    fun getTokenLocation(): TokenLocation? {
+        return tokenLocation
     }
 }
