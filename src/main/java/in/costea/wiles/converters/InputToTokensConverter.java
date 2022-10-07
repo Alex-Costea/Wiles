@@ -68,41 +68,43 @@ public class InputToTokensConverter {
         return tokens;
     }
 
+    public StringBuilder createString(int index,boolean stopAtStringDelimiter)
+    {
+        int currentIndex=index+1;
+        @NotNull
+        StringBuilder sb = new StringBuilder();
+        char lastNonSpaceCharacter = 0;
+        int lastNonSpaceCharacterIndex = -1;
+        while (!stopAtStringDelimiter || arrayChars[currentIndex] != STRING_DELIMITER) {
+            if (arrayChars[currentIndex] == NEWLINE) {
+                if (lastNonSpaceCharacter == CONTINUE_LINE)
+                    sb.setLength(lastNonSpaceCharacterIndex - 1);
+                else break;
+            } else if (arrayChars[currentIndex] != SPACE) {
+                lastNonSpaceCharacterIndex = currentIndex;
+                lastNonSpaceCharacter = arrayChars[currentIndex];
+            }
+            sb.append(arrayChars[currentIndex]);
+            if (currentIndex + 1 == arrayChars.length)
+                break;
+            currentIndex++;
+        }
+        return sb;
+    }
+
     @NotNull
     private String readStringLiteral() throws StringUnfinishedException {
-        int currentIndex = index + 1;
-        try {
-            if (currentIndex >= arrayChars.length)
-                throw new StringUnfinishedException("", line, getIndexOnCurrentLine());
+        if (++index  >= arrayChars.length)
+            throw new StringUnfinishedException("", line, getIndexOnCurrentLine());
+        StringBuilder sb=createString(index,false);
+        index+=sb.length();
+        if (arrayChars[index] == STRING_DELIMITER)
+            return STRING_START + sb;
 
-            @NotNull
-            StringBuilder sb = new StringBuilder();
-            char lastNonSpaceCharacter = 0;
-            int lastNonSpaceCharacterIndex = -1;
-            while (arrayChars[currentIndex] != STRING_DELIMITER) {
-                if (arrayChars[currentIndex] == NEWLINE) {
-                    if (lastNonSpaceCharacter == CONTINUE_LINE)
-                        sb.setLength(lastNonSpaceCharacterIndex - 1);
-                    else break;
-                } else if (arrayChars[currentIndex] != SPACE) {
-                    lastNonSpaceCharacterIndex = currentIndex;
-                    lastNonSpaceCharacter = arrayChars[currentIndex];
-                }
-                sb.append(arrayChars[currentIndex]);
-                if (currentIndex + 1 == arrayChars.length)
-                    break;
-                currentIndex++;
-            }
-            if (arrayChars[currentIndex] == STRING_DELIMITER)
-                return STRING_START + sb;
-
-            //String not properly finished
-            if (arrayChars[currentIndex] == NEWLINE) //add the newline token regardless
-                currentIndex--;
-            throw new StringUnfinishedException(sb.toString(), line, getIndexOnCurrentLine());
-        } finally {
-            index = currentIndex;
-        }
+        //String not properly finished at this point
+        if (arrayChars[index] == NEWLINE) //add the newline token regardless
+            index--;
+        throw new StringUnfinishedException(sb.toString(), line, getIndexOnCurrentLine());
     }
 
     @NotNull
@@ -163,11 +165,7 @@ public class InputToTokensConverter {
     }
 
     private void readComment() {
-        int currentIndex = index;
-        while (currentIndex < arrayChars.length && arrayChars[currentIndex] != NEWLINE) {
-            currentIndex++;
-        }
-        index = currentIndex - 1;
+        index+=createString(index,false).length()+1;
     }
 
     @NotNull

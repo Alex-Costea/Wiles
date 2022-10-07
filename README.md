@@ -18,7 +18,6 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Floating: `12345.6`
 - String: `"abc"`
 - Boolean: `true` (1) and `false` (0)
-- List: `[1,2,3]`
 - `nothing`
 
 ### Types
@@ -39,6 +38,8 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - For-from loop: `for i from a to b` (syntactic sugar for `for i in range(from <- a, to <- b)`)
 - While loop: `while condition [block]`
 - Code block: `do nothing` (no operation), `do [operation]` or `begin [op1];[op2]; end`
+- Yield: `yield [expression]` (return equivalent)
+- `stop`, `skip` (`break`/`return;`, `continue` equivalents)
 
 ### Operators
 - `+`, `-`, `*`, `/`, `^` (power)
@@ -51,17 +52,13 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - `[]`, `()`, `,`
 
 ### Other keywords
-- `stop`, `skip` (`break`/`return;`, `continue` equivalents)
-- `yield` (return equivalent)
 - `begin`, `end` (code blocks)
-- `anon` (marks parameters as unneeding to be named when calling method)
+- `anon` (marks parameters as not needing to be named when calling method)
 
 ### Named parameters
 - Methods calling with named parameters by default: `range(from <- 1, to <- 10)`
 - Naming parameters can be made optional with `anon` keyword for each parameter
 - `anon` params must always be first in declaration
-- When using one `anon` list, `my_method(a,b,c)` is the same as `my_method([a,b,c])`
-- If parameter name and value sent are the same, `my_method(name<-name)` can be simplified to `my_method(<-name)`
 
 ### Miscellaneous
 - Declaring `main` method optional when using no other methods
@@ -69,7 +66,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Language is statically, strongly typed with some type inference
 - Comment using `#`
 - Returning value done with `method_name := result` or with `yield` keyword
-- `\` can be used to continue a line after a newline (including string literals, not including comments)
+- `\` can be used to continue a line after a newline (including string literals and comments)
 - Types are not reserved keywords and can be used as variable names
 - Method potentially not returning value is a compilation error
 
@@ -83,6 +80,9 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Direct field access is impossible, instead it is transferred to getters/setters
 - Warnings, e.g. unreachable code
 - Garbage collection
+- When using one `anon` list, `my_method(a,b,c)` is the same as `my_method([a,b,c])`
+- If parameter name and value sent are the same, `my_method(name<-name)` can be simplified to `my_method(<-name)`
+- List literal defined with: `[1,2,3]`
 
 ## Examples
 ### Hello World
