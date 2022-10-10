@@ -12,12 +12,14 @@ class ExpectParamsBuilder private constructor(var foundTest: Predicate<String>) 
     var isIgnoringNewLine = true
         private set
 
+    var secondaryTest : Predicate<String>? = null
+
     fun withErrorMessage(message: String): ExpectParamsBuilder {
         errorMessage = message
         return this
     }
 
-    fun removeTokenWhen(whenRemove: WhenRemoveToken): ExpectParamsBuilder {
+    fun removeWhen(whenRemove: WhenRemoveToken): ExpectParamsBuilder {
         this.whenRemove = whenRemove
         return this
     }
@@ -28,7 +30,14 @@ class ExpectParamsBuilder private constructor(var foundTest: Predicate<String>) 
     }
 
     fun or(otherTest: Predicate<String>): ExpectParamsBuilder {
-        foundTest = foundTest.or(otherTest)
+        if(secondaryTest == null)
+            foundTest = foundTest.or(otherTest)
+        else secondaryTest = secondaryTest!!.or(otherTest)
+        return this
+    }
+
+    fun thenOf(otherTest: Predicate<String>): ExpectParamsBuilder {
+        secondaryTest = otherTest
         return this
     }
 

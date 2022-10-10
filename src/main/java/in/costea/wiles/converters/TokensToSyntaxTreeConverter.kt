@@ -21,7 +21,7 @@ class TokensToSyntaxTreeConverter(tokens: List<Token>) {
         tokenTransmitter = TokenTransmitter(tokens)
         exceptions = CompilationExceptionsCollection()
         val bodyOnlyMode: Boolean = try {
-            tokenTransmitter.expectMaybe(tokenOf(DECLARE_METHOD_ID).removeTokenWhen(WhenRemoveToken.Never)).isEmpty
+            tokenTransmitter.expectMaybe(tokenOf(DECLARE_METHOD_ID).removeWhen(WhenRemoveToken.Never)).isEmpty
         } catch (e: UnexpectedTokenException) {
             true
         }

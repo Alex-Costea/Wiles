@@ -17,7 +17,7 @@ data class Token(val content: String, val location: TokenLocation?) {
          return true
      }
 
-     //Not ideal
+     //TODO: Not ideal
      override fun hashCode(): Int {
          var result = content.hashCode()
          result = 31 * result + if(location==null) 1 else 0

@@ -55,6 +55,7 @@ public class ExpressionCommand extends AbstractCommand {
                 .or(isContainedIn(BRACKETS)).withErrorMessage("Identifier or unary operator expected!"));
         @NotNull
         var newExpression = new ExpressionCommand(newToken, transmitter, expressionType);
+        @NotNull
         var newExceptions = newExpression.process();
         if (newExceptions.size() > 0)
             throw newExceptions.get(0);
@@ -86,6 +87,7 @@ public class ExpressionCommand extends AbstractCommand {
     }
 
     private void verifyOtherTokens() throws AbstractCompilationException {
+        @NotNull
         Token mainToken = firstToken;
         while (!transmitter.tokensExhausted()) {
             // finalize expression at newline/semicolon if correctly finalized
@@ -94,7 +96,8 @@ public class ExpressionCommand extends AbstractCommand {
                 break;
 
             // finalize expression at "end" if correct
-            var tempToken = transmitter.expectMaybe(tokenOf(END_BLOCK_ID).removeTokenWhen(WhenRemoveToken.Never));
+            @NotNull
+            var tempToken = transmitter.expectMaybe(tokenOf(END_BLOCK_ID).removeWhen(WhenRemoveToken.Never));
             if (tempToken.isPresent()) {
                 if (expressionType == ExpressionType.REGULAR)
                     break;
@@ -106,7 +109,7 @@ public class ExpressionCommand extends AbstractCommand {
                         .or(isContainedIn(INFIX_OPERATORS)).withErrorMessage("Operator expected!"));
             else
                 mainToken = transmitter.expect(tokenOf(isContainedIn(BRACKETS)).or(isContainedIn(UNARY_OPERATORS))
-                        .or(IS_LITERAL).withErrorMessage("Identifier or unary operator expected!").removeTokenWhen(WhenRemoveToken.Always));
+                        .or(IS_LITERAL).withErrorMessage("Identifier or unary operator expected!").removeWhen(WhenRemoveToken.Always));
 
             if (mainToken.getContent().equals(ROUND_BRACKET_END_ID)) {
                 if (expressionType == ExpressionType.INSIDE_ROUND) break; //end of inner statement

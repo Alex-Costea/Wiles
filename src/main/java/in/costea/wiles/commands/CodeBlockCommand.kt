@@ -59,14 +59,14 @@ class CodeBlockCommand(transmitter: TokenTransmitter, private val standAlone: Bo
     override fun process(): CompilationExceptionsCollection {
         try {
             if (!standAlone && transmitter.expectMaybe(tokenOf(DO_ID)).isPresent) {
-                if (transmitter.expectMaybe(tokenOf(NOTHING_ID)).isEmpty) {
+                if (transmitter.expectMaybe(tokenOf(NOTHING_ID)).isEmpty)
                     readOneStatement()
-                }
                 return exceptions
             } else {
                 if (!standAlone) transmitter.expect(tokenOf(START_BLOCK_ID))
                 while (!transmitter.tokensExhausted()) {
-                    if (!standAlone && transmitter.expectMaybe(tokenOf(END_BLOCK_ID).removeTokenWhen(WhenRemoveToken.Never)).isPresent) break
+                    if (!standAlone && transmitter.expectMaybe(tokenOf(END_BLOCK_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
+                        break
                     readOneStatement()
                 }
                 if (!standAlone) transmitter.expect(tokenOf(END_BLOCK_ID))

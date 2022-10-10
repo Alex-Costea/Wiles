@@ -20,7 +20,7 @@ abstract class AbstractCommand(@JvmField protected val transmitter: TokenTransmi
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonProperty
-    abstract fun getComponents(): List< AbstractCommand>
+    abstract fun getComponents(): List<AbstractCommand>
 
     abstract fun process(): CompilationExceptionsCollection
 

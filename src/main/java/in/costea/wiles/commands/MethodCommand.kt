@@ -18,7 +18,6 @@ class MethodCommand(transmitter: TokenTransmitter) : AbstractCommand(transmitter
     private val parameters: MutableList<ParameterCommand> = ArrayList()
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
 
-    //private final List<AbstractCommand> components = new ArrayList<>();
     private var returnType: TypeDefinitionCommand
     private var methodBody: CodeBlockCommand
 
