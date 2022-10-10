@@ -19,6 +19,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - String: `"abc"`
 - Boolean: `true` (1) and `false` (0)
 - `nothing`
+- List literal: `[1,2,3]`
 
 ### Types
 - Nothing: only valid value is `nothing`
@@ -26,7 +27,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Boolean: `bit`
 - String: `text`
 - Floating point: `decimal` (equivalent to double in other languages)
-- `Optional[type]` either a value of `type`, or `nothing`
+- `either[type1,type2]` either a value of `type1`, or of `type2`
 - Other generic types: `list[type]`, `range[type]`, `dict[type,type]`
 
 ### Declaring
@@ -34,8 +35,9 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Method: `method name({param1 : type, param2 : type}) {: return_type}` (return assumed `nothing` if unspecified)
 - Value `let {var} name {: type} := value` (`var` makes it mutable, type can be inferred)
 - Conditional: `if condition [block] {otherwise [block]}`
+- Conditional type casting: `when value is type [block]`
 - For-in loop: `for x in collection [block]`
-- For-from loop: `for i from a to b` (syntactic sugar for `for i in range(from <- a, to <- b)`)
+- For-from loop: `for i from a to b` (syntactic sugar for `for i in range(from ;= a, to := b)`)
 - While loop: `while condition [block]`
 - Code block: `do nothing` (no operation), `do [operation]` or `begin [op1];[op2]; end`
 - Yield: `yield [expression]` (return equivalent)
@@ -45,20 +47,14 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - `+`, `-`, `*`, `/`, `^` (power)
 - `and`, `or`, `not` (not bitwise!)
 - `=`, `>`, `>=`, `<`, `<=`, `=/=`
-- `:=` (assign or declare)
+- `:=` (assign, declare or name parameters)
 - `.` (method / field access)
 - `:` (type annotation)
-- `<-` (naming parameters, or just "smaller than minus" depending on context)
 - `[]`, `()`, `,`
 
-### Other keywords
-- `begin`, `end` (code blocks)
-- `anon` (marks parameters as not needing to be named when calling method)
-
 ### Named parameters
-- Methods calling with named parameters by default: `range(from <- 1, to <- 10)`
-- Naming parameters can be made optional with `anon` keyword for each parameter
-- `anon` params must always be first in declaration
+- Methods calling with named parameters by default: `range(from := 1, to := 10)`
+- If a method parameter is called `args` and is last, it can be used without naming
 
 ### Miscellaneous
 - Declaring `main` method optional when using no other methods
@@ -80,9 +76,9 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Direct field access is impossible, instead it is transferred to getters/setters
 - Warnings, e.g. unreachable code
 - Garbage collection
-- When using one `anon` list, `my_method(a,b,c)` is the same as `my_method([a,b,c])`
-- If parameter name and value sent are the same, `my_method(name<-name)` can be simplified to `my_method(<-name)`
-- List literal defined with: `[1,2,3]`
+- When using `args` list, `my_method(a,b,c)` is the same as `my_method([a,b,c])`
+- `maybe[type] = either[type,nothing]`
+- `error` types
 
 ## Examples
 ### Hello World
@@ -106,7 +102,7 @@ end
 ### Minimum value
 
 ```
-method min(list: anon list[int]) : optional[int]
+method min(args: list[int]) : either[int,nothing]
 begin
     if list.size = 0 do
         yield nothing 
