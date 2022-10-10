@@ -106,10 +106,10 @@ end
 ```
 method min(args: list[int]) : either[int,nothing]
 begin
-    if list.size = 0 do
+    if args.size = 0 do
         yield nothing
-    min := list[0]
-    for x in list.slice(from := 1) do
+    min := args[0]
+    for x in args.slice(from := 1) do
         if x < min do
             min := x
 end
