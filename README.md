@@ -73,7 +73,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - `infint` (infinite precision integer)
 - `exactdec` (stored as fraction, not as float)
 - Other generic types:  `linkedlist[type]`, `set[type]`, `ref[type]`, `either[type1,type2,type3]`
-- Method type: `method[param1,param2][return_type]`
+- Using `method` types like first class objects 
 - Classes with `class` keyword. Internally, maybe something like `dict[text,method]`?
 - Declare fields `readonly` for getter with no setter, `public` for getter and setter
 - Direct field access is impossible, instead it is transferred to getters/setters
