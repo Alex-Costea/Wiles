@@ -27,19 +27,20 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Boolean: `bit`
 - String: `text`
 - Floating point: `decimal` (equivalent to double in other languages)
+- Method type: methods must be assigned to value
 - Sum types: `either[type1,type2]`, either a value of `type1`, or of `type2`
 - Other generic types: `list[type]`, `range[type]`, `dict[type,type]`
 
 ### Declaring
 #### Note: {} means optional
-- Method: `method name({param1 : type, param2 : type}) {: return_type}` (return assumed `nothing` if unspecified)
+- Method: `method({param1 : type, param2 : type}) {--> return_type}` (return assumed `nothing` if unspecified)
 - Value `let {var} name {: type} := value` (`var` makes it mutable, type can be inferred)
 - Conditional: `if condition [block] {otherwise [block]}`
 - Conditional type casting: `when value is type [block] {otherwise block}`
 - For-in loop: `for x in collection [block]`
 - For-from loop: `for i from a to b` (syntactic sugar for `for i in range(from := a, to := b)`)
 - While loop: `while condition [block]`
-- Code block: `do nothing` (no operation), `do [operation]` or `begin [op1];[op2]; end`
+- Code block: `do nothing` (no operation), `do [operation]` or `{do} begin [op1];[op2]; end`
 - Yield: `yield [expression]` (return equivalent)
 - `stop`, `skip` (`break`/`return;`, `continue` equivalents)
 
@@ -104,7 +105,7 @@ end
 ### Minimum value
 
 ```
-method min(args: list[int]) : either[int,nothing]
+min := method(args : list[int])  --> either[int,nothing]
 begin
     if args.size = 0 do
         yield nothing
@@ -114,7 +115,7 @@ begin
             min := x
 end
 
-method main()
+main := do
 begin
     result := min(10, 3, 55, 8)
     when result is nothing do
