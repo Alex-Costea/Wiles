@@ -106,7 +106,7 @@ end
 ### Minimum value
 
 ```
-method min(anon list: list[int]) : optional[int]
+method min(list: anon list[int]) : optional[int]
 begin
     if list.size = 0 do
         yield nothing 

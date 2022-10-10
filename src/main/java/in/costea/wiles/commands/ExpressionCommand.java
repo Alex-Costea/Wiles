@@ -17,6 +17,7 @@ import java.util.List;
 import static in.costea.wiles.builders.ExpectParamsBuilder.isContainedIn;
 import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
 import static in.costea.wiles.statics.Constants.*;
+import static in.costea.wiles.statics.Utils.todo;
 
 public class ExpressionCommand extends AbstractCommand {
     @NotNull
@@ -121,8 +122,7 @@ public class ExpressionCommand extends AbstractCommand {
             }
 
             if ((expectNext == ExpectNext.OPERATOR) && mainToken.getContent().equals(ROUND_BRACKET_START_ID)) {
-                //TODO: implement
-                throw new Error("Method call not yet implemented!");
+                todo("Method call");
             }
             if (mainToken.getContent().equals(SQUARE_BRACKET_START_ID)) {
                 addInnerExpression(ExpressionType.INSIDE_SQUARE, false);

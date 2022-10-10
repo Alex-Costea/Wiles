@@ -36,6 +36,11 @@ class ExpectParamsBuilder private constructor(var foundTest: Predicate<String>) 
         return this
     }
 
+    fun or(otherTest: String): ExpectParamsBuilder {
+        or { x -> x == otherTest }
+        return this
+    }
+
     fun thenOf(otherTest: Predicate<String>): ExpectParamsBuilder {
         secondaryTest = otherTest
         return this

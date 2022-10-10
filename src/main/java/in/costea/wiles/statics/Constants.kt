@@ -33,6 +33,7 @@ object Constants {
     const val NOTHING_ID = "NOTHING"
     const val COMMA_ID = "COMMA"
     const val DO_ID = "DO"
+    const val ANON_ID="ANON"
     private const val EQUALS_ID = "EQUALS"
     private const val LARGER_ID = "LARGER"
     private const val SMALLER_ID = "SMALLER"
@@ -108,6 +109,7 @@ object Constants {
         KEYWORDS["do"] = "DO"
         KEYWORDS["begin"] = START_BLOCK_ID
         KEYWORDS["end"] = END_BLOCK_ID
+        KEYWORDS["anon"] = ANON_ID
 
         TYPES["!bit"] = "BOOLEAN"
         TYPES["!byte"] = "INT8"
