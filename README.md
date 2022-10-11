@@ -117,7 +117,7 @@ end
 
 let main := do
 begin
-    result := min(10, 3, 55, 8)
+    let result := min(10, 3, 55, 8)
     when result is nothing do
         writeline("Error: no min found!")
     otherwise do
