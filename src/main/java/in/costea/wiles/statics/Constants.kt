@@ -33,7 +33,7 @@ object Constants {
     const val NOTHING_ID = "NOTHING"
     const val COMMA_ID = "COMMA"
     const val DO_ID = "DO"
-    const val ANON_ID="ANON"
+    const val RIGHT_ARROW_ID="RIGHT_ARROW"
     private const val EQUALS_ID = "EQUALS"
     private const val LARGER_ID = "LARGER"
     private const val SMALLER_ID = "SMALLER"
@@ -44,6 +44,8 @@ object Constants {
     private const val AND_ID = "AND"
     private const val OR_ID = "OR"
     const val NOT_ID = "NOT"
+    const val ANON_STARTS_WITH=IDENTIFIER_START+"arg"
+
 
     @JvmField
     val KEYWORDS: BiMap<String, String> = HashBiMap.create()
@@ -109,7 +111,6 @@ object Constants {
         KEYWORDS["do"] = "DO"
         KEYWORDS["begin"] = START_BLOCK_ID
         KEYWORDS["end"] = END_BLOCK_ID
-        KEYWORDS["anon"] = ANON_ID
 
         TYPES["!bit"] = "BOOLEAN"
         TYPES["!byte"] = "INT8"
@@ -117,10 +118,9 @@ object Constants {
         TYPES["!int"] = "INT32"
         TYPES["!bigint"] = "INT64"
         TYPES["!text"] = "STRING"
-        TYPES["!decimal"] = "DOUBLE"
+        TYPES["!rational"] = "DOUBLE"
         TYPES["!list"] = "ARRAY_LIST"
-        TYPES["!optional"] = "NULLABLE"
-        TYPES["!dictionary"] = "LINKED_MAP"
+        TYPES["!either"] = "EITHER"
         TYPES["!range"] = "RANGE"
         TYPES[NOTHING_ID] = "NOTHING"
 
@@ -144,6 +144,7 @@ object Constants {
         OPERATORS["."] = DOT_ID
         OPERATORS[":"] = COLON_ID
         OPERATORS[";"] = STATEMENT_TERMINATOR_ID
+        OPERATORS["-->"] = RIGHT_ARROW_ID
         OPERATORS["" + SPACE] = SPACE_ID
         OPERATORS["" + CONTINUE_LINE] = BACKSLASH_ID
         OPERATORS["" + NEWLINE] = NEWLINE_ID

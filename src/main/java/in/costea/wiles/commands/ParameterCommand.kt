@@ -6,7 +6,7 @@ import `in`.costea.wiles.data.Token
 import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.services.TokenTransmitter
-import `in`.costea.wiles.statics.Constants.ANON_ID
+import `in`.costea.wiles.statics.Constants.ANON_STARTS_WITH
 import `in`.costea.wiles.statics.Constants.COLON_ID
 import `in`.costea.wiles.statics.Constants.IS_IDENTIFIER
 import `in`.costea.wiles.statics.Constants.UNKNOWN_TOKEN
@@ -18,7 +18,7 @@ class ParameterCommand(transmitter: TokenTransmitter) : AbstractCommand(transmit
     private var isAnon = false
     private set(value)
     {
-        name=if(value) ANON_ID else ""
+        name=if(value) "ANON" else ""
         field = value
     }
 
@@ -37,8 +37,9 @@ class ParameterCommand(transmitter: TokenTransmitter) : AbstractCommand(transmit
     override fun process(): CompilationExceptionsCollection {
         try {
             tokenCommand = TokenCommand(transmitter, transmitter.expect(tokenOf(IS_IDENTIFIER).withErrorMessage("Token expected!")))
+            if(tokenCommand!!.token.content.startsWith(ANON_STARTS_WITH))
+                isAnon=true
             transmitter.expect(tokenOf(COLON_ID))
-            isAnon=(transmitter.expectMaybe(tokenOf(ANON_ID)).isPresent)
             exceptions.addAll(typeDefinition.process())
         } catch (e: AbstractCompilationException) {
             exceptions.add(e)

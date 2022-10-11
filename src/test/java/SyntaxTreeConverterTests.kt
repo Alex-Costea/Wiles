@@ -6,7 +6,6 @@ import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.exceptions.TokenExpectedException
 import `in`.costea.wiles.exceptions.UnexpectedEndException
 import `in`.costea.wiles.exceptions.UnexpectedTokenException
-import `in`.costea.wiles.statics.Constants.ANON_ID
 import `in`.costea.wiles.statics.Constants.ASSIGN_ID
 import `in`.costea.wiles.statics.Constants.COLON_ID
 import `in`.costea.wiles.statics.Constants.COMMA_ID
@@ -153,8 +152,8 @@ class SyntaxTreeConverterTests {
                 DECLARE_METHOD_ID, "!product", ROUND_BRACKET_START_ID, "!a", COLON_ID, "!int",
                 COMMA_ID, "!b", COLON_ID, "!int", ROUND_BRACKET_END_ID, COLON_ID, "!bigint", NEWLINE_ID,
                 DO_ID, "!product", ASSIGN_ID, "!a", TIMES_ID, "!b")
-        assertResults(null,"PROGRAM(METHOD main(TYPE NOTHING; DECLARATION ANON(!a; TYPE INT32); CODE_BLOCK))",
-            DECLARE_METHOD_ID, "!main", ROUND_BRACKET_START_ID, "!a", COLON_ID, ANON_ID, "!int", ROUND_BRACKET_END_ID, DO_ID, NOTHING_ID)
+        assertResults(null,"PROGRAM(METHOD main(TYPE NOTHING; DECLARATION ANON(!arg1; TYPE INT32); CODE_BLOCK))",
+            DECLARE_METHOD_ID, "!main", ROUND_BRACKET_START_ID, "!arg1", COLON_ID, "!int", ROUND_BRACKET_END_ID, DO_ID, NOTHING_ID)
     }
 
     @Test
