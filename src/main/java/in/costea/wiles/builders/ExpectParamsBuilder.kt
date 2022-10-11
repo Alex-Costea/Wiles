@@ -42,6 +42,9 @@ class ExpectParamsBuilder private constructor(var foundTest: Predicate<String>) 
     }
 
     fun thenOf(otherTest: Predicate<String>): ExpectParamsBuilder {
+        TODO("Not tested!")
+        check(secondaryTest==null)
+            {"Second param already set!"}
         secondaryTest = otherTest
         return this
     }

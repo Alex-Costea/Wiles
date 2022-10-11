@@ -17,7 +17,9 @@ class CompilationExceptionsCollection : ArrayList<AbstractCompilationException>(
     override fun equals(other: Any?): Boolean {
         if (other !is CompilationExceptionsCollection)
             return false
-        for (i in 0 until other.size)
+        if(other.size!=size)
+            return false
+        for (i in 0 until size)
             if (this[i].message != other[i].message)
                 return false
         return true

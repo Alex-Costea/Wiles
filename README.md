@@ -57,7 +57,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 
 ### Named parameters
 - Methods calling with named parameters by default: `range(from := 1, to := 10)`
-- If a method parameter' identifier starts with `arg`, it can be used without naming
+- If a method parameter's identifier starts with `arg`, it can be used without naming
 - `arg` identifiers must be last
 - When using one `arg` list, `my_method(a,b,c)` is the same as `my_method([a,b,c])`
 
