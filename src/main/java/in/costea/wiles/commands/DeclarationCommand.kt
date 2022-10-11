@@ -15,7 +15,7 @@ import `in`.costea.wiles.statics.Constants.ASSIGN_ID
 import `in`.costea.wiles.statics.Constants.DECLARE_ID
 import `in`.costea.wiles.statics.Constants.METHOD_ID
 
-class AssignmentCommand(transmitter: TokenTransmitter) : AbstractCommand(transmitter) {
+class DeclarationCommand(transmitter: TokenTransmitter) : AbstractCommand(transmitter) {
     private var leftExpression : AbstractCommand? = null
     private var rightExpression : AbstractCommand? = null
     private val exceptions=CompilationExceptionsCollection()

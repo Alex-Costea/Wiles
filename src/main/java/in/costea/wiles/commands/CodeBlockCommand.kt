@@ -1,5 +1,7 @@
 package `in`.costea.wiles.commands
 
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonProperty
 import `in`.costea.wiles.builders.ExpectParamsBuilder
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.isContainedIn
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
@@ -20,9 +22,14 @@ import `in`.costea.wiles.statics.Constants.STATEMENT_TERMINATORS
 import `in`.costea.wiles.statics.Constants.TOKENS_INVERSE
 import `in`.costea.wiles.statics.Constants.UNARY_OPERATORS
 
-class CodeBlockCommand(transmitter: TokenTransmitter) : AbstractCommand(transmitter) {
+class CodeBlockCommand(transmitter: TokenTransmitter,private val outerMost:Boolean) : AbstractCommand(transmitter) {
     private val components: MutableList<AbstractCommand> = ArrayList()
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
+
+    @JsonProperty
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private var compiledSuccessfully: Boolean? = null
+
     override val type: SyntaxType
         get() = SyntaxType.CODE_BLOCK
 
@@ -38,10 +45,10 @@ class CodeBlockCommand(transmitter: TokenTransmitter) : AbstractCommand(transmit
         command = if (optionalToken.isPresent)
             ExpressionCommand(optionalToken.get(), transmitter, ExpressionType.RIGHT_SIDE)
         else if(transmitter.expectMaybe(tokenOf(DECLARE_ID).removeWhen(WhenRemoveToken.Never)).isPresent) {
-            AssignmentCommand(transmitter)
+            DeclarationCommand(transmitter)
         } else {
             val (content, location) = transmitter.expect(tokenOf(ExpectParamsBuilder.ANYTHING))
-            throw UnexpectedTokenException(TOKENS_INVERSE[content]!!, location)
+            throw UnexpectedTokenException(TOKENS_INVERSE[content]?:content, location)
         }
         val newExceptions: CompilationExceptionsCollection = command.process()
         if (newExceptions.size > 0) throw newExceptions[0]
@@ -50,22 +57,23 @@ class CodeBlockCommand(transmitter: TokenTransmitter) : AbstractCommand(transmit
 
     override fun process(): CompilationExceptionsCollection {
         try {
-            if (transmitter.expectMaybe(tokenOf(DO_ID)).isPresent) {
+            if (!outerMost && transmitter.expectMaybe(tokenOf(DO_ID)).isPresent) {
                 if (transmitter.expectMaybe(tokenOf(NOTHING_ID)).isEmpty)
                     readOneStatement()
                 return exceptions
             } else {
-                transmitter.expect(tokenOf(START_BLOCK_ID))
+                if(!outerMost) transmitter.expect(tokenOf(START_BLOCK_ID))
                 while (!transmitter.tokensExhausted()) {
-                    if (transmitter.expectMaybe(tokenOf(END_BLOCK_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
+                    if (!outerMost && transmitter.expectMaybe(tokenOf(END_BLOCK_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
                         break
                     readOneStatement()
                 }
-                transmitter.expect(tokenOf(END_BLOCK_ID))
+                if(!outerMost) transmitter.expect(tokenOf(END_BLOCK_ID))
             }
         } catch (ex: AbstractCompilationException) {
             exceptions.add(ex)
         }
+        compiledSuccessfully=exceptions.isEmpty()
         return exceptions
     }
 }

@@ -3,7 +3,7 @@ package `in`.costea.wiles
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter
 import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.json.JsonMapper
-import `in`.costea.wiles.commands.ProgramCommand
+import `in`.costea.wiles.commands.CodeBlockCommand
 import `in`.costea.wiles.converters.InputToTokensConverter
 import `in`.costea.wiles.converters.TokensToSyntaxTreeConverter
 import `in`.costea.wiles.data.CompilationExceptionsCollection
@@ -25,7 +25,7 @@ object Main {
         val tokens = sourceToTokens(input)
         print("Tokens: ")
         println(tokens.stream().map(Token::content).toList())
-        val ast: ProgramCommand = tokensToAST(tokens)
+        val ast = tokensToAST(tokens)
         val mapper = JsonMapper.builder().disable(MapperFeature.AUTO_DETECT_CREATORS).disable(MapperFeature.AUTO_DETECT_FIELDS)
                 .disable(MapperFeature.AUTO_DETECT_GETTERS).disable(MapperFeature.AUTO_DETECT_IS_GETTERS).build()
         print("Syntax tree: ")
@@ -61,11 +61,10 @@ object Main {
         return tokens
     }
 
-    private fun tokensToAST(tokens: List<Token>): ProgramCommand {
+    private fun tokensToAST(tokens: List<Token>): CodeBlockCommand {
         val converter = TokensToSyntaxTreeConverter(tokens)
         val programCommand = converter.convert()
         exceptions.addAll(converter.exceptions)
-        programCommand.setCompiledSuccessfully(exceptions.size == 0)
         return programCommand
     }
 }

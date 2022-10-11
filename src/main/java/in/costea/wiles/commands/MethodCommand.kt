@@ -23,7 +23,7 @@ class MethodCommand(transmitter: TokenTransmitter) : AbstractCommand(transmitter
 
     init {
         returnType = TypeDefinitionCommand(transmitter)
-        methodBody = CodeBlockCommand(transmitter)
+        methodBody = CodeBlockCommand(transmitter,false)
         returnType.name = NOTHING_ID
     }
 
