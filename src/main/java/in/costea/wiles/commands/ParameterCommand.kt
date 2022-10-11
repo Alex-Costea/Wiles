@@ -27,7 +27,7 @@ class ParameterCommand(transmitter: TokenTransmitter) : AbstractCommand(transmit
     }
 
     override val type: SyntaxType
-        get() = SyntaxType.DECLARATION
+        get() = SyntaxType.PARAMETER
 
     override fun getComponents(): List<AbstractCommand> {
         return listOf(tokenCommand?:TokenCommand(transmitter, Token(UNKNOWN_TOKEN,null)),

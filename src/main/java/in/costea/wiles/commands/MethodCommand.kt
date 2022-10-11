@@ -6,10 +6,11 @@ import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.enums.WhenRemoveToken
 import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.services.TokenTransmitter
-import `in`.costea.wiles.statics.Constants.COLON_ID
 import `in`.costea.wiles.statics.Constants.COMMA_ID
 import `in`.costea.wiles.statics.Constants.IS_IDENTIFIER
+import `in`.costea.wiles.statics.Constants.METHOD_ID
 import `in`.costea.wiles.statics.Constants.NOTHING_ID
+import `in`.costea.wiles.statics.Constants.RIGHT_ARROW_ID
 import `in`.costea.wiles.statics.Constants.ROUND_BRACKET_END_ID
 import `in`.costea.wiles.statics.Constants.ROUND_BRACKET_START_ID
 
@@ -26,16 +27,8 @@ class MethodCommand(transmitter: TokenTransmitter) : AbstractCommand(transmitter
         returnType.name = NOTHING_ID
     }
 
-    fun setMethodName(methodName: String) {
-        name = methodName
-    }
-
     override val type: SyntaxType
         get() = SyntaxType.METHOD
-
-    fun setMethodBody(methodBody: CodeBlockCommand) {
-        this.methodBody = methodBody
-    }
 
     override fun getComponents(): List<AbstractCommand> {
         val components = ArrayList<AbstractCommand>()
@@ -47,8 +40,7 @@ class MethodCommand(transmitter: TokenTransmitter) : AbstractCommand(transmitter
 
     override fun process(): CompilationExceptionsCollection {
         try {
-            name = transmitter.expect(tokenOf(IS_IDENTIFIER).withErrorMessage("Expected method name!"))
-                .content.substring(1)
+            transmitter.expect(tokenOf(METHOD_ID))
 
             //Parameters list
             transmitter.expect(tokenOf(ROUND_BRACKET_START_ID))
@@ -62,7 +54,7 @@ class MethodCommand(transmitter: TokenTransmitter) : AbstractCommand(transmitter
             transmitter.expect(tokenOf(ROUND_BRACKET_END_ID))
 
             //Return type
-            if (transmitter.expectMaybe(tokenOf(COLON_ID)).isPresent) {
+            if (transmitter.expectMaybe(tokenOf(RIGHT_ARROW_ID)).isPresent) {
                 returnType = TypeDefinitionCommand(transmitter)
                 exceptions.addAll(returnType.process())
             }
