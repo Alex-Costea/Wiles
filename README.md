@@ -29,7 +29,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Floating point: `decimal` (equivalent to double in other languages)
 - Method type: methods must be assigned to value
 - Sum types: `either[type1,type2]`, either a value of `type1`, or of `type2`
-- Other generic types: `list[type]`, `range[type]`, `dict[type,type]`
+- Other generic types: `list[type]`, `range[type]`
 
 ### Declaring
 #### Note: {} means optional
@@ -72,7 +72,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 ### Potential additions (no promises!)
 - `infint` (infinite precision integer)
 - `exactdec` (stored as fraction, not as float)
-- Other generic types:  `linkedlist[type]`, `set[type]`, `ref[type]`, `either[type1,type2,type3]`
+- Other generic types: `dict[type,type]`, `linkedlist[type]`, `set[type]`, `ref[type]`
 - Using `method` types like first class objects 
 - Classes with `class` keyword. Internally, maybe something like `dict[text,method]`?
 - Declare fields `readonly` for getter with no setter, `public` for getter and setter
