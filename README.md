@@ -40,7 +40,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - For-in loop: `for x in collection [block]`
 - For-from loop: `for i from a to b` (syntactic sugar for `for i in range(from := a, to := b)`)
 - While loop: `while condition [block]`
-- Code block: `do nothing` (no operation), `do [operation]` or `{do} begin [op1];[op2]; end`
+- Code block: `do nothing` (no operation), `do [operation]` or `begin [op1];[op2]; end`
 - Yield: `yield [expression]` (return equivalent)
 - `stop`, `skip` (`break`/`return;`, `continue` equivalents)
 
@@ -115,7 +115,7 @@ begin
             min := x
 end
 
-let main := do
+let main := method()
 begin
     let result := min(10, 3, 55, 8)
     when result is nothing do
