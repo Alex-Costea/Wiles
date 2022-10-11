@@ -14,28 +14,31 @@ This is a one-man project mostly meant for myself to try out making an interpret
 
 ### Literals
 
+- `nothing`
 - Integer: `12345`
 - Floating: `12345.6`
 - String: `"abc"`
 - Boolean: `true` (1) and `false` (0)
-- `nothing`
+- List literal: `list(1,2,3)`
 
 ### Types
 - Nothing: only valid value is `nothing`
 - Integers: `byte`, `smallint`, `int`, `bigint`
 - Boolean: `bit`
 - String: `text`
-- Floating point: `decimal` (equivalent to double in other languages)
-- `Optional[type]` either a value of `type`, or `nothing`
-- Other generic types: `list[type]`, `range[type]`, `dict[type,type]`
+- Floating point: `rational` (equivalent to `double` in other languages)
+- Method type: methods must be assigned to value
+- Sum types: `either[type1,type2]`, either a value of `type1`, or of `type2`
+- Other generic types: `list[type]`, `range[type]`
 
 ### Declaring
 #### Note: {} means optional
-- Method: `method name({param1 : type, param2 : type}) {: return_type}` (return assumed `nothing` if unspecified)
+- Method: `method({param1 : type, param2 : type}) {--> return_type}` (return assumed `nothing` if unspecified)
 - Value `let {var} name {: type} := value` (`var` makes it mutable, type can be inferred)
 - Conditional: `if condition [block] {otherwise [block]}`
+- Conditional type casting: `when value is type [block] {otherwise block}`
 - For-in loop: `for x in collection [block]`
-- For-from loop: `for i from a to b` (syntactic sugar for `for i in range(from <- a, to <- b)`)
+- For-from loop: `for i from a to b` (syntactic sugar for `for i in range(from := a, to := b)`)
 - While loop: `while condition [block]`
 - Code block: `do nothing` (no operation), `do [operation]` or `begin [op1];[op2]; end`
 - Yield: `yield [expression]` (return equivalent)
@@ -45,20 +48,18 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - `+`, `-`, `*`, `/`, `^` (power)
 - `and`, `or`, `not` (not bitwise!)
 - `=`, `>`, `>=`, `<`, `<=`, `=/=`
-- `:=` (assign or declare)
+- `:=` (assign, declare or name parameters)
 - `.` (method / field access)
 - `:` (type annotation)
-- `<-` (naming parameters, or just "smaller than minus" depending on context)
-- `[]`, `()`, `,`
-
-### Other keywords
-- `begin`, `end` (code blocks)
-- `anon` (marks parameters as not needing to be named when calling method)
+- `[]` (subtype declaration, collection access)
+- `()` (order of operations, method access)
+- `,` (separator between elements)
 
 ### Named parameters
-- Methods calling with named parameters by default: `range(from <- 1, to <- 10)`
-- Naming parameters can be made optional with `anon` keyword for each parameter
-- `anon` params must always be first in declaration
+- Methods calling with named parameters by default: `range(from := 1, to := 10)`
+- If a method parameter' identifier starts with `arg`, it can be used without naming
+- `arg` identifiers must be last
+- When using one `arg` list, `my_method(a,b,c)` is the same as `my_method([a,b,c])`
 
 ### Miscellaneous
 - Declaring `main` method optional when using no other methods
@@ -69,20 +70,21 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - `\` can be used to continue a line after a newline (including string literals and comments)
 - Types are not reserved keywords and can be used as variable names
 - Method potentially not returning value is a compilation error
+- `nothing` type is invalid in comparisons
 
 ### Potential additions (no promises!)
 - `infint` (infinite precision integer)
-- `exactdec` (stored as fraction, not as float)
-- Other generic types:  `linkedlist[type]`, `set[type]`, `ref[type]`, `either[type1,type2,type3]`
-- Method type: `method[param1,param2][return_type]`
+- `decimal` (stored as fraction, not as float)
+- Other generic types: `dict[type,type]`, `linkedlist[type]`, `set[type]`, `ref[type]`
+- Using `method` types like first class objects 
 - Classes with `class` keyword. Internally, maybe something like `dict[text,method]`?
 - Declare fields `readonly` for getter with no setter, `public` for getter and setter
 - Direct field access is impossible, instead it is transferred to getters/setters
 - Warnings, e.g. unreachable code
 - Garbage collection
-- When using one `anon` list, `my_method(a,b,c)` is the same as `my_method([a,b,c])`
-- If parameter name and value sent are the same, `my_method(name<-name)` can be simplified to `my_method(<-name)`
-- List literal defined with: `[1,2,3]`
+- `maybe[type] = either[type,nothing]`
+- `error` types
+- `either` with more than 2 types
 
 ## Examples
 ### Hello World
@@ -98,7 +100,7 @@ begin
         text.append("Fizz")
     if modulo(i, 5) = 0 do
         text.append("Buzz")
-    if my_text = "" do
+    if text = "" do
         text := i.as_text
     writeline(text)
 end 
@@ -106,13 +108,22 @@ end
 ### Minimum value
 
 ```
-method min(list: anon list[int]) : optional[int]
+let min := method(args : list[int])  --> either[int,nothing]
 begin
-    if list.size = 0 do
-        yield nothing 
-    min := list[0]
-    for x in list do
+    if args.size = 0 do
+        yield nothing
+    min := args[0]
+    for x in args.slice(from := 1) do
         if x < min do
             min := x
+end
+
+let main := method()
+begin
+    let result := min(10, 3, 55, 8)
+    when result is nothing do
+        writeline("Error: no min found!")
+    otherwise do
+        writeline("Min found: " + result)
 end
 ```
