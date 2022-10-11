@@ -41,6 +41,7 @@ class TokenConverterTests {
         tokenConverterEquals("#", arrayOf())
         tokenConverterEquals("#\n", arrayOf("NEWLINE"))
         tokenConverterEquals("abc#de\nfgh", arrayOf("!abc", "NEWLINE", "!fgh"))
+        tokenConverterEquals("abc#de\\   \nfgh", arrayOf("!abc"))
         tokenConverterEquals("abc#a b c d e f break end continue", arrayOf("!abc"))
     }
 

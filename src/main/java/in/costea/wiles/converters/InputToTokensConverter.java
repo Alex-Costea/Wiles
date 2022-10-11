@@ -68,27 +68,36 @@ public class InputToTokensConverter {
         return tokens;
     }
 
-    public StringBuilder createString(int index,boolean stopAtStringDelimiter)
+    public StringBuilder createString(boolean isComment)
     {
         int currentIndex=index+1;
         @NotNull
         StringBuilder sb = new StringBuilder();
         char lastNonSpaceCharacter = 0;
         int lastNonSpaceCharacterIndex = -1;
-        while (currentIndex<arrayChars.length && !stopAtStringDelimiter && arrayChars[currentIndex] != STRING_DELIMITER) {
+        while (currentIndex<arrayChars.length) {
             if (arrayChars[currentIndex] == NEWLINE) {
                 if (lastNonSpaceCharacter == CONTINUE_LINE)
-                    sb.setLength(lastNonSpaceCharacterIndex - 1);
-                else break;
+                    sb.setLength(lastNonSpaceCharacterIndex - index - 1);
+                else
+                {
+                    //TODO: ugly hack i don't understand
+                    if(!isComment)
+                        currentIndex--;
+                    break;
+                }
             } else if (arrayChars[currentIndex] != SPACE) {
                 lastNonSpaceCharacterIndex = currentIndex;
                 lastNonSpaceCharacter = arrayChars[currentIndex];
             }
+            if(isComment && arrayChars[currentIndex] == STRING_DELIMITER)
+                break;
             sb.append(arrayChars[currentIndex]);
             if (currentIndex + 1 == arrayChars.length)
                 break;
             currentIndex++;
         }
+        index=currentIndex;
         return sb;
     }
 
@@ -96,8 +105,7 @@ public class InputToTokensConverter {
     private String readStringLiteral() throws StringUnfinishedException {
         if (index  >= arrayChars.length)
             throw new StringUnfinishedException("", line, getIndexOnCurrentLine());
-        StringBuilder sb=createString(index,false);
-        index+=sb.length()+1;
+        StringBuilder sb=createString(true);
         if (index < arrayChars.length && arrayChars[index] == STRING_DELIMITER)
             return STRING_START + sb;
 
@@ -165,7 +173,7 @@ public class InputToTokensConverter {
     }
 
     private void readComment() {
-        index+=createString(index,false).length();
+        createString(false);
     }
 
     @NotNull
