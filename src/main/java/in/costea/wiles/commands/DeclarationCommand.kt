@@ -28,9 +28,11 @@ class DeclarationCommand(transmitter: TokenTransmitter) : AbstractCommand(transm
     override fun process(): CompilationExceptionsCollection {
         try {
             transmitter.expect(tokenOf(DECLARE_ID))
+
             val leftExpression=ExpressionCommand(transmitter,ExpressionType.LEFT_SIDE)
             this.leftExpression=leftExpression
             exceptions.addAll(leftExpression.process())
+
             transmitter.expect(tokenOf(ASSIGN_ID))
 
             //Method declaration
@@ -44,7 +46,6 @@ class DeclarationCommand(transmitter: TokenTransmitter) : AbstractCommand(transm
                 //Unknown
                 else throw TokenExpectedException(message,transmitter.expect(tokenOf(ANYTHING).withErrorMessage(message)).location)
             }
-
             this.rightExpression=rightExpression
             exceptions.addAll(rightExpression.process())
         }

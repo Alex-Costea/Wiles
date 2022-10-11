@@ -12,6 +12,7 @@ import `in`.costea.wiles.enums.WhenRemoveToken
 import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.exceptions.UnexpectedTokenException
 import `in`.costea.wiles.services.TokenTransmitter
+import `in`.costea.wiles.statics.Constants.ASSIGNMENT_START_ID
 import `in`.costea.wiles.statics.Constants.DECLARE_ID
 import `in`.costea.wiles.statics.Constants.DO_ID
 import `in`.costea.wiles.statics.Constants.END_BLOCK_ID
@@ -43,6 +44,8 @@ class CodeBlockCommand(transmitter: TokenTransmitter,private val outerMost:Boole
                 ExpressionCommand(transmitter, ExpressionType.RIGHT_SIDE)
         else if(transmitter.expectMaybe(tokenOf(DECLARE_ID).removeWhen(WhenRemoveToken.Never)).isPresent) {
             DeclarationCommand(transmitter)
+        } else if(transmitter.expectMaybe(tokenOf(ASSIGNMENT_START_ID).removeWhen(WhenRemoveToken.Never)).isPresent) {
+            AssignmentCommand(transmitter)
         } else {
             val (content, location) = transmitter.expect(tokenOf(ExpectParamsBuilder.ANYTHING))
             throw UnexpectedTokenException(TOKENS_INVERSE[content]?:content, location)
