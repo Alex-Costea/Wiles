@@ -105,7 +105,7 @@ end
 ### Minimum value
 
 ```
-min := method(args : list[int])  --> either[int,nothing]
+let min := method(args : list[int])  --> either[int,nothing]
 begin
     if args.size = 0 do
         yield nothing
@@ -115,7 +115,7 @@ begin
             min := x
 end
 
-main := do
+let main := do
 begin
     result := min(10, 3, 55, 8)
     when result is nothing do
