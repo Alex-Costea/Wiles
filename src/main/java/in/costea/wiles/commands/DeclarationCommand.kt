@@ -1,7 +1,6 @@
 package `in`.costea.wiles.commands
 
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.ANYTHING
-import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.isContainedIn
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.enums.ExpressionType
@@ -10,7 +9,6 @@ import `in`.costea.wiles.enums.WhenRemoveToken
 import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.exceptions.TokenExpectedException
 import `in`.costea.wiles.services.TokenTransmitter
-import `in`.costea.wiles.statics.Constants
 import `in`.costea.wiles.statics.Constants.ASSIGN_ID
 import `in`.costea.wiles.statics.Constants.DECLARE_ID
 import `in`.costea.wiles.statics.Constants.METHOD_ID
@@ -30,9 +28,7 @@ class DeclarationCommand(transmitter: TokenTransmitter) : AbstractCommand(transm
     override fun process(): CompilationExceptionsCollection {
         try {
             transmitter.expect(tokenOf(DECLARE_ID))
-            val firstToken = transmitter.expect(tokenOf(isContainedIn(Constants.UNARY_OPERATORS))
-                .or(Constants.IS_LITERAL).withErrorMessage("Expression expected in left side of assignment!"))
-            val leftExpression=ExpressionCommand(firstToken,transmitter,ExpressionType.LEFT_SIDE)
+            val leftExpression=ExpressionCommand(transmitter,ExpressionType.LEFT_SIDE)
             this.leftExpression=leftExpression
             exceptions.addAll(leftExpression.process())
             transmitter.expect(tokenOf(ASSIGN_ID))
@@ -42,11 +38,11 @@ class DeclarationCommand(transmitter: TokenTransmitter) : AbstractCommand(transm
                 MethodCommand(transmitter)
             else {
                 //Expression
-                val optionalToken = transmitter.expectMaybe(tokenOf(isContainedIn(Constants.UNARY_OPERATORS)).or(Constants.IS_LITERAL))
-                if (optionalToken.isPresent)
-                    ExpressionCommand(optionalToken.get(), transmitter, ExpressionType.RIGHT_SIDE)
+                val message="Expected expression!"
+                if (transmitter.expectMaybe(ExpressionCommand.START_OF_EXPRESSION).isPresent)
+                    ExpressionCommand(transmitter, ExpressionType.RIGHT_SIDE)
                 //Unknown
-                else throw TokenExpectedException("Expected expression!",transmitter.expect(tokenOf(ANYTHING)).location)
+                else throw TokenExpectedException(message,transmitter.expect(tokenOf(ANYTHING).withErrorMessage(message)).location)
             }
 
             this.rightExpression=rightExpression

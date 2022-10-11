@@ -34,7 +34,8 @@ This is a one-man project mostly meant for myself to try out making an interpret
 ### Declaring
 #### Note: {} means optional
 - Method: `method({param1 : type, param2 : type}) {--> return_type}` (return assumed `nothing` if unspecified)
-- Value `let {var} name {: type} := value` (`var` makes it mutable, type can be inferred)
+- Value: `let {var} name {: type} := value` (`var` makes it mutable, type can be inferred)
+- Assignment: `set name := value`
 - Conditional: `if condition [block] {otherwise [block]}`
 - Conditional type casting: `when value is type [block] {otherwise block}`
 - For-in loop: `for x in collection [block]`
@@ -100,7 +101,7 @@ begin
     if modulo(i, 5) = 0 do
         text.append("Buzz")
     if text = "" do
-        text := i.as_text
+        set text := i.as_text
     writeline(text)
 end 
 ```
@@ -111,10 +112,10 @@ let min := method(args : list[int])  --> either[int,nothing]
 begin
     if args.size = 0 do
         yield nothing
-    min := args[0]
+    set min := args[0]
     for x in args.slice(from := 1) do
         if x < min do
-            min := x
+            set min := x
 end
 
 let result := min(10, 3, 55, 8)

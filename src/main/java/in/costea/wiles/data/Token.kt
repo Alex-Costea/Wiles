@@ -4,7 +4,7 @@ data class Token(val content: String, val location: TokenLocation?) {
 
      override fun toString(): String {
          location?:return ""
-         return content+"at line: "+location.line+" index: "+location.lineIndex
+         return content+" at line: "+location.line+" index: "+location.lineIndex
      }
 
      override fun equals(other: Any?): Boolean {

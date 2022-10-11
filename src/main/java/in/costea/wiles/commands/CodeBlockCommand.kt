@@ -15,12 +15,10 @@ import `in`.costea.wiles.services.TokenTransmitter
 import `in`.costea.wiles.statics.Constants.DECLARE_ID
 import `in`.costea.wiles.statics.Constants.DO_ID
 import `in`.costea.wiles.statics.Constants.END_BLOCK_ID
-import `in`.costea.wiles.statics.Constants.IS_LITERAL
 import `in`.costea.wiles.statics.Constants.NOTHING_ID
 import `in`.costea.wiles.statics.Constants.START_BLOCK_ID
 import `in`.costea.wiles.statics.Constants.STATEMENT_TERMINATORS
 import `in`.costea.wiles.statics.Constants.TOKENS_INVERSE
-import `in`.costea.wiles.statics.Constants.UNARY_OPERATORS
 
 class CodeBlockCommand(transmitter: TokenTransmitter,private val outerMost:Boolean) : AbstractCommand(transmitter) {
     private val components: MutableList<AbstractCommand> = ArrayList()
@@ -40,10 +38,9 @@ class CodeBlockCommand(transmitter: TokenTransmitter,private val outerMost:Boole
     @Throws(AbstractCompilationException::class)
     private fun readOneStatement() {
         if (transmitter.expectMaybe(tokenOf(isContainedIn(STATEMENT_TERMINATORS)).dontIgnoreNewLine()).isPresent) return
-        val command: AbstractCommand
-        val optionalToken = transmitter.expectMaybe(tokenOf(isContainedIn(UNARY_OPERATORS)).or(IS_LITERAL))
-        command = if (optionalToken.isPresent)
-            ExpressionCommand(optionalToken.get(), transmitter, ExpressionType.RIGHT_SIDE)
+        val command: AbstractCommand =
+            if (transmitter.expectMaybe(ExpressionCommand.START_OF_EXPRESSION).isPresent)
+                ExpressionCommand(transmitter, ExpressionType.RIGHT_SIDE)
         else if(transmitter.expectMaybe(tokenOf(DECLARE_ID).removeWhen(WhenRemoveToken.Never)).isPresent) {
             DeclarationCommand(transmitter)
         } else {
