@@ -51,6 +51,8 @@ public class ExpressionCommand extends AbstractCommand {
         return components;
     }
 
+
+    //TODO: expression can start with (
     private void addInnerExpression(ExpressionType expressionType, boolean flatten) throws AbstractCompilationException {
         Token newToken = transmitter.expect(tokenOf(isContainedIn(UNARY_OPERATORS)).or(IS_LITERAL)
                 .or(isContainedIn(BRACKETS)).withErrorMessage("Identifier or unary operator expected!"));

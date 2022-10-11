@@ -15,7 +15,6 @@ import `in`.costea.wiles.statics.Constants.DO_ID
 import `in`.costea.wiles.statics.Constants.END_BLOCK_ID
 import `in`.costea.wiles.statics.Constants.IS_LITERAL
 import `in`.costea.wiles.statics.Constants.NOTHING_ID
-import `in`.costea.wiles.statics.Constants.ROUND_BRACKET_START_ID
 import `in`.costea.wiles.statics.Constants.START_BLOCK_ID
 import `in`.costea.wiles.statics.Constants.STATEMENT_TERMINATORS
 import `in`.costea.wiles.statics.Constants.TOKENS_INVERSE
@@ -35,16 +34,9 @@ class CodeBlockCommand(transmitter: TokenTransmitter) : AbstractCommand(transmit
     private fun readOneStatement() {
         if (transmitter.expectMaybe(tokenOf(isContainedIn(STATEMENT_TERMINATORS)).dontIgnoreNewLine()).isPresent) return
         val command: AbstractCommand
-        /*TODO: innerExpression is buggy
-            for instance: (a+b)+c
-        */
-        val innerExpression = transmitter.expectMaybe(tokenOf(ROUND_BRACKET_START_ID)).isPresent
         val optionalToken = transmitter.expectMaybe(tokenOf(isContainedIn(UNARY_OPERATORS)).or(IS_LITERAL))
-        command = if (optionalToken.isPresent) ExpressionCommand(
-            optionalToken.get(),
-            transmitter,
-            if (innerExpression) ExpressionType.INSIDE_ROUND else ExpressionType.RIGHT_SIDE
-        )
+        command = if (optionalToken.isPresent)
+            ExpressionCommand(optionalToken.get(), transmitter, ExpressionType.RIGHT_SIDE)
         else if(transmitter.expectMaybe(tokenOf(DECLARE_ID).removeWhen(WhenRemoveToken.Never)).isPresent) {
             AssignmentCommand(transmitter)
         } else {

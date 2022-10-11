@@ -1,7 +1,7 @@
 package `in`.costea.wiles.commands
 
-import `in`.costea.wiles.builders.ExpectParamsBuilder
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.ANYTHING
+import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.isContainedIn
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.enums.ExpressionType
@@ -30,7 +30,7 @@ class AssignmentCommand(transmitter: TokenTransmitter) : AbstractCommand(transmi
     override fun process(): CompilationExceptionsCollection {
         try {
             transmitter.expect(tokenOf(DECLARE_ID))
-            val firstToken = transmitter.expect(tokenOf(ExpectParamsBuilder.isContainedIn(Constants.UNARY_OPERATORS))
+            val firstToken = transmitter.expect(tokenOf(isContainedIn(Constants.UNARY_OPERATORS))
                 .or(Constants.IS_LITERAL).withErrorMessage("Expression expected in left side of assignment!"))
             val leftExpression=ExpressionCommand(firstToken,transmitter,ExpressionType.LEFT_SIDE)
             this.leftExpression=leftExpression
@@ -42,7 +42,7 @@ class AssignmentCommand(transmitter: TokenTransmitter) : AbstractCommand(transmi
                 MethodCommand(transmitter)
             else {
                 //Expression
-                val optionalToken = transmitter.expectMaybe(tokenOf(ExpectParamsBuilder.isContainedIn(Constants.UNARY_OPERATORS)).or(Constants.IS_LITERAL))
+                val optionalToken = transmitter.expectMaybe(tokenOf(isContainedIn(Constants.UNARY_OPERATORS)).or(Constants.IS_LITERAL))
                 if (optionalToken.isPresent)
                     ExpressionCommand(optionalToken.get(), transmitter, ExpressionType.RIGHT_SIDE)
                 //Unknown

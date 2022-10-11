@@ -99,6 +99,7 @@ object Constants {
         KEYWORDS["let"] = DECLARE_ID
         KEYWORDS["var"] = "MUTABLE"
         KEYWORDS["if"] = "IF"
+        KEYWORDS["when"] = "WHEN"
         KEYWORDS["otherwise"] = "ELSE"
         KEYWORDS["for"] = "FOR"
         KEYWORDS["while"] = "WHILE"
