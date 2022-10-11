@@ -75,7 +75,7 @@ public class InputToTokensConverter {
         StringBuilder sb = new StringBuilder();
         char lastNonSpaceCharacter = 0;
         int lastNonSpaceCharacterIndex = -1;
-        while (!stopAtStringDelimiter || arrayChars[currentIndex] != STRING_DELIMITER) {
+        while (currentIndex<arrayChars.length && !stopAtStringDelimiter && arrayChars[currentIndex] != STRING_DELIMITER) {
             if (arrayChars[currentIndex] == NEWLINE) {
                 if (lastNonSpaceCharacter == CONTINUE_LINE)
                     sb.setLength(lastNonSpaceCharacterIndex - 1);
@@ -94,15 +94,15 @@ public class InputToTokensConverter {
 
     @NotNull
     private String readStringLiteral() throws StringUnfinishedException {
-        if (++index  >= arrayChars.length)
+        if (index  >= arrayChars.length)
             throw new StringUnfinishedException("", line, getIndexOnCurrentLine());
         StringBuilder sb=createString(index,false);
-        index+=sb.length();
-        if (arrayChars[index] == STRING_DELIMITER)
+        index+=sb.length()+1;
+        if (index < arrayChars.length && arrayChars[index] == STRING_DELIMITER)
             return STRING_START + sb;
 
         //String not properly finished at this point
-        if (arrayChars[index] == NEWLINE) //add the newline token regardless
+        if (index < arrayChars.length &&  arrayChars[index] == NEWLINE) //add the newline token regardless
             index--;
         throw new StringUnfinishedException(sb.toString(), line, getIndexOnCurrentLine());
     }
@@ -165,7 +165,7 @@ public class InputToTokensConverter {
     }
 
     private void readComment() {
-        index+=createString(index,false).length()+1;
+        index+=createString(index,false).length();
     }
 
     @NotNull
