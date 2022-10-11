@@ -92,15 +92,20 @@ public class ExpressionCommand extends AbstractCommand {
         Token mainToken = firstToken;
         while (!transmitter.tokensExhausted()) {
             // finalize expression at newline/semicolon if correctly finalized
-            if ((expectNext == ExpectNext.OPERATOR) && expressionType == ExpressionType.REGULAR &&
+            if ((expectNext == ExpectNext.OPERATOR) && expressionType == ExpressionType.RIGHT_SIDE &&
                     transmitter.expectMaybe(tokenOf(isContainedIn(STATEMENT_TERMINATORS)).dontIgnoreNewLine()).isPresent())
+                break;
+
+            // finalize expression at := if correctly finalized
+            if ((expectNext == ExpectNext.OPERATOR) && expressionType == ExpressionType.LEFT_SIDE &&
+                    transmitter.expectMaybe(tokenOf(ASSIGN_ID).removeWhen(WhenRemoveToken.Never)).isPresent())
                 break;
 
             // finalize expression at "end" if correct
             @NotNull
             var tempToken = transmitter.expectMaybe(tokenOf(END_BLOCK_ID).removeWhen(WhenRemoveToken.Never));
             if (tempToken.isPresent()) {
-                if (expressionType == ExpressionType.REGULAR)
+                if (expressionType == ExpressionType.RIGHT_SIDE)
                     break;
                 else throw new UnexpectedTokenException("end", tempToken.get().getLocation());
             }
@@ -146,6 +151,7 @@ public class ExpressionCommand extends AbstractCommand {
         if (expressionType == ExpressionType.INSIDE_SQUARE && exceptions.size() == 0 && !mainToken.getContent().equals(SQUARE_BRACKET_END_ID))
             throw new UnexpectedEndException("Closing parentheses expected", mainToken.getLocation());
         if (expectNext == ExpectNext.TOKEN && exceptions.size() == 0) {
+            //Ignore trailing comma
             if (components.size() > 0 && components.get(components.size() - 1) instanceof TokenCommand tokenCommand)
                 if (tokenCommand.getToken().getContent().equals(COMMA_ID)) {
                     components.remove(components.size() - 1);

@@ -8,7 +8,7 @@ import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.services.TokenTransmitter
 
 class ProgramCommand(transmitter: TokenTransmitter) : AbstractCommand(transmitter) {
-    private val components: MutableList<AssignmentCommand> = ArrayList()
+    private val components: MutableList<AbstractCommand> = ArrayList()
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
 
     @JsonProperty
@@ -17,14 +17,14 @@ class ProgramCommand(transmitter: TokenTransmitter) : AbstractCommand(transmitte
     override val type: SyntaxType
         get() = SyntaxType.PROGRAM
 
-    override fun getComponents(): List<AssignmentCommand> {
+    override fun getComponents(): List<AbstractCommand> {
         return components
     }
 
     override fun process(): CompilationExceptionsCollection {
         try {
             while (!transmitter.tokensExhausted()) {
-                val assignmentCommand = AssignmentCommand(transmitter,true)
+                val assignmentCommand = AssignmentCommand(transmitter)
                 exceptions.addAll(assignmentCommand.process())
                 components.add(assignmentCommand)
             }

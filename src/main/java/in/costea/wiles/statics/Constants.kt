@@ -28,7 +28,6 @@ object Constants {
     const val IDENTIFIER_START = "!"
     const val STRING_START = "@"
     const val NUM_START = "#"
-    const val MAIN_METHOD_NAME = "main"
     const val COLON_ID = "COLON"
     const val NOTHING_ID = "NOTHING"
     const val COMMA_ID = "COMMA"

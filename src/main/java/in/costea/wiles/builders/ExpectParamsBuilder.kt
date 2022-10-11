@@ -5,7 +5,7 @@ import `in`.costea.wiles.statics.Constants.TOKENS_INVERSE
 import java.util.function.Predicate
 
 class ExpectParamsBuilder private constructor(var foundTest: Predicate<String>) {
-    var errorMessage = "Shouldn't happen"
+    var errorMessage = "Unspecified compilation error"
         private set
     var whenRemove: WhenRemoveToken = WhenRemoveToken.Default
         private set

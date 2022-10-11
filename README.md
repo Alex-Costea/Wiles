@@ -62,7 +62,6 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - When using one `arg` list, `my_method(a,b,c)` is the same as `my_method([a,b,c])`
 
 ### Miscellaneous
-- Declaring `main` method optional when using no other methods
 - `;` can be specified or inferred from newline
 - Language is statically, strongly typed with some type inference
 - Comment using `#`
@@ -118,12 +117,9 @@ begin
             min := x
 end
 
-let main := method()
-begin
-    let result := min(10, 3, 55, 8)
-    when result is nothing do
-        writeline("Error: no min found!")
-    otherwise do
-        writeline("Min found: " + result)
-end
+let result := min(10, 3, 55, 8)
+when result is nothing do
+    writeline("Error: no min found!")
+otherwise do
+    writeline("Min found: " + result)
 ```
