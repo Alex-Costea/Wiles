@@ -19,7 +19,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Floating: `12345.6`
 - String: `"abc"`
 - Boolean: `true` (1) and `false` (0)
-- List literal: `list(1,2,3)`
+- List literal: `list_of(1,2,3)`
 
 ### Types
 - Nothing: only valid value is `nothing`
