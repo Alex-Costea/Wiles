@@ -7,16 +7,17 @@ import `in`.costea.wiles.services.TokenTransmitter
 
 class TokensToSyntaxTreeConverter(tokens: List<Token>) {
     val exceptions: CompilationExceptionsCollection
-    private var bodyOnlyMode = false
+    private var bodyOnlyMode : Boolean
     private val tokenTransmitter: TokenTransmitter
 
     init {
         tokenTransmitter = TokenTransmitter(tokens)
         exceptions = CompilationExceptionsCollection()
+        bodyOnlyMode=false
     }
 
     fun convert(): ProgramCommand {
-        bodyOnlyMode = false
+        //TODO: case if bodyOnlyMode=true
         val syntaxTree = ProgramCommand(tokenTransmitter)
         exceptions.addAll(syntaxTree.process())
         return syntaxTree
