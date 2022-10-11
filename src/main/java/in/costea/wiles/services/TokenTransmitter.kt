@@ -34,22 +34,14 @@ class TokenTransmitter(tokens: List<Token>) {
             if (!foundTest.test(tokens.first.content))
                 throw TokenExpectedException(message, tokens.first.location)
 
-            val secondTest=params.secondaryTest
-            if (secondTest != null) {
-                if(tokens.size<=1) throw UnexpectedEndException(message, tokens.first.location)
-                if(!secondTest.test(tokens[1].content))
-                    throw throw TokenExpectedException(message, tokens[1].location)
-            }
-
             succeeded = true
             tokens.first
         } finally {
             val whenRemoveToken: WhenRemoveToken = params.whenRemove
             assert(whenRemoveToken != WhenRemoveToken.Default)
-            for(i in 1..if(params.secondaryTest!=null) 2 else 1)
-                if ((!succeeded && whenRemoveToken == WhenRemoveToken.Always) || (succeeded && whenRemoveToken != WhenRemoveToken.Never))
-                    if (!tokens.isEmpty())
-                        removeToken()
+            if ((!succeeded && whenRemoveToken == WhenRemoveToken.Always) || (succeeded && whenRemoveToken != WhenRemoveToken.Never))
+                if (!tokens.isEmpty())
+                    removeToken()
         }
     }
 

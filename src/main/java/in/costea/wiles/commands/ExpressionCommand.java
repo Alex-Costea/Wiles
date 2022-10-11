@@ -8,6 +8,7 @@ import in.costea.wiles.enums.WhenRemoveToken;
 import in.costea.wiles.exceptions.AbstractCompilationException;
 import in.costea.wiles.exceptions.UnexpectedEndException;
 import in.costea.wiles.exceptions.UnexpectedTokenException;
+import in.costea.wiles.services.OrderOfOperationsProcessor;
 import in.costea.wiles.services.TokenTransmitter;
 import org.jetbrains.annotations.NotNull;
 
@@ -161,7 +162,11 @@ public class ExpressionCommand extends AbstractCommand {
                 }
             throw new UnexpectedEndException("Expression unfinished!", mainToken.getLocation());
         }
-        //TODO: process order of operations and check if effect exists
+
+        @NotNull
+        final var componentsAfterOOO=new OrderOfOperationsProcessor(components).process();
+        components.clear();
+        components.addAll(componentsAfterOOO);
     }
 
     @Override

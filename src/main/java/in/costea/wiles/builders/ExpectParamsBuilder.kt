@@ -12,8 +12,6 @@ class ExpectParamsBuilder private constructor(var foundTest: Predicate<String>) 
     var isIgnoringNewLine = true
         private set
 
-    var secondaryTest : Predicate<String>? = null
-
     fun withErrorMessage(message: String): ExpectParamsBuilder {
         errorMessage = message
         return this
@@ -30,22 +28,12 @@ class ExpectParamsBuilder private constructor(var foundTest: Predicate<String>) 
     }
 
     fun or(otherTest: Predicate<String>): ExpectParamsBuilder {
-        if(secondaryTest == null)
-            foundTest = foundTest.or(otherTest)
-        else secondaryTest = secondaryTest!!.or(otherTest)
+        foundTest = foundTest.or(otherTest)
         return this
     }
 
     fun or(otherTest: String): ExpectParamsBuilder {
         or { x -> x == otherTest }
-        return this
-    }
-
-    fun thenOf(otherTest: Predicate<String>): ExpectParamsBuilder {
-        TODO("Not tested!")
-        check(secondaryTest==null)
-            {"Second param already set!"}
-        secondaryTest = otherTest
         return this
     }
 
