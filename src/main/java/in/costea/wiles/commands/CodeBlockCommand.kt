@@ -10,7 +10,7 @@ import `in`.costea.wiles.enums.WhenRemoveToken
 import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.exceptions.UnexpectedTokenException
 import `in`.costea.wiles.services.TokenTransmitter
-import `in`.costea.wiles.statics.Constants.DECLARE_METHOD_ID
+import `in`.costea.wiles.statics.Constants.METHOD_ID
 import `in`.costea.wiles.statics.Constants.DO_ID
 import `in`.costea.wiles.statics.Constants.END_BLOCK_ID
 import `in`.costea.wiles.statics.Constants.IS_LITERAL
@@ -42,7 +42,7 @@ class CodeBlockCommand(transmitter: TokenTransmitter, private val standAlone: Bo
             transmitter,
             if (innerExpression) ExpressionType.INSIDE_ROUND else ExpressionType.REGULAR
         ) else {
-            optionalToken = transmitter.expectMaybe(tokenOf(DECLARE_METHOD_ID))
+            optionalToken = transmitter.expectMaybe(tokenOf(METHOD_ID))
             if (standAlone && optionalToken.isPresent) throw UnexpectedTokenException(
                 "Cannot declare method in body-only mode!",
                 optionalToken.get().location

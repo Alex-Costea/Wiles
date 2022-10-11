@@ -9,7 +9,7 @@ import `in`.costea.wiles.data.Token
 import `in`.costea.wiles.enums.WhenRemoveToken
 import `in`.costea.wiles.exceptions.UnexpectedTokenException
 import `in`.costea.wiles.services.TokenTransmitter
-import `in`.costea.wiles.statics.Constants.DECLARE_METHOD_ID
+import `in`.costea.wiles.statics.Constants.METHOD_ID
 import `in`.costea.wiles.statics.Constants.MAIN_METHOD_NAME
 
 class TokensToSyntaxTreeConverter(tokens: List<Token>) {
@@ -21,7 +21,7 @@ class TokensToSyntaxTreeConverter(tokens: List<Token>) {
         tokenTransmitter = TokenTransmitter(tokens)
         exceptions = CompilationExceptionsCollection()
         val bodyOnlyMode: Boolean = try {
-            tokenTransmitter.expectMaybe(tokenOf(DECLARE_METHOD_ID).removeWhen(WhenRemoveToken.Never)).isEmpty
+            tokenTransmitter.expectMaybe(tokenOf(METHOD_ID).removeWhen(WhenRemoveToken.Never)).isEmpty
         } catch (e: UnexpectedTokenException) {
             true
         }

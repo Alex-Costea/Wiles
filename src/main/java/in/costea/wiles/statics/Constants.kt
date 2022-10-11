@@ -16,7 +16,7 @@ object Constants {
     const val ROUND_BRACKET_END_ID = "ROUND_BRACKET_END"
     const val SQUARE_BRACKET_START_ID = "SQUARE_BRACKET_START"
     const val SQUARE_BRACKET_END_ID = "SQUARE_BRACKET_END"
-    const val DECLARE_METHOD_ID = "DECLARE_METHOD"
+    const val METHOD_ID = "METHOD"
     const val STATEMENT_TERMINATOR_ID = "TERMINATOR"
     const val BACKSLASH_ID = "BACKSLASH"
     const val PLUS_ID = "PLUS"
@@ -34,6 +34,7 @@ object Constants {
     const val COMMA_ID = "COMMA"
     const val DO_ID = "DO"
     const val RIGHT_ARROW_ID="RIGHT_ARROW"
+    const val DECLARE_ID="DECLARE"
     private const val EQUALS_ID = "EQUALS"
     private const val LARGER_ID = "LARGER"
     private const val SMALLER_ID = "SMALLER"
@@ -95,8 +96,8 @@ object Constants {
 
     init {
         KEYWORDS["nothing"] = NOTHING_ID
-        KEYWORDS["method"] = DECLARE_METHOD_ID
-        KEYWORDS["let"] = "DECLARE_VARIABLE"
+        KEYWORDS["method"] = METHOD_ID
+        KEYWORDS["let"] = DECLARE_ID
         KEYWORDS["var"] = "MUTABLE"
         KEYWORDS["if"] = "IF"
         KEYWORDS["otherwise"] = "ELSE"

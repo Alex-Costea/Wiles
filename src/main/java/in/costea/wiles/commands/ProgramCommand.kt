@@ -7,7 +7,7 @@ import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.services.TokenTransmitter
-import `in`.costea.wiles.statics.Constants.DECLARE_METHOD_ID
+import `in`.costea.wiles.statics.Constants.METHOD_ID
 
 class ProgramCommand(transmitter: TokenTransmitter) : AbstractCommand(transmitter) {
     private val components: MutableList<MethodCommand> = ArrayList()
@@ -30,7 +30,7 @@ class ProgramCommand(transmitter: TokenTransmitter) : AbstractCommand(transmitte
     override fun process(): CompilationExceptionsCollection {
         try {
             while (!transmitter.tokensExhausted()) {
-                transmitter.expect(tokenOf(DECLARE_METHOD_ID))
+                transmitter.expect(tokenOf(METHOD_ID))
                 val methodCommand = MethodCommand(transmitter)
                 exceptions.addAll(methodCommand.process())
                 components.add(methodCommand)
