@@ -39,18 +39,19 @@ class CodeBlockCommand(transmitter: TokenTransmitter,private val outerMost:Boole
     @Throws(AbstractCompilationException::class)
     private fun readOneStatement() {
         if (transmitter.expectMaybe(tokenOf(isContainedIn(STATEMENT_TERMINATORS)).dontIgnoreNewLine()).isPresent) return
-        val command: AbstractCommand =
-            if (transmitter.expectMaybe(ExpressionCommand.START_OF_EXPRESSION).isPresent)
-                ExpressionCommand(transmitter, ExpressionType.RIGHT_SIDE)
-        else if(transmitter.expectMaybe(tokenOf(DECLARE_ID).removeWhen(WhenRemoveToken.Never)).isPresent) {
+
+        val command: AbstractCommand = if (transmitter.expectMaybe(ExpressionCommand.START_OF_EXPRESSION).isPresent)
+            ExpressionCommand(transmitter, ExpressionType.RIGHT_SIDE)
+        else if(transmitter.expectMaybe(tokenOf(DECLARE_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
             DeclarationCommand(transmitter)
-        } else if(transmitter.expectMaybe(tokenOf(ASSIGNMENT_START_ID).removeWhen(WhenRemoveToken.Never)).isPresent) {
+        else if(transmitter.expectMaybe(tokenOf(ASSIGNMENT_START_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
             AssignmentCommand(transmitter)
-        } else {
+        else {
             val (content, location) = transmitter.expect(tokenOf(ExpectParamsBuilder.ANYTHING))
             throw UnexpectedTokenException(TOKENS_INVERSE[content]?:content, location)
         }
-        val newExceptions: CompilationExceptionsCollection = command.process()
+
+        val newExceptions = command.process()
         if (newExceptions.size > 0) throw newExceptions[0]
         components.add(command)
     }
