@@ -89,7 +89,7 @@ class SyntaxTreeConverterTests {
         assertResults(createExceptions(UnexpectedTokenException("*", null)),
                 null,
                 TIMES_ID, "!a")
-        assertResults(createExceptions(TokenExpectedException("Identifier or operator expected!", null)),
+        assertResults(createExceptions(TokenExpectedException("Expected expression!", null)),
                 null,
                 "!a", PLUS_ID, ROUND_BRACKET_START_ID, "BREAK", ROUND_BRACKET_END_ID)
     }

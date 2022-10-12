@@ -30,7 +30,8 @@ public class ExpressionCommand extends AbstractCommand {
     private final ExpressionType expressionType;
 
     public static final ExpectParamsBuilder START_OF_EXPRESSION =
-            tokenOf(isContainedIn(UNARY_OPERATORS)).or(IS_LITERAL).or(ROUND_BRACKET_START_ID).removeWhen(WhenRemoveToken.Never);
+            tokenOf(isContainedIn(UNARY_OPERATORS)).or(IS_LITERAL).or(ROUND_BRACKET_START_ID)
+            .withErrorMessage("Expected expression!").removeWhen(WhenRemoveToken.Never);
 
     public ExpressionCommand(@NotNull TokenTransmitter transmitter, @NotNull ExpressionType expressionType) {
         super(transmitter);
@@ -66,7 +67,7 @@ public class ExpressionCommand extends AbstractCommand {
     public @NotNull CompilationExceptionsCollection process() {
         try {
             @NotNull
-            Token mainToken=transmitter.expect(START_OF_EXPRESSION.withErrorMessage("Identifier or operator expected!"));
+            Token mainToken=transmitter.expect(START_OF_EXPRESSION);
             @NotNull ExpectNext expectNext;
             var content=mainToken.getContent();
             if(IS_LITERAL.test(content) || BRACKETS.contains(content) || UNARY_OPERATORS.contains(content))
