@@ -6,9 +6,11 @@ import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.exceptions.TokenExpectedException
 import `in`.costea.wiles.exceptions.UnexpectedEndException
 import `in`.costea.wiles.exceptions.UnexpectedTokenException
+import `in`.costea.wiles.statics.Constants.ASSIGNMENT_START_ID
 import `in`.costea.wiles.statics.Constants.ASSIGN_ID
 import `in`.costea.wiles.statics.Constants.COLON_ID
 import `in`.costea.wiles.statics.Constants.COMMA_ID
+import `in`.costea.wiles.statics.Constants.DECLARE_ID
 import `in`.costea.wiles.statics.Constants.METHOD_ID
 import `in`.costea.wiles.statics.Constants.DO_ID
 import `in`.costea.wiles.statics.Constants.END_BLOCK_ID
@@ -43,12 +45,13 @@ class SyntaxTreeConverterTests {
 
     @Test
     fun newlineTests() {
-        assertResults(null, "PROGRAM(METHOD a(TYPE NOTHING; CODE_BLOCK))",
-                METHOD_ID, "!a", ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, START_BLOCK_ID, END_BLOCK_ID)
-        assertResults(null, "PROGRAM(METHOD a(TYPE NOTHING; CODE_BLOCK))",
-                NEWLINE_ID, NEWLINE_ID, METHOD_ID, "!a", ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, START_BLOCK_ID, END_BLOCK_ID)
-        assertResults(null, "PROGRAM(METHOD a(TYPE NOTHING; CODE_BLOCK))",
-                METHOD_ID, "!a", ROUND_BRACKET_START_ID,
+        assertResults(null, "CODE_BLOCK(DECLARATION(EXPRESSION(!a); METHOD(TYPE NOTHING; CODE_BLOCK)))",
+                DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, START_BLOCK_ID, END_BLOCK_ID)
+        assertResults(null, "CODE_BLOCK(DECLARATION(EXPRESSION(!a); METHOD(TYPE NOTHING; CODE_BLOCK)))",
+                NEWLINE_ID, NEWLINE_ID,
+                DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, START_BLOCK_ID, END_BLOCK_ID)
+        assertResults(null, "CODE_BLOCK(DECLARATION(EXPRESSION(!a); METHOD(TYPE NOTHING; CODE_BLOCK)))",
+                DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, ROUND_BRACKET_START_ID,
                 NEWLINE_ID, ROUND_BRACKET_END_ID,
                 NEWLINE_ID, START_BLOCK_ID,
                 NEWLINE_ID, END_BLOCK_ID)
@@ -56,19 +59,23 @@ class SyntaxTreeConverterTests {
 
     @Test
     fun expressionsTest() {
-        assertResults(null, "PROGRAM(METHOD main(TYPE NOTHING; CODE_BLOCK(EXPRESSION(!b; ASSIGN; !c))))",
-                METHOD_ID, "!main", ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, START_BLOCK_ID, "!b", ASSIGN_ID, "!c", END_BLOCK_ID)
-        assertResults(null, "PROGRAM(METHOD main(TYPE NOTHING; CODE_BLOCK(EXPRESSION(!b; ASSIGN; #3))))",
-                METHOD_ID, "!main", ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, START_BLOCK_ID, "!b", ASSIGN_ID, "#3", END_BLOCK_ID)
-        assertResults(null, "PROGRAM(METHOD main(TYPE NOTHING; CODE_BLOCK(EXPRESSION(!b; PLUS; #3; MINUS; #5))))",
+        assertResults(null, "CODE_BLOCK(DECLARATION(EXPRESSION(!main); METHOD(TYPE NOTHING; CODE_BLOCK(ASSIGNMENT(EXPRESSION(!b); EXPRESSION(!c))))))",
+                DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID,
+                ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, START_BLOCK_ID,
+                ASSIGNMENT_START_ID,"!b", ASSIGN_ID, "!c", END_BLOCK_ID)
+        assertResults(null, "CODE_BLOCK(DECLARATION(EXPRESSION(!main); METHOD(TYPE NOTHING; CODE_BLOCK(ASSIGNMENT(EXPRESSION(!b); EXPRESSION(#3))))))",
+            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID,
+            ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, START_BLOCK_ID,
+            ASSIGNMENT_START_ID,"!b", ASSIGN_ID, "#3", END_BLOCK_ID)
+        assertResults(null, "CODE_BLOCK(EXPRESSION(!b; PLUS; #3; MINUS; #5))",
                 "!b", PLUS_ID, "#3", MINUS_ID, "#5")
-        assertResults(null, "PROGRAM(METHOD main(TYPE NOTHING; CODE_BLOCK(EXPRESSION(!a; PLUS; !b); EXPRESSION(#0; PLUS; !c); EXPRESSION(!a; PLUS; !b; PLUS; !c))))",
+        assertResults(null, "CODE_BLOCK(EXPRESSION(!a; PLUS; !b); EXPRESSION(#0; PLUS; !c); EXPRESSION(!a; PLUS; !b; PLUS; !c))",
                 "!a", PLUS_ID, "!b", NEWLINE_ID, PLUS_ID, "!c", NEWLINE_ID, NEWLINE_ID,
                 "!a", PLUS_ID, NEWLINE_ID, "!b", PLUS_ID, "!c")
-        assertResults(null, "PROGRAM(METHOD main(TYPE NOTHING; CODE_BLOCK(EXPRESSION(!b; PLUS; #3; MINUS; #5))))",
+        assertResults(null, "CODE_BLOCK(EXPRESSION(!b; PLUS; #3; MINUS; #5))",
                 "!b", PLUS_ID, "#3", MINUS_ID, "#5")
-        assertResults(null, "PROGRAM(METHOD main(TYPE NOTHING; CODE_BLOCK(EXPRESSION(!c; ASSIGN; #0; MINUS; #10; PLUS; #0; PLUS; EXPRESSION ROUND(#0; PLUS; #10)))))",
-                "!c", ASSIGN_ID, MINUS_ID, "#10", PLUS_ID, NEWLINE_ID, PLUS_ID, ROUND_BRACKET_START_ID, PLUS_ID, "#10", ROUND_BRACKET_END_ID)
+        assertResults(null, "CODE_BLOCK(ASSIGNMENT(EXPRESSION(!c); EXPRESSION(#0; MINUS; #10; PLUS; #0; PLUS; EXPRESSION ROUND(#0; PLUS; #10))))",
+                ASSIGNMENT_START_ID,"!c", ASSIGN_ID, MINUS_ID, "#10", PLUS_ID, NEWLINE_ID, PLUS_ID, ROUND_BRACKET_START_ID, PLUS_ID, "#10", ROUND_BRACKET_END_ID)
     }
 
     @Test
@@ -82,7 +89,7 @@ class SyntaxTreeConverterTests {
         assertResults(createExceptions(UnexpectedTokenException("*", null)),
                 null,
                 TIMES_ID, "!a")
-        assertResults(createExceptions(TokenExpectedException("Identifier or unary operator expected!", null)),
+        assertResults(createExceptions(TokenExpectedException("Identifier or operator expected!", null)),
                 null,
                 "!a", PLUS_ID, ROUND_BRACKET_START_ID, "BREAK", ROUND_BRACKET_END_ID)
     }

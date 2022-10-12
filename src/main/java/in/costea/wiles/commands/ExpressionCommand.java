@@ -28,8 +28,6 @@ public class ExpressionCommand extends AbstractCommand {
     private final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
     @NotNull
     private final ExpressionType expressionType;
-    @NotNull
-    private ExpectNext expectNext=ExpectNext.INIT;
 
     public static final ExpectParamsBuilder START_OF_EXPRESSION =
             tokenOf(isContainedIn(UNARY_OPERATORS)).or(IS_LITERAL).or(ROUND_BRACKET_START_ID).removeWhen(WhenRemoveToken.Never);
@@ -67,8 +65,14 @@ public class ExpressionCommand extends AbstractCommand {
     @Override
     public @NotNull CompilationExceptionsCollection process() {
         try {
-            transmitter.expect(START_OF_EXPRESSION);
-            Token mainToken=null;
+            @NotNull
+            Token mainToken=transmitter.expect(START_OF_EXPRESSION.withErrorMessage("Identifier or operator expected!"));
+            @NotNull ExpectNext expectNext;
+            var content=mainToken.getContent();
+            if(IS_LITERAL.test(content) || BRACKETS.contains(content) || UNARY_OPERATORS.contains(content))
+                expectNext = ExpectNext.TOKEN;
+            else expectNext = ExpectNext.OPERATOR;
+
             while (!transmitter.tokensExhausted())
             {
                 // finalize expression at newline/semicolon if correctly finalized
@@ -93,52 +97,52 @@ public class ExpressionCommand extends AbstractCommand {
                 if (expectNext == ExpectNext.OPERATOR)
                     mainToken = transmitter.expect(tokenOf(isContainedIn(BRACKETS))
                             .or(isContainedIn(INFIX_OPERATORS)).withErrorMessage("Operator expected!"));
-                else
-                    mainToken = transmitter.expect(tokenOf(isContainedIn(BRACKETS)).or(isContainedIn(UNARY_OPERATORS))
-                            .or(IS_LITERAL).withErrorMessage("Identifier or unary operator expected!").removeWhen(WhenRemoveToken.Always));
+                else mainToken = transmitter.expect(tokenOf(isContainedIn(BRACKETS)).or(isContainedIn(UNARY_OPERATORS))
+                        .or(IS_LITERAL).withErrorMessage("Identifier or unary operator expected!"));
 
-                if (mainToken.getContent().equals(ROUND_BRACKET_END_ID)) {
+                content=mainToken.getContent();
+
+                if (content.equals(ROUND_BRACKET_END_ID)) {
                     if (expressionType == ExpressionType.INSIDE_ROUND) break; //end of inner statement
                     else
                         throw new UnexpectedTokenException("Brackets don't close properly", mainToken.getLocation());
                 }
-                if (mainToken.getContent().equals(SQUARE_BRACKET_END_ID)) {
+                if (content.equals(SQUARE_BRACKET_END_ID)) {
                     if (expressionType == ExpressionType.INSIDE_SQUARE) break; //end of inner statement
                     else
                         throw new UnexpectedTokenException("Brackets don't close properly", mainToken.getLocation());
                 }
 
-                if (expectNext == ExpectNext.OPERATOR && mainToken.getContent().equals(ROUND_BRACKET_START_ID)) {
+                if (expectNext == ExpectNext.OPERATOR && content.equals(ROUND_BRACKET_START_ID)) {
                     todo("Method call");
                 }
 
-                if (mainToken.getContent().equals(SQUARE_BRACKET_START_ID))
+                if (content.equals(SQUARE_BRACKET_START_ID))
                 {
                     if(expectNext == ExpectNext.OPERATOR)
                     {
                         addInnerExpression(ExpressionType.INSIDE_SQUARE);
-                        expectNext = ExpectNext.OPERATOR;
                         continue;
                     }
                     else throw new UnexpectedTokenException("Identifier or unary operator expected!",mainToken.getLocation());
                 }
 
-                if (expectNext == ExpectNext.TOKEN && UNARY_OPERATORS.contains(mainToken.getContent())) //unary +/-
-                    components.add(new TokenCommand(transmitter, new Token("#0", mainToken.getLocation())));
-                else
-                    expectNext = expectNext == ExpectNext.OPERATOR ? ExpectNext.TOKEN : ExpectNext.OPERATOR;
+                if (expectNext == ExpectNext.TOKEN && UNARY_OPERATORS.contains(content))
+                {
+                    if (ADD_ZERO_UNARY_OPERATORS.contains(content))
+                        components.add(new TokenCommand(transmitter, new Token("#0", mainToken.getLocation())));
+                }
+                else expectNext = expectNext == ExpectNext.OPERATOR ? ExpectNext.TOKEN : ExpectNext.OPERATOR;
 
-                if (mainToken.getContent().equals(ROUND_BRACKET_START_ID)) //inner expression, not method call
+                if (content.equals(ROUND_BRACKET_START_ID)) //inner expression, not method call
                     addInnerExpression(ExpressionType.INSIDE_ROUND);
                 else components.add(new TokenCommand(transmitter, mainToken));
             }
 
-            assert mainToken != null;
-
             //verifying expression finished well
-            if (expressionType == ExpressionType.INSIDE_ROUND && exceptions.size() == 0 && !mainToken.getContent().equals(ROUND_BRACKET_END_ID))
+            if (expressionType == ExpressionType.INSIDE_ROUND && exceptions.size() == 0 && !content.equals(ROUND_BRACKET_END_ID))
                 throw new UnexpectedEndException("Closing parentheses expected", mainToken.getLocation());
-            if (expressionType == ExpressionType.INSIDE_SQUARE && exceptions.size() == 0 && !mainToken.getContent().equals(SQUARE_BRACKET_END_ID))
+            if (expressionType == ExpressionType.INSIDE_SQUARE && exceptions.size() == 0 && !content.equals(SQUARE_BRACKET_END_ID))
                 throw new UnexpectedEndException("Closing parentheses expected", mainToken.getLocation());
 
             //Ignore trailing comma
@@ -175,7 +179,6 @@ public class ExpressionCommand extends AbstractCommand {
 
     private enum ExpectNext {
         OPERATOR,
-        TOKEN,
-        INIT
+        TOKEN
     }
 }

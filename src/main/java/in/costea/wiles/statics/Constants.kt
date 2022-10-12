@@ -79,6 +79,9 @@ object Constants {
     val UNARY_OPERATORS = setOf(PLUS_ID, MINUS_ID, NOT_ID)
 
     @JvmField
+    val ADD_ZERO_UNARY_OPERATORS = setOf(PLUS_ID, MINUS_ID)
+
+    @JvmField
     val BRACKETS = setOf(ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID,
             SQUARE_BRACKET_START_ID, SQUARE_BRACKET_END_ID)
 
