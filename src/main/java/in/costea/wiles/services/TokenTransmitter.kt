@@ -22,6 +22,7 @@ class TokenTransmitter(tokens: List<Token>) {
         var succeeded = false
         if (params.whenRemove == WhenRemoveToken.Default)
             params.removeWhen(WhenRemoveToken.Always)
+        message!!
         return try {
             if (tokens.isEmpty()) throw UnexpectedEndException(message, null)
             if (params.isIgnoringNewLine) {
@@ -47,7 +48,10 @@ class TokenTransmitter(tokens: List<Token>) {
 
     fun expectMaybe(expectParamsBuilder: ExpectParamsBuilder): Optional<Token> {
         return try {
-            if (expectParamsBuilder.whenRemove == WhenRemoveToken.Default) expectParamsBuilder.removeWhen(WhenRemoveToken.WhenFound)
+            if (expectParamsBuilder.whenRemove == WhenRemoveToken.Default)
+                expectParamsBuilder.removeWhen(WhenRemoveToken.WhenFound)
+            if(expectParamsBuilder.errorMessage==null)
+                expectParamsBuilder.withErrorMessage("N/A")
             Optional.of(expect(expectParamsBuilder))
         } catch (ex: TokenExpectedException) {
             Optional.empty()

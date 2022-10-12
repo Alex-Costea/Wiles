@@ -2,7 +2,7 @@ package `in`.costea.wiles.commands
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
-import `in`.costea.wiles.builders.ExpectParamsBuilder
+import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.ANYTHING
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.isContainedIn
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
 import `in`.costea.wiles.data.CompilationExceptionsCollection
@@ -47,7 +47,8 @@ class CodeBlockCommand(transmitter: TokenTransmitter,private val outerMost:Boole
         else if(transmitter.expectMaybe(tokenOf(ASSIGNMENT_START_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
             AssignmentCommand(transmitter)
         else {
-            val (content, location) = transmitter.expect(tokenOf(ExpectParamsBuilder.ANYTHING))
+            //token should always exist at this location
+            val (content, location) = transmitter.expectMaybe(tokenOf(ANYTHING)).get()
             throw UnexpectedTokenException(TOKENS_INVERSE[content]?:content, location)
         }
 
