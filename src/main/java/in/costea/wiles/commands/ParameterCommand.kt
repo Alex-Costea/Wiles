@@ -2,14 +2,12 @@ package `in`.costea.wiles.commands
 
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
 import `in`.costea.wiles.data.CompilationExceptionsCollection
-import `in`.costea.wiles.data.Token
 import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.services.TokenTransmitter
 import `in`.costea.wiles.statics.Constants.ANON_STARTS_WITH
 import `in`.costea.wiles.statics.Constants.COLON_ID
 import `in`.costea.wiles.statics.Constants.IS_IDENTIFIER
-import `in`.costea.wiles.statics.Constants.UNKNOWN_TOKEN
 
 class ParameterCommand(transmitter: TokenTransmitter) : AbstractCommand(transmitter) {
     private var tokenCommand: TokenCommand? = null
@@ -30,7 +28,7 @@ class ParameterCommand(transmitter: TokenTransmitter) : AbstractCommand(transmit
         get() = SyntaxType.PARAMETER
 
     override fun getComponents(): List<AbstractCommand> {
-        return listOf(tokenCommand?:TokenCommand(transmitter, Token(UNKNOWN_TOKEN,null)),
+        return listOf(tokenCommand!!,
             typeDefinition)
     }
 

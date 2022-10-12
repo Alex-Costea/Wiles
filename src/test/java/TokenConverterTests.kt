@@ -3,7 +3,7 @@ import `in`.costea.wiles.data.Token
 import `in`.costea.wiles.data.TokenLocation
 import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.exceptions.StringUnfinishedException
-import `in`.costea.wiles.exceptions.UnknownOperatorException
+import `in`.costea.wiles.exceptions.UnknownTokenException
 import `in`.costea.wiles.statics.Constants.DEBUG
 import `in`.costea.wiles.statics.Constants.DO_ID
 import `in`.costea.wiles.statics.Constants.MAX_OPERATOR_LENGTH
@@ -48,23 +48,23 @@ class TokenConverterTests {
     @Test
     fun operatorsTest() {
         tokenConverterEquals("=/=", arrayOf("NOT_EQUAL"))
-        tokenConverterThrows(0, "$", UnknownOperatorException::class.java, null, null)
-        tokenConverterThrows(0, "=$", UnknownOperatorException::class.java, "Operator unknown: $")
+        tokenConverterThrows(0, "$", UnknownTokenException::class.java, null, null)
+        tokenConverterThrows(0, "=$", UnknownTokenException::class.java, "Operator unknown: $")
         val invalidProgram = "\${}{}{}{}{}"
         Assumptions.assumingThat(invalidProgram.length >= MAX_OPERATOR_LENGTH + 1) {
             val substring1 = invalidProgram.substring(1, MAX_OPERATOR_LENGTH + 1)
-            tokenConverterThrows(0, invalidProgram, UnknownOperatorException::class.java, "Operator unknown: $substring1")
+            tokenConverterThrows(0, invalidProgram, UnknownTokenException::class.java, "Operator unknown: $substring1")
             Assumptions.assumingThat(invalidProgram.length >= 2 * MAX_OPERATOR_LENGTH + 1) {
                 val substring2 = invalidProgram.substring(MAX_OPERATOR_LENGTH + 1, 2 * MAX_OPERATOR_LENGTH + 1)
-                tokenConverterThrows(1, invalidProgram, UnknownOperatorException::class.java, "Operator unknown: $substring2")
+                tokenConverterThrows(1, invalidProgram, UnknownTokenException::class.java, "Operator unknown: $substring2")
             }
         }
         if (DEBUG) {
             tokenConverterEquals("$=", arrayOf("TEMP"))
             tokenConverterEquals("=$=", arrayOf("TEMP2"))
         }
-        tokenConverterThrows(0, "$\n@", UnknownOperatorException::class.java, "Operator unknown: $")
-        tokenConverterThrows(1, "$\n@", UnknownOperatorException::class.java, "Operator unknown: @")
+        tokenConverterThrows(0, "$\n@", UnknownTokenException::class.java, "Operator unknown: $")
+        tokenConverterThrows(1, "$\n@", UnknownTokenException::class.java, "Operator unknown: @")
     }
 
     @Test

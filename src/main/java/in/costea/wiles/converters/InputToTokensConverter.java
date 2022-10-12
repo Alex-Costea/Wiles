@@ -5,7 +5,7 @@ import in.costea.wiles.data.Token;
 import in.costea.wiles.data.TokenLocation;
 import in.costea.wiles.exceptions.AbstractCompilationException;
 import in.costea.wiles.exceptions.StringUnfinishedException;
-import in.costea.wiles.exceptions.UnknownOperatorException;
+import in.costea.wiles.exceptions.UnknownTokenException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -147,7 +147,7 @@ public class InputToTokensConverter {
         return sb.toString();
     }
     @NotNull
-    private String readOperator() throws UnknownOperatorException {
+    private String readOperator() throws UnknownTokenException {
         int currentIndex = index;
         int operatorFoundIndex = index;
         @NotNull
@@ -167,7 +167,7 @@ public class InputToTokensConverter {
         index = operatorFoundIndex;
         if (token == null) {
             index = currentIndex - 1;
-            throw new UnknownOperatorException(sb.toString(), line, getIndexOnCurrentLine());
+            throw new UnknownTokenException(sb.toString(), line, getIndexOnCurrentLine());
         }
         return token;
     }

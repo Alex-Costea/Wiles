@@ -4,10 +4,11 @@ import com.google.common.collect.BiMap
 import com.google.common.collect.HashBiMap
 import java.util.*
 import java.util.function.Predicate
+import kotlin.streams.toList
 
 object Constants {
     const val DEBUG = true
-    const val UNKNOWN_TOKEN = "ERROR_TOKEN"
+    const val UNKNOWN_TOKEN = "UNKNOWN_TOKEN"
     const val START_BLOCK_ID = "START_BLOCK"
     const val END_BLOCK_ID = "END_BLOCK"
     const val SPACE_ID = "SPACE"
@@ -17,7 +18,7 @@ object Constants {
     const val SQUARE_BRACKET_START_ID = "SQUARE_BRACKET_START"
     const val SQUARE_BRACKET_END_ID = "SQUARE_BRACKET_END"
     const val METHOD_ID = "METHOD"
-    const val STATEMENT_TERMINATOR_ID = "TERMINATOR"
+    private const val STATEMENT_TERMINATOR_ID = "TERMINATOR"
     const val BACKSLASH_ID = "BACKSLASH"
     const val PLUS_ID = "PLUS"
     const val MINUS_ID = "MINUS"
@@ -161,9 +162,9 @@ object Constants {
         TOKENS = HashBiMap.create(KEYWORDS)
         TOKENS.putAll(OPERATORS)
         TOKENS_INVERSE = TOKENS.inverse()
-        require(Collections.max(OPERATORS.keys.stream().mapToInt { obj: String? ->
-            obj?.length ?: 0
-        }.boxed().toList()) <= MAX_OPERATOR_LENGTH)
-        { "MAX_OPERATOR_LENGTH smaller than length of largest operator!" }
+        require(Collections.max(OPERATORS.keys.stream().mapToInt { obj: String -> obj.length }.toList()) <= MAX_OPERATOR_LENGTH)
+        {
+            "MAX_OPERATOR_LENGTH smaller than length of largest operator!"
+        }
     }
 }
