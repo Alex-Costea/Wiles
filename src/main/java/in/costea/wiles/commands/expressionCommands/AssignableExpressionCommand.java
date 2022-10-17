@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import static in.costea.wiles.builders.ExpectParamsBuilder.isContainedIn;
 import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
 import static in.costea.wiles.statics.Constants.ASSIGN_ID;
-import static in.costea.wiles.statics.Constants.STATEMENT_TERMINATORS;
+import static in.costea.wiles.statics.Constants.TERMINATORS;
 
 public class AssignableExpressionCommand extends AbstractExpressionCommand {
 
@@ -28,7 +28,7 @@ public class AssignableExpressionCommand extends AbstractExpressionCommand {
 
     @Override
     protected boolean checkExpressionFinalized() {
-        return transmitter.expectMaybe(tokenOf(isContainedIn(STATEMENT_TERMINATORS)).dontIgnoreNewLine()).isPresent();
+        return transmitter.expectMaybe(tokenOf(isContainedIn(TERMINATORS)).dontIgnoreNewLine()).isPresent();
     }
 
     @Override

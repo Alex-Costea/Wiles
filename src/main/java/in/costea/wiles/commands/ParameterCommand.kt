@@ -5,7 +5,7 @@ import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.services.TokenTransmitter
-import `in`.costea.wiles.statics.Constants.ANON_STARTS_WITH
+import `in`.costea.wiles.statics.Constants.UNNAMED_START
 import `in`.costea.wiles.statics.Constants.ASSIGN_ID
 import `in`.costea.wiles.statics.Constants.COLON_ID
 import `in`.costea.wiles.statics.Constants.IS_IDENTIFIER
@@ -41,7 +41,7 @@ class ParameterCommand(transmitter: TokenTransmitter) : AbstractCommand(transmit
                 transmitter,
                 transmitter.expect(tokenOf(IS_IDENTIFIER).withErrorMessage("Identifier expected!"))
             )
-            if (nameToken!!.token.content.startsWith(ANON_STARTS_WITH))
+            if (nameToken!!.token.content.startsWith(UNNAMED_START))
                 isAnon = true
             transmitter.expect(tokenOf(COLON_ID))
             exceptions.addAll(typeDefinition.process())

@@ -98,7 +98,7 @@ class SyntaxTreeConverterTests {
     }
 
     @Test
-    fun parenthesesTests() {
+    fun bracketsTests() {
         assertResults(null, "CODE_BLOCK(EXPRESSION(!a; PLUS; EXPRESSION ROUND(EXPRESSION ROUND(!b; PLUS; !c); PLUS; !d)))",
                 "!a", PLUS_ID, ROUND_BRACKET_START_ID, ROUND_BRACKET_START_ID, "!b", PLUS_ID, "!c",
                 ROUND_BRACKET_END_ID, PLUS_ID, "!d", ROUND_BRACKET_END_ID)
@@ -151,7 +151,7 @@ class SyntaxTreeConverterTests {
     }
 
     @Test
-    fun squareParenthesesTest() {
+    fun squareBracketsTest() {
         assertResults(null, "CODE_BLOCK(EXPRESSION(!a; EXPRESSION SQUARE(!b; COMMA; !d; COMMA; !e; PLUS; #2; TIMES; EXPRESSION ROUND(!a; POWER; !b))))",
                 "!a", SQUARE_BRACKET_START_ID, "!b", COMMA_ID, "!d", COMMA_ID, "!e",
                 PLUS_ID, "#2", TIMES_ID, ROUND_BRACKET_START_ID, "!a", POWER_ID, "!b", ROUND_BRACKET_END_ID, SQUARE_BRACKET_END_ID)

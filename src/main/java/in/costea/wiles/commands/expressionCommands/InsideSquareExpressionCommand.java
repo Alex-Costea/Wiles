@@ -22,6 +22,6 @@ public class InsideSquareExpressionCommand extends AbstractExpressionCommand {
     protected void checkBracketsCloseProperlyAtEnd(@NotNull String content, TokenLocation location) throws UnexpectedEndException {
 
         if (!content.equals(SQUARE_BRACKET_END_ID))
-            throw new UnexpectedEndException("Closing parentheses expected", location);
+            throw new UnexpectedEndException("Closing brackets expected", location);
     }
 }

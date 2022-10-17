@@ -18,7 +18,7 @@ import `in`.costea.wiles.statics.Constants.DO_ID
 import `in`.costea.wiles.statics.Constants.END_BLOCK_ID
 import `in`.costea.wiles.statics.Constants.NOTHING_ID
 import `in`.costea.wiles.statics.Constants.START_BLOCK_ID
-import `in`.costea.wiles.statics.Constants.STATEMENT_TERMINATORS
+import `in`.costea.wiles.statics.Constants.TERMINATORS
 import `in`.costea.wiles.statics.Constants.TOKENS_INVERSE
 
 class CodeBlockCommand(transmitter: TokenTransmitter, private val outerMost: Boolean) : AbstractCommand(transmitter) {
@@ -38,7 +38,7 @@ class CodeBlockCommand(transmitter: TokenTransmitter, private val outerMost: Boo
 
     @Throws(AbstractCompilationException::class)
     private fun readOneStatement() {
-        if (transmitter.expectMaybe(tokenOf(isContainedIn(STATEMENT_TERMINATORS)).dontIgnoreNewLine()).isPresent) return
+        if (transmitter.expectMaybe(tokenOf(isContainedIn(TERMINATORS)).dontIgnoreNewLine()).isPresent) return
 
         val command: AbstractCommand =
             if (transmitter.expectMaybe(AbstractExpressionCommand.START_OF_EXPRESSION).isPresent)

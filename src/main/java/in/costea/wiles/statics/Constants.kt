@@ -18,7 +18,7 @@ object Constants {
     const val SQUARE_BRACKET_START_ID = "SQUARE_BRACKET_START"
     const val SQUARE_BRACKET_END_ID = "SQUARE_BRACKET_END"
     const val METHOD_ID = "METHOD"
-    private const val STATEMENT_TERMINATOR_ID = "TERMINATOR"
+    private const val TERMINATOR_ID = "TERMINATOR"
     const val BACKSLASH_ID = "BACKSLASH"
     const val PLUS_ID = "PLUS"
     const val MINUS_ID = "MINUS"
@@ -45,8 +45,8 @@ object Constants {
     private const val AND_ID = "AND"
     private const val OR_ID = "OR"
     private const val NOT_ID = "NOT"
-    const val ANON_STARTS_WITH = IDENTIFIER_START + "arg"
-
+    private const val MAYBE_ID = "MAYBE"
+    const val UNNAMED_START = IDENTIFIER_START + "arg"
 
     @JvmField
     val KEYWORDS: BiMap<String, String> = HashBiMap.create()
@@ -77,10 +77,10 @@ object Constants {
     )
 
     @JvmField
-    val UNARY_OPERATORS = setOf(PLUS_ID, MINUS_ID, NOT_ID)
+    val ADD_ZERO_UNARY_OPERATORS = setOf(PLUS_ID, MINUS_ID)
 
     @JvmField
-    val ADD_ZERO_UNARY_OPERATORS = setOf(PLUS_ID, MINUS_ID)
+    val UNARY_OPERATORS = setOf(PLUS_ID, MINUS_ID, NOT_ID)
 
     @JvmField
     val BRACKETS = setOf(
@@ -89,8 +89,7 @@ object Constants {
     )
 
     @JvmField
-    val STATEMENT_TERMINATORS = setOf(NEWLINE_ID, STATEMENT_TERMINATOR_ID)
-
+    val TERMINATORS = setOf(NEWLINE_ID, TERMINATOR_ID)
 
     @JvmField
     val IS_IDENTIFIER = Predicate { x: String -> x.length > 1 && x.startsWith(IDENTIFIER_START) }
@@ -151,8 +150,9 @@ object Constants {
         OPERATORS[","] = COMMA_ID
         OPERATORS["."] = DOT_ID
         OPERATORS[":"] = COLON_ID
-        OPERATORS[";"] = STATEMENT_TERMINATOR_ID
+        OPERATORS[";"] = TERMINATOR_ID
         OPERATORS["-->"] = RIGHT_ARROW_ID
+        OPERATORS["?"] = MAYBE_ID
         OPERATORS["" + SPACE] = SPACE_ID
         OPERATORS["" + CONTINUE_LINE] = BACKSLASH_ID
         OPERATORS["" + NEWLINE] = NEWLINE_ID
