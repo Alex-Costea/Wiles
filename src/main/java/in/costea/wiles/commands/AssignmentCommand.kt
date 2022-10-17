@@ -1,6 +1,8 @@
 package `in`.costea.wiles.commands
 
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
+import `in`.costea.wiles.commands.expressionCommands.LeftSideExpressionCommand
+import `in`.costea.wiles.commands.expressionCommands.RightSideExpressionCommand
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.exceptions.AbstractCompilationException
@@ -24,13 +26,15 @@ class AssignmentCommand(transmitter: TokenTransmitter) : AbstractCommand(transmi
         try {
             transmitter.expect(tokenOf(ASSIGNMENT_START_ID))
 
-            val leftExpression=LeftSideExpressionCommand(transmitter)
+            val leftExpression=
+                LeftSideExpressionCommand(transmitter)
             this.leftExpression=leftExpression
             exceptions.addAll(leftExpression.process())
 
             transmitter.expect(tokenOf(ASSIGN_ID))
 
-            val rightExpression=RightSideExpressionCommand(transmitter)
+            val rightExpression=
+                RightSideExpressionCommand(transmitter)
             this.rightExpression=rightExpression
             exceptions.addAll(rightExpression.process())
         }

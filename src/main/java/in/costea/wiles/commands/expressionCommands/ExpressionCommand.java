@@ -1,9 +1,11 @@
-package in.costea.wiles.commands;
+package in.costea.wiles.commands.expressionCommands;
 
 import in.costea.wiles.builders.ExpectParamsBuilder;
+import in.costea.wiles.commands.AbstractCommand;
+import in.costea.wiles.commands.TokenCommand;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
-import in.costea.wiles.enums.ExpressionType;
+import in.costea.wiles.data.TokenLocation;
 import in.costea.wiles.enums.SyntaxType;
 import in.costea.wiles.enums.WhenRemoveToken;
 import in.costea.wiles.exceptions.AbstractCompilationException;
@@ -25,21 +27,14 @@ public abstract class ExpressionCommand extends AbstractCommand {
     @NotNull
     private final List<AbstractCommand> components = new ArrayList<>();
     @NotNull
-    private final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
-    @NotNull
-    private final ExpressionType expressionType;
+    protected final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
 
     public static final ExpectParamsBuilder START_OF_EXPRESSION =
             tokenOf(isContainedIn(UNARY_OPERATORS)).or(IS_LITERAL).or(ROUND_BRACKET_START_ID)
             .withErrorMessage("Expected expression!").removeWhen(WhenRemoveToken.Never);
 
-    public ExpressionCommand(@NotNull TokenTransmitter transmitter, @NotNull ExpressionType expressionType) {
+    protected ExpressionCommand(@NotNull TokenTransmitter transmitter) {
         super(transmitter);
-        this.expressionType = expressionType;
-        switch (expressionType) {
-            case INSIDE_ROUND -> name = "ROUND";
-            case INSIDE_SQUARE -> name = "SQUARE";
-        }
     }
 
     @Override
@@ -53,14 +48,19 @@ public abstract class ExpressionCommand extends AbstractCommand {
     }
 
 
-    private void addInnerExpression(ExpressionType expressionType) throws AbstractCompilationException {
+    private void addInsideRoundExpression() throws AbstractCompilationException {
         @NotNull
-        final ExpressionCommand newExpression;
-        switch(expressionType) {
-            case INSIDE_ROUND -> newExpression = new InsideRoundBracketsExpressionCommand(transmitter);
-            case INSIDE_SQUARE -> newExpression = new InsideSquareBracketsExpressionCommand(transmitter);
-            default -> throw new IllegalArgumentException("Unknown expression type");
-        }
+        final ExpressionCommand newExpression = new InsideRoundBracketsExpressionCommand(transmitter);
+        @NotNull
+        final var newExceptions = newExpression.process();
+        if (newExceptions.size() > 0)
+            throw newExceptions.get(0);
+        components.add(newExpression);
+    }
+
+    private void addInsideSquareExpression() throws AbstractCompilationException {
+        @NotNull
+        final ExpressionCommand newExpression = new InsideSquareBracketsExpressionCommand(transmitter);
         @NotNull
         final var newExceptions = newExpression.process();
         if (newExceptions.size() > 0)
@@ -81,24 +81,16 @@ public abstract class ExpressionCommand extends AbstractCommand {
 
             while (!transmitter.tokensExhausted())
             {
-                // finalize expression at newline/semicolon if correctly finalized
-                if ((expectNext == ExpectNext.OPERATOR) && expressionType == ExpressionType.RIGHT_SIDE &&
-                        transmitter.expectMaybe(tokenOf(isContainedIn(STATEMENT_TERMINATORS)).dontIgnoreNewLine()).isPresent())
+                // finalize expression if correctly finalized
+                if((expectNext==ExpectNext.OPERATOR) && transmitter.expectMaybe(expressionFinalized()).isPresent())
                     break;
 
-                // finalize expression at := if correctly finalized
-                if ((expectNext == ExpectNext.OPERATOR) && expressionType == ExpressionType.LEFT_SIDE &&
-                        transmitter.expectMaybe(tokenOf(ASSIGN_ID).removeWhen(WhenRemoveToken.Never)).isPresent())
-                    break;
-
-                // finalize expression at "end" if correct
+                // handle end token
                 @NotNull
                 final var tempToken = transmitter.expectMaybe(tokenOf(END_BLOCK_ID).removeWhen(WhenRemoveToken.Never));
-                if (tempToken.isPresent()) {
-                    if (expressionType == ExpressionType.RIGHT_SIDE)
+                if (tempToken.isPresent())
+                    if(handleEndTokenReceived(tempToken.get()))
                         break;
-                    else throw new UnexpectedTokenException("end", tempToken.get().getLocation());
-                }
 
                 if (expectNext == ExpectNext.OPERATOR)
                     mainToken = transmitter.expect(tokenOf(isContainedIn(BRACKETS))
@@ -108,16 +100,8 @@ public abstract class ExpressionCommand extends AbstractCommand {
 
                 content=mainToken.getContent();
 
-                if (content.equals(ROUND_BRACKET_END_ID)) {
-                    if (expressionType == ExpressionType.INSIDE_ROUND) break; //end of inner statement
-                    else
-                        throw new UnexpectedTokenException("Brackets don't close properly", mainToken.getLocation());
-                }
-                if (content.equals(SQUARE_BRACKET_END_ID)) {
-                    if (expressionType == ExpressionType.INSIDE_SQUARE) break; //end of inner statement
-                    else
-                        throw new UnexpectedTokenException("Brackets don't close properly", mainToken.getLocation());
-                }
+                if(handleBracketsCloseTokenFound(content,mainToken.getLocation()))
+                    break;
 
                 if (expectNext == ExpectNext.OPERATOR && content.equals(ROUND_BRACKET_START_ID)) {
                     todo("Method call");
@@ -127,7 +111,7 @@ public abstract class ExpressionCommand extends AbstractCommand {
                 {
                     if(expectNext == ExpectNext.OPERATOR)
                     {
-                        addInnerExpression(ExpressionType.INSIDE_SQUARE);
+                        addInsideSquareExpression();
                         continue;
                     }
                     else throw new UnexpectedTokenException("Identifier or unary operator expected!",mainToken.getLocation());
@@ -141,15 +125,14 @@ public abstract class ExpressionCommand extends AbstractCommand {
                 else expectNext = expectNext == ExpectNext.OPERATOR ? ExpectNext.TOKEN : ExpectNext.OPERATOR;
 
                 if (content.equals(ROUND_BRACKET_START_ID)) //inner expression, not method call
-                    addInnerExpression(ExpressionType.INSIDE_ROUND);
+                    addInsideRoundExpression();
                 else components.add(new TokenCommand(transmitter, mainToken));
             }
 
             //verifying expression finished well
-            if (expressionType == ExpressionType.INSIDE_ROUND && exceptions.size() == 0 && !content.equals(ROUND_BRACKET_END_ID))
-                throw new UnexpectedEndException("Closing parentheses expected", mainToken.getLocation());
-            if (expressionType == ExpressionType.INSIDE_SQUARE && exceptions.size() == 0 && !content.equals(SQUARE_BRACKET_END_ID))
-                throw new UnexpectedEndException("Closing parentheses expected", mainToken.getLocation());
+            if(exceptions.size()==0)
+                checkBracketsCloseProperlyAtEnd(content,mainToken.getLocation());
+
 
             //Ignore trailing comma
             if (expectNext == ExpectNext.TOKEN && exceptions.size() == 0) {
@@ -181,6 +164,25 @@ public abstract class ExpressionCommand extends AbstractCommand {
             exceptions.add(ex);
         }
         return exceptions;
+    }
+
+    protected void checkBracketsCloseProperlyAtEnd(String content, TokenLocation location) throws UnexpectedEndException {
+        //by default, there is no check
+    }
+
+    protected boolean handleEndTokenReceived(Token token) throws UnexpectedTokenException {
+        throw new UnexpectedTokenException("end", token.getLocation());
+    }
+
+    protected boolean handleBracketsCloseTokenFound(String content, TokenLocation location) throws UnexpectedTokenException {
+        if(content.equals(ROUND_BRACKET_END_ID) || content.equals(SQUARE_BRACKET_END_ID))
+            throw new UnexpectedTokenException("Brackets don't close properly", location);
+        return false;
+    }
+
+    protected ExpectParamsBuilder expressionFinalized()
+    {
+        return tokenOf((x)->false).removeWhen(WhenRemoveToken.Never);
     }
 
     private enum ExpectNext {
