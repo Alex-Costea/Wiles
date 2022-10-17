@@ -15,7 +15,7 @@ class TokenCommand(transmitter: TokenTransmitter, val token: Token) : AbstractCo
     override val type: SyntaxType
         get() = SyntaxType.TOKEN
 
-    override fun getComponents(): List<ExpressionCommand> {
+    override fun getComponents(): List<AbstractCommand> {
         return ArrayList()
     }
 
