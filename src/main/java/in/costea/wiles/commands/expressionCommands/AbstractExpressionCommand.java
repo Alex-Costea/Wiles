@@ -82,6 +82,11 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                 throw new UnexpectedEndException("Expression unfinished!", location);
     }
 
+    private void addZeroIfNecessary(@NotNull String content, TokenLocation location) {
+        if (ADD_ZERO_UNARY_OPERATORS.contains(content))
+            components.add(new TokenCommand(transmitter, new Token("#0", location)));
+    }
+
     private void flatten() {
         if (components.size() == 1) {
             if (components.get(0) instanceof final InsideRoundExpressionCommand expressionCommand) {
@@ -152,7 +157,6 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                 else components.add(new TokenCommand(transmitter, mainToken));
             }
 
-            //verifying expression finished well
             checkBracketsCloseProperlyAtEnd(content, location);
             checkFinished(expectNext, location);
             flatten();
@@ -168,11 +172,6 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
         return exceptions;
     }
 
-    private void addZeroIfNecessary(@NotNull String content, TokenLocation location) {
-        if (ADD_ZERO_UNARY_OPERATORS.contains(content))
-            components.add(new TokenCommand(transmitter, new Token("#0", location)));
-    }
-
     protected boolean handleAssignTokenReceived(TokenLocation location) throws AbstractCompilationException {
         throw new UnexpectedTokenException("Assignment not allowed here!", location);
     }
@@ -182,7 +181,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
     }
 
     protected boolean handleEndTokenReceived(TokenLocation location) throws UnexpectedTokenException {
-        throw new UnexpectedTokenException("end", location);
+        throw new UnexpectedTokenException("End token not allowed here!", location);
     }
 
     protected boolean handleBracketsCloseTokenFound(@NotNull String content, TokenLocation location) throws UnexpectedTokenException {

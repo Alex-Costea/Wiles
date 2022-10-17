@@ -91,6 +91,10 @@ class SyntaxTreeConverterTests {
         assertResults(createExceptions(TokenExpectedException("Expected expression!", null)),
                 null,
                 "!a", PLUS_ID, ROUND_BRACKET_START_ID, "BREAK", ROUND_BRACKET_END_ID)
+
+        assertResults(createExceptions(UnexpectedTokenException("End token not allowed here!", null)),
+            null,
+            "!a", PLUS_ID, ROUND_BRACKET_START_ID,"!b",PLUS_ID, END_BLOCK_ID, ROUND_BRACKET_END_ID)
     }
 
     @Test
