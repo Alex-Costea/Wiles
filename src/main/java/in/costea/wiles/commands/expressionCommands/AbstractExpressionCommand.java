@@ -9,7 +9,6 @@ import in.costea.wiles.data.TokenLocation;
 import in.costea.wiles.enums.SyntaxType;
 import in.costea.wiles.enums.WhenRemoveToken;
 import in.costea.wiles.exceptions.AbstractCompilationException;
-import in.costea.wiles.exceptions.TokenExpectedException;
 import in.costea.wiles.exceptions.UnexpectedEndException;
 import in.costea.wiles.exceptions.UnexpectedTokenException;
 import in.costea.wiles.services.OrderOfOperationsProcessor;
@@ -80,13 +79,13 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                 @NotNull
                 final var tempToken = transmitter.expectMaybe(tokenOf(END_BLOCK_ID).removeWhen(WhenRemoveToken.Never));
                 if (tempToken.isPresent())
-                    if(handleEndTokenReceived(tempToken.get()))
+                    if(handleEndTokenReceived(tempToken.get().getLocation()))
                         break;
 
                 //handle assignment token
                 final var tempToken2 = transmitter.expectMaybe(tokenOf(ASSIGN_ID).removeWhen(WhenRemoveToken.Never));
                 if (tempToken2.isPresent())
-                    if(handleAssignTokenReceived(tempToken2.get()))
+                    if(handleAssignTokenReceived(tempToken2.get().getLocation()))
                         break;
 
                 // expect the next correct token
@@ -173,19 +172,19 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
         return exceptions;
     }
 
-    protected boolean handleAssignTokenReceived(Token token) throws UnexpectedTokenException, TokenExpectedException, UnexpectedEndException {
-        throw new UnexpectedTokenException("Assignment not allowed here!",token.getLocation());
+    protected boolean handleAssignTokenReceived(TokenLocation location) throws AbstractCompilationException {
+        throw new UnexpectedTokenException("Assignment not allowed here!",location);
     }
 
-    protected void checkBracketsCloseProperlyAtEnd(String content, TokenLocation location) throws UnexpectedEndException {
+    protected void checkBracketsCloseProperlyAtEnd(@NotNull String content, TokenLocation location) throws UnexpectedEndException {
         //by default, there is no check
     }
 
-    protected boolean handleEndTokenReceived(Token token) throws UnexpectedTokenException {
-        throw new UnexpectedTokenException("end", token.getLocation());
+    protected boolean handleEndTokenReceived(TokenLocation location) throws UnexpectedTokenException {
+        throw new UnexpectedTokenException("end", location);
     }
 
-    protected boolean handleBracketsCloseTokenFound(String content, TokenLocation location) throws UnexpectedTokenException {
+    protected boolean handleBracketsCloseTokenFound(@NotNull String content, TokenLocation location) throws UnexpectedTokenException {
         throw new UnexpectedTokenException("Brackets don't close properly", location);
     }
 

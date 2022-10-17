@@ -1,7 +1,7 @@
 package in.costea.wiles.commands.expressionCommands;
 
 import in.costea.wiles.builders.ExpectParamsBuilder;
-import in.costea.wiles.data.Token;
+import in.costea.wiles.data.TokenLocation;
 import in.costea.wiles.services.TokenTransmitter;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +20,7 @@ public class RightSideExpressionCommand extends AbstractExpressionCommand {
     }
 
     @Override
-    protected boolean handleEndTokenReceived(Token token) {
+    protected boolean handleEndTokenReceived(TokenLocation location) {
         return true;
     }
 }

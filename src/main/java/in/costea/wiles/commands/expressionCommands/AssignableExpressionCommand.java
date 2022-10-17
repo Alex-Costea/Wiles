@@ -1,7 +1,7 @@
 package in.costea.wiles.commands.expressionCommands;
 
 import in.costea.wiles.builders.ExpectParamsBuilder;
-import in.costea.wiles.data.Token;
+import in.costea.wiles.data.TokenLocation;
 import in.costea.wiles.enums.SyntaxType;
 import in.costea.wiles.exceptions.TokenExpectedException;
 import in.costea.wiles.exceptions.UnexpectedEndException;
@@ -33,12 +33,12 @@ public class AssignableExpressionCommand extends AbstractExpressionCommand {
     }
 
     @Override
-    protected boolean handleEndTokenReceived(Token token) {
+    protected boolean handleEndTokenReceived(TokenLocation location) {
         return true;
     }
 
     @Override
-    protected boolean handleAssignTokenReceived(Token token) throws TokenExpectedException, UnexpectedEndException {
+    protected boolean handleAssignTokenReceived(TokenLocation location) throws TokenExpectedException, UnexpectedEndException {
         transmitter.expect(tokenOf(ASSIGN_ID));
         isAssignment=true;
         LeftSideExpressionCommand leftSide = new LeftSideExpressionCommand(transmitter, this);

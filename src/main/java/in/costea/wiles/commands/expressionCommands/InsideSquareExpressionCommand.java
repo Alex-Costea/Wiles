@@ -14,12 +14,12 @@ public class InsideSquareExpressionCommand extends AbstractExpressionCommand {
     }
 
     @Override
-    protected boolean handleBracketsCloseTokenFound(String content, TokenLocation location) {
+    protected boolean handleBracketsCloseTokenFound(@NotNull String content, TokenLocation location) {
         return content.equals(SQUARE_BRACKET_END_ID);
     }
 
     @Override
-    protected void checkBracketsCloseProperlyAtEnd(String content, TokenLocation location) throws UnexpectedEndException {
+    protected void checkBracketsCloseProperlyAtEnd(@NotNull String content, TokenLocation location) throws UnexpectedEndException {
 
         if (!content.equals(SQUARE_BRACKET_END_ID))
             throw new UnexpectedEndException("Closing parentheses expected", location);
