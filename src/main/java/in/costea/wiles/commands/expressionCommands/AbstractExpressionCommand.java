@@ -115,7 +115,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                 {
                     if(expectNext == ExpectNext.OPERATOR)
                     {
-                        addInsideExpression(new InsideSquareBracketsExpressionCommand(transmitter));
+                        addInsideExpression(new InsideSquareExpressionCommand(transmitter));
                         continue;
                     }
                     else throw new UnexpectedTokenException("Identifier or unary operator expected!",location);
@@ -132,7 +132,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
 
                 // add inner expression
                 if (content.equals(ROUND_BRACKET_START_ID))
-                    addInsideExpression(new InsideRoundBracketsExpressionCommand(transmitter));
+                    addInsideExpression(new InsideRoundExpressionCommand(transmitter));
                 else components.add(new TokenCommand(transmitter, mainToken));
             }
 
@@ -154,7 +154,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
             //Flatten
             if(components.size()==1)
             {
-                if(components.get(0) instanceof final InsideRoundBracketsExpressionCommand expressionCommand)
+                if(components.get(0) instanceof final InsideRoundExpressionCommand expressionCommand)
                 {
                     components.clear();
                     components.addAll(expressionCommand.getComponents());

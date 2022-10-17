@@ -49,10 +49,4 @@ public class AssignableExpressionCommand extends AbstractExpressionCommand {
         components.add(rightSide);
         return true;
     }
-
-    @NotNull
-    @Override
-    public String toString() {
-        return super.toString();
-    }
 }

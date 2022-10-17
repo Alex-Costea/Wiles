@@ -7,8 +7,8 @@ import org.jetbrains.annotations.NotNull;
 
 import static in.costea.wiles.statics.Constants.SQUARE_BRACKET_END_ID;
 
-public class InsideSquareBracketsExpressionCommand extends AbstractExpressionCommand {
-    public InsideSquareBracketsExpressionCommand(@NotNull TokenTransmitter transmitter) {
+public class InsideSquareExpressionCommand extends AbstractExpressionCommand {
+    public InsideSquareExpressionCommand(@NotNull TokenTransmitter transmitter) {
         super(transmitter);
         name="SQUARE";
     }
