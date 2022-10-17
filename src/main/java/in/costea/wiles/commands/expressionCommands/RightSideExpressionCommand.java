@@ -1,6 +1,5 @@
 package in.costea.wiles.commands.expressionCommands;
 
-import in.costea.wiles.builders.ExpectParamsBuilder;
 import in.costea.wiles.data.TokenLocation;
 import in.costea.wiles.services.TokenTransmitter;
 import org.jetbrains.annotations.NotNull;
@@ -11,8 +10,8 @@ import static in.costea.wiles.statics.Constants.STATEMENT_TERMINATORS;
 
 public class RightSideExpressionCommand extends AbstractExpressionCommand {
     @Override
-    protected ExpectParamsBuilder expressionFinalized() {
-        return tokenOf(isContainedIn(STATEMENT_TERMINATORS)).dontIgnoreNewLine();
+    protected boolean checkExpressionFinalized() {
+        return transmitter.expectMaybe(tokenOf(isContainedIn(STATEMENT_TERMINATORS)).dontIgnoreNewLine()).isPresent();
     }
 
     public RightSideExpressionCommand(@NotNull TokenTransmitter transmitter) {

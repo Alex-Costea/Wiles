@@ -1,6 +1,5 @@
 package in.costea.wiles.commands.expressionCommands;
 
-import in.costea.wiles.builders.ExpectParamsBuilder;
 import in.costea.wiles.data.TokenLocation;
 import in.costea.wiles.enums.SyntaxType;
 import in.costea.wiles.exceptions.TokenExpectedException;
@@ -24,8 +23,8 @@ public class AssignableExpressionCommand extends AbstractExpressionCommand {
     }
 
     @Override
-    protected ExpectParamsBuilder expressionFinalized(){
-        return tokenOf(isContainedIn(STATEMENT_TERMINATORS)).dontIgnoreNewLine();
+    protected boolean checkExpressionFinalized() {
+        return transmitter.expectMaybe(tokenOf(isContainedIn(STATEMENT_TERMINATORS)).dontIgnoreNewLine()).isPresent();
     }
 
     public AssignableExpressionCommand(@NotNull TokenTransmitter transmitter) {

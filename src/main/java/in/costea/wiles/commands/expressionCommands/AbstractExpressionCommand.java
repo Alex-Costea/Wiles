@@ -72,8 +72,9 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
             while (!transmitter.tokensExhausted())
             {
                 // finalize expression if correctly finalized
-                if((expectNext==ExpectNext.OPERATOR) && transmitter.expectMaybe(expressionFinalized()).isPresent())
-                    break;
+                if((expectNext==ExpectNext.OPERATOR))
+                    if(checkExpressionFinalized())
+                        break;
 
                 // handle end token
                 @NotNull
@@ -188,9 +189,9 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
         throw new UnexpectedTokenException("Brackets don't close properly", location);
     }
 
-    protected ExpectParamsBuilder expressionFinalized()
+    protected boolean checkExpressionFinalized()
     {
-        return tokenOf(NOTHING).removeWhen(WhenRemoveToken.Never).dontIgnoreNewLine();
+        return false;
     }
 
     private enum ExpectNext {
