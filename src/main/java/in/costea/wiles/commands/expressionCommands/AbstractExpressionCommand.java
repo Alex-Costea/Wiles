@@ -53,8 +53,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
         components.add(newExpression);
     }
 
-    private @NotNull ExpectNext firstExpectNext(@NotNull String content)
-    {
+    private @NotNull ExpectNext firstExpectNext(@NotNull String content) {
         if (IS_LITERAL.test(content) || BRACKETS.contains(content) || UNARY_OPERATORS.contains(content))
             return ExpectNext.TOKEN;
         return ExpectNext.OPERATOR;
@@ -62,7 +61,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
 
     private @NotNull Token getNextToken(@NotNull ExpectNext expectNext) throws AbstractCompilationException {
         if (expectNext == ExpectNext.OPERATOR) return transmitter.expect(tokenOf(isContainedIn(BRACKETS))
-                    .or(isContainedIn(INFIX_OPERATORS)).withErrorMessage("Operator expected!"));
+                .or(isContainedIn(INFIX_OPERATORS)).withErrorMessage("Operator expected!"));
 
         return transmitter.expect(tokenOf(isContainedIn(BRACKETS)).or(isContainedIn(UNARY_OPERATORS))
                 .or(IS_LITERAL).withErrorMessage("Identifier or unary operator expected!"));
@@ -79,12 +78,11 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
 
     private void checkFinished(@NotNull ExpectNext expectNext, TokenLocation location) throws UnexpectedEndException {
         if (expectNext == ExpectNext.TOKEN && exceptions.size() == 0)
-                if(!removeTrailingCommaIfExists())
-                    throw new UnexpectedEndException("Expression unfinished!", location);
+            if (!removeTrailingCommaIfExists())
+                throw new UnexpectedEndException("Expression unfinished!", location);
     }
 
-    private void flatten()
-    {
+    private void flatten() {
         if (components.size() == 1) {
             if (components.get(0) instanceof final InsideRoundExpressionCommand expressionCommand) {
                 components.clear();
@@ -100,7 +98,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
             @NotNull ExpectNext expectNext;
             @NotNull var content = mainToken.getContent();
             TokenLocation location = mainToken.getLocation();
-            expectNext=firstExpectNext(content);
+            expectNext = firstExpectNext(content);
 
             while (!transmitter.tokensExhausted()) {
                 // finalize expression if correctly finalized
@@ -145,7 +143,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
 
                 // switch expecting operator or token next
                 if (expectNext == ExpectNext.TOKEN && UNARY_OPERATORS.contains(content))
-                    addZeroIfNecessary(content,location);
+                    addZeroIfNecessary(content, location);
                 else expectNext = expectNext == ExpectNext.OPERATOR ? ExpectNext.TOKEN : ExpectNext.OPERATOR;
 
                 // add inner expression
@@ -156,7 +154,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
 
             //verifying expression finished well
             checkBracketsCloseProperlyAtEnd(content, location);
-            checkFinished(expectNext,location);
+            checkFinished(expectNext, location);
             flatten();
 
             //Set order of operations
