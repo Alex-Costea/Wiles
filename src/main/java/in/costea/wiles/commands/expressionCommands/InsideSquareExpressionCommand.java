@@ -10,7 +10,7 @@ import static in.costea.wiles.statics.Constants.SQUARE_BRACKET_END_ID;
 public class InsideSquareExpressionCommand extends AbstractExpressionCommand {
     public InsideSquareExpressionCommand(@NotNull TokenTransmitter transmitter) {
         super(transmitter);
-        name="SQUARE";
+        name = "SQUARE";
     }
 
     @Override

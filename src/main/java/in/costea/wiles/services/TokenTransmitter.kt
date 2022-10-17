@@ -50,7 +50,7 @@ class TokenTransmitter(tokens: List<Token>) {
         return try {
             if (expectParamsBuilder.whenRemove == WhenRemoveToken.Default)
                 expectParamsBuilder.removeWhen(WhenRemoveToken.WhenFound)
-            if(expectParamsBuilder.errorMessage==null)
+            if (expectParamsBuilder.errorMessage == null)
                 expectParamsBuilder.withErrorMessage("N/A")
             Optional.of(expect(expectParamsBuilder))
         } catch (ex: TokenExpectedException) {

@@ -6,9 +6,9 @@ import `in`.costea.wiles.statics.Constants.DEBUG
 class CompilationExceptionsCollection : ArrayList<AbstractCompilationException>() {
     fun getExceptionsString(): String {
         val optional: String = sortedWith(nullsLast(compareBy<AbstractCompilationException> { it.tokenLocation?.line }
-                .thenBy { it.tokenLocation?.lineIndex }))
-                .map { "\n    " + it.message + "\n" + (if (DEBUG) it.stackTraceToString() else "") }
-                .fold("") { a, b -> a + b }
+            .thenBy { it.tokenLocation?.lineIndex }))
+            .map { "\n    " + it.message + "\n" + (if (DEBUG) it.stackTraceToString() else "") }
+            .fold("") { a, b -> a + b }
         if (optional.isEmpty())
             throw IllegalStateException()
         return optional
@@ -17,7 +17,7 @@ class CompilationExceptionsCollection : ArrayList<AbstractCompilationException>(
     override fun equals(other: Any?): Boolean {
         if (other !is CompilationExceptionsCollection)
             return false
-        if(other.size!=size)
+        if (other.size != size)
             return false
         for (i in 0 until size)
             if (this[i].message != other[i].message)

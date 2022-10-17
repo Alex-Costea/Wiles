@@ -19,8 +19,7 @@ object Utils {
     }
 
     @JvmStatic
-    fun todo(s:String)
-    {
+    fun todo(s: String) {
         TODO(s)
     }
 }

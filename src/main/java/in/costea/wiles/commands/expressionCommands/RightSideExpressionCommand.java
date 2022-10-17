@@ -9,13 +9,13 @@ import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
 import static in.costea.wiles.statics.Constants.STATEMENT_TERMINATORS;
 
 public class RightSideExpressionCommand extends AbstractExpressionCommand {
+    public RightSideExpressionCommand(@NotNull TokenTransmitter transmitter) {
+        super(transmitter);
+    }
+
     @Override
     protected boolean checkExpressionFinalized() {
         return transmitter.expectMaybe(tokenOf(isContainedIn(STATEMENT_TERMINATORS)).dontIgnoreNewLine()).isPresent();
-    }
-
-    public RightSideExpressionCommand(@NotNull TokenTransmitter transmitter) {
-        super(transmitter);
     }
 
     @Override

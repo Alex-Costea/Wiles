@@ -15,7 +15,7 @@ class TokensToSyntaxTreeConverter(tokens: List<Token>) {
     }
 
     fun convert(): CodeBlockCommand {
-        val syntaxTree = CodeBlockCommand(tokenTransmitter,true)
+        val syntaxTree = CodeBlockCommand(tokenTransmitter, true)
         exceptions.addAll(syntaxTree.process())
         return syntaxTree
     }

@@ -68,21 +68,19 @@ public class InputToTokensConverter {
         return tokens;
     }
 
-    public StringBuilder createString(boolean isComment)
-    {
-        int currentIndex=index+1;
+    public StringBuilder createString(boolean isComment) {
+        int currentIndex = index + 1;
         @NotNull
         StringBuilder sb = new StringBuilder();
         char lastNonSpaceCharacter = 0;
         int lastNonSpaceCharacterIndex = -1;
-        while (currentIndex<arrayChars.length) {
+        while (currentIndex < arrayChars.length) {
             if (arrayChars[currentIndex] == NEWLINE) {
                 if (lastNonSpaceCharacter == CONTINUE_LINE)
                     sb.setLength(lastNonSpaceCharacterIndex - index - 1);
-                else
-                {
+                else {
                     //TODO: ugly hack i don't understand
-                    if(!isComment)
+                    if (!isComment)
                         currentIndex--;
                     break;
                 }
@@ -90,27 +88,27 @@ public class InputToTokensConverter {
                 lastNonSpaceCharacterIndex = currentIndex;
                 lastNonSpaceCharacter = arrayChars[currentIndex];
             }
-            if(isComment && arrayChars[currentIndex] == STRING_DELIMITER)
+            if (isComment && arrayChars[currentIndex] == STRING_DELIMITER)
                 break;
             sb.append(arrayChars[currentIndex]);
             if (currentIndex + 1 == arrayChars.length)
                 break;
             currentIndex++;
         }
-        index=currentIndex;
+        index = currentIndex;
         return sb;
     }
 
     @NotNull
     private String readStringLiteral() throws StringUnfinishedException {
-        if (index  >= arrayChars.length)
+        if (index >= arrayChars.length)
             throw new StringUnfinishedException("", line, getIndexOnCurrentLine());
-        StringBuilder sb=createString(true);
+        StringBuilder sb = createString(true);
         if (index < arrayChars.length && arrayChars[index] == STRING_DELIMITER)
             return STRING_START + sb;
 
         //String not properly finished at this point
-        if (index < arrayChars.length &&  arrayChars[index] == NEWLINE) //add the newline token regardless
+        if (index < arrayChars.length && arrayChars[index] == NEWLINE) //add the newline token regardless
             index--;
         throw new StringUnfinishedException(sb.toString(), line, getIndexOnCurrentLine());
     }
@@ -146,6 +144,7 @@ public class InputToTokensConverter {
         index = currentIndex - 1;
         return sb.toString();
     }
+
     @NotNull
     private String readOperator() throws UnknownTokenException {
         int currentIndex = index;

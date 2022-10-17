@@ -10,16 +10,15 @@ public class LeftSideExpressionCommand extends AbstractExpressionCommand {
         super(transmitter);
     }
 
-    private void checkValid()
-    {
-        //TODO: check if valid LeftSide
-    }
-
     public LeftSideExpressionCommand(@NotNull TokenTransmitter transmitter, AssignableExpressionCommand assignableExpressionCommand) {
         super(transmitter);
         components.addAll(assignableExpressionCommand.components);
         exceptions.addAll(assignableExpressionCommand.exceptions);
         checkValid();
+    }
+
+    private void checkValid() {
+        //TODO: check if valid LeftSide
     }
 
     @Override

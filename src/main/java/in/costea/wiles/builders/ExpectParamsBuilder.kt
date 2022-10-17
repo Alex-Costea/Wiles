@@ -5,7 +5,7 @@ import `in`.costea.wiles.statics.Constants.TOKENS_INVERSE
 import java.util.function.Predicate
 
 class ExpectParamsBuilder private constructor(var foundTest: Predicate<String>) {
-    var errorMessage : String? = null
+    var errorMessage: String? = null
         private set
     var whenRemove: WhenRemoveToken = WhenRemoveToken.Default
         private set
@@ -41,9 +41,6 @@ class ExpectParamsBuilder private constructor(var foundTest: Predicate<String>) 
         @JvmField
         val ANYTHING = Predicate { _: String -> true }
 
-        @JvmField
-        val NOTHING = Predicate { _: String -> false }
-
         @JvmStatic
         fun isContainedIn(set: Collection<String?>): Predicate<String> {
             return Predicate { o: String? -> set.contains(o) }
@@ -52,7 +49,7 @@ class ExpectParamsBuilder private constructor(var foundTest: Predicate<String>) 
         @JvmStatic
         fun tokenOf(expectedToken: String?): ExpectParamsBuilder {
             return ExpectParamsBuilder { x: String? -> x == expectedToken }
-                    .withErrorMessage("Token \"" + TOKENS_INVERSE[expectedToken] + "\" expected!")
+                .withErrorMessage("Token \"" + TOKENS_INVERSE[expectedToken] + "\" expected!")
         }
 
         @JvmStatic

@@ -14,21 +14,21 @@ import static in.costea.wiles.statics.Constants.STATEMENT_TERMINATORS;
 
 public class AssignableExpressionCommand extends AbstractExpressionCommand {
 
-    private boolean isAssignment=false;
+    private boolean isAssignment = false;
+
+    public AssignableExpressionCommand(@NotNull TokenTransmitter transmitter) {
+        super(transmitter);
+    }
 
     @Override
     public @NotNull SyntaxType getType() {
-        if(isAssignment) return SyntaxType.ASSIGNMENT;
+        if (isAssignment) return SyntaxType.ASSIGNMENT;
         return SyntaxType.EXPRESSION;
     }
 
     @Override
     protected boolean checkExpressionFinalized() {
         return transmitter.expectMaybe(tokenOf(isContainedIn(STATEMENT_TERMINATORS)).dontIgnoreNewLine()).isPresent();
-    }
-
-    public AssignableExpressionCommand(@NotNull TokenTransmitter transmitter) {
-        super(transmitter);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class AssignableExpressionCommand extends AbstractExpressionCommand {
     @Override
     protected boolean handleAssignTokenReceived(TokenLocation location) throws TokenExpectedException, UnexpectedEndException {
         transmitter.expect(tokenOf(ASSIGN_ID));
-        isAssignment=true;
+        isAssignment = true;
         LeftSideExpressionCommand leftSide = new LeftSideExpressionCommand(transmitter, this);
         components.clear();
         RightSideExpressionCommand rightSide = new RightSideExpressionCommand(transmitter);

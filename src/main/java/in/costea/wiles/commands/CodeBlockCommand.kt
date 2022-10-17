@@ -21,7 +21,7 @@ import `in`.costea.wiles.statics.Constants.START_BLOCK_ID
 import `in`.costea.wiles.statics.Constants.STATEMENT_TERMINATORS
 import `in`.costea.wiles.statics.Constants.TOKENS_INVERSE
 
-class CodeBlockCommand(transmitter: TokenTransmitter,private val outerMost:Boolean) : AbstractCommand(transmitter) {
+class CodeBlockCommand(transmitter: TokenTransmitter, private val outerMost: Boolean) : AbstractCommand(transmitter) {
     private val components: MutableList<AbstractCommand> = ArrayList()
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
 
@@ -40,17 +40,18 @@ class CodeBlockCommand(transmitter: TokenTransmitter,private val outerMost:Boole
     private fun readOneStatement() {
         if (transmitter.expectMaybe(tokenOf(isContainedIn(STATEMENT_TERMINATORS)).dontIgnoreNewLine()).isPresent) return
 
-        val command: AbstractCommand = if (transmitter.expectMaybe(AbstractExpressionCommand.START_OF_EXPRESSION).isPresent)
-            AssignableExpressionCommand(
-                transmitter
-            )
-        else if(transmitter.expectMaybe(tokenOf(DECLARE_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
-            DeclarationCommand(transmitter)
-        else {
-            //token should always exist at this location
-            val (content, location) = transmitter.expectMaybe(tokenOf(ANYTHING)).get()
-            throw UnexpectedTokenException(TOKENS_INVERSE[content]?:content, location)
-        }
+        val command: AbstractCommand =
+            if (transmitter.expectMaybe(AbstractExpressionCommand.START_OF_EXPRESSION).isPresent)
+                AssignableExpressionCommand(
+                    transmitter
+                )
+            else if (transmitter.expectMaybe(tokenOf(DECLARE_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
+                DeclarationCommand(transmitter)
+            else {
+                //token should always exist at this location
+                val (content, location) = transmitter.expectMaybe(tokenOf(ANYTHING)).get()
+                throw UnexpectedTokenException(TOKENS_INVERSE[content] ?: content, location)
+            }
 
         val newExceptions = command.process()
         if (newExceptions.size > 0) throw newExceptions[0]
@@ -64,18 +65,18 @@ class CodeBlockCommand(transmitter: TokenTransmitter,private val outerMost:Boole
                     readOneStatement()
                 return exceptions
             } else {
-                if(!outerMost) transmitter.expect(tokenOf(START_BLOCK_ID))
+                if (!outerMost) transmitter.expect(tokenOf(START_BLOCK_ID))
                 while (!transmitter.tokensExhausted()) {
                     if (!outerMost && transmitter.expectMaybe(tokenOf(END_BLOCK_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
                         break
                     readOneStatement()
                 }
-                if(!outerMost) transmitter.expect(tokenOf(END_BLOCK_ID))
+                if (!outerMost) transmitter.expect(tokenOf(END_BLOCK_ID))
             }
         } catch (ex: AbstractCompilationException) {
             exceptions.add(ex)
         }
-        compiledSuccessfully=exceptions.isEmpty()
+        compiledSuccessfully = exceptions.isEmpty()
         return exceptions
     }
 }

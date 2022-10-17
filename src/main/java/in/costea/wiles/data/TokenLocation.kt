@@ -1,7 +1,7 @@
 package `in`.costea.wiles.data
 
-data class TokenLocation(val line : Int, val lineIndex : Int) {
-    override fun equals(other : Any?): Boolean {
+data class TokenLocation(val line: Int, val lineIndex: Int) {
+    override fun equals(other: Any?): Boolean {
         if (other is TokenLocation)
             return line == other.line || lineIndex == other.lineIndex
         return false

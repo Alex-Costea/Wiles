@@ -14,24 +14,23 @@ import in.costea.wiles.exceptions.UnexpectedTokenException;
 import in.costea.wiles.services.OrderOfOperationsProcessor;
 import in.costea.wiles.services.TokenTransmitter;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static in.costea.wiles.builders.ExpectParamsBuilder.*;
+import static in.costea.wiles.builders.ExpectParamsBuilder.isContainedIn;
+import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
 import static in.costea.wiles.statics.Constants.*;
 import static in.costea.wiles.statics.Utils.todo;
 
 public abstract class AbstractExpressionCommand extends AbstractCommand {
+    public static final ExpectParamsBuilder START_OF_EXPRESSION =
+            tokenOf(isContainedIn(UNARY_OPERATORS)).or(IS_LITERAL).or(ROUND_BRACKET_START_ID)
+                    .withErrorMessage("Expected expression!").removeWhen(WhenRemoveToken.Never);
     @NotNull
     protected final List<AbstractCommand> components = new ArrayList<>();
     @NotNull
     protected final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
-
-    public static final ExpectParamsBuilder START_OF_EXPRESSION =
-            tokenOf(isContainedIn(UNARY_OPERATORS)).or(IS_LITERAL).or(ROUND_BRACKET_START_ID)
-            .withErrorMessage("Expected expression!").removeWhen(WhenRemoveToken.Never);
 
     protected AbstractExpressionCommand(@NotNull TokenTransmitter transmitter) {
         super(transmitter);
@@ -47,10 +46,8 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
         return components;
     }
 
-    private void addInsideExpression(AbstractExpressionCommand newExpression) throws AbstractCompilationException
-    {
-        @NotNull
-        final var newExceptions = newExpression.process();
+    private void addInsideExpression(AbstractExpressionCommand newExpression) throws AbstractCompilationException {
+        @NotNull final var newExceptions = newExpression.process();
         if (newExceptions.size() > 0)
             throw newExceptions.get(0);
         components.add(newExpression);
@@ -59,34 +56,32 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
     @Override
     public @NotNull CompilationExceptionsCollection process() {
         try {
-            @NotNull Token mainToken=transmitter.expect(START_OF_EXPRESSION);
+            @NotNull Token mainToken = transmitter.expect(START_OF_EXPRESSION);
             @NotNull ExpectNext expectNext;
-            @NotNull var content=mainToken.getContent();
-            @Nullable TokenLocation location = mainToken.getLocation();
+            @NotNull var content = mainToken.getContent();
+            TokenLocation location = mainToken.getLocation();
 
             //starting with token or operator?
-            if(IS_LITERAL.test(content) || BRACKETS.contains(content) || UNARY_OPERATORS.contains(content))
+            if (IS_LITERAL.test(content) || BRACKETS.contains(content) || UNARY_OPERATORS.contains(content))
                 expectNext = ExpectNext.TOKEN;
             else expectNext = ExpectNext.OPERATOR;
 
-            while (!transmitter.tokensExhausted())
-            {
+            while (!transmitter.tokensExhausted()) {
                 // finalize expression if correctly finalized
-                if((expectNext==ExpectNext.OPERATOR))
-                    if(checkExpressionFinalized())
+                if ((expectNext == ExpectNext.OPERATOR))
+                    if (checkExpressionFinalized())
                         break;
 
                 // handle end token
-                @NotNull
-                final var tempToken = transmitter.expectMaybe(tokenOf(END_BLOCK_ID).removeWhen(WhenRemoveToken.Never));
+                @NotNull final var tempToken = transmitter.expectMaybe(tokenOf(END_BLOCK_ID).removeWhen(WhenRemoveToken.Never));
                 if (tempToken.isPresent())
-                    if(handleEndTokenReceived(tempToken.get().getLocation()))
+                    if (handleEndTokenReceived(tempToken.get().getLocation()))
                         break;
 
                 //handle assignment token
                 final var tempToken2 = transmitter.expectMaybe(tokenOf(ASSIGN_ID).removeWhen(WhenRemoveToken.Never));
                 if (tempToken2.isPresent())
-                    if(handleAssignTokenReceived(tempToken2.get().getLocation()))
+                    if (handleAssignTokenReceived(tempToken2.get().getLocation()))
                         break;
 
                 // expect the next correct token
@@ -97,12 +92,12 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                         .or(IS_LITERAL).withErrorMessage("Identifier or unary operator expected!"));
 
                 //reassign Token information
-                content=mainToken.getContent();
-                location =mainToken.getLocation();
+                content = mainToken.getContent();
+                location = mainToken.getLocation();
 
                 //handle closing brackets token
-                if(content.equals(ROUND_BRACKET_END_ID) || content.equals(SQUARE_BRACKET_END_ID))
-                    if(handleBracketsCloseTokenFound(content,location))
+                if (content.equals(ROUND_BRACKET_END_ID) || content.equals(SQUARE_BRACKET_END_ID))
+                    if (handleBracketsCloseTokenFound(content, location))
                         break;
 
                 //method call
@@ -111,19 +106,15 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                 }
 
                 //applying square brackets to identifier
-                if (content.equals(SQUARE_BRACKET_START_ID))
-                {
-                    if(expectNext == ExpectNext.OPERATOR)
-                    {
+                if (content.equals(SQUARE_BRACKET_START_ID)) {
+                    if (expectNext == ExpectNext.OPERATOR) {
                         addInsideExpression(new InsideSquareExpressionCommand(transmitter));
                         continue;
-                    }
-                    else throw new UnexpectedTokenException("Identifier or unary operator expected!",location);
+                    } else throw new UnexpectedTokenException("Identifier or unary operator expected!", location);
                 }
 
                 // add "0" if necessary
-                if (expectNext == ExpectNext.TOKEN && UNARY_OPERATORS.contains(content))
-                {
+                if (expectNext == ExpectNext.TOKEN && UNARY_OPERATORS.contains(content)) {
                     if (ADD_ZERO_UNARY_OPERATORS.contains(content))
                         components.add(new TokenCommand(transmitter, new Token("#0", location)));
                 }
@@ -137,14 +128,13 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
             }
 
             //verifying expression finished well
-            if(exceptions.size()==0)
-                checkBracketsCloseProperlyAtEnd(content,location);
+            if (exceptions.size() == 0)
+                checkBracketsCloseProperlyAtEnd(content, location);
 
 
             //Ignore trailing comma
             if (expectNext == ExpectNext.TOKEN && exceptions.size() == 0) {
-                if (components.size() > 0 && components.get(components.size() - 1) instanceof TokenCommand tokenCommand)
-                {
+                if (components.size() > 0 && components.get(components.size() - 1) instanceof TokenCommand tokenCommand) {
                     if (tokenCommand.getToken().getContent().equals(COMMA_ID))
                         components.remove(components.size() - 1);
                     else throw new UnexpectedEndException("Expression unfinished!", location);
@@ -152,18 +142,15 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
             }
 
             //Flatten
-            if(components.size()==1)
-            {
-                if(components.get(0) instanceof final InsideRoundExpressionCommand expressionCommand)
-                {
+            if (components.size() == 1) {
+                if (components.get(0) instanceof final InsideRoundExpressionCommand expressionCommand) {
                     components.clear();
                     components.addAll(expressionCommand.getComponents());
                 }
             }
 
             //Set order of operations
-            @NotNull
-            final var componentsAfterOOO = new OrderOfOperationsProcessor(components).process();
+            @NotNull final var componentsAfterOOO = new OrderOfOperationsProcessor(components).process();
             components.clear();
             components.addAll(componentsAfterOOO);
 
@@ -174,7 +161,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
     }
 
     protected boolean handleAssignTokenReceived(TokenLocation location) throws AbstractCompilationException {
-        throw new UnexpectedTokenException("Assignment not allowed here!",location);
+        throw new UnexpectedTokenException("Assignment not allowed here!", location);
     }
 
     protected void checkBracketsCloseProperlyAtEnd(@NotNull String content, TokenLocation location) throws UnexpectedEndException {
@@ -189,8 +176,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
         throw new UnexpectedTokenException("Brackets don't close properly", location);
     }
 
-    protected boolean checkExpressionFinalized()
-    {
+    protected boolean checkExpressionFinalized() {
         return false;
     }
 

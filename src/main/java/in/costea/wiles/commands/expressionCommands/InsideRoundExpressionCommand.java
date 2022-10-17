@@ -10,7 +10,7 @@ import static in.costea.wiles.statics.Constants.ROUND_BRACKET_END_ID;
 public class InsideRoundExpressionCommand extends AbstractExpressionCommand {
     public InsideRoundExpressionCommand(@NotNull TokenTransmitter transmitter) {
         super(transmitter);
-        name="ROUND";
+        name = "ROUND";
     }
 
     @Override

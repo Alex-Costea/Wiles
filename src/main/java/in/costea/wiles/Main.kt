@@ -19,6 +19,7 @@ import java.util.stream.Collectors
 
 object Main {
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
+
     @Throws(IOException::class)
     @JvmStatic
     fun main(args: Array<String>) {
@@ -27,7 +28,8 @@ object Main {
         print("Tokens: ")
         println(tokens.stream().map(Token::content).map(StringEscapeUtils::escapeJava).toList())
         val ast = tokensToAST(tokens)
-        val mapper = JsonMapper.builder().disable(MapperFeature.AUTO_DETECT_CREATORS).disable(MapperFeature.AUTO_DETECT_FIELDS)
+        val mapper =
+            JsonMapper.builder().disable(MapperFeature.AUTO_DETECT_CREATORS).disable(MapperFeature.AUTO_DETECT_FIELDS)
                 .disable(MapperFeature.AUTO_DETECT_GETTERS).disable(MapperFeature.AUTO_DETECT_IS_GETTERS).build()
         print("Syntax tree: ")
         println(ast)

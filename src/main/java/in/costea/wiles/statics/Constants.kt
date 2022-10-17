@@ -33,8 +33,8 @@ object Constants {
     const val NOTHING_ID = "NOTHING"
     const val COMMA_ID = "COMMA"
     const val DO_ID = "DO"
-    const val RIGHT_ARROW_ID="RIGHT_ARROW"
-    const val DECLARE_ID="DECLARE"
+    const val RIGHT_ARROW_ID = "RIGHT_ARROW"
+    const val DECLARE_ID = "DECLARE"
     private const val EQUALS_ID = "EQUALS"
     private const val LARGER_ID = "LARGER"
     private const val SMALLER_ID = "SMALLER"
@@ -45,7 +45,7 @@ object Constants {
     private const val AND_ID = "AND"
     private const val OR_ID = "OR"
     private const val NOT_ID = "NOT"
-    const val ANON_STARTS_WITH=IDENTIFIER_START+"arg"
+    const val ANON_STARTS_WITH = IDENTIFIER_START + "arg"
 
 
     @JvmField
@@ -71,9 +71,10 @@ object Constants {
 
     @JvmField
     val INFIX_OPERATORS = setOf(
-            PLUS_ID, MINUS_ID, TIMES_ID, DIVIDE_ID, POWER_ID,
-            EQUALS_ID, LARGER_ID, SMALLER_ID, LARGER_EQUALS_ID, SMALLER_EQUALS_ID, NOT_EQUAL_ID,
-            DOT_ID, COMMA_ID, AND_ID, OR_ID)
+        PLUS_ID, MINUS_ID, TIMES_ID, DIVIDE_ID, POWER_ID,
+        EQUALS_ID, LARGER_ID, SMALLER_ID, LARGER_EQUALS_ID, SMALLER_EQUALS_ID, NOT_EQUAL_ID,
+        DOT_ID, COMMA_ID, AND_ID, OR_ID
+    )
 
     @JvmField
     val UNARY_OPERATORS = setOf(PLUS_ID, MINUS_ID, NOT_ID)
@@ -82,8 +83,10 @@ object Constants {
     val ADD_ZERO_UNARY_OPERATORS = setOf(PLUS_ID, MINUS_ID)
 
     @JvmField
-    val BRACKETS = setOf(ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID,
-            SQUARE_BRACKET_START_ID, SQUARE_BRACKET_END_ID)
+    val BRACKETS = setOf(
+        ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID,
+        SQUARE_BRACKET_START_ID, SQUARE_BRACKET_END_ID
+    )
 
     @JvmField
     val STATEMENT_TERMINATORS = setOf(NEWLINE_ID, STATEMENT_TERMINATOR_ID)
@@ -160,7 +163,8 @@ object Constants {
         TOKENS = HashBiMap.create(KEYWORDS)
         TOKENS.putAll(OPERATORS)
         TOKENS_INVERSE = TOKENS.inverse()
-        require(Collections.max(OPERATORS.keys.stream().mapToInt { obj: String -> obj.length }.toList()) <= MAX_OPERATOR_LENGTH)
+        require(Collections.max(OPERATORS.keys.stream().mapToInt { obj: String -> obj.length }
+            .toList()) <= MAX_OPERATOR_LENGTH)
         {
             "MAX_OPERATOR_LENGTH smaller than length of largest operator!"
         }
