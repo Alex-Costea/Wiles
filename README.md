@@ -55,6 +55,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - `[]` (subtype declaration, collection access)
 - `()` (order of operations, method access)
 - `,` (separator between elements)
+- `?` : syntactic sugar for `type? = either[type,nothing]`
 
 ### Named parameters
 - Methods calling with named parameters by default: `range(from := 1, to := 10)`
@@ -82,7 +83,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Direct field access is impossible, instead it is transferred to getters/setters
 - Warnings, e.g. unreachable code
 - Garbage collection
-- `maybe[type] = either[type,nothing]`
+- `anything`, `anything?` types
 - `error` types
 - `either` with more than 2 types
 
@@ -108,7 +109,7 @@ end
 ### Minimum value
 
 ```
-let min := method(args : list[int])  --> either[int,nothing]
+let min := method(args : list[int])  --> int?
 begin
     if args.size = 0 do
         yield nothing
