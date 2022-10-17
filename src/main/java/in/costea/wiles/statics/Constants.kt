@@ -35,7 +35,6 @@ object Constants {
     const val DO_ID = "DO"
     const val RIGHT_ARROW_ID="RIGHT_ARROW"
     const val DECLARE_ID="DECLARE"
-    const val ASSIGNMENT_START_ID = "ASSIGNMENT_START"
     private const val EQUALS_ID = "EQUALS"
     private const val LARGER_ID = "LARGER"
     private const val SMALLER_ID = "SMALLER"
@@ -117,7 +116,6 @@ object Constants {
         KEYWORDS["do"] = "DO"
         KEYWORDS["begin"] = START_BLOCK_ID
         KEYWORDS["end"] = END_BLOCK_ID
-        KEYWORDS["set"] = ASSIGNMENT_START_ID
 
         TYPES["!bit"] = "BOOLEAN"
         TYPES["!byte"] = "INT8"

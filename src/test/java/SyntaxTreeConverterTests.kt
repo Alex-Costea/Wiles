@@ -6,7 +6,6 @@ import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.exceptions.TokenExpectedException
 import `in`.costea.wiles.exceptions.UnexpectedEndException
 import `in`.costea.wiles.exceptions.UnexpectedTokenException
-import `in`.costea.wiles.statics.Constants.ASSIGNMENT_START_ID
 import `in`.costea.wiles.statics.Constants.ASSIGN_ID
 import `in`.costea.wiles.statics.Constants.COLON_ID
 import `in`.costea.wiles.statics.Constants.COMMA_ID
@@ -62,11 +61,11 @@ class SyntaxTreeConverterTests {
         assertResults(null, "CODE_BLOCK(DECLARATION(EXPRESSION(!main); METHOD(TYPE NOTHING; CODE_BLOCK(ASSIGNMENT(EXPRESSION(!b); EXPRESSION(!c))))))",
                 DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID,
                 ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, START_BLOCK_ID,
-                ASSIGNMENT_START_ID,"!b", ASSIGN_ID, "!c", END_BLOCK_ID)
+                "!b", ASSIGN_ID, "!c", END_BLOCK_ID)
         assertResults(null, "CODE_BLOCK(DECLARATION(EXPRESSION(!main); METHOD(TYPE NOTHING; CODE_BLOCK(ASSIGNMENT(EXPRESSION(!b); EXPRESSION(#3))))))",
             DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID,
             ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, START_BLOCK_ID,
-            ASSIGNMENT_START_ID,"!b", ASSIGN_ID, "#3", END_BLOCK_ID)
+            "!b", ASSIGN_ID, "#3", END_BLOCK_ID)
         assertResults(null, "CODE_BLOCK(EXPRESSION(!b; PLUS; #3; MINUS; #5))",
                 "!b", PLUS_ID, "#3", MINUS_ID, "#5")
         assertResults(null, "CODE_BLOCK(EXPRESSION(!a; PLUS; !b); EXPRESSION(#0; PLUS; !c); EXPRESSION(!a; PLUS; !b; PLUS; !c))",
@@ -75,7 +74,7 @@ class SyntaxTreeConverterTests {
         assertResults(null, "CODE_BLOCK(EXPRESSION(!b; PLUS; #3; MINUS; #5))",
                 "!b", PLUS_ID, "#3", MINUS_ID, "#5")
         assertResults(null, "CODE_BLOCK(ASSIGNMENT(EXPRESSION(!c); EXPRESSION(#0; MINUS; #10; PLUS; #0; PLUS; EXPRESSION ROUND(#0; PLUS; #10))))",
-                ASSIGNMENT_START_ID,"!c", ASSIGN_ID, MINUS_ID, "#10", PLUS_ID, NEWLINE_ID, PLUS_ID, ROUND_BRACKET_START_ID, PLUS_ID, "#10", ROUND_BRACKET_END_ID)
+                "!c", ASSIGN_ID, MINUS_ID, "#10", PLUS_ID, NEWLINE_ID, PLUS_ID, ROUND_BRACKET_START_ID, PLUS_ID, "#10", ROUND_BRACKET_END_ID)
     }
 
     @Test
@@ -138,11 +137,11 @@ class SyntaxTreeConverterTests {
             DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, DO_ID, NOTHING_ID)
         assertResults(null, "CODE_BLOCK(DECLARATION(EXPRESSION(!main); METHOD(TYPE NOTHING; CODE_BLOCK(ASSIGNMENT(EXPRESSION(!b); EXPRESSION(#3))))))",
             DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, DO_ID,
-            ASSIGNMENT_START_ID, "!b", ASSIGN_ID, "#3")
+             "!b", ASSIGN_ID, "#3")
         assertResults(null, "CODE_BLOCK(DECLARATION(EXPRESSION(!product); METHOD(TYPE INT64; PARAMETER(!a; TYPE INT32); PARAMETER(!b; TYPE INT32); CODE_BLOCK(ASSIGNMENT(EXPRESSION(!product); EXPRESSION(!a; TIMES; !b))))))",
             DECLARE_ID, "!product", ASSIGN_ID, METHOD_ID, ROUND_BRACKET_START_ID, "!a", COLON_ID, "!int",
                 COMMA_ID, "!b", COLON_ID, "!int", ROUND_BRACKET_END_ID, RIGHT_ARROW_ID, "!bigint", NEWLINE_ID,
-                DO_ID, ASSIGNMENT_START_ID, "!product", ASSIGN_ID, "!a", TIMES_ID, "!b")
+                DO_ID,  "!product", ASSIGN_ID, "!a", TIMES_ID, "!b")
         assertResults(null,"CODE_BLOCK(DECLARATION(EXPRESSION(!main); METHOD(TYPE NOTHING; PARAMETER ANON(!arg1; TYPE INT32); CODE_BLOCK)))",
             DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, ROUND_BRACKET_START_ID, "!arg1", COLON_ID, "!int", ROUND_BRACKET_END_ID, DO_ID, NOTHING_ID)
     }
@@ -155,9 +154,9 @@ class SyntaxTreeConverterTests {
         assertResults(null, "CODE_BLOCK(EXPRESSION(!a; EXPRESSION SQUARE(!b)))",
                 "!a", SQUARE_BRACKET_START_ID, "!b", COMMA_ID, SQUARE_BRACKET_END_ID)
         assertResults(null, "CODE_BLOCK(ASSIGNMENT(EXPRESSION(!a); EXPRESSION(!b; EXPRESSION SQUARE(#3; COMMA; #4; COMMA; #5))))",
-                ASSIGNMENT_START_ID,"!a", ASSIGN_ID,"!b", SQUARE_BRACKET_START_ID, "#3", COMMA_ID, "#4", COMMA_ID, "#5", COMMA_ID, SQUARE_BRACKET_END_ID)
+                "!a", ASSIGN_ID,"!b", SQUARE_BRACKET_START_ID, "#3", COMMA_ID, "#4", COMMA_ID, "#5", COMMA_ID, SQUARE_BRACKET_END_ID)
         assertResults(null, "CODE_BLOCK(ASSIGNMENT(EXPRESSION(!a); EXPRESSION(!b; EXPRESSION SQUARE(!c; COMMA; !d; EXPRESSION SQUARE(!e)); PLUS; !f)))",
-                ASSIGNMENT_START_ID,"!a", ASSIGN_ID, "!b", SQUARE_BRACKET_START_ID, "!c", COMMA_ID, "!d",
+                "!a", ASSIGN_ID, "!b", SQUARE_BRACKET_START_ID, "!c", COMMA_ID, "!d",
                 SQUARE_BRACKET_START_ID, "!e", SQUARE_BRACKET_END_ID, SQUARE_BRACKET_END_ID, PLUS_ID, "!f")
     }
 

@@ -9,6 +9,7 @@ import in.costea.wiles.data.TokenLocation;
 import in.costea.wiles.enums.SyntaxType;
 import in.costea.wiles.enums.WhenRemoveToken;
 import in.costea.wiles.exceptions.AbstractCompilationException;
+import in.costea.wiles.exceptions.TokenExpectedException;
 import in.costea.wiles.exceptions.UnexpectedEndException;
 import in.costea.wiles.exceptions.UnexpectedTokenException;
 import in.costea.wiles.services.OrderOfOperationsProcessor;
@@ -25,7 +26,7 @@ import static in.costea.wiles.statics.Utils.todo;
 
 public abstract class ExpressionCommand extends AbstractCommand {
     @NotNull
-    private final List<AbstractCommand> components = new ArrayList<>();
+    protected final List<AbstractCommand> components = new ArrayList<>();
     @NotNull
     protected final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
 
@@ -80,6 +81,12 @@ public abstract class ExpressionCommand extends AbstractCommand {
                 final var tempToken = transmitter.expectMaybe(tokenOf(END_BLOCK_ID).removeWhen(WhenRemoveToken.Never));
                 if (tempToken.isPresent())
                     if(handleEndTokenReceived(tempToken.get()))
+                        break;
+
+                //handle assignment token
+                final var tempToken2 = transmitter.expectMaybe(tokenOf(ASSIGN_ID).removeWhen(WhenRemoveToken.Never));
+                if (tempToken2.isPresent())
+                    if(handleAssignTokenReceived(tempToken2.get()))
                         break;
 
                 // expect the next correct token
@@ -164,6 +171,10 @@ public abstract class ExpressionCommand extends AbstractCommand {
             exceptions.add(ex);
         }
         return exceptions;
+    }
+
+    protected boolean handleAssignTokenReceived(Token token) throws UnexpectedTokenException, TokenExpectedException, UnexpectedEndException {
+        throw new UnexpectedTokenException("Assignment not allowed here!",token.getLocation());
     }
 
     protected void checkBracketsCloseProperlyAtEnd(String content, TokenLocation location) throws UnexpectedEndException {
