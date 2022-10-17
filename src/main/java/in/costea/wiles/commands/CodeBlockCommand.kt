@@ -5,14 +5,14 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.ANYTHING
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.isContainedIn
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
+import `in`.costea.wiles.commands.expressionCommands.AbstractExpressionCommand
+import `in`.costea.wiles.commands.expressionCommands.AssignableExpressionCommand
 import `in`.costea.wiles.data.CompilationExceptionsCollection
-import `in`.costea.wiles.enums.ExpressionType
 import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.enums.WhenRemoveToken
 import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.exceptions.UnexpectedTokenException
 import `in`.costea.wiles.services.TokenTransmitter
-import `in`.costea.wiles.statics.Constants.ASSIGNMENT_START_ID
 import `in`.costea.wiles.statics.Constants.DECLARE_ID
 import `in`.costea.wiles.statics.Constants.DO_ID
 import `in`.costea.wiles.statics.Constants.END_BLOCK_ID
@@ -40,12 +40,12 @@ class CodeBlockCommand(transmitter: TokenTransmitter,private val outerMost:Boole
     private fun readOneStatement() {
         if (transmitter.expectMaybe(tokenOf(isContainedIn(STATEMENT_TERMINATORS)).dontIgnoreNewLine()).isPresent) return
 
-        val command: AbstractCommand = if (transmitter.expectMaybe(ExpressionCommand.START_OF_EXPRESSION).isPresent)
-            ExpressionCommand(transmitter, ExpressionType.RIGHT_SIDE)
+        val command: AbstractCommand = if (transmitter.expectMaybe(AbstractExpressionCommand.START_OF_EXPRESSION).isPresent)
+            AssignableExpressionCommand(
+                transmitter
+            )
         else if(transmitter.expectMaybe(tokenOf(DECLARE_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
             DeclarationCommand(transmitter)
-        else if(transmitter.expectMaybe(tokenOf(ASSIGNMENT_START_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
-            AssignmentCommand(transmitter)
         else {
             //token should always exist at this location
             val (content, location) = transmitter.expectMaybe(tokenOf(ANYTHING)).get()

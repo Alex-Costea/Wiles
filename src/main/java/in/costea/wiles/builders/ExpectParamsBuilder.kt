@@ -41,6 +41,9 @@ class ExpectParamsBuilder private constructor(var foundTest: Predicate<String>) 
         @JvmField
         val ANYTHING = Predicate { _: String -> true }
 
+        @JvmField
+        val NOTHING = Predicate { _: String -> false }
+
         @JvmStatic
         fun isContainedIn(set: Collection<String?>): Predicate<String> {
             return Predicate { o: String? -> set.contains(o) }
