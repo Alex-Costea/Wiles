@@ -6,7 +6,6 @@ import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.ANYTHING
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.isContainedIn
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
 import `in`.costea.wiles.data.CompilationExceptionsCollection
-import `in`.costea.wiles.enums.ExpressionType
 import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.enums.WhenRemoveToken
 import `in`.costea.wiles.exceptions.AbstractCompilationException
@@ -41,7 +40,7 @@ class CodeBlockCommand(transmitter: TokenTransmitter,private val outerMost:Boole
         if (transmitter.expectMaybe(tokenOf(isContainedIn(STATEMENT_TERMINATORS)).dontIgnoreNewLine()).isPresent) return
 
         val command: AbstractCommand = if (transmitter.expectMaybe(ExpressionCommand.START_OF_EXPRESSION).isPresent)
-            ExpressionCommand(transmitter, ExpressionType.RIGHT_SIDE)
+            RightSideExpressionCommand(transmitter)
         else if(transmitter.expectMaybe(tokenOf(DECLARE_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
             DeclarationCommand(transmitter)
         else if(transmitter.expectMaybe(tokenOf(ASSIGNMENT_START_ID).removeWhen(WhenRemoveToken.Never)).isPresent)

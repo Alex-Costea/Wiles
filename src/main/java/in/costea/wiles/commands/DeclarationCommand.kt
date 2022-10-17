@@ -2,7 +2,6 @@ package `in`.costea.wiles.commands
 
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
 import `in`.costea.wiles.data.CompilationExceptionsCollection
-import `in`.costea.wiles.enums.ExpressionType
 import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.enums.WhenRemoveToken
 import `in`.costea.wiles.exceptions.AbstractCompilationException
@@ -27,7 +26,7 @@ class DeclarationCommand(transmitter: TokenTransmitter) : AbstractCommand(transm
         try {
             transmitter.expect(tokenOf(DECLARE_ID))
 
-            val leftExpression=ExpressionCommand(transmitter,ExpressionType.LEFT_SIDE)
+            val leftExpression=LeftSideExpressionCommand(transmitter)
             this.leftExpression=leftExpression
             exceptions.addAll(leftExpression.process())
 
@@ -37,7 +36,7 @@ class DeclarationCommand(transmitter: TokenTransmitter) : AbstractCommand(transm
             val rightExpression : AbstractCommand = if(transmitter.expectMaybe(tokenOf(METHOD_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
                 MethodCommand(transmitter)
             //Expression
-            else ExpressionCommand(transmitter, ExpressionType.RIGHT_SIDE)
+            else RightSideExpressionCommand(transmitter)
 
             this.rightExpression=rightExpression
             exceptions.addAll(rightExpression.process())

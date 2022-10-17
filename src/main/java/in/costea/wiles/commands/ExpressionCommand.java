@@ -21,7 +21,7 @@ import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
 import static in.costea.wiles.statics.Constants.*;
 import static in.costea.wiles.statics.Utils.todo;
 
-public class ExpressionCommand extends AbstractCommand {
+public abstract class ExpressionCommand extends AbstractCommand {
     @NotNull
     private final List<AbstractCommand> components = new ArrayList<>();
     @NotNull
@@ -55,7 +55,12 @@ public class ExpressionCommand extends AbstractCommand {
 
     private void addInnerExpression(ExpressionType expressionType) throws AbstractCompilationException {
         @NotNull
-        final var newExpression = new ExpressionCommand(transmitter, expressionType);
+        final ExpressionCommand newExpression;
+        switch(expressionType) {
+            case INSIDE_ROUND -> newExpression = new InsideRoundBracketsExpressionCommand(transmitter);
+            case INSIDE_SQUARE -> newExpression = new InsideSquareBracketsExpressionCommand(transmitter);
+            default -> throw new IllegalArgumentException("Unknown expression type");
+        }
         @NotNull
         final var newExceptions = newExpression.process();
         if (newExceptions.size() > 0)
