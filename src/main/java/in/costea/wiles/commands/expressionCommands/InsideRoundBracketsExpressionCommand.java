@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static in.costea.wiles.statics.Constants.ROUND_BRACKET_END_ID;
 
-public class InsideRoundBracketsExpressionCommand extends ExpressionCommand {
+public class InsideRoundBracketsExpressionCommand extends AbstractExpressionCommand {
     public InsideRoundBracketsExpressionCommand(@NotNull TokenTransmitter transmitter) {
         super(transmitter);
         name="ROUND";

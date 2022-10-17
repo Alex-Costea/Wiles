@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.ANYTHING
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.isContainedIn
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
-import `in`.costea.wiles.commands.expressionCommands.ExpressionCommand
+import `in`.costea.wiles.commands.expressionCommands.AbstractExpressionCommand
 import `in`.costea.wiles.commands.expressionCommands.AssignableExpressionCommand
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.enums.SyntaxType
@@ -40,7 +40,7 @@ class CodeBlockCommand(transmitter: TokenTransmitter,private val outerMost:Boole
     private fun readOneStatement() {
         if (transmitter.expectMaybe(tokenOf(isContainedIn(STATEMENT_TERMINATORS)).dontIgnoreNewLine()).isPresent) return
 
-        val command: AbstractCommand = if (transmitter.expectMaybe(ExpressionCommand.START_OF_EXPRESSION).isPresent)
+        val command: AbstractCommand = if (transmitter.expectMaybe(AbstractExpressionCommand.START_OF_EXPRESSION).isPresent)
             AssignableExpressionCommand(
                 transmitter
             )

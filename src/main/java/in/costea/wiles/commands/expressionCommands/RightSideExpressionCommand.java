@@ -9,7 +9,7 @@ import static in.costea.wiles.builders.ExpectParamsBuilder.isContainedIn;
 import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
 import static in.costea.wiles.statics.Constants.STATEMENT_TERMINATORS;
 
-public class RightSideExpressionCommand extends ExpressionCommand {
+public class RightSideExpressionCommand extends AbstractExpressionCommand {
     @Override
     protected ExpectParamsBuilder expressionFinalized() {
         return tokenOf(isContainedIn(STATEMENT_TERMINATORS)).dontIgnoreNewLine();

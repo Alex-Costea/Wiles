@@ -13,7 +13,7 @@ import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
 import static in.costea.wiles.statics.Constants.ASSIGN_ID;
 import static in.costea.wiles.statics.Constants.STATEMENT_TERMINATORS;
 
-public class AssignableExpressionCommand extends ExpressionCommand{
+public class AssignableExpressionCommand extends AbstractExpressionCommand {
 
     private boolean isAssignment=false;
 

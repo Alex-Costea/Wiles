@@ -24,7 +24,7 @@ import static in.costea.wiles.builders.ExpectParamsBuilder.*;
 import static in.costea.wiles.statics.Constants.*;
 import static in.costea.wiles.statics.Utils.todo;
 
-public abstract class ExpressionCommand extends AbstractCommand {
+public abstract class AbstractExpressionCommand extends AbstractCommand {
     @NotNull
     protected final List<AbstractCommand> components = new ArrayList<>();
     @NotNull
@@ -34,7 +34,7 @@ public abstract class ExpressionCommand extends AbstractCommand {
             tokenOf(isContainedIn(UNARY_OPERATORS)).or(IS_LITERAL).or(ROUND_BRACKET_START_ID)
             .withErrorMessage("Expected expression!").removeWhen(WhenRemoveToken.Never);
 
-    protected ExpressionCommand(@NotNull TokenTransmitter transmitter) {
+    protected AbstractExpressionCommand(@NotNull TokenTransmitter transmitter) {
         super(transmitter);
     }
 
@@ -48,7 +48,7 @@ public abstract class ExpressionCommand extends AbstractCommand {
         return components;
     }
 
-    private void addInsideExpression(ExpressionCommand newExpression) throws AbstractCompilationException
+    private void addInsideExpression(AbstractExpressionCommand newExpression) throws AbstractCompilationException
     {
         @NotNull
         final var newExceptions = newExpression.process();
