@@ -164,6 +164,12 @@ class SyntaxTreeConverterTests {
                 SQUARE_BRACKET_START_ID, "!e", SQUARE_BRACKET_END_ID, SQUARE_BRACKET_END_ID, PLUS_ID, "!f")
     }
 
+    @Test
+    fun orderOfOperationsTest()
+    {
+        //TODO
+    }
+
     private class CreateConverter(tokens: List<String>) {
         var converter: TokensToSyntaxTreeConverter
         var exceptions: CompilationExceptionsCollection

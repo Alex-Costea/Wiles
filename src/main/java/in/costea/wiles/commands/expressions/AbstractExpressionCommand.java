@@ -25,9 +25,8 @@ import static in.costea.wiles.statics.Utils.todo;
 
 public abstract class AbstractExpressionCommand extends AbstractCommand {
     public static final ExpectParamsBuilder START_OF_EXPRESSION =
-            tokenOf(isContainedIn(UNARY_OPERATORS)).or(IS_LITERAL).or(ROUND_BRACKET_START_ID)
+            tokenOf(isContainedIn(PREFIX_OPERATORS)).or(IS_LITERAL).or(ROUND_BRACKET_START_ID)
                     .withErrorMessage("Expected expression!").removeWhen(WhenRemoveToken.Never);
-    @NotNull
     protected final List<AbstractCommand> components = new ArrayList<>();
     @NotNull
     protected final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
@@ -54,7 +53,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
     }
 
     private @NotNull ExpectNext firstExpectNext(@NotNull String content) {
-        if (IS_LITERAL.test(content) || BRACKETS.contains(content) || UNARY_OPERATORS.contains(content))
+        if (IS_LITERAL.test(content) || BRACKETS.contains(content) || PREFIX_OPERATORS.contains(content))
             return ExpectNext.TOKEN;
         return ExpectNext.OPERATOR;
     }
@@ -63,7 +62,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
         if (expectNext == ExpectNext.OPERATOR) return transmitter.expect(tokenOf(isContainedIn(BRACKETS))
                 .or(isContainedIn(INFIX_OPERATORS)).withErrorMessage("Operator expected!"));
 
-        return transmitter.expect(tokenOf(isContainedIn(BRACKETS)).or(isContainedIn(UNARY_OPERATORS))
+        return transmitter.expect(tokenOf(isContainedIn(BRACKETS)).or(isContainedIn(PREFIX_OPERATORS))
                 .or(IS_LITERAL).withErrorMessage("Identifier or unary operator expected!"));
     }
 
@@ -83,7 +82,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
     }
 
     private void addZeroIfNecessary(@NotNull String content, TokenLocation location) {
-        if (ADD_ZERO_UNARY_OPERATORS.contains(content))
+        if (ADD_ZERO_PREFIX_OPERATORS.contains(content))
             components.add(new TokenCommand(transmitter, new Token("#0", location)));
     }
 
@@ -147,7 +146,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                 }
 
                 // switch expecting operator or token next
-                if (expectNext == ExpectNext.TOKEN && UNARY_OPERATORS.contains(content))
+                if (expectNext == ExpectNext.TOKEN && PREFIX_OPERATORS.contains(content))
                     addZeroIfNecessary(content, location);
                 else expectNext = expectNext == ExpectNext.OPERATOR ? ExpectNext.TOKEN : ExpectNext.OPERATOR;
 
@@ -159,12 +158,13 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
 
             checkBracketsCloseProperlyAtEnd(content, location);
             checkFinished(expectNext, location);
-            flatten();
 
             //Set order of operations
-            @NotNull final var componentsAfterOOO = new OrderOfOperationsProcessor(components).process();
+            @NotNull final var componentsAfterOOO = new OrderOfOperationsProcessor(transmitter,components).process();
             components.clear();
             components.addAll(componentsAfterOOO);
+
+            flatten();
 
         } catch (AbstractCompilationException ex) {
             exceptions.add(ex);

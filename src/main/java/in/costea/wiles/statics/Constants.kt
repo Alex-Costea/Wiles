@@ -77,10 +77,12 @@ object Constants {
     )
 
     @JvmField
-    val ADD_ZERO_UNARY_OPERATORS = setOf(PLUS_ID, MINUS_ID)
+    val ADD_ZERO_PREFIX_OPERATORS = setOf(PLUS_ID, MINUS_ID)
 
     @JvmField
-    val UNARY_OPERATORS = setOf(PLUS_ID, MINUS_ID, NOT_ID)
+    val PREFIX_OPERATORS = setOf(PLUS_ID, MINUS_ID, NOT_ID)
+
+    val PRECEDENCE : HashMap<String,Int> = HashMap()
 
     @JvmField
     val BRACKETS = setOf(
@@ -100,6 +102,23 @@ object Constants {
     val IS_LITERAL: Predicate<String> = IS_IDENTIFIER.or(IS_TEXT_LITERAL).or(IS_NUMBER_LITERAL)
 
     init {
+        PRECEDENCE[OR_ID] = -4
+        PRECEDENCE[AND_ID] = -3
+        PRECEDENCE[NOT_ID] = -2
+        PRECEDENCE[EQUALS_ID] = -1
+        PRECEDENCE[NOT_EQUAL_ID] = -1
+        PRECEDENCE[LARGER_ID] = 0
+        PRECEDENCE[SMALLER_ID] = 0
+        PRECEDENCE[LARGER_EQUALS_ID] = 0
+        PRECEDENCE[SMALLER_EQUALS_ID] = 0
+        PRECEDENCE[PLUS_ID] = 1
+        PRECEDENCE[MINUS_ID] = 1
+        PRECEDENCE[TIMES_ID] = 2
+        PRECEDENCE[DIVIDE_ID] = 2
+        PRECEDENCE[POWER_ID] = 3
+        PRECEDENCE[DOT_ID] = 4
+        PRECEDENCE[COMMA_ID] = 5
+
         KEYWORDS["nothing"] = NOTHING_ID
         KEYWORDS["method"] = METHOD_ID
         KEYWORDS["let"] = DECLARE_ID

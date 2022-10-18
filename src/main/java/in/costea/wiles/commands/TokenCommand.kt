@@ -7,7 +7,6 @@ import `in`.costea.wiles.services.TokenTransmitter
 import org.apache.commons.lang3.StringEscapeUtils
 
 class TokenCommand(transmitter: TokenTransmitter, val token: Token) : AbstractCommand(transmitter) {
-
     init {
         name = token.content
     }
