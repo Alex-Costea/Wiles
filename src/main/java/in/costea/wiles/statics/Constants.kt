@@ -22,6 +22,9 @@ object Constants {
     const val BACKSLASH_ID = "BACKSLASH"
     const val PLUS_ID = "PLUS"
     const val MINUS_ID = "MINUS"
+    const val UNARY_ID = "UNARY_"
+    private const val UNARY_PLUS_ID = UNARY_ID + PLUS_ID
+    private const val UNARY_MINUS_ID = UNARY_ID + MINUS_ID
     const val TIMES_ID = "TIMES"
     private const val DIVIDE_ID = "DIVIDE"
     const val POWER_ID = "POWER"
@@ -77,7 +80,7 @@ object Constants {
     )
 
     @JvmField
-    val PREFIX_OPERATORS = setOf(PLUS_ID, MINUS_ID, NOT_ID)
+    val PREFIX_OPERATORS = setOf(PLUS_ID, MINUS_ID, UNARY_PLUS_ID, UNARY_MINUS_ID, NOT_ID)
 
     val PRECEDENCE : HashMap<String,Int> = HashMap()
 
@@ -115,10 +118,12 @@ object Constants {
         PRECEDENCE[TIMES_ID] = 2
         PRECEDENCE[DIVIDE_ID] = 2
         PRECEDENCE[POWER_ID] = 3
-        PRECEDENCE[COMMA_ID] = 4
-        PRECEDENCE[DOT_ID] = 5
+        PRECEDENCE[UNARY_PLUS_ID] = 4
+        PRECEDENCE[UNARY_MINUS_ID] = 4
+        PRECEDENCE[COMMA_ID] = 5
+        PRECEDENCE[DOT_ID] = 6
 
-        RIGHT_TO_LEFT = setOf(PRECEDENCE[NOT_ID]!!)
+        RIGHT_TO_LEFT = setOf(PRECEDENCE[NOT_ID]!!, PRECEDENCE[UNARY_PLUS_ID]!!)
 
         KEYWORDS["nothing"] = NOTHING_ID
         KEYWORDS["method"] = METHOD_ID

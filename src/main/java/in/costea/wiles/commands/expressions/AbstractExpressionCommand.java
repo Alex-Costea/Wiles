@@ -83,11 +83,6 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                 throw new UnexpectedEndException("Expression unfinished!", location);
     }
 
-    private void addZeroIfNecessary(@NotNull String content, TokenLocation location) {
-        if (PREFIX_OPERATORS.contains(content) && INFIX_OPERATORS.contains(content))
-            components.add(new TokenCommand(transmitter, new Token("#0", location)));
-    }
-
     private void flatten() {
         if (components.size() == 1) {
             if (components.get(0) instanceof final AbstractExpressionCommand command && command.shouldFlatten) {
@@ -148,8 +143,10 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                 }
 
                 // switch expecting operator or token next
-                if (expectNext == ExpectNext.TOKEN && PREFIX_OPERATORS.contains(content))
-                    addZeroIfNecessary(content, location);
+                if (expectNext == ExpectNext.TOKEN && PREFIX_OPERATORS.contains(content)) {
+                    if (INFIX_OPERATORS.contains(content))
+                        mainToken=new Token(UNARY_ID+content,location);
+                }
                 else expectNext = expectNext == ExpectNext.OPERATOR ? ExpectNext.TOKEN : ExpectNext.OPERATOR;
 
                 // add inner expression
