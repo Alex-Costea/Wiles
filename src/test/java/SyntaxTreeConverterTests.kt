@@ -12,10 +12,12 @@ import `in`.costea.wiles.statics.Constants.COMMA_ID
 import `in`.costea.wiles.statics.Constants.DECLARE_ID
 import `in`.costea.wiles.statics.Constants.DO_ID
 import `in`.costea.wiles.statics.Constants.END_BLOCK_ID
+import `in`.costea.wiles.statics.Constants.LARGER_ID
 import `in`.costea.wiles.statics.Constants.METHOD_ID
 import `in`.costea.wiles.statics.Constants.MINUS_ID
 import `in`.costea.wiles.statics.Constants.NEWLINE_ID
 import `in`.costea.wiles.statics.Constants.NOTHING_ID
+import `in`.costea.wiles.statics.Constants.OR_ID
 import `in`.costea.wiles.statics.Constants.PLUS_ID
 import `in`.costea.wiles.statics.Constants.POWER_ID
 import `in`.costea.wiles.statics.Constants.RIGHT_ARROW_ID
@@ -168,6 +170,8 @@ class SyntaxTreeConverterTests {
     fun orderOfOperationsTest()
     {
         //TODO
+        assertResults(null,"CODE_BLOCK(EXPRESSION(!a; OR; EXPRESSION(EXPRESSION(!b; PLUS; !c); LARGER; !d)))",
+            "!a", OR_ID, "!b", PLUS_ID, "!c", LARGER_ID, "!d")
     }
 
     private class CreateConverter(tokens: List<String>) {

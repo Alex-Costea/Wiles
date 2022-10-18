@@ -39,14 +39,14 @@ object Constants {
     const val RIGHT_ARROW_ID = "RIGHT_ARROW"
     const val DECLARE_ID = "DECLARE"
     private const val EQUALS_ID = "EQUALS"
-    private const val LARGER_ID = "LARGER"
+    const val LARGER_ID = "LARGER"
     private const val SMALLER_ID = "SMALLER"
     private const val LARGER_EQUALS_ID = "LARGER_EQUALS"
     private const val SMALLER_EQUALS_ID = "SMALLER_EQUALS"
     private const val NOT_EQUAL_ID = "NOT_EQUAL"
     private const val DOT_ID = "DOT"
     private const val AND_ID = "AND"
-    private const val OR_ID = "OR"
+    const val OR_ID = "OR"
     private const val NOT_ID = "NOT"
     private const val MAYBE_ID = "MAYBE"
     const val UNNAMED_START = IDENTIFIER_START + "arg"
@@ -123,7 +123,7 @@ object Constants {
         PRECEDENCE[COMMA_ID] = 5
         PRECEDENCE[DOT_ID] = 6
 
-        RIGHT_TO_LEFT = setOf(PRECEDENCE[NOT_ID]!!, PRECEDENCE[UNARY_PLUS_ID]!!)
+        RIGHT_TO_LEFT = setOf(PRECEDENCE[NOT_ID]!!, PRECEDENCE[UNARY_PLUS_ID]!!, PRECEDENCE[POWER_ID]!!)
 
         KEYWORDS["nothing"] = NOTHING_ID
         KEYWORDS["method"] = METHOD_ID
@@ -140,7 +140,7 @@ object Constants {
         KEYWORDS["stop"] = "BREAK"
         KEYWORDS["skip"] = "CONTINUE"
         KEYWORDS["yield"] = "RETURN"
-        KEYWORDS["do"] = "DO"
+        KEYWORDS["do"] = DO_ID
         KEYWORDS["begin"] = START_BLOCK_ID
         KEYWORDS["end"] = END_BLOCK_ID
 
