@@ -6,6 +6,7 @@ import `in`.costea.wiles.commands.expressions.BinaryExpressionCommand
 import `in`.costea.wiles.statics.Constants.INFIX_OPERATORS
 import `in`.costea.wiles.statics.Constants.PRECEDENCE
 import `in`.costea.wiles.statics.Constants.PREFIX_OPERATORS
+import `in`.costea.wiles.statics.Constants.RIGHT_TO_LEFT
 import java.lang.Integer.MAX_VALUE
 import java.lang.Integer.MIN_VALUE
 import java.util.*
@@ -52,7 +53,8 @@ class OrderOfOperationsProcessor(private val transmitter : TokenTransmitter, pri
             {
                 currentPrecedence = PRECEDENCE[component.token.content]!!
                 val lastPrecedence = PRECEDENCE[lastOperator?.name?:""]?: MIN_VALUE
-                if (currentPrecedence <= lastPrecedence) {
+                if (currentPrecedence < lastPrecedence ||
+                    (currentPrecedence==lastPrecedence && !RIGHT_TO_LEFT.contains(currentPrecedence))) {
                     processStack(stack,currentPrecedence)
                 }
                 lastOperator=component

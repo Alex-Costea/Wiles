@@ -116,8 +116,8 @@ object Constants {
         PRECEDENCE[TIMES_ID] = 2
         PRECEDENCE[DIVIDE_ID] = 2
         PRECEDENCE[POWER_ID] = 3
-        PRECEDENCE[DOT_ID] = 4
-        PRECEDENCE[COMMA_ID] = 5
+        PRECEDENCE[COMMA_ID] = 4
+        PRECEDENCE[DOT_ID] = 5
 
         KEYWORDS["nothing"] = NOTHING_ID
         KEYWORDS["method"] = METHOD_ID
@@ -188,4 +188,6 @@ object Constants {
             "MAX_OPERATOR_LENGTH smaller than length of largest operator!"
         }
     }
+
+    val RIGHT_TO_LEFT = setOf(PRECEDENCE[NOT_ID])
 }
