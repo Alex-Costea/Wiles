@@ -31,6 +31,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
     @NotNull
     protected final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
     protected boolean shouldDoOrderOfOperations = true;
+    protected boolean shouldFlatten = false;
 
     protected AbstractExpressionCommand(@NotNull TokenTransmitter transmitter) {
         super(transmitter);
@@ -89,9 +90,9 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
 
     private void flatten() {
         if (components.size() == 1) {
-            if (components.get(0) instanceof final InsideRoundExpressionCommand expressionCommand) {
+            if (components.get(0) instanceof final AbstractExpressionCommand command && command.shouldFlatten) {
                 components.clear();
-                components.addAll(expressionCommand.getComponents());
+                components.addAll(command.getComponents());
             }
         }
     }

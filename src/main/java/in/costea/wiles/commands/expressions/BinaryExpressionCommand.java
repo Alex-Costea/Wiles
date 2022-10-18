@@ -11,6 +11,7 @@ public class BinaryExpressionCommand extends AbstractExpressionCommand{
     public BinaryExpressionCommand(@NotNull TokenTransmitter transmitter, @NotNull List<AbstractCommand> components) {
         super(transmitter);
         this.components.addAll(components);
+        shouldFlatten=true;
     }
 
     @Override

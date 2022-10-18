@@ -11,6 +11,7 @@ public class InsideRoundExpressionCommand extends AbstractExpressionCommand {
     public InsideRoundExpressionCommand(@NotNull TokenTransmitter transmitter) {
         super(transmitter);
         name = "ROUND";
+        shouldFlatten=true;
     }
 
     @Override
