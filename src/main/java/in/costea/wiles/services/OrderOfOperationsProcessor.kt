@@ -56,7 +56,7 @@ class OrderOfOperationsProcessor(private val transmitter : TokenTransmitter, pri
             if((component is TokenCommand) &&  (INFIX_OPERATORS.contains(content) || PREFIX_OPERATORS.contains(content)))
             {
                 currentPrecedence = PRECEDENCE[component.token.content]!!
-                val lastPrecedence = PRECEDENCE[lastOperator?:""]?: minusInfinity
+                val lastPrecedence = PRECEDENCE[lastOperator?.name?:""]?: minusInfinity
                 if(currentPrecedence > lastPrecedence)
                 {
                     stack.addLast(component)
