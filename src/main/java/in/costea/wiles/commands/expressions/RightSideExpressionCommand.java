@@ -1,4 +1,4 @@
-package in.costea.wiles.commands.expressionCommands;
+package in.costea.wiles.commands.expressions;
 
 import in.costea.wiles.data.TokenLocation;
 import in.costea.wiles.services.TokenTransmitter;

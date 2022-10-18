@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.ANYTHING
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.isContainedIn
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
-import `in`.costea.wiles.commands.expressionCommands.AbstractExpressionCommand
-import `in`.costea.wiles.commands.expressionCommands.AssignableExpressionCommand
+import `in`.costea.wiles.commands.expressions.AbstractExpressionCommand
+import `in`.costea.wiles.commands.expressions.AssignableExpressionCommand
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.enums.WhenRemoveToken

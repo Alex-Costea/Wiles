@@ -1,4 +1,4 @@
-package in.costea.wiles.commands.expressionCommands;
+package in.costea.wiles.commands.expressions;
 
 import in.costea.wiles.builders.ExpectParamsBuilder;
 import in.costea.wiles.commands.AbstractCommand;

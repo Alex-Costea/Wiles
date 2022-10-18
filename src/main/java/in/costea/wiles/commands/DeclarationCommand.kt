@@ -1,8 +1,8 @@
 package `in`.costea.wiles.commands
 
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
-import `in`.costea.wiles.commands.expressionCommands.LeftSideExpressionCommand
-import `in`.costea.wiles.commands.expressionCommands.RightSideExpressionCommand
+import `in`.costea.wiles.commands.expressions.LeftSideExpressionCommand
+import `in`.costea.wiles.commands.expressions.RightSideExpressionCommand
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.enums.WhenRemoveToken
