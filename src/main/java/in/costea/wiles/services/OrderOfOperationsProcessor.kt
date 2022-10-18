@@ -22,6 +22,8 @@ class OrderOfOperationsProcessor(private val transmitter : TokenTransmitter, pri
         if(!isOperator(current.name))
         {
             previous = current
+            if(stack.isEmpty())
+                return BinaryExpressionCommand(transmitter,listOf(previous))
             current = stack.pop()
         }
         val next  = if(stack.size>1) createCommand(stack) else stack.pop()
