@@ -77,9 +77,6 @@ object Constants {
     )
 
     @JvmField
-    val ADD_ZERO_PREFIX_OPERATORS = setOf(PLUS_ID, MINUS_ID)
-
-    @JvmField
     val PREFIX_OPERATORS = setOf(PLUS_ID, MINUS_ID, NOT_ID)
 
     val PRECEDENCE : HashMap<String,Int> = HashMap()
@@ -101,6 +98,8 @@ object Constants {
     @JvmField
     val IS_LITERAL: Predicate<String> = IS_IDENTIFIER.or(IS_TEXT_LITERAL).or(IS_NUMBER_LITERAL)
 
+    val RIGHT_TO_LEFT : Set<Int>
+
     init {
         PRECEDENCE[OR_ID] = -4
         PRECEDENCE[AND_ID] = -3
@@ -118,6 +117,8 @@ object Constants {
         PRECEDENCE[POWER_ID] = 3
         PRECEDENCE[COMMA_ID] = 4
         PRECEDENCE[DOT_ID] = 5
+
+        RIGHT_TO_LEFT = setOf(PRECEDENCE[NOT_ID]!!)
 
         KEYWORDS["nothing"] = NOTHING_ID
         KEYWORDS["method"] = METHOD_ID
@@ -188,6 +189,4 @@ object Constants {
             "MAX_OPERATOR_LENGTH smaller than length of largest operator!"
         }
     }
-
-    val RIGHT_TO_LEFT = setOf(PRECEDENCE[NOT_ID])
 }

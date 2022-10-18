@@ -84,7 +84,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
     }
 
     private void addZeroIfNecessary(@NotNull String content, TokenLocation location) {
-        if (ADD_ZERO_PREFIX_OPERATORS.contains(content))
+        if (PREFIX_OPERATORS.contains(content) && INFIX_OPERATORS.contains(content))
             components.add(new TokenCommand(transmitter, new Token("#0", location)));
     }
 
