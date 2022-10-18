@@ -46,6 +46,7 @@ public class AssignableExpressionCommand extends AbstractExpressionCommand {
         exceptions.addAll(rightSide.process());
         components.add(leftSide);
         components.add(rightSide);
+        shouldDoOrderOfOperations=false;
         return true;
     }
 }

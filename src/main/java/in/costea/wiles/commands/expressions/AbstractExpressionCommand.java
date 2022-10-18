@@ -30,6 +30,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
     protected final List<AbstractCommand> components = new ArrayList<>();
     @NotNull
     protected final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
+    protected boolean shouldDoOrderOfOperations = true;
 
     protected AbstractExpressionCommand(@NotNull TokenTransmitter transmitter) {
         super(transmitter);
@@ -159,10 +160,12 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
             checkBracketsCloseProperlyAtEnd(content, location);
             checkFinished(expectNext, location);
 
-            //Set order of operations
-            @NotNull final var componentsAfterOOO = new OrderOfOperationsProcessor(transmitter,components).process();
-            components.clear();
-            components.addAll(componentsAfterOOO);
+            if(shouldDoOrderOfOperations) {
+                //Set order of operations
+                @NotNull final var componentsAfterOOO = new OrderOfOperationsProcessor(transmitter, components).process();
+                components.clear();
+                components.addAll(componentsAfterOOO);
+            }
 
             flatten();
 

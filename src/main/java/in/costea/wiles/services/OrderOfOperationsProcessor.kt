@@ -2,46 +2,39 @@ package `in`.costea.wiles.services
 
 import `in`.costea.wiles.commands.AbstractCommand
 import `in`.costea.wiles.commands.TokenCommand
-import `in`.costea.wiles.commands.expressions.InsideRoundExpressionCommand
+import `in`.costea.wiles.commands.expressions.BinaryExpressionCommand
 import `in`.costea.wiles.statics.Constants.INFIX_OPERATORS
 import `in`.costea.wiles.statics.Constants.PRECEDENCE
 import `in`.costea.wiles.statics.Constants.PREFIX_OPERATORS
+import java.lang.Integer.MAX_VALUE
+import java.lang.Integer.MIN_VALUE
 import java.util.*
 
 class OrderOfOperationsProcessor(private val transmitter : TokenTransmitter, private val components: List<AbstractCommand>) {
-    //private val newComponents : ArrayList<AbstractCommand> = ArrayList()
-    private val minusInfinity = -100
-    private var currentPrecedence: Int = minusInfinity
+    private fun isOperator(content : String) = (INFIX_OPERATORS.contains(content) || PREFIX_OPERATORS.contains(content))
 
-    private fun processStack(stack : LinkedList<AbstractCommand>) : AbstractCommand
+    private fun createCommand(stack : LinkedList<AbstractCommand>) : BinaryExpressionCommand
     {
         if(stack.isEmpty())
-            TODO()
-        val current = stack.pop()
-        val next  = if(!stack.isEmpty()) {
-            processStack(stack)
-        } else {
-            components.last()
-        }
-        if(INFIX_OPERATORS.contains(current.name))
+            throw IllegalArgumentException("Stack cannot be empty!")
+        var previous : AbstractCommand? = null
+        var current = stack.pop()
+        if(!isOperator(current.name))
         {
-            return InsideRoundExpressionCommand(transmitter, listOf(
-                components.last(),current,next))
+            previous = current
+            current = stack.pop()
         }
-        else if(PREFIX_OPERATORS.contains(current.name))
-        {
-            return InsideRoundExpressionCommand(transmitter, listOf(
-                current,next))
-        }
-        throw IllegalArgumentException()
+        val next  = if(stack.size>1) createCommand(stack) else stack.pop()
+        previous ?: return BinaryExpressionCommand(transmitter, listOf(current,next))
+        return BinaryExpressionCommand(transmitter, listOf(previous,current,next))
     }
 
-    private fun preProcessStack(stack : LinkedList<AbstractCommand>)
+    private fun processStack(stack : LinkedList<AbstractCommand>, currentPrecedence : Int)
     {
         val stack2 : LinkedList<AbstractCommand> = LinkedList()
-        while(PRECEDENCE[stack.first.name]!!<currentPrecedence)
+        while((PRECEDENCE[stack.first.name] ?: MAX_VALUE) < currentPrecedence)
             stack2.add(stack.pop())
-        val new = processStack(stack)
+        val new = createCommand(stack)
         stack.clear()
         stack.addAll(stack2)
         stack.add(new)
@@ -50,28 +43,21 @@ class OrderOfOperationsProcessor(private val transmitter : TokenTransmitter, pri
     fun process(): List<AbstractCommand> {
         val stack : LinkedList<AbstractCommand> = LinkedList()
         var lastOperator : TokenCommand? = null
+        var currentPrecedence: Int
         for(component in components)
         {
-            val content = component.name
-            if((component is TokenCommand) &&  (INFIX_OPERATORS.contains(content) || PREFIX_OPERATORS.contains(content)))
+            if((component is TokenCommand) && isOperator(component.name))
             {
                 currentPrecedence = PRECEDENCE[component.token.content]!!
-                val lastPrecedence = PRECEDENCE[lastOperator?.name?:""]?: minusInfinity
-                if(currentPrecedence > lastPrecedence)
-                {
-                    stack.addLast(component)
-                }
-                else
-                {
-                    preProcessStack(stack)
-                    stack.addLast(component)
+                val lastPrecedence = PRECEDENCE[lastOperator?.name?:""]?: MIN_VALUE
+                if (currentPrecedence <= lastPrecedence) {
+                    processStack(stack,currentPrecedence)
                 }
                 lastOperator=component
             }
-            else stack.addLast(component)
+            stack.addLast(component)
         }
-        currentPrecedence = minusInfinity
-        preProcessStack(stack)
+        processStack(stack, MIN_VALUE)
         return stack.toList()
     }
 }
