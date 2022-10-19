@@ -25,7 +25,7 @@ import static in.costea.wiles.statics.Utils.todo;
 
 public abstract class AbstractExpressionCommand extends AbstractCommand {
     public static final ExpectParamsBuilder START_OF_EXPRESSION =
-            tokenOf(isContainedIn(PREFIX_OPERATORS)).or(IS_LITERAL).or(ROUND_BRACKET_START_ID)
+            tokenOf(isContainedIn(STARTING_OPERATORS)).or(IS_LITERAL).or(ROUND_BRACKET_START_ID)
                     .withErrorMessage("Expected expression!").removeWhen(WhenRemoveToken.Never);
     protected final List<AbstractCommand> components = new ArrayList<>();
     @NotNull
@@ -55,7 +55,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
     }
 
     private @NotNull ExpectNext firstExpectNext(@NotNull String content) {
-        if (IS_LITERAL.test(content) || BRACKETS.contains(content) || PREFIX_OPERATORS.contains(content))
+        if (IS_LITERAL.test(content) || BRACKETS.contains(content) || STARTING_OPERATORS.contains(content))
             return ExpectNext.TOKEN;
         return ExpectNext.OPERATOR;
     }
@@ -64,7 +64,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
         if (expectNext == ExpectNext.OPERATOR) return transmitter.expect(tokenOf(isContainedIn(BRACKETS))
                 .or(isContainedIn(INFIX_OPERATORS)).withErrorMessage("Operator expected!"));
 
-        return transmitter.expect(tokenOf(isContainedIn(BRACKETS)).or(isContainedIn(PREFIX_OPERATORS))
+        return transmitter.expect(tokenOf(isContainedIn(BRACKETS)).or(isContainedIn(STARTING_OPERATORS))
                 .or(IS_LITERAL).withErrorMessage("Identifier or unary operator expected!"));
     }
 
@@ -143,7 +143,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                 }
 
                 // switch expecting operator or token next
-                if (expectNext == ExpectNext.TOKEN && PREFIX_OPERATORS.contains(content)) {
+                if (expectNext == ExpectNext.TOKEN && STARTING_OPERATORS.contains(content)) {
                     if (INFIX_OPERATORS.contains(content))
                         mainToken=new Token(UNARY_ID+content,location);
                 }

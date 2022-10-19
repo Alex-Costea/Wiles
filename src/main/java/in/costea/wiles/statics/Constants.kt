@@ -38,7 +38,7 @@ object Constants {
     const val DO_ID = "DO"
     const val RIGHT_ARROW_ID = "RIGHT_ARROW"
     const val DECLARE_ID = "DECLARE"
-    private const val EQUALS_ID = "EQUALS"
+    const val EQUALS_ID = "EQUALS"
     const val LARGER_ID = "LARGER"
     private const val SMALLER_ID = "SMALLER"
     private const val LARGER_EQUALS_ID = "LARGER_EQUALS"
@@ -47,7 +47,7 @@ object Constants {
     private const val DOT_ID = "DOT"
     private const val AND_ID = "AND"
     const val OR_ID = "OR"
-    private const val NOT_ID = "NOT"
+    const val NOT_ID = "NOT"
     private const val MAYBE_ID = "MAYBE"
     const val UNNAMED_START = IDENTIFIER_START + "arg"
 
@@ -80,7 +80,10 @@ object Constants {
     )
 
     @JvmField
-    val PREFIX_OPERATORS = setOf(PLUS_ID, MINUS_ID, UNARY_PLUS_ID, UNARY_MINUS_ID, NOT_ID)
+    val PREFIX_OPERATORS = setOf(UNARY_PLUS_ID, UNARY_MINUS_ID, NOT_ID)
+
+    @JvmField
+    val STARTING_OPERATORS = setOf(PLUS_ID, MINUS_ID, NOT_ID)
 
     val PRECEDENCE : HashMap<String,Int> = HashMap()
 

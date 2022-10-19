@@ -12,11 +12,13 @@ import `in`.costea.wiles.statics.Constants.COMMA_ID
 import `in`.costea.wiles.statics.Constants.DECLARE_ID
 import `in`.costea.wiles.statics.Constants.DO_ID
 import `in`.costea.wiles.statics.Constants.END_BLOCK_ID
+import `in`.costea.wiles.statics.Constants.EQUALS_ID
 import `in`.costea.wiles.statics.Constants.LARGER_ID
 import `in`.costea.wiles.statics.Constants.METHOD_ID
 import `in`.costea.wiles.statics.Constants.MINUS_ID
 import `in`.costea.wiles.statics.Constants.NEWLINE_ID
 import `in`.costea.wiles.statics.Constants.NOTHING_ID
+import `in`.costea.wiles.statics.Constants.NOT_ID
 import `in`.costea.wiles.statics.Constants.OR_ID
 import `in`.costea.wiles.statics.Constants.PLUS_ID
 import `in`.costea.wiles.statics.Constants.POWER_ID
@@ -172,6 +174,15 @@ class SyntaxTreeConverterTests {
         //TODO
         assertResults(null,"CODE_BLOCK(EXPRESSION(!a; OR; EXPRESSION(EXPRESSION(!b; PLUS; !c); LARGER; !d)))",
             "!a", OR_ID, "!b", PLUS_ID, "!c", LARGER_ID, "!d")
+
+        assertResults(null,"CODE_BLOCK(EXPRESSION(NOT; EXPRESSION(EXPRESSION(!a; PLUS; !b); EQUALS; #10)))",
+        NOT_ID,"!a", PLUS_ID,"!b", EQUALS_ID, "#10")
+
+        assertResults(null,"CODE_BLOCK(EXPRESSION(EXPRESSION(!a; TIMES; EXPRESSION(!b; POWER; #2)); PLUS; #10))",
+            "!a", TIMES_ID, "!b", POWER_ID, "#2", PLUS_ID, "#10")
+
+        assertResults(null,"CODE_BLOCK(EXPRESSION(EXPRESSION(!a; POWER; EXPRESSION(!b; POWER; #2)); PLUS; #10))",
+            "!a", POWER_ID, "!b", POWER_ID, "#2", PLUS_ID, "#10")
     }
 
     private class CreateConverter(tokens: List<String>) {
