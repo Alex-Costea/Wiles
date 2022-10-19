@@ -47,7 +47,8 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
         return components;
     }
 
-    private void addInsideExpression(@NotNull AbstractExpressionCommand newExpression) throws AbstractCompilationException {
+    private void addInnerExpression() throws AbstractCompilationException {
+        var newExpression = new InnerExpressionCommand(transmitter);
         @NotNull final var newExceptions = newExpression.process();
         if (newExceptions.size() > 0)
             throw newExceptions.get(0);
@@ -143,7 +144,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
 
                 // add inner expression
                 if (content.equals(ROUND_BRACKET_START_ID))
-                    addInsideExpression(new InsideRoundExpressionCommand(transmitter));
+                    addInnerExpression();
                 else components.add(new TokenCommand(transmitter, mainToken));
             }
 
