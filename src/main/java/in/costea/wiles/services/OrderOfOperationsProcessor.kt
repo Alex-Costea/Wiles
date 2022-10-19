@@ -32,11 +32,9 @@ class OrderOfOperationsProcessor(private val transmitter : TokenTransmitter, pri
             else if(isOperator(stack.last.name)) PRECEDENCE[stack[stack.lastIndex].name]!!
         else throw IllegalStateException()
 
-        token1?: run {
+        if(token1 == null)
             stack.add(BinaryExpressionCommand(transmitter, listOf(operation, token2)))
-            return
-        }
-        stack.add(BinaryExpressionCommand(transmitter,listOf(token1,operation,token2)))
+        else stack.add(BinaryExpressionCommand(transmitter,listOf(token1,operation,token2)))
 
         if(stack.size == 1)
             return

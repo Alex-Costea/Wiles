@@ -183,6 +183,9 @@ class SyntaxTreeConverterTests {
 
         assertResults(null,"CODE_BLOCK(EXPRESSION(EXPRESSION(!a; POWER; EXPRESSION(!b; POWER; #2)); PLUS; #10))",
             "!a", POWER_ID, "!b", POWER_ID, "#2", PLUS_ID, "#10")
+
+        assertResults(null,"CODE_BLOCK(EXPRESSION(EXPRESSION(NOT; EXPRESSION(NOT; EXPRESSION(!a; EQUALS; !b))); OR; !c))",
+            NOT_ID, NOT_ID, "!a", EQUALS_ID, "!b", OR_ID, "!c")
     }
 
     private class CreateConverter(tokens: List<String>) {
