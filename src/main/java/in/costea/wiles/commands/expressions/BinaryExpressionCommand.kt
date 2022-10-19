@@ -1,21 +1,23 @@
-package in.costea.wiles.commands.expressions;
+package `in`.costea.wiles.commands.expressions
 
-import in.costea.wiles.commands.AbstractCommand;
-import in.costea.wiles.data.CompilationExceptionsCollection;
-import in.costea.wiles.services.TokenTransmitter;
-import org.jetbrains.annotations.NotNull;
+import `in`.costea.wiles.commands.AbstractCommand
+import `in`.costea.wiles.commands.TokenCommand
+import `in`.costea.wiles.data.CompilationExceptionsCollection
+import `in`.costea.wiles.services.TokenTransmitter
 
-import java.util.List;
-
-public class BinaryExpressionCommand extends AbstractExpressionCommand{
-    public BinaryExpressionCommand(@NotNull TokenTransmitter transmitter, @NotNull List<AbstractCommand> components) {
-        super(transmitter);
-        this.components.addAll(components);
-        shouldFlatten=true;
+class BinaryExpressionCommand(
+    transmitter: TokenTransmitter,
+    operation: TokenCommand,
+    left: AbstractCommand?,
+    right: AbstractCommand
+) : AbstractExpressionCommand(transmitter) {
+    init {
+        this.left=left
+        this.operation=operation
+        this.right=right
     }
 
-    @Override
-    public @NotNull CompilationExceptionsCollection process() {
-        throw new IllegalStateException("Cannot be processed!");
+    override fun process(): CompilationExceptionsCollection {
+        throw IllegalStateException("Cannot be processed!")
     }
 }

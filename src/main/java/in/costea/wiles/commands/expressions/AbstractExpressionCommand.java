@@ -31,20 +31,28 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
     @NotNull
     protected final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
     protected boolean shouldDoOrderOfOperations = true;
-    protected boolean shouldFlatten = false;
+    protected AbstractCommand left = null;
+    protected TokenCommand operation = null;
+    protected AbstractCommand right = null;
 
     protected AbstractExpressionCommand(@NotNull TokenTransmitter transmitter) {
         super(transmitter);
     }
 
     @Override
-    public @NotNull SyntaxType getType() {
+    public final @NotNull SyntaxType getType() {
         return SyntaxType.EXPRESSION;
     }
 
     @Override
-    public @NotNull List<AbstractCommand> getComponents() {
-        return components;
+    public final @NotNull List<AbstractCommand> getComponents() {
+        var myComp = new ArrayList<AbstractCommand>();
+        if(left!=null) myComp.add(left);
+        if(operation!=null) myComp.add(operation);
+        if(right!=null) myComp.add(right);
+        if(myComp.isEmpty())
+            return components;
+        return myComp;
     }
 
     private void addInnerExpression() throws AbstractCompilationException {
@@ -86,7 +94,14 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
 
     private void flatten() {
         if (components.size() == 1) {
-            if (components.get(0) instanceof final AbstractExpressionCommand command && command.shouldFlatten) {
+            if (components.get(0) instanceof final BinaryExpressionCommand command) {
+                this.left = command.left;
+                this.operation = command.operation;
+                assert operation != null;
+                this.right = command.right;
+                assert right != null;
+            }
+            else if (components.get(0) instanceof final InnerExpressionCommand command) {
                 components.clear();
                 components.addAll(command.getComponents());
             }
@@ -159,7 +174,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
             }
 
             flatten();
-
+            assert(components.size()<=3);
         } catch (AbstractCompilationException ex) {
             exceptions.add(ex);
         }

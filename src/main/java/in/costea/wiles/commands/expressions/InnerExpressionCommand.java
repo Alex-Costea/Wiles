@@ -10,7 +10,6 @@ import static in.costea.wiles.statics.Constants.ROUND_BRACKET_END_ID;
 public class InnerExpressionCommand extends AbstractExpressionCommand {
     public InnerExpressionCommand(@NotNull TokenTransmitter transmitter) {
         super(transmitter);
-        shouldFlatten=true;
     }
 
     @Override

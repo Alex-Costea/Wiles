@@ -1,7 +1,7 @@
 package in.costea.wiles.commands.expressions;
 
+import in.costea.wiles.commands.TokenCommand;
 import in.costea.wiles.data.TokenLocation;
-import in.costea.wiles.enums.SyntaxType;
 import in.costea.wiles.exceptions.TokenExpectedException;
 import in.costea.wiles.exceptions.UnexpectedEndException;
 import in.costea.wiles.services.TokenTransmitter;
@@ -14,16 +14,8 @@ import static in.costea.wiles.statics.Constants.TERMINATORS;
 
 public class AssignableExpressionCommand extends AbstractExpressionCommand {
 
-    private boolean isAssignment = false;
-
     public AssignableExpressionCommand(@NotNull TokenTransmitter transmitter) {
         super(transmitter);
-    }
-
-    @Override
-    public @NotNull SyntaxType getType() {
-        if (isAssignment) return SyntaxType.ASSIGNMENT;
-        return SyntaxType.EXPRESSION;
     }
 
     @Override
@@ -38,14 +30,11 @@ public class AssignableExpressionCommand extends AbstractExpressionCommand {
 
     @Override
     protected boolean handleAssignTokenReceived(TokenLocation location) throws TokenExpectedException, UnexpectedEndException {
-        transmitter.expect(tokenOf(ASSIGN_ID));
-        isAssignment = true;
-        LeftSideExpressionCommand leftSide = new LeftSideExpressionCommand(transmitter, this);
+        operation = new TokenCommand(transmitter,transmitter.expect(tokenOf(ASSIGN_ID)));
+        left = new LeftSideExpressionCommand(transmitter, this);
+        right = new RightSideExpressionCommand(transmitter);
         components.clear();
-        RightSideExpressionCommand rightSide = new RightSideExpressionCommand(transmitter);
-        exceptions.addAll(rightSide.process());
-        components.add(leftSide);
-        components.add(rightSide);
+        exceptions.addAll(right.process());
         shouldDoOrderOfOperations=false;
         return true;
     }

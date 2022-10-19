@@ -23,7 +23,7 @@ class OrderOfOperationsProcessor(private val transmitter : TokenTransmitter, pri
         val token2 = stack.removeLast()
         if(stack.isEmpty())
             return
-        val operation = stack.removeLast()
+        val operation = stack.removeLast() as TokenCommand
         if(!isOperator(operation.name))
             throw java.lang.IllegalStateException()
         if(INFIX_OPERATORS.contains(operation.name))
@@ -34,8 +34,8 @@ class OrderOfOperationsProcessor(private val transmitter : TokenTransmitter, pri
         else throw IllegalStateException()
 
         if(token1 == null)
-            stack.add(BinaryExpressionCommand(transmitter, listOf(operation, token2)))
-        else stack.add(BinaryExpressionCommand(transmitter,listOf(token1,operation,token2)))
+            stack.add(BinaryExpressionCommand(transmitter, operation,null,token2))
+        else stack.add(BinaryExpressionCommand(transmitter,operation,token1,token2))
 
         if(stack.size == 1)
             return
