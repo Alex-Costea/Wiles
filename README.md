@@ -98,9 +98,9 @@ for i from 1 to 100
 begin
     let var text := ""
     if modulo(i, 3) = 0 do
-        text.append("Fizz")
+        text := text + "Fizz"
     if modulo(i, 5) = 0 do
-        text.append("Buzz")
+        text := text + "Buzz"
     if text = "" do
         text := i.as_text
     writeline(text)
@@ -109,7 +109,7 @@ end
 ### Minimum value
 
 ```
-let min := method(args : list[int])  -> int?
+let min := method(args : list[int]) -> int?
 begin
     if args.size = 0 do
         yield nothing
