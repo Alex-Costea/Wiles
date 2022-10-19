@@ -33,7 +33,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 
 ### Declaring
 #### Note: {} means optional
-- Method: `method({param1 : type, param2 : type}) {--> return_type}` (return assumed `nothing` if unspecified)
+- Method: `method({param1 : type, param2 : type}) {-> return_type}` (return assumed `nothing` if unspecified)
 - Value: `let {var} name {: type} := value` (`var` makes it mutable, type can be inferred)
 - Assignment: `name := value`
 - Conditional: `if condition [block] {otherwise [block]}`
@@ -109,7 +109,7 @@ end
 ### Minimum value
 
 ```
-let min := method(args : list[int])  --> int?
+let min := method(args : list[int])  -> int?
 begin
     if args.size = 0 do
         yield nothing

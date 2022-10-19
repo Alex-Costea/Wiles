@@ -179,7 +179,7 @@ object Constants {
         OPERATORS["."] = DOT_ID
         OPERATORS[":"] = COLON_ID
         OPERATORS[";"] = TERMINATOR_ID
-        OPERATORS["-->"] = RIGHT_ARROW_ID
+        OPERATORS["->"] = RIGHT_ARROW_ID
         OPERATORS["?"] = MAYBE_ID
         OPERATORS["" + SPACE] = SPACE_ID
         OPERATORS["" + CONTINUE_LINE] = BACKSLASH_ID
