@@ -25,8 +25,6 @@ import `in`.costea.wiles.statics.Constants.POWER_ID
 import `in`.costea.wiles.statics.Constants.RIGHT_ARROW_ID
 import `in`.costea.wiles.statics.Constants.ROUND_BRACKET_END_ID
 import `in`.costea.wiles.statics.Constants.ROUND_BRACKET_START_ID
-import `in`.costea.wiles.statics.Constants.SQUARE_BRACKET_END_ID
-import `in`.costea.wiles.statics.Constants.SQUARE_BRACKET_START_ID
 import `in`.costea.wiles.statics.Constants.START_BLOCK_ID
 import `in`.costea.wiles.statics.Constants.TIMES_ID
 import org.junit.jupiter.api.Assertions
@@ -70,14 +68,14 @@ class SyntaxTreeConverterTests {
             DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID,
             ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, START_BLOCK_ID,
             "!b", ASSIGN_ID, "#3", END_BLOCK_ID)
-        assertResults(null, "CODE_BLOCK(EXPRESSION(!b; PLUS; #3; MINUS; #5))",
+        assertResults(null, "CODE_BLOCK(EXPRESSION(EXPRESSION(!b; PLUS; #3); MINUS; #5))",
                 "!b", PLUS_ID, "#3", MINUS_ID, "#5")
-        assertResults(null, "CODE_BLOCK(EXPRESSION(!a; PLUS; !b); EXPRESSION(#0; PLUS; !c); EXPRESSION(!a; PLUS; !b; PLUS; !c))",
+        assertResults(null, "CODE_BLOCK(EXPRESSION(!a; PLUS; !b); EXPRESSION(UNARY_PLUS; !c); EXPRESSION(EXPRESSION(!a; PLUS; !b); PLUS; !c))",
                 "!a", PLUS_ID, "!b", NEWLINE_ID, PLUS_ID, "!c", NEWLINE_ID, NEWLINE_ID,
                 "!a", PLUS_ID, NEWLINE_ID, "!b", PLUS_ID, "!c")
-        assertResults(null, "CODE_BLOCK(EXPRESSION(!b; PLUS; #3; MINUS; #5))",
+        assertResults(null, "CODE_BLOCK(EXPRESSION(EXPRESSION(!b; PLUS; #3); MINUS; #5))",
                 "!b", PLUS_ID, "#3", MINUS_ID, "#5")
-        assertResults(null, "CODE_BLOCK(ASSIGNMENT(EXPRESSION(!c); EXPRESSION(#0; MINUS; #10; PLUS; #0; PLUS; EXPRESSION ROUND(#0; PLUS; #10))))",
+        assertResults(null, "CODE_BLOCK(ASSIGNMENT(EXPRESSION(!c); EXPRESSION(EXPRESSION(UNARY_MINUS; #10); PLUS; EXPRESSION(UNARY_PLUS; EXPRESSION(UNARY_PLUS; #10)))))",
                 "!c", ASSIGN_ID, MINUS_ID, "#10", PLUS_ID, NEWLINE_ID, PLUS_ID, ROUND_BRACKET_START_ID, PLUS_ID, "#10", ROUND_BRACKET_END_ID)
     }
 
@@ -103,16 +101,16 @@ class SyntaxTreeConverterTests {
 
     @Test
     fun bracketsTests() {
-        assertResults(null, "CODE_BLOCK(EXPRESSION(!a; PLUS; EXPRESSION ROUND(EXPRESSION ROUND(!b; PLUS; !c); PLUS; !d)))",
+        assertResults(null, "CODE_BLOCK(EXPRESSION(!a; PLUS; EXPRESSION(EXPRESSION(!b; PLUS; !c); PLUS; !d)))",
                 "!a", PLUS_ID, ROUND_BRACKET_START_ID, ROUND_BRACKET_START_ID, "!b", PLUS_ID, "!c",
                 ROUND_BRACKET_END_ID, PLUS_ID, "!d", ROUND_BRACKET_END_ID)
-        assertResults(null, "CODE_BLOCK(EXPRESSION(!a; PLUS; EXPRESSION ROUND(!b; PLUS; !c)))",
+        assertResults(null, "CODE_BLOCK(EXPRESSION(!a; PLUS; EXPRESSION(!b; PLUS; !c)))",
                 "!a", PLUS_ID, ROUND_BRACKET_START_ID, NEWLINE_ID, "!b", PLUS_ID, "!c", ROUND_BRACKET_END_ID)
-        assertResults(null, "CODE_BLOCK(EXPRESSION(!a; PLUS; EXPRESSION ROUND(!b; PLUS; !c)))",
+        assertResults(null, "CODE_BLOCK(EXPRESSION(!a; PLUS; EXPRESSION(!b; PLUS; !c)))",
                 "!a", PLUS_ID, NEWLINE_ID, ROUND_BRACKET_START_ID, "!b", PLUS_ID, "!c", ROUND_BRACKET_END_ID)
         assertResults(null, "CODE_BLOCK(EXPRESSION(!a; PLUS; !b))",
             ROUND_BRACKET_START_ID, "!a", PLUS_ID, "!b", ROUND_BRACKET_END_ID)
-        assertResults(null, "CODE_BLOCK(EXPRESSION(EXPRESSION ROUND(!a; PLUS; !b); PLUS; !c))",
+        assertResults(null, "CODE_BLOCK(EXPRESSION(EXPRESSION(!a; PLUS; !b); PLUS; !c))",
                 ROUND_BRACKET_START_ID, "!a", PLUS_ID, "!b", ROUND_BRACKET_END_ID, PLUS_ID, "!c")
     }
 
@@ -154,9 +152,11 @@ class SyntaxTreeConverterTests {
             DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, ROUND_BRACKET_START_ID, "!arg1", COLON_ID, "!int", ROUND_BRACKET_END_ID, DO_ID, NOTHING_ID)
     }
 
-    @Test
+    //TODO: figure out a better internal representation for square bracket calling
+    // It should be some kind of method call probably
+/*    @Test
     fun squareBracketsTest() {
-        assertResults(null, "CODE_BLOCK(EXPRESSION(!a; EXPRESSION SQUARE(!b; COMMA; !d; COMMA; !e; PLUS; #2; TIMES; EXPRESSION ROUND(!a; POWER; !b))))",
+        assertResults(null, "CODE_BLOCK(EXPRESSION(!a; EXPRESSION SQUARE(!b; COMMA; !d; COMMA; !e; PLUS; #2; TIMES; EXPRESSION(!a; POWER; !b))))",
                 "!a", SQUARE_BRACKET_START_ID, "!b", COMMA_ID, "!d", COMMA_ID, "!e",
                 PLUS_ID, "#2", TIMES_ID, ROUND_BRACKET_START_ID, "!a", POWER_ID, "!b", ROUND_BRACKET_END_ID, SQUARE_BRACKET_END_ID)
         assertResults(null, "CODE_BLOCK(EXPRESSION(!a; EXPRESSION SQUARE(!b)))",
@@ -166,12 +166,11 @@ class SyntaxTreeConverterTests {
         assertResults(null, "CODE_BLOCK(ASSIGNMENT(EXPRESSION(!a); EXPRESSION(!b; EXPRESSION SQUARE(!c; COMMA; !d; EXPRESSION SQUARE(!e)); PLUS; !f)))",
                 "!a", ASSIGN_ID, "!b", SQUARE_BRACKET_START_ID, "!c", COMMA_ID, "!d",
                 SQUARE_BRACKET_START_ID, "!e", SQUARE_BRACKET_END_ID, SQUARE_BRACKET_END_ID, PLUS_ID, "!f")
-    }
+    }*/
 
     @Test
     fun orderOfOperationsTest()
     {
-        //TODO
         assertResults(null,"CODE_BLOCK(EXPRESSION(!a; OR; EXPRESSION(EXPRESSION(!b; PLUS; !c); LARGER; !d)))",
             "!a", OR_ID, "!b", PLUS_ID, "!c", LARGER_ID, "!d")
 

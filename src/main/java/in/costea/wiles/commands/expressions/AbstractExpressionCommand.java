@@ -137,6 +137,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                 //applying square brackets to identifier
                 if (content.equals(SQUARE_BRACKET_START_ID)) {
                     if (expectNext == ExpectNext.OPERATOR) {
+                        components.add(new TokenCommand(transmitter, new Token(APPLY_ID,null)));
                         addInsideExpression(new InsideSquareExpressionCommand(transmitter));
                         continue;
                     } else throw new UnexpectedTokenException("Identifier or unary operator expected!", location);

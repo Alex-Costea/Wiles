@@ -46,10 +46,12 @@ object Constants {
     private const val NOT_EQUAL_ID = "NOT_EQUAL"
     private const val DOT_ID = "DOT"
     private const val AND_ID = "AND"
+    const val APPLY_ID = "APPLY"
     const val OR_ID = "OR"
     const val NOT_ID = "NOT"
     private const val MAYBE_ID = "MAYBE"
     const val UNNAMED_START = IDENTIFIER_START + "arg"
+
 
     @JvmField
     val KEYWORDS: BiMap<String, String> = HashBiMap.create()
@@ -76,7 +78,7 @@ object Constants {
     val INFIX_OPERATORS = setOf(
         PLUS_ID, MINUS_ID, TIMES_ID, DIVIDE_ID, POWER_ID,
         EQUALS_ID, LARGER_ID, SMALLER_ID, LARGER_EQUALS_ID, SMALLER_EQUALS_ID, NOT_EQUAL_ID,
-        DOT_ID, COMMA_ID, AND_ID, OR_ID
+        DOT_ID, COMMA_ID, AND_ID, OR_ID, APPLY_ID
     )
 
     @JvmField
@@ -107,6 +109,7 @@ object Constants {
     val RIGHT_TO_LEFT : Set<Int>
 
     init {
+        PRECEDENCE[COMMA_ID] = -5
         PRECEDENCE[OR_ID] = -4
         PRECEDENCE[AND_ID] = -3
         PRECEDENCE[NOT_ID] = -2
@@ -123,8 +126,8 @@ object Constants {
         PRECEDENCE[UNARY_PLUS_ID] = 3
         PRECEDENCE[UNARY_MINUS_ID] = 3
         PRECEDENCE[POWER_ID] = 4
-        PRECEDENCE[COMMA_ID] = 5
-        PRECEDENCE[DOT_ID] = 6
+        PRECEDENCE[DOT_ID] = 5
+        PRECEDENCE[APPLY_ID] = 5
 
         RIGHT_TO_LEFT = setOf(PRECEDENCE[NOT_ID]!!, PRECEDENCE[UNARY_PLUS_ID]!!, PRECEDENCE[POWER_ID]!!)
 
