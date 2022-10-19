@@ -15,7 +15,7 @@ public class InsideRoundExpressionCommand extends AbstractExpressionCommand {
 
     @Override
     protected boolean handleBracketsCloseTokenFound(@NotNull String content, TokenLocation location) {
-        return content.equals(ROUND_BRACKET_END_ID);
+        return true;
     }
 
     @Override

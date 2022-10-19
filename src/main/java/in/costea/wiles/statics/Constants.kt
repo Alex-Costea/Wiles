@@ -15,8 +15,8 @@ object Constants {
     const val NEWLINE_ID = "NEWLINE"
     const val ROUND_BRACKET_START_ID = "ROUND_BRACKET_START"
     const val ROUND_BRACKET_END_ID = "ROUND_BRACKET_END"
-    const val SQUARE_BRACKET_START_ID = "SQUARE_BRACKET_START"
-    const val SQUARE_BRACKET_END_ID = "SQUARE_BRACKET_END"
+    private const val SQUARE_BRACKET_START_ID = "SQUARE_BRACKET_START"
+    private const val SQUARE_BRACKET_END_ID = "SQUARE_BRACKET_END"
     const val METHOD_ID = "METHOD"
     private const val TERMINATOR_ID = "TERMINATOR"
     const val BACKSLASH_ID = "BACKSLASH"
@@ -46,7 +46,7 @@ object Constants {
     private const val NOT_EQUAL_ID = "NOT_EQUAL"
     private const val DOT_ID = "DOT"
     private const val AND_ID = "AND"
-    const val APPLY_ID = "APPLY"
+    private const val APPLY_ID = "APPLY"
     const val OR_ID = "OR"
     const val NOT_ID = "NOT"
     private const val MAYBE_ID = "MAYBE"
@@ -90,10 +90,7 @@ object Constants {
     val PRECEDENCE : HashMap<String,Int> = HashMap()
 
     @JvmField
-    val BRACKETS = setOf(
-        ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID,
-        SQUARE_BRACKET_START_ID, SQUARE_BRACKET_END_ID
-    )
+    val ROUND_BRACKETS = setOf(ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID)
 
     @JvmField
     val TERMINATORS = setOf(NEWLINE_ID, TERMINATOR_ID)

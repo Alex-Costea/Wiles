@@ -55,16 +55,16 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
     }
 
     private @NotNull ExpectNext firstExpectNext(@NotNull String content) {
-        if (IS_LITERAL.test(content) || BRACKETS.contains(content) || STARTING_OPERATORS.contains(content))
+        if (IS_LITERAL.test(content) || ROUND_BRACKETS.contains(content) || STARTING_OPERATORS.contains(content))
             return ExpectNext.TOKEN;
         return ExpectNext.OPERATOR;
     }
 
     private @NotNull Token getNextToken(@NotNull ExpectNext expectNext) throws AbstractCompilationException {
-        if (expectNext == ExpectNext.OPERATOR) return transmitter.expect(tokenOf(isContainedIn(BRACKETS))
+        if (expectNext == ExpectNext.OPERATOR) return transmitter.expect(tokenOf(isContainedIn(ROUND_BRACKETS))
                 .or(isContainedIn(INFIX_OPERATORS)).withErrorMessage("Operator expected!"));
 
-        return transmitter.expect(tokenOf(isContainedIn(BRACKETS)).or(isContainedIn(STARTING_OPERATORS))
+        return transmitter.expect(tokenOf(isContainedIn(ROUND_BRACKETS)).or(isContainedIn(STARTING_OPERATORS))
                 .or(IS_LITERAL).withErrorMessage("Identifier or unary operator expected!"));
     }
 
@@ -125,22 +125,13 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                 location = mainToken.getLocation();
 
                 //handle closing brackets token
-                if (content.equals(ROUND_BRACKET_END_ID) || content.equals(SQUARE_BRACKET_END_ID))
+                if (content.equals(ROUND_BRACKET_END_ID))
                     if (handleBracketsCloseTokenFound(content, location))
                         break;
 
                 //method call
                 if (expectNext == ExpectNext.OPERATOR && content.equals(ROUND_BRACKET_START_ID)) {
                     todo("Method call");
-                }
-
-                //applying square brackets to identifier
-                if (content.equals(SQUARE_BRACKET_START_ID)) {
-                    if (expectNext == ExpectNext.OPERATOR) {
-                        components.add(new TokenCommand(transmitter, new Token(APPLY_ID,null)));
-                        addInsideExpression(new InsideSquareExpressionCommand(transmitter));
-                        continue;
-                    } else throw new UnexpectedTokenException("Identifier or unary operator expected!", location);
                 }
 
                 // switch expecting operator or token next

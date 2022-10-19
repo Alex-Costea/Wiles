@@ -52,7 +52,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - `:=` (assign, declare or name parameters)
 - `.` (method / field access)
 - `:` (type annotation)
-- `[]` (subtype declaration, collection access)
+- `[]` (subtype declaration)
 - `()` (order of operations, method access)
 - `,` (separator between elements)
 - `?` : syntactic sugar for `type? = either[type,nothing]`
@@ -113,7 +113,7 @@ let min := method(args : list[int])  -> int?
 begin
     if args.size = 0 do
         yield nothing
-    min := args[0]
+    min := args.get(0)
     for x in args.slice(from := 1) do
         if x < min do
             min := x
