@@ -1,6 +1,7 @@
 package `in`.costea.wiles.services
 
 import `in`.costea.wiles.commands.AbstractCommand
+import `in`.costea.wiles.commands.TokenCommand
 import `in`.costea.wiles.commands.expressions.BinaryExpressionCommand
 import `in`.costea.wiles.statics.Constants.INFIX_OPERATORS
 import `in`.costea.wiles.statics.Constants.PRECEDENCE
@@ -24,7 +25,7 @@ class OrderOfOperationsProcessor(private val transmitter : TokenTransmitter, pri
             return
         val operation = stack.removeLast()
         if(!isOperator(operation.name))
-            throw IllegalStateException("Operator expected!")
+            throw java.lang.IllegalStateException()
         if(INFIX_OPERATORS.contains(operation.name))
             token1=stack.removeLast()
 
@@ -43,7 +44,7 @@ class OrderOfOperationsProcessor(private val transmitter : TokenTransmitter, pri
             processStack(stack,currentPrecedence)
     }
 
-    private fun handleComponent(component : AbstractCommand?, stack: LinkedList<AbstractCommand>)
+    private fun handleComponent(component : TokenCommand?, stack: LinkedList<AbstractCommand>)
     {
         val currentPrecedence = PRECEDENCE[component?.name]?: MIN_VALUE
         val lastPrecedence : Int = if(stack.size <= 1)
@@ -53,7 +54,7 @@ class OrderOfOperationsProcessor(private val transmitter : TokenTransmitter, pri
         else if(isOperator(stack[stack.lastIndex-1].name))
             PRECEDENCE[stack[stack.lastIndex-1].name]!!
         else throw IllegalStateException("Operator expected")
-        if(checkPrecedence(currentPrecedence, lastPrecedence)) {
+        if(!PREFIX_OPERATORS.contains(component?.name) && checkPrecedence(currentPrecedence, lastPrecedence)) {
             processStack(stack,currentPrecedence)
         }
     }
@@ -62,7 +63,7 @@ class OrderOfOperationsProcessor(private val transmitter : TokenTransmitter, pri
         val stack : LinkedList<AbstractCommand> = LinkedList()
         for(component in components)
         {
-            if(isOperator(component.name))
+            if(component is TokenCommand && isOperator(component.name))
             {
                 handleComponent(component, stack)
             }
