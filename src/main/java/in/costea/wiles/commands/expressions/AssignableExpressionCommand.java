@@ -1,14 +1,12 @@
 package in.costea.wiles.commands.expressions;
 
-import in.costea.wiles.commands.AbstractCommand;
 import in.costea.wiles.commands.TokenCommand;
 import in.costea.wiles.data.TokenLocation;
 import in.costea.wiles.exceptions.TokenExpectedException;
 import in.costea.wiles.exceptions.UnexpectedEndException;
+import in.costea.wiles.services.PrecedenceProcessor;
 import in.costea.wiles.services.TokenTransmitter;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 import static in.costea.wiles.builders.ExpectParamsBuilder.isContainedIn;
 import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
@@ -33,7 +31,7 @@ public class AssignableExpressionCommand extends AbstractExpressionCommand {
     }
 
     @Override
-    protected boolean handleAssignTokenReceived(TokenLocation location, List<AbstractCommand> components) throws TokenExpectedException, UnexpectedEndException {
+    protected boolean handleAssignTokenReceived(TokenLocation location, PrecedenceProcessor precedenceProcessor) throws TokenExpectedException, UnexpectedEndException {
         operation = new TokenCommand(transmitter,transmitter.expect(tokenOf(ASSIGN_ID)));
         right = new RightSideExpressionCommand(transmitter);
         exceptions.addAll(right.process());

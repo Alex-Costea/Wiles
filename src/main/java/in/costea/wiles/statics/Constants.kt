@@ -85,7 +85,7 @@ object Constants {
     @JvmField
     val STARTING_OPERATORS = setOf(PLUS_ID, MINUS_ID, NOT_ID)
 
-    val PRECEDENCE : HashMap<String,Int> = HashMap()
+    val PRECEDENCE : HashMap<String,Byte> = HashMap()
 
     @JvmField
     val ROUND_BRACKETS = setOf(ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID)
@@ -101,7 +101,7 @@ object Constants {
     @JvmField
     val IS_LITERAL: Predicate<String> = IS_IDENTIFIER.or(IS_TEXT_LITERAL).or(IS_NUMBER_LITERAL)
 
-    val RIGHT_TO_LEFT : Set<Int>
+    val RIGHT_TO_LEFT : Set<Byte>
 
     init {
         PRECEDENCE[OR_ID] = -4

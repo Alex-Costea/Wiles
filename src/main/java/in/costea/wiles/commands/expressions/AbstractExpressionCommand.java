@@ -11,7 +11,7 @@ import in.costea.wiles.enums.WhenRemoveToken;
 import in.costea.wiles.exceptions.AbstractCompilationException;
 import in.costea.wiles.exceptions.UnexpectedEndException;
 import in.costea.wiles.exceptions.UnexpectedTokenException;
-import in.costea.wiles.services.OrderOfOperationsProcessor;
+import in.costea.wiles.services.PrecedenceProcessor;
 import in.costea.wiles.services.TokenTransmitter;
 import org.jetbrains.annotations.NotNull;
 
@@ -52,12 +52,12 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
         return components;
     }
 
-    private void addInnerExpression(List<AbstractCommand> components) throws AbstractCompilationException {
+    private void addInnerExpression(PrecedenceProcessor precedenceProcessor) throws AbstractCompilationException {
         var newExpression = new InnerExpressionCommand(transmitter);
         @NotNull final var newExceptions = newExpression.process();
         if (newExceptions.size() > 0)
             throw newExceptions.get(0);
-        components.add(newExpression);
+        precedenceProcessor.add(newExpression);
     }
 
     private @NotNull ExpectNext firstExpectNext(@NotNull String content) {
@@ -98,7 +98,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
             @NotNull Token mainToken = transmitter.expect(START_OF_EXPRESSION);
             @NotNull ExpectNext expectNext;
             @NotNull var content = mainToken.getContent();
-            @NotNull List<AbstractCommand> components = new ArrayList<>();
+            @NotNull var precedenceProcessor=new PrecedenceProcessor(transmitter);
             TokenLocation location = mainToken.getLocation();
             expectNext = firstExpectNext(content);
 
@@ -117,7 +117,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                 //handle assignment token
                 final var tempToken2 = transmitter.expectMaybe(tokenOf(ASSIGN_ID).removeWhen(WhenRemoveToken.Never));
                 if (tempToken2.isPresent())
-                    if (handleAssignTokenReceived(tempToken2.get().getLocation(),components))
+                    if (handleAssignTokenReceived(tempToken2.get().getLocation(),precedenceProcessor))
                         break;
 
                 // expect the next correct token
@@ -144,8 +144,8 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
 
                 // add inner expression
                 if (content.equals(ROUND_BRACKET_START_ID))
-                    addInnerExpression(components);
-                else components.add(new TokenCommand(transmitter, mainToken));
+                    addInnerExpression(precedenceProcessor);
+                else precedenceProcessor.add(new TokenCommand(transmitter, mainToken));
             }
 
             checkBracketsCloseProperlyAtEnd(content, location);
@@ -153,14 +153,14 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                 throw new UnexpectedEndException("Expression unfinished!", location);
 
             //Set order of operations and flatten
-            flatten(new OrderOfOperationsProcessor(transmitter, components).process());
+            flatten(precedenceProcessor.getResult());
         } catch (AbstractCompilationException ex) {
             exceptions.add(ex);
         }
         return exceptions;
     }
 
-    protected boolean handleAssignTokenReceived(TokenLocation location, List<AbstractCommand> components) throws AbstractCompilationException {
+    protected boolean handleAssignTokenReceived(TokenLocation location, PrecedenceProcessor precedenceProcessor) throws AbstractCompilationException {
         throw new UnexpectedTokenException("Assignment not allowed here!", location);
     }
 
