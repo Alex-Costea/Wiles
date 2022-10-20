@@ -27,10 +27,8 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
     public static final ExpectParamsBuilder START_OF_EXPRESSION =
             tokenOf(isContainedIn(STARTING_OPERATORS)).or(IS_LITERAL).or(ROUND_BRACKET_START_ID)
                     .withErrorMessage("Expected expression!").removeWhen(WhenRemoveToken.Never);
-    protected final List<AbstractCommand> components = new ArrayList<>();
     @NotNull
     protected final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
-    protected boolean shouldDoOrderOfOperations = true;
     protected AbstractCommand left = null;
     protected TokenCommand operation = null;
     protected AbstractCommand right = null;
@@ -46,16 +44,15 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
 
     @Override
     public final @NotNull List<AbstractCommand> getComponents() {
-        var myComp = new ArrayList<AbstractCommand>();
-        if(left!=null) myComp.add(left);
-        if(operation!=null) myComp.add(operation);
-        if(right!=null) myComp.add(right);
-        if(myComp.isEmpty())
-            return components;
-        return myComp;
+        var components = new ArrayList<AbstractCommand>();
+        if(left!=null) components.add(left);
+        if(operation!=null) components.add(operation);
+        assert(right!=null);
+        components.add(right);
+        return components;
     }
 
-    private void addInnerExpression() throws AbstractCompilationException {
+    private void addInnerExpression(List<AbstractCommand> components) throws AbstractCompilationException {
         var newExpression = new InnerExpressionCommand(transmitter);
         @NotNull final var newExceptions = newExpression.process();
         if (newExceptions.size() > 0)
@@ -77,7 +74,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                 .or(IS_LITERAL).withErrorMessage("Identifier or unary operator expected!"));
     }
 
-    private boolean removeTrailingCommaIfExists() {
+    private boolean removeTrailingCommaIfExists(List<AbstractCommand> components) {
         if (components.size() > 0 && components.get(components.size() - 1) instanceof TokenCommand tokenCommand)
             if (tokenCommand.getToken().getContent().equals(COMMA_ID)) {
                 components.remove(components.size() - 1);
@@ -86,26 +83,22 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
         return false;
     }
 
-    private void checkFinished(@NotNull ExpectNext expectNext, TokenLocation location) throws UnexpectedEndException {
-        if (expectNext == ExpectNext.TOKEN && exceptions.size() == 0)
-            if (!removeTrailingCommaIfExists())
-                throw new UnexpectedEndException("Expression unfinished!", location);
-    }
-
-    private void flatten() {
-        if (components.size() == 1) {
-            if (components.get(0) instanceof final BinaryExpressionCommand command) {
-                this.left = command.left;
-                this.operation = command.operation;
-                assert operation != null;
-                this.right = command.right;
-                assert right != null;
-            }
-            else if (components.get(0) instanceof final InnerExpressionCommand command) {
-                components.clear();
-                components.addAll(command.getComponents());
-            }
+    private void flatten(AbstractCommand component) {
+        if(this instanceof AssignableExpressionCommand command && command.isAssignment) {
+            this.left = component;
         }
+        else if (component instanceof final BinaryExpressionCommand command) {
+            this.left = command.left;
+            this.operation = command.operation;
+            this.right = command.right;
+            assert right != null;
+        }
+        else if (component instanceof final InnerExpressionCommand command) {
+            this.left=command.left;
+            this.operation=command.operation;
+            this.right=command.right;
+        }
+        else this.right=component;
     }
 
     @Override
@@ -114,6 +107,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
             @NotNull Token mainToken = transmitter.expect(START_OF_EXPRESSION);
             @NotNull ExpectNext expectNext;
             @NotNull var content = mainToken.getContent();
+            @NotNull List<AbstractCommand> components = new ArrayList<>();
             TokenLocation location = mainToken.getLocation();
             expectNext = firstExpectNext(content);
 
@@ -132,7 +126,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                 //handle assignment token
                 final var tempToken2 = transmitter.expectMaybe(tokenOf(ASSIGN_ID).removeWhen(WhenRemoveToken.Never));
                 if (tempToken2.isPresent())
-                    if (handleAssignTokenReceived(tempToken2.get().getLocation()))
+                    if (handleAssignTokenReceived(tempToken2.get().getLocation(),components))
                         break;
 
                 // expect the next correct token
@@ -159,29 +153,24 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
 
                 // add inner expression
                 if (content.equals(ROUND_BRACKET_START_ID))
-                    addInnerExpression();
+                    addInnerExpression(components);
                 else components.add(new TokenCommand(transmitter, mainToken));
             }
 
             checkBracketsCloseProperlyAtEnd(content, location);
-            checkFinished(expectNext, location);
+            if (expectNext == ExpectNext.TOKEN && exceptions.size() == 0)
+                if (!removeTrailingCommaIfExists(components))
+                    throw new UnexpectedEndException("Expression unfinished!", location);
 
-            if(shouldDoOrderOfOperations) {
-                //Set order of operations
-                @NotNull final var componentsAfterOOO = new OrderOfOperationsProcessor(transmitter, components).process();
-                components.clear();
-                components.addAll(componentsAfterOOO);
-            }
-
-            flatten();
-            assert(components.size()<=3);
+            //Set order of operations and flatten
+            flatten(new OrderOfOperationsProcessor(transmitter, components).process());
         } catch (AbstractCompilationException ex) {
             exceptions.add(ex);
         }
         return exceptions;
     }
 
-    protected boolean handleAssignTokenReceived(TokenLocation location) throws AbstractCompilationException {
+    protected boolean handleAssignTokenReceived(TokenLocation location, List<AbstractCommand> components) throws AbstractCompilationException {
         throw new UnexpectedTokenException("Assignment not allowed here!", location);
     }
 

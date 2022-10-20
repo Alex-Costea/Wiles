@@ -59,7 +59,7 @@ class OrderOfOperationsProcessor(private val transmitter : TokenTransmitter, pri
         }
     }
 
-    fun process(): List<AbstractCommand> {
+    fun process(): AbstractCommand {
         val stack : LinkedList<AbstractCommand> = LinkedList()
         for(component in components)
         {
@@ -70,6 +70,9 @@ class OrderOfOperationsProcessor(private val transmitter : TokenTransmitter, pri
             stack.addLast(component)
         }
         handleComponent(null,stack)
-        return stack.toList()
+        assert(stack.size==1)
+        if(stack.size == 1 && stack.last is TokenCommand)
+            return BinaryExpressionCommand(transmitter,null,null,stack.last)
+        return stack[0]
     }
 }

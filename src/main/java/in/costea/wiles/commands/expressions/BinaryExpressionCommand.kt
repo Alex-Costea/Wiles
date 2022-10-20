@@ -7,7 +7,7 @@ import `in`.costea.wiles.services.TokenTransmitter
 
 class BinaryExpressionCommand(
     transmitter: TokenTransmitter,
-    operation: TokenCommand,
+    operation: TokenCommand?,
     left: AbstractCommand?,
     right: AbstractCommand
 ) : AbstractExpressionCommand(transmitter) {

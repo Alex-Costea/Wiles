@@ -106,6 +106,7 @@ object Constants {
     val RIGHT_TO_LEFT : Set<Int>
 
     init {
+
         PRECEDENCE[COMMA_ID] = -5
         PRECEDENCE[OR_ID] = -4
         PRECEDENCE[AND_ID] = -3
