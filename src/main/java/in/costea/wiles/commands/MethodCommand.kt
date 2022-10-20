@@ -6,7 +6,7 @@ import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.enums.WhenRemoveToken
 import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.services.TokenTransmitter
-import `in`.costea.wiles.statics.Constants.COMMA_ID
+import `in`.costea.wiles.statics.Constants.SEPARATOR_ID
 import `in`.costea.wiles.statics.Constants.IS_IDENTIFIER
 import `in`.costea.wiles.statics.Constants.METHOD_ID
 import `in`.costea.wiles.statics.Constants.NOTHING_ID
@@ -49,7 +49,7 @@ class MethodCommand(transmitter: TokenTransmitter) : AbstractCommand(transmitter
                 val parameterCommand = ParameterCommand(transmitter)
                 exceptions.addAll(parameterCommand.process())
                 parameters.add(parameterCommand)
-                if (transmitter.expectMaybe(tokenOf(COMMA_ID)).isEmpty) break
+                if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break
             }
             transmitter.expect(tokenOf(ROUND_BRACKET_END_ID))
 

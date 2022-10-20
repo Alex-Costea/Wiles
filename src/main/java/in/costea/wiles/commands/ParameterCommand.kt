@@ -7,7 +7,7 @@ import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.services.TokenTransmitter
 import `in`.costea.wiles.statics.Constants.UNNAMED_START
 import `in`.costea.wiles.statics.Constants.ASSIGN_ID
-import `in`.costea.wiles.statics.Constants.COLON_ID
+import `in`.costea.wiles.statics.Constants.TYPEOF_ID
 import `in`.costea.wiles.statics.Constants.IS_IDENTIFIER
 import `in`.costea.wiles.statics.Constants.IS_LITERAL
 
@@ -43,7 +43,7 @@ class ParameterCommand(transmitter: TokenTransmitter) : AbstractCommand(transmit
             )
             if (nameToken!!.token.content.startsWith(UNNAMED_START))
                 isAnon = true
-            transmitter.expect(tokenOf(COLON_ID))
+            transmitter.expect(tokenOf(TYPEOF_ID))
             exceptions.addAll(typeDefinition.process())
             if (transmitter.expectMaybe(tokenOf(ASSIGN_ID)).isPresent) {
                 defaultValue = TokenCommand(

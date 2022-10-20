@@ -6,7 +6,7 @@ import `in`.costea.wiles.exceptions.StringUnfinishedException
 import `in`.costea.wiles.exceptions.UnknownTokenException
 import `in`.costea.wiles.statics.Constants.DEBUG
 import `in`.costea.wiles.statics.Constants.DO_ID
-import `in`.costea.wiles.statics.Constants.MAX_OPERATOR_LENGTH
+import `in`.costea.wiles.statics.Constants.MAX_SYMBOL_LENGTH
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.api.Test
@@ -51,11 +51,11 @@ class TokenConverterTests {
         tokenConverterThrows(0, "$", UnknownTokenException::class.java, null, null)
         tokenConverterThrows(0, "=$", UnknownTokenException::class.java, "Operator unknown: $")
         val invalidProgram = "\${}{}{}{}{}"
-        Assumptions.assumingThat(invalidProgram.length >= MAX_OPERATOR_LENGTH + 1) {
-            val substring1 = invalidProgram.substring(1, MAX_OPERATOR_LENGTH + 1)
+        Assumptions.assumingThat(invalidProgram.length >= MAX_SYMBOL_LENGTH + 1) {
+            val substring1 = invalidProgram.substring(1, MAX_SYMBOL_LENGTH + 1)
             tokenConverterThrows(0, invalidProgram, UnknownTokenException::class.java, "Operator unknown: $substring1")
-            Assumptions.assumingThat(invalidProgram.length >= 2 * MAX_OPERATOR_LENGTH + 1) {
-                val substring2 = invalidProgram.substring(MAX_OPERATOR_LENGTH + 1, 2 * MAX_OPERATOR_LENGTH + 1)
+            Assumptions.assumingThat(invalidProgram.length >= 2 * MAX_SYMBOL_LENGTH + 1) {
+                val substring2 = invalidProgram.substring(MAX_SYMBOL_LENGTH + 1, 2 * MAX_SYMBOL_LENGTH + 1)
                 tokenConverterThrows(1, invalidProgram, UnknownTokenException::class.java, "Operator unknown: $substring2")
             }
         }

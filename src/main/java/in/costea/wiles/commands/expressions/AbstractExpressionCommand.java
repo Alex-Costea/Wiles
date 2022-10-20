@@ -74,15 +74,6 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                 .or(IS_LITERAL).withErrorMessage("Identifier or unary operator expected!"));
     }
 
-    private boolean removeTrailingCommaIfExists(List<AbstractCommand> components) {
-        if (components.size() > 0 && components.get(components.size() - 1) instanceof TokenCommand tokenCommand)
-            if (tokenCommand.getToken().getContent().equals(COMMA_ID)) {
-                components.remove(components.size() - 1);
-                return true;
-            }
-        return false;
-    }
-
     private void flatten(AbstractCommand component) {
         if(this instanceof AssignableExpressionCommand command && command.isAssignment) {
             this.left = component;
@@ -159,8 +150,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
 
             checkBracketsCloseProperlyAtEnd(content, location);
             if (expectNext == ExpectNext.TOKEN && exceptions.size() == 0)
-                if (!removeTrailingCommaIfExists(components))
-                    throw new UnexpectedEndException("Expression unfinished!", location);
+                throw new UnexpectedEndException("Expression unfinished!", location);
 
             //Set order of operations and flatten
             flatten(new OrderOfOperationsProcessor(transmitter, components).process());

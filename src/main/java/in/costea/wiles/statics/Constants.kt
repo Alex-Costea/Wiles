@@ -19,7 +19,7 @@ object Constants {
     private const val SQUARE_BRACKET_END_ID = "SQUARE_BRACKET_END"
     const val METHOD_ID = "METHOD"
     private const val TERMINATOR_ID = "TERMINATOR"
-    const val BACKSLASH_ID = "BACKSLASH"
+    const val CONTINUE_LINE_ID = "CONTINUE_LINE"
     const val PLUS_ID = "PLUS"
     const val MINUS_ID = "MINUS"
     const val UNARY_ID = "UNARY_"
@@ -32,9 +32,9 @@ object Constants {
     const val IDENTIFIER_START = "!"
     const val STRING_START = "@"
     const val NUM_START = "#"
-    const val COLON_ID = "COLON"
+    const val TYPEOF_ID = "TYPEOF"
     const val NOTHING_ID = "NOTHING"
-    const val COMMA_ID = "COMMA"
+    const val SEPARATOR_ID = "SEPARATOR"
     const val DO_ID = "DO"
     const val RIGHT_ARROW_ID = "RIGHT_ARROW"
     const val DECLARE_ID = "DECLARE"
@@ -44,7 +44,7 @@ object Constants {
     private const val LARGER_EQUALS_ID = "LARGER_EQUALS"
     private const val SMALLER_EQUALS_ID = "SMALLER_EQUALS"
     private const val NOT_EQUAL_ID = "NOT_EQUAL"
-    private const val DOT_ID = "DOT"
+    private const val ACCESS_ID = "ACCESS"
     private const val AND_ID = "AND"
     private const val APPLY_ID = "APPLY"
     const val OR_ID = "OR"
@@ -52,20 +52,18 @@ object Constants {
     private const val MAYBE_ID = "MAYBE"
     const val UNNAMED_START = IDENTIFIER_START + "arg"
 
+    private val KEYWORDS: BiMap<String, String> = HashBiMap.create()
 
-    @JvmField
-    val KEYWORDS: BiMap<String, String> = HashBiMap.create()
-
-    @JvmField
-    val OPERATORS: BiMap<String, String> = HashBiMap.create()
+    private val SYMBOLS: BiMap<String, String> = HashBiMap.create()
 
     @JvmField
     val TYPES: BiMap<String, String> = HashBiMap.create()
-    private val TOKENS: BiMap<String, String>
+    @JvmField
+    val TOKENS: BiMap<String, String>
 
     @JvmField
     val TOKENS_INVERSE: BiMap<String, String>
-    const val MAX_OPERATOR_LENGTH = 3
+    const val MAX_SYMBOL_LENGTH = 3
     const val STRING_DELIMITER = '"'
     const val DECIMAL_DELIMITER = '.'
     const val DIGIT_SEPARATOR = '_'
@@ -78,7 +76,7 @@ object Constants {
     val INFIX_OPERATORS = setOf(
         PLUS_ID, MINUS_ID, TIMES_ID, DIVIDE_ID, POWER_ID,
         EQUALS_ID, LARGER_ID, SMALLER_ID, LARGER_EQUALS_ID, SMALLER_EQUALS_ID, NOT_EQUAL_ID,
-        DOT_ID, COMMA_ID, AND_ID, OR_ID, APPLY_ID
+        ACCESS_ID, SEPARATOR_ID, AND_ID, OR_ID, APPLY_ID
     )
 
     @JvmField
@@ -106,8 +104,6 @@ object Constants {
     val RIGHT_TO_LEFT : Set<Int>
 
     init {
-
-        PRECEDENCE[COMMA_ID] = -5
         PRECEDENCE[OR_ID] = -4
         PRECEDENCE[AND_ID] = -3
         PRECEDENCE[NOT_ID] = -2
@@ -124,7 +120,7 @@ object Constants {
         PRECEDENCE[UNARY_PLUS_ID] = 3
         PRECEDENCE[UNARY_MINUS_ID] = 3
         PRECEDENCE[POWER_ID] = 4
-        PRECEDENCE[DOT_ID] = 5
+        PRECEDENCE[ACCESS_ID] = 5
         PRECEDENCE[APPLY_ID] = 5
 
         RIGHT_TO_LEFT = setOf(PRECEDENCE[NOT_ID]!!, PRECEDENCE[UNARY_PLUS_ID]!!, PRECEDENCE[POWER_ID]!!)
@@ -160,42 +156,42 @@ object Constants {
         TYPES["!range"] = "RANGE"
         TYPES[NOTHING_ID] = "NOTHING"
 
-        OPERATORS["+"] = PLUS_ID
-        OPERATORS["-"] = MINUS_ID
-        OPERATORS["*"] = TIMES_ID
-        OPERATORS["/"] = DIVIDE_ID
-        OPERATORS["^"] = POWER_ID
-        OPERATORS[":="] = ASSIGN_ID
-        OPERATORS["="] = EQUALS_ID
-        OPERATORS[">"] = LARGER_ID
-        OPERATORS["<"] = SMALLER_ID
-        OPERATORS[">="] = LARGER_EQUALS_ID
-        OPERATORS["<="] = SMALLER_EQUALS_ID
-        OPERATORS["=/="] = NOT_EQUAL_ID
-        OPERATORS["("] = ROUND_BRACKET_START_ID
-        OPERATORS[")"] = ROUND_BRACKET_END_ID
-        OPERATORS["["] = SQUARE_BRACKET_START_ID
-        OPERATORS["]"] = SQUARE_BRACKET_END_ID
-        OPERATORS[","] = COMMA_ID
-        OPERATORS["."] = DOT_ID
-        OPERATORS[":"] = COLON_ID
-        OPERATORS[";"] = TERMINATOR_ID
-        OPERATORS["->"] = RIGHT_ARROW_ID
-        OPERATORS["?"] = MAYBE_ID
-        OPERATORS["" + SPACE] = SPACE_ID
-        OPERATORS["" + CONTINUE_LINE] = BACKSLASH_ID
-        OPERATORS["" + NEWLINE] = NEWLINE_ID
+        SYMBOLS["+"] = PLUS_ID
+        SYMBOLS["-"] = MINUS_ID
+        SYMBOLS["*"] = TIMES_ID
+        SYMBOLS["/"] = DIVIDE_ID
+        SYMBOLS["^"] = POWER_ID
+        SYMBOLS[":="] = ASSIGN_ID
+        SYMBOLS["="] = EQUALS_ID
+        SYMBOLS[">"] = LARGER_ID
+        SYMBOLS["<"] = SMALLER_ID
+        SYMBOLS[">="] = LARGER_EQUALS_ID
+        SYMBOLS["<="] = SMALLER_EQUALS_ID
+        SYMBOLS["=/="] = NOT_EQUAL_ID
+        SYMBOLS["("] = ROUND_BRACKET_START_ID
+        SYMBOLS[")"] = ROUND_BRACKET_END_ID
+        SYMBOLS["["] = SQUARE_BRACKET_START_ID
+        SYMBOLS["]"] = SQUARE_BRACKET_END_ID
+        SYMBOLS[","] = SEPARATOR_ID
+        SYMBOLS["."] = ACCESS_ID
+        SYMBOLS[":"] = TYPEOF_ID
+        SYMBOLS[";"] = TERMINATOR_ID
+        SYMBOLS["->"] = RIGHT_ARROW_ID
+        SYMBOLS["?"] = MAYBE_ID
+        SYMBOLS["" + SPACE] = SPACE_ID
+        SYMBOLS["" + CONTINUE_LINE] = CONTINUE_LINE_ID
+        SYMBOLS["" + NEWLINE] = NEWLINE_ID
         if (DEBUG) {
-            OPERATORS["$="] = "TEMP"
-            OPERATORS["=$="] = "TEMP2"
+            SYMBOLS["$="] = "TEMP"
+            SYMBOLS["=$="] = "TEMP2"
         }
         TOKENS = HashBiMap.create(KEYWORDS)
-        TOKENS.putAll(OPERATORS)
+        TOKENS.putAll(SYMBOLS)
         TOKENS_INVERSE = TOKENS.inverse()
-        require(Collections.max(OPERATORS.keys.stream().mapToInt { obj: String -> obj.length }
-            .toList()) <= MAX_OPERATOR_LENGTH)
+        require(Collections.max(SYMBOLS.keys.stream().mapToInt { obj: String -> obj.length }
+            .toList()) <= MAX_SYMBOL_LENGTH)
         {
-            "MAX_OPERATOR_LENGTH smaller than length of largest operator!"
+            "MAX_SYMBOL_LENGTH smaller than length of largest symbol!"
         }
     }
 }

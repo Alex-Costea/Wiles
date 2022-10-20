@@ -50,7 +50,7 @@ public class InputToTokensConverter {
                 } else {
                     String id = readOperator();
                     int size = tokens.size();
-                    if (size > 0 && id.equals(NEWLINE_ID) && tokens.get(size - 1).getContent().equals(BACKSLASH_ID)) {
+                    if (size > 0 && id.equals(NEWLINE_ID) && tokens.get(size - 1).getContent().equals(CONTINUE_LINE_ID)) {
                         tokens.remove(size - 1);
                         addNewLine();
                         continue; // backslash followed by newline is ignored
@@ -123,7 +123,7 @@ public class InputToTokensConverter {
             currentIndex++;
         }
         index = currentIndex - 1;
-        return KEYWORDS.getOrDefault(sb.toString(), IDENTIFIER_START + sb);
+        return TOKENS.getOrDefault(sb.toString(), IDENTIFIER_START + sb);
     }
 
     @NotNull
@@ -152,9 +152,9 @@ public class InputToTokensConverter {
         @NotNull
         StringBuilder sb = new StringBuilder();
         String token = null;
-        while (!isAlphanumeric(arrayChars[currentIndex]) && currentIndex - index < MAX_OPERATOR_LENGTH) {
+        while (!isAlphanumeric(arrayChars[currentIndex]) && currentIndex - index < MAX_SYMBOL_LENGTH) {
             sb.append(arrayChars[currentIndex]);
-            String tempId = OPERATORS.get(sb.toString());
+            String tempId = TOKENS.get(sb.toString());
             if (tempId != null) {
                 token = tempId;
                 operatorFoundIndex = currentIndex;

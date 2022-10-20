@@ -7,8 +7,8 @@ import `in`.costea.wiles.exceptions.TokenExpectedException
 import `in`.costea.wiles.exceptions.UnexpectedEndException
 import `in`.costea.wiles.exceptions.UnexpectedTokenException
 import `in`.costea.wiles.statics.Constants.ASSIGN_ID
-import `in`.costea.wiles.statics.Constants.COLON_ID
-import `in`.costea.wiles.statics.Constants.COMMA_ID
+import `in`.costea.wiles.statics.Constants.TYPEOF_ID
+import `in`.costea.wiles.statics.Constants.SEPARATOR_ID
 import `in`.costea.wiles.statics.Constants.DECLARE_ID
 import `in`.costea.wiles.statics.Constants.DO_ID
 import `in`.costea.wiles.statics.Constants.END_BLOCK_ID
@@ -131,13 +131,13 @@ class SyntaxTreeConverterTests {
             DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, RIGHT_ARROW_ID, "!int",
                 START_BLOCK_ID, END_BLOCK_ID)
         assertResults(null, "CODE_BLOCK(DECLARATION(EXPRESSION(!main); METHOD(TYPE INT32; PARAMETER(!a; TYPE INT32); CODE_BLOCK)))",
-            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, ROUND_BRACKET_START_ID, "!a", COLON_ID, "!int", ROUND_BRACKET_END_ID,
+            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, ROUND_BRACKET_START_ID, "!a", TYPEOF_ID, "!int", ROUND_BRACKET_END_ID,
             RIGHT_ARROW_ID, "!int", START_BLOCK_ID, END_BLOCK_ID)
         assertResults(null, "CODE_BLOCK(DECLARATION(EXPRESSION(!main); METHOD(TYPE INT32; PARAMETER(!a; TYPE INT32); PARAMETER(!b; TYPE STRING); CODE_BLOCK)))",
-            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, ROUND_BRACKET_START_ID, "!a", COLON_ID, "!int",
-                "COMMA", "!b", COLON_ID, "!text", ROUND_BRACKET_END_ID, RIGHT_ARROW_ID, "!int", START_BLOCK_ID, END_BLOCK_ID)
+            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, ROUND_BRACKET_START_ID, "!a", TYPEOF_ID, "!int",
+                SEPARATOR_ID, "!b", TYPEOF_ID, "!text", ROUND_BRACKET_END_ID, RIGHT_ARROW_ID, "!int", START_BLOCK_ID, END_BLOCK_ID)
         assertResults(null, "CODE_BLOCK(DECLARATION(EXPRESSION(!main); METHOD(TYPE INT32; PARAMETER(!a; TYPE NOTHING); CODE_BLOCK)))",
-            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, ROUND_BRACKET_START_ID, "!a", COLON_ID, NOTHING_ID, ROUND_BRACKET_END_ID,
+            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, ROUND_BRACKET_START_ID, "!a", TYPEOF_ID, NOTHING_ID, ROUND_BRACKET_END_ID,
             RIGHT_ARROW_ID, "!int", START_BLOCK_ID, END_BLOCK_ID)
         assertResults(null, "CODE_BLOCK(DECLARATION(EXPRESSION(!a); METHOD(TYPE NOTHING; CODE_BLOCK)))",
             DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, DO_ID, NOTHING_ID)
@@ -145,11 +145,11 @@ class SyntaxTreeConverterTests {
             DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, DO_ID,
              "!b", ASSIGN_ID, "#3")
         assertResults(null, "CODE_BLOCK(DECLARATION(EXPRESSION(!product); METHOD(TYPE INT64; PARAMETER(!a; TYPE INT32); PARAMETER(!b; TYPE INT32); CODE_BLOCK(EXPRESSION(EXPRESSION(!product); ASSIGN; EXPRESSION(!a; TIMES; !b))))))",
-            DECLARE_ID, "!product", ASSIGN_ID, METHOD_ID, ROUND_BRACKET_START_ID, "!a", COLON_ID, "!int",
-                COMMA_ID, "!b", COLON_ID, "!int", ROUND_BRACKET_END_ID, RIGHT_ARROW_ID, "!bigint", NEWLINE_ID,
+            DECLARE_ID, "!product", ASSIGN_ID, METHOD_ID, ROUND_BRACKET_START_ID, "!a", TYPEOF_ID, "!int",
+                SEPARATOR_ID, "!b", TYPEOF_ID, "!int", ROUND_BRACKET_END_ID, RIGHT_ARROW_ID, "!bigint", NEWLINE_ID,
                 DO_ID,  "!product", ASSIGN_ID, "!a", TIMES_ID, "!b")
         assertResults(null,"CODE_BLOCK(DECLARATION(EXPRESSION(!main); METHOD(TYPE NOTHING; PARAMETER ANON(!arg1; TYPE INT32); CODE_BLOCK)))",
-            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, ROUND_BRACKET_START_ID, "!arg1", COLON_ID, "!int", ROUND_BRACKET_END_ID, DO_ID, NOTHING_ID)
+            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, ROUND_BRACKET_START_ID, "!arg1", TYPEOF_ID, "!int", ROUND_BRACKET_END_ID, DO_ID, NOTHING_ID)
     }
 
     //TODO: figure out a better internal representation for square bracket calling
