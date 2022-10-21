@@ -10,7 +10,9 @@ import kotlin.streams.toList
 
 object Constants {
     const val DEBUG = true
-    private const val ROMANIAN_MODE = false
+    private const val ROMANIAN_MODE = true
+
+    //names
     const val UNKNOWN_TOKEN = "UNKNOWN_TOKEN"
     const val START_BLOCK_ID = "START_BLOCK"
     const val END_BLOCK_ID = "END_BLOCK"
@@ -64,11 +66,16 @@ object Constants {
     private const val CONTINUE_ID = "CONTINUE"
     private const val FOR_ID = "FOR"
     private const val WHILE_ID = "WHILE"
+
+    //error messages
+    @JvmField
+    var INTERNAL_ERROR = if(ROMANIAN_MODE) "Eroare internă!" else "Internal error!"
+
     const val UNNAMED_START = IDENTIFIER_START + "arg"
-    const val INTERNAL_ERROR = "Internal error!"
     const val MAX_SYMBOL_LENGTH = 3
     const val STRING_DELIMITER = '"'
-    const val DECIMAL_DELIMITER = '.'
+    @JvmField
+    var DECIMAL_DELIMITER = if(ROMANIAN_MODE) ',' else '.'
     const val DIGIT_SEPARATOR = '_'
     const val COMMENT_START = '#'
     const val NEWLINE = '\n'
@@ -150,7 +157,7 @@ object Constants {
         KEYWORDS[if(!ROMANIAN_MODE) "not" else "nu"] = NOT_ID
         KEYWORDS[if(!ROMANIAN_MODE) "stop" else "oprește"] = BREAK_ID
         KEYWORDS[if(!ROMANIAN_MODE) "skip" else "sari_peste"] = CONTINUE_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "yield" else "redă"] = RETURN_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "yield" else "produce"] = RETURN_ID
         KEYWORDS[if(!ROMANIAN_MODE) "do" else "fă"] = DO_ID
         KEYWORDS[if(!ROMANIAN_MODE) "begin" else "început"] = START_BLOCK_ID
         KEYWORDS[if(!ROMANIAN_MODE) "end" else "sfârșit"] = END_BLOCK_ID
