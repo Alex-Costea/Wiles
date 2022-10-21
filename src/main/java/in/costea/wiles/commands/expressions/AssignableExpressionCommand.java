@@ -1,11 +1,9 @@
 package in.costea.wiles.commands.expressions;
 
-import in.costea.wiles.builders.CommandFactory;
 import in.costea.wiles.commands.TokenCommand;
 import in.costea.wiles.data.TokenLocation;
 import in.costea.wiles.exceptions.TokenExpectedException;
 import in.costea.wiles.exceptions.UnexpectedEndException;
-import in.costea.wiles.exceptions.UnexpectedTokenException;
 import in.costea.wiles.services.PrecedenceProcessor;
 import in.costea.wiles.services.TokenTransmitter;
 import org.jetbrains.annotations.NotNull;
@@ -33,9 +31,9 @@ public class AssignableExpressionCommand extends AbstractExpressionCommand {
     }
 
     @Override
-    protected boolean handleAssignTokenReceived(TokenLocation location, PrecedenceProcessor precedenceProcessor) throws TokenExpectedException, UnexpectedEndException, UnexpectedTokenException {
+    protected boolean handleAssignTokenReceived(TokenLocation location, PrecedenceProcessor precedenceProcessor) throws TokenExpectedException, UnexpectedEndException {
         operation = new TokenCommand(transmitter,transmitter.expect(tokenOf(ASSIGN_ID)));
-        right = new CommandFactory(transmitter).of(RightSideExpressionCommand.class).create();
+        right = new RightSideExpressionCommand(transmitter);
         exceptions.addAll(right.process());
         isAssignment=true;
         return true;

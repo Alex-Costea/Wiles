@@ -64,11 +64,13 @@ public class CommandFactory {
             if(transmitter.expectMaybe(tokenOf(IS_IDENTIFIER).removeWhen(WhenRemoveToken.Never)).isPresent())
                 return new ParameterCommand(transmitter);
 
+        //Expression not found
         Token newToken = transmitter.expect(tokenOf(ANYTHING).removeWhen(WhenRemoveToken.Never).withErrorMessage("Code ended unexpectedly!"));
         var content = TOKENS_INVERSE.getOrDefault(newToken.getContent(),newToken.getContent());
         throw new UnexpectedTokenException(content, newToken.getLocation());
     }
 
+    @SuppressWarnings("unused")
     public @NotNull Optional<AbstractCommand> createMaybe()
     {
         try

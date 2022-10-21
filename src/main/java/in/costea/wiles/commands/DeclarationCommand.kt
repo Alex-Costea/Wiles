@@ -28,7 +28,7 @@ class DeclarationCommand(transmitter: TokenTransmitter) : AbstractCommand(transm
             if(transmitter.expectMaybe(tokenOf(MUTABLE_ID)).isPresent)
                 name = MUTABLE_ID
 
-            val leftExpression = CommandFactory(transmitter).of(LeftSideExpressionCommand::class.java).create()
+            val leftExpression = LeftSideExpressionCommand(transmitter)
             this.left = leftExpression
             exceptions.addAll(leftExpression.process())
 
