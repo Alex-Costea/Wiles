@@ -5,7 +5,6 @@ import in.costea.wiles.commands.AbstractCommand;
 import in.costea.wiles.commands.TokenCommand;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
-import in.costea.wiles.data.TokenLocation;
 import in.costea.wiles.enums.SyntaxType;
 import in.costea.wiles.enums.WhenRemoveToken;
 import in.costea.wiles.exceptions.AbstractCompilationException;
@@ -56,7 +55,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
 
     private void addInnerExpression(PrecedenceProcessor precedenceProcessor) throws AbstractCompilationException {
         var newExpression = new InnerExpressionCommand(transmitter);
-        @NotNull final var newExceptions = newExpression.process();
+        @NotNull final CompilationExceptionsCollection newExceptions = newExpression.process();
         if (newExceptions.size() > 0)
             throw newExceptions.get(0);
         precedenceProcessor.add(newExpression);
@@ -66,14 +65,6 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
         if (IS_LITERAL.test(content) || ROUND_BRACKETS.contains(content) || STARTING_OPERATORS.contains(content))
             return ExpectNext.TOKEN;
         return ExpectNext.OPERATOR;
-    }
-
-    private @NotNull Token getNextToken(@NotNull ExpectNext expectNext) throws AbstractCompilationException {
-        if (expectNext == ExpectNext.OPERATOR) return transmitter.expect(tokenOf(isContainedIn(ROUND_BRACKETS))
-                .or(isContainedIn(INFIX_OPERATORS)).withErrorMessage("Operator expected!"));
-
-        return transmitter.expect(tokenOf(isContainedIn(ROUND_BRACKETS)).or(isContainedIn(STARTING_OPERATORS))
-                .or(IS_LITERAL).withErrorMessage("Identifier or unary operator expected!"));
     }
 
     //Either left can be null, or both left and operation can be null
@@ -94,35 +85,51 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
         else this.right = component;
     }
 
+    protected Optional<AbstractCommand> handleSpecialCommands() {
+        return Optional.empty();
+    }
+
     @Override
     public @NotNull CompilationExceptionsCollection process() {
         try {
-            @NotNull Token mainToken = transmitter.expect(START_OF_EXPRESSION);
+            @NotNull Token mainCurrentToken = transmitter.expect(START_OF_EXPRESSION);
             @NotNull ExpectNext expectNext;
-            @NotNull String content = mainToken.getContent();
             @NotNull var precedenceProcessor=new PrecedenceProcessor(transmitter);
-            TokenLocation location = mainToken.getLocation();
-            expectNext = getFirstExpectNext(content);
-
+            @NotNull Optional<Token> maybeTempToken;
+            expectNext = getFirstExpectNext(mainCurrentToken.getContent());
             while (!transmitter.tokensExhausted()) {
-                //TODO: more general way of handling special tokens at beginning
+                // stop parsing expression if correctly finalized
+                if ((expectNext == ExpectNext.OPERATOR)) {
+                    maybeTempToken = transmitter.expectMaybe(tokenOf(isContainedIn(TERMINATORS)).dontIgnoreNewLine());
+                    if (maybeTempToken.isPresent())
+                        if (shouldBreakOnToken(maybeTempToken.get(),precedenceProcessor))
+                            break;
+                }
 
-                // finalize expression if correctly finalized
-                if ((expectNext == ExpectNext.OPERATOR))
-                    if (checkExpressionFinalized())
+                // handle end and assign tokens
+                maybeTempToken = transmitter.expectMaybe(tokenOf(END_BLOCK_ID).or(ASSIGN_ID).removeWhen(WhenRemoveToken.Never));
+                if (maybeTempToken.isPresent())
+                    if (shouldBreakOnToken(maybeTempToken.get(),precedenceProcessor))
                         break;
 
-                // handle end token
-                final Optional<Token> tempToken = transmitter.expectMaybe(tokenOf(END_BLOCK_ID).removeWhen(WhenRemoveToken.Never));
-                if (tempToken.isPresent())
-                    if (handleEndTokenReceived(tempToken.get().getLocation()))
-                        break;
+                //Method call or inner expression
+                if (transmitter.expectMaybe(tokenOf(ROUND_BRACKET_START_ID)).isPresent()) {
+                    if(expectNext == ExpectNext.OPERATOR)
+                        todo("Method call");
+                    else{
+                        addInnerExpression(precedenceProcessor);
+                        expectNext = ExpectNext.OPERATOR;
+                        continue;
+                    }
+                }
 
-                //handle assignment token
-                final Optional<Token> tempToken2 = transmitter.expectMaybe(tokenOf(ASSIGN_ID).removeWhen(WhenRemoveToken.Never));
-                if (tempToken2.isPresent())
-                    if (handleAssignTokenReceived(tempToken2.get().getLocation(),precedenceProcessor))
+                //handle closing brackets token
+                maybeTempToken = transmitter.expectMaybe(tokenOf(ROUND_BRACKET_END_ID));
+                if (maybeTempToken.isPresent()) {
+                    mainCurrentToken = maybeTempToken.get();
+                    if (shouldBreakOnToken(mainCurrentToken,precedenceProcessor))
                         break;
+                }
 
                 //Special commands
                 if(expectNext==ExpectNext.TOKEN) {
@@ -138,37 +145,37 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                     }
                 }
 
+                //handle unary operators
+                if (expectNext == ExpectNext.TOKEN) {
+                    maybeTempToken = transmitter.expectMaybe(tokenOf(isContainedIn(STARTING_OPERATORS)));
+                    if(maybeTempToken.isPresent())
+                    {
+                        mainCurrentToken = maybeTempToken.get();
+                        if (INFIX_OPERATORS.contains(mainCurrentToken.getContent()))
+                            mainCurrentToken = new Token(UNARY_ID + mainCurrentToken.getContent(), mainCurrentToken.getLocation());
+                        precedenceProcessor.add(new TokenCommand(transmitter, mainCurrentToken));
+                        continue;
+                    }
+                }
+
                 // expect the next correct token
-                mainToken = getNextToken(expectNext);
-                content = mainToken.getContent();
-                location = mainToken.getLocation();
+                if (expectNext == ExpectNext.OPERATOR)
+                    mainCurrentToken = transmitter.expect(tokenOf(isContainedIn(INFIX_OPERATORS))
+                            .withErrorMessage("Operator expected!"));
+                else
+                     mainCurrentToken = transmitter.expect(tokenOf(isContainedIn(STARTING_OPERATORS)).or(IS_LITERAL)
+                             .withErrorMessage("Identifier or unary operator expected!"));
 
-                //handle closing brackets token
-                if (content.equals(ROUND_BRACKET_END_ID))
-                    if (handleBracketsCloseTokenFound(content, location))
-                        break;
-
-                //method call
-                if (expectNext == ExpectNext.OPERATOR && content.equals(ROUND_BRACKET_START_ID)) {
-                    todo("Method call");
-                }
-
-                // switch expecting operator or token next
-                if (expectNext == ExpectNext.TOKEN && STARTING_OPERATORS.contains(content)) {
-                    if (INFIX_OPERATORS.contains(content))
-                        mainToken=new Token(UNARY_ID+content,location);
-                }
-                else expectNext = expectNext == ExpectNext.OPERATOR ? ExpectNext.TOKEN : ExpectNext.OPERATOR;
-
-                // add component and inner expression
-                if (content.equals(ROUND_BRACKET_START_ID))
-                    addInnerExpression(precedenceProcessor);
-                else precedenceProcessor.add(new TokenCommand(transmitter, mainToken));
+                //Add token and change next expected token
+                precedenceProcessor.add(new TokenCommand(transmitter, mainCurrentToken));
+                expectNext = (expectNext == ExpectNext.OPERATOR) ? ExpectNext.TOKEN : ExpectNext.OPERATOR;
             }
 
-            checkBracketsCloseProperlyAtEnd(content, location);
-            if (expectNext == ExpectNext.TOKEN && exceptions.size() == 0)
-                throw new UnexpectedEndException("Expression unfinished!", location);
+            //Final checks
+            if (expectNext == ExpectNext.TOKEN)
+                throw new UnexpectedEndException("Expression unfinished!", mainCurrentToken.getLocation());
+            if (this instanceof InnerExpressionCommand && !mainCurrentToken.getContent().equals(ROUND_BRACKET_END_ID))
+                throw new UnexpectedEndException("Closing brackets expected", mainCurrentToken.getLocation());
 
             //Set order of operations and flatten
             flattenThis(precedenceProcessor.getResult());
@@ -178,27 +185,10 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
         return exceptions;
     }
 
-    protected Optional<AbstractCommand> handleSpecialCommands() {
-        return Optional.empty();
-    }
-
-    protected boolean handleAssignTokenReceived(TokenLocation location, @NotNull PrecedenceProcessor precedenceProcessor) throws AbstractCompilationException {
-        throw new UnexpectedTokenException("Assignment not allowed here!", location);
-    }
-
-    protected boolean handleEndTokenReceived(TokenLocation location) throws UnexpectedTokenException {
-        throw new UnexpectedTokenException("End token not allowed here!", location);
-    }
-
-    protected void checkBracketsCloseProperlyAtEnd(@NotNull String content, TokenLocation location) throws UnexpectedEndException {
-        //by default, there is no check
-    }
-
-    protected boolean handleBracketsCloseTokenFound(@NotNull String content, TokenLocation location) throws UnexpectedTokenException {
-        throw new UnexpectedTokenException("Brackets don't close properly", location);
-    }
-
-    protected boolean checkExpressionFinalized() {
+    protected boolean shouldBreakOnToken(@NotNull Token token, @NotNull PrecedenceProcessor precedenceProcessor) throws AbstractCompilationException
+    {
+        if(token.getContent().equals(ROUND_BRACKET_END_ID))
+            throw new UnexpectedTokenException("Brackets don't close properly", token.getLocation());
         return false;
     }
 

@@ -1,10 +1,12 @@
 package in.costea.wiles.commands.expressions;
 
-import in.costea.wiles.data.TokenLocation;
-import in.costea.wiles.exceptions.UnexpectedEndException;
+import in.costea.wiles.data.Token;
+import in.costea.wiles.exceptions.UnexpectedTokenException;
+import in.costea.wiles.services.PrecedenceProcessor;
 import in.costea.wiles.services.TokenTransmitter;
 import org.jetbrains.annotations.NotNull;
 
+import static in.costea.wiles.statics.Constants.END_BLOCK_ID;
 import static in.costea.wiles.statics.Constants.ROUND_BRACKET_END_ID;
 
 public class InnerExpressionCommand extends AbstractExpressionCommand {
@@ -13,14 +15,10 @@ public class InnerExpressionCommand extends AbstractExpressionCommand {
     }
 
     @Override
-    protected boolean handleBracketsCloseTokenFound(@NotNull String content, TokenLocation location) {
-        return true;
+    protected boolean shouldBreakOnToken(@NotNull Token token, @NotNull PrecedenceProcessor precedenceProcessor) throws UnexpectedTokenException {
+        if(token.getContent().equals(END_BLOCK_ID))
+            throw new UnexpectedTokenException("End token not allowed here!",token.getLocation());
+        return token.getContent().equals(ROUND_BRACKET_END_ID);
     }
 
-    @Override
-    protected void checkBracketsCloseProperlyAtEnd(@NotNull String content, TokenLocation location) throws UnexpectedEndException {
-
-        if (!content.equals(ROUND_BRACKET_END_ID))
-            throw new UnexpectedEndException("Closing brackets expected", location);
-    }
 }
