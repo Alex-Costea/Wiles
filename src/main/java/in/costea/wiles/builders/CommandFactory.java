@@ -8,8 +8,6 @@ import in.costea.wiles.commands.expressions.RightSideExpressionCommand;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.enums.WhenRemoveToken;
 import in.costea.wiles.exceptions.AbstractCompilationException;
-import in.costea.wiles.exceptions.TokenExpectedException;
-import in.costea.wiles.exceptions.UnexpectedEndException;
 import in.costea.wiles.exceptions.UnexpectedTokenException;
 import in.costea.wiles.services.TokenTransmitter;
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +35,7 @@ public class CommandFactory {
         return this;
     }
 
-    public @NotNull AbstractCommand create(@NotNull String errorMessage) throws TokenExpectedException, UnexpectedEndException, UnexpectedTokenException {
+    public @NotNull AbstractCommand create(@NotNull String errorMessage) throws AbstractCompilationException {
         if(commands.contains(AssignableExpressionCommand.class))
             if (transmitter.expectMaybe(START_OF_EXPRESSION).isPresent())
                 return new AssignableExpressionCommand(transmitter);
@@ -55,13 +53,14 @@ public class CommandFactory {
                 return new MethodCommand(transmitter);
 
         //Expression not found
-        ExpectParamsBuilder paramsBuilder = tokenOf(ANYTHING).removeWhen(WhenRemoveToken.Never).withErrorMessage(errorMessage);
+        ExpectParamsBuilder paramsBuilder = tokenOf(ANYTHING).removeWhen(WhenRemoveToken.Never)
+                .withErrorMessage(errorMessage);
         Token newToken = transmitter.expect(paramsBuilder);
         String content = TOKENS_INVERSE.getOrDefault(newToken.getContent(),newToken.getContent());
         throw new UnexpectedTokenException(content, newToken.getLocation());
     }
 
-    public @NotNull AbstractCommand create() throws TokenExpectedException, UnexpectedTokenException, UnexpectedEndException {
+    public @NotNull AbstractCommand create() throws AbstractCompilationException {
         return create(INTERNAL_ERROR);
     }
 

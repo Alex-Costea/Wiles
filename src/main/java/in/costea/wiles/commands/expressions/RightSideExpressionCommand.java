@@ -2,7 +2,6 @@ package in.costea.wiles.commands.expressions;
 
 import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.AbstractCompilationException;
-import in.costea.wiles.services.PrecedenceProcessor;
 import in.costea.wiles.services.TokenTransmitter;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,12 +15,12 @@ public class RightSideExpressionCommand extends AbstractExpressionCommand {
     }
 
     @Override
-    protected boolean shouldBreakOnToken(@NotNull Token token, @NotNull PrecedenceProcessor precedenceProcessor) throws AbstractCompilationException {
+    protected boolean handleToken(@NotNull Token token) throws AbstractCompilationException {
         if(isContainedIn(TERMINATORS).test(token.getContent()))
             return true;
         if(token.getContent().equals(END_BLOCK_ID))
             return true;
-        return super.shouldBreakOnToken(token,precedenceProcessor);
+        return super.handleToken(token);
     }
 
 }

@@ -16,7 +16,8 @@ class PrecedenceProcessor(private val transmitter: TokenTransmitter) {
     private fun isOperator(content : String) = (INFIX_OPERATORS.contains(content) || PREFIX_OPERATORS.contains(content))
 
     private fun checkPrecedence(currentPrecedence: Byte,lastPrecedence : Byte) =
-        currentPrecedence < lastPrecedence || (currentPrecedence==lastPrecedence && !RIGHT_TO_LEFT.contains(currentPrecedence))
+        currentPrecedence < lastPrecedence
+                || (currentPrecedence==lastPrecedence && !RIGHT_TO_LEFT.contains(currentPrecedence))
 
     private fun processStack(currentPrecedence : Byte)
     {

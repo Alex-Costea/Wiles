@@ -6,7 +6,7 @@ import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.enums.WhenRemoveToken
 import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.services.TokenTransmitter
-import `in`.costea.wiles.statics.Constants
+import `in`.costea.wiles.statics.Constants.IS_IDENTIFIER
 import `in`.costea.wiles.statics.Constants.NOTHING_ID
 import `in`.costea.wiles.statics.Constants.RIGHT_ARROW_ID
 import `in`.costea.wiles.statics.Constants.ROUND_BRACKET_END_ID
@@ -42,7 +42,7 @@ class MethodCommand(transmitter: TokenTransmitter) : AbstractCommand(transmitter
             //Parameters list
             transmitter.expect(tokenOf(ROUND_BRACKET_START_ID))
 
-            while (transmitter.expectMaybe(tokenOf(Constants.IS_IDENTIFIER).removeWhen(WhenRemoveToken.Never)).isPresent) {
+            while (transmitter.expectMaybe(tokenOf(IS_IDENTIFIER).removeWhen(WhenRemoveToken.Never)).isPresent) {
                 val parameterCommand = ParameterCommand(transmitter)
                 exceptions.addAll(parameterCommand.process())
                 parameters.add(parameterCommand)

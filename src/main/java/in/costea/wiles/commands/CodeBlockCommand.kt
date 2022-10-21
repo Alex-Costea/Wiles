@@ -55,7 +55,8 @@ class CodeBlockCommand(transmitter: TokenTransmitter, private val outerMost: Boo
             } else {
                 if (!outerMost) transmitter.expect(tokenOf(START_BLOCK_ID))
                 while (!transmitter.tokensExhausted()) {
-                    if (!outerMost && transmitter.expectMaybe(tokenOf(END_BLOCK_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
+                    if (!outerMost && transmitter.expectMaybe(tokenOf(END_BLOCK_ID).removeWhen(WhenRemoveToken.Never))
+                            .isPresent)
                         break
                     readOneStatement()
                 }

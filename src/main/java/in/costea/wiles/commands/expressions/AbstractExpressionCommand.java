@@ -59,13 +59,13 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
         return Optional.empty();
     }
 
-    protected boolean shouldBreakOnToken(@NotNull Token token, @NotNull PrecedenceProcessor precedenceProcessor) throws AbstractCompilationException {
+    protected boolean handleToken(@NotNull Token token) throws AbstractCompilationException {
         if (token.getContent().equals(ROUND_BRACKET_END_ID))
             throw new UnexpectedTokenException("Brackets don't close properly", token.getLocation());
         return false;
     }
 
-    protected void setComponents(PrecedenceProcessor precedenceProcessor)
+    protected void setComponents(@NotNull PrecedenceProcessor precedenceProcessor)
     {
         @NotNull final AbstractCommand result = precedenceProcessor.getResult();
         if (result instanceof final AbstractExpressionCommand command) {
@@ -101,14 +101,15 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                 if ((expectNext == ExpectNext.OPERATOR)) {
                     maybeTempToken = transmitter.expectMaybe(tokenOf(isContainedIn(TERMINATORS)).dontIgnoreNewLine());
                     if (maybeTempToken.isPresent())
-                        if (shouldBreakOnToken(maybeTempToken.get(), precedenceProcessor))
+                        if (handleToken(maybeTempToken.get()))
                             break;
                 }
 
                 //Handle end and assign tokens
-                maybeTempToken = transmitter.expectMaybe(tokenOf(END_BLOCK_ID).or(ASSIGN_ID).removeWhen(WhenRemoveToken.Never));
+                maybeTempToken = transmitter.expectMaybe(tokenOf(END_BLOCK_ID).or(ASSIGN_ID)
+                        .removeWhen(WhenRemoveToken.Never));
                 if (maybeTempToken.isPresent())
-                    if (shouldBreakOnToken(maybeTempToken.get(), precedenceProcessor))
+                    if (handleToken(maybeTempToken.get()))
                         break;
 
                 //Handle method calls and inner expressions
@@ -130,7 +131,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                 maybeTempToken = transmitter.expectMaybe(tokenOf(ROUND_BRACKET_END_ID));
                 if (maybeTempToken.isPresent()) {
                     mainCurrentToken = maybeTempToken.get();
-                    if (shouldBreakOnToken(mainCurrentToken, precedenceProcessor))
+                    if (handleToken(mainCurrentToken))
                         break;
                 }
 
@@ -154,7 +155,8 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                     if (maybeTempToken.isPresent()) {
                         mainCurrentToken = maybeTempToken.get();
                         if (INFIX_OPERATORS.contains(mainCurrentToken.getContent()))
-                            mainCurrentToken = new Token(UNARY_ID + mainCurrentToken.getContent(), mainCurrentToken.getLocation());
+                            mainCurrentToken = new Token(UNARY_ID + mainCurrentToken.getContent(),
+                                    mainCurrentToken.getLocation());
                         precedenceProcessor.add(new TokenCommand(transmitter, mainCurrentToken));
                         continue;
                     }

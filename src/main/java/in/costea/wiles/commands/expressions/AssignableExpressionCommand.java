@@ -19,14 +19,14 @@ public class AssignableExpressionCommand extends AbstractExpressionCommand {
     }
 
     @Override
-    protected void setComponents(PrecedenceProcessor precedenceProcessor) {
+    protected void setComponents(@NotNull PrecedenceProcessor precedenceProcessor) {
         if(isAssignment)
             this.left = precedenceProcessor.getResult();
         else super.setComponents(precedenceProcessor);
     }
 
     @Override
-    protected boolean shouldBreakOnToken(@NotNull Token token, @NotNull PrecedenceProcessor precedenceProcessor) throws AbstractCompilationException {
+    protected boolean handleToken(@NotNull Token token) throws AbstractCompilationException {
         if(isContainedIn(TERMINATORS).test(token.getContent()))
             return true;
         if(token.getContent().equals(END_BLOCK_ID))
@@ -38,6 +38,6 @@ public class AssignableExpressionCommand extends AbstractExpressionCommand {
             isAssignment = true;
             return true;
         }
-        return super.shouldBreakOnToken(token,precedenceProcessor);
+        return super.handleToken(token);
     }
 }
