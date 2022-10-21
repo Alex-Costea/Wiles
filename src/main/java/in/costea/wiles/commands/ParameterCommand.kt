@@ -7,9 +7,11 @@ import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.services.TokenTransmitter
 import `in`.costea.wiles.statics.Constants.UNNAMED_START
 import `in`.costea.wiles.statics.Constants.ASSIGN_ID
+import `in`.costea.wiles.statics.Constants.IDENTIFIER_EXPECTED_ERROR
 import `in`.costea.wiles.statics.Constants.TYPEOF_ID
 import `in`.costea.wiles.statics.Constants.IS_IDENTIFIER
 import `in`.costea.wiles.statics.Constants.IS_LITERAL
+import `in`.costea.wiles.statics.Constants.LITERAL_EXPECTED_ERROR
 
 class ParameterCommand(transmitter: TokenTransmitter) : AbstractCommand(transmitter) {
     private var nameToken: TokenCommand? = null
@@ -39,7 +41,7 @@ class ParameterCommand(transmitter: TokenTransmitter) : AbstractCommand(transmit
         try {
             nameToken = TokenCommand(
                 transmitter,
-                transmitter.expect(tokenOf(IS_IDENTIFIER).withErrorMessage("Identifier expected!"))
+                transmitter.expect(tokenOf(IS_IDENTIFIER).withErrorMessage(IDENTIFIER_EXPECTED_ERROR))
             )
             if (nameToken!!.token.content.startsWith(UNNAMED_START))
                 isAnon = true
@@ -48,7 +50,7 @@ class ParameterCommand(transmitter: TokenTransmitter) : AbstractCommand(transmit
             if (transmitter.expectMaybe(tokenOf(ASSIGN_ID)).isPresent) {
                 defaultValue = TokenCommand(
                     transmitter,
-                    transmitter.expect(tokenOf(IS_LITERAL).withErrorMessage("Default value expected!"))
+                    transmitter.expect(tokenOf(IS_LITERAL).withErrorMessage(LITERAL_EXPECTED_ERROR))
                 )
             }
         } catch (e: AbstractCompilationException) {

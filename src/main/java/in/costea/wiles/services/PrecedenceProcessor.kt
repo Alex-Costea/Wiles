@@ -4,6 +4,7 @@ import `in`.costea.wiles.commands.AbstractCommand
 import `in`.costea.wiles.commands.TokenCommand
 import `in`.costea.wiles.commands.expressions.BinaryExpressionCommand
 import `in`.costea.wiles.statics.Constants.INFIX_OPERATORS
+import `in`.costea.wiles.statics.Constants.OPERATOR_EXPECTED_ERROR
 import `in`.costea.wiles.statics.Constants.PRECEDENCE
 import `in`.costea.wiles.statics.Constants.PREFIX_OPERATORS
 import `in`.costea.wiles.statics.Constants.RIGHT_TO_LEFT
@@ -55,7 +56,7 @@ class PrecedenceProcessor(private val transmitter: TokenTransmitter) {
             PRECEDENCE[stack.last.name]!!
         else if(isOperator(stack[stack.lastIndex-1].name))
             PRECEDENCE[stack[stack.lastIndex-1].name]!!
-        else throw IllegalStateException("Operator expected")
+        else throw IllegalStateException(OPERATOR_EXPECTED_ERROR)
         if(!PREFIX_OPERATORS.contains(component?.name) && checkPrecedence(currentPrecedence, lastPrecedence)) {
             processStack(currentPrecedence)
         }

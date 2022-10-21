@@ -17,9 +17,4 @@ object Utils {
     fun isDigit(c: Char): Boolean {
         return Character.isDigit(c)
     }
-
-    @JvmStatic
-    fun todo(s: String) {
-        TODO(s)
-    }
 }

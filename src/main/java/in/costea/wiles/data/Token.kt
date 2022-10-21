@@ -1,10 +1,12 @@
 package `in`.costea.wiles.data
 
+import `in`.costea.wiles.statics.Constants.AT_LINE_INDEX
+
 data class Token(val content: String, val location: TokenLocation?) {
 
     override fun toString(): String {
         location ?: return ""
-        return content + " at line: " + location.line + " index: " + location.lineIndex
+        return AT_LINE_INDEX.format(content,location.line,location.lineIndex)
     }
 
     override fun equals(other: Any?): Boolean {

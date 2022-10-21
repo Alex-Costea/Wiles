@@ -2,6 +2,7 @@ package `in`.costea.wiles.builders
 
 import `in`.costea.wiles.enums.WhenRemoveToken
 import `in`.costea.wiles.statics.Constants.TOKENS_INVERSE
+import `in`.costea.wiles.statics.Constants.TOKEN_EXPECTED_ERROR
 import java.util.function.Predicate
 
 class ExpectParamsBuilder private constructor(var foundTest: Predicate<String>) {
@@ -49,7 +50,7 @@ class ExpectParamsBuilder private constructor(var foundTest: Predicate<String>) 
         @JvmStatic
         fun tokenOf(expectedToken: String): ExpectParamsBuilder {
             return ExpectParamsBuilder { x: String -> x == expectedToken }
-                .withErrorMessage("Token \"" + TOKENS_INVERSE[expectedToken] + "\" expected!")
+                .withErrorMessage(TOKEN_EXPECTED_ERROR.format(TOKENS_INVERSE[expectedToken]))
         }
 
         @JvmStatic

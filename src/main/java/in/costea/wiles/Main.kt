@@ -9,6 +9,7 @@ import `in`.costea.wiles.converters.TokensToSyntaxTreeConverter
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.data.Token
 import `in`.costea.wiles.exceptions.CompilationFailed
+import `in`.costea.wiles.statics.Constants.IO_ERROR
 import java.io.BufferedReader
 import java.io.File
 import java.io.IOException
@@ -50,9 +51,9 @@ object Main {
                 return input
             }
         } catch (ex: NullPointerException) {
-            throw Error("Error loading input file!")
+            throw Error(IO_ERROR)
         } catch (ex: IOException) {
-            throw Error("Error loading input file!")
+            throw Error(IO_ERROR)
         }
     }
 

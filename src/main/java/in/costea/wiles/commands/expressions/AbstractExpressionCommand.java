@@ -22,12 +22,11 @@ import java.util.Optional;
 import static in.costea.wiles.builders.ExpectParamsBuilder.isContainedIn;
 import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
 import static in.costea.wiles.statics.Constants.*;
-import static in.costea.wiles.statics.Utils.todo;
 
 public abstract class AbstractExpressionCommand extends AbstractCommand {
     public static final ExpectParamsBuilder START_OF_EXPRESSION =
             tokenOf(isContainedIn(STARTING_OPERATORS)).or(IS_LITERAL).or(ROUND_BRACKET_START_ID)
-                    .withErrorMessage("Expected expression!").removeWhen(WhenRemoveToken.Never);
+                    .withErrorMessage(EXPRESSION_EXPECTED_ERROR).removeWhen(WhenRemoveToken.Never);
     @NotNull
     protected final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
     protected AbstractCommand left = null;
@@ -61,7 +60,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
 
     protected boolean handleToken(@NotNull Token token) throws AbstractCompilationException {
         if (token.getContent().equals(ROUND_BRACKET_END_ID))
-            throw new UnexpectedTokenException("Brackets don't close properly", token.getLocation());
+            throw new UnexpectedTokenException(NON_MATCHING_BRACKETS_ERROR, token.getLocation());
         return false;
     }
 
@@ -115,7 +114,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                 //Handle method calls and inner expressions
                 if (transmitter.expectMaybe(tokenOf(ROUND_BRACKET_START_ID)).isPresent()) {
                     if (expectNext == ExpectNext.OPERATOR) //Method call
-                        todo("Method call");
+                        throw new RuntimeException(NOT_YET_IMPLEMENTED_ERROR);
                     else { //Inner expressions
                         var newExpression = new InnerExpressionCommand(this.transmitter);
                         @NotNull final CompilationExceptionsCollection newExceptions = newExpression.process();
@@ -165,10 +164,10 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                 //Expect the next token
                 if (expectNext == ExpectNext.OPERATOR)
                     mainCurrentToken = transmitter.expect(tokenOf(isContainedIn(INFIX_OPERATORS))
-                            .withErrorMessage("Operator expected!"));
+                            .withErrorMessage(OPERATOR_EXPECTED_ERROR));
                 else
                     mainCurrentToken = transmitter.expect(tokenOf(isContainedIn(STARTING_OPERATORS)).or(IS_LITERAL)
-                            .withErrorMessage("Identifier or unary operator expected!"));
+                            .withErrorMessage(IDENTIFIER_OR_UNARY_OPERATOR_EXPECTED_ERROR));
 
                 //Add token and change next expected token
                 precedenceProcessor.add(new TokenCommand(transmitter, mainCurrentToken));
@@ -177,9 +176,9 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
 
             //Final processing
             if (expectNext == ExpectNext.TOKEN)
-                throw new UnexpectedEndException("Expression unfinished!", mainCurrentToken.getLocation());
+                throw new UnexpectedEndException(EXPRESSION_UNFINISHED_ERROR, mainCurrentToken.getLocation());
             if (this instanceof InnerExpressionCommand && !mainCurrentToken.getContent().equals(ROUND_BRACKET_END_ID))
-                throw new UnexpectedEndException("Closing brackets expected", mainCurrentToken.getLocation());
+                throw new UnexpectedEndException(NON_MATCHING_BRACKETS_ERROR, mainCurrentToken.getLocation());
             setComponents(precedenceProcessor);
         } catch (AbstractCompilationException ex) {
             exceptions.add(ex);

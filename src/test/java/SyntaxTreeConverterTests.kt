@@ -7,12 +7,14 @@ import `in`.costea.wiles.exceptions.TokenExpectedException
 import `in`.costea.wiles.exceptions.UnexpectedEndException
 import `in`.costea.wiles.exceptions.UnexpectedTokenException
 import `in`.costea.wiles.statics.Constants.ASSIGN_ID
-import `in`.costea.wiles.statics.Constants.TYPEOF_ID
-import `in`.costea.wiles.statics.Constants.SEPARATOR_ID
 import `in`.costea.wiles.statics.Constants.DECLARE_ID
 import `in`.costea.wiles.statics.Constants.DO_ID
 import `in`.costea.wiles.statics.Constants.END_BLOCK_ID
+import `in`.costea.wiles.statics.Constants.END_TOKEN_NOT_ALLOWED_ERROR
 import `in`.costea.wiles.statics.Constants.EQUALS_ID
+import `in`.costea.wiles.statics.Constants.EXPRESSION_EXPECTED_ERROR
+import `in`.costea.wiles.statics.Constants.EXPRESSION_UNFINISHED_ERROR
+import `in`.costea.wiles.statics.Constants.IDENTIFIER_OR_UNARY_OPERATOR_EXPECTED_ERROR
 import `in`.costea.wiles.statics.Constants.LARGER_ID
 import `in`.costea.wiles.statics.Constants.METHOD_ID
 import `in`.costea.wiles.statics.Constants.MINUS_ID
@@ -25,8 +27,11 @@ import `in`.costea.wiles.statics.Constants.POWER_ID
 import `in`.costea.wiles.statics.Constants.RIGHT_ARROW_ID
 import `in`.costea.wiles.statics.Constants.ROUND_BRACKET_END_ID
 import `in`.costea.wiles.statics.Constants.ROUND_BRACKET_START_ID
+import `in`.costea.wiles.statics.Constants.SEPARATOR_ID
 import `in`.costea.wiles.statics.Constants.START_BLOCK_ID
 import `in`.costea.wiles.statics.Constants.TIMES_ID
+import `in`.costea.wiles.statics.Constants.TOKEN_EXPECTED_ERROR
+import `in`.costea.wiles.statics.Constants.TYPEOF_ID
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
@@ -81,20 +86,20 @@ class SyntaxTreeConverterTests {
 
     @Test
     fun expressionsTestException() {
-        assertResults(createExceptions(UnexpectedEndException("Expression unfinished!", null)),
+        assertResults(createExceptions(UnexpectedEndException(EXPRESSION_UNFINISHED_ERROR, null)),
                 null,
                 "!a", PLUS_ID, "!b", PLUS_ID)
-        assertResults(createExceptions(TokenExpectedException("Identifier or unary operator expected!", null)),
+        assertResults(createExceptions(TokenExpectedException(IDENTIFIER_OR_UNARY_OPERATOR_EXPECTED_ERROR, null)),
                 null,
                 "!b", PLUS_ID, TIMES_ID, "#5")
         assertResults(createExceptions(UnexpectedTokenException("*", null)),
                 null,
                 TIMES_ID, "!a")
-        assertResults(createExceptions(TokenExpectedException("Expected expression!", null)),
+        assertResults(createExceptions(TokenExpectedException(EXPRESSION_EXPECTED_ERROR, null)),
                 null,
                 "!a", PLUS_ID, ROUND_BRACKET_START_ID, "BREAK", ROUND_BRACKET_END_ID)
 
-        assertResults(createExceptions(UnexpectedTokenException("End token not allowed here!", null)),
+        assertResults(createExceptions(UnexpectedTokenException(END_TOKEN_NOT_ALLOWED_ERROR, null)),
             null,
             "!a", PLUS_ID, ROUND_BRACKET_START_ID,"!b",PLUS_ID, END_BLOCK_ID, ROUND_BRACKET_END_ID)
     }
@@ -117,10 +122,10 @@ class SyntaxTreeConverterTests {
     @Test
     fun programExceptionsTest() {
         //TODO: more, updated tests
-        assertResults(createExceptions(UnexpectedEndException("Token \"end\" expected!", null)),
+        assertResults(createExceptions(UnexpectedEndException(TOKEN_EXPECTED_ERROR.format("end"), null)),
                 null,
             DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, START_BLOCK_ID)
-        assertResults(createExceptions(UnexpectedEndException("Token \")\" expected!", null)),
+        assertResults(createExceptions(UnexpectedEndException(TOKEN_EXPECTED_ERROR.format(")"), null)),
                 null,
             DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, ROUND_BRACKET_START_ID)
     }

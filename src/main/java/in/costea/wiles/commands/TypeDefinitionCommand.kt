@@ -7,6 +7,7 @@ import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.services.TokenTransmitter
 import `in`.costea.wiles.statics.Constants.TYPES
+import `in`.costea.wiles.statics.Constants.TYPE_EXPECTED_ERROR
 
 class TypeDefinitionCommand(transmitter: TokenTransmitter) : AbstractCommand(transmitter) {
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
@@ -19,7 +20,7 @@ class TypeDefinitionCommand(transmitter: TokenTransmitter) : AbstractCommand(tra
 
     override fun process(): CompilationExceptionsCollection {
         try {
-            val (content) = transmitter.expect(tokenOf(isContainedIn(TYPES.keys)).withErrorMessage("Type expected!"))
+            val (content) = transmitter.expect(tokenOf(isContainedIn(TYPES.keys)).withErrorMessage(TYPE_EXPECTED_ERROR))
             name = TYPES[content]!!
             //TODO: all the other type stuff
         } catch (e: AbstractCompilationException) {

@@ -8,8 +8,10 @@ import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.services.TokenTransmitter
 import `in`.costea.wiles.statics.Constants.ASSIGN_ID
+import `in`.costea.wiles.statics.Constants.IDENTIFIER_EXPECTED_ERROR
 import `in`.costea.wiles.statics.Constants.IS_IDENTIFIER
 import `in`.costea.wiles.statics.Constants.MUTABLE_ID
+import `in`.costea.wiles.statics.Constants.RIGHT_SIDE_EXPECTED_ERROR
 
 class DeclarationCommand(transmitter: TokenTransmitter) : AbstractCommand(transmitter) {
     private var left: AbstractCommand? = null
@@ -29,14 +31,14 @@ class DeclarationCommand(transmitter: TokenTransmitter) : AbstractCommand(transm
                 name = MUTABLE_ID
 
             this.left = TokenCommand(transmitter,transmitter.expect(tokenOf(IS_IDENTIFIER)
-                .withErrorMessage("Identifier expected!")))
+                .withErrorMessage(IDENTIFIER_EXPECTED_ERROR)))
 
             transmitter.expect(tokenOf(ASSIGN_ID))
 
             val rightExpression = CommandFactory(transmitter)
                 .addType(RightSideExpressionCommand::class.java)
                 .addType(MethodCommand::class.java)
-                .create("Right side of declaration expected!")
+                .create(RIGHT_SIDE_EXPECTED_ERROR)
 
             this.right = rightExpression
             exceptions.addAll(rightExpression.process())

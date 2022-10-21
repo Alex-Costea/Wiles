@@ -4,6 +4,7 @@ import `in`.costea.wiles.commands.AbstractCommand
 import `in`.costea.wiles.commands.TokenCommand
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.services.TokenTransmitter
+import `in`.costea.wiles.statics.Constants.CANNOT_BE_PROCESSED_ERROR
 
 class BinaryExpressionCommand(
     transmitter: TokenTransmitter,
@@ -18,6 +19,6 @@ class BinaryExpressionCommand(
     }
 
     override fun process(): CompilationExceptionsCollection {
-        throw IllegalStateException("Cannot be processed!")
+        throw IllegalStateException(CANNOT_BE_PROCESSED_ERROR)
     }
 }
