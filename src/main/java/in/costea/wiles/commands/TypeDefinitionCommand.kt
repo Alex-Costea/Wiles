@@ -21,6 +21,7 @@ class TypeDefinitionCommand(transmitter: TokenTransmitter) : AbstractCommand(tra
         try {
             val (content) = transmitter.expect(tokenOf(isContainedIn(TYPES.keys)).withErrorMessage("Type expected!"))
             name = TYPES[content]!!
+            //TODO: all the other type stuff
         } catch (e: AbstractCompilationException) {
             exceptions.add(e)
         }
