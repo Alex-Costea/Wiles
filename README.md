@@ -31,7 +31,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Sum types: `either[type1,type2]`, either a value of `type1`, or of `type2`
 - Other generic types: `list[type]`, `range[type]`
 
-### Declaring
+### Commands
 #### Note: {} means optional
 - Method: `method({param1 : type, param2 : type}) {-> return_type}` (return assumed `nothing` if unspecified)
 - Value: `let {var} name {: type} := value` (`var` makes it mutable, type can be inferred)
@@ -41,8 +41,9 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - For-in loop: `for x in collection [block]`
 - For-from loop: `for i from a to b` (syntactic sugar for `for i in range(from := a, to := b)`)
 - While loop: `while condition [block]`
-- Code block: `do nothing` (no operation), `do [operation]` or `begin [op1];[op2]; end`
+- Code block: `do [operation]` or `begin [op1];[op2]; end`
 - Yield: `yield [expression]` (return equivalent)
+- `nothing` (no operation)
 - `stop`, `skip` (`break`/`return;`, `continue` equivalents)
 
 ### Operators
