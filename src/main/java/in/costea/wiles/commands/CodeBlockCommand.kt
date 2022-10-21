@@ -14,7 +14,6 @@ import `in`.costea.wiles.services.TokenTransmitter
 import `in`.costea.wiles.statics.Constants.DO_ID
 import `in`.costea.wiles.statics.Constants.END_BLOCK_ID
 import `in`.costea.wiles.statics.Constants.EXPECT_TERMINATOR
-import `in`.costea.wiles.statics.Constants.NOTHING_ID
 import `in`.costea.wiles.statics.Constants.START_BLOCK_ID
 
 class CodeBlockCommand(transmitter: TokenTransmitter, private val blockType: CodeBlockType) : AbstractCommand(transmitter) {
@@ -48,10 +47,9 @@ class CodeBlockCommand(transmitter: TokenTransmitter, private val blockType: Cod
 
     override fun process(): CompilationExceptionsCollection {
         try {
-            if (blockType != CodeBlockType.OUTERMOST && transmitter.expectMaybe(tokenOf(DO_ID)).isPresent) {
-                if (transmitter.expectMaybe(tokenOf(NOTHING_ID)).isEmpty)
-                    readOneStatement()
-            } else {
+            if (blockType != CodeBlockType.OUTERMOST && transmitter.expectMaybe(tokenOf(DO_ID)).isPresent)
+                readOneStatement()
+            else {
                 if (blockType != CodeBlockType.OUTERMOST) transmitter.expect(tokenOf(START_BLOCK_ID))
                 while (!transmitter.tokensExhausted()) {
                     if (blockType != CodeBlockType.OUTERMOST && transmitter.expectMaybe(tokenOf(END_BLOCK_ID)
