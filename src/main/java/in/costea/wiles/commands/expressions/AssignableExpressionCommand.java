@@ -7,7 +7,6 @@ import in.costea.wiles.services.PrecedenceProcessor;
 import in.costea.wiles.services.TokenTransmitter;
 import org.jetbrains.annotations.NotNull;
 
-import static in.costea.wiles.builders.ExpectParamsBuilder.isContainedIn;
 import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
 import static in.costea.wiles.statics.Constants.*;
 
@@ -27,7 +26,7 @@ public class AssignableExpressionCommand extends AbstractExpressionCommand {
 
     @Override
     protected boolean handleToken(@NotNull Token token) throws AbstractCompilationException {
-        if(isContainedIn(TERMINATORS).test(token.getContent()))
+        if(TERMINATORS.contains(token.getContent()))
             return true;
         if(token.getContent().equals(END_BLOCK_ID))
             return true;

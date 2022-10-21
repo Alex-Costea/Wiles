@@ -2,6 +2,8 @@ package `in`.costea.wiles.statics
 
 import com.google.common.collect.BiMap
 import com.google.common.collect.HashBiMap
+import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.isContainedIn
+import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
 import java.util.*
 import java.util.function.Predicate
 import kotlin.streams.toList
@@ -94,6 +96,10 @@ object Constants {
 
     @JvmField
     val TERMINATORS = setOf(NEWLINE_ID, TERMINATOR_ID)
+
+    @JvmField
+    val EXPECT_TERMINATOR = tokenOf(isContainedIn(TERMINATORS))
+        .dontIgnoreNewLine().withErrorMessage("End of line or semicolon expected!")
 
     @JvmField
     val IS_IDENTIFIER = Predicate { x: String -> x.length > 1 && x.startsWith(IDENTIFIER_START) }

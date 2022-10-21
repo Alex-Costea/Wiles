@@ -3,7 +3,6 @@ package `in`.costea.wiles.commands
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import `in`.costea.wiles.builders.CommandFactory
-import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.isContainedIn
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
 import `in`.costea.wiles.commands.expressions.AssignableExpressionCommand
 import `in`.costea.wiles.data.CompilationExceptionsCollection
@@ -13,9 +12,9 @@ import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.services.TokenTransmitter
 import `in`.costea.wiles.statics.Constants.DO_ID
 import `in`.costea.wiles.statics.Constants.END_BLOCK_ID
+import `in`.costea.wiles.statics.Constants.EXPECT_TERMINATOR
 import `in`.costea.wiles.statics.Constants.NOTHING_ID
 import `in`.costea.wiles.statics.Constants.START_BLOCK_ID
-import `in`.costea.wiles.statics.Constants.TERMINATORS
 
 class CodeBlockCommand(transmitter: TokenTransmitter, private val outerMost: Boolean) : AbstractCommand(transmitter) {
     private val components: MutableList<AbstractCommand> = ArrayList()
@@ -34,7 +33,7 @@ class CodeBlockCommand(transmitter: TokenTransmitter, private val outerMost: Boo
 
     @Throws(AbstractCompilationException::class)
     private fun readOneStatement() {
-        if (transmitter.expectMaybe(tokenOf(isContainedIn(TERMINATORS)).dontIgnoreNewLine()).isPresent) return
+        if (transmitter.expectMaybe(EXPECT_TERMINATOR).isPresent) return
 
         val command: AbstractCommand = CommandFactory(transmitter)
             .of(AssignableExpressionCommand::class.java)
@@ -51,7 +50,6 @@ class CodeBlockCommand(transmitter: TokenTransmitter, private val outerMost: Boo
             if (!outerMost && transmitter.expectMaybe(tokenOf(DO_ID)).isPresent) {
                 if (transmitter.expectMaybe(tokenOf(NOTHING_ID)).isEmpty)
                     readOneStatement()
-                return exceptions
             } else {
                 if (!outerMost) transmitter.expect(tokenOf(START_BLOCK_ID))
                 while (!transmitter.tokensExhausted()) {

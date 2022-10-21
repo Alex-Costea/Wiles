@@ -12,11 +12,6 @@ import java.util.*
 class TokenTransmitter(tokens: List<Token>) {
     private val tokens = LinkedList(tokens)
 
-    private fun removeToken() {
-        check(!tokens.isEmpty()) { "Tokens exhausted!" }
-        tokens.pop()
-    }
-
     @Throws(UnexpectedEndException::class, TokenExpectedException::class)
     fun expect(params: ExpectParamsBuilder): Token {
         val message = params.errorMessage
@@ -28,8 +23,8 @@ class TokenTransmitter(tokens: List<Token>) {
             if (tokens.isEmpty()) throw UnexpectedEndException(message, null)
             if (params.isIgnoringNewLine) {
                 while (tokens.first.content == Constants.NEWLINE_ID) {
-                    if (tokens.isEmpty()) throw UnexpectedEndException(message, tokens.first.location)
-                    removeToken()
+                    val token = tokens.pop()
+                    if (tokens.isEmpty()) throw UnexpectedEndException(message, token.location)
                 }
             }
             val foundTest = params.foundTest
@@ -43,7 +38,7 @@ class TokenTransmitter(tokens: List<Token>) {
             assert(whenRemoveToken != WhenRemoveToken.Default)
             if ((!succeeded && whenRemoveToken == WhenRemoveToken.Always) || (succeeded && whenRemoveToken != WhenRemoveToken.Never))
                 if (!tokens.isEmpty())
-                    removeToken()
+                    tokens.pop()
         }
     }
 

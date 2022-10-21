@@ -99,7 +99,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
             while (!transmitter.tokensExhausted()) {
                 //Stop parsing expression if correctly finalized
                 if ((expectNext == ExpectNext.OPERATOR)) {
-                    maybeTempToken = transmitter.expectMaybe(tokenOf(isContainedIn(TERMINATORS)).dontIgnoreNewLine());
+                    maybeTempToken = transmitter.expectMaybe(EXPECT_TERMINATOR);
                     if (maybeTempToken.isPresent())
                         if (handleToken(maybeTempToken.get()))
                             break;
