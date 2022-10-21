@@ -3,9 +3,7 @@ package in.costea.wiles.builders;
 import in.costea.wiles.commands.AbstractCommand;
 import in.costea.wiles.commands.DeclarationCommand;
 import in.costea.wiles.commands.MethodCommand;
-import in.costea.wiles.commands.ParameterCommand;
 import in.costea.wiles.commands.expressions.AssignableExpressionCommand;
-import in.costea.wiles.commands.expressions.LeftSideExpressionCommand;
 import in.costea.wiles.commands.expressions.RightSideExpressionCommand;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.enums.WhenRemoveToken;
@@ -44,10 +42,6 @@ public class CommandFactory {
             if (transmitter.expectMaybe(START_OF_EXPRESSION).isPresent())
                 return new AssignableExpressionCommand(transmitter);
 
-        if(commands.contains(LeftSideExpressionCommand.class))
-            if (transmitter.expectMaybe(START_OF_EXPRESSION).isPresent())
-                return new LeftSideExpressionCommand(transmitter);
-
         if(commands.contains(RightSideExpressionCommand.class))
             if (transmitter.expectMaybe(START_OF_EXPRESSION).isPresent())
                 return new RightSideExpressionCommand(transmitter);
@@ -59,10 +53,6 @@ public class CommandFactory {
         if(commands.contains(MethodCommand.class))
             if(transmitter.expectMaybe(tokenOf(METHOD_ID)).isPresent())
                 return new MethodCommand(transmitter);
-
-        if(commands.contains(ParameterCommand.class))
-            if(transmitter.expectMaybe(tokenOf(IS_IDENTIFIER).removeWhen(WhenRemoveToken.Never)).isPresent())
-                return new ParameterCommand(transmitter);
 
         //Expression not found
         Token newToken = transmitter.expect(tokenOf(ANYTHING).removeWhen(WhenRemoveToken.Never).withErrorMessage("Code ended unexpectedly!"));

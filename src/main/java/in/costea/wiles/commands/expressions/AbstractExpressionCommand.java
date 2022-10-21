@@ -43,6 +43,8 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
         return SyntaxType.EXPRESSION;
     }
 
+
+    //Either left can be null, or both left and operation can be null
     @Override
     public final @NotNull List<AbstractCommand> getComponents() {
         var components = new ArrayList<AbstractCommand>();
@@ -75,22 +77,21 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                 .or(IS_LITERAL).withErrorMessage("Identifier or unary operator expected!"));
     }
 
-    private void flatten(AbstractCommand component) {
-        if(this instanceof AssignableExpressionCommand command && command.isAssignment) {
+    private void flattenToExpression(AbstractExpressionCommand command)
+    {
+        this.left = command.left;
+        this.operation = command.operation;
+        this.right = command.right;
+        assert operation != null || left == null;
+        assert right != null;
+    }
+
+    private void flattenThis(AbstractCommand component) {
+        if(this instanceof AssignableExpressionCommand command && command.isAssignment)
             this.left = component;
-        }
-        else if (component instanceof final BinaryExpressionCommand command) {
-            this.left = command.left;
-            this.operation = command.operation;
-            this.right = command.right;
-            assert right != null;
-        }
-        else if (component instanceof final InnerExpressionCommand command) {
-            this.left=command.left;
-            this.operation=command.operation;
-            this.right=command.right;
-        }
-        else this.right=component;
+        else if (component instanceof final AbstractExpressionCommand command)
+            flattenToExpression(command);
+        else this.right = component;
     }
 
     @Override
@@ -168,7 +169,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                 throw new UnexpectedEndException("Expression unfinished!", location);
 
             //Set order of operations and flatten
-            flatten(precedenceProcessor.getResult());
+            flattenThis(precedenceProcessor.getResult());
         } catch (AbstractCompilationException ex) {
             exceptions.add(ex);
         }
