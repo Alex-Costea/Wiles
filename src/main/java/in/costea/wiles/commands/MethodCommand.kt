@@ -40,9 +40,9 @@ class MethodCommand(transmitter: TokenTransmitter) : AbstractCommand(transmitter
 
     override fun process(): CompilationExceptionsCollection {
         try {
-            //Parameters list
             transmitter.expect(tokenOf(ROUND_BRACKET_START_ID))
 
+            //TODO: check if arg parameters are t the end
             while (transmitter.expectMaybe(tokenOf(IS_IDENTIFIER).removeWhen(WhenRemoveToken.Never)).isPresent) {
                 val parameterCommand = ParameterCommand(transmitter)
                 exceptions.addAll(parameterCommand.process())
