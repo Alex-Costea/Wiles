@@ -6,6 +6,7 @@ import `in`.costea.wiles.enums.WhenRemoveToken
 import `in`.costea.wiles.exceptions.TokenExpectedException
 import `in`.costea.wiles.exceptions.UnexpectedEndException
 import `in`.costea.wiles.statics.Constants
+import `in`.costea.wiles.statics.Constants.INTERNAL_ERROR
 import java.util.*
 
 class TokenTransmitter(tokens: List<Token>) {
@@ -51,7 +52,7 @@ class TokenTransmitter(tokens: List<Token>) {
             if (expectParamsBuilder.whenRemove == WhenRemoveToken.Default)
                 expectParamsBuilder.removeWhen(WhenRemoveToken.WhenFound)
             if (expectParamsBuilder.errorMessage == null)
-                expectParamsBuilder.withErrorMessage("N/A")
+                expectParamsBuilder.withErrorMessage(INTERNAL_ERROR)
             Optional.of(expect(expectParamsBuilder))
         } catch (ex: TokenExpectedException) {
             Optional.empty()

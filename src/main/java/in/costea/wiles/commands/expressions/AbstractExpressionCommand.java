@@ -43,14 +43,13 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
         return SyntaxType.EXPRESSION;
     }
 
-
-    //Either left can be null, or both left and operation can be null
     @Override
     public final @NotNull List<AbstractCommand> getComponents() {
         var components = new ArrayList<AbstractCommand>();
         if(left!=null) components.add(left);
         if(operation!=null) components.add(operation);
-        assert(right!=null);
+        else assert left==null;
+        assert right!=null;
         components.add(right);
         return components;
     }
@@ -63,7 +62,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
         precedenceProcessor.add(newExpression);
     }
 
-    private @NotNull ExpectNext firstExpectNext(@NotNull String content) {
+    private @NotNull ExpectNext getFirstExpectNext(@NotNull String content) {
         if (IS_LITERAL.test(content) || ROUND_BRACKETS.contains(content) || STARTING_OPERATORS.contains(content))
             return ExpectNext.TOKEN;
         return ExpectNext.OPERATOR;
@@ -77,6 +76,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                 .or(IS_LITERAL).withErrorMessage("Identifier or unary operator expected!"));
     }
 
+    //Either left can be null, or both left and operation can be null
     private void flattenToExpression(AbstractExpressionCommand command)
     {
         this.left = command.left;
@@ -99,25 +99,27 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
         try {
             @NotNull Token mainToken = transmitter.expect(START_OF_EXPRESSION);
             @NotNull ExpectNext expectNext;
-            @NotNull var content = mainToken.getContent();
+            @NotNull String content = mainToken.getContent();
             @NotNull var precedenceProcessor=new PrecedenceProcessor(transmitter);
             TokenLocation location = mainToken.getLocation();
-            expectNext = firstExpectNext(content);
+            expectNext = getFirstExpectNext(content);
 
             while (!transmitter.tokensExhausted()) {
+                //TODO: more general way of handling special tokens at beginning
+
                 // finalize expression if correctly finalized
                 if ((expectNext == ExpectNext.OPERATOR))
                     if (checkExpressionFinalized())
                         break;
 
                 // handle end token
-                final var tempToken = transmitter.expectMaybe(tokenOf(END_BLOCK_ID).removeWhen(WhenRemoveToken.Never));
+                final Optional<Token> tempToken = transmitter.expectMaybe(tokenOf(END_BLOCK_ID).removeWhen(WhenRemoveToken.Never));
                 if (tempToken.isPresent())
                     if (handleEndTokenReceived(tempToken.get().getLocation()))
                         break;
 
                 //handle assignment token
-                final var tempToken2 = transmitter.expectMaybe(tokenOf(ASSIGN_ID).removeWhen(WhenRemoveToken.Never));
+                final Optional<Token> tempToken2 = transmitter.expectMaybe(tokenOf(ASSIGN_ID).removeWhen(WhenRemoveToken.Never));
                 if (tempToken2.isPresent())
                     if (handleAssignTokenReceived(tempToken2.get().getLocation(),precedenceProcessor))
                         break;
@@ -177,11 +179,10 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
     }
 
     protected Optional<AbstractCommand> handleSpecialCommands() {
-        //Example: return new CommandFactory(transmitter).of(MethodCommand.class).createMaybe();
         return Optional.empty();
     }
 
-    protected boolean handleAssignTokenReceived(TokenLocation location, PrecedenceProcessor precedenceProcessor) throws AbstractCompilationException {
+    protected boolean handleAssignTokenReceived(TokenLocation location, @NotNull PrecedenceProcessor precedenceProcessor) throws AbstractCompilationException {
         throw new UnexpectedTokenException("Assignment not allowed here!", location);
     }
 

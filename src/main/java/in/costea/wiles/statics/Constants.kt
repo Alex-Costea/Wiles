@@ -52,6 +52,7 @@ object Constants {
     const val NOT_ID = "NOT"
     private const val MAYBE_ID = "MAYBE"
     const val UNNAMED_START = IDENTIFIER_START + "arg"
+    const val INTERNAL_ERROR = "Internal error!"
 
     private val KEYWORDS: BiMap<String, String> = HashBiMap.create()
 

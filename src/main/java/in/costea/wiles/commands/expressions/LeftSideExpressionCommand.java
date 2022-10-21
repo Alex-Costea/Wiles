@@ -18,7 +18,7 @@ public class LeftSideExpressionCommand extends AbstractExpressionCommand {
     }
 
     @Override
-    protected boolean handleAssignTokenReceived(TokenLocation location, PrecedenceProcessor precedenceProcessor) {
+    protected boolean handleAssignTokenReceived(TokenLocation location, @NotNull PrecedenceProcessor precedenceProcessor) {
         checkValid();
         return true;
     }

@@ -31,7 +31,7 @@ public class AssignableExpressionCommand extends AbstractExpressionCommand {
     }
 
     @Override
-    protected boolean handleAssignTokenReceived(TokenLocation location, PrecedenceProcessor precedenceProcessor) throws TokenExpectedException, UnexpectedEndException {
+    protected boolean handleAssignTokenReceived(TokenLocation location, @NotNull PrecedenceProcessor precedenceProcessor) throws TokenExpectedException, UnexpectedEndException {
         operation = new TokenCommand(transmitter,transmitter.expect(tokenOf(ASSIGN_ID)));
         right = new RightSideExpressionCommand(transmitter);
         exceptions.addAll(right.process());

@@ -62,7 +62,7 @@ public class CommandFactory {
     }
 
     public @NotNull AbstractCommand create() throws TokenExpectedException, UnexpectedTokenException, UnexpectedEndException {
-        return create("N/A");
+        return create(INTERNAL_ERROR);
     }
 
     @SuppressWarnings("unused")
@@ -70,7 +70,7 @@ public class CommandFactory {
     {
         try
         {
-            return Optional.of(create("N/A"));
+            return Optional.of(create(INTERNAL_ERROR));
         } catch (AbstractCompilationException e) {
             return Optional.empty();
         }
