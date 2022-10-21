@@ -37,7 +37,7 @@ class DeclarationCommand(transmitter: TokenTransmitter) : AbstractCommand(transm
             val rightExpression = CommandFactory(transmitter)
                 .of(RightSideExpressionCommand::class.java)
                 .of(MethodCommand::class.java)
-                .create()
+                .create("Right side of declaration expected!")
 
             this.right = rightExpression
             exceptions.addAll(rightExpression.process())

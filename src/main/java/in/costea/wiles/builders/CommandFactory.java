@@ -37,7 +37,7 @@ public class CommandFactory {
         return this;
     }
 
-    public @NotNull AbstractCommand create() throws TokenExpectedException, UnexpectedEndException, UnexpectedTokenException {
+    public @NotNull AbstractCommand create(@NotNull String errorMessage) throws TokenExpectedException, UnexpectedEndException, UnexpectedTokenException {
         if(commands.contains(AssignableExpressionCommand.class))
             if (transmitter.expectMaybe(START_OF_EXPRESSION).isPresent())
                 return new AssignableExpressionCommand(transmitter);
@@ -55,9 +55,14 @@ public class CommandFactory {
                 return new MethodCommand(transmitter);
 
         //Expression not found
-        Token newToken = transmitter.expect(tokenOf(ANYTHING).removeWhen(WhenRemoveToken.Never).withErrorMessage("Code ended unexpectedly!"));
-        var content = TOKENS_INVERSE.getOrDefault(newToken.getContent(),newToken.getContent());
+        ExpectParamsBuilder paramsBuilder = tokenOf(ANYTHING).removeWhen(WhenRemoveToken.Never).withErrorMessage(errorMessage);
+        Token newToken = transmitter.expect(paramsBuilder);
+        String content = TOKENS_INVERSE.getOrDefault(newToken.getContent(),newToken.getContent());
         throw new UnexpectedTokenException(content, newToken.getLocation());
+    }
+
+    public @NotNull AbstractCommand create() throws TokenExpectedException, UnexpectedTokenException, UnexpectedEndException {
+        return create("N/A");
     }
 
     @SuppressWarnings("unused")
@@ -65,7 +70,7 @@ public class CommandFactory {
     {
         try
         {
-            return Optional.of(create());
+            return Optional.of(create("N/A"));
         } catch (AbstractCompilationException e) {
             return Optional.empty();
         }
