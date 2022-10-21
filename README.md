@@ -67,7 +67,6 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - `;` can be specified or inferred from newline
 - Language is statically, strongly typed with some type inference
 - Comment using `#`
-- Returning value done with `method_name := result` or with `yield` keyword
 - `\` can be used to continue a line after a newline (including string literals and comments)
 - Types are not reserved keywords and can be used as variable names
 - Method potentially not returning value is a compilation error
@@ -113,10 +112,11 @@ let min := method(args : list[int]) -> int?
 begin
     if args.size = 0 do
         yield nothing
-    min := args.get(0)
+    let var min := args.get(0)
     for x in args.slice(from := 1) do
         if x < min do
             min := x
+    yield min
 end
 
 let result := min(10, 3, 55, 8)

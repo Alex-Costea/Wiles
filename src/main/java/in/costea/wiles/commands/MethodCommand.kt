@@ -2,6 +2,7 @@ package `in`.costea.wiles.commands
 
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
 import `in`.costea.wiles.data.CompilationExceptionsCollection
+import `in`.costea.wiles.enums.CodeBlockType
 import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.enums.WhenRemoveToken
 import `in`.costea.wiles.exceptions.AbstractCompilationException
@@ -22,7 +23,7 @@ class MethodCommand(transmitter: TokenTransmitter) : AbstractCommand(transmitter
 
     init {
         returnType = TypeDefinitionCommand(transmitter)
-        methodBody = CodeBlockCommand(transmitter, false)
+        methodBody = CodeBlockCommand(transmitter, CodeBlockType.METHOD_BODY)
         returnType.name = NOTHING_ID
     }
 

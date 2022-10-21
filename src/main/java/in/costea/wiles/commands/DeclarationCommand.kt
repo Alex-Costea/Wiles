@@ -35,8 +35,8 @@ class DeclarationCommand(transmitter: TokenTransmitter) : AbstractCommand(transm
             transmitter.expect(tokenOf(ASSIGN_ID))
 
             val rightExpression = CommandFactory(transmitter)
-                .of(RightSideExpressionCommand::class.java)
-                .of(MethodCommand::class.java)
+                .addType(RightSideExpressionCommand::class.java)
+                .addType(MethodCommand::class.java)
                 .create("Right side of declaration expected!")
 
             this.right = rightExpression

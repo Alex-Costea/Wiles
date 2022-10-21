@@ -3,6 +3,7 @@ package in.costea.wiles.builders;
 import in.costea.wiles.commands.AbstractCommand;
 import in.costea.wiles.commands.DeclarationCommand;
 import in.costea.wiles.commands.MethodCommand;
+import in.costea.wiles.commands.ReturnCommand;
 import in.costea.wiles.commands.expressions.AssignableExpressionCommand;
 import in.costea.wiles.commands.expressions.RightSideExpressionCommand;
 import in.costea.wiles.data.Token;
@@ -29,7 +30,7 @@ public class CommandFactory {
         this.transmitter=transmitter;
     }
 
-    public @NotNull CommandFactory of(@NotNull Class<? extends AbstractCommand> command)
+    public @NotNull CommandFactory addType(@NotNull Class<? extends AbstractCommand> command)
     {
         commands.add(command);
         return this;
@@ -51,6 +52,10 @@ public class CommandFactory {
         if(commands.contains(MethodCommand.class))
             if(transmitter.expectMaybe(tokenOf(METHOD_ID)).isPresent())
                 return new MethodCommand(transmitter);
+
+        if(commands.contains(ReturnCommand.class))
+            if(transmitter.expectMaybe(tokenOf(RETURN_ID)).isPresent())
+                return new ReturnCommand(transmitter);
 
         //Expression not found
         ExpectParamsBuilder paramsBuilder = tokenOf(ANYTHING).removeWhen(WhenRemoveToken.Never)

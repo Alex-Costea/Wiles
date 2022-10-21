@@ -53,6 +53,8 @@ object Constants {
     const val OR_ID = "OR"
     const val NOT_ID = "NOT"
     private const val MAYBE_ID = "MAYBE"
+    const val RETURN_ID = "RETURN"
+
     const val UNNAMED_START = IDENTIFIER_START + "arg"
     const val INTERNAL_ERROR = "Internal error!"
 
@@ -102,7 +104,7 @@ object Constants {
         .dontIgnoreNewLine().withErrorMessage("End of line or semicolon expected!")
 
     @JvmField
-    val IS_IDENTIFIER = Predicate { x: String -> x.length > 1 && x.startsWith(IDENTIFIER_START) }
+    val IS_IDENTIFIER = Predicate { x: String -> x.length > 1 && x.startsWith(IDENTIFIER_START) || x == NOTHING_ID }
     private val IS_TEXT_LITERAL = Predicate { x: String -> x.length > 1 && x.startsWith(STRING_START) }
     private val IS_NUMBER_LITERAL = Predicate { x: String -> x.length > 1 && x.startsWith(NUM_START) }
 
@@ -147,7 +149,7 @@ object Constants {
         KEYWORDS["not"] = NOT_ID
         KEYWORDS["stop"] = "BREAK"
         KEYWORDS["skip"] = "CONTINUE"
-        KEYWORDS["yield"] = "RETURN"
+        KEYWORDS["yield"] = RETURN_ID
         KEYWORDS["do"] = DO_ID
         KEYWORDS["begin"] = START_BLOCK_ID
         KEYWORDS["end"] = END_BLOCK_ID
