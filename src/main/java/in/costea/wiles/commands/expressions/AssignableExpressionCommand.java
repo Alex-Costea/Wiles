@@ -18,25 +18,26 @@ public class AssignableExpressionCommand extends AbstractExpressionCommand {
         super(transmitter);
     }
 
+    @Override
+    protected void setComponents(PrecedenceProcessor precedenceProcessor) {
+        if(isAssignment)
+            this.left = precedenceProcessor.getResult();
+        else super.setComponents(precedenceProcessor);
+    }
 
     @Override
     protected boolean shouldBreakOnToken(@NotNull Token token, @NotNull PrecedenceProcessor precedenceProcessor) throws AbstractCompilationException {
         if(isContainedIn(TERMINATORS).test(token.getContent()))
             return true;
-        switch(token.getContent())
-        {
-            case END_BLOCK_ID -> {
-                return true;
-            }
-            case ASSIGN_ID -> {
-                operation = new TokenCommand(transmitter,transmitter.expect(tokenOf(ASSIGN_ID)));
-                right = new RightSideExpressionCommand(transmitter);
-                exceptions.addAll(right.process());
-                isAssignment=true;
-                return true;
-            }
+        if(token.getContent().equals(END_BLOCK_ID))
+            return true;
+        if (token.getContent().equals(ASSIGN_ID)) {
+            operation = new TokenCommand(transmitter, transmitter.expect(tokenOf(ASSIGN_ID)));
+            right = new RightSideExpressionCommand(transmitter);
+            exceptions.addAll(right.process());
+            isAssignment = true;
+            return true;
         }
         return super.shouldBreakOnToken(token,precedenceProcessor);
     }
-
 }

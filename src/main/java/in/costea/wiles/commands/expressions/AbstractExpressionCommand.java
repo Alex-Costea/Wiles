@@ -48,7 +48,8 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
         var components = new ArrayList<AbstractCommand>();
         if (left != null) components.add(left);
         if (operation != null) components.add(operation);
-        else assert left == null;
+        else
+            assert left == null;
         assert right != null;
         components.add(right);
         return components;
@@ -64,19 +65,20 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
         return false;
     }
 
-    private void setComponents(PrecedenceProcessor precedenceProcessor)
+    protected void setComponents(PrecedenceProcessor precedenceProcessor)
     {
         @NotNull final AbstractCommand result = precedenceProcessor.getResult();
-        if (this instanceof AssignableExpressionCommand command && command.isAssignment)
-            this.left = result;
-        else if (result instanceof final AbstractExpressionCommand command) {
+        if (result instanceof final AbstractExpressionCommand command) {
             this.left = command.left;
             this.operation = command.operation;
             this.right = command.right;
             //Right cannot be null. If left is null, operation must also be null
             assert operation != null || left == null;
             assert right != null;
-        } else this.right = result;
+            return;
+        }
+        //Is not flattenable
+        this.right = result;
     }
 
     @Override
