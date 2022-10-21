@@ -2,13 +2,13 @@ package `in`.costea.wiles.commands
 
 import `in`.costea.wiles.builders.CommandFactory
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
-import `in`.costea.wiles.commands.expressions.LeftSideExpressionCommand
 import `in`.costea.wiles.commands.expressions.RightSideExpressionCommand
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.services.TokenTransmitter
 import `in`.costea.wiles.statics.Constants.ASSIGN_ID
+import `in`.costea.wiles.statics.Constants.IS_IDENTIFIER
 import `in`.costea.wiles.statics.Constants.MUTABLE_ID
 
 class DeclarationCommand(transmitter: TokenTransmitter) : AbstractCommand(transmitter) {
@@ -28,9 +28,8 @@ class DeclarationCommand(transmitter: TokenTransmitter) : AbstractCommand(transm
             if(transmitter.expectMaybe(tokenOf(MUTABLE_ID)).isPresent)
                 name = MUTABLE_ID
 
-            val leftExpression = LeftSideExpressionCommand(transmitter)
-            this.left = leftExpression
-            exceptions.addAll(leftExpression.process())
+            this.left = TokenCommand(transmitter,transmitter.expect(tokenOf(IS_IDENTIFIER)
+                .withErrorMessage("Identifier expected!")))
 
             transmitter.expect(tokenOf(ASSIGN_ID))
 
