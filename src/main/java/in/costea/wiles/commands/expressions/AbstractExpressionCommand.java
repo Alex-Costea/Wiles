@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static in.costea.wiles.builders.ExpectParamsBuilder.isContainedIn;
 import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
@@ -109,7 +110,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                         break;
 
                 // handle end token
-                @NotNull final var tempToken = transmitter.expectMaybe(tokenOf(END_BLOCK_ID).removeWhen(WhenRemoveToken.Never));
+                final var tempToken = transmitter.expectMaybe(tokenOf(END_BLOCK_ID).removeWhen(WhenRemoveToken.Never));
                 if (tempToken.isPresent())
                     if (handleEndTokenReceived(tempToken.get().getLocation()))
                         break;
@@ -119,6 +120,20 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                 if (tempToken2.isPresent())
                     if (handleAssignTokenReceived(tempToken2.get().getLocation(),precedenceProcessor))
                         break;
+
+                //Special commands
+                if(expectNext==ExpectNext.TOKEN) {
+                    Optional<AbstractCommand> maybeCommand;
+                    if ((maybeCommand = handleSpecialCommands()).isPresent()) {
+                        AbstractCommand command = maybeCommand.get();
+                        CompilationExceptionsCollection exceptions = command.process();
+                        if (!exceptions.isEmpty())
+                            throw exceptions.get(0);
+                        precedenceProcessor.add(maybeCommand.get());
+                        expectNext=ExpectNext.OPERATOR;
+                        continue;
+                    }
+                }
 
                 // expect the next correct token
                 mainToken = getNextToken(expectNext);
@@ -142,7 +157,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                 }
                 else expectNext = expectNext == ExpectNext.OPERATOR ? ExpectNext.TOKEN : ExpectNext.OPERATOR;
 
-                // of inner expression
+                // add component and inner expression
                 if (content.equals(ROUND_BRACKET_START_ID))
                     addInnerExpression(precedenceProcessor);
                 else precedenceProcessor.add(new TokenCommand(transmitter, mainToken));
@@ -160,16 +175,21 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
         return exceptions;
     }
 
+    protected Optional<AbstractCommand> handleSpecialCommands() {
+        //Example: return new CommandFactory(transmitter).of(MethodCommand.class).createMaybe();
+        return Optional.empty();
+    }
+
     protected boolean handleAssignTokenReceived(TokenLocation location, PrecedenceProcessor precedenceProcessor) throws AbstractCompilationException {
         throw new UnexpectedTokenException("Assignment not allowed here!", location);
     }
 
-    protected void checkBracketsCloseProperlyAtEnd(@NotNull String content, TokenLocation location) throws UnexpectedEndException {
-        //by default, there is no check
-    }
-
     protected boolean handleEndTokenReceived(TokenLocation location) throws UnexpectedTokenException {
         throw new UnexpectedTokenException("End token not allowed here!", location);
+    }
+
+    protected void checkBracketsCloseProperlyAtEnd(@NotNull String content, TokenLocation location) throws UnexpectedEndException {
+        //by default, there is no check
     }
 
     protected boolean handleBracketsCloseTokenFound(@NotNull String content, TokenLocation location) throws UnexpectedTokenException {

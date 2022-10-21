@@ -65,7 +65,8 @@ public class CommandFactory {
                 return new ParameterCommand(transmitter);
 
         Token newToken = transmitter.expect(tokenOf(ANYTHING).removeWhen(WhenRemoveToken.Never).withErrorMessage("Code ended unexpectedly!"));
-        throw new UnexpectedTokenException(TOKENS_INVERSE.get(newToken.getContent()), newToken.getLocation());
+        var content = TOKENS_INVERSE.getOrDefault(newToken.getContent(),newToken.getContent());
+        throw new UnexpectedTokenException(content, newToken.getLocation());
     }
 
     public @NotNull Optional<AbstractCommand> createMaybe()
