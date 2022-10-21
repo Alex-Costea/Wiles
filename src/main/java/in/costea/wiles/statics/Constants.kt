@@ -10,6 +10,7 @@ import kotlin.streams.toList
 
 object Constants {
     const val DEBUG = true
+    private const val ROMANIAN_MODE = false
     const val UNKNOWN_TOKEN = "UNKNOWN_TOKEN"
     const val START_BLOCK_ID = "START_BLOCK"
     const val END_BLOCK_ID = "END_BLOCK"
@@ -135,37 +136,37 @@ object Constants {
 
         RIGHT_TO_LEFT = setOf(PRECEDENCE[NOT_ID]!!, PRECEDENCE[UNARY_PLUS_ID]!!, PRECEDENCE[POWER_ID]!!)
 
-        KEYWORDS["nothing"] = NOTHING_ID
-        KEYWORDS["method"] = METHOD_ID
-        KEYWORDS["let"] = DECLARE_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "nothing" else "nimic"] = NOTHING_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "method" else "metodă"] = METHOD_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "let" else "fie"] = DECLARE_ID
         KEYWORDS["var"] = MUTABLE_ID
-        KEYWORDS["if"] = IF_ID
-        KEYWORDS["when"] = WHEN_ID
-        KEYWORDS["otherwise"] = ELSE_ID
-        KEYWORDS["for"] = FOR_ID
-        KEYWORDS["while"] = WHILE_ID
-        KEYWORDS["and"] = AND_ID
-        KEYWORDS["or"] = OR_ID
-        KEYWORDS["not"] = NOT_ID
-        KEYWORDS["stop"] = BREAK_ID
-        KEYWORDS["skip"] = CONTINUE_ID
-        KEYWORDS["yield"] = RETURN_ID
-        KEYWORDS["do"] = DO_ID
-        KEYWORDS["begin"] = START_BLOCK_ID
-        KEYWORDS["end"] = END_BLOCK_ID
-        KEYWORDS["true"] = TRUE_ID
-        KEYWORDS["false"] = FALSE_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "if" else "dacă"] = IF_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "when" else "când"] = WHEN_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "otherwise" else "altfel"] = ELSE_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "for" else "pentru"] = FOR_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "while" else "cât_timp"] = WHILE_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "and" else "și"] = AND_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "or" else "sau"] = OR_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "not" else "nu"] = NOT_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "stop" else "oprește"] = BREAK_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "skip" else "sari_peste"] = CONTINUE_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "yield" else "redă"] = RETURN_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "do" else "fă"] = DO_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "begin" else "început"] = START_BLOCK_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "end" else "sfârșit"] = END_BLOCK_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "true" else "adevărat"] = TRUE_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "false" else "fals"] = FALSE_ID
 
         TYPES["!bit"] = "BOOLEAN"
         TYPES["!byte"] = "INT8"
-        TYPES["!smallint"] = "INT16"
-        TYPES["!int"] = "INT32"
-        TYPES["!bigint"] = "INT64"
+        TYPES[if(!ROMANIAN_MODE) "!smallint" else "!întreg_mic"] = "INT16"
+        TYPES[if(!ROMANIAN_MODE) "!int" else "!întreg"] = "INT32"
+        TYPES[if(!ROMANIAN_MODE) "!bigint" else "!întreg_mare"] = "INT64"
         TYPES["!text"] = "STRING"
-        TYPES["!rational"] = "DOUBLE"
-        TYPES["!list"] = "ARRAY_LIST"
-        TYPES["!either"] = "EITHER"
-        TYPES["!range"] = "RANGE"
+        TYPES[if(!ROMANIAN_MODE) "!rational" else "!rațional"] = "DOUBLE"
+        TYPES[if(!ROMANIAN_MODE) "!list" else "!listă"] = "ARRAY_LIST"
+        TYPES[if(!ROMANIAN_MODE) "!either" else "!ori"] = "EITHER"
+        TYPES[if(!ROMANIAN_MODE) "!range" else "!interval"] = "RANGE"
         TYPES[NOTHING_ID] = NOTHING_ID
 
         SYMBOLS["+"] = PLUS_ID
