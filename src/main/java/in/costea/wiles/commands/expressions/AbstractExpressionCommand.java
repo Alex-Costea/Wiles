@@ -142,7 +142,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                 }
                 else expectNext = expectNext == ExpectNext.OPERATOR ? ExpectNext.TOKEN : ExpectNext.OPERATOR;
 
-                // add inner expression
+                // of inner expression
                 if (content.equals(ROUND_BRACKET_START_ID))
                     addInnerExpression(precedenceProcessor);
                 else precedenceProcessor.add(new TokenCommand(transmitter, mainToken));

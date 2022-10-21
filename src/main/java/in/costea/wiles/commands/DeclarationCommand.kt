@@ -1,16 +1,14 @@
 package `in`.costea.wiles.commands
 
+import `in`.costea.wiles.builders.CommandFactory
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
 import `in`.costea.wiles.commands.expressions.LeftSideExpressionCommand
 import `in`.costea.wiles.commands.expressions.RightSideExpressionCommand
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.enums.SyntaxType
-import `in`.costea.wiles.enums.WhenRemoveToken
 import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.services.TokenTransmitter
 import `in`.costea.wiles.statics.Constants.ASSIGN_ID
-import `in`.costea.wiles.statics.Constants.DECLARE_ID
-import `in`.costea.wiles.statics.Constants.METHOD_ID
 import `in`.costea.wiles.statics.Constants.MUTABLE_ID
 
 class DeclarationCommand(transmitter: TokenTransmitter) : AbstractCommand(transmitter) {
@@ -27,23 +25,20 @@ class DeclarationCommand(transmitter: TokenTransmitter) : AbstractCommand(transm
 
     override fun process(): CompilationExceptionsCollection {
         try {
-            transmitter.expect(tokenOf(DECLARE_ID))
-
             if(transmitter.expectMaybe(tokenOf(MUTABLE_ID)).isPresent)
                 name = MUTABLE_ID
 
-            val leftExpression = LeftSideExpressionCommand(transmitter)
+            val leftExpression = CommandFactory(transmitter).of(LeftSideExpressionCommand::class.java).create()
             this.left = leftExpression
             exceptions.addAll(leftExpression.process())
 
             transmitter.expect(tokenOf(ASSIGN_ID))
 
             //Method declaration
-            val rightExpression: AbstractCommand =
-                if (transmitter.expectMaybe(tokenOf(METHOD_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
-                    MethodCommand(transmitter)
-                //Expression
-                else RightSideExpressionCommand(transmitter)
+            val rightExpression = CommandFactory(transmitter)
+                .of(RightSideExpressionCommand::class.java)
+                .of(MethodCommand::class.java)
+                .create()
 
             this.right = rightExpression
             exceptions.addAll(rightExpression.process())

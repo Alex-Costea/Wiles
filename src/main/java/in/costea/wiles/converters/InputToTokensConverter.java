@@ -108,7 +108,7 @@ public class InputToTokensConverter {
             return STRING_START + sb;
 
         //String not properly finished at this point
-        if (index < arrayChars.length && arrayChars[index] == NEWLINE) //add the newline token regardless
+        if (index < arrayChars.length && arrayChars[index] == NEWLINE) //of the newline token regardless
             index--;
         throw new StringUnfinishedException(sb.toString(), line, getIndexOnCurrentLine());
     }
