@@ -79,4 +79,5 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 *.class
 target/classes/input.wiles
-syntaxtree.json
+input.wiles
+syntaxTree.json

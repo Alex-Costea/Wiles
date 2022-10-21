@@ -9,7 +9,6 @@ import `in`.costea.wiles.converters.TokensToSyntaxTreeConverter
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.data.Token
 import `in`.costea.wiles.exceptions.CompilationFailed
-import org.apache.commons.lang3.StringEscapeUtils
 import java.io.BufferedReader
 import java.io.File
 import java.io.IOException
@@ -26,7 +25,7 @@ object Main {
         val input = loadFile()
         val tokens = sourceToTokens(input)
         print("Tokens: ")
-        println(tokens.stream().map(Token::content).map(StringEscapeUtils::escapeJava).toList())
+        println(tokens.stream().map(Token::content).toList())
         val ast = tokensToAST(tokens)
         val mapper =
             JsonMapper.builder().disable(MapperFeature.AUTO_DETECT_CREATORS).disable(MapperFeature.AUTO_DETECT_FIELDS)
@@ -36,7 +35,7 @@ object Main {
 
         //Print exceptions
         val writer = mapper.writer(DefaultPrettyPrinter())
-        writer.writeValue(File("syntaxtree.json"), ast)
+        writer.writeValue(File("syntaxTree.json"), ast)
         if (exceptions.size > 0) throw CompilationFailed(exceptions)
     }
 
