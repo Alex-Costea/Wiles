@@ -5,6 +5,7 @@ import in.costea.wiles.commands.AbstractCommand;
 import in.costea.wiles.commands.TokenCommand;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
+import in.costea.wiles.enums.ExpectNext;
 import in.costea.wiles.enums.SyntaxType;
 import in.costea.wiles.enums.WhenRemoveToken;
 import in.costea.wiles.exceptions.AbstractCompilationException;
@@ -45,94 +46,94 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
     @Override
     public final @NotNull List<AbstractCommand> getComponents() {
         var components = new ArrayList<AbstractCommand>();
-        if(left!=null) components.add(left);
-        if(operation!=null) components.add(operation);
-        else assert left==null;
-        assert right!=null;
+        if (left != null) components.add(left);
+        if (operation != null) components.add(operation);
+        else assert left == null;
+        assert right != null;
         components.add(right);
         return components;
-    }
-
-    private void addInnerExpression(PrecedenceProcessor precedenceProcessor) throws AbstractCompilationException {
-        var newExpression = new InnerExpressionCommand(transmitter);
-        @NotNull final CompilationExceptionsCollection newExceptions = newExpression.process();
-        if (newExceptions.size() > 0)
-            throw newExceptions.get(0);
-        precedenceProcessor.add(newExpression);
-    }
-
-    private @NotNull ExpectNext getFirstExpectNext(@NotNull String content) {
-        if (IS_LITERAL.test(content) || ROUND_BRACKETS.contains(content) || STARTING_OPERATORS.contains(content))
-            return ExpectNext.TOKEN;
-        return ExpectNext.OPERATOR;
-    }
-
-    //Either left can be null, or both left and operation can be null
-    private void flattenToExpression(AbstractExpressionCommand command)
-    {
-        this.left = command.left;
-        this.operation = command.operation;
-        this.right = command.right;
-        assert operation != null || left == null;
-        assert right != null;
-    }
-
-    private void flattenThis(AbstractCommand component) {
-        if(this instanceof AssignableExpressionCommand command && command.isAssignment)
-            this.left = component;
-        else if (component instanceof final AbstractExpressionCommand command)
-            flattenToExpression(command);
-        else this.right = component;
     }
 
     protected Optional<AbstractCommand> handleSpecialCommands() {
         return Optional.empty();
     }
 
+    protected boolean shouldBreakOnToken(@NotNull Token token, @NotNull PrecedenceProcessor precedenceProcessor) throws AbstractCompilationException {
+        if (token.getContent().equals(ROUND_BRACKET_END_ID))
+            throw new UnexpectedTokenException("Brackets don't close properly", token.getLocation());
+        return false;
+    }
+
+    private void setComponents(PrecedenceProcessor precedenceProcessor)
+    {
+        @NotNull final AbstractCommand result = precedenceProcessor.getResult();
+        if (this instanceof AssignableExpressionCommand command && command.isAssignment)
+            this.left = result;
+        else if (result instanceof final AbstractExpressionCommand command) {
+            this.left = command.left;
+            this.operation = command.operation;
+            this.right = command.right;
+            //Right cannot be null. If left is null, operation must also be null
+            assert operation != null || left == null;
+            assert right != null;
+        } else this.right = result;
+    }
+
     @Override
     public @NotNull CompilationExceptionsCollection process() {
         try {
             @NotNull Token mainCurrentToken = transmitter.expect(START_OF_EXPRESSION);
-            @NotNull ExpectNext expectNext;
-            @NotNull var precedenceProcessor=new PrecedenceProcessor(transmitter);
+            @NotNull var precedenceProcessor = new PrecedenceProcessor(transmitter);
             @NotNull Optional<Token> maybeTempToken;
-            expectNext = getFirstExpectNext(mainCurrentToken.getContent());
+            @NotNull String content = mainCurrentToken.getContent();
+
+            //Decide what token to expect first
+            @NotNull ExpectNext expectNext;
+            if (IS_LITERAL.test(content) || ROUND_BRACKETS.contains(content) || STARTING_OPERATORS.contains(content))
+                expectNext = ExpectNext.TOKEN;
+            else
+                expectNext = ExpectNext.OPERATOR;
+
             while (!transmitter.tokensExhausted()) {
-                // stop parsing expression if correctly finalized
+                //Stop parsing expression if correctly finalized
                 if ((expectNext == ExpectNext.OPERATOR)) {
                     maybeTempToken = transmitter.expectMaybe(tokenOf(isContainedIn(TERMINATORS)).dontIgnoreNewLine());
                     if (maybeTempToken.isPresent())
-                        if (shouldBreakOnToken(maybeTempToken.get(),precedenceProcessor))
+                        if (shouldBreakOnToken(maybeTempToken.get(), precedenceProcessor))
                             break;
                 }
 
-                // handle end and assign tokens
+                //Handle end and assign tokens
                 maybeTempToken = transmitter.expectMaybe(tokenOf(END_BLOCK_ID).or(ASSIGN_ID).removeWhen(WhenRemoveToken.Never));
                 if (maybeTempToken.isPresent())
-                    if (shouldBreakOnToken(maybeTempToken.get(),precedenceProcessor))
+                    if (shouldBreakOnToken(maybeTempToken.get(), precedenceProcessor))
                         break;
 
-                //Method call or inner expression
+                //Handle method calls and inner expressions
                 if (transmitter.expectMaybe(tokenOf(ROUND_BRACKET_START_ID)).isPresent()) {
-                    if(expectNext == ExpectNext.OPERATOR)
+                    if (expectNext == ExpectNext.OPERATOR) //Method call
                         todo("Method call");
-                    else{
-                        addInnerExpression(precedenceProcessor);
+                    else { //Inner expressions
+                        var newExpression = new InnerExpressionCommand(this.transmitter);
+                        @NotNull final CompilationExceptionsCollection newExceptions = newExpression.process();
+                        if (newExceptions.size() > 0)
+                            throw newExceptions.get(0);
+                        precedenceProcessor.add(newExpression);
                         expectNext = ExpectNext.OPERATOR;
                         continue;
                     }
                 }
 
-                //handle closing brackets token
+                //Handle closing brackets token
                 maybeTempToken = transmitter.expectMaybe(tokenOf(ROUND_BRACKET_END_ID));
                 if (maybeTempToken.isPresent()) {
                     mainCurrentToken = maybeTempToken.get();
-                    if (shouldBreakOnToken(mainCurrentToken,precedenceProcessor))
+                    if (shouldBreakOnToken(mainCurrentToken, precedenceProcessor))
                         break;
                 }
 
                 //Special commands
-                if(expectNext==ExpectNext.TOKEN) {
+                if (expectNext == ExpectNext.TOKEN) {
                     Optional<AbstractCommand> maybeCommand;
                     if ((maybeCommand = handleSpecialCommands()).isPresent()) {
                         AbstractCommand command = maybeCommand.get();
@@ -140,16 +141,15 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                         if (!exceptions.isEmpty())
                             throw exceptions.get(0);
                         precedenceProcessor.add(maybeCommand.get());
-                        expectNext=ExpectNext.OPERATOR;
+                        expectNext = ExpectNext.OPERATOR;
                         continue;
                     }
                 }
 
-                //handle unary operators
+                //Handle unary operators
                 if (expectNext == ExpectNext.TOKEN) {
                     maybeTempToken = transmitter.expectMaybe(tokenOf(isContainedIn(STARTING_OPERATORS)));
-                    if(maybeTempToken.isPresent())
-                    {
+                    if (maybeTempToken.isPresent()) {
                         mainCurrentToken = maybeTempToken.get();
                         if (INFIX_OPERATORS.contains(mainCurrentToken.getContent()))
                             mainCurrentToken = new Token(UNARY_ID + mainCurrentToken.getContent(), mainCurrentToken.getLocation());
@@ -158,42 +158,28 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                     }
                 }
 
-                // expect the next correct token
+                //Expect the next token
                 if (expectNext == ExpectNext.OPERATOR)
                     mainCurrentToken = transmitter.expect(tokenOf(isContainedIn(INFIX_OPERATORS))
                             .withErrorMessage("Operator expected!"));
                 else
-                     mainCurrentToken = transmitter.expect(tokenOf(isContainedIn(STARTING_OPERATORS)).or(IS_LITERAL)
-                             .withErrorMessage("Identifier or unary operator expected!"));
+                    mainCurrentToken = transmitter.expect(tokenOf(isContainedIn(STARTING_OPERATORS)).or(IS_LITERAL)
+                            .withErrorMessage("Identifier or unary operator expected!"));
 
                 //Add token and change next expected token
                 precedenceProcessor.add(new TokenCommand(transmitter, mainCurrentToken));
                 expectNext = (expectNext == ExpectNext.OPERATOR) ? ExpectNext.TOKEN : ExpectNext.OPERATOR;
             }
 
-            //Final checks
+            //Final processing
             if (expectNext == ExpectNext.TOKEN)
                 throw new UnexpectedEndException("Expression unfinished!", mainCurrentToken.getLocation());
             if (this instanceof InnerExpressionCommand && !mainCurrentToken.getContent().equals(ROUND_BRACKET_END_ID))
                 throw new UnexpectedEndException("Closing brackets expected", mainCurrentToken.getLocation());
-
-            //Set order of operations and flatten
-            flattenThis(precedenceProcessor.getResult());
+            setComponents(precedenceProcessor);
         } catch (AbstractCompilationException ex) {
             exceptions.add(ex);
         }
         return exceptions;
-    }
-
-    protected boolean shouldBreakOnToken(@NotNull Token token, @NotNull PrecedenceProcessor precedenceProcessor) throws AbstractCompilationException
-    {
-        if(token.getContent().equals(ROUND_BRACKET_END_ID))
-            throw new UnexpectedTokenException("Brackets don't close properly", token.getLocation());
-        return false;
-    }
-
-    private enum ExpectNext {
-        OPERATOR,
-        TOKEN
     }
 }
