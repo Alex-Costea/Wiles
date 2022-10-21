@@ -11,25 +11,29 @@ import `in`.costea.wiles.services.TokenTransmitter
 import `in`.costea.wiles.statics.Constants.ASSIGN_ID
 import `in`.costea.wiles.statics.Constants.DECLARE_ID
 import `in`.costea.wiles.statics.Constants.METHOD_ID
+import `in`.costea.wiles.statics.Constants.MUTABLE_ID
 
 class DeclarationCommand(transmitter: TokenTransmitter) : AbstractCommand(transmitter) {
-    private var leftExpression: AbstractCommand? = null
-    private var rightExpression: AbstractCommand? = null
+    private var left: AbstractCommand? = null
+    private var right: AbstractCommand? = null
     private val exceptions = CompilationExceptionsCollection()
 
     override val type: SyntaxType
         get() = SyntaxType.DECLARATION
 
     override fun getComponents(): List<AbstractCommand> {
-        return listOf(leftExpression ?: return emptyList(), rightExpression ?: return emptyList())
+        return listOf(left ?: return emptyList(), right ?: return emptyList())
     }
 
     override fun process(): CompilationExceptionsCollection {
         try {
             transmitter.expect(tokenOf(DECLARE_ID))
 
+            if(transmitter.expectMaybe(tokenOf(MUTABLE_ID)).isPresent)
+                name = MUTABLE_ID
+
             val leftExpression = LeftSideExpressionCommand(transmitter)
-            this.leftExpression = leftExpression
+            this.left = leftExpression
             exceptions.addAll(leftExpression.process())
 
             transmitter.expect(tokenOf(ASSIGN_ID))
@@ -41,7 +45,7 @@ class DeclarationCommand(transmitter: TokenTransmitter) : AbstractCommand(transm
                 //Expression
                 else RightSideExpressionCommand(transmitter)
 
-            this.rightExpression = rightExpression
+            this.right = rightExpression
             exceptions.addAll(rightExpression.process())
         } catch (ex: AbstractCompilationException) {
             exceptions.add(ex)

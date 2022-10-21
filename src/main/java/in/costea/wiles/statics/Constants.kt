@@ -40,6 +40,7 @@ object Constants {
     const val DECLARE_ID = "DECLARE"
     const val EQUALS_ID = "EQUALS"
     const val LARGER_ID = "LARGER"
+    const val MUTABLE_ID = "MUTABLE"
     private const val SMALLER_ID = "SMALLER"
     private const val LARGER_EQUALS_ID = "LARGER_EQUALS"
     private const val SMALLER_EQUALS_ID = "SMALLER_EQUALS"
@@ -128,7 +129,7 @@ object Constants {
         KEYWORDS["nothing"] = NOTHING_ID
         KEYWORDS["method"] = METHOD_ID
         KEYWORDS["let"] = DECLARE_ID
-        KEYWORDS["var"] = "MUTABLE"
+        KEYWORDS["var"] = MUTABLE_ID
         KEYWORDS["if"] = "IF"
         KEYWORDS["when"] = "WHEN"
         KEYWORDS["otherwise"] = "ELSE"
