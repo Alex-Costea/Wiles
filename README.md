@@ -38,8 +38,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Assignment: `name := value`
 - Conditional: `if condition [block] {otherwise [block]}`
 - Conditional type casting: `when value is type [block] {otherwise block}`
-- For-in loop: `for x in collection [block]`
-- For-from loop: `for i from a to b` (syntactic sugar for `for i in range(from := a, to := b)`)
+- For loop: `for x {in collection} {from a} {to b} {by c} [block]`
 - While loop: `while condition [block]`
 - Code block: `do [operation]` or `begin [op1];[op2]; end`
 - Yield: `yield [expression]` (return equivalent)
@@ -115,7 +114,7 @@ begin
     if args.size = 0 do
         yield nothing
     let var min_value := args[0]
-    for x in args.slice(from := 1) do
+    for x in args from 1 do
         if x < min_value do
             min_value := x
     yield min_value
