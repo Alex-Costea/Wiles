@@ -113,7 +113,7 @@ let min := method(args : list[int]) -> int?
 begin
     if args.size = 0 do
         yield nothing
-    let var min := args.get(0)
+    let var min := args[0]
     for x in args.slice(from := 1) do
         if x < min do
             min := x
