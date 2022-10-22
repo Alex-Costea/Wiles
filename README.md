@@ -53,10 +53,10 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - `:=` (assign, declare or name parameters)
 - `.` (method / field access)
 - `:` (type annotation)
-- `[]` (subtype declaration)
+- `[]` (subtypes, also `a[b]` = `a.get(b)`,`a[b] := c` = `a.set(to := c, a)`)
 - `()` (order of operations, method access)
 - `,` (separator between elements)
-- `?` : syntactic sugar for `type? = either[type,nothing]`
+- `?` (syntactic sugar for `type? = either[type,nothing]`)
 
 ### Named parameters
 - Methods calling with named parameters by default: `range(from := 1, to := 10)`
@@ -84,8 +84,8 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Warnings, e.g. unreachable code
 - Garbage collection
 - `anything`, `anything?` types
-- `error` types
 - `either` with more than 2 types
+- `error` types. syntax: `int? io_error, illegal_state_error`, internally also an `either`
 
 ## Examples
 ### Hello World
