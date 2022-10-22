@@ -51,6 +51,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - `and`, `or`, `not` (not bitwise!)
 - `=`, `>`, `>=`, `<`, `<=`, `=/=`
 - `:=` (assign, declare or name parameters)
+- `+=`, `-=`, `*=`, `/=`, `^=` (syntactic sugar for `a +=` = `a := a +`)
 - `.` (method / field access)
 - `:` (type annotation)
 - `[]` (subtypes, also `a[b]` = `a.get(b)`,`a[b] := c` = `a.set(to := c, a)`)
@@ -98,9 +99,9 @@ for i from 1 to 100
 begin
     let var text := ""
     if modulo(i, 3) = 0 do
-        text := text + "Fizz"
+        text += "Fizz"
     if modulo(i, 5) = 0 do
-        text := text + "Buzz"
+        text += "Buzz"
     if text = "" do
         text := i.as_text
     writeline(text)
@@ -113,11 +114,11 @@ let min := method(args : list[int]) -> int?
 begin
     if args.size = 0 do
         yield nothing
-    let var min := args[0]
+    let var min_value := args[0]
     for x in args.slice(from := 1) do
-        if x < min do
-            min := x
-    yield min
+        if x < min_value do
+            min_value := x
+    yield min_value
 end
 
 let result := min(10, 3, 55, 8)
