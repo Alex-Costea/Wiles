@@ -29,7 +29,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Floating point: `rational` (equivalent to `double` in other languages)
 - Method type: methods must be assigned to value
 - Sum types: `either[type1,type2]`, either a value of `type1`, or of `type2`
-- Other generic types: `list[type]`, `range[type]`
+- List: `list[type]`
 
 ### Commands
 #### Note: {} means optional
@@ -38,7 +38,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Assignment: `name := value`
 - Conditional: `if condition [block] {otherwise [block]}`
 - Conditional type casting: `when value is type [block] {otherwise block}`
-- For loop: `for x {in collection} {from a} {to b} {by c} [block]`
+- For loop: `for x {in collection} {from a} {to b} [block]`
 - While loop: `while condition [block]`
 - Code block: `do [operation]` or `begin [op1];[op2]; end`
 - Yield: `yield [expression]` (return equivalent)
@@ -59,7 +59,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - `?` (syntactic sugar for `type? = either[type,nothing]`)
 
 ### Named parameters
-- Methods calling with named parameters by default: `range(from := 1, to := 10)`
+- Methods calling with named parameters by default: `my_method(a := 1, b := 10)`
 - If a method parameter's identifier starts with `arg`, it can be used without naming
 - `arg` identifiers must be last
 - When using one `arg` list, `my_method(a,b,c)` is the same as `my_method([a,b,c])`
@@ -76,7 +76,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 ### Potential additions (no promises!)
 - `infint` (infinite precision integer)
 - `decimal` (stored as fraction, not as float)
-- Other generic types: `dict[type,type]`, `linkedlist[type]`, `set[type]`, `ref[type]`
+- Other generic types: `dict[type,type]`, `linkedlist[type]`, `set[type]`, `ref[type]`, `range[type]`
 - Using `method` types like first class objects 
 - Classes with `class` keyword. Internally, maybe something like `dict[text,method]`?
 - Declare fields `readonly` for getter with no setter, `public` for getter and setter
