@@ -29,7 +29,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Floating point: `rational` (equivalent to `double` in other languages)
 - Method type: methods must be assigned to value
 - Sum types: `either[type1,type2]`, either a value of `type1`, or of `type2`
-- Other generic types: `list[type]`, `range[type]`
+- List: `list[type]`
 
 ### Statements
 #### Note: {} means optional
@@ -38,8 +38,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Assignment: `name := value`
 - Conditional: `if condition [block] {otherwise [block]}`
 - Conditional type casting: `when value is type [block] {otherwise block}`
-- For-in loop: `for x in collection [block]`
-- For-from loop: `for i from a to b` (syntactic sugar for `for i in range(from := a, to := b)`)
+- For loop: `for x {in collection} {from a} {to b} [block]`
 - While loop: `while condition [block]`
 - Code block: `do [operation]` or `begin [op1];[op2]; end`
 - Yield: `yield [expression]` (return equivalent)
@@ -51,6 +50,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - `and`, `or`, `not` (not bitwise!)
 - `=`, `>`, `>=`, `<`, `<=`, `=/=`
 - `:=` (assign, declare or name parameters)
+- `+=`, `-=`, `*=`, `/=`, `^=` (syntactic sugar for `a +=` = `a := a +`)
 - `.` (method / field access)
 - `:` (type annotation)
 - `[]` (subtypes, also `a[b]` = `a.get(b)`,`a[b] := c` = `a.set(to := c, a)`)
@@ -59,7 +59,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - `?` (syntactic sugar for `type? = either[type,nothing]`)
 
 ### Named parameters
-- Methods calling with named parameters by default: `range(from := 1, to := 10)`
+- Methods calling with named parameters by default: `my_method(a := 1, b := 10)`
 - If a method parameter's identifier starts with `arg`, it can be used without naming
 - `arg` identifiers must be last
 - When using one `arg` list, `my_method(a,b,c)` is the same as `my_method([a,b,c])`
@@ -76,7 +76,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 ### Potential additions (no promises!)
 - `infint` (infinite precision integer)
 - `decimal` (stored as fraction, not as float)
-- Other generic types: `dict[type,type]`, `linkedlist[type]`, `set[type]`, `ref[type]`
+- Other generic types: `dict[type,type]`, `linkedlist[type]`, `set[type]`, `ref[type]`, `range[type]`
 - Using `method` types like first class objects 
 - Classes with `class` keyword. Internally, maybe something like `dict[text,method]`?
 - Declare fields `readonly` for getter with no setter, `public` for getter and setter
@@ -98,9 +98,9 @@ for i from 1 to 100
 begin
     let var text := ""
     if modulo(i, 3) = 0 do
-        text := text + "Fizz"
+        text += "Fizz"
     if modulo(i, 5) = 0 do
-        text := text + "Buzz"
+        text += "Buzz"
     if text = "" do
         text := i.as_text
     writeline(text)
@@ -113,11 +113,11 @@ let min := method(args : list[int]) -> int?
 begin
     if args.size = 0 do
         yield nothing
-    let var min := args[0]
-    for x in args.slice(from := 1) do
-        if x < min do
-            min := x
-    yield min
+    let var min_value := args[0]
+    for x in args from 1 do
+        if x < min_value do
+            min_value := x
+    yield min_value
 end
 
 let result := min(10, 3, 55, 8)
