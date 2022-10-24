@@ -1,18 +1,19 @@
-package `in`.costea.wiles.commands
+package `in`.costea.wiles.statements
 
-import `in`.costea.wiles.commands.expressions.RightSideExpressionCommand
+import `in`.costea.wiles.statements.expressions.DefaultExpression
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.services.TokenTransmitter
 
-class ReturnCommand(transmitter: TokenTransmitter) : AbstractCommand(transmitter) {
+class ReturnStatement(transmitter: TokenTransmitter) : AbstractStatement(transmitter) {
     override val type: SyntaxType
         get() = SyntaxType.RETURN
 
-    private val expression = RightSideExpressionCommand(transmitter)
+    private val expression =
+        DefaultExpression(transmitter)
 
-    override fun getComponents(): List<AbstractCommand> {
+    override fun getComponents(): List<AbstractStatement> {
         return listOf(expression)
     }
 

@@ -1,4 +1,4 @@
-package `in`.costea.wiles.commands
+package `in`.costea.wiles.statements
 
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.isContainedIn
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
@@ -6,15 +6,15 @@ import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.services.TokenTransmitter
-import `in`.costea.wiles.statics.Constants.TYPES
-import `in`.costea.wiles.statics.Constants.TYPE_EXPECTED_ERROR
+import `in`.costea.wiles.constants.Types.TYPES
+import `in`.costea.wiles.constants.ErrorMessages.TYPE_EXPECTED_ERROR
 
-class TypeDefinitionCommand(transmitter: TokenTransmitter) : AbstractCommand(transmitter) {
+class TypeDefinitionStatement(transmitter: TokenTransmitter) : AbstractStatement(transmitter) {
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
     override val type: SyntaxType
         get() = SyntaxType.TYPE
 
-    override fun getComponents(): List<AbstractCommand> {
+    override fun getComponents(): List<AbstractStatement> {
         return ArrayList()
     }
 

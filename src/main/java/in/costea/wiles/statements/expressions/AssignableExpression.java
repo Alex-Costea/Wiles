@@ -1,6 +1,6 @@
-package in.costea.wiles.commands.expressions;
+package in.costea.wiles.statements.expressions;
 
-import in.costea.wiles.commands.TokenCommand;
+import in.costea.wiles.statements.TokenStatement;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.AbstractCompilationException;
 import in.costea.wiles.services.PrecedenceProcessor;
@@ -8,12 +8,12 @@ import in.costea.wiles.services.TokenTransmitter;
 import org.jetbrains.annotations.NotNull;
 
 import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
-import static in.costea.wiles.statics.Constants.*;
+import static in.costea.wiles.constants.Tokens.*;
 
-public class AssignableExpressionCommand extends AbstractExpressionCommand {
+public class AssignableExpression extends AbstractExpression {
     protected boolean isAssignment=false;
 
-    public AssignableExpressionCommand(@NotNull TokenTransmitter transmitter) {
+    public AssignableExpression(@NotNull TokenTransmitter transmitter) {
         super(transmitter);
     }
 
@@ -31,8 +31,8 @@ public class AssignableExpressionCommand extends AbstractExpressionCommand {
         if(token.getContent().equals(END_BLOCK_ID))
             return true;
         if (token.getContent().equals(ASSIGN_ID)) {
-            operation = new TokenCommand(transmitter, transmitter.expect(tokenOf(ASSIGN_ID)));
-            right = new RightSideExpressionCommand(transmitter);
+            operation = new TokenStatement(transmitter, transmitter.expect(tokenOf(ASSIGN_ID)));
+            right = new DefaultExpression(transmitter);
             exceptions.addAll(right.process());
             isAssignment = true;
             return true;

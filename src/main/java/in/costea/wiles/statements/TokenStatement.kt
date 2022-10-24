@@ -1,11 +1,11 @@
-package `in`.costea.wiles.commands
+package `in`.costea.wiles.statements
 
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.data.Token
 import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.services.TokenTransmitter
 
-class TokenCommand(transmitter: TokenTransmitter, val token: Token) : AbstractCommand(transmitter) {
+class TokenStatement(transmitter: TokenTransmitter, val token: Token) : AbstractStatement(transmitter) {
     init {
         name = token.content
     }
@@ -13,7 +13,7 @@ class TokenCommand(transmitter: TokenTransmitter, val token: Token) : AbstractCo
     override val type: SyntaxType
         get() = SyntaxType.TOKEN
 
-    override fun getComponents(): List<AbstractCommand> {
+    override fun getComponents(): List<AbstractStatement> {
         return ArrayList()
     }
 

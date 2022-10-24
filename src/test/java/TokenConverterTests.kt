@@ -3,10 +3,10 @@ import `in`.costea.wiles.data.Token
 import `in`.costea.wiles.data.TokenLocation
 import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.exceptions.StringUnfinishedException
-import `in`.costea.wiles.exceptions.UnknownTokenException
-import `in`.costea.wiles.statics.Constants.DEBUG
-import `in`.costea.wiles.statics.Constants.DO_ID
-import `in`.costea.wiles.statics.Constants.MAX_SYMBOL_LENGTH
+import `in`.costea.wiles.constants.Settings.DEBUG
+import `in`.costea.wiles.constants.Tokens.ACCESS_ID
+import `in`.costea.wiles.constants.Tokens.DO_ID
+import `in`.costea.wiles.constants.Settings.MAX_SYMBOL_LENGTH
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.api.Test
@@ -46,35 +46,29 @@ class TokenConverterTests {
     }
 
     @Test
-    fun operatorsTest() {
+    fun symbolsTest() {
         tokenConverterEquals("=/=", arrayOf("NOT_EQUAL"))
-        tokenConverterThrows(0, "$", UnknownTokenException::class.java, null, null)
-        tokenConverterThrows(0, "=$", UnknownTokenException::class.java, "Operator unknown: $")
+        tokenConverterEquals( "$", arrayOf("$"))
+        tokenConverterEquals( "=$", arrayOf("EQUALS","$"))
         val invalidProgram = "\${}{}{}{}{}"
-        Assumptions.assumingThat(invalidProgram.length >= MAX_SYMBOL_LENGTH + 1) {
-            val substring1 = invalidProgram.substring(1, MAX_SYMBOL_LENGTH + 1)
-            tokenConverterThrows(0, invalidProgram, UnknownTokenException::class.java, "Operator unknown: $substring1")
-            Assumptions.assumingThat(invalidProgram.length >= 2 * MAX_SYMBOL_LENGTH + 1) {
-                val substring2 = invalidProgram.substring(MAX_SYMBOL_LENGTH + 1, 2 * MAX_SYMBOL_LENGTH + 1)
-                tokenConverterThrows(1, invalidProgram, UnknownTokenException::class.java, "Operator unknown: $substring2")
-            }
+        Assumptions.assumingThat(invalidProgram.length >= 2 * MAX_SYMBOL_LENGTH + 1) {
+            tokenConverterEquals( invalidProgram, arrayOf("\${}","{}{","}{}","{}"))
         }
         if (DEBUG) {
             tokenConverterEquals("$=", arrayOf("TEMP"))
             tokenConverterEquals("=$=", arrayOf("TEMP2"))
         }
-        tokenConverterThrows(0, "$\n@", UnknownTokenException::class.java, "Operator unknown: $")
-        tokenConverterThrows(1, "$\n@", UnknownTokenException::class.java, "Operator unknown: @")
+        tokenConverterEquals( "$\n@", arrayOf("$","NEWLINE","@"))
     }
 
     @Test
     fun numericalLiteralsTest() {
         tokenConverterEquals("1", arrayOf("#1"))
-        tokenConverterEquals(".1", arrayOf("DOT", "#1"))
-        tokenConverterEquals("1.", arrayOf("#1", "DOT"))
-        tokenConverterEquals("1.length", arrayOf("#1", "DOT", "!length"))
+        tokenConverterEquals(".1", arrayOf(ACCESS_ID, "#1"))
+        tokenConverterEquals("1.", arrayOf("#1", ACCESS_ID))
+        tokenConverterEquals("1.length", arrayOf("#1", ACCESS_ID, "!length"))
         tokenConverterEquals("1.2", arrayOf("#1.2"))
-        tokenConverterEquals("1.2.3.4.5", arrayOf("#1.2", "DOT", "#3.4", "DOT", "#5"))
+        tokenConverterEquals("1.2.3.4.5", arrayOf("#1.2", ACCESS_ID, "#3.4", ACCESS_ID, "#5"))
     }
 
     @Test
@@ -85,8 +79,8 @@ class TokenConverterTests {
         tokenConverterThrows(0, "\"\"\"\"\"", StringUnfinishedException::class.java, "String unfinished: ")
         tokenConverterThrows(0, "abc\"def\nghi\"jkl", StringUnfinishedException::class.java, null, null)
         tokenConverterThrows(0, "true\n\nhello\"\n\"", StringUnfinishedException::class.java, null,3)
-        tokenConverterThrows(1, "@\n\"\n\"\n", StringUnfinishedException::class.java,null, 2)
-        tokenConverterThrows(2, "@\n\"\n\"\n", StringUnfinishedException::class.java, null,3)
+        tokenConverterThrows(0, "@\n\"\n\"\n", StringUnfinishedException::class.java,null, 2)
+        tokenConverterThrows(1, "@\n\"\n\"\n", StringUnfinishedException::class.java, null,3)
     }
 
     @Test

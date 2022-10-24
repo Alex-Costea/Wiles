@@ -1,6 +1,6 @@
 package `in`.costea.wiles.data
 
-import `in`.costea.wiles.statics.Constants.AT_LINE_INDEX
+import `in`.costea.wiles.constants.ErrorMessages.AT_LINE_INDEX
 
 data class Token(val content: String, val location: TokenLocation?) {
 

@@ -1,7 +1,7 @@
 package `in`.costea.wiles.data
 
 import `in`.costea.wiles.exceptions.AbstractCompilationException
-import `in`.costea.wiles.statics.Constants.DEBUG
+import `in`.costea.wiles.constants.Settings.DEBUG
 
 class CompilationExceptionsCollection : ArrayList<AbstractCompilationException>() {
     fun getExceptionsString(): String {

@@ -1,4 +1,4 @@
-import `in`.costea.wiles.commands.AbstractCommand
+import `in`.costea.wiles.statements.AbstractStatement
 import `in`.costea.wiles.converters.TokensToSyntaxTreeConverter
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.data.Token
@@ -6,32 +6,32 @@ import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.exceptions.TokenExpectedException
 import `in`.costea.wiles.exceptions.UnexpectedEndException
 import `in`.costea.wiles.exceptions.UnexpectedTokenException
-import `in`.costea.wiles.statics.Constants.ASSIGN_ID
-import `in`.costea.wiles.statics.Constants.DECLARE_ID
-import `in`.costea.wiles.statics.Constants.DO_ID
-import `in`.costea.wiles.statics.Constants.END_BLOCK_ID
-import `in`.costea.wiles.statics.Constants.END_TOKEN_NOT_ALLOWED_ERROR
-import `in`.costea.wiles.statics.Constants.EQUALS_ID
-import `in`.costea.wiles.statics.Constants.EXPRESSION_EXPECTED_ERROR
-import `in`.costea.wiles.statics.Constants.EXPRESSION_UNFINISHED_ERROR
-import `in`.costea.wiles.statics.Constants.IDENTIFIER_OR_UNARY_OPERATOR_EXPECTED_ERROR
-import `in`.costea.wiles.statics.Constants.LARGER_ID
-import `in`.costea.wiles.statics.Constants.METHOD_ID
-import `in`.costea.wiles.statics.Constants.MINUS_ID
-import `in`.costea.wiles.statics.Constants.NEWLINE_ID
-import `in`.costea.wiles.statics.Constants.NOTHING_ID
-import `in`.costea.wiles.statics.Constants.NOT_ID
-import `in`.costea.wiles.statics.Constants.OR_ID
-import `in`.costea.wiles.statics.Constants.PLUS_ID
-import `in`.costea.wiles.statics.Constants.POWER_ID
-import `in`.costea.wiles.statics.Constants.RIGHT_ARROW_ID
-import `in`.costea.wiles.statics.Constants.ROUND_BRACKET_END_ID
-import `in`.costea.wiles.statics.Constants.ROUND_BRACKET_START_ID
-import `in`.costea.wiles.statics.Constants.SEPARATOR_ID
-import `in`.costea.wiles.statics.Constants.START_BLOCK_ID
-import `in`.costea.wiles.statics.Constants.TIMES_ID
-import `in`.costea.wiles.statics.Constants.TOKEN_EXPECTED_ERROR
-import `in`.costea.wiles.statics.Constants.TYPEOF_ID
+import `in`.costea.wiles.constants.Tokens.ASSIGN_ID
+import `in`.costea.wiles.constants.Tokens.DECLARE_ID
+import `in`.costea.wiles.constants.Tokens.DO_ID
+import `in`.costea.wiles.constants.Tokens.END_BLOCK_ID
+import `in`.costea.wiles.constants.ErrorMessages.END_TOKEN_NOT_ALLOWED_ERROR
+import `in`.costea.wiles.constants.Tokens.EQUALS_ID
+import `in`.costea.wiles.constants.ErrorMessages.EXPRESSION_EXPECTED_ERROR
+import `in`.costea.wiles.constants.ErrorMessages.EXPRESSION_UNFINISHED_ERROR
+import `in`.costea.wiles.constants.ErrorMessages.IDENTIFIER_OR_UNARY_OPERATOR_EXPECTED_ERROR
+import `in`.costea.wiles.constants.Tokens.LARGER_ID
+import `in`.costea.wiles.constants.Tokens.METHOD_ID
+import `in`.costea.wiles.constants.Tokens.MINUS_ID
+import `in`.costea.wiles.constants.Tokens.NEWLINE_ID
+import `in`.costea.wiles.constants.Tokens.NOTHING_ID
+import `in`.costea.wiles.constants.Tokens.NOT_ID
+import `in`.costea.wiles.constants.Tokens.OR_ID
+import `in`.costea.wiles.constants.Tokens.PLUS_ID
+import `in`.costea.wiles.constants.Tokens.POWER_ID
+import `in`.costea.wiles.constants.Tokens.RIGHT_ARROW_ID
+import `in`.costea.wiles.constants.Tokens.ROUND_BRACKET_END_ID
+import `in`.costea.wiles.constants.Tokens.ROUND_BRACKET_START_ID
+import `in`.costea.wiles.constants.Tokens.SEPARATOR_ID
+import `in`.costea.wiles.constants.Tokens.START_BLOCK_ID
+import `in`.costea.wiles.constants.Tokens.TIMES_ID
+import `in`.costea.wiles.constants.ErrorMessages.TOKEN_EXPECTED_ERROR
+import `in`.costea.wiles.constants.Tokens.TYPEOF_ID
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
@@ -198,7 +198,7 @@ class SyntaxTreeConverterTests {
     private class CreateConverter(tokens: List<String>) {
         var converter: TokensToSyntaxTreeConverter
         var exceptions: CompilationExceptionsCollection
-        var tree: AbstractCommand
+        var tree: AbstractStatement
 
         init {
             converter = TokensToSyntaxTreeConverter(tokens.map { content-> Token(content,null) })

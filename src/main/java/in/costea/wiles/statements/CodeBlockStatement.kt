@@ -1,23 +1,23 @@
-package `in`.costea.wiles.commands
+package `in`.costea.wiles.statements
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
-import `in`.costea.wiles.builders.CommandFactory
+import `in`.costea.wiles.builders.StatementFactory
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
-import `in`.costea.wiles.commands.expressions.AssignableExpressionCommand
+import `in`.costea.wiles.statements.expressions.AssignableExpression
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.builders.CodeBlockType
 import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.enums.WhenRemoveToken
 import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.services.TokenTransmitter
-import `in`.costea.wiles.statics.Constants.DO_ID
-import `in`.costea.wiles.statics.Constants.END_BLOCK_ID
-import `in`.costea.wiles.statics.Constants.EXPECT_TERMINATOR
-import `in`.costea.wiles.statics.Constants.START_BLOCK_ID
+import `in`.costea.wiles.constants.Tokens.DO_ID
+import `in`.costea.wiles.constants.Tokens.END_BLOCK_ID
+import `in`.costea.wiles.constants.Predicates.EXPECT_TERMINATOR
+import `in`.costea.wiles.constants.Tokens.START_BLOCK_ID
 
-class CodeBlockCommand(transmitter: TokenTransmitter, private val blockType: CodeBlockType) : AbstractCommand(transmitter) {
-    private val components: MutableList<AbstractCommand> = ArrayList()
+class CodeBlockStatement(transmitter: TokenTransmitter, private val blockType: CodeBlockType) : AbstractStatement(transmitter) {
+    private val components: MutableList<AbstractStatement> = ArrayList()
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
 
     @JsonProperty
@@ -27,22 +27,22 @@ class CodeBlockCommand(transmitter: TokenTransmitter, private val blockType: Cod
     override val type: SyntaxType
         get() = SyntaxType.CODE_BLOCK
 
-    override fun getComponents(): List<AbstractCommand> {
+    override fun getComponents(): List<AbstractStatement> {
         return components
     }
 
     @Throws(AbstractCompilationException::class)
     private fun readOneStatement() {
         if (transmitter.expectMaybe(EXPECT_TERMINATOR).isPresent) return
-        val commandFactory= CommandFactory(transmitter)
-            .addType(AssignableExpressionCommand::class.java)
-            .addType(DeclarationCommand::class.java)
+        val statementFactory= StatementFactory(transmitter)
+            .addType(AssignableExpression::class.java)
+            .addType(DeclarationStatement::class.java)
         if(blockType.isWithinMethod)
-            commandFactory.addType(ReturnCommand::class.java)
-        val command = commandFactory.create()
-        val newExceptions = command.process()
+            statementFactory.addType(ReturnStatement::class.java)
+        val statement = statementFactory.create()
+        val newExceptions = statement.process()
         if (newExceptions.size > 0) throw newExceptions[0]
-        components.add(command)
+        components.add(statement)
     }
 
     override fun process(): CompilationExceptionsCollection {

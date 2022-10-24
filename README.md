@@ -31,7 +31,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Sum types: `either[type1,type2]`, either a value of `type1`, or of `type2`
 - Other generic types: `list[type]`, `range[type]`
 
-### Commands
+### Statements
 #### Note: {} means optional
 - Method: `method({param1 : type, param2 : type}) {-> return_type}` (return assumed `nothing` if unspecified)
 - Value: `let {var} name {: type} := value` (`var` makes it mutable, type can be inferred)

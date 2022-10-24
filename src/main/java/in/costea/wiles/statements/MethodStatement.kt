@@ -1,4 +1,4 @@
-package `in`.costea.wiles.commands
+package `in`.costea.wiles.statements
 
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
 import `in`.costea.wiles.data.CompilationExceptionsCollection
@@ -7,31 +7,31 @@ import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.enums.WhenRemoveToken
 import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.services.TokenTransmitter
-import `in`.costea.wiles.statics.Constants.IS_IDENTIFIER
-import `in`.costea.wiles.statics.Constants.NOTHING_ID
-import `in`.costea.wiles.statics.Constants.RIGHT_ARROW_ID
-import `in`.costea.wiles.statics.Constants.ROUND_BRACKET_END_ID
-import `in`.costea.wiles.statics.Constants.ROUND_BRACKET_START_ID
-import `in`.costea.wiles.statics.Constants.SEPARATOR_ID
+import `in`.costea.wiles.constants.Predicates.IS_IDENTIFIER
+import `in`.costea.wiles.constants.Tokens.NOTHING_ID
+import `in`.costea.wiles.constants.Tokens.RIGHT_ARROW_ID
+import `in`.costea.wiles.constants.Tokens.ROUND_BRACKET_END_ID
+import `in`.costea.wiles.constants.Tokens.ROUND_BRACKET_START_ID
+import `in`.costea.wiles.constants.Tokens.SEPARATOR_ID
 
-class MethodCommand(transmitter: TokenTransmitter) : AbstractCommand(transmitter) {
-    private val parameters: MutableList<ParameterCommand> = ArrayList()
+class MethodStatement(transmitter: TokenTransmitter) : AbstractStatement(transmitter) {
+    private val parameters: MutableList<ParameterStatement> = ArrayList()
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
 
-    private var returnType: TypeDefinitionCommand
-    private var methodBody: CodeBlockCommand
+    private var returnType: TypeDefinitionStatement
+    private var methodBody: CodeBlockStatement
 
     init {
-        returnType = TypeDefinitionCommand(transmitter)
-        methodBody = CodeBlockCommand(transmitter, CodeBlockType().withinMethod())
+        returnType = TypeDefinitionStatement(transmitter)
+        methodBody = CodeBlockStatement(transmitter, CodeBlockType().withinMethod())
         returnType.name = NOTHING_ID
     }
 
     override val type: SyntaxType
         get() = SyntaxType.METHOD
 
-    override fun getComponents(): List<AbstractCommand> {
-        val components = ArrayList<AbstractCommand>()
+    override fun getComponents(): List<AbstractStatement> {
+        val components = ArrayList<AbstractStatement>()
         components.add(returnType)
         components.addAll(parameters)
         components.add(methodBody)
@@ -44,9 +44,9 @@ class MethodCommand(transmitter: TokenTransmitter) : AbstractCommand(transmitter
 
             //TODO: check if arg parameters are t the end
             while (transmitter.expectMaybe(tokenOf(IS_IDENTIFIER).removeWhen(WhenRemoveToken.Never)).isPresent) {
-                val parameterCommand = ParameterCommand(transmitter)
-                exceptions.addAll(parameterCommand.process())
-                parameters.add(parameterCommand)
+                val parameterStatement = ParameterStatement(transmitter)
+                exceptions.addAll(parameterStatement.process())
+                parameters.add(parameterStatement)
                 if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break
             }
 
@@ -54,7 +54,7 @@ class MethodCommand(transmitter: TokenTransmitter) : AbstractCommand(transmitter
 
             //Return type
             if (transmitter.expectMaybe(tokenOf(RIGHT_ARROW_ID)).isPresent) {
-                returnType = TypeDefinitionCommand(transmitter)
+                returnType = TypeDefinitionStatement(transmitter)
                 exceptions.addAll(returnType.process())
             }
 

@@ -5,8 +5,8 @@ import `in`.costea.wiles.data.Token
 import `in`.costea.wiles.enums.WhenRemoveToken
 import `in`.costea.wiles.exceptions.TokenExpectedException
 import `in`.costea.wiles.exceptions.UnexpectedEndException
-import `in`.costea.wiles.statics.Constants
-import `in`.costea.wiles.statics.Constants.INTERNAL_ERROR
+import `in`.costea.wiles.constants.Tokens
+import `in`.costea.wiles.constants.ErrorMessages.INTERNAL_ERROR
 import java.util.*
 
 class TokenTransmitter(tokens: List<Token>) {
@@ -22,7 +22,7 @@ class TokenTransmitter(tokens: List<Token>) {
         return try {
             if (tokens.isEmpty()) throw UnexpectedEndException(message, null)
             if (params.isIgnoringNewLine) {
-                while (tokens.first.content == Constants.NEWLINE_ID) {
+                while (tokens.first.content == Tokens.NEWLINE_ID) {
                     val token = tokens.pop()
                     if (tokens.isEmpty()) throw UnexpectedEndException(message, token.location)
                 }

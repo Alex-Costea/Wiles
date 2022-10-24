@@ -3,13 +3,13 @@ package `in`.costea.wiles
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter
 import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.json.JsonMapper
-import `in`.costea.wiles.commands.CodeBlockCommand
+import `in`.costea.wiles.statements.CodeBlockStatement
 import `in`.costea.wiles.converters.InputToTokensConverter
 import `in`.costea.wiles.converters.TokensToSyntaxTreeConverter
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.data.Token
 import `in`.costea.wiles.exceptions.CompilationFailed
-import `in`.costea.wiles.statics.Constants.IO_ERROR
+import `in`.costea.wiles.constants.ErrorMessages.IO_ERROR
 import java.io.BufferedReader
 import java.io.File
 import java.io.IOException
@@ -64,10 +64,10 @@ object Main {
         return tokens
     }
 
-    private fun tokensToAST(tokens: List<Token>): CodeBlockCommand {
+    private fun tokensToAST(tokens: List<Token>): CodeBlockStatement {
         val converter = TokensToSyntaxTreeConverter(tokens)
-        val programCommand = converter.convert()
+        val programStatement = converter.convert()
         exceptions.addAll(converter.exceptions)
-        return programCommand
+        return programStatement
     }
 }

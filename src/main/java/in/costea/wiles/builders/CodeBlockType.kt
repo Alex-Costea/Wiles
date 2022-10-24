@@ -16,6 +16,4 @@ class CodeBlockType {
         isWithinMethod = true
         return this
     }
-
-
 }

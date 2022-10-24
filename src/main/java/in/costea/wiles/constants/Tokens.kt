@@ -1,19 +1,20 @@
-package `in`.costea.wiles.statics
+package `in`.costea.wiles.constants
 
 import com.google.common.collect.BiMap
 import com.google.common.collect.HashBiMap
-import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.isContainedIn
-import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
+import `in`.costea.wiles.constants.Chars.CONTINUE_LINE
+import `in`.costea.wiles.constants.Chars.NEWLINE
+import `in`.costea.wiles.constants.Chars.SPACE
+import `in`.costea.wiles.constants.ErrorMessages.MAX_SYMBOL_TOO_LARGE
+import `in`.costea.wiles.constants.Settings.DEBUG
+import `in`.costea.wiles.constants.Settings.MAX_SYMBOL_LENGTH
+import `in`.costea.wiles.constants.Settings.ROMANIAN_MODE
 import java.util.*
-import java.util.function.Predicate
+import kotlin.collections.HashMap
 import kotlin.streams.toList
 
-object Constants {
-    const val DEBUG = true
-    private const val ROMANIAN_MODE = false
-
-    //names
-    const val UNKNOWN_TOKEN = "UNKNOWN_TOKEN"
+object Tokens {
+    const val ERROR_TOKEN = "ERROR_TOKEN"
     const val START_BLOCK_ID = "START_BLOCK"
     const val END_BLOCK_ID = "END_BLOCK"
     const val SPACE_ID = "SPACE"
@@ -28,10 +29,10 @@ object Constants {
     const val PLUS_ID = "PLUS"
     const val MINUS_ID = "MINUS"
     const val UNARY_ID = "UNARY_"
-    private const val UNARY_PLUS_ID = UNARY_ID + PLUS_ID
-    private const val UNARY_MINUS_ID = UNARY_ID + MINUS_ID
+    const val UNARY_PLUS_ID = UNARY_ID + PLUS_ID
+    const val UNARY_MINUS_ID = UNARY_ID + MINUS_ID
     const val TIMES_ID = "TIMES"
-    private const val DIVIDE_ID = "DIVIDE"
+    const val DIVIDE_ID = "DIVIDE"
     const val POWER_ID = "POWER"
     const val ASSIGN_ID = "ASSIGN"
     const val IDENTIFIER_START = "!"
@@ -46,13 +47,13 @@ object Constants {
     const val EQUALS_ID = "EQUALS"
     const val LARGER_ID = "LARGER"
     const val MUTABLE_ID = "MUTABLE"
-    private const val SMALLER_ID = "SMALLER"
-    private const val LARGER_EQUALS_ID = "LARGER_EQUALS"
-    private const val SMALLER_EQUALS_ID = "SMALLER_EQUALS"
-    private const val NOT_EQUAL_ID = "NOT_EQUAL"
-    private const val ACCESS_ID = "ACCESS"
-    private const val AND_ID = "AND"
-    private const val APPLY_ID = "APPLY"
+    const val SMALLER_ID = "SMALLER"
+    const val LARGER_EQUALS_ID = "LARGER_EQUALS"
+    const val SMALLER_EQUALS_ID = "SMALLER_EQUALS"
+    const val NOT_EQUAL_ID = "NOT_EQUAL"
+    const val ACCESS_ID = "ACCESS"
+    const val AND_ID = "AND"
+    const val APPLY_ID = "APPLY"
     const val OR_ID = "OR"
     const val NOT_ID = "NOT"
     private const val MAYBE_ID = "MAYBE"
@@ -66,56 +67,20 @@ object Constants {
     private const val CONTINUE_ID = "CONTINUE"
     private const val FOR_ID = "FOR"
     private const val WHILE_ID = "WHILE"
-
-    //error messages
-    const val INTERNAL_ERROR = "Internal error!"
-    const val IO_ERROR = "Error loading input file!"
-    const val TOKEN_EXPECTED_ERROR = "Token \"%s\" expected!"
-    const val IDENTIFIER_EXPECTED_ERROR = "Identifier expected!"
-    const val RIGHT_SIDE_EXPECTED_ERROR = "Right side of declaration expected!"
-    const val AT_LINE_INDEX = "%s at line: %d index: %d"
-    const val LITERAL_EXPECTED_ERROR = "Literal expected!"
-    const val TYPE_EXPECTED_ERROR = "Type expected!"
-    const val EXPRESSION_EXPECTED_ERROR = "Expression expected!"
-    const val END_TOKEN_NOT_ALLOWED_ERROR = "End token not allowed here!"
-    const val NON_MATCHING_BRACKETS_ERROR = "Brackets don't close properly!"
-    const val OPERATOR_EXPECTED_ERROR = "Operator expected!"
-    const val IDENTIFIER_OR_UNARY_OPERATOR_EXPECTED_ERROR = "Identifier or unary operator expected!"
-    const val EXPRESSION_UNFINISHED_ERROR = "Expression unfinished!"
-    const val TOKEN_UNKNOWN_ERROR = "Token unknown: %s"
-    const val UNEXPECTED_TOKEN_ERROR = "Unexpected token: %s"
-    const val STRING_UNFINISHED_ERROR = "Text unfinished: \"%s"
-    const val CANNOT_BE_PROCESSED_ERROR = "Cannot be processed!"
-    const val NOT_YET_IMPLEMENTED_ERROR = "Not yet implemented!"
-
     const val UNNAMED_START = IDENTIFIER_START + "arg"
-    const val MAX_SYMBOL_LENGTH = 3
-    const val STRING_DELIMITER = '"'
-    @JvmField
-    var DECIMAL_DELIMITER = if(ROMANIAN_MODE) ',' else '.'
-    const val DIGIT_SEPARATOR = '_'
-    const val COMMENT_START = '#'
-    const val NEWLINE = '\n'
-    const val SPACE = ' '
-    const val CONTINUE_LINE = '\\'
 
-    private val KEYWORDS: BiMap<String, String> = HashBiMap.create()
-    private val SYMBOLS: BiMap<String, String> = HashBiMap.create()
-    @JvmField
-    val TYPES: BiMap<String, String> = HashBiMap.create()
+    private val KEYWORDS: HashMap<String, String> = HashMap()
+    private val SYMBOLS: HashMap<String, String> = HashMap()
     @JvmField
     val TOKENS: BiMap<String, String>
     @JvmField
     val TOKENS_INVERSE: BiMap<String, String>
-    val PRECEDENCE : HashMap<String,Byte> = HashMap()
-    val RIGHT_TO_LEFT : Set<Byte>
 
     @JvmField
     val INFIX_OPERATORS = setOf(
         PLUS_ID, MINUS_ID, TIMES_ID, DIVIDE_ID, POWER_ID,
         EQUALS_ID, LARGER_ID, SMALLER_ID, LARGER_EQUALS_ID, SMALLER_EQUALS_ID, NOT_EQUAL_ID,
-        ACCESS_ID, SEPARATOR_ID, AND_ID, OR_ID, APPLY_ID
-    )
+        ACCESS_ID, SEPARATOR_ID, AND_ID, OR_ID, APPLY_ID)
     @JvmField
     val PREFIX_OPERATORS = setOf(UNARY_PLUS_ID, UNARY_MINUS_ID, NOT_ID)
     @JvmField
@@ -124,42 +89,9 @@ object Constants {
     val ROUND_BRACKETS = setOf(ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID)
     @JvmField
     val TERMINATORS = setOf(NEWLINE_ID, TERMINATOR_ID)
-    private val KEYWORD_LITERALS = setOf(TRUE_ID,FALSE_ID,NOTHING_ID)
-
-    @JvmField
-    val IS_IDENTIFIER = Predicate { x: String -> x.length > 1 && x.startsWith(IDENTIFIER_START) }
-    private val IS_TEXT_LITERAL = Predicate { x: String -> x.length > 1 && x.startsWith(STRING_START) }
-    private val IS_NUMBER_LITERAL = Predicate { x: String -> x.length > 1 && x.startsWith(NUM_START) }
-    private val IS_KEYWORD_LITERAL= Predicate { x:String -> KEYWORD_LITERALS.contains(x) }
-    @JvmField
-    val IS_LITERAL: Predicate<String> = IS_IDENTIFIER.or(IS_TEXT_LITERAL).or(IS_NUMBER_LITERAL).or(IS_KEYWORD_LITERAL)
-
-    @JvmField
-    val EXPECT_TERMINATOR = tokenOf(isContainedIn(TERMINATORS))
-        .dontIgnoreNewLine().withErrorMessage("End of line or semicolon expected!")
+    val KEYWORD_LITERALS = setOf(TRUE_ID,FALSE_ID,NOTHING_ID)
 
     init {
-        PRECEDENCE[OR_ID] = -4
-        PRECEDENCE[AND_ID] = -3
-        PRECEDENCE[NOT_ID] = -2
-        PRECEDENCE[EQUALS_ID] = -1
-        PRECEDENCE[NOT_EQUAL_ID] = -1
-        PRECEDENCE[LARGER_ID] = 0
-        PRECEDENCE[SMALLER_ID] = 0
-        PRECEDENCE[LARGER_EQUALS_ID] = 0
-        PRECEDENCE[SMALLER_EQUALS_ID] = 0
-        PRECEDENCE[PLUS_ID] = 1
-        PRECEDENCE[MINUS_ID] = 1
-        PRECEDENCE[TIMES_ID] = 2
-        PRECEDENCE[DIVIDE_ID] = 2
-        PRECEDENCE[UNARY_PLUS_ID] = 3
-        PRECEDENCE[UNARY_MINUS_ID] = 3
-        PRECEDENCE[POWER_ID] = 4
-        PRECEDENCE[ACCESS_ID] = 5
-        PRECEDENCE[APPLY_ID] = 5
-
-        RIGHT_TO_LEFT = setOf(PRECEDENCE[NOT_ID]!!, PRECEDENCE[UNARY_PLUS_ID]!!, PRECEDENCE[POWER_ID]!!)
-
         KEYWORDS[if(!ROMANIAN_MODE) "nothing" else "nimic"] = NOTHING_ID
         KEYWORDS[if(!ROMANIAN_MODE) "method" else "metodă"] = METHOD_ID
         KEYWORDS[if(!ROMANIAN_MODE) "let" else "fie"] = DECLARE_ID
@@ -180,18 +112,6 @@ object Constants {
         KEYWORDS[if(!ROMANIAN_MODE) "end" else "sfârșit"] = END_BLOCK_ID
         KEYWORDS[if(!ROMANIAN_MODE) "true" else "adevărat"] = TRUE_ID
         KEYWORDS[if(!ROMANIAN_MODE) "false" else "fals"] = FALSE_ID
-
-        TYPES["!bit"] = "BOOLEAN"
-        TYPES["!byte"] = "INT8"
-        TYPES[if(!ROMANIAN_MODE) "!smallint" else "!întreg_mic"] = "INT16"
-        TYPES[if(!ROMANIAN_MODE) "!int" else "!întreg"] = "INT32"
-        TYPES[if(!ROMANIAN_MODE) "!bigint" else "!întreg_mare"] = "INT64"
-        TYPES["!text"] = "STRING"
-        TYPES[if(!ROMANIAN_MODE) "!rational" else "!rațional"] = "DOUBLE"
-        TYPES[if(!ROMANIAN_MODE) "!list" else "!listă"] = "ARRAY_LIST"
-        TYPES[if(!ROMANIAN_MODE) "!either" else "!ori"] = "EITHER"
-        TYPES[if(!ROMANIAN_MODE) "!range" else "!interval"] = "RANGE"
-        TYPES[NOTHING_ID] = NOTHING_ID
 
         SYMBOLS["+"] = PLUS_ID
         SYMBOLS["-"] = MINUS_ID
@@ -226,9 +146,6 @@ object Constants {
         TOKENS.putAll(SYMBOLS)
         TOKENS_INVERSE = TOKENS.inverse()
         require(Collections.max(SYMBOLS.keys.stream().mapToInt { obj: String -> obj.length }
-            .toList()) <= MAX_SYMBOL_LENGTH)
-        {
-            "MAX_SYMBOL_LENGTH smaller than length of largest symbol!"
-        }
+            .toList()) <= MAX_SYMBOL_LENGTH) { MAX_SYMBOL_TOO_LARGE }
     }
 }

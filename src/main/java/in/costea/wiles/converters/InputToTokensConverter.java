@@ -5,17 +5,17 @@ import in.costea.wiles.data.Token;
 import in.costea.wiles.data.TokenLocation;
 import in.costea.wiles.exceptions.AbstractCompilationException;
 import in.costea.wiles.exceptions.StringUnfinishedException;
-import in.costea.wiles.exceptions.UnknownTokenException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static in.costea.wiles.statics.Constants.*;
-import static in.costea.wiles.statics.Utils.*;
+import static in.costea.wiles.constants.Chars.*;
+import static in.costea.wiles.constants.Settings.MAX_SYMBOL_LENGTH;
+import static in.costea.wiles.constants.Tokens.*;
+import static in.costea.wiles.constants.Utils.*;
 
 public class InputToTokensConverter {
-
     private final char[] arrayChars;
     @NotNull
     private final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
@@ -48,7 +48,7 @@ public class InputToTokensConverter {
                 {
                     readComment();
                 } else {
-                    String id = readOperator();
+                    String id = readSymbol();
                     int size = tokens.size();
                     if (size > 0 && id.equals(NEWLINE_ID) && tokens.get(size - 1).getContent().equals(CONTINUE_LINE_ID)) {
                         tokens.remove(size - 1);
@@ -62,7 +62,7 @@ public class InputToTokensConverter {
                 }
             } catch (AbstractCompilationException ex) {
                 exceptions.add(ex);
-                tokens.add(createToken(UNKNOWN_TOKEN));
+                tokens.add(createToken(ERROR_TOKEN));
             }
         }
         return tokens;
@@ -146,7 +146,7 @@ public class InputToTokensConverter {
     }
 
     @NotNull
-    private String readOperator() throws UnknownTokenException {
+    private String readSymbol() {
         int currentIndex = index;
         int operatorFoundIndex = index;
         @NotNull
@@ -166,7 +166,8 @@ public class InputToTokensConverter {
         index = operatorFoundIndex;
         if (token == null) {
             index = currentIndex - 1;
-            throw new UnknownTokenException(sb.toString(), line, getIndexOnCurrentLine());
+            token = sb.toString();
+            //throw new UnknownTokenException(sb.toString(), line, getIndexOnCurrentLine());
         }
         return token;
     }

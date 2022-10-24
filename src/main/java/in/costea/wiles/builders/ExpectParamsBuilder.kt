@@ -1,8 +1,8 @@
 package `in`.costea.wiles.builders
 
 import `in`.costea.wiles.enums.WhenRemoveToken
-import `in`.costea.wiles.statics.Constants.TOKENS_INVERSE
-import `in`.costea.wiles.statics.Constants.TOKEN_EXPECTED_ERROR
+import `in`.costea.wiles.constants.Tokens.TOKENS_INVERSE
+import `in`.costea.wiles.constants.ErrorMessages.TOKEN_EXPECTED_ERROR
 import java.util.function.Predicate
 
 class ExpectParamsBuilder private constructor(var foundTest: Predicate<String>) {

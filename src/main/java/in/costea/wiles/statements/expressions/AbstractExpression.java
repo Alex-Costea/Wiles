@@ -1,8 +1,8 @@
-package in.costea.wiles.commands.expressions;
+package in.costea.wiles.statements.expressions;
 
 import in.costea.wiles.builders.ExpectParamsBuilder;
-import in.costea.wiles.commands.AbstractCommand;
-import in.costea.wiles.commands.TokenCommand;
+import in.costea.wiles.statements.AbstractStatement;
+import in.costea.wiles.statements.TokenStatement;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.enums.ExpectNext;
@@ -21,19 +21,22 @@ import java.util.Optional;
 
 import static in.costea.wiles.builders.ExpectParamsBuilder.isContainedIn;
 import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
-import static in.costea.wiles.statics.Constants.*;
+import static in.costea.wiles.constants.Predicates.EXPECT_TERMINATOR;
+import static in.costea.wiles.constants.Predicates.IS_LITERAL;
+import static in.costea.wiles.constants.Tokens.*;
+import static in.costea.wiles.constants.ErrorMessages.*;
 
-public abstract class AbstractExpressionCommand extends AbstractCommand {
+public abstract class AbstractExpression extends AbstractStatement {
     public static final ExpectParamsBuilder START_OF_EXPRESSION =
             tokenOf(isContainedIn(STARTING_OPERATORS)).or(IS_LITERAL).or(ROUND_BRACKET_START_ID)
                     .withErrorMessage(EXPRESSION_EXPECTED_ERROR).removeWhen(WhenRemoveToken.Never);
     @NotNull
     protected final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
-    protected AbstractCommand left = null;
-    protected TokenCommand operation = null;
-    protected AbstractCommand right = null;
+    protected AbstractStatement left = null;
+    protected TokenStatement operation = null;
+    protected AbstractStatement right = null;
 
-    protected AbstractExpressionCommand(@NotNull TokenTransmitter transmitter) {
+    protected AbstractExpression(@NotNull TokenTransmitter transmitter) {
         super(transmitter);
     }
 
@@ -43,8 +46,8 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
     }
 
     @Override
-    public final @NotNull List<AbstractCommand> getComponents() {
-        var components = new ArrayList<AbstractCommand>();
+    public final @NotNull List<AbstractStatement> getComponents() {
+        var components = new ArrayList<AbstractStatement>();
         if (left != null) components.add(left);
         if (operation != null) components.add(operation);
         else
@@ -54,7 +57,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
         return components;
     }
 
-    protected Optional<AbstractCommand> handleSpecialCommands() {
+    protected Optional<AbstractStatement> handleSpecialStatements() {
         return Optional.empty();
     }
 
@@ -66,11 +69,11 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
 
     protected void setComponents(@NotNull PrecedenceProcessor precedenceProcessor)
     {
-        @NotNull final AbstractCommand result = precedenceProcessor.getResult();
-        if (result instanceof final AbstractExpressionCommand command) {
-            this.left = command.left;
-            this.operation = command.operation;
-            this.right = command.right;
+        @NotNull final AbstractStatement result = precedenceProcessor.getResult();
+        if (result instanceof final AbstractExpression expression) {
+            this.left = expression.left;
+            this.operation = expression.operation;
+            this.right = expression.right;
             //Right cannot be null. If left is null, operation must also be null
             assert operation != null || left == null;
             assert right != null;
@@ -116,7 +119,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                     if (expectNext == ExpectNext.OPERATOR) //Method call
                         throw new RuntimeException(NOT_YET_IMPLEMENTED_ERROR);
                     else { //Inner expressions
-                        var newExpression = new InnerExpressionCommand(this.transmitter);
+                        var newExpression = new InnerExpression(this.transmitter);
                         @NotNull final CompilationExceptionsCollection newExceptions = newExpression.process();
                         if (newExceptions.size() > 0)
                             throw newExceptions.get(0);
@@ -134,15 +137,15 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                         break;
                 }
 
-                //Special commands
+                //Special statements
                 if (expectNext == ExpectNext.TOKEN) {
-                    Optional<AbstractCommand> maybeCommand;
-                    if ((maybeCommand = handleSpecialCommands()).isPresent()) {
-                        AbstractCommand command = maybeCommand.get();
-                        CompilationExceptionsCollection exceptions = command.process();
+                    Optional<AbstractStatement> maybeStatement;
+                    if ((maybeStatement = handleSpecialStatements()).isPresent()) {
+                        AbstractStatement statement = maybeStatement.get();
+                        CompilationExceptionsCollection exceptions = statement.process();
                         if (!exceptions.isEmpty())
                             throw exceptions.get(0);
-                        precedenceProcessor.add(maybeCommand.get());
+                        precedenceProcessor.add(maybeStatement.get());
                         expectNext = ExpectNext.OPERATOR;
                         continue;
                     }
@@ -156,7 +159,7 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                         if (INFIX_OPERATORS.contains(mainCurrentToken.getContent()))
                             mainCurrentToken = new Token(UNARY_ID + mainCurrentToken.getContent(),
                                     mainCurrentToken.getLocation());
-                        precedenceProcessor.add(new TokenCommand(transmitter, mainCurrentToken));
+                        precedenceProcessor.add(new TokenStatement(transmitter, mainCurrentToken));
                         continue;
                     }
                 }
@@ -170,14 +173,14 @@ public abstract class AbstractExpressionCommand extends AbstractCommand {
                             .withErrorMessage(IDENTIFIER_OR_UNARY_OPERATOR_EXPECTED_ERROR));
 
                 //Add token and change next expected token
-                precedenceProcessor.add(new TokenCommand(transmitter, mainCurrentToken));
+                precedenceProcessor.add(new TokenStatement(transmitter, mainCurrentToken));
                 expectNext = (expectNext == ExpectNext.OPERATOR) ? ExpectNext.TOKEN : ExpectNext.OPERATOR;
             }
 
             //Final processing
             if (expectNext == ExpectNext.TOKEN)
                 throw new UnexpectedEndException(EXPRESSION_UNFINISHED_ERROR, mainCurrentToken.getLocation());
-            if (this instanceof InnerExpressionCommand && !mainCurrentToken.getContent().equals(ROUND_BRACKET_END_ID))
+            if (this instanceof InnerExpression && !mainCurrentToken.getContent().equals(ROUND_BRACKET_END_ID))
                 throw new UnexpectedEndException(NON_MATCHING_BRACKETS_ERROR, mainCurrentToken.getLocation());
             setComponents(precedenceProcessor);
         } catch (AbstractCompilationException ex) {

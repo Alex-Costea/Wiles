@@ -1,4 +1,4 @@
-package `in`.costea.wiles.commands
+package `in`.costea.wiles.statements
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -8,7 +8,7 @@ import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.services.TokenTransmitter
 
 @JsonPropertyOrder("compiledSuccessfully", "name", "type", "components")
-abstract class AbstractCommand(@JvmField protected val transmitter: TokenTransmitter) {
+abstract class AbstractStatement(@JvmField protected val transmitter: TokenTransmitter) {
 
     @JvmField
     @JsonProperty
@@ -20,7 +20,7 @@ abstract class AbstractCommand(@JvmField protected val transmitter: TokenTransmi
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonProperty
-    abstract fun getComponents(): List<AbstractCommand>
+    abstract fun getComponents(): List<AbstractStatement>
 
     abstract fun process(): CompilationExceptionsCollection
 

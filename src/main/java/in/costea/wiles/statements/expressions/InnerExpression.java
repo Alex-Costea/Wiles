@@ -1,14 +1,15 @@
-package in.costea.wiles.commands.expressions;
+package in.costea.wiles.statements.expressions;
 
 import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.UnexpectedTokenException;
 import in.costea.wiles.services.TokenTransmitter;
 import org.jetbrains.annotations.NotNull;
 
-import static in.costea.wiles.statics.Constants.*;
+import static in.costea.wiles.constants.Tokens.*;
+import static in.costea.wiles.constants.ErrorMessages.END_TOKEN_NOT_ALLOWED_ERROR;
 
-public class InnerExpressionCommand extends AbstractExpressionCommand {
-    public InnerExpressionCommand(@NotNull TokenTransmitter transmitter) {
+public class InnerExpression extends AbstractExpression {
+    public InnerExpression(@NotNull TokenTransmitter transmitter) {
         super(transmitter);
     }
 

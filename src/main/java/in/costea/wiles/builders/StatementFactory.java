@@ -1,8 +1,8 @@
 package in.costea.wiles.builders;
 
-import in.costea.wiles.commands.*;
-import in.costea.wiles.commands.expressions.AssignableExpressionCommand;
-import in.costea.wiles.commands.expressions.RightSideExpressionCommand;
+import in.costea.wiles.statements.*;
+import in.costea.wiles.statements.expressions.AssignableExpression;
+import in.costea.wiles.statements.expressions.DefaultExpression;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.enums.WhenRemoveToken;
 import in.costea.wiles.exceptions.AbstractCompilationException;
@@ -16,43 +16,44 @@ import java.util.Set;
 
 import static in.costea.wiles.builders.ExpectParamsBuilder.ANYTHING;
 import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
-import static in.costea.wiles.commands.expressions.AbstractExpressionCommand.START_OF_EXPRESSION;
-import static in.costea.wiles.statics.Constants.*;
+import static in.costea.wiles.statements.expressions.AbstractExpression.START_OF_EXPRESSION;
+import static in.costea.wiles.constants.Tokens.*;
+import static in.costea.wiles.constants.ErrorMessages.INTERNAL_ERROR;
 
-public class CommandFactory {
+public class StatementFactory {
     @NotNull
-    private final Set<Class<? extends AbstractCommand>> commands=new HashSet<>();
+    private final Set<Class<? extends AbstractStatement>> statement =new HashSet<>();
     @NotNull private final TokenTransmitter transmitter;
-    public CommandFactory(@NotNull TokenTransmitter transmitter){
+    public StatementFactory(@NotNull TokenTransmitter transmitter){
         this.transmitter=transmitter;
     }
 
-    public @NotNull CommandFactory addType(@NotNull Class<? extends AbstractCommand> command)
+    public @NotNull StatementFactory addType(@NotNull Class<? extends AbstractStatement> statement)
     {
-        commands.add(command);
+        this.statement.add(statement);
         return this;
     }
 
-    public @NotNull AbstractCommand create(@NotNull String errorMessage) throws AbstractCompilationException {
-        if(commands.contains(AssignableExpressionCommand.class))
+    public @NotNull AbstractStatement create(@NotNull String errorMessage) throws AbstractCompilationException {
+        if(statement.contains(AssignableExpression.class))
             if (transmitter.expectMaybe(START_OF_EXPRESSION).isPresent())
-                return new AssignableExpressionCommand(transmitter);
+                return new AssignableExpression(transmitter);
 
-        if(commands.contains(RightSideExpressionCommand.class))
+        if(statement.contains(DefaultExpression.class))
             if (transmitter.expectMaybe(START_OF_EXPRESSION).isPresent())
-                return new RightSideExpressionCommand(transmitter);
+                return new DefaultExpression(transmitter);
 
-        if(commands.contains(DeclarationCommand.class))
+        if(statement.contains(DeclarationStatement.class))
             if(transmitter.expectMaybe(tokenOf(DECLARE_ID)).isPresent())
-                return new DeclarationCommand(transmitter);
+                return new DeclarationStatement(transmitter);
 
-        if(commands.contains(MethodCommand.class))
+        if(statement.contains(MethodStatement.class))
             if(transmitter.expectMaybe(tokenOf(METHOD_ID)).isPresent())
-                return new MethodCommand(transmitter);
+                return new MethodStatement(transmitter);
 
-        if(commands.contains(ReturnCommand.class))
+        if(statement.contains(ReturnStatement.class))
             if(transmitter.expectMaybe(tokenOf(RETURN_ID)).isPresent())
-                return new ReturnCommand(transmitter);
+                return new ReturnStatement(transmitter);
 
         //Expression not found
         ExpectParamsBuilder paramsBuilder = tokenOf(ANYTHING).removeWhen(WhenRemoveToken.Never)
@@ -62,12 +63,12 @@ public class CommandFactory {
         throw new UnexpectedTokenException(content, newToken.getLocation());
     }
 
-    public @NotNull AbstractCommand create() throws AbstractCompilationException {
+    public @NotNull AbstractStatement create() throws AbstractCompilationException {
         return create(INTERNAL_ERROR);
     }
 
     @SuppressWarnings("unused")
-    public @NotNull Optional<AbstractCommand> createMaybe()
+    public @NotNull Optional<AbstractStatement> createMaybe()
     {
         try
         {

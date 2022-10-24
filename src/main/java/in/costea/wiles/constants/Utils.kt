@@ -1,6 +1,6 @@
-package `in`.costea.wiles.statics
+package `in`.costea.wiles.constants
 
-import `in`.costea.wiles.statics.Constants.DIGIT_SEPARATOR
+import `in`.costea.wiles.constants.Chars.DIGIT_SEPARATOR
 
 object Utils {
     @JvmStatic
