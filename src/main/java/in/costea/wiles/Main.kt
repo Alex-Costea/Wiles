@@ -3,6 +3,7 @@ package `in`.costea.wiles
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter
 import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.json.JsonMapper
+import com.google.common.base.CharMatcher
 import `in`.costea.wiles.statements.CodeBlockStatement
 import `in`.costea.wiles.converters.InputToTokensConverter
 import `in`.costea.wiles.converters.TokensToSyntaxTreeConverter
@@ -44,7 +45,7 @@ object Main {
 
     private fun lastLocation(input : String) : TokenLocation
     {
-        val textSplit = input.trim().split("\n")
+        val textSplit = CharMatcher.whitespace().trimTrailingFrom(input).split("\n")
         val lastIndex = textSplit.lastIndex
         val lastLineLocation = textSplit[lastIndex].length
         return TokenLocation(lastIndex+1,lastLineLocation+1)
