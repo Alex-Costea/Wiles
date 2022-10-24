@@ -1,13 +1,13 @@
 import `in`.costea.wiles.constants.ErrorMessages.STRING_UNFINISHED_ERROR
-import `in`.costea.wiles.converters.InputToTokensConverter
-import `in`.costea.wiles.data.Token
-import `in`.costea.wiles.data.TokenLocation
-import `in`.costea.wiles.exceptions.AbstractCompilationException
-import `in`.costea.wiles.exceptions.StringUnfinishedException
 import `in`.costea.wiles.constants.Settings.DEBUG
+import `in`.costea.wiles.constants.Settings.MAX_SYMBOL_LENGTH
 import `in`.costea.wiles.constants.Tokens.ACCESS_ID
 import `in`.costea.wiles.constants.Tokens.DO_ID
-import `in`.costea.wiles.constants.Settings.MAX_SYMBOL_LENGTH
+import `in`.costea.wiles.constants.Utils.nullLocation
+import `in`.costea.wiles.converters.InputToTokensConverter
+import `in`.costea.wiles.data.Token
+import `in`.costea.wiles.exceptions.AbstractCompilationException
+import `in`.costea.wiles.exceptions.StringUnfinishedException
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.api.Test
@@ -18,9 +18,12 @@ class TokenConverterTests {
     private fun tokenConverterEquals(input: String, solution: Array<String>) {
         val solutionList: MutableList<Token> = ArrayList()
         for (s in solution) {
-            solutionList.add(Token(s,null))
+            solutionList.add(Token(s, nullLocation))
         }
-        Assertions.assertEquals(InputToTokensConverter(input).convert(), solutionList)
+        val givenList = InputToTokensConverter(input).convert()
+        assert(givenList.size == solutionList.size)
+        for((i,x) in givenList.withIndex())
+            assert(x.content == solutionList[i].content)
     }
 
     private fun tokenConverterThrows(exceptionIndex: Int, input: String, throwing: Class<out Throwable>, message: String? = null, line: Int? = null) {
@@ -28,7 +31,7 @@ class TokenConverterTests {
         x.convert()
         val t = if (message != null) Assertions.assertThrows(throwing, { x.throwExceptionIfExists(exceptionIndex) }, message) else Assertions.assertThrows(throwing) { x.throwExceptionIfExists(exceptionIndex) }
         assert(t is AbstractCompilationException)
-        if (line != null) Assertions.assertEquals(line, Objects.requireNonNull<TokenLocation>((t as AbstractCompilationException).getTokenLocation()).line)
+        if (line != null) Assertions.assertEquals(line, Objects.requireNonNull((t as AbstractCompilationException).getTokenLocation()).line)
     }
 
     @Test

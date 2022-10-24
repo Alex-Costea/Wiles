@@ -11,6 +11,7 @@ import java.util.*
 
 class TokenTransmitter(tokens: List<Token>) {
     private val tokens = LinkedList(tokens)
+    private val lastLocation = tokens.last().location
 
     @Throws(UnexpectedEndException::class, TokenExpectedException::class)
     fun expect(params: ExpectParamsBuilder): Token {
@@ -20,7 +21,7 @@ class TokenTransmitter(tokens: List<Token>) {
             params.removeWhen(WhenRemoveToken.Always)
         message!!
         return try {
-            if (tokens.isEmpty()) throw UnexpectedEndException(message, null)
+            if (tokens.isEmpty()) throw UnexpectedEndException(message, lastLocation)
             if (params.isIgnoringNewLine) {
                 while (tokens.first.content == Tokens.NEWLINE_ID) {
                     val token = tokens.pop()

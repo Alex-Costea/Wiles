@@ -5,9 +5,9 @@ import `in`.costea.wiles.constants.Settings.DEBUG
 
 class CompilationExceptionsCollection : ArrayList<AbstractCompilationException>() {
     fun getExceptionsString(input: String): String {
-        val optional: String = sortedWith(nullsLast(compareBy<AbstractCompilationException> { it.tokenLocation?.line }
-            .thenBy { it.tokenLocation?.lineIndex }))
-            .map { "\n    " + it.message + (it.tokenLocation?.displayLocation(input)?:"") +
+        val optional: String = sortedWith(nullsLast(compareBy<AbstractCompilationException> { it.tokenLocation.line }
+            .thenBy { it.tokenLocation.lineIndex }))
+            .map { "\n    " + it.message + it.tokenLocation.displayLocation(input) +
                     (if (DEBUG) it.stackTraceToString() else "") }
             .fold("") { a, b -> a + b }
         if (optional.isEmpty())

@@ -5,7 +5,7 @@ import `in`.costea.wiles.constants.ErrorMessages.LINE_SYMBOL
 data class TokenLocation(val line: Int, val lineIndex: Int) {
     override fun equals(other: Any?): Boolean {
         if (other is TokenLocation)
-            return line == other.line || lineIndex == other.lineIndex
+            return line == other.line && lineIndex == other.lineIndex
         return false
     }
 
