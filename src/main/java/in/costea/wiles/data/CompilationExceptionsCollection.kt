@@ -1,18 +1,20 @@
 package `in`.costea.wiles.data
 
-import `in`.costea.wiles.exceptions.AbstractCompilationException
+import `in`.costea.wiles.constants.ErrorMessages.COMPILATION_FAILED
+import `in`.costea.wiles.constants.ErrorMessages.LINE_SYMBOL
 import `in`.costea.wiles.constants.Settings.DEBUG
+import `in`.costea.wiles.exceptions.AbstractCompilationException
 
 class CompilationExceptionsCollection : ArrayList<AbstractCompilationException>() {
     fun getExceptionsString(input: String): String {
-        val optional: String = sortedWith(nullsLast(compareBy<AbstractCompilationException> { it.tokenLocation.line }
+        val optional = sortedWith(nullsLast(compareBy<AbstractCompilationException> { it.tokenLocation.line }
             .thenBy { it.tokenLocation.lineIndex }))
-            .map { "\n    " + it.message + it.tokenLocation.displayLocation(input) +
-                    (if (DEBUG) it.stackTraceToString() else "") }
+            .map { LINE_SYMBOL+ "Line ${it.tokenLocation.line}: " + it.message +
+                    it.tokenLocation.displayLocation(input) + (if (DEBUG) "\n"+it.stackTraceToString() else "") }
             .fold("") { a, b -> a + b }
         if (optional.isEmpty())
             throw IllegalStateException()
-        return optional
+        return COMPILATION_FAILED+optional
     }
 
     override fun equals(other: Any?): Boolean {

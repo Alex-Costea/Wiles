@@ -4,14 +4,13 @@ import com.fasterxml.jackson.core.util.DefaultPrettyPrinter
 import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.google.common.base.CharMatcher
-import `in`.costea.wiles.statements.CodeBlockStatement
+import `in`.costea.wiles.constants.ErrorMessages.IO_ERROR
 import `in`.costea.wiles.converters.InputToTokensConverter
 import `in`.costea.wiles.converters.TokensToSyntaxTreeConverter
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.data.Token
-import `in`.costea.wiles.exceptions.CompilationFailed
-import `in`.costea.wiles.constants.ErrorMessages.IO_ERROR
 import `in`.costea.wiles.data.TokenLocation
+import `in`.costea.wiles.statements.CodeBlockStatement
 import java.io.BufferedReader
 import java.io.File
 import java.io.IOException
@@ -40,7 +39,8 @@ object Main {
         //Print exceptions
         val writer = mapper.writer(DefaultPrettyPrinter())
         writer.writeValue(File("syntaxTree.json"), ast)
-        if (exceptions.size > 0) throw CompilationFailed(exceptions,input)
+        if (exceptions.size > 0)
+            System.err.println(exceptions.getExceptionsString(input))
     }
 
     private fun lastLocation(input : String) : TokenLocation
@@ -48,7 +48,7 @@ object Main {
         val textSplit = CharMatcher.whitespace().trimTrailingFrom(input).split("\n")
         val lastIndex = textSplit.lastIndex
         val lastLineLocation = textSplit[lastIndex].length
-        return TokenLocation(lastIndex+1,lastLineLocation+1)
+        return TokenLocation(lastIndex+1,lastLineLocation+2)
     }
 
     private fun loadFile(): String {

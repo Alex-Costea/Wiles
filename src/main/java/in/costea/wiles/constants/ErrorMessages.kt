@@ -21,4 +21,5 @@ object ErrorMessages {
     const val NOT_YET_IMPLEMENTED_ERROR = "Not yet implemented!"
     const val MAX_SYMBOL_TOO_LARGE = "MAX_SYMBOL_LENGTH smaller than length of largest symbol!"
     const val LINE_SYMBOL = "\n>>> "
+    const val COMPILATION_FAILED ="\nCOMPILATION FAILED!\n"
 }
