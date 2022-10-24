@@ -28,11 +28,8 @@ object Main {
         val tokens = sourceToTokens(input)
         print("Tokens: ")
         println(tokens.stream().map(Token::content).toList())
-        val textSplit = input.trim().split("\n")
-        val lastIndex = textSplit.lastIndex
-        val lastLineLocation = textSplit[lastIndex].length
-        val lastLocation = TokenLocation(lastIndex+1,lastLineLocation+1)
-        val ast = tokensToAST(tokens,lastLocation)
+
+        val ast = tokensToAST(tokens, lastLocation(input))
         val mapper =
             JsonMapper.builder().disable(MapperFeature.AUTO_DETECT_CREATORS).disable(MapperFeature.AUTO_DETECT_FIELDS)
                 .disable(MapperFeature.AUTO_DETECT_GETTERS).disable(MapperFeature.AUTO_DETECT_IS_GETTERS).build()
@@ -43,6 +40,14 @@ object Main {
         val writer = mapper.writer(DefaultPrettyPrinter())
         writer.writeValue(File("syntaxTree.json"), ast)
         if (exceptions.size > 0) throw CompilationFailed(exceptions,input)
+    }
+
+    private fun lastLocation(input : String) : TokenLocation
+    {
+        val textSplit = input.trim().split("\n")
+        val lastIndex = textSplit.lastIndex
+        val lastLineLocation = textSplit[lastIndex].length
+        return TokenLocation(lastIndex+1,lastLineLocation+1)
     }
 
     private fun loadFile(): String {
