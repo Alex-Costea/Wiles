@@ -10,6 +10,7 @@ import `in`.costea.wiles.converters.TokensToSyntaxTreeConverter
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.data.Token
 import `in`.costea.wiles.data.TokenLocation
+import `in`.costea.wiles.exceptions.InternalErrorException
 import `in`.costea.wiles.statements.CodeBlockStatement
 import java.io.BufferedReader
 import java.io.File
@@ -62,9 +63,9 @@ object Main {
                 return input
             }
         } catch (ex: NullPointerException) {
-            throw Error(IO_ERROR)
+            throw InternalErrorException(IO_ERROR)
         } catch (ex: IOException) {
-            throw Error(IO_ERROR)
+            throw InternalErrorException(IO_ERROR)
         }
     }
 

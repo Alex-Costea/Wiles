@@ -4,6 +4,7 @@ import `in`.costea.wiles.constants.ErrorMessages.COMPILATION_FAILED
 import `in`.costea.wiles.constants.ErrorMessages.LINE_SYMBOL
 import `in`.costea.wiles.constants.Settings.DEBUG
 import `in`.costea.wiles.exceptions.AbstractCompilationException
+import `in`.costea.wiles.exceptions.InternalErrorException
 
 class CompilationExceptionsCollection : ArrayList<AbstractCompilationException>() {
     fun getExceptionsString(input: String): String {
@@ -13,7 +14,7 @@ class CompilationExceptionsCollection : ArrayList<AbstractCompilationException>(
                     it.tokenLocation.displayLocation(input) + (if (DEBUG) "\n"+it.stackTraceToString() else "") }
             .fold("") { a, b -> a + b }
         if (optional.isEmpty())
-            throw IllegalStateException()
+            throw InternalErrorException()
         return COMPILATION_FAILED+optional
     }
 

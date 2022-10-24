@@ -6,6 +6,7 @@ import `in`.costea.wiles.enums.WhenRemoveToken
 import `in`.costea.wiles.constants.Tokens.TOKENS_INVERSE
 import `in`.costea.wiles.constants.ErrorMessages.TOKEN_EXPECTED_ERROR
 import `in`.costea.wiles.constants.ErrorMessages.WHEN_REMOVE_EXPECTED
+import `in`.costea.wiles.exceptions.InternalErrorException
 import java.util.function.Predicate
 
 class ExpectParamsBuilder private constructor(var foundTest: Predicate<String>) {
@@ -53,16 +54,16 @@ class ExpectParamsBuilder private constructor(var foundTest: Predicate<String>) 
     {
         frozen = true
         if(errorMessage == null)
-            throw IllegalStateException(ERROR_MESSAGE_EXPECTED)
+            throw InternalErrorException(ERROR_MESSAGE_EXPECTED)
         if(whenRemove == WhenRemoveToken.Default)
-            throw IllegalStateException(WHEN_REMOVE_EXPECTED)
+            throw InternalErrorException(WHEN_REMOVE_EXPECTED)
         return this
     }
 
     private fun checkFrozen()
     {
         if(frozen)
-            throw IllegalStateException(CANNOT_EDIT)
+            throw InternalErrorException(CANNOT_EDIT)
     }
 
     companion object {

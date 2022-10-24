@@ -1,8 +1,6 @@
 import `in`.costea.wiles.constants.ErrorMessages.END_OF_STATEMENT_EXPECTED
-import `in`.costea.wiles.constants.ErrorMessages.END_TOKEN_NOT_ALLOWED_ERROR
 import `in`.costea.wiles.constants.ErrorMessages.EXPRESSION_EXPECTED_ERROR
 import `in`.costea.wiles.constants.ErrorMessages.EXPRESSION_UNFINISHED_ERROR
-import `in`.costea.wiles.constants.ErrorMessages.IDENTIFIER_OR_UNARY_OPERATOR_EXPECTED_ERROR
 import `in`.costea.wiles.constants.ErrorMessages.TOKEN_EXPECTED_ERROR
 import `in`.costea.wiles.constants.ErrorMessages.UNEXPECTED_TOKEN_ERROR
 import `in`.costea.wiles.constants.Tokens.ASSIGN_ID
@@ -93,7 +91,7 @@ class SyntaxTreeConverterTests {
         assertResults(createExceptions(UnexpectedEndException(EXPRESSION_UNFINISHED_ERROR, nullLocation)),
                 null,
                 "!a", PLUS_ID, "!b", PLUS_ID)
-        assertResults(createExceptions(TokenExpectedException(IDENTIFIER_OR_UNARY_OPERATOR_EXPECTED_ERROR, nullLocation)),
+        assertResults(createExceptions(TokenExpectedException(UNEXPECTED_TOKEN_ERROR, nullLocation)),
                 null,
                 "!b", PLUS_ID, TIMES_ID, "#5")
         assertResults(createExceptions(UnexpectedTokenException(UNEXPECTED_TOKEN_ERROR, nullLocation)),
@@ -103,7 +101,7 @@ class SyntaxTreeConverterTests {
                 null,
                 "!a", PLUS_ID, ROUND_BRACKET_START_ID, "BREAK", ROUND_BRACKET_END_ID)
 
-        assertResults(createExceptions(UnexpectedTokenException(END_TOKEN_NOT_ALLOWED_ERROR, nullLocation)),
+        assertResults(createExceptions(TokenExpectedException(UNEXPECTED_TOKEN_ERROR, nullLocation)),
             null,
             "!a", PLUS_ID, ROUND_BRACKET_START_ID,"!b",PLUS_ID, END_BLOCK_ID, ROUND_BRACKET_END_ID)
     }

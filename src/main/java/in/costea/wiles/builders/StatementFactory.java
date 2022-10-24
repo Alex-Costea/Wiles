@@ -3,6 +3,7 @@ package in.costea.wiles.builders;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.enums.WhenRemoveToken;
 import in.costea.wiles.exceptions.AbstractCompilationException;
+import in.costea.wiles.exceptions.InternalErrorException;
 import in.costea.wiles.exceptions.UnexpectedTokenException;
 import in.costea.wiles.services.TokenTransmitter;
 import in.costea.wiles.statements.AbstractStatement;
@@ -50,7 +51,7 @@ public class StatementFactory {
     public @NotNull StatementFactory addType(@NotNull Class<? extends AbstractStatement> statement)
     {
         if(!params.containsKey(statement))
-            throw new RuntimeException(NOT_YET_IMPLEMENTED_ERROR);
+            throw new InternalErrorException(NOT_YET_IMPLEMENTED_ERROR);
         this.statements.add(statement);
         return this;
     }

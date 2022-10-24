@@ -9,7 +9,7 @@ import `in`.costea.wiles.exceptions.UnexpectedEndException
 import `in`.costea.wiles.constants.Tokens
 import `in`.costea.wiles.constants.ErrorMessages.INTERNAL_ERROR
 import `in`.costea.wiles.data.TokenLocation
-import java.lang.IllegalStateException
+import `in`.costea.wiles.exceptions.InternalErrorException
 import java.util.*
 
 class TokenTransmitter(tokens: List<Token>, private val lastLocation : TokenLocation) {
@@ -21,7 +21,7 @@ class TokenTransmitter(tokens: List<Token>, private val lastLocation : TokenLoca
         var succeeded = false
         if (!params.frozen && params.whenRemove == WhenRemoveToken.Default)
             params.removeWhen(WhenRemoveToken.Always)
-        message?:throw IllegalStateException(ERROR_MESSAGE_EXPECTED)
+        message?:throw InternalErrorException(ERROR_MESSAGE_EXPECTED)
         return try {
             if (tokens.isEmpty()) throw UnexpectedEndException(message, lastLocation)
             if (params.isIgnoringNewLine) {

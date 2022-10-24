@@ -5,6 +5,7 @@ import `in`.costea.wiles.statements.TokenStatement
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.services.TokenTransmitter
 import `in`.costea.wiles.constants.ErrorMessages.CANNOT_BE_PROCESSED_ERROR
+import `in`.costea.wiles.exceptions.InternalErrorException
 
 class BinaryExpression(
     transmitter: TokenTransmitter,
@@ -19,6 +20,6 @@ class BinaryExpression(
     }
 
     override fun process(): CompilationExceptionsCollection {
-        throw IllegalStateException(CANNOT_BE_PROCESSED_ERROR)
+        throw InternalErrorException(CANNOT_BE_PROCESSED_ERROR)
     }
 }

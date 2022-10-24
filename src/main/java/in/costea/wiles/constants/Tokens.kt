@@ -9,6 +9,7 @@ import `in`.costea.wiles.constants.ErrorMessages.MAX_SYMBOL_TOO_LARGE
 import `in`.costea.wiles.constants.Settings.DEBUG
 import `in`.costea.wiles.constants.Settings.MAX_SYMBOL_LENGTH
 import `in`.costea.wiles.constants.Settings.ROMANIAN_MODE
+import `in`.costea.wiles.exceptions.InternalErrorException
 import java.util.*
 import kotlin.collections.HashMap
 import kotlin.streams.toList
@@ -145,7 +146,7 @@ object Tokens {
         TOKENS = HashBiMap.create(KEYWORDS)
         TOKENS.putAll(SYMBOLS)
         TOKENS_INVERSE = TOKENS.inverse()
-        require(Collections.max(SYMBOLS.keys.stream().mapToInt { obj: String -> obj.length }
-            .toList()) <= MAX_SYMBOL_LENGTH) { MAX_SYMBOL_TOO_LARGE }
+        if(Collections.max(SYMBOLS.keys.stream().mapToInt { obj: String -> obj.length }.toList()) > MAX_SYMBOL_LENGTH)
+            throw InternalErrorException(MAX_SYMBOL_TOO_LARGE)
     }
 }

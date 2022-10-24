@@ -6,6 +6,7 @@ import in.costea.wiles.enums.ExpectNext;
 import in.costea.wiles.enums.SyntaxType;
 import in.costea.wiles.enums.WhenRemoveToken;
 import in.costea.wiles.exceptions.AbstractCompilationException;
+import in.costea.wiles.exceptions.InternalErrorException;
 import in.costea.wiles.exceptions.UnexpectedEndException;
 import in.costea.wiles.exceptions.UnexpectedTokenException;
 import in.costea.wiles.services.PrecedenceProcessor;
@@ -111,7 +112,7 @@ public abstract class AbstractExpression extends AbstractStatement {
                 //Handle method calls and inner expressions
                 if (transmitter.expectMaybe(tokenOf(ROUND_BRACKET_START_ID)).isPresent()) {
                     if (expectNext == ExpectNext.OPERATOR) //Method call
-                        throw new RuntimeException(NOT_YET_IMPLEMENTED_ERROR);
+                        throw new InternalErrorException(NOT_YET_IMPLEMENTED_ERROR);
                     else { //Inner expressions
                         var newExpression = new InnerExpression(this.transmitter);
                         newExpression.process().throwFirstIfExists();
@@ -160,7 +161,7 @@ public abstract class AbstractExpression extends AbstractStatement {
                             .withErrorMessage(OPERATOR_EXPECTED_ERROR));
                 else
                     mainCurrentToken = transmitter.expect(tokenOf(IS_CONTAINED_IN.invoke(STARTING_OPERATORS))
-                            .or(IS_LITERAL).withErrorMessage(IDENTIFIER_OR_UNARY_OPERATOR_EXPECTED_ERROR));
+                            .or(IS_LITERAL).withErrorMessage(UNEXPECTED_TOKEN_ERROR));
 
                 //Add token and change next expected token
                 precedenceProcessor.add(new TokenStatement(transmitter, mainCurrentToken));

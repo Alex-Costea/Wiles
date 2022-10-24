@@ -2,6 +2,7 @@ package `in`.costea.wiles.statements
 
 import `in`.costea.wiles.builders.StatementFactory
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
+import `in`.costea.wiles.constants.ErrorMessages.EXPRESSION_EXPECTED_ERROR
 import `in`.costea.wiles.statements.expressions.DefaultExpression
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.enums.SyntaxType
@@ -11,7 +12,6 @@ import `in`.costea.wiles.constants.Tokens.ASSIGN_ID
 import `in`.costea.wiles.constants.ErrorMessages.IDENTIFIER_EXPECTED_ERROR
 import `in`.costea.wiles.constants.Predicates.IS_IDENTIFIER
 import `in`.costea.wiles.constants.Tokens.MUTABLE_ID
-import `in`.costea.wiles.constants.ErrorMessages.RIGHT_SIDE_EXPECTED_ERROR
 
 class DeclarationStatement(transmitter: TokenTransmitter) : AbstractStatement(transmitter) {
     private var left: AbstractStatement? = null
@@ -38,7 +38,7 @@ class DeclarationStatement(transmitter: TokenTransmitter) : AbstractStatement(tr
             val rightExpression = StatementFactory(transmitter)
                 .addType(DefaultExpression::class.java)
                 .addType(MethodStatement::class.java)
-                .create(RIGHT_SIDE_EXPECTED_ERROR)
+                .create(EXPRESSION_EXPECTED_ERROR)
 
             this.right = rightExpression
             exceptions.addAll(rightExpression.process())
