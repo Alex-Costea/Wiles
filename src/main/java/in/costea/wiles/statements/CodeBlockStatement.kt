@@ -40,8 +40,7 @@ class CodeBlockStatement(transmitter: TokenTransmitter, private val blockType: C
         if(blockType.isWithinMethod)
             statementFactory.addType(ReturnStatement::class.java)
         val statement = statementFactory.create()
-        val newExceptions = statement.process()
-        if (newExceptions.size > 0) throw newExceptions[0]
+        statement.process().throwFirstIfExists()
         components.add(statement)
     }
 

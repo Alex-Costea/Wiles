@@ -35,4 +35,10 @@ class CompilationExceptionsCollection : ArrayList<AbstractCompilationException>(
         return hashCode
     }
 
+    fun throwFirstIfExists()
+    {
+        if(size>0)
+            throw this[0]
+    }
+
 }

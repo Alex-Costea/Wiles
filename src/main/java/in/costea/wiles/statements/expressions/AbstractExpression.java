@@ -52,8 +52,8 @@ public abstract class AbstractExpression extends AbstractStatement {
         if (operation != null) components.add(operation);
         else
             assert left == null;
-        assert right != null;
-        components.add(right);
+        if(right != null)
+            components.add(right);
         return components;
     }
 
@@ -120,9 +120,7 @@ public abstract class AbstractExpression extends AbstractStatement {
                         throw new RuntimeException(NOT_YET_IMPLEMENTED_ERROR);
                     else { //Inner expressions
                         var newExpression = new InnerExpression(this.transmitter);
-                        @NotNull final CompilationExceptionsCollection newExceptions = newExpression.process();
-                        if (newExceptions.size() > 0)
-                            throw newExceptions.get(0);
+                        newExpression.process().throwFirstIfExists();
                         precedenceProcessor.add(newExpression);
                         expectNext = ExpectNext.OPERATOR;
                         continue;
@@ -142,9 +140,7 @@ public abstract class AbstractExpression extends AbstractStatement {
                     Optional<AbstractStatement> maybeStatement;
                     if ((maybeStatement = handleSpecialStatements()).isPresent()) {
                         AbstractStatement statement = maybeStatement.get();
-                        CompilationExceptionsCollection exceptions = statement.process();
-                        if (!exceptions.isEmpty())
-                            throw exceptions.get(0);
+                        statement.process().throwFirstIfExists();
                         precedenceProcessor.add(maybeStatement.get());
                         expectNext = ExpectNext.OPERATOR;
                         continue;
