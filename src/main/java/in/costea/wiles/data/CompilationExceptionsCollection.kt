@@ -4,10 +4,11 @@ import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.constants.Settings.DEBUG
 
 class CompilationExceptionsCollection : ArrayList<AbstractCompilationException>() {
-    fun getExceptionsString(): String {
+    fun getExceptionsString(input: String): String {
         val optional: String = sortedWith(nullsLast(compareBy<AbstractCompilationException> { it.tokenLocation?.line }
             .thenBy { it.tokenLocation?.lineIndex }))
-            .map { "\n    " + it.message + "\n" + (if (DEBUG) it.stackTraceToString() else "") }
+            .map { "\n    " + it.message + (it.tokenLocation?.displayLocation(input)?:"") +
+                    (if (DEBUG) it.stackTraceToString() else "") }
             .fold("") { a, b -> a + b }
         if (optional.isEmpty())
             throw IllegalStateException()

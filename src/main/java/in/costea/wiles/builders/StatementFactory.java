@@ -16,6 +16,7 @@ import java.util.Set;
 
 import static in.costea.wiles.builders.ExpectParamsBuilder.ANYTHING;
 import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
+import static in.costea.wiles.constants.ErrorMessages.UNEXPECTED_TOKEN_ERROR;
 import static in.costea.wiles.statements.expressions.AbstractExpression.START_OF_EXPRESSION;
 import static in.costea.wiles.constants.Tokens.*;
 import static in.costea.wiles.constants.ErrorMessages.INTERNAL_ERROR;
@@ -59,8 +60,7 @@ public class StatementFactory {
         ExpectParamsBuilder paramsBuilder = tokenOf(ANYTHING).removeWhen(WhenRemoveToken.Never)
                 .withErrorMessage(errorMessage);
         Token newToken = transmitter.expect(paramsBuilder);
-        String content = TOKENS_INVERSE.getOrDefault(newToken.getContent(),newToken.getContent());
-        throw new UnexpectedTokenException(content, newToken.getLocation());
+        throw new UnexpectedTokenException(UNEXPECTED_TOKEN_ERROR, newToken.getLocation());
     }
 
     public @NotNull AbstractStatement create() throws AbstractCompilationException {

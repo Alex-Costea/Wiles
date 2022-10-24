@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static in.costea.wiles.constants.Chars.*;
+import static in.costea.wiles.constants.ErrorMessages.STRING_UNFINISHED_ERROR;
 import static in.costea.wiles.constants.Settings.MAX_SYMBOL_LENGTH;
 import static in.costea.wiles.constants.Tokens.*;
 import static in.costea.wiles.constants.Utils.*;
@@ -102,7 +103,7 @@ public class InputToTokensConverter {
     @NotNull
     private String readStringLiteral() throws StringUnfinishedException {
         if (index >= arrayChars.length)
-            throw new StringUnfinishedException("", line, getIndexOnCurrentLine());
+            throw new StringUnfinishedException(STRING_UNFINISHED_ERROR, line, getIndexOnCurrentLine());
         StringBuilder sb = createString(true);
         if (index < arrayChars.length && arrayChars[index] == STRING_DELIMITER)
             return STRING_START + sb;
@@ -110,7 +111,7 @@ public class InputToTokensConverter {
         //String not properly finished at this point
         if (index < arrayChars.length && arrayChars[index] == NEWLINE) //of the newline token regardless
             index--;
-        throw new StringUnfinishedException(sb.toString(), line, getIndexOnCurrentLine());
+        throw new StringUnfinishedException(STRING_UNFINISHED_ERROR, line, getIndexOnCurrentLine());
     }
 
     @NotNull

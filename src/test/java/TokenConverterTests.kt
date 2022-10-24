@@ -1,3 +1,4 @@
+import `in`.costea.wiles.constants.ErrorMessages.STRING_UNFINISHED_ERROR
 import `in`.costea.wiles.converters.InputToTokensConverter
 import `in`.costea.wiles.data.Token
 import `in`.costea.wiles.data.TokenLocation
@@ -74,9 +75,9 @@ class TokenConverterTests {
     @Test
     fun stringLiteralsTest() {
         tokenConverterEquals("\"abc\"", arrayOf("@abc"))
-        tokenConverterThrows(0, "\"abc", StringUnfinishedException::class.java, "String unfinished: abc")
+        tokenConverterThrows(0, "\"abc", StringUnfinishedException::class.java, STRING_UNFINISHED_ERROR)
         tokenConverterEquals("\"\"\"\"", arrayOf("@", "@"))
-        tokenConverterThrows(0, "\"\"\"\"\"", StringUnfinishedException::class.java, "String unfinished: ")
+        tokenConverterThrows(0, "\"\"\"\"\"", StringUnfinishedException::class.java, STRING_UNFINISHED_ERROR)
         tokenConverterThrows(0, "abc\"def\nghi\"jkl", StringUnfinishedException::class.java, null, null)
         tokenConverterThrows(0, "true\n\nhello\"\n\"", StringUnfinishedException::class.java, null,3)
         tokenConverterThrows(0, "@\n\"\n\"\n", StringUnfinishedException::class.java,null, 2)

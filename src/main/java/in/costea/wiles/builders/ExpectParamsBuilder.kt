@@ -30,11 +30,13 @@ class ExpectParamsBuilder private constructor(var foundTest: Predicate<String>) 
 
     fun or(otherTest: Predicate<String>): ExpectParamsBuilder {
         foundTest = foundTest.or(otherTest)
+        errorMessage = null
         return this
     }
 
     fun or(otherTest: String): ExpectParamsBuilder {
         or { x -> x == otherTest }
+        errorMessage = null
         return this
     }
 

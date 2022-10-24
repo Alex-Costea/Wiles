@@ -37,7 +37,7 @@ object Main {
         //Print exceptions
         val writer = mapper.writer(DefaultPrettyPrinter())
         writer.writeValue(File("syntaxTree.json"), ast)
-        if (exceptions.size > 0) throw CompilationFailed(exceptions)
+        if (exceptions.size > 0) throw CompilationFailed(exceptions,input)
     }
 
     private fun loadFile(): String {

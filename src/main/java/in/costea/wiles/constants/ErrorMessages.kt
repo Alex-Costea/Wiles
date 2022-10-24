@@ -15,9 +15,10 @@ object ErrorMessages {
     const val OPERATOR_EXPECTED_ERROR = "Operator expected!"
     const val IDENTIFIER_OR_UNARY_OPERATOR_EXPECTED_ERROR = "Identifier or unary operator expected!"
     const val EXPRESSION_UNFINISHED_ERROR = "Expression unfinished!"
-    const val UNEXPECTED_TOKEN_ERROR = "Unexpected token: %s"
-    const val STRING_UNFINISHED_ERROR = "Text unfinished: \"%s"
+    const val UNEXPECTED_TOKEN_ERROR = "Unexpected token!"
+    const val STRING_UNFINISHED_ERROR = "Text unfinished!"
     const val CANNOT_BE_PROCESSED_ERROR = "Cannot be processed!"
     const val NOT_YET_IMPLEMENTED_ERROR = "Not yet implemented!"
     const val MAX_SYMBOL_TOO_LARGE = "MAX_SYMBOL_LENGTH smaller than length of largest symbol!"
+    const val LINE_SYMBOL = "\n>>> "
 }

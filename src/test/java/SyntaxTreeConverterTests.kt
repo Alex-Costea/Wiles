@@ -31,6 +31,7 @@ import `in`.costea.wiles.constants.Tokens.SEPARATOR_ID
 import `in`.costea.wiles.constants.Tokens.START_BLOCK_ID
 import `in`.costea.wiles.constants.Tokens.TIMES_ID
 import `in`.costea.wiles.constants.ErrorMessages.TOKEN_EXPECTED_ERROR
+import `in`.costea.wiles.constants.ErrorMessages.UNEXPECTED_TOKEN_ERROR
 import `in`.costea.wiles.constants.Tokens.TYPEOF_ID
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -92,7 +93,7 @@ class SyntaxTreeConverterTests {
         assertResults(createExceptions(TokenExpectedException(IDENTIFIER_OR_UNARY_OPERATOR_EXPECTED_ERROR, null)),
                 null,
                 "!b", PLUS_ID, TIMES_ID, "#5")
-        assertResults(createExceptions(UnexpectedTokenException("*", null)),
+        assertResults(createExceptions(UnexpectedTokenException(UNEXPECTED_TOKEN_ERROR, null)),
                 null,
                 TIMES_ID, "!a")
         assertResults(createExceptions(TokenExpectedException(EXPRESSION_EXPECTED_ERROR, null)),

@@ -7,7 +7,7 @@ abstract class AbstractCompilationException : Exception {
     @JvmField
     val tokenLocation: TokenLocation?
 
-    constructor(s: String, tokenLocation: TokenLocation?) : super("" + (tokenLocation ?: "") + s) {
+    constructor(s: String, tokenLocation: TokenLocation?) :super(s) {
         this.tokenLocation = tokenLocation
     }
 
