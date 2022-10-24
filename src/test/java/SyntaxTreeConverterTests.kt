@@ -203,7 +203,7 @@ class SyntaxTreeConverterTests {
         var tree: AbstractStatement
 
         init {
-            converter = TokensToSyntaxTreeConverter(tokens.map { content-> Token(content, nullLocation) })
+            converter = TokensToSyntaxTreeConverter(tokens.map { content-> Token(content, nullLocation) }, nullLocation)
             tree = converter.convert()
             exceptions = converter.exceptions
         }

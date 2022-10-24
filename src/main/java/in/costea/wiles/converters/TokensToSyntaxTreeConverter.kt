@@ -4,14 +4,15 @@ import `in`.costea.wiles.statements.CodeBlockStatement
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.data.Token
 import `in`.costea.wiles.builders.CodeBlockType
+import `in`.costea.wiles.data.TokenLocation
 import `in`.costea.wiles.services.TokenTransmitter
 
-class TokensToSyntaxTreeConverter(tokens: List<Token>) {
+class TokensToSyntaxTreeConverter(tokens: List<Token>, lastLocation : TokenLocation) {
     val exceptions: CompilationExceptionsCollection
     private val tokenTransmitter: TokenTransmitter
 
     init {
-        tokenTransmitter = TokenTransmitter(tokens)
+        tokenTransmitter = TokenTransmitter(tokens, lastLocation)
         exceptions = CompilationExceptionsCollection()
     }
 

@@ -10,6 +10,7 @@ import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.data.Token
 import `in`.costea.wiles.exceptions.CompilationFailed
 import `in`.costea.wiles.constants.ErrorMessages.IO_ERROR
+import `in`.costea.wiles.data.TokenLocation
 import java.io.BufferedReader
 import java.io.File
 import java.io.IOException
@@ -27,7 +28,11 @@ object Main {
         val tokens = sourceToTokens(input)
         print("Tokens: ")
         println(tokens.stream().map(Token::content).toList())
-        val ast = tokensToAST(tokens)
+        val textSplit = input.split("\n")
+        val lastIndex = textSplit.lastIndex
+        val lastLineLocation = textSplit[lastIndex].length
+        val lastLocation = TokenLocation(lastIndex+1,lastLineLocation+1)
+        val ast = tokensToAST(tokens,lastLocation)
         val mapper =
             JsonMapper.builder().disable(MapperFeature.AUTO_DETECT_CREATORS).disable(MapperFeature.AUTO_DETECT_FIELDS)
                 .disable(MapperFeature.AUTO_DETECT_GETTERS).disable(MapperFeature.AUTO_DETECT_IS_GETTERS).build()
@@ -64,8 +69,8 @@ object Main {
         return tokens
     }
 
-    private fun tokensToAST(tokens: List<Token>): CodeBlockStatement {
-        val converter = TokensToSyntaxTreeConverter(tokens)
+    private fun tokensToAST(tokens: List<Token>, lastLocation : TokenLocation): CodeBlockStatement {
+        val converter = TokensToSyntaxTreeConverter(tokens,lastLocation)
         val programStatement = converter.convert()
         exceptions.addAll(converter.exceptions)
         return programStatement

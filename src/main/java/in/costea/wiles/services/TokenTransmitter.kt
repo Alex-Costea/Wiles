@@ -7,11 +7,11 @@ import `in`.costea.wiles.exceptions.TokenExpectedException
 import `in`.costea.wiles.exceptions.UnexpectedEndException
 import `in`.costea.wiles.constants.Tokens
 import `in`.costea.wiles.constants.ErrorMessages.INTERNAL_ERROR
+import `in`.costea.wiles.data.TokenLocation
 import java.util.*
 
-class TokenTransmitter(tokens: List<Token>) {
+class TokenTransmitter(tokens: List<Token>, private val lastLocation : TokenLocation) {
     private val tokens = LinkedList(tokens)
-    private val lastLocation = tokens.last().location
 
     @Throws(UnexpectedEndException::class, TokenExpectedException::class)
     fun expect(params: ExpectParamsBuilder): Token {
