@@ -28,7 +28,7 @@ object Main {
         val tokens = sourceToTokens(input)
         print("Tokens: ")
         println(tokens.stream().map(Token::content).toList())
-        val textSplit = input.split("\n")
+        val textSplit = input.trim().split("\n")
         val lastIndex = textSplit.lastIndex
         val lastLineLocation = textSplit[lastIndex].length
         val lastLocation = TokenLocation(lastIndex+1,lastLineLocation+1)
