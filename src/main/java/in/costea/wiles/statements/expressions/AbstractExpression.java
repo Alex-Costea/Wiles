@@ -1,8 +1,5 @@
 package in.costea.wiles.statements.expressions;
 
-import in.costea.wiles.builders.ExpectParamsBuilder;
-import in.costea.wiles.statements.AbstractStatement;
-import in.costea.wiles.statements.TokenStatement;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.enums.ExpectNext;
@@ -13,23 +10,20 @@ import in.costea.wiles.exceptions.UnexpectedEndException;
 import in.costea.wiles.exceptions.UnexpectedTokenException;
 import in.costea.wiles.services.PrecedenceProcessor;
 import in.costea.wiles.services.TokenTransmitter;
+import in.costea.wiles.statements.AbstractStatement;
+import in.costea.wiles.statements.TokenStatement;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static in.costea.wiles.builders.ExpectParamsBuilder.isContainedIn;
 import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
-import static in.costea.wiles.constants.Predicates.EXPECT_TERMINATOR;
-import static in.costea.wiles.constants.Predicates.IS_LITERAL;
-import static in.costea.wiles.constants.Tokens.*;
 import static in.costea.wiles.constants.ErrorMessages.*;
+import static in.costea.wiles.constants.Predicates.*;
+import static in.costea.wiles.constants.Tokens.*;
 
 public abstract class AbstractExpression extends AbstractStatement {
-    public static final ExpectParamsBuilder START_OF_EXPRESSION =
-            tokenOf(isContainedIn(STARTING_OPERATORS)).or(IS_LITERAL).or(ROUND_BRACKET_START_ID)
-                    .withErrorMessage(EXPRESSION_EXPECTED_ERROR).removeWhen(WhenRemoveToken.Never);
     @NotNull
     protected final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
     protected AbstractStatement left = null;
@@ -149,7 +143,7 @@ public abstract class AbstractExpression extends AbstractStatement {
 
                 //Handle unary operators
                 if (expectNext == ExpectNext.TOKEN) {
-                    maybeTempToken = transmitter.expectMaybe(tokenOf(isContainedIn(STARTING_OPERATORS)));
+                    maybeTempToken = transmitter.expectMaybe(tokenOf(IS_CONTAINED_IN.invoke(STARTING_OPERATORS)));
                     if (maybeTempToken.isPresent()) {
                         mainCurrentToken = maybeTempToken.get();
                         if (INFIX_OPERATORS.contains(mainCurrentToken.getContent()))
@@ -162,11 +156,11 @@ public abstract class AbstractExpression extends AbstractStatement {
 
                 //Expect the next token
                 if (expectNext == ExpectNext.OPERATOR)
-                    mainCurrentToken = transmitter.expect(tokenOf(isContainedIn(INFIX_OPERATORS))
+                    mainCurrentToken = transmitter.expect(tokenOf(IS_CONTAINED_IN.invoke(INFIX_OPERATORS))
                             .withErrorMessage(OPERATOR_EXPECTED_ERROR));
                 else
-                    mainCurrentToken = transmitter.expect(tokenOf(isContainedIn(STARTING_OPERATORS)).or(IS_LITERAL)
-                            .withErrorMessage(IDENTIFIER_OR_UNARY_OPERATOR_EXPECTED_ERROR));
+                    mainCurrentToken = transmitter.expect(tokenOf(IS_CONTAINED_IN.invoke(STARTING_OPERATORS))
+                            .or(IS_LITERAL).withErrorMessage(IDENTIFIER_OR_UNARY_OPERATOR_EXPECTED_ERROR));
 
                 //Add token and change next expected token
                 precedenceProcessor.add(new TokenStatement(transmitter, mainCurrentToken));

@@ -2,19 +2,20 @@ package `in`.costea.wiles.statements
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
-import `in`.costea.wiles.builders.StatementFactory
-import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
-import `in`.costea.wiles.statements.expressions.AssignableExpression
-import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.builders.CodeBlockType
+import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
+import `in`.costea.wiles.builders.StatementFactory
+import `in`.costea.wiles.constants.Predicates.EXPECT_TERMINATOR
+import `in`.costea.wiles.constants.Predicates.READ_REST_OF_LINE
+import `in`.costea.wiles.constants.Tokens.DO_ID
+import `in`.costea.wiles.constants.Tokens.END_BLOCK_ID
+import `in`.costea.wiles.constants.Tokens.START_BLOCK_ID
+import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.enums.WhenRemoveToken
 import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.services.TokenTransmitter
-import `in`.costea.wiles.constants.Tokens.DO_ID
-import `in`.costea.wiles.constants.Tokens.END_BLOCK_ID
-import `in`.costea.wiles.constants.Predicates.EXPECT_TERMINATOR
-import `in`.costea.wiles.constants.Tokens.START_BLOCK_ID
+import `in`.costea.wiles.statements.expressions.AssignableExpression
 
 class CodeBlockStatement(transmitter: TokenTransmitter, private val blockType: CodeBlockType) : AbstractStatement(transmitter) {
     private val components: MutableList<AbstractStatement> = ArrayList()
@@ -40,7 +41,11 @@ class CodeBlockStatement(transmitter: TokenTransmitter, private val blockType: C
         if(blockType.isWithinMethod)
             statementFactory.addType(ReturnStatement::class.java)
         val statement = statementFactory.create()
-        statement.process().throwFirstIfExists()
+        val newExceptions = statement.process()
+        exceptions.addAll(newExceptions)
+        if(!newExceptions.isEmpty())
+            while(transmitter.expectMaybe(READ_REST_OF_LINE).isPresent)
+                Unit
         components.add(statement)
     }
 
