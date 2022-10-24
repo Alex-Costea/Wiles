@@ -59,7 +59,7 @@ public abstract class AbstractExpression extends AbstractStatement {
     protected boolean handleToken(@NotNull Token token) throws AbstractCompilationException {
         if (token.getContent().equals(ROUND_BRACKET_END_ID))
             throw new UnexpectedTokenException(UNEXPECTED_CLOSING_BRACKET_ERROR, token.getLocation());
-        return false;
+        return STATEMENT_START_KEYWORDS.contains(token.getContent());
     }
 
     protected void setComponents(@NotNull PrecedenceProcessor precedenceProcessor)
@@ -94,20 +94,16 @@ public abstract class AbstractExpression extends AbstractStatement {
                 expectNext = ExpectNext.OPERATOR;
 
             while (!transmitter.tokensExhausted()) {
-                //Stop parsing expression if correctly finalized
+                //Finalize expression
+                //It finalizes on keywords that correspond to the start of the next statement for better error messages
                 if ((expectNext == ExpectNext.OPERATOR)) {
-                    maybeTempToken = transmitter.expectMaybe(EXPECT_TERMINATOR_REMOVE_NEVER);
+                    maybeTempToken = transmitter.expectMaybe(tokenOf(IS_CONTAINED_IN.invoke(TERMINATORS)).or(ASSIGN_ID)
+                            .or(IS_CONTAINED_IN.invoke(STATEMENT_START_KEYWORDS)).dontIgnoreNewLine()
+                            .removeWhen(WhenRemoveToken.Never));
                     if (maybeTempToken.isPresent())
                         if (handleToken(maybeTempToken.get()))
                             break;
                 }
-
-                //Handle end and assign tokens
-                maybeTempToken = transmitter.expectMaybe(tokenOf(END_BLOCK_ID).or(ASSIGN_ID)
-                        .removeWhen(WhenRemoveToken.Never));
-                if (maybeTempToken.isPresent())
-                    if (handleToken(maybeTempToken.get()))
-                        break;
 
                 //Handle method calls and inner expressions
                 if (transmitter.expectMaybe(tokenOf(ROUND_BRACKET_START_ID)).isPresent()) {
@@ -135,7 +131,7 @@ public abstract class AbstractExpression extends AbstractStatement {
                     Optional<AbstractStatement> maybeStatement;
                     if ((maybeStatement = handleSpecialStatements()).isPresent()) {
                         AbstractStatement statement = maybeStatement.get();
-                        statement.process().throwFirstIfExists();
+                        exceptions.addAll(statement.process());
                         precedenceProcessor.add(maybeStatement.get());
                         expectNext = ExpectNext.OPERATOR;
                         continue;

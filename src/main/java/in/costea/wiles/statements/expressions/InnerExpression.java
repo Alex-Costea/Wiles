@@ -13,7 +13,6 @@ public class InnerExpression extends AbstractExpression {
 
     @Override
     protected boolean handleToken(@NotNull Token token) {
-
         return token.getContent().equals(ROUND_BRACKET_END_ID);
     }
 

@@ -28,8 +28,6 @@ public class AssignableExpression extends AbstractExpression {
     protected boolean handleToken(@NotNull Token token) throws AbstractCompilationException {
         if(TERMINATORS.contains(token.getContent()))
             return true;
-        if(token.getContent().equals(END_BLOCK_ID))
-            return true;
         if (token.getContent().equals(ASSIGN_ID)) {
             operation = new TokenStatement(transmitter, transmitter.expect(tokenOf(ASSIGN_ID)));
             right = new DefaultExpression(transmitter);

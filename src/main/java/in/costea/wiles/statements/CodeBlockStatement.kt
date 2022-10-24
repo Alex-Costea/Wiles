@@ -5,9 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import `in`.costea.wiles.builders.CodeBlockType
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
 import `in`.costea.wiles.builders.StatementFactory
+import `in`.costea.wiles.constants.ErrorMessages.END_OF_STATEMENT_EXPECTED_ERROR
+import `in`.costea.wiles.constants.Predicates
 import `in`.costea.wiles.constants.Predicates.EXPECT_TERMINATOR
-import `in`.costea.wiles.constants.Predicates.EXPECT_TERMINATOR_REMOVE_NEVER
 import `in`.costea.wiles.constants.Predicates.READ_REST_OF_LINE
+import `in`.costea.wiles.constants.Tokens
 import `in`.costea.wiles.constants.Tokens.DO_ID
 import `in`.costea.wiles.constants.Tokens.END_BLOCK_ID
 import `in`.costea.wiles.constants.Tokens.START_BLOCK_ID
@@ -49,9 +51,16 @@ class CodeBlockStatement(transmitter: TokenTransmitter, private val blockType: C
             while(transmitter.expectMaybe(READ_REST_OF_LINE).isPresent)
                 Unit
         else try {
-            transmitter.expect(EXPECT_TERMINATOR_REMOVE_NEVER)
+            transmitter.expect(tokenOf(Predicates.IS_CONTAINED_IN(Tokens.TERMINATORS)).dontIgnoreNewLine()
+                .withErrorMessage(END_OF_STATEMENT_EXPECTED_ERROR).removeWhen(WhenRemoveToken.Never))
         }
         catch(ignored : UnexpectedEndException){}
+        catch(ex : AbstractCompilationException)
+        {
+            while(transmitter.expectMaybe(READ_REST_OF_LINE).isPresent)
+                Unit
+            throw ex
+        }
         finally {
             components.add(statement)
         }
@@ -72,7 +81,8 @@ class CodeBlockStatement(transmitter: TokenTransmitter, private val blockType: C
                         break
                     readOneStatement()
                 }
-                if (!blockType.isOutermost) transmitter.expect(tokenOf(END_BLOCK_ID))
+                if (!blockType.isOutermost)
+                    transmitter.expect(tokenOf(END_BLOCK_ID))
             }
         } catch (ex: AbstractCompilationException) {
             exceptions.add(ex)
