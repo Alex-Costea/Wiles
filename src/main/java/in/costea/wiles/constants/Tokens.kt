@@ -5,7 +5,7 @@ import com.google.common.collect.HashBiMap
 import `in`.costea.wiles.constants.Chars.CONTINUE_LINE
 import `in`.costea.wiles.constants.Chars.NEWLINE
 import `in`.costea.wiles.constants.Chars.SPACE
-import `in`.costea.wiles.constants.ErrorMessages.MAX_SYMBOL_TOO_LARGE
+import `in`.costea.wiles.constants.ErrorMessages.MAX_SYMBOL_TOO_LARGE_ERROR
 import `in`.costea.wiles.constants.Settings.DEBUG
 import `in`.costea.wiles.constants.Settings.MAX_SYMBOL_LENGTH
 import `in`.costea.wiles.constants.Settings.ROMANIAN_MODE
@@ -147,6 +147,6 @@ object Tokens {
         TOKENS.putAll(SYMBOLS)
         TOKENS_INVERSE = TOKENS.inverse()
         if(Collections.max(SYMBOLS.keys.stream().mapToInt { obj: String -> obj.length }.toList()) > MAX_SYMBOL_LENGTH)
-            throw InternalErrorException(MAX_SYMBOL_TOO_LARGE)
+            throw InternalErrorException(MAX_SYMBOL_TOO_LARGE_ERROR)
     }
 }

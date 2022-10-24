@@ -65,7 +65,7 @@ public class StatementFactory {
         ExpectParamsBuilder paramsBuilder = tokenOf(ANYTHING).removeWhen(WhenRemoveToken.Never)
                 .withErrorMessage(errorMessage);
         Token newToken = transmitter.expect(paramsBuilder);
-        throw new UnexpectedTokenException(UNEXPECTED_TOKEN_ERROR, newToken.getLocation());
+        throw new UnexpectedTokenException(INVALID_STATEMENT_ERROR, newToken.getLocation());
     }
 
     public @NotNull AbstractStatement create() throws AbstractCompilationException {

@@ -1,7 +1,7 @@
 package `in`.costea.wiles.services
 
 import `in`.costea.wiles.builders.ExpectParamsBuilder
-import `in`.costea.wiles.constants.ErrorMessages.ERROR_MESSAGE_EXPECTED
+import `in`.costea.wiles.constants.ErrorMessages.ERROR_MESSAGE_EXPECTED_ERROR
 import `in`.costea.wiles.data.Token
 import `in`.costea.wiles.enums.WhenRemoveToken
 import `in`.costea.wiles.exceptions.TokenExpectedException
@@ -12,7 +12,7 @@ import `in`.costea.wiles.data.TokenLocation
 import `in`.costea.wiles.exceptions.InternalErrorException
 import java.util.*
 
-class TokenTransmitter(tokens: List<Token>, private val lastLocation : TokenLocation) {
+class TokenTransmitter(tokens: List<Token>, val lastLocation : TokenLocation) {
     private val tokens = LinkedList(tokens)
 
     @Throws(UnexpectedEndException::class, TokenExpectedException::class)
@@ -21,7 +21,7 @@ class TokenTransmitter(tokens: List<Token>, private val lastLocation : TokenLoca
         var succeeded = false
         if (!params.frozen && params.whenRemove == WhenRemoveToken.Default)
             params.removeWhen(WhenRemoveToken.Always)
-        message?:throw InternalErrorException(ERROR_MESSAGE_EXPECTED)
+        message?:throw InternalErrorException(ERROR_MESSAGE_EXPECTED_ERROR)
         return try {
             if (tokens.isEmpty()) throw UnexpectedEndException(message, lastLocation)
             if (params.isIgnoringNewLine) {

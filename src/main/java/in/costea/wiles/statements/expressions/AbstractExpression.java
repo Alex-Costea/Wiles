@@ -58,7 +58,7 @@ public abstract class AbstractExpression extends AbstractStatement {
 
     protected boolean handleToken(@NotNull Token token) throws AbstractCompilationException {
         if (token.getContent().equals(ROUND_BRACKET_END_ID))
-            throw new UnexpectedTokenException(NON_MATCHING_BRACKETS_ERROR, token.getLocation());
+            throw new UnexpectedTokenException(UNEXPECTED_CLOSING_BRACKET_ERROR, token.getLocation());
         return false;
     }
 
@@ -158,10 +158,10 @@ public abstract class AbstractExpression extends AbstractStatement {
                 //Expect the next token
                 if (expectNext == ExpectNext.OPERATOR)
                     mainCurrentToken = transmitter.expect(tokenOf(IS_CONTAINED_IN.invoke(INFIX_OPERATORS))
-                            .withErrorMessage(OPERATOR_EXPECTED_ERROR));
+                            .withErrorMessage(INVALID_EXPRESSION_ERROR));
                 else
                     mainCurrentToken = transmitter.expect(tokenOf(IS_CONTAINED_IN.invoke(STARTING_OPERATORS))
-                            .or(IS_LITERAL).withErrorMessage(UNEXPECTED_TOKEN_ERROR));
+                            .or(IS_LITERAL).withErrorMessage(INVALID_EXPRESSION_ERROR));
 
                 //Add token and change next expected token
                 precedenceProcessor.add(new TokenStatement(transmitter, mainCurrentToken));
@@ -172,7 +172,7 @@ public abstract class AbstractExpression extends AbstractStatement {
             if (expectNext == ExpectNext.TOKEN)
                 throw new UnexpectedEndException(EXPRESSION_UNFINISHED_ERROR, mainCurrentToken.getLocation());
             if (this instanceof InnerExpression && !mainCurrentToken.getContent().equals(ROUND_BRACKET_END_ID))
-                throw new UnexpectedEndException(NON_MATCHING_BRACKETS_ERROR, mainCurrentToken.getLocation());
+                throw new UnexpectedEndException(UNEXPECTED_OPENING_BRACKET_ERROR, transmitter.getLastLocation());
             setComponents(precedenceProcessor);
         } catch (AbstractCompilationException ex) {
             exceptions.add(ex);

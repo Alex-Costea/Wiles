@@ -1,6 +1,6 @@
 package `in`.costea.wiles.data
 
-import `in`.costea.wiles.constants.ErrorMessages.COMPILATION_FAILED
+import `in`.costea.wiles.constants.ErrorMessages.COMPILATION_FAILED_ERROR
 import `in`.costea.wiles.constants.ErrorMessages.LINE_SYMBOL
 import `in`.costea.wiles.constants.Settings.DEBUG
 import `in`.costea.wiles.exceptions.AbstractCompilationException
@@ -15,7 +15,7 @@ class CompilationExceptionsCollection : ArrayList<AbstractCompilationException>(
             .fold("") { a, b -> a + b }
         if (optional.isEmpty())
             throw InternalErrorException()
-        return COMPILATION_FAILED+optional
+        return COMPILATION_FAILED_ERROR+optional
     }
 
     override fun equals(other: Any?): Boolean {

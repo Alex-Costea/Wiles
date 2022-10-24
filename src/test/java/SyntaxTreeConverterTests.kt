@@ -1,8 +1,9 @@
-import `in`.costea.wiles.constants.ErrorMessages.END_OF_STATEMENT_EXPECTED
+import `in`.costea.wiles.constants.ErrorMessages.END_OF_STATEMENT_EXPECTED_ERROR
 import `in`.costea.wiles.constants.ErrorMessages.EXPRESSION_EXPECTED_ERROR
 import `in`.costea.wiles.constants.ErrorMessages.EXPRESSION_UNFINISHED_ERROR
+import `in`.costea.wiles.constants.ErrorMessages.INVALID_STATEMENT_ERROR
 import `in`.costea.wiles.constants.ErrorMessages.TOKEN_EXPECTED_ERROR
-import `in`.costea.wiles.constants.ErrorMessages.UNEXPECTED_TOKEN_ERROR
+import `in`.costea.wiles.constants.ErrorMessages.INVALID_EXPRESSION_ERROR
 import `in`.costea.wiles.constants.Tokens.ASSIGN_ID
 import `in`.costea.wiles.constants.Tokens.DECLARE_ID
 import `in`.costea.wiles.constants.Tokens.DO_ID
@@ -91,17 +92,17 @@ class SyntaxTreeConverterTests {
         assertResults(createExceptions(UnexpectedEndException(EXPRESSION_UNFINISHED_ERROR, nullLocation)),
                 null,
                 "!a", PLUS_ID, "!b", PLUS_ID)
-        assertResults(createExceptions(TokenExpectedException(UNEXPECTED_TOKEN_ERROR, nullLocation)),
+        assertResults(createExceptions(TokenExpectedException(INVALID_EXPRESSION_ERROR, nullLocation)),
                 null,
                 "!b", PLUS_ID, TIMES_ID, "#5")
-        assertResults(createExceptions(UnexpectedTokenException(UNEXPECTED_TOKEN_ERROR, nullLocation)),
+        assertResults(createExceptions(UnexpectedTokenException(INVALID_STATEMENT_ERROR, nullLocation)),
                 null,
                 TIMES_ID, "!a")
         assertResults(createExceptions(TokenExpectedException(EXPRESSION_EXPECTED_ERROR, nullLocation)),
                 null,
                 "!a", PLUS_ID, ROUND_BRACKET_START_ID, "BREAK", ROUND_BRACKET_END_ID)
 
-        assertResults(createExceptions(TokenExpectedException(UNEXPECTED_TOKEN_ERROR, nullLocation)),
+        assertResults(createExceptions(TokenExpectedException(INVALID_EXPRESSION_ERROR, nullLocation)),
             null,
             "!a", PLUS_ID, ROUND_BRACKET_START_ID,"!b",PLUS_ID, END_BLOCK_ID, ROUND_BRACKET_END_ID)
     }
@@ -124,7 +125,7 @@ class SyntaxTreeConverterTests {
     @Test
     fun programExceptionsTest() {
         //TODO: more, updated tests
-        assertResults(createExceptions(UnexpectedEndException(END_OF_STATEMENT_EXPECTED, nullLocation)),
+        assertResults(createExceptions(UnexpectedEndException(END_OF_STATEMENT_EXPECTED_ERROR, nullLocation)),
             null,
             DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, START_BLOCK_ID)
         assertResults(createExceptions(UnexpectedEndException(TOKEN_EXPECTED_ERROR.format("end"), nullLocation)),
