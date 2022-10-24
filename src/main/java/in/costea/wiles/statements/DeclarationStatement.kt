@@ -12,9 +12,11 @@ import `in`.costea.wiles.constants.Tokens.ASSIGN_ID
 import `in`.costea.wiles.constants.ErrorMessages.IDENTIFIER_EXPECTED_ERROR
 import `in`.costea.wiles.constants.Predicates.IS_IDENTIFIER
 import `in`.costea.wiles.constants.Tokens.MUTABLE_ID
+import `in`.costea.wiles.constants.Tokens.TYPEOF_ID
 
 class DeclarationStatement(transmitter: TokenTransmitter) : AbstractStatement(transmitter) {
     private var left: AbstractStatement? = null
+    private var typeStatement : TypeDefinitionStatement? = null
     private var right: AbstractStatement? = null
     private val exceptions = CompilationExceptionsCollection()
 
@@ -22,7 +24,10 @@ class DeclarationStatement(transmitter: TokenTransmitter) : AbstractStatement(tr
         get() = SyntaxType.DECLARATION
 
     override fun getComponents(): List<AbstractStatement> {
-        return listOf(left ?: return emptyList(), right ?: return emptyList())
+        val x = mutableListOf(left ?: return emptyList(), right ?: return emptyList())
+        if(typeStatement != null)
+            x.add(0,typeStatement!!)
+        return x
     }
 
     override fun process(): CompilationExceptionsCollection {
@@ -33,6 +38,10 @@ class DeclarationStatement(transmitter: TokenTransmitter) : AbstractStatement(tr
             this.left = TokenStatement(transmitter,transmitter.expect(tokenOf(IS_IDENTIFIER)
                 .withErrorMessage(IDENTIFIER_EXPECTED_ERROR)))
 
+            if(transmitter.expectMaybe(tokenOf(TYPEOF_ID)).isPresent) {
+                typeStatement = TypeDefinitionStatement(transmitter)
+                exceptions.addAll(typeStatement!!.process())
+            }
             transmitter.expect(tokenOf(ASSIGN_ID))
 
             val rightExpression = StatementFactory(transmitter)
