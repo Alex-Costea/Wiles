@@ -1,6 +1,7 @@
 package `in`.costea.wiles.services
 
 import `in`.costea.wiles.builders.ExpectParamsBuilder
+import `in`.costea.wiles.constants.ErrorMessages.ERROR_MESSAGE_EXPECTED
 import `in`.costea.wiles.data.Token
 import `in`.costea.wiles.enums.WhenRemoveToken
 import `in`.costea.wiles.exceptions.TokenExpectedException
@@ -8,6 +9,7 @@ import `in`.costea.wiles.exceptions.UnexpectedEndException
 import `in`.costea.wiles.constants.Tokens
 import `in`.costea.wiles.constants.ErrorMessages.INTERNAL_ERROR
 import `in`.costea.wiles.data.TokenLocation
+import java.lang.IllegalStateException
 import java.util.*
 
 class TokenTransmitter(tokens: List<Token>, private val lastLocation : TokenLocation) {
@@ -17,9 +19,9 @@ class TokenTransmitter(tokens: List<Token>, private val lastLocation : TokenLoca
     fun expect(params: ExpectParamsBuilder): Token {
         val message = params.errorMessage
         var succeeded = false
-        if (params.whenRemove == WhenRemoveToken.Default)
+        if (!params.frozen && params.whenRemove == WhenRemoveToken.Default)
             params.removeWhen(WhenRemoveToken.Always)
-        message!!
+        message?:throw IllegalStateException(ERROR_MESSAGE_EXPECTED)
         return try {
             if (tokens.isEmpty()) throw UnexpectedEndException(message, lastLocation)
             if (params.isIgnoringNewLine) {
@@ -45,10 +47,12 @@ class TokenTransmitter(tokens: List<Token>, private val lastLocation : TokenLoca
 
     fun expectMaybe(expectParamsBuilder: ExpectParamsBuilder): Optional<Token> {
         return try {
-            if (expectParamsBuilder.whenRemove == WhenRemoveToken.Default)
-                expectParamsBuilder.removeWhen(WhenRemoveToken.WhenFound)
-            if (expectParamsBuilder.errorMessage == null)
-                expectParamsBuilder.withErrorMessage(INTERNAL_ERROR)
+            if(!expectParamsBuilder.frozen) {
+                if (expectParamsBuilder.whenRemove == WhenRemoveToken.Default)
+                    expectParamsBuilder.removeWhen(WhenRemoveToken.WhenFound)
+                if (expectParamsBuilder.errorMessage == null)
+                    expectParamsBuilder.withErrorMessage(INTERNAL_ERROR)
+            }
             Optional.of(expect(expectParamsBuilder))
         } catch (ex: TokenExpectedException) {
             Optional.empty()

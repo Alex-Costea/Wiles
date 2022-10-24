@@ -6,6 +6,7 @@ import `in`.costea.wiles.builders.CodeBlockType
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
 import `in`.costea.wiles.builders.StatementFactory
 import `in`.costea.wiles.constants.Predicates.EXPECT_TERMINATOR
+import `in`.costea.wiles.constants.Predicates.EXPECT_TERMINATOR_REMOVE_NEVER
 import `in`.costea.wiles.constants.Predicates.READ_REST_OF_LINE
 import `in`.costea.wiles.constants.Tokens.DO_ID
 import `in`.costea.wiles.constants.Tokens.END_BLOCK_ID
@@ -14,6 +15,7 @@ import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.enums.WhenRemoveToken
 import `in`.costea.wiles.exceptions.AbstractCompilationException
+import `in`.costea.wiles.exceptions.UnexpectedEndException
 import `in`.costea.wiles.services.TokenTransmitter
 import `in`.costea.wiles.statements.expressions.AssignableExpression
 
@@ -46,7 +48,13 @@ class CodeBlockStatement(transmitter: TokenTransmitter, private val blockType: C
         if(!newExceptions.isEmpty())
             while(transmitter.expectMaybe(READ_REST_OF_LINE).isPresent)
                 Unit
-        components.add(statement)
+        else try {
+            transmitter.expect(EXPECT_TERMINATOR_REMOVE_NEVER)
+        }
+        catch(ignored : UnexpectedEndException){}
+        finally {
+            components.add(statement)
+        }
     }
 
     override fun process(): CompilationExceptionsCollection {
@@ -54,7 +62,10 @@ class CodeBlockStatement(transmitter: TokenTransmitter, private val blockType: C
             if (!blockType.isOutermost && transmitter.expectMaybe(tokenOf(DO_ID)).isPresent)
                 readOneStatement()
             else {
-                if (!blockType.isOutermost) transmitter.expect(tokenOf(START_BLOCK_ID))
+                if (!blockType.isOutermost) {
+                    transmitter.expect(tokenOf(START_BLOCK_ID))
+                    transmitter.expect(EXPECT_TERMINATOR)
+                }
                 while (!transmitter.tokensExhausted()) {
                     if (!blockType.isOutermost && transmitter.expectMaybe(tokenOf(END_BLOCK_ID)
                             .removeWhen(WhenRemoveToken.Never)).isPresent)

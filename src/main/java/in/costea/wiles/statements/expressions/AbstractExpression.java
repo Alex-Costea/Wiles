@@ -95,7 +95,7 @@ public abstract class AbstractExpression extends AbstractStatement {
             while (!transmitter.tokensExhausted()) {
                 //Stop parsing expression if correctly finalized
                 if ((expectNext == ExpectNext.OPERATOR)) {
-                    maybeTempToken = transmitter.expectMaybe(EXPECT_TERMINATOR);
+                    maybeTempToken = transmitter.expectMaybe(EXPECT_TERMINATOR_REMOVE_NEVER);
                     if (maybeTempToken.isPresent())
                         if (handleToken(maybeTempToken.get()))
                             break;

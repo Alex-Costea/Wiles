@@ -24,7 +24,7 @@ object Tokens {
     private const val SQUARE_BRACKET_START_ID = "SQUARE_BRACKET_START"
     private const val SQUARE_BRACKET_END_ID = "SQUARE_BRACKET_END"
     const val METHOD_ID = "METHOD"
-    private const val TERMINATOR_ID = "TERMINATOR"
+    const val TERMINATOR_ID = "TERMINATOR"
     const val CONTINUE_LINE_ID = "CONTINUE_LINE"
     const val PLUS_ID = "PLUS"
     const val MINUS_ID = "MINUS"

@@ -1,8 +1,11 @@
 package `in`.costea.wiles.builders
 
+import `in`.costea.wiles.constants.ErrorMessages.CANNOT_EDIT
+import `in`.costea.wiles.constants.ErrorMessages.ERROR_MESSAGE_EXPECTED
 import `in`.costea.wiles.enums.WhenRemoveToken
 import `in`.costea.wiles.constants.Tokens.TOKENS_INVERSE
 import `in`.costea.wiles.constants.ErrorMessages.TOKEN_EXPECTED_ERROR
+import `in`.costea.wiles.constants.ErrorMessages.WHEN_REMOVE_EXPECTED
 import java.util.function.Predicate
 
 class ExpectParamsBuilder private constructor(var foundTest: Predicate<String>) {
@@ -12,32 +15,54 @@ class ExpectParamsBuilder private constructor(var foundTest: Predicate<String>) 
         private set
     var isIgnoringNewLine = true
         private set
-
+    var frozen = false
+    private set
     fun withErrorMessage(message: String): ExpectParamsBuilder {
+        checkFrozen()
         errorMessage = message
         return this
     }
 
     fun removeWhen(whenRemove: WhenRemoveToken): ExpectParamsBuilder {
+        checkFrozen()
         this.whenRemove = whenRemove
         return this
     }
 
     fun dontIgnoreNewLine(): ExpectParamsBuilder {
+        checkFrozen()
         isIgnoringNewLine = false
         return this
     }
 
     fun or(otherTest: Predicate<String>): ExpectParamsBuilder {
+        checkFrozen()
         foundTest = foundTest.or(otherTest)
         errorMessage = null
         return this
     }
 
     fun or(otherTest: String): ExpectParamsBuilder {
+        checkFrozen()
         or { x -> x == otherTest }
         errorMessage = null
         return this
+    }
+
+    fun freeze() : ExpectParamsBuilder
+    {
+        frozen = true
+        if(errorMessage == null)
+            throw IllegalStateException(ERROR_MESSAGE_EXPECTED)
+        if(whenRemove == WhenRemoveToken.Default)
+            throw IllegalStateException(WHEN_REMOVE_EXPECTED)
+        return this
+    }
+
+    private fun checkFrozen()
+    {
+        if(frozen)
+            throw IllegalStateException(CANNOT_EDIT)
     }
 
     companion object {

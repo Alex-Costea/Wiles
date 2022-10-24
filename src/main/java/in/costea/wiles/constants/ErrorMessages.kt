@@ -20,6 +20,10 @@ object ErrorMessages {
     const val CANNOT_BE_PROCESSED_ERROR = "Cannot be processed!"
     const val NOT_YET_IMPLEMENTED_ERROR = "Not yet implemented!"
     const val MAX_SYMBOL_TOO_LARGE = "MAX_SYMBOL_LENGTH smaller than length of largest symbol!"
+    const val END_OF_STATEMENT_EXPECTED = "End of statement expected!"
+    const val CANNOT_EDIT = "Object state cannot be edited!"
+    const val ERROR_MESSAGE_EXPECTED = "Error message expected!"
+    const val WHEN_REMOVE_EXPECTED = "When to remove token parameter expected!"
     const val LINE_SYMBOL = "\n>>> "
     const val COMPILATION_FAILED ="\nCOMPILATION FAILED!\n"
 }

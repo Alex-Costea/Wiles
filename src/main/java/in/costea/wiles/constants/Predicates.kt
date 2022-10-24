@@ -2,6 +2,7 @@ package `in`.costea.wiles.constants
 
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
 import `in`.costea.wiles.constants.ErrorMessages.EXPRESSION_EXPECTED_ERROR
+import `in`.costea.wiles.constants.ErrorMessages.INTERNAL_ERROR
 import `in`.costea.wiles.constants.Tokens.ROUND_BRACKET_START_ID
 import `in`.costea.wiles.constants.Tokens.STARTING_OPERATORS
 import `in`.costea.wiles.constants.Tokens.TERMINATORS
@@ -22,15 +23,20 @@ object Predicates {
 
     @JvmField
     val EXPECT_TERMINATOR = tokenOf(IS_CONTAINED_IN(TERMINATORS)).dontIgnoreNewLine()
+        .withErrorMessage(ErrorMessages.END_OF_STATEMENT_EXPECTED).removeWhen(WhenRemoveToken.WhenFound).freeze()
+
+    @JvmField
+    val EXPECT_TERMINATOR_REMOVE_NEVER = tokenOf(IS_CONTAINED_IN(TERMINATORS)).dontIgnoreNewLine()
+        .withErrorMessage(ErrorMessages.END_OF_STATEMENT_EXPECTED).removeWhen(WhenRemoveToken.Never).freeze()
 
     @JvmField
     val ANYTHING = Predicate { _: String -> true }
 
     @JvmField
-    val READ_REST_OF_LINE = tokenOf(IS_CONTAINED_IN(TERMINATORS).negate()).dontIgnoreNewLine()
-        .removeWhen(WhenRemoveToken.Always)
+    val READ_REST_OF_LINE =tokenOf(IS_CONTAINED_IN(TERMINATORS).negate()).dontIgnoreNewLine()
+        .withErrorMessage(INTERNAL_ERROR).removeWhen(WhenRemoveToken.Always).freeze()
 
     @JvmField
-    val START_OF_EXPRESSION = tokenOf(IS_CONTAINED_IN(STARTING_OPERATORS)).or(IS_LITERAL).or(ROUND_BRACKET_START_ID)
-            .withErrorMessage(EXPRESSION_EXPECTED_ERROR).removeWhen(WhenRemoveToken.Never)
+    val START_OF_EXPRESSION =tokenOf(IS_CONTAINED_IN(STARTING_OPERATORS)).or(IS_LITERAL).or(ROUND_BRACKET_START_ID)
+            .withErrorMessage(EXPRESSION_EXPECTED_ERROR).removeWhen(WhenRemoveToken.Never).freeze()
 }
