@@ -21,18 +21,16 @@ object Predicates {
     val IS_CONTAINED_IN = {set: Collection<String> -> Predicate { o: String -> set.contains(o) }}
 
     @JvmField
-    val EXPECT_TERMINATOR = tokenOf(IS_CONTAINED_IN(TERMINATORS))
-        .dontIgnoreNewLine().withErrorMessage("End of line or semicolon expected!")
+    val EXPECT_TERMINATOR = tokenOf(IS_CONTAINED_IN(TERMINATORS)).dontIgnoreNewLine()
 
     @JvmField
     val ANYTHING = Predicate { _: String -> true }
 
     @JvmField
-    val READ_REST_OF_LINE = tokenOf(IS_CONTAINED_IN(TERMINATORS).negate())
-        .dontIgnoreNewLine().removeWhen(WhenRemoveToken.Always)
+    val READ_REST_OF_LINE = tokenOf(IS_CONTAINED_IN(TERMINATORS).negate()).dontIgnoreNewLine()
+        .removeWhen(WhenRemoveToken.Always)
 
     @JvmField
     val START_OF_EXPRESSION = tokenOf(IS_CONTAINED_IN(STARTING_OPERATORS)).or(IS_LITERAL).or(ROUND_BRACKET_START_ID)
             .withErrorMessage(EXPRESSION_EXPECTED_ERROR).removeWhen(WhenRemoveToken.Never)
-
 }

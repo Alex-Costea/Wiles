@@ -1,60 +1,64 @@
 package in.costea.wiles.builders;
 
-import in.costea.wiles.statements.*;
-import in.costea.wiles.statements.expressions.AssignableExpression;
-import in.costea.wiles.statements.expressions.DefaultExpression;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.enums.WhenRemoveToken;
 import in.costea.wiles.exceptions.AbstractCompilationException;
 import in.costea.wiles.exceptions.UnexpectedTokenException;
 import in.costea.wiles.services.TokenTransmitter;
+import in.costea.wiles.statements.AbstractStatement;
+import in.costea.wiles.statements.DeclarationStatement;
+import in.costea.wiles.statements.MethodStatement;
+import in.costea.wiles.statements.ReturnStatement;
+import in.costea.wiles.statements.expressions.AssignableExpression;
+import in.costea.wiles.statements.expressions.DefaultExpression;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 
 import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
-import static in.costea.wiles.constants.ErrorMessages.UNEXPECTED_TOKEN_ERROR;
+import static in.costea.wiles.constants.ErrorMessages.*;
 import static in.costea.wiles.constants.Predicates.ANYTHING;
 import static in.costea.wiles.constants.Predicates.START_OF_EXPRESSION;
 import static in.costea.wiles.constants.Tokens.*;
-import static in.costea.wiles.constants.ErrorMessages.INTERNAL_ERROR;
 
 public class StatementFactory {
     @NotNull
-    private final Set<Class<? extends AbstractStatement>> statement =new HashSet<>();
+    private final Set<Class<? extends AbstractStatement>> statements =new HashSet<>();
     @NotNull private final TokenTransmitter transmitter;
+    private static final HashMap<Class<? extends AbstractStatement>,ExpectParamsBuilder> params = new HashMap<>();
+    private static final HashMap<Class<? extends AbstractStatement>, Function<TokenTransmitter,AbstractStatement>>
+            createObject = new HashMap<>();
+    static {
+        params.put(AssignableExpression.class, START_OF_EXPRESSION);
+        params.put(DefaultExpression.class, START_OF_EXPRESSION);
+        params.put(DeclarationStatement.class, tokenOf(DECLARE_ID));
+        params.put(MethodStatement.class, tokenOf(METHOD_ID));
+        params.put(ReturnStatement.class, tokenOf(RETURN_ID));
+        createObject.put(AssignableExpression.class, AssignableExpression::new);
+        createObject.put(DefaultExpression.class, DefaultExpression::new);
+        createObject.put(DeclarationStatement.class, DeclarationStatement::new);
+        createObject.put(MethodStatement.class, MethodStatement::new);
+        createObject.put(ReturnStatement.class, ReturnStatement::new);
+    }
     public StatementFactory(@NotNull TokenTransmitter transmitter){
         this.transmitter=transmitter;
     }
 
     public @NotNull StatementFactory addType(@NotNull Class<? extends AbstractStatement> statement)
     {
-        this.statement.add(statement);
+        if(!params.containsKey(statement))
+            throw new RuntimeException(NOT_YET_IMPLEMENTED_ERROR);
+        this.statements.add(statement);
         return this;
     }
 
     public @NotNull AbstractStatement create(@NotNull String errorMessage) throws AbstractCompilationException {
-        if(statement.contains(AssignableExpression.class))
-            if (transmitter.expectMaybe(START_OF_EXPRESSION).isPresent())
-                return new AssignableExpression(transmitter);
-
-        if(statement.contains(DefaultExpression.class))
-            if (transmitter.expectMaybe(START_OF_EXPRESSION).isPresent())
-                return new DefaultExpression(transmitter);
-
-        if(statement.contains(DeclarationStatement.class))
-            if(transmitter.expectMaybe(tokenOf(DECLARE_ID)).isPresent())
-                return new DeclarationStatement(transmitter);
-
-        if(statement.contains(MethodStatement.class))
-            if(transmitter.expectMaybe(tokenOf(METHOD_ID)).isPresent())
-                return new MethodStatement(transmitter);
-
-        if(statement.contains(ReturnStatement.class))
-            if(transmitter.expectMaybe(tokenOf(RETURN_ID)).isPresent())
-                return new ReturnStatement(transmitter);
+        for(var statement:statements)
+            if(transmitter.expectMaybe(params.get(statement)).isPresent())
+                return createObject.get(statement).apply(transmitter);
 
         //Expression not found
         ExpectParamsBuilder paramsBuilder = tokenOf(ANYTHING).removeWhen(WhenRemoveToken.Never)
@@ -65,16 +69,5 @@ public class StatementFactory {
 
     public @NotNull AbstractStatement create() throws AbstractCompilationException {
         return create(INTERNAL_ERROR);
-    }
-
-    @SuppressWarnings("unused")
-    public @NotNull Optional<AbstractStatement> createMaybe()
-    {
-        try
-        {
-            return Optional.of(create(INTERNAL_ERROR));
-        } catch (AbstractCompilationException e) {
-            return Optional.empty();
-        }
     }
 }
