@@ -62,8 +62,10 @@ class CodeBlockStatement(transmitter: TokenTransmitter, within: IsWithin) : Abst
         }
         val newExceptions = statement.process()
         exceptions.addAll(newExceptions)
-        if(!newExceptions.isEmpty())
+        if(!newExceptions.isEmpty()) {
             readRestOfLine()
+            components.add(statement)
+        }
         else try {
             transmitter.expect(tokenOf(Predicates.IS_CONTAINED_IN(Tokens.TERMINATORS)).dontIgnoreNewLine()
                 .withErrorMessage(END_OF_STATEMENT_EXPECTED_ERROR).removeWhen(WhenRemoveToken.Never))
