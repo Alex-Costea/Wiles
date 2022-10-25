@@ -1,89 +1,100 @@
-package in.costea.wiles.builders;
+package `in`.costea.wiles.builders
 
-import in.costea.wiles.data.Token;
-import in.costea.wiles.enums.WhenRemoveToken;
-import in.costea.wiles.exceptions.AbstractCompilationException;
-import in.costea.wiles.exceptions.InternalErrorException;
-import in.costea.wiles.exceptions.UnexpectedTokenException;
-import in.costea.wiles.services.TokenTransmitter;
-import in.costea.wiles.statements.*;
-import in.costea.wiles.statements.expressions.DefaultExpression;
-import in.costea.wiles.statements.expressions.TopLevelExpression;
-import org.jetbrains.annotations.NotNull;
+import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
+import `in`.costea.wiles.constants.ErrorMessages.INTERNAL_ERROR
+import `in`.costea.wiles.constants.ErrorMessages.INVALID_STATEMENT_ERROR
+import `in`.costea.wiles.constants.ErrorMessages.NOT_YET_IMPLEMENTED_ERROR
+import `in`.costea.wiles.constants.Predicates.ANYTHING
+import `in`.costea.wiles.constants.Predicates.START_OF_EXPRESSION
+import `in`.costea.wiles.constants.Tokens.BREAK_ID
+import `in`.costea.wiles.constants.Tokens.CONTINUE_ID
+import `in`.costea.wiles.constants.Tokens.DECLARE_ID
+import `in`.costea.wiles.constants.Tokens.FOR_ID
+import `in`.costea.wiles.constants.Tokens.IF_ID
+import `in`.costea.wiles.constants.Tokens.METHOD_ID
+import `in`.costea.wiles.constants.Tokens.RETURN_ID
+import `in`.costea.wiles.constants.Tokens.WHILE_ID
+import `in`.costea.wiles.enums.WhenRemoveToken
+import `in`.costea.wiles.exceptions.AbstractCompilationException
+import `in`.costea.wiles.exceptions.InternalErrorException
+import `in`.costea.wiles.exceptions.UnexpectedTokenException
+import `in`.costea.wiles.services.TokenTransmitter
+import `in`.costea.wiles.statements.*
+import `in`.costea.wiles.statements.expressions.DefaultExpression
+import `in`.costea.wiles.statements.expressions.TopLevelExpression
+import java.util.function.Function
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.function.Function;
-
-import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
-import static in.costea.wiles.constants.ErrorMessages.*;
-import static in.costea.wiles.constants.Predicates.ANYTHING;
-import static in.costea.wiles.constants.Predicates.START_OF_EXPRESSION;
-import static in.costea.wiles.constants.Tokens.*;
-
-public class StatementFactory {
-    @NotNull
-    private final Set<Class<? extends AbstractStatement>> statements =new HashSet<>();
-    @NotNull private final TokenTransmitter transmitter;
-    private static final HashMap<Class<? extends AbstractStatement>,ExpectParamsBuilder> params = new HashMap<>();
-    private static final HashMap<Class<? extends AbstractStatement>, Function<Context,AbstractStatement>>
-            createObject = new HashMap<>();
-    static {
-        params.put(TopLevelExpression.class, START_OF_EXPRESSION);
-        params.put(DefaultExpression.class, START_OF_EXPRESSION);
-        params.put(DeclarationStatement.class, tokenOf(DECLARE_ID));
-        params.put(MethodStatement.class, tokenOf(METHOD_ID));
-        params.put(ReturnStatement.class, tokenOf(RETURN_ID));
-        params.put(IfStatement.class,tokenOf(IF_ID));
-        params.put(ForStatement.class,tokenOf(FOR_ID));
-        params.put(WhileStatement.class,tokenOf(WHILE_ID));
-        params.put(BreakStatement.class,tokenOf(BREAK_ID));
-        params.put(ContinueStatement.class,tokenOf(CONTINUE_ID));
-        createObject.put(TopLevelExpression.class, TopLevelExpression::new);
-        createObject.put(DefaultExpression.class, DefaultExpression::new);
-        createObject.put(DeclarationStatement.class, DeclarationStatement::new);
-        createObject.put(MethodStatement.class, MethodStatement::new);
-        createObject.put(ReturnStatement.class, ReturnStatement::new);
-        createObject.put(IfStatement.class, IfStatement::new);
-        createObject.put(ForStatement.class, ForStatement::new);
-        createObject.put(WhileStatement.class, WhileStatement::new);
-        createObject.put(BreakStatement.class, BreakStatement::new);
-        createObject.put(ContinueStatement.class, ContinueStatement::new);
+class StatementFactory {
+    private val statements: MutableSet<Class<out AbstractStatement>> = HashSet()
+    private lateinit var transmitter: TokenTransmitter
+    private lateinit var context: Context
+    fun addType(statement: Class<out AbstractStatement>): StatementFactory {
+        if (!params.containsKey(statement)) throw InternalErrorException(NOT_YET_IMPLEMENTED_ERROR)
+        statements.add(statement)
+        return this
     }
 
-    private final Context context;
-
-    public StatementFactory(@NotNull Context context){
-        this.context = context;
-        this.transmitter=context.getTransmitter();
-    }
-
-    public @NotNull StatementFactory addType(@NotNull Class<? extends AbstractStatement> statement)
+    fun setContext(context: Context) : StatementFactory
     {
-        if(!params.containsKey(statement))
-            throw new InternalErrorException(NOT_YET_IMPLEMENTED_ERROR);
-        if(!context.isWithinMethod() && statement.equals(ReturnStatement.class))
-            return this;
-        if(!context.isWithinLoop() && statement.equals(ContinueStatement.class))
-            return this;
-        this.statements.add(statement);
-        return this;
+        this.context=context
+        this.transmitter=context.transmitter
+        return this
     }
 
-    public @NotNull AbstractStatement create(@NotNull String errorMessage) throws AbstractCompilationException {
-        for(var statement:statements)
-            if(transmitter.expectMaybe(params.get(statement)).isPresent())
-                return createObject.get(statement).apply(context);
+    @JvmOverloads
+    @Throws(AbstractCompilationException::class)
+    fun create(errorMessage: String = INTERNAL_ERROR): AbstractStatement {
+        for (statement in statements) {
+            if (!context.isWithinMethod && statement == ReturnStatement::class.java) continue
+            if (!context.isWithinLoop && statement == ContinueStatement::class.java) continue
+            if (transmitter.expectMaybe(params[statement]!!).isPresent) return createObject[statement]!!
+                .apply(context)
+        }
 
         //Expression not found
-        ExpectParamsBuilder paramsBuilder = tokenOf(ANYTHING).removeWhen(WhenRemoveToken.Never)
-                .withErrorMessage(errorMessage);
-        Token newToken = transmitter.expect(paramsBuilder);
-        throw new UnexpectedTokenException(INVALID_STATEMENT_ERROR, newToken.getLocation());
+        val paramsBuilder = tokenOf(ANYTHING).removeWhen(WhenRemoveToken.Never)
+            .withErrorMessage(errorMessage)
+        val (_, location) = transmitter.expect(paramsBuilder)
+        throw UnexpectedTokenException(INVALID_STATEMENT_ERROR, location)
     }
 
-    public @NotNull AbstractStatement create() throws AbstractCompilationException {
-        return create(INTERNAL_ERROR);
+    companion object {
+        private val params: HashMap<Class<out AbstractStatement>, ExpectParamsBuilder> =
+            HashMap()
+        private val createObject: HashMap<Class<out AbstractStatement>, Function<Context, AbstractStatement>> =
+            HashMap()
+
+        init {
+            params[TopLevelExpression::class.java] = START_OF_EXPRESSION
+            params[DefaultExpression::class.java] = START_OF_EXPRESSION
+            params[DeclarationStatement::class.java] = tokenOf(DECLARE_ID)
+            params[MethodStatement::class.java] = tokenOf(METHOD_ID)
+            params[ReturnStatement::class.java] = tokenOf(RETURN_ID)
+            params[IfStatement::class.java] = tokenOf(IF_ID)
+            params[ForStatement::class.java] = tokenOf(FOR_ID)
+            params[WhileStatement::class.java] = tokenOf(WHILE_ID)
+            params[BreakStatement::class.java] = tokenOf(BREAK_ID)
+            params[ContinueStatement::class.java] = tokenOf(CONTINUE_ID)
+            createObject[TopLevelExpression::class.java] =
+                Function { context: Context -> TopLevelExpression(context) }
+            createObject[DefaultExpression::class.java] =
+                Function { context: Context -> DefaultExpression(context) }
+            createObject[DeclarationStatement::class.java] =
+                Function { context: Context -> DeclarationStatement(context) }
+            createObject[MethodStatement::class.java] =
+                Function { context: Context -> MethodStatement(context) }
+            createObject[ReturnStatement::class.java] =
+                Function { context: Context -> ReturnStatement(context) }
+            createObject[IfStatement::class.java] =
+                Function { context: Context -> IfStatement(context) }
+            createObject[ForStatement::class.java] =
+                Function { context: Context -> ForStatement(context) }
+            createObject[WhileStatement::class.java] =
+                Function { context: Context -> WhileStatement(context) }
+            createObject[BreakStatement::class.java] =
+                Function { context: Context -> BreakStatement(context) }
+            createObject[ContinueStatement::class.java] =
+                Function { context: Context -> ContinueStatement(context) }
+        }
     }
 }

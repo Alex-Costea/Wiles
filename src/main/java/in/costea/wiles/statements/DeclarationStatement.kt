@@ -20,6 +20,13 @@ class DeclarationStatement(context: Context) : AbstractStatement(context) {
     private var right: AbstractStatement? = null
     private val exceptions = CompilationExceptionsCollection()
 
+    companion object
+    {
+        val rightExpressionFactory = StatementFactory()
+            .addType(DefaultExpression::class.java)
+            .addType(MethodStatement::class.java)
+    }
+
     override val type: SyntaxType
         get() = SyntaxType.DECLARATION
 
@@ -44,10 +51,7 @@ class DeclarationStatement(context: Context) : AbstractStatement(context) {
             }
             transmitter.expect(tokenOf(ASSIGN_ID))
 
-            val rightExpression = StatementFactory(context)
-                .addType(DefaultExpression::class.java)
-                .addType(MethodStatement::class.java)
-                .create(EXPRESSION_EXPECTED_ERROR)
+            val rightExpression = rightExpressionFactory.setContext(context).create(EXPRESSION_EXPECTED_ERROR)
 
             this.right = rightExpression
             exceptions.addAll(rightExpression.process())

@@ -21,6 +21,18 @@ import `in`.costea.wiles.exceptions.UnexpectedEndException
 import `in`.costea.wiles.statements.expressions.TopLevelExpression
 
 class CodeBlockStatement(context: Context) : AbstractStatement(context) {
+    companion object{
+        val statementFactory = StatementFactory()
+            .addType(TopLevelExpression::class.java)
+            .addType(DeclarationStatement::class.java)
+            .addType(IfStatement::class.java)
+            .addType(ForStatement::class.java)
+            .addType(WhileStatement::class.java)
+            .addType(BreakStatement::class.java)
+            .addType(ReturnStatement::class.java)
+            .addType(ContinueStatement::class.java)
+    }
+
     private val components: MutableList<AbstractStatement> = ArrayList()
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
 
@@ -37,19 +49,10 @@ class CodeBlockStatement(context: Context) : AbstractStatement(context) {
 
     private fun readOneStatement() {
         if (transmitter.expectMaybe(EXPECT_TERMINATOR).isPresent) return
-        val statementFactory = StatementFactory(context.setOutermost(false))
-            .addType(TopLevelExpression::class.java)
-            .addType(DeclarationStatement::class.java)
-            .addType(IfStatement::class.java)
-            .addType(ForStatement::class.java)
-            .addType(WhileStatement::class.java)
-            .addType(BreakStatement::class.java)
-            .addType(ReturnStatement::class.java)
-            .addType(ContinueStatement::class.java)
         val statement : AbstractStatement
         try
         {
-            statement = statementFactory.create()
+            statement = statementFactory.setContext(context.setOutermost(false)).create()
         }
         catch (ex : AbstractCompilationException)
         {
