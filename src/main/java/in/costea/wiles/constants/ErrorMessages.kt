@@ -22,7 +22,7 @@ object ErrorMessages {
             "Please use the ${TOKENS_INVERSE[TERMINATOR_ID]!!} symbol or start a new line."
 
     //Internal errors
-    const val INTERNAL_ERROR = "An internal error occurred."
+    const val INTERNAL_ERROR = "An internal error occurred. "
     const val IO_ERROR = "An error occurred while trying to load the source code file."
     const val CANNOT_BE_PROCESSED_ERROR = "Cannot be processed."
     const val NOT_YET_IMPLEMENTED_ERROR = "Not yet implemented."

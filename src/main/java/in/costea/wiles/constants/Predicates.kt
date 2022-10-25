@@ -3,6 +3,7 @@ package `in`.costea.wiles.constants
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
 import `in`.costea.wiles.constants.ErrorMessages.EXPRESSION_EXPECTED_ERROR
 import `in`.costea.wiles.constants.ErrorMessages.INTERNAL_ERROR
+import `in`.costea.wiles.constants.Tokens.NEWLINE_ID
 import `in`.costea.wiles.constants.Tokens.ROUND_BRACKET_START_ID
 import `in`.costea.wiles.constants.Tokens.STARTING_OPERATORS
 import `in`.costea.wiles.constants.Tokens.TERMINATORS
@@ -29,7 +30,7 @@ object Predicates {
     val ANYTHING = Predicate { _: String -> true }
 
     @JvmField
-    val READ_REST_OF_LINE =tokenOf(IS_CONTAINED_IN(TERMINATORS).negate()).dontIgnoreNewLine()
+    val READ_REST_OF_LINE =tokenOf { it != NEWLINE_ID }.dontIgnoreNewLine()
         .withErrorMessage(INTERNAL_ERROR).removeWhen(WhenRemoveToken.WhenFound).freeze()
 
     @JvmField
