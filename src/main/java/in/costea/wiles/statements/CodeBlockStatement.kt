@@ -48,7 +48,6 @@ class CodeBlockStatement(context: Context) : AbstractStatement(context) {
     }
 
     private fun readOneStatement() {
-        if (transmitter.expectMaybe(EXPECT_TERMINATOR).isPresent) return
         val statement : AbstractStatement
         try
         {
@@ -102,6 +101,7 @@ class CodeBlockStatement(context: Context) : AbstractStatement(context) {
                     if (!context.isOutermost && transmitter.expectMaybe(tokenOf(END_BLOCK_ID)
                             .removeWhen(WhenRemoveToken.Never)).isPresent)
                         break
+                    if (transmitter.expectMaybe(EXPECT_TERMINATOR).isPresent) continue
                     readOneStatement()
                 }
                 if (!context.isOutermost)
