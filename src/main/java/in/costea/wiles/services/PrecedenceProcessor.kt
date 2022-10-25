@@ -1,6 +1,6 @@
 package `in`.costea.wiles.services
 
-import `in`.costea.wiles.builders.IsWithin
+import `in`.costea.wiles.builders.Context
 import `in`.costea.wiles.statements.AbstractStatement
 import `in`.costea.wiles.statements.TokenStatement
 import `in`.costea.wiles.statements.expressions.BinaryExpression
@@ -13,7 +13,7 @@ import `in`.costea.wiles.exceptions.InternalErrorException
 import java.lang.Byte.MIN_VALUE
 import java.util.*
 
-class PrecedenceProcessor(private val transmitter: TokenTransmitter,private val within : IsWithin) {
+class PrecedenceProcessor(private val context : Context) {
 
     private val stack : LinkedList<AbstractStatement> = LinkedList()
     private fun isOperator(content : String) = (INFIX_OPERATORS.contains(content) || PREFIX_OPERATORS.contains(content))
@@ -39,8 +39,8 @@ class PrecedenceProcessor(private val transmitter: TokenTransmitter,private val 
         else throw InternalErrorException()
 
         if(token1 == null)
-            stack.add(BinaryExpression(transmitter, operation,null,token2,within))
-        else stack.add(BinaryExpression(transmitter,operation,token1,token2,within))
+            stack.add(BinaryExpression(operation,null,token2,context))
+        else stack.add(BinaryExpression(operation,token1,token2,context))
 
         if(stack.size == 1)
             return
@@ -77,7 +77,7 @@ class PrecedenceProcessor(private val transmitter: TokenTransmitter,private val 
         handleComponent(null)
         assert(stack.size==1)
         if(stack.size == 1 && stack.last is TokenStatement)
-            return BinaryExpression(transmitter,null,null,stack.last, within)
+            return BinaryExpression(null,null,stack.last, context)
         return stack.pop()
     }
 }

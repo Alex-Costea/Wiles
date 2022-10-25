@@ -1,13 +1,16 @@
 package `in`.costea.wiles.builders
 
-class IsWithin {
+import `in`.costea.wiles.services.TokenTransmitter
+
+class Context(val transmitter: TokenTransmitter) {
     var isOutermost = false
     private set
     var isWithinMethod = false
     private set
     var isWithinLoop = false
     private set
-    fun setOutermost() : IsWithin
+
+    fun setOutermost() : Context
     {
         if(isOutermost)
             return this
@@ -16,7 +19,7 @@ class IsWithin {
         return x
     }
 
-    fun setWithinMethod() : IsWithin
+    fun setWithinMethod() : Context
     {
         if(isWithinMethod)
             return this
@@ -25,7 +28,7 @@ class IsWithin {
         return x
     }
 
-    fun setWithinLoop() : IsWithin
+    fun setWithinLoop() : Context
     {
         if(isWithinLoop)
             return this
@@ -34,8 +37,8 @@ class IsWithin {
         return x
     }
 
-    private fun clone(): IsWithin {
-        val x = IsWithin()
+    private fun clone(): Context {
+        val x = Context(transmitter)
         if(isOutermost)
             x.isOutermost = true
         if(isWithinLoop)

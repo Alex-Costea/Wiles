@@ -1,16 +1,15 @@
 package in.costea.wiles.statements;
 
-import in.costea.wiles.builders.IsWithin;
+import in.costea.wiles.builders.Context;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.enums.SyntaxType;
-import in.costea.wiles.services.TokenTransmitter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class WhileStatement extends AbstractStatement{
-    public WhileStatement(@NotNull TokenTransmitter transmitter, @NotNull IsWithin oldWithin) {
-        super(transmitter,oldWithin.setWithinLoop());
+    public WhileStatement(@NotNull Context oldContext) {
+        super(oldContext.setWithinLoop());
     }
 
     @NotNull

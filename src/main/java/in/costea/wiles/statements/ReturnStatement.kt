@@ -1,18 +1,17 @@
 package `in`.costea.wiles.statements
 
-import `in`.costea.wiles.builders.IsWithin
-import `in`.costea.wiles.statements.expressions.DefaultExpression
+import `in`.costea.wiles.builders.Context
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.exceptions.AbstractCompilationException
-import `in`.costea.wiles.services.TokenTransmitter
+import `in`.costea.wiles.statements.expressions.DefaultExpression
 
-class ReturnStatement(transmitter: TokenTransmitter,within : IsWithin) : AbstractStatement(transmitter,within) {
+class ReturnStatement(context : Context) : AbstractStatement(context) {
     override val type: SyntaxType
         get() = SyntaxType.RETURN
 
     private val expression =
-        DefaultExpression(transmitter,within)
+        DefaultExpression(context)
 
     override fun getComponents(): List<AbstractStatement> {
         return listOf(expression)

@@ -2,7 +2,7 @@ package `in`.costea.wiles.statements
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
-import `in`.costea.wiles.builders.IsWithin
+import `in`.costea.wiles.builders.Context
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
 import `in`.costea.wiles.builders.StatementFactory
 import `in`.costea.wiles.constants.ErrorMessages.END_OF_STATEMENT_EXPECTED_ERROR
@@ -18,10 +18,9 @@ import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.enums.WhenRemoveToken
 import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.exceptions.UnexpectedEndException
-import `in`.costea.wiles.services.TokenTransmitter
 import `in`.costea.wiles.statements.expressions.TopLevelExpression
 
-class CodeBlockStatement(transmitter: TokenTransmitter, within: IsWithin) : AbstractStatement(transmitter,within) {
+class CodeBlockStatement(context: Context) : AbstractStatement(context) {
     private val components: MutableList<AbstractStatement> = ArrayList()
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
 
@@ -40,7 +39,7 @@ class CodeBlockStatement(transmitter: TokenTransmitter, within: IsWithin) : Abst
     private fun readOneStatement() {
         if (transmitter.expectMaybe(EXPECT_TERMINATOR).isPresent) return
         val statementFactory = StatementFactory(transmitter,
-            if(!within.isOutermost) within else IsWithin())
+            if(!context.isOutermost) context else Context(transmitter))
             .addType(TopLevelExpression::class.java)
             .addType(DeclarationStatement::class.java)
             .addType(IfStatement::class.java)
@@ -88,20 +87,20 @@ class CodeBlockStatement(transmitter: TokenTransmitter, within: IsWithin) : Abst
 
     override fun process(): CompilationExceptionsCollection {
         try {
-            if (!within.isOutermost && transmitter.expectMaybe(tokenOf(DO_ID)).isPresent)
+            if (!context.isOutermost && transmitter.expectMaybe(tokenOf(DO_ID)).isPresent)
                 readOneStatement()
             else {
-                if (!within.isOutermost) {
+                if (!context.isOutermost) {
                     transmitter.expect(tokenOf(START_BLOCK_ID))
                     transmitter.expect(EXPECT_TERMINATOR)
                 }
                 while (!transmitter.tokensExhausted()) {
-                    if (!within.isOutermost && transmitter.expectMaybe(tokenOf(END_BLOCK_ID)
+                    if (!context.isOutermost && transmitter.expectMaybe(tokenOf(END_BLOCK_ID)
                             .removeWhen(WhenRemoveToken.Never)).isPresent)
                         break
                     readOneStatement()
                 }
-                if (!within.isOutermost)
+                if (!context.isOutermost)
                     transmitter.expect(tokenOf(END_BLOCK_ID))
             }
         } catch (ex: AbstractCompilationException) {

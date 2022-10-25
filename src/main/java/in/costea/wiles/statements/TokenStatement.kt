@@ -1,12 +1,11 @@
 package `in`.costea.wiles.statements
 
-import `in`.costea.wiles.builders.IsWithin
+import `in`.costea.wiles.builders.Context
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.data.Token
 import `in`.costea.wiles.enums.SyntaxType
-import `in`.costea.wiles.services.TokenTransmitter
 
-class TokenStatement(transmitter: TokenTransmitter, val token: Token,within : IsWithin) : AbstractStatement(transmitter,within) {
+class TokenStatement(val token: Token, context : Context) : AbstractStatement(context) {
     init {
         name = token.content
     }

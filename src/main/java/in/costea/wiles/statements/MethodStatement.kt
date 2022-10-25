@@ -1,20 +1,19 @@
 package `in`.costea.wiles.statements
 
+import `in`.costea.wiles.builders.Context
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
-import `in`.costea.wiles.data.CompilationExceptionsCollection
-import `in`.costea.wiles.builders.IsWithin
-import `in`.costea.wiles.enums.SyntaxType
-import `in`.costea.wiles.enums.WhenRemoveToken
-import `in`.costea.wiles.exceptions.AbstractCompilationException
-import `in`.costea.wiles.services.TokenTransmitter
 import `in`.costea.wiles.constants.Predicates.IS_IDENTIFIER
 import `in`.costea.wiles.constants.Tokens.NOTHING_ID
 import `in`.costea.wiles.constants.Tokens.RIGHT_ARROW_ID
 import `in`.costea.wiles.constants.Tokens.ROUND_BRACKET_END_ID
 import `in`.costea.wiles.constants.Tokens.ROUND_BRACKET_START_ID
 import `in`.costea.wiles.constants.Tokens.SEPARATOR_ID
+import `in`.costea.wiles.data.CompilationExceptionsCollection
+import `in`.costea.wiles.enums.SyntaxType
+import `in`.costea.wiles.enums.WhenRemoveToken
+import `in`.costea.wiles.exceptions.AbstractCompilationException
 
-class MethodStatement(transmitter: TokenTransmitter, oldWithin : IsWithin) : AbstractStatement(transmitter,oldWithin.setWithinMethod()) {
+class MethodStatement(oldContext : Context) : AbstractStatement(oldContext.setWithinMethod()) {
     private val parameters: MutableList<ParameterStatement> = ArrayList()
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
 
@@ -22,8 +21,8 @@ class MethodStatement(transmitter: TokenTransmitter, oldWithin : IsWithin) : Abs
     private var methodBody: CodeBlockStatement
 
     init {
-        returnType = TypeDefinitionStatement(transmitter,within)
-        methodBody = CodeBlockStatement(transmitter, within)
+        returnType = TypeDefinitionStatement(context)
+        methodBody = CodeBlockStatement(context)
         returnType.name = NOTHING_ID
     }
 
@@ -44,7 +43,7 @@ class MethodStatement(transmitter: TokenTransmitter, oldWithin : IsWithin) : Abs
 
             //TODO: check if arg parameters are t the end
             while (transmitter.expectMaybe(tokenOf(IS_IDENTIFIER).removeWhen(WhenRemoveToken.Never)).isPresent) {
-                val parameterStatement = ParameterStatement(transmitter,within)
+                val parameterStatement = ParameterStatement(context)
                 exceptions.addAll(parameterStatement.process())
                 parameters.add(parameterStatement)
                 if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break
@@ -54,7 +53,7 @@ class MethodStatement(transmitter: TokenTransmitter, oldWithin : IsWithin) : Abs
 
             //Return type
             if (transmitter.expectMaybe(tokenOf(RIGHT_ARROW_ID)).isPresent) {
-                returnType = TypeDefinitionStatement(transmitter,within)
+                returnType = TypeDefinitionStatement(context)
                 exceptions.addAll(returnType.process())
             }
 

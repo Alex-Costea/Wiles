@@ -7,14 +7,14 @@ import in.costea.wiles.exceptions.InternalErrorException;
 import in.costea.wiles.exceptions.UnexpectedTokenException;
 import in.costea.wiles.services.TokenTransmitter;
 import in.costea.wiles.statements.*;
-import in.costea.wiles.statements.expressions.TopLevelExpression;
 import in.costea.wiles.statements.expressions.DefaultExpression;
+import in.costea.wiles.statements.expressions.TopLevelExpression;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
 import static in.costea.wiles.constants.ErrorMessages.*;
@@ -27,7 +27,7 @@ public class StatementFactory {
     private final Set<Class<? extends AbstractStatement>> statements =new HashSet<>();
     @NotNull private final TokenTransmitter transmitter;
     private static final HashMap<Class<? extends AbstractStatement>,ExpectParamsBuilder> params = new HashMap<>();
-    private static final HashMap<Class<? extends AbstractStatement>, BiFunction<TokenTransmitter,IsWithin,AbstractStatement>>
+    private static final HashMap<Class<? extends AbstractStatement>, Function<Context,AbstractStatement>>
             createObject = new HashMap<>();
     static {
         params.put(TopLevelExpression.class, START_OF_EXPRESSION);
@@ -52,20 +52,20 @@ public class StatementFactory {
         createObject.put(ContinueStatement.class, ContinueStatement::new);
     }
 
-    private final IsWithin isWithin;
+    private final Context context;
 
-    public StatementFactory(@NotNull TokenTransmitter transmitter, @NotNull IsWithin within){
+    public StatementFactory(@NotNull TokenTransmitter transmitter, @NotNull Context context){
         this.transmitter=transmitter;
-        this.isWithin = within;
+        this.context = context;
     }
 
     public @NotNull StatementFactory addType(@NotNull Class<? extends AbstractStatement> statement)
     {
         if(!params.containsKey(statement))
             throw new InternalErrorException(NOT_YET_IMPLEMENTED_ERROR);
-        if(!isWithin.isWithinMethod() && statement.equals(ReturnStatement.class))
+        if(!context.isWithinMethod() && statement.equals(ReturnStatement.class))
             return this;
-        if(!isWithin.isWithinLoop() && statement.equals(ContinueStatement.class))
+        if(!context.isWithinLoop() && statement.equals(ContinueStatement.class))
             return this;
         this.statements.add(statement);
         return this;
@@ -74,7 +74,7 @@ public class StatementFactory {
     public @NotNull AbstractStatement create(@NotNull String errorMessage) throws AbstractCompilationException {
         for(var statement:statements)
             if(transmitter.expectMaybe(params.get(statement)).isPresent())
-                return createObject.get(statement).apply(transmitter,isWithin);
+                return createObject.get(statement).apply(context);
 
         //Expression not found
         ExpectParamsBuilder paramsBuilder = tokenOf(ANYTHING).removeWhen(WhenRemoveToken.Never)

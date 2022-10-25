@@ -1,6 +1,6 @@
 package in.costea.wiles.statements.expressions;
 
-import in.costea.wiles.builders.IsWithin;
+import in.costea.wiles.builders.Context;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.enums.ExpectNext;
@@ -11,7 +11,6 @@ import in.costea.wiles.exceptions.InternalErrorException;
 import in.costea.wiles.exceptions.UnexpectedEndException;
 import in.costea.wiles.exceptions.UnexpectedTokenException;
 import in.costea.wiles.services.PrecedenceProcessor;
-import in.costea.wiles.services.TokenTransmitter;
 import in.costea.wiles.statements.AbstractStatement;
 import in.costea.wiles.statements.TokenStatement;
 import org.jetbrains.annotations.NotNull;
@@ -32,8 +31,8 @@ public abstract class AbstractExpression extends AbstractStatement {
     protected TokenStatement operation = null;
     protected AbstractStatement right = null;
 
-    protected AbstractExpression(@NotNull TokenTransmitter transmitter, @NotNull IsWithin within) {
-        super(transmitter,within);
+    protected AbstractExpression(@NotNull Context context) {
+        super(context);
     }
 
     @Override
@@ -83,7 +82,7 @@ public abstract class AbstractExpression extends AbstractStatement {
     public @NotNull CompilationExceptionsCollection process() {
         try {
             @NotNull Token mainCurrentToken = transmitter.expect(START_OF_EXPRESSION);
-            @NotNull var precedenceProcessor = new PrecedenceProcessor(transmitter,getWithin());
+            @NotNull var precedenceProcessor = new PrecedenceProcessor(getContext());
             @NotNull Optional<Token> maybeTempToken;
             @NotNull String content = mainCurrentToken.getContent();
 
@@ -111,7 +110,7 @@ public abstract class AbstractExpression extends AbstractStatement {
                     if (expectNext == ExpectNext.OPERATOR) //Method call
                         throw new InternalErrorException(NOT_YET_IMPLEMENTED_ERROR);
                     else { //Inner expressions
-                        var newExpression = new InnerExpression(transmitter,getWithin());
+                        var newExpression = new InnerExpression(getContext());
                         newExpression.process().throwFirstIfExists();
                         precedenceProcessor.add(newExpression);
                         expectNext = ExpectNext.OPERATOR;
@@ -147,7 +146,7 @@ public abstract class AbstractExpression extends AbstractStatement {
                         if (INFIX_OPERATORS.contains(mainCurrentToken.getContent()))
                             mainCurrentToken = new Token(UNARY_ID + mainCurrentToken.getContent(),
                                     mainCurrentToken.getLocation());
-                        precedenceProcessor.add(new TokenStatement(transmitter, mainCurrentToken,getWithin()));
+                        precedenceProcessor.add(new TokenStatement(mainCurrentToken, getContext()));
                         continue;
                     }
                 }
@@ -161,7 +160,7 @@ public abstract class AbstractExpression extends AbstractStatement {
                             .or(IS_LITERAL).withErrorMessage(INVALID_EXPRESSION_ERROR));
 
                 //Add token and change next expected token
-                precedenceProcessor.add(new TokenStatement(transmitter, mainCurrentToken,getWithin()));
+                precedenceProcessor.add(new TokenStatement(mainCurrentToken, getContext()));
                 expectNext = (expectNext == ExpectNext.OPERATOR) ? ExpectNext.TOKEN : ExpectNext.OPERATOR;
             }
 

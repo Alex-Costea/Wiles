@@ -1,21 +1,20 @@
 package `in`.costea.wiles.statements
 
-import `in`.costea.wiles.builders.StatementFactory
+import `in`.costea.wiles.builders.Context
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
-import `in`.costea.wiles.builders.IsWithin
+import `in`.costea.wiles.builders.StatementFactory
 import `in`.costea.wiles.constants.ErrorMessages.EXPRESSION_EXPECTED_ERROR
-import `in`.costea.wiles.statements.expressions.DefaultExpression
+import `in`.costea.wiles.constants.ErrorMessages.IDENTIFIER_EXPECTED_ERROR
+import `in`.costea.wiles.constants.Predicates.IS_IDENTIFIER
+import `in`.costea.wiles.constants.Tokens.ASSIGN_ID
+import `in`.costea.wiles.constants.Tokens.MUTABLE_ID
+import `in`.costea.wiles.constants.Tokens.TYPEOF_ID
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.exceptions.AbstractCompilationException
-import `in`.costea.wiles.services.TokenTransmitter
-import `in`.costea.wiles.constants.Tokens.ASSIGN_ID
-import `in`.costea.wiles.constants.ErrorMessages.IDENTIFIER_EXPECTED_ERROR
-import `in`.costea.wiles.constants.Predicates.IS_IDENTIFIER
-import `in`.costea.wiles.constants.Tokens.MUTABLE_ID
-import `in`.costea.wiles.constants.Tokens.TYPEOF_ID
+import `in`.costea.wiles.statements.expressions.DefaultExpression
 
-class DeclarationStatement(transmitter: TokenTransmitter, within: IsWithin) : AbstractStatement(transmitter,within) {
+class DeclarationStatement(context: Context) : AbstractStatement(context) {
     private var left: AbstractStatement? = null
     private var typeStatement : TypeDefinitionStatement? = null
     private var right: AbstractStatement? = null
@@ -36,16 +35,16 @@ class DeclarationStatement(transmitter: TokenTransmitter, within: IsWithin) : Ab
             if(transmitter.expectMaybe(tokenOf(MUTABLE_ID)).isPresent)
                 name = MUTABLE_ID
 
-            this.left = TokenStatement(transmitter,transmitter.expect(tokenOf(IS_IDENTIFIER)
-                .withErrorMessage(IDENTIFIER_EXPECTED_ERROR)),within)
+            this.left = TokenStatement(transmitter.expect(tokenOf(IS_IDENTIFIER)
+                .withErrorMessage(IDENTIFIER_EXPECTED_ERROR)),context)
 
             if(transmitter.expectMaybe(tokenOf(TYPEOF_ID)).isPresent) {
-                typeStatement = TypeDefinitionStatement(transmitter,within)
+                typeStatement = TypeDefinitionStatement(context)
                 exceptions.addAll(typeStatement!!.process())
             }
             transmitter.expect(tokenOf(ASSIGN_ID))
 
-            val rightExpression = StatementFactory(transmitter,within)
+            val rightExpression = StatementFactory(transmitter,context)
                 .addType(DefaultExpression::class.java)
                 .addType(MethodStatement::class.java)
                 .create(EXPRESSION_EXPECTED_ERROR)
