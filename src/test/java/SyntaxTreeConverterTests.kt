@@ -5,6 +5,7 @@ import `in`.costea.wiles.constants.ErrorMessages.INVALID_STATEMENT_ERROR
 import `in`.costea.wiles.constants.ErrorMessages.TOKEN_EXPECTED_ERROR
 import `in`.costea.wiles.constants.ErrorMessages.INVALID_EXPRESSION_ERROR
 import `in`.costea.wiles.constants.Tokens.ASSIGN_ID
+import `in`.costea.wiles.constants.Tokens.CONTINUE_ID
 import `in`.costea.wiles.constants.Tokens.DECLARE_ID
 import `in`.costea.wiles.constants.Tokens.DO_ID
 import `in`.costea.wiles.constants.Tokens.END_BLOCK_ID
@@ -144,6 +145,10 @@ class SyntaxTreeConverterTests {
             DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, NEWLINE_ID,
             START_BLOCK_ID, NEWLINE_ID, "!a", TIMES_ID, TIMES_ID, "!b", NEWLINE_ID, "!a", PLUS_ID, "!b",
             DECLARE_ID, "!c", ASSIGN_ID, "!d", NEWLINE_ID, END_BLOCK_ID)
+        assertResults(createExceptions(UnexpectedTokenException(INVALID_STATEMENT_ERROR, nullLocation)),
+        "CODE_BLOCK(DECLARATION(!a; METHOD(TYPE NOTHING; CODE_BLOCK)); EXPRESSION(!a; PLUS; !b))",
+            DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, DO_ID, CONTINUE_ID
+            , NEWLINE_ID, "!a", PLUS_ID, "!b")
     }
 
     @Test

@@ -35,7 +35,6 @@ class CodeBlockStatement(context: Context) : AbstractStatement(context) {
         return components
     }
 
-    @Throws(AbstractCompilationException::class)
     private fun readOneStatement() {
         if (transmitter.expectMaybe(EXPECT_TERMINATOR).isPresent) return
         val statementFactory = StatementFactory(transmitter,
@@ -73,7 +72,7 @@ class CodeBlockStatement(context: Context) : AbstractStatement(context) {
         catch(ex : AbstractCompilationException)
         {
             readRestOfLine()
-            throw ex
+            exceptions.add(ex)
         }
         finally {
             components.add(statement)
