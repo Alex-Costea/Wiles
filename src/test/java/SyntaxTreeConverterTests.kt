@@ -18,6 +18,7 @@ import `in`.costea.wiles.constants.Tokens.NOT_ID
 import `in`.costea.wiles.constants.Tokens.OR_ID
 import `in`.costea.wiles.constants.Tokens.PLUS_ID
 import `in`.costea.wiles.constants.Tokens.POWER_ID
+import `in`.costea.wiles.constants.Tokens.RETURN_ID
 import `in`.costea.wiles.constants.Tokens.RIGHT_ARROW_ID
 import `in`.costea.wiles.constants.Tokens.ROUND_BRACKET_END_ID
 import `in`.costea.wiles.constants.Tokens.ROUND_BRACKET_START_ID
@@ -170,22 +171,6 @@ class SyntaxTreeConverterTests {
             "!b", ASSIGN_ID, METHOD_ID, ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, DO_ID, NOTHING_ID, NEWLINE_ID, END_BLOCK_ID, NEWLINE_ID, NEWLINE_ID, NEWLINE_ID)
     }
 
-    //TODO: figure out a better internal representation for square bracket calling
-    // It should be some kind of method call probably
-/*    @Test
-    fun squareBracketsTest() {
-        assertResults(null, "CODE_BLOCK(EXPRESSION(!a; EXPRESSION SQUARE(!b; COMMA; !d; COMMA; !e; PLUS; #2; TIMES; EXPRESSION(!a; POWER; !b))))",
-                "!a", SQUARE_BRACKET_START_ID, "!b", COMMA_ID, "!d", COMMA_ID, "!e",
-                PLUS_ID, "#2", TIMES_ID, ROUND_BRACKET_START_ID, "!a", POWER_ID, "!b", ROUND_BRACKET_END_ID, SQUARE_BRACKET_END_ID)
-        assertResults(null, "CODE_BLOCK(EXPRESSION(!a; EXPRESSION SQUARE(!b)))",
-                "!a", SQUARE_BRACKET_START_ID, "!b", COMMA_ID, SQUARE_BRACKET_END_ID)
-        assertResults(null, "CODE_BLOCK(ASSIGNMENT(EXPRESSION(!a); EXPRESSION(!b; EXPRESSION SQUARE(#3; COMMA; #4; COMMA; #5))))",
-                "!a", ASSIGN_ID,"!b", SQUARE_BRACKET_START_ID, "#3", COMMA_ID, "#4", COMMA_ID, "#5", COMMA_ID, SQUARE_BRACKET_END_ID)
-        assertResults(null, "CODE_BLOCK(ASSIGNMENT(EXPRESSION(!a); EXPRESSION(!b; EXPRESSION SQUARE(!c; COMMA; !d; EXPRESSION SQUARE(!e)); PLUS; !f)))",
-                "!a", ASSIGN_ID, "!b", SQUARE_BRACKET_START_ID, "!c", COMMA_ID, "!d",
-                SQUARE_BRACKET_START_ID, "!e", SQUARE_BRACKET_END_ID, SQUARE_BRACKET_END_ID, PLUS_ID, "!f")
-    }*/
-
     @Test
     fun orderOfOperationsTest()
     {
@@ -203,6 +188,23 @@ class SyntaxTreeConverterTests {
 
         assertResults(null,"CODE_BLOCK(EXPRESSION(EXPRESSION(NOT; EXPRESSION(NOT; EXPRESSION(!a; EQUALS; !b))); OR; !c))",
             NOT_ID, NOT_ID, "!a", EQUALS_ID, "!b", OR_ID, "!c")
+    }
+
+    @Test
+    fun returnTest()
+    {
+        assertResults(null,"CODE_BLOCK(DECLARATION(!a; METHOD(TYPE INT32; CODE_BLOCK(RETURN(EXPRESSION(#10))))))",
+            DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, RIGHT_ARROW_ID, "!int",
+            START_BLOCK_ID, NEWLINE_ID, RETURN_ID, "#10", NEWLINE_ID, END_BLOCK_ID)
+        assertResults(createExceptions(UnexpectedTokenException(INVALID_STATEMENT_ERROR, nullLocation)),null,
+            RETURN_ID, "#10")
+    }
+
+    @Test
+    fun declarationsTest()
+    {
+        assertResults(null,"CODE_BLOCK(DECLARATION(TYPE INT32; !a; EXPRESSION(#10)))",
+            DECLARE_ID, "!a", TYPEOF_ID, "!int", ASSIGN_ID, "#10")
     }
 
     private class CreateConverter(tokens: List<String>) {
