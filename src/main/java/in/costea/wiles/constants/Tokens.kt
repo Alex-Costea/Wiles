@@ -59,13 +59,13 @@ object Tokens {
     const val RETURN_ID = "RETURN"
     private const val TRUE_ID = "TRUE"
     private const val FALSE_ID = "FALSE"
-    private const val IF_ID = "IF"
+    const val IF_ID = "IF"
     private const val WHEN_ID = "WHEN"
     private const val ELSE_ID = "ELSE"
-    private const val BREAK_ID = "BREAK"
-    private const val CONTINUE_ID = "CONTINUE"
-    private const val FOR_ID = "FOR"
-    private const val WHILE_ID = "WHILE"
+    const val BREAK_ID = "BREAK"
+    const val CONTINUE_ID = "CONTINUE"
+    const val FOR_ID = "FOR"
+    const val WHILE_ID = "WHILE"
     const val UNNAMED_START = IDENTIFIER_START + "arg"
 
     private val KEYWORDS: HashMap<String, String> = HashMap()

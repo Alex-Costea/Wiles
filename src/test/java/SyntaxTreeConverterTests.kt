@@ -207,6 +207,36 @@ class SyntaxTreeConverterTests {
             DECLARE_ID, "!a", TYPEOF_ID, "!int", ASSIGN_ID, "#10")
     }
 
+    @Test
+    fun ifTest()
+    {
+
+    }
+
+    @Test
+    fun forTest()
+    {
+
+    }
+
+    @Test
+    fun whileTest()
+    {
+
+    }
+
+    @Test
+    fun breakTest()
+    {
+
+    }
+
+    @Test
+    fun continueTest()
+    {
+
+    }
+
     private class CreateConverter(tokens: List<String>) {
         var converter: TokensToSyntaxTreeConverter
         var exceptions: CompilationExceptionsCollection

@@ -1,5 +1,6 @@
 package in.costea.wiles.statements.expressions;
 
+import in.costea.wiles.builders.IsWithin;
 import in.costea.wiles.statements.TokenStatement;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.AbstractCompilationException;
@@ -13,8 +14,8 @@ import static in.costea.wiles.constants.Tokens.*;
 public class TopLevelExpression extends AbstractExpression {
     protected boolean isAssignment=false;
 
-    public TopLevelExpression(@NotNull TokenTransmitter transmitter) {
-        super(transmitter);
+    public TopLevelExpression(@NotNull TokenTransmitter transmitter, @NotNull IsWithin within) {
+        super(transmitter,within);
     }
 
     @Override
@@ -29,8 +30,8 @@ public class TopLevelExpression extends AbstractExpression {
         if(TERMINATORS.contains(token.getContent()))
             return true;
         if (token.getContent().equals(ASSIGN_ID)) {
-            operation = new TokenStatement(transmitter, transmitter.expect(tokenOf(ASSIGN_ID)));
-            right = new DefaultExpression(transmitter);
+            operation = new TokenStatement(transmitter, transmitter.expect(tokenOf(ASSIGN_ID)),getWithin());
+            right = new DefaultExpression(transmitter,getWithin());
             exceptions.addAll(right.process());
             isAssignment = true;
             return true;

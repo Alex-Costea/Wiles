@@ -1,5 +1,6 @@
 package in.costea.wiles.statements.expressions;
 
+import in.costea.wiles.builders.IsWithin;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.enums.ExpectNext;
@@ -31,8 +32,8 @@ public abstract class AbstractExpression extends AbstractStatement {
     protected TokenStatement operation = null;
     protected AbstractStatement right = null;
 
-    protected AbstractExpression(@NotNull TokenTransmitter transmitter) {
-        super(transmitter);
+    protected AbstractExpression(@NotNull TokenTransmitter transmitter, @NotNull IsWithin within) {
+        super(transmitter,within);
     }
 
     @Override
@@ -82,7 +83,7 @@ public abstract class AbstractExpression extends AbstractStatement {
     public @NotNull CompilationExceptionsCollection process() {
         try {
             @NotNull Token mainCurrentToken = transmitter.expect(START_OF_EXPRESSION);
-            @NotNull var precedenceProcessor = new PrecedenceProcessor(transmitter);
+            @NotNull var precedenceProcessor = new PrecedenceProcessor(transmitter,getWithin());
             @NotNull Optional<Token> maybeTempToken;
             @NotNull String content = mainCurrentToken.getContent();
 
@@ -110,7 +111,7 @@ public abstract class AbstractExpression extends AbstractStatement {
                     if (expectNext == ExpectNext.OPERATOR) //Method call
                         throw new InternalErrorException(NOT_YET_IMPLEMENTED_ERROR);
                     else { //Inner expressions
-                        var newExpression = new InnerExpression(this.transmitter);
+                        var newExpression = new InnerExpression(transmitter,getWithin());
                         newExpression.process().throwFirstIfExists();
                         precedenceProcessor.add(newExpression);
                         expectNext = ExpectNext.OPERATOR;
@@ -146,7 +147,7 @@ public abstract class AbstractExpression extends AbstractStatement {
                         if (INFIX_OPERATORS.contains(mainCurrentToken.getContent()))
                             mainCurrentToken = new Token(UNARY_ID + mainCurrentToken.getContent(),
                                     mainCurrentToken.getLocation());
-                        precedenceProcessor.add(new TokenStatement(transmitter, mainCurrentToken));
+                        precedenceProcessor.add(new TokenStatement(transmitter, mainCurrentToken,getWithin()));
                         continue;
                     }
                 }
@@ -160,7 +161,7 @@ public abstract class AbstractExpression extends AbstractStatement {
                             .or(IS_LITERAL).withErrorMessage(INVALID_EXPRESSION_ERROR));
 
                 //Add token and change next expected token
-                precedenceProcessor.add(new TokenStatement(transmitter, mainCurrentToken));
+                precedenceProcessor.add(new TokenStatement(transmitter, mainCurrentToken,getWithin()));
                 expectNext = (expectNext == ExpectNext.OPERATOR) ? ExpectNext.TOKEN : ExpectNext.OPERATOR;
             }
 

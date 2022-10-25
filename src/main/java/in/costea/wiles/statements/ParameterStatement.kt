@@ -1,6 +1,7 @@
 package `in`.costea.wiles.statements
 
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
+import `in`.costea.wiles.builders.IsWithin
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.exceptions.AbstractCompilationException
@@ -13,7 +14,7 @@ import `in`.costea.wiles.constants.Predicates.IS_IDENTIFIER
 import `in`.costea.wiles.constants.Predicates.IS_LITERAL
 import `in`.costea.wiles.constants.ErrorMessages.LITERAL_EXPECTED_ERROR
 
-class ParameterStatement(transmitter: TokenTransmitter) : AbstractStatement(transmitter) {
+class ParameterStatement(transmitter: TokenTransmitter,within: IsWithin) : AbstractStatement(transmitter,within) {
     private var nameToken: TokenStatement? = null
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
     private var typeDefinition: TypeDefinitionStatement
@@ -25,7 +26,7 @@ class ParameterStatement(transmitter: TokenTransmitter) : AbstractStatement(tran
         }
 
     init {
-        typeDefinition = TypeDefinitionStatement(transmitter)
+        typeDefinition = TypeDefinitionStatement(transmitter,within)
     }
 
     override val type: SyntaxType
@@ -42,7 +43,7 @@ class ParameterStatement(transmitter: TokenTransmitter) : AbstractStatement(tran
             nameToken = TokenStatement(
                 transmitter,
                 transmitter.expect(tokenOf(IS_IDENTIFIER).withErrorMessage(IDENTIFIER_EXPECTED_ERROR))
-            )
+            ,within)
             if (nameToken!!.token.content.startsWith(UNNAMED_START))
                 isAnon = true
             transmitter.expect(tokenOf(TYPEOF_ID))
@@ -51,7 +52,7 @@ class ParameterStatement(transmitter: TokenTransmitter) : AbstractStatement(tran
                 defaultValue = TokenStatement(
                     transmitter,
                     transmitter.expect(tokenOf(IS_LITERAL).withErrorMessage(LITERAL_EXPECTED_ERROR))
-                )
+                ,within)
             }
         } catch (e: AbstractCompilationException) {
             exceptions.add(e)

@@ -3,12 +3,16 @@ package `in`.costea.wiles.statements
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
+import `in`.costea.wiles.builders.IsWithin
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.services.TokenTransmitter
 
 @JsonPropertyOrder("compiledSuccessfully", "name", "type", "components")
-abstract class AbstractStatement(@JvmField protected val transmitter: TokenTransmitter) {
+abstract class AbstractStatement(@JvmField protected val transmitter: TokenTransmitter,
+                                 val within: IsWithin
+)
+{
 
     @JvmField
     @JsonProperty

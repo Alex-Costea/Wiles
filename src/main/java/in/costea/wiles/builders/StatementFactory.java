@@ -6,10 +6,7 @@ import in.costea.wiles.exceptions.AbstractCompilationException;
 import in.costea.wiles.exceptions.InternalErrorException;
 import in.costea.wiles.exceptions.UnexpectedTokenException;
 import in.costea.wiles.services.TokenTransmitter;
-import in.costea.wiles.statements.AbstractStatement;
-import in.costea.wiles.statements.DeclarationStatement;
-import in.costea.wiles.statements.MethodStatement;
-import in.costea.wiles.statements.ReturnStatement;
+import in.costea.wiles.statements.*;
 import in.costea.wiles.statements.expressions.TopLevelExpression;
 import in.costea.wiles.statements.expressions.DefaultExpression;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
 import static in.costea.wiles.constants.ErrorMessages.*;
@@ -30,7 +27,7 @@ public class StatementFactory {
     private final Set<Class<? extends AbstractStatement>> statements =new HashSet<>();
     @NotNull private final TokenTransmitter transmitter;
     private static final HashMap<Class<? extends AbstractStatement>,ExpectParamsBuilder> params = new HashMap<>();
-    private static final HashMap<Class<? extends AbstractStatement>, Function<TokenTransmitter,AbstractStatement>>
+    private static final HashMap<Class<? extends AbstractStatement>, BiFunction<TokenTransmitter,IsWithin,AbstractStatement>>
             createObject = new HashMap<>();
     static {
         params.put(TopLevelExpression.class, START_OF_EXPRESSION);
@@ -38,20 +35,38 @@ public class StatementFactory {
         params.put(DeclarationStatement.class, tokenOf(DECLARE_ID));
         params.put(MethodStatement.class, tokenOf(METHOD_ID));
         params.put(ReturnStatement.class, tokenOf(RETURN_ID));
+        params.put(IfStatement.class,tokenOf(IF_ID));
+        params.put(ForStatement.class,tokenOf(FOR_ID));
+        params.put(WhileStatement.class,tokenOf(WHILE_ID));
+        params.put(BreakStatement.class,tokenOf(BREAK_ID));
+        params.put(ContinueStatement.class,tokenOf(CONTINUE_ID));
         createObject.put(TopLevelExpression.class, TopLevelExpression::new);
         createObject.put(DefaultExpression.class, DefaultExpression::new);
         createObject.put(DeclarationStatement.class, DeclarationStatement::new);
         createObject.put(MethodStatement.class, MethodStatement::new);
         createObject.put(ReturnStatement.class, ReturnStatement::new);
+        createObject.put(IfStatement.class, IfStatement::new);
+        createObject.put(ForStatement.class, ForStatement::new);
+        createObject.put(WhileStatement.class, WhileStatement::new);
+        createObject.put(BreakStatement.class, BreakStatement::new);
+        createObject.put(ContinueStatement.class, ContinueStatement::new);
     }
-    public StatementFactory(@NotNull TokenTransmitter transmitter){
+
+    private final IsWithin isWithin;
+
+    public StatementFactory(@NotNull TokenTransmitter transmitter, @NotNull IsWithin within){
         this.transmitter=transmitter;
+        this.isWithin = within;
     }
 
     public @NotNull StatementFactory addType(@NotNull Class<? extends AbstractStatement> statement)
     {
         if(!params.containsKey(statement))
             throw new InternalErrorException(NOT_YET_IMPLEMENTED_ERROR);
+        if(!isWithin.isWithinMethod() && statement.equals(ReturnStatement.class))
+            return this;
+        if(!isWithin.isWithinLoop() && statement.equals(ContinueStatement.class))
+            return this;
         this.statements.add(statement);
         return this;
     }
@@ -59,7 +74,7 @@ public class StatementFactory {
     public @NotNull AbstractStatement create(@NotNull String errorMessage) throws AbstractCompilationException {
         for(var statement:statements)
             if(transmitter.expectMaybe(params.get(statement)).isPresent())
-                return createObject.get(statement).apply(transmitter);
+                return createObject.get(statement).apply(transmitter,isWithin);
 
         //Expression not found
         ExpectParamsBuilder paramsBuilder = tokenOf(ANYTHING).removeWhen(WhenRemoveToken.Never)

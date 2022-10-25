@@ -2,6 +2,7 @@ package `in`.costea.wiles.statements
 
 import `in`.costea.wiles.builders.StatementFactory
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
+import `in`.costea.wiles.builders.IsWithin
 import `in`.costea.wiles.constants.ErrorMessages.EXPRESSION_EXPECTED_ERROR
 import `in`.costea.wiles.statements.expressions.DefaultExpression
 import `in`.costea.wiles.data.CompilationExceptionsCollection
@@ -14,7 +15,7 @@ import `in`.costea.wiles.constants.Predicates.IS_IDENTIFIER
 import `in`.costea.wiles.constants.Tokens.MUTABLE_ID
 import `in`.costea.wiles.constants.Tokens.TYPEOF_ID
 
-class DeclarationStatement(transmitter: TokenTransmitter) : AbstractStatement(transmitter) {
+class DeclarationStatement(transmitter: TokenTransmitter, within: IsWithin) : AbstractStatement(transmitter,within) {
     private var left: AbstractStatement? = null
     private var typeStatement : TypeDefinitionStatement? = null
     private var right: AbstractStatement? = null
@@ -36,15 +37,15 @@ class DeclarationStatement(transmitter: TokenTransmitter) : AbstractStatement(tr
                 name = MUTABLE_ID
 
             this.left = TokenStatement(transmitter,transmitter.expect(tokenOf(IS_IDENTIFIER)
-                .withErrorMessage(IDENTIFIER_EXPECTED_ERROR)))
+                .withErrorMessage(IDENTIFIER_EXPECTED_ERROR)),within)
 
             if(transmitter.expectMaybe(tokenOf(TYPEOF_ID)).isPresent) {
-                typeStatement = TypeDefinitionStatement(transmitter)
+                typeStatement = TypeDefinitionStatement(transmitter,within)
                 exceptions.addAll(typeStatement!!.process())
             }
             transmitter.expect(tokenOf(ASSIGN_ID))
 
-            val rightExpression = StatementFactory(transmitter)
+            val rightExpression = StatementFactory(transmitter,within)
                 .addType(DefaultExpression::class.java)
                 .addType(MethodStatement::class.java)
                 .create(EXPRESSION_EXPECTED_ERROR)

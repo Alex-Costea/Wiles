@@ -3,7 +3,7 @@ package `in`.costea.wiles.converters
 import `in`.costea.wiles.statements.CodeBlockStatement
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.data.Token
-import `in`.costea.wiles.builders.CodeBlockType
+import `in`.costea.wiles.builders.IsWithin
 import `in`.costea.wiles.data.TokenLocation
 import `in`.costea.wiles.services.TokenTransmitter
 
@@ -17,7 +17,7 @@ class TokensToSyntaxTreeConverter(tokens: List<Token>, lastLocation : TokenLocat
     }
 
     fun convert(): CodeBlockStatement {
-        val syntaxTree = CodeBlockStatement(tokenTransmitter, CodeBlockType().outermost())
+        val syntaxTree = CodeBlockStatement(tokenTransmitter, IsWithin().outermost())
         exceptions.addAll(syntaxTree.process())
         return syntaxTree
     }

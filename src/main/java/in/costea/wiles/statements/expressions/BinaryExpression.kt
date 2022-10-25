@@ -1,5 +1,6 @@
 package `in`.costea.wiles.statements.expressions
 
+import `in`.costea.wiles.builders.IsWithin
 import `in`.costea.wiles.statements.AbstractStatement
 import `in`.costea.wiles.statements.TokenStatement
 import `in`.costea.wiles.data.CompilationExceptionsCollection
@@ -11,8 +12,9 @@ class BinaryExpression(
     transmitter: TokenTransmitter,
     operation: TokenStatement?,
     left: AbstractStatement?,
-    right: AbstractStatement
-) : AbstractExpression(transmitter) {
+    right: AbstractStatement,
+    within: IsWithin
+) : AbstractExpression(transmitter, within) {
     init {
         this.left=left
         this.operation=operation

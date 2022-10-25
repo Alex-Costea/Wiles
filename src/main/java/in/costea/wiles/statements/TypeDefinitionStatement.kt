@@ -1,6 +1,7 @@
 package `in`.costea.wiles.statements
 
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
+import `in`.costea.wiles.builders.IsWithin
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.exceptions.AbstractCompilationException
@@ -9,7 +10,7 @@ import `in`.costea.wiles.constants.Types.TYPES
 import `in`.costea.wiles.constants.ErrorMessages.TYPE_EXPECTED_ERROR
 import `in`.costea.wiles.constants.Predicates.IS_CONTAINED_IN
 
-class TypeDefinitionStatement(transmitter: TokenTransmitter) : AbstractStatement(transmitter) {
+class TypeDefinitionStatement(transmitter: TokenTransmitter,within: IsWithin) : AbstractStatement(transmitter,within) {
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
     override val type: SyntaxType
         get() = SyntaxType.TYPE
