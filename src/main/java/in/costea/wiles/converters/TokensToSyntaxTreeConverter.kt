@@ -17,7 +17,7 @@ class TokensToSyntaxTreeConverter(tokens: List<Token>, lastLocation : TokenLocat
     }
 
     fun convert(): CodeBlockStatement {
-        val syntaxTree = CodeBlockStatement(tokenTransmitter, IsWithin().outermost())
+        val syntaxTree = CodeBlockStatement(tokenTransmitter, IsWithin().setOutermost())
         exceptions.addAll(syntaxTree.process())
         return syntaxTree
     }

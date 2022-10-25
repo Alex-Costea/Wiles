@@ -49,12 +49,21 @@ class CodeBlockStatement(transmitter: TokenTransmitter, within: IsWithin) : Abst
             .addType(BreakStatement::class.java)
             .addType(ReturnStatement::class.java)
             .addType(ContinueStatement::class.java)
-        val statement = statementFactory.create()
+        val statement : AbstractStatement
+        try
+        {
+            statement = statementFactory.create()
+        }
+        catch (ex : AbstractCompilationException)
+        {
+            exceptions.add(ex)
+            readRestOfLine()
+            return
+        }
         val newExceptions = statement.process()
         exceptions.addAll(newExceptions)
         if(!newExceptions.isEmpty())
-            while(transmitter.expectMaybe(READ_REST_OF_LINE).isPresent)
-                Unit
+            readRestOfLine()
         else try {
             transmitter.expect(tokenOf(Predicates.IS_CONTAINED_IN(Tokens.TERMINATORS)).dontIgnoreNewLine()
                 .withErrorMessage(END_OF_STATEMENT_EXPECTED_ERROR).removeWhen(WhenRemoveToken.Never))
@@ -62,13 +71,17 @@ class CodeBlockStatement(transmitter: TokenTransmitter, within: IsWithin) : Abst
         catch(ignored : UnexpectedEndException){}
         catch(ex : AbstractCompilationException)
         {
-            while(transmitter.expectMaybe(READ_REST_OF_LINE).isPresent)
-                Unit
+            readRestOfLine()
             throw ex
         }
         finally {
             components.add(statement)
         }
+    }
+
+    private fun readRestOfLine() {
+        while(transmitter.expectMaybe(READ_REST_OF_LINE).isPresent)
+            Unit
     }
 
     override fun process(): CompilationExceptionsCollection {

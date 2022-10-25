@@ -14,7 +14,7 @@ import `in`.costea.wiles.constants.Tokens.ROUND_BRACKET_END_ID
 import `in`.costea.wiles.constants.Tokens.ROUND_BRACKET_START_ID
 import `in`.costea.wiles.constants.Tokens.SEPARATOR_ID
 
-class MethodStatement(transmitter: TokenTransmitter, oldWithin : IsWithin) : AbstractStatement(transmitter,oldWithin.withinMethod()) {
+class MethodStatement(transmitter: TokenTransmitter, oldWithin : IsWithin) : AbstractStatement(transmitter,oldWithin.setWithinMethod()) {
     private val parameters: MutableList<ParameterStatement> = ArrayList()
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
 

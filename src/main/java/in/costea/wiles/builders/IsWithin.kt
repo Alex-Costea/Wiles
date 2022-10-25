@@ -7,7 +7,7 @@ class IsWithin {
     private set
     var isWithinLoop = false
     private set
-    fun outermost() : IsWithin
+    fun setOutermost() : IsWithin
     {
         if(isOutermost)
             return this
@@ -16,7 +16,7 @@ class IsWithin {
         return x
     }
 
-    fun withinMethod() : IsWithin
+    fun setWithinMethod() : IsWithin
     {
         if(isWithinMethod)
             return this
@@ -25,12 +25,12 @@ class IsWithin {
         return x
     }
 
-    fun withinLoop() : IsWithin
+    fun setWithinLoop() : IsWithin
     {
         if(isWithinLoop)
             return this
         val x = clone()
-        isWithinLoop = true
+        x.isWithinLoop = true
         return x
     }
 

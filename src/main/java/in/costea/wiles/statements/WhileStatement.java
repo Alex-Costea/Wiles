@@ -10,7 +10,7 @@ import java.util.List;
 
 public class WhileStatement extends AbstractStatement{
     public WhileStatement(@NotNull TokenTransmitter transmitter, @NotNull IsWithin oldWithin) {
-        super(transmitter,oldWithin.withinLoop());
+        super(transmitter,oldWithin.setWithinLoop());
     }
 
     @NotNull

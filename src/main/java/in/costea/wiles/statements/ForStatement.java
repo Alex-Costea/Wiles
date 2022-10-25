@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ForStatement extends AbstractStatement{
     public ForStatement(@NotNull TokenTransmitter transmitter, @NotNull IsWithin oldWithin) {
-        super(transmitter,oldWithin.withinLoop());
+        super(transmitter,oldWithin.setWithinLoop());
     }
 
     @NotNull
