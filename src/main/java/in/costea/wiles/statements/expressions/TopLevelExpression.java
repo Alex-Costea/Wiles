@@ -10,10 +10,10 @@ import org.jetbrains.annotations.NotNull;
 import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
 import static in.costea.wiles.constants.Tokens.*;
 
-public class AssignableExpression extends AbstractExpression {
+public class TopLevelExpression extends AbstractExpression {
     protected boolean isAssignment=false;
 
-    public AssignableExpression(@NotNull TokenTransmitter transmitter) {
+    public TopLevelExpression(@NotNull TokenTransmitter transmitter) {
         super(transmitter);
     }
 

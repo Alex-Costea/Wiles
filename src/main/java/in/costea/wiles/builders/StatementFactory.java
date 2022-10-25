@@ -10,7 +10,7 @@ import in.costea.wiles.statements.AbstractStatement;
 import in.costea.wiles.statements.DeclarationStatement;
 import in.costea.wiles.statements.MethodStatement;
 import in.costea.wiles.statements.ReturnStatement;
-import in.costea.wiles.statements.expressions.AssignableExpression;
+import in.costea.wiles.statements.expressions.TopLevelExpression;
 import in.costea.wiles.statements.expressions.DefaultExpression;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,12 +33,12 @@ public class StatementFactory {
     private static final HashMap<Class<? extends AbstractStatement>, Function<TokenTransmitter,AbstractStatement>>
             createObject = new HashMap<>();
     static {
-        params.put(AssignableExpression.class, START_OF_EXPRESSION);
+        params.put(TopLevelExpression.class, START_OF_EXPRESSION);
         params.put(DefaultExpression.class, START_OF_EXPRESSION);
         params.put(DeclarationStatement.class, tokenOf(DECLARE_ID));
         params.put(MethodStatement.class, tokenOf(METHOD_ID));
         params.put(ReturnStatement.class, tokenOf(RETURN_ID));
-        createObject.put(AssignableExpression.class, AssignableExpression::new);
+        createObject.put(TopLevelExpression.class, TopLevelExpression::new);
         createObject.put(DefaultExpression.class, DefaultExpression::new);
         createObject.put(DeclarationStatement.class, DeclarationStatement::new);
         createObject.put(MethodStatement.class, MethodStatement::new);

@@ -19,7 +19,7 @@ import `in`.costea.wiles.enums.WhenRemoveToken
 import `in`.costea.wiles.exceptions.AbstractCompilationException
 import `in`.costea.wiles.exceptions.UnexpectedEndException
 import `in`.costea.wiles.services.TokenTransmitter
-import `in`.costea.wiles.statements.expressions.AssignableExpression
+import `in`.costea.wiles.statements.expressions.TopLevelExpression
 
 class CodeBlockStatement(transmitter: TokenTransmitter, private val blockType: CodeBlockType) : AbstractStatement(transmitter) {
     private val components: MutableList<AbstractStatement> = ArrayList()
@@ -40,7 +40,7 @@ class CodeBlockStatement(transmitter: TokenTransmitter, private val blockType: C
     private fun readOneStatement() {
         if (transmitter.expectMaybe(EXPECT_TERMINATOR).isPresent) return
         val statementFactory= StatementFactory(transmitter)
-            .addType(AssignableExpression::class.java)
+            .addType(TopLevelExpression::class.java)
             .addType(DeclarationStatement::class.java)
         if(blockType.isWithinMethod)
             statementFactory.addType(ReturnStatement::class.java)

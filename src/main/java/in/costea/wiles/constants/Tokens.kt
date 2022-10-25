@@ -3,8 +3,6 @@ package `in`.costea.wiles.constants
 import com.google.common.collect.BiMap
 import com.google.common.collect.HashBiMap
 import `in`.costea.wiles.constants.Chars.CONTINUE_LINE
-import `in`.costea.wiles.constants.Chars.NEWLINE
-import `in`.costea.wiles.constants.Chars.SPACE
 import `in`.costea.wiles.constants.ErrorMessages.MAX_SYMBOL_TOO_LARGE_ERROR
 import `in`.costea.wiles.constants.Settings.DEBUG
 import `in`.costea.wiles.constants.Settings.MAX_SYMBOL_LENGTH
@@ -140,9 +138,9 @@ object Tokens {
         SYMBOLS[";"] = TERMINATOR_ID
         SYMBOLS["->"] = RIGHT_ARROW_ID
         SYMBOLS["?"] = MAYBE_ID
-        SYMBOLS["" + SPACE] = SPACE_ID
+        SYMBOLS[" "] = SPACE_ID
         SYMBOLS["" + CONTINUE_LINE] = CONTINUE_LINE_ID
-        SYMBOLS["" + NEWLINE] = NEWLINE_ID
+        SYMBOLS["\n"] = NEWLINE_ID
         if (DEBUG) {
             SYMBOLS["$="] = "TEMP"
             SYMBOLS["=$="] = "TEMP2"

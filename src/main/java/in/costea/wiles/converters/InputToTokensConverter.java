@@ -76,7 +76,7 @@ public class InputToTokensConverter {
         char lastNonSpaceCharacter = 0;
         int lastNonSpaceCharacterIndex = -1;
         while (currentIndex < arrayChars.length) {
-            if (arrayChars[currentIndex] == NEWLINE) {
+            if (arrayChars[currentIndex] == '\n') {
                 if (lastNonSpaceCharacter == CONTINUE_LINE)
                     sb.setLength(lastNonSpaceCharacterIndex - index - 1);
                 else {
@@ -85,7 +85,7 @@ public class InputToTokensConverter {
                         currentIndex--;
                     break;
                 }
-            } else if (arrayChars[currentIndex] != SPACE) {
+            } else if (arrayChars[currentIndex] != ' ') {
                 lastNonSpaceCharacterIndex = currentIndex;
                 lastNonSpaceCharacter = arrayChars[currentIndex];
             }
@@ -109,7 +109,7 @@ public class InputToTokensConverter {
             return STRING_START + sb;
 
         //String not properly finished at this point
-        if (index < arrayChars.length && arrayChars[index] == NEWLINE) //of the newline token regardless
+        if (index < arrayChars.length && arrayChars[index] == '\n') //of the newline token regardless
             index--;
         throw new StringUnfinishedException(STRING_UNFINISHED_ERROR, line, getIndexOnCurrentLine());
     }
@@ -161,7 +161,7 @@ public class InputToTokensConverter {
                 operatorFoundIndex = currentIndex;
             }
             currentIndex++;
-            if (currentIndex == arrayChars.length || arrayChars[currentIndex] == SPACE || arrayChars[currentIndex] == NEWLINE)
+            if (currentIndex == arrayChars.length || arrayChars[currentIndex] == ' ' || arrayChars[currentIndex] == '\n')
                 break;
         }
         index = operatorFoundIndex;
