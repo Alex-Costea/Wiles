@@ -7,11 +7,11 @@ import in.costea.wiles.enums.ExpectNext;
 import in.costea.wiles.enums.SyntaxType;
 import in.costea.wiles.enums.WhenRemoveToken;
 import in.costea.wiles.exceptions.AbstractCompilationException;
-import in.costea.wiles.exceptions.InternalErrorException;
 import in.costea.wiles.exceptions.UnexpectedEndException;
 import in.costea.wiles.exceptions.UnexpectedTokenException;
 import in.costea.wiles.services.PrecedenceProcessor;
 import in.costea.wiles.statements.AbstractStatement;
+import in.costea.wiles.statements.MethodCallStatement;
 import in.costea.wiles.statements.TokenStatement;
 import org.jetbrains.annotations.NotNull;
 
@@ -106,16 +106,22 @@ public abstract class AbstractExpression extends AbstractStatement {
                 }
 
                 //Handle method calls and inner expressions
-                if (transmitter.expectMaybe(tokenOf(ROUND_BRACKET_START_ID)).isPresent()) {
-                    if (expectNext == ExpectNext.OPERATOR) //Method call
-                        throw new InternalErrorException(NOT_YET_IMPLEMENTED_ERROR);
-                    else { //Inner expressions
-                        var newExpression = new InnerExpression(getContext());
+                maybeTempToken =transmitter.expectMaybe(tokenOf(ROUND_BRACKET_START_ID));
+                if (maybeTempToken.isPresent()) {
+                    if (expectNext == ExpectNext.OPERATOR) { //Method call
+                        precedenceProcessor.add(new TokenStatement(new Token(APPLY_ID,maybeTempToken.get()
+                                .getLocation()),getContext()));
+                        var newExpression = new MethodCallStatement(getContext());
                         newExpression.process().throwFirstIfExists();
                         precedenceProcessor.add(newExpression);
-                        expectNext = ExpectNext.OPERATOR;
                         continue;
                     }
+                    //Inner expressions
+                    var newExpression = new InnerExpression(getContext());
+                    newExpression.process().throwFirstIfExists();
+                    precedenceProcessor.add(newExpression);
+                    expectNext = ExpectNext.OPERATOR;
+                    continue;
                 }
 
                 //Handle closing brackets token

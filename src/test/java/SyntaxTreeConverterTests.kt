@@ -247,6 +247,13 @@ class SyntaxTreeConverterTests {
 
     }
 
+    @Test
+    fun methodCallTest()
+    {
+        assertResults(null,"CODE_BLOCK(EXPRESSION(!a; PLUS; EXPRESSION(!b; APPLY; METHOD_CALL)))",
+            "!a", PLUS_ID, "!b", ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID)
+    }
+
     private class CreateConverter(tokens: List<String>) {
         var converter: TokensToSyntaxTreeConverter
         var exceptions: CompilationExceptionsCollection

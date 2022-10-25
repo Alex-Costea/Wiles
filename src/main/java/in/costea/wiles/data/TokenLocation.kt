@@ -12,7 +12,7 @@ data class TokenLocation(val line: Int, val lineIndex: Int) {
     fun displayLocation(input : String): String
     {
         return  LINE_SYMBOL + input.split("\n")[line-1] +
-                LINE_SYMBOL + " ".repeat(lineIndex-1) + "^\n"
+                LINE_SYMBOL + " ".repeat(lineIndex-1) + "^"+ LINE_SYMBOL
     }
 
     override fun hashCode(): Int {

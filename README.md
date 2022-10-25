@@ -40,7 +40,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Conditional type casting: `when value is type [block] {otherwise block}`
 - For loop: `for x {in collection} {from a} {to b} [block]`
 - While loop: `while condition [block]`
-- Code block: `do [operation]` or `begin [op1];[op2]; end`
+- Code block: `do [operation]` or `begin; [op1];[op2]; end`
 - Yield: `yield [expression]` (return equivalent)
 - `nothing` (no operation)
 - `stop`, `skip` (`break`/`return;`, `continue` equivalents)
