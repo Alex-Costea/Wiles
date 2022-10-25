@@ -44,7 +44,7 @@ class DeclarationStatement(context: Context) : AbstractStatement(context) {
             }
             transmitter.expect(tokenOf(ASSIGN_ID))
 
-            val rightExpression = StatementFactory(transmitter,context)
+            val rightExpression = StatementFactory(context)
                 .addType(DefaultExpression::class.java)
                 .addType(MethodStatement::class.java)
                 .create(EXPRESSION_EXPECTED_ERROR)

@@ -3,13 +3,16 @@ package in.costea.wiles.statements;
 import in.costea.wiles.builders.Context;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.enums.SyntaxType;
+import in.costea.wiles.exceptions.InternalErrorException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import static in.costea.wiles.constants.ErrorMessages.NOT_YET_IMPLEMENTED_ERROR;
+
 public class WhileStatement extends AbstractStatement{
     public WhileStatement(@NotNull Context oldContext) {
-        super(oldContext.setWithinLoop());
+        super(oldContext.setWithinLoop(true));
     }
 
     @NotNull
@@ -21,12 +24,12 @@ public class WhileStatement extends AbstractStatement{
     @NotNull
     @Override
     public List<AbstractStatement> getComponents() {
-        return List.of();
+        throw new InternalErrorException(NOT_YET_IMPLEMENTED_ERROR);
     }
 
     @NotNull
     @Override
     public CompilationExceptionsCollection process() {
-        return new CompilationExceptionsCollection();
+        throw new InternalErrorException(NOT_YET_IMPLEMENTED_ERROR);
     }
 }

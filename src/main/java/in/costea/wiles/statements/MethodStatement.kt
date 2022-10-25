@@ -13,7 +13,7 @@ import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.enums.WhenRemoveToken
 import `in`.costea.wiles.exceptions.AbstractCompilationException
 
-class MethodStatement(oldContext : Context) : AbstractStatement(oldContext.setWithinMethod()) {
+class MethodStatement(oldContext : Context) : AbstractStatement(oldContext.setWithinMethod(true)) {
     private val parameters: MutableList<ParameterStatement> = ArrayList()
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
 

@@ -54,9 +54,9 @@ public class StatementFactory {
 
     private final Context context;
 
-    public StatementFactory(@NotNull TokenTransmitter transmitter, @NotNull Context context){
-        this.transmitter=transmitter;
+    public StatementFactory(@NotNull Context context){
         this.context = context;
+        this.transmitter=context.getTransmitter();
     }
 
     public @NotNull StatementFactory addType(@NotNull Class<? extends AbstractStatement> statement)

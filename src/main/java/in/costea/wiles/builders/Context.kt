@@ -10,30 +10,30 @@ class Context(val transmitter: TokenTransmitter) {
     var isWithinLoop = false
     private set
 
-    fun setOutermost() : Context
+    fun setOutermost(to:Boolean) : Context
     {
-        if(isOutermost)
+        if(isOutermost == to)
             return this
         val x = clone()
-        x.isOutermost = true
+        x.isOutermost = to
         return x
     }
 
-    fun setWithinMethod() : Context
+    fun setWithinMethod(to:Boolean) : Context
     {
-        if(isWithinMethod)
+        if(isWithinMethod == to)
             return this
         val x = clone()
-        x.isWithinMethod = true
+        x.isWithinMethod = to
         return x
     }
 
-    fun setWithinLoop() : Context
+    fun setWithinLoop(to:Boolean) : Context
     {
-        if(isWithinLoop)
+        if(isWithinLoop == to)
             return this
         val x = clone()
-        x.isWithinLoop = true
+        x.isWithinLoop = to
         return x
     }
 

@@ -37,8 +37,7 @@ class CodeBlockStatement(context: Context) : AbstractStatement(context) {
 
     private fun readOneStatement() {
         if (transmitter.expectMaybe(EXPECT_TERMINATOR).isPresent) return
-        val statementFactory = StatementFactory(transmitter,
-            if(!context.isOutermost) context else Context(transmitter))
+        val statementFactory = StatementFactory(context.setOutermost(false))
             .addType(TopLevelExpression::class.java)
             .addType(DeclarationStatement::class.java)
             .addType(IfStatement::class.java)
