@@ -38,13 +38,6 @@ class Context(val transmitter: TokenTransmitter) {
     }
 
     private fun clone(): Context {
-        val x = Context(transmitter)
-        if(isOutermost)
-            x.isOutermost = true
-        if(isWithinLoop)
-            x.isOutermost = true
-        if(isWithinLoop)
-            x.isWithinLoop = true
-        return x
+        return Context(transmitter).setOutermost(isOutermost).setWithinLoop(isWithinLoop).setWithinMethod(isWithinMethod)
     }
 }
