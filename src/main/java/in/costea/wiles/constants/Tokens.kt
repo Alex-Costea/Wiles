@@ -61,12 +61,14 @@ object Tokens {
     private const val FALSE_ID = "FALSE"
     const val IF_ID = "IF"
     private const val WHEN_ID = "WHEN"
-    private const val ELSE_ID = "ELSE"
+    const val ELSE_ID = "ELSE"
     const val BREAK_ID = "BREAK"
     const val CONTINUE_ID = "CONTINUE"
     const val FOR_ID = "FOR"
+    private const val IN_ID = "IN"
+    private const val FROM_ID = "FROM"
+    private const val TO_ID = "TO"
     const val WHILE_ID = "WHILE"
-    const val UNNAMED_START = IDENTIFIER_START + "arg"
 
     private val KEYWORDS: HashMap<String, String> = HashMap()
     private val SYMBOLS: HashMap<String, String> = HashMap()
@@ -115,6 +117,9 @@ object Tokens {
         KEYWORDS[if(!ROMANIAN_MODE) "end" else "sfârșit"] = END_BLOCK_ID
         KEYWORDS[if(!ROMANIAN_MODE) "true" else "adevărat"] = TRUE_ID
         KEYWORDS[if(!ROMANIAN_MODE) "false" else "fals"] = FALSE_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "in" else "în"] = IN_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "from" else "de_la"] = FROM_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "to" else "la"] = TO_ID
 
         SYMBOLS["+"] = PLUS_ID
         SYMBOLS["-"] = MINUS_ID

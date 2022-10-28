@@ -41,7 +41,7 @@ class MethodStatement(oldContext : Context) : AbstractStatement(oldContext.setWi
         try {
             transmitter.expect(tokenOf(ROUND_BRACKET_START_ID))
 
-            //TODO: check if arg parameters are t the end
+            //TODO: check if arg parameters are at the end
             while (transmitter.expectMaybe(tokenOf(IS_IDENTIFIER).removeWhen(WhenRemoveToken.Never)).isPresent) {
                 val parameterStatement = ParameterStatement(context)
                 exceptions.addAll(parameterStatement.process())
