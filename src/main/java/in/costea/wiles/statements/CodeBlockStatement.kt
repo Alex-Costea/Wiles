@@ -6,6 +6,7 @@ import `in`.costea.wiles.builders.Context
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
 import `in`.costea.wiles.builders.StatementFactory
 import `in`.costea.wiles.constants.Predicates.EXPECT_TERMINATOR
+import `in`.costea.wiles.constants.Predicates.EXPECT_TERMINATOR_DONT_REMOVE
 import `in`.costea.wiles.constants.Predicates.READ_REST_OF_LINE
 import `in`.costea.wiles.constants.Tokens.DO_ID
 import `in`.costea.wiles.constants.Tokens.END_BLOCK_ID
@@ -100,8 +101,13 @@ class CodeBlockStatement(context: Context) : AbstractStatement(context) {
                     if (transmitter.expectMaybe(EXPECT_TERMINATOR).isPresent) continue
                     readOneStatement()
                 }
-                if (!context.isOutermost)
+                if (!context.isOutermost) {
                     transmitter.expect(tokenOf(END_BLOCK_ID))
+                    try {
+                        transmitter.expect(EXPECT_TERMINATOR_DONT_REMOVE)
+                    }
+                    catch(_: UnexpectedEndException) {}
+                }
             }
         } catch (ex: AbstractCompilationException) {
             exceptions.add(ex)

@@ -27,6 +27,11 @@ object Predicates {
         .withErrorMessage(ErrorMessages.END_OF_STATEMENT_EXPECTED_ERROR).removeWhen(WhenRemoveToken.WhenFound).freeze()
 
     @JvmField
+    val EXPECT_TERMINATOR_DONT_REMOVE = tokenOf(IS_CONTAINED_IN(TERMINATORS)).dontIgnoreNewLine()
+        .withErrorMessage(ErrorMessages.END_OF_STATEMENT_EXPECTED_ERROR).removeWhen(WhenRemoveToken.Never).freeze()
+
+
+    @JvmField
     val ANYTHING = Predicate { _: String -> true }
 
     @JvmField
