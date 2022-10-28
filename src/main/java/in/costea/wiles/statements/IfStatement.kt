@@ -4,7 +4,6 @@ import `in`.costea.wiles.builders.Context
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
 import `in`.costea.wiles.builders.StatementFactory
 import `in`.costea.wiles.constants.ErrorMessages.EXPRESSION_EXPECTED_ERROR
-import `in`.costea.wiles.constants.Predicates.EXPECT_TERMINATOR
 import `in`.costea.wiles.constants.Tokens.ELSE_ID
 import `in`.costea.wiles.constants.Tokens.TERMINATOR_ID
 import `in`.costea.wiles.data.CompilationExceptionsCollection
@@ -40,13 +39,8 @@ class IfStatement(context: Context) : AbstractStatement(context) {
         {
             exceptions.addAll(condition.process())
             exceptions.addAll(thenBlockStatement.process())
-            val tempToken = transmitter.expectMaybe(EXPECT_TERMINATOR)
-            if (!tempToken.isPresent)
-                return exceptions
-            val params = tokenOf(ELSE_ID)
-            if (tempToken.get().content == TERMINATOR_ID)
-                params.dontIgnoreNewLine()
-            if (transmitter.expectMaybe(params).isPresent) {
+            transmitter.expectMaybe(tokenOf(TERMINATOR_ID))
+            if (transmitter.expectMaybe(tokenOf(ELSE_ID)).isPresent) {
                 elseBlockStatement = StatementFactory().setContext(context)
                     .addType(CodeBlockStatement::class.java)
                     .addType(IfStatement::class.java)
