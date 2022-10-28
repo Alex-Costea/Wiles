@@ -9,10 +9,12 @@ import `in`.costea.wiles.constants.Predicates.START_OF_EXPRESSION
 import `in`.costea.wiles.constants.Tokens.BREAK_ID
 import `in`.costea.wiles.constants.Tokens.CONTINUE_ID
 import `in`.costea.wiles.constants.Tokens.DECLARE_ID
+import `in`.costea.wiles.constants.Tokens.DO_ID
 import `in`.costea.wiles.constants.Tokens.FOR_ID
 import `in`.costea.wiles.constants.Tokens.IF_ID
 import `in`.costea.wiles.constants.Tokens.METHOD_ID
 import `in`.costea.wiles.constants.Tokens.RETURN_ID
+import `in`.costea.wiles.constants.Tokens.START_BLOCK_ID
 import `in`.costea.wiles.constants.Tokens.WHILE_ID
 import `in`.costea.wiles.enums.WhenRemoveToken
 import `in`.costea.wiles.exceptions.AbstractCompilationException
@@ -75,6 +77,7 @@ class StatementFactory {
             params[WhileStatement::class.java] = tokenOf(WHILE_ID)
             params[BreakStatement::class.java] = tokenOf(BREAK_ID)
             params[ContinueStatement::class.java] = tokenOf(CONTINUE_ID)
+            params[CodeBlockStatement::class.java] = tokenOf(DO_ID).or(START_BLOCK_ID).removeWhen(WhenRemoveToken.Never)
             createObject[TopLevelExpression::class.java] =
                 Function { context: Context -> TopLevelExpression(context) }
             createObject[DefaultExpression::class.java] =
@@ -95,6 +98,8 @@ class StatementFactory {
                 Function { context: Context -> BreakStatement(context) }
             createObject[ContinueStatement::class.java] =
                 Function { context: Context -> ContinueStatement(context) }
+            createObject[CodeBlockStatement::class.java] =
+                Function { context : Context -> CodeBlockStatement(context) }
         }
     }
 }
