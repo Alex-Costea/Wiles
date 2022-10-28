@@ -2,10 +2,9 @@ package `in`.costea.wiles.statements
 
 import `in`.costea.wiles.builders.Context
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
-import `in`.costea.wiles.constants.ErrorMessages.INTERNAL_ERROR
-import `in`.costea.wiles.constants.Predicates.IS_CONTAINED_IN
+import `in`.costea.wiles.constants.Predicates.EXPECT_TERMINATOR
 import `in`.costea.wiles.constants.Tokens.ELSE_ID
-import `in`.costea.wiles.constants.Tokens.TERMINATORS
+import `in`.costea.wiles.constants.Tokens.TERMINATOR_ID
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.statements.expressions.DefaultExpression
@@ -36,11 +35,16 @@ class IfStatement(context: Context) : AbstractStatement(context) {
         condition.process().throwFirstIfExists()
         val exceptions = CompilationExceptionsCollection()
         exceptions.addAll(thenBlockStatement.process())
-        transmitter.expect(tokenOf(IS_CONTAINED_IN(TERMINATORS)).dontIgnoreNewLine().withErrorMessage(INTERNAL_ERROR))
-        if(transmitter.expectMaybe(tokenOf(ELSE_ID)).isPresent) {
-            elseBlockStatement = CodeBlockStatement(context)
-            exceptions.addAll(elseBlockStatement!!.process())
-            handledEOL=false
+        val tempToken = transmitter.expectMaybe(EXPECT_TERMINATOR)
+        if(tempToken.isPresent) {
+            val params = tokenOf(ELSE_ID)
+            if(tempToken.get().content == TERMINATOR_ID)
+                params.dontIgnoreNewLine()
+            if (transmitter.expectMaybe(params).isPresent) {
+                elseBlockStatement = CodeBlockStatement(context)
+                exceptions.addAll(elseBlockStatement!!.process())
+                handledEOL = false
+            }
         }
         return exceptions
     }
