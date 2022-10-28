@@ -12,6 +12,8 @@ import `in`.costea.wiles.statements.expressions.DefaultExpression
 
 class IfStatement(context: Context) : AbstractStatement(context) {
 
+    private var handledEOL = true
+
     private val condition = DefaultExpression(context)
     private val thenBlockStatement = CodeBlockStatement(context)
     private var elseBlockStatement : CodeBlockStatement? = null
@@ -24,6 +26,12 @@ class IfStatement(context: Context) : AbstractStatement(context) {
         return listOf(condition,thenBlockStatement,elseBlockStatement!!)
     }
 
+    override fun handleEndOfStatement()
+    {
+        if(!handledEOL)
+            super.handleEndOfStatement()
+    }
+
     override fun process(): CompilationExceptionsCollection {
         condition.process().throwFirstIfExists()
         val exceptions = CompilationExceptionsCollection()
@@ -32,6 +40,7 @@ class IfStatement(context: Context) : AbstractStatement(context) {
         if(transmitter.expectMaybe(tokenOf(ELSE_ID)).isPresent) {
             elseBlockStatement = CodeBlockStatement(context)
             exceptions.addAll(elseBlockStatement!!.process())
+            handledEOL=false
         }
         return exceptions
     }

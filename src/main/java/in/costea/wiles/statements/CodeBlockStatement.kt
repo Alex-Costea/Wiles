@@ -5,14 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import `in`.costea.wiles.builders.Context
 import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
 import `in`.costea.wiles.builders.StatementFactory
-import `in`.costea.wiles.constants.ErrorMessages.END_OF_STATEMENT_EXPECTED_ERROR
 import `in`.costea.wiles.constants.Predicates.EXPECT_TERMINATOR
-import `in`.costea.wiles.constants.Predicates.IS_CONTAINED_IN
 import `in`.costea.wiles.constants.Predicates.READ_REST_OF_LINE
 import `in`.costea.wiles.constants.Tokens.DO_ID
 import `in`.costea.wiles.constants.Tokens.END_BLOCK_ID
 import `in`.costea.wiles.constants.Tokens.START_BLOCK_ID
-import `in`.costea.wiles.constants.Tokens.TERMINATORS
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.enums.WhenRemoveToken
@@ -66,8 +63,7 @@ class CodeBlockStatement(context: Context) : AbstractStatement(context) {
             components.add(statement)
         }
         else try {
-            transmitter.expect(tokenOf(IS_CONTAINED_IN(TERMINATORS)).dontIgnoreNewLine()
-                .withErrorMessage(END_OF_STATEMENT_EXPECTED_ERROR).removeWhen(WhenRemoveToken.Never))
+            statement.handleEndOfStatement()
         }
         catch(ignored : UnexpectedEndException){}
         catch(ex : AbstractCompilationException)

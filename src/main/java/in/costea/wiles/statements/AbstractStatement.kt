@@ -4,8 +4,13 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import `in`.costea.wiles.builders.Context
+import `in`.costea.wiles.builders.ExpectParamsBuilder
+import `in`.costea.wiles.constants.ErrorMessages
+import `in`.costea.wiles.constants.Predicates
+import `in`.costea.wiles.constants.Tokens
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.enums.SyntaxType
+import `in`.costea.wiles.enums.WhenRemoveToken
 
 @JsonPropertyOrder("compiledSuccessfully", "name", "type", "components")
 abstract class AbstractStatement(val context: Context)
@@ -25,6 +30,13 @@ abstract class AbstractStatement(val context: Context)
     abstract fun getComponents(): List<AbstractStatement>
 
     abstract fun process(): CompilationExceptionsCollection
+
+    open fun handleEndOfStatement()
+    {
+        transmitter.expect(
+            ExpectParamsBuilder.tokenOf(Predicates.IS_CONTAINED_IN(Tokens.TERMINATORS)).dontIgnoreNewLine()
+            .withErrorMessage(ErrorMessages.END_OF_STATEMENT_EXPECTED_ERROR).removeWhen(WhenRemoveToken.Never))
+    }
 
     override fun toString(): String {
         val sb = StringBuilder()

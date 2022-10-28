@@ -8,8 +8,10 @@ import `in`.costea.wiles.constants.Tokens.ASSIGN_ID
 import `in`.costea.wiles.constants.Tokens.CONTINUE_ID
 import `in`.costea.wiles.constants.Tokens.DECLARE_ID
 import `in`.costea.wiles.constants.Tokens.DO_ID
+import `in`.costea.wiles.constants.Tokens.ELSE_ID
 import `in`.costea.wiles.constants.Tokens.END_BLOCK_ID
 import `in`.costea.wiles.constants.Tokens.EQUALS_ID
+import `in`.costea.wiles.constants.Tokens.IF_ID
 import `in`.costea.wiles.constants.Tokens.LARGER_ID
 import `in`.costea.wiles.constants.Tokens.METHOD_ID
 import `in`.costea.wiles.constants.Tokens.MINUS_ID
@@ -27,6 +29,7 @@ import `in`.costea.wiles.constants.Tokens.SEPARATOR_ID
 import `in`.costea.wiles.constants.Tokens.START_BLOCK_ID
 import `in`.costea.wiles.constants.Tokens.TERMINATOR_ID
 import `in`.costea.wiles.constants.Tokens.TIMES_ID
+import `in`.costea.wiles.constants.Tokens.TRUE_ID
 import `in`.costea.wiles.constants.Tokens.TYPEOF_ID
 import `in`.costea.wiles.constants.Utils.nullLocation
 import `in`.costea.wiles.converters.TokensToSyntaxTreeConverter
@@ -220,7 +223,10 @@ class SyntaxTreeConverterTests {
     @Test
     fun ifTest()
     {
-
+        assertResults(null,"CODE_BLOCK(DECLARATION(!a; METHOD(TYPE NOTHING; CODE_BLOCK(IF(EXPRESSION(TRUE); CODE_BLOCK(RETURN(EXPRESSION(!a))); CODE_BLOCK(RETURN(EXPRESSION(!b))))))); IF(EXPRESSION(TRUE); CODE_BLOCK(EXPRESSION(!c))); EXPRESSION(!d))",
+            DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID, DO_ID, NEWLINE_ID,
+            IF_ID, TRUE_ID, DO_ID, RETURN_ID, "!a", TERMINATOR_ID, ELSE_ID, DO_ID, RETURN_ID, "!b",
+            NEWLINE_ID, IF_ID, TRUE_ID, DO_ID, "!c", NEWLINE_ID, "!d")
     }
 
     @Test

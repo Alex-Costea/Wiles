@@ -57,7 +57,7 @@ object Tokens {
     const val NOT_ID = "NOT"
     private const val MAYBE_ID = "MAYBE"
     const val RETURN_ID = "RETURN"
-    private const val TRUE_ID = "TRUE"
+    const val TRUE_ID = "TRUE"
     private const val FALSE_ID = "FALSE"
     const val IF_ID = "IF"
     private const val WHEN_ID = "WHEN"
