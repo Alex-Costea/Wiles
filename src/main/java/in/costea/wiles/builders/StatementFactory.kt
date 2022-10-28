@@ -10,7 +10,6 @@ import `in`.costea.wiles.constants.Tokens.BREAK_ID
 import `in`.costea.wiles.constants.Tokens.CONTINUE_ID
 import `in`.costea.wiles.constants.Tokens.DECLARE_ID
 import `in`.costea.wiles.constants.Tokens.DO_ID
-import `in`.costea.wiles.constants.Tokens.FOR_ID
 import `in`.costea.wiles.constants.Tokens.IF_ID
 import `in`.costea.wiles.constants.Tokens.METHOD_ID
 import `in`.costea.wiles.constants.Tokens.RETURN_ID
@@ -73,7 +72,7 @@ class StatementFactory {
             params[MethodStatement::class.java] = tokenOf(METHOD_ID)
             params[ReturnStatement::class.java] = tokenOf(RETURN_ID)
             params[IfStatement::class.java] = tokenOf(IF_ID)
-            params[ForStatement::class.java] = tokenOf(FOR_ID)
+            //params[ForStatement::class.java] = tokenOf(FOR_ID)
             params[WhileStatement::class.java] = tokenOf(WHILE_ID)
             params[BreakStatement::class.java] = tokenOf(BREAK_ID)
             params[ContinueStatement::class.java] = tokenOf(CONTINUE_ID)
@@ -90,8 +89,8 @@ class StatementFactory {
                 Function { context: Context -> ReturnStatement(context) }
             createObject[IfStatement::class.java] =
                 Function { context: Context -> IfStatement(context) }
-            createObject[ForStatement::class.java] =
-                Function { context: Context -> ForStatement(context) }
+            //createObject[ForStatement::class.java] =
+            //    Function { context: Context -> ForStatement(context) }
             createObject[WhileStatement::class.java] =
                 Function { context: Context -> WhileStatement(context) }
             createObject[BreakStatement::class.java] =

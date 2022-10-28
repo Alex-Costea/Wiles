@@ -1,35 +1,32 @@
-package in.costea.wiles.statements;
+package `in`.costea.wiles.statements
 
-import in.costea.wiles.builders.Context;
-import in.costea.wiles.data.CompilationExceptionsCollection;
-import in.costea.wiles.enums.SyntaxType;
-import in.costea.wiles.exceptions.InternalErrorException;
-import org.jetbrains.annotations.NotNull;
+import `in`.costea.wiles.builders.Context
+import `in`.costea.wiles.data.CompilationExceptionsCollection
+import `in`.costea.wiles.enums.SyntaxType
+import `in`.costea.wiles.exceptions.AbstractCompilationException
+import `in`.costea.wiles.statements.expressions.DefaultExpression
 
-import java.util.List;
+class WhileStatement(oldContext: Context) : AbstractStatement(oldContext.setWithinLoop(true)) {
+    private val condition = DefaultExpression(context)
+    private val codeBlock = CodeBlockStatement(context)
 
-import static in.costea.wiles.constants.ErrorMessages.NOT_YET_IMPLEMENTED_ERROR;
+    override val type: SyntaxType
+        get() = SyntaxType.WHILE
 
-public class WhileStatement extends AbstractStatement{
-    public WhileStatement(@NotNull Context oldContext) {
-        super(oldContext.setWithinLoop(true));
+    override fun getComponents(): List<AbstractStatement> {
+        return listOf(condition,codeBlock)
     }
 
-    @NotNull
-    @Override
-    public SyntaxType getType() {
-        return SyntaxType.WHILE;
-    }
-
-    @NotNull
-    @Override
-    public List<AbstractStatement> getComponents() {
-        throw new InternalErrorException(NOT_YET_IMPLEMENTED_ERROR);
-    }
-
-    @NotNull
-    @Override
-    public CompilationExceptionsCollection process() {
-        throw new InternalErrorException(NOT_YET_IMPLEMENTED_ERROR);
+    override fun process(): CompilationExceptionsCollection {
+        val exceptions = CompilationExceptionsCollection()
+        try
+        {
+            exceptions.addAll(condition.process())
+            exceptions.addAll(codeBlock.process())
+        }
+        catch (ex : AbstractCompilationException){
+            exceptions.add(ex)
+        }
+        return exceptions
     }
 }
