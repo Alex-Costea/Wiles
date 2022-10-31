@@ -4,7 +4,7 @@ import in.costea.wiles.builders.Context;
 import in.costea.wiles.data.Token;
 import org.jetbrains.annotations.NotNull;
 
-import static in.costea.wiles.constants.Tokens.ROUND_BRACKET_END_ID;
+import static in.costea.wiles.constants.Tokens.BRACKET_END_ID;
 
 public class InnerExpression extends AbstractExpression {
     public InnerExpression(@NotNull Context context) {
@@ -13,7 +13,7 @@ public class InnerExpression extends AbstractExpression {
 
     @Override
     protected boolean handleToken(@NotNull Token token) {
-        return token.getContent().equals(ROUND_BRACKET_END_ID);
+        return token.getContent().equals(BRACKET_END_ID);
     }
 
 }

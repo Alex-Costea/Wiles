@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
-import static in.costea.wiles.constants.Tokens.ROUND_BRACKET_END_ID;
+import static in.costea.wiles.constants.Tokens.BRACKET_END_ID;
 import static in.costea.wiles.constants.Tokens.SEPARATOR_ID;
 
 public class MethodCallStatement extends AbstractStatement{
@@ -35,7 +35,7 @@ public class MethodCallStatement extends AbstractStatement{
     public CompilationExceptionsCollection process() {
         var exceptions = new CompilationExceptionsCollection();
         InsideMethodCallExpression newComp;
-        if(transmitter.expectMaybe(tokenOf(ROUND_BRACKET_END_ID)).isEmpty())
+        if(transmitter.expectMaybe(tokenOf(BRACKET_END_ID)).isEmpty())
         {
             newComp =  new InsideMethodCallExpression(getContext());
             while (components.size() == 0 || !newComp.isLastExpression()) {

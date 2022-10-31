@@ -3,7 +3,6 @@ package in.costea.wiles.statements.expressions;
 import in.costea.wiles.builders.Context;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
-import in.costea.wiles.data.TokenLocation;
 import in.costea.wiles.enums.ExpectNext;
 import in.costea.wiles.enums.SyntaxType;
 import in.costea.wiles.enums.WhenRemoveToken;
@@ -31,7 +30,6 @@ public abstract class AbstractExpression extends AbstractStatement {
     protected AbstractStatement left = null;
     protected TokenStatement operation = null;
     protected AbstractStatement right = null;
-    protected TokenLocation firstLocation;
 
     protected AbstractExpression(@NotNull Context context) {
         super(context);
@@ -59,7 +57,7 @@ public abstract class AbstractExpression extends AbstractStatement {
     }
 
     protected boolean handleToken(@NotNull Token token) throws AbstractCompilationException {
-        if (token.getContent().equals(ROUND_BRACKET_END_ID))
+        if (token.getContent().equals(BRACKET_END_ID))
             throw new UnexpectedTokenException(UNEXPECTED_CLOSING_BRACKET_ERROR, token.getLocation());
         return STATEMENT_START_KEYWORDS.contains(token.getContent());
     }
@@ -88,14 +86,13 @@ public abstract class AbstractExpression extends AbstractStatement {
     public @NotNull CompilationExceptionsCollection process() {
         try {
             @NotNull Token mainCurrentToken = transmitter.expect(START_OF_EXPRESSION);
-            firstLocation = mainCurrentToken.getLocation();
             @NotNull var precedenceProcessor = new PrecedenceProcessor(getContext());
             @NotNull Optional<Token> maybeTempToken;
             @NotNull String content = mainCurrentToken.getContent();
 
             //Decide what token to expect first
             @NotNull ExpectNext expectNext;
-            if (IS_LITERAL.test(content) || ROUND_BRACKETS.contains(content) || STARTING_OPERATORS.contains(content))
+            if (IS_LITERAL.test(content) || BRACKETS.contains(content) || STARTING_OPERATORS.contains(content))
                 expectNext = ExpectNext.TOKEN;
             else
                 expectNext = ExpectNext.OPERATOR;
@@ -113,7 +110,7 @@ public abstract class AbstractExpression extends AbstractStatement {
                 }
 
                 //Handle method calls and inner expressions
-                maybeTempToken =transmitter.expectMaybe(tokenOf(ROUND_BRACKET_START_ID));
+                maybeTempToken =transmitter.expectMaybe(tokenOf(BRACKET_START_ID));
                 if (maybeTempToken.isPresent()) {
                     if (expectNext == ExpectNext.OPERATOR) { //Method call
                         precedenceProcessor.add(new TokenStatement(new Token(APPLY_ID,maybeTempToken.get()
@@ -132,7 +129,7 @@ public abstract class AbstractExpression extends AbstractStatement {
                 }
 
                 //Handle closing brackets token
-                maybeTempToken = transmitter.expectMaybe(tokenOf(ROUND_BRACKET_END_ID));
+                maybeTempToken = transmitter.expectMaybe(tokenOf(BRACKET_END_ID));
                 if (maybeTempToken.isPresent()) {
                     mainCurrentToken = maybeTempToken.get();
                     if (handleToken(mainCurrentToken))
@@ -180,7 +177,7 @@ public abstract class AbstractExpression extends AbstractStatement {
             //Final processing
             if (expectNext == ExpectNext.TOKEN)
                 throw new UnexpectedEndException(EXPRESSION_UNFINISHED_ERROR, mainCurrentToken.getLocation());
-            if (this instanceof InnerExpression && !mainCurrentToken.getContent().equals(ROUND_BRACKET_END_ID))
+            if (this instanceof InnerExpression && !mainCurrentToken.getContent().equals(BRACKET_END_ID))
                 throw new UnexpectedEndException(UNEXPECTED_OPENING_BRACKET_ERROR, transmitter.getLastLocation());
             setComponents(precedenceProcessor);
             checkLeft();

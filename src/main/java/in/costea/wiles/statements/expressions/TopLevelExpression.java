@@ -3,7 +3,7 @@ package in.costea.wiles.statements.expressions;
 import in.costea.wiles.builders.Context;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.AbstractCompilationException;
-import in.costea.wiles.exceptions.InvalidStatementExpression;
+import in.costea.wiles.exceptions.InvalidStatementException;
 import in.costea.wiles.services.PrecedenceProcessor;
 import in.costea.wiles.statements.TokenStatement;
 import org.jetbrains.annotations.NotNull;
@@ -19,20 +19,21 @@ public class TopLevelExpression extends AbstractExpression {
         super(context);
     }
 
-    private void checkValid(AbstractExpression exp) throws InvalidStatementExpression
+    private void checkValid(AbstractExpression exp) throws InvalidStatementException
     {
         if(exp.operation == null)
             return;
-        if(!VALID_LEFT_SIDE_OPERATORS.contains(exp.operation.name))
-            throw new InvalidStatementExpression(INVALID_LEFT_EXCEPTION,exp.operation.getToken().getLocation());
-        if(exp.left instanceof BinaryExpression)
-            checkValid((AbstractExpression) exp.left);
-        if(exp.right instanceof BinaryExpression)
-            checkValid((AbstractExpression) exp.right);
+        if(exp.operation.name.equals(ACCESS_ID) || exp.operation.name.equals(ELEM_ID)) {
+            if (exp.left instanceof BinaryExpression)
+                checkValid((AbstractExpression) exp.left);
+            if(exp.operation.name.equals(ACCESS_ID) && exp.right instanceof BinaryExpression)
+                checkValid((AbstractExpression) exp.right);
+        }
+        else throw new InvalidStatementException(INVALID_LEFT_EXCEPTION, exp.operation.getToken().getLocation());
     }
 
     @Override
-    protected void checkLeft() throws InvalidStatementExpression {
+    protected void checkLeft() throws InvalidStatementException {
         if(!isAssignment)
             return;
         checkValid((AbstractExpression) this.left);

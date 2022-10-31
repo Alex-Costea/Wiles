@@ -4,7 +4,7 @@ import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
 import `in`.costea.wiles.constants.ErrorMessages.EXPRESSION_EXPECTED_ERROR
 import `in`.costea.wiles.constants.ErrorMessages.INTERNAL_ERROR
 import `in`.costea.wiles.constants.Tokens.NEWLINE_ID
-import `in`.costea.wiles.constants.Tokens.ROUND_BRACKET_START_ID
+import `in`.costea.wiles.constants.Tokens.BRACKET_START_ID
 import `in`.costea.wiles.constants.Tokens.STARTING_OPERATORS
 import `in`.costea.wiles.constants.Tokens.TERMINATORS
 import `in`.costea.wiles.enums.WhenRemoveToken
@@ -39,6 +39,6 @@ object Predicates {
         .withErrorMessage(INTERNAL_ERROR).removeWhen(WhenRemoveToken.WhenFound).freeze()
 
     @JvmField
-    val START_OF_EXPRESSION =tokenOf(IS_CONTAINED_IN(STARTING_OPERATORS)).or(IS_LITERAL).or(ROUND_BRACKET_START_ID)
+    val START_OF_EXPRESSION =tokenOf(IS_CONTAINED_IN(STARTING_OPERATORS)).or(IS_LITERAL).or(BRACKET_START_ID)
             .withErrorMessage(EXPRESSION_EXPECTED_ERROR).removeWhen(WhenRemoveToken.Never).freeze()
 }

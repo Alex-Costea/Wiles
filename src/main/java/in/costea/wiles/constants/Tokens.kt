@@ -18,10 +18,8 @@ object Tokens {
     const val END_BLOCK_ID = "END_BLOCK"
     const val SPACE_ID = "SPACE"
     const val NEWLINE_ID = "NEWLINE"
-    const val ROUND_BRACKET_START_ID = "ROUND_BRACKET_START"
-    const val ROUND_BRACKET_END_ID = "ROUND_BRACKET_END"
-    private const val SQUARE_BRACKET_START_ID = "SQUARE_BRACKET_START"
-    private const val SQUARE_BRACKET_END_ID = "SQUARE_BRACKET_END"
+    const val BRACKET_START_ID = "ROUND_BRACKET_START"
+    const val BRACKET_END_ID = "ROUND_BRACKET_END"
     const val METHOD_ID = "METHOD"
     const val TERMINATOR_ID = "TERMINATOR"
     const val CONTINUE_LINE_ID = "CONTINUE_LINE"
@@ -69,6 +67,7 @@ object Tokens {
     private const val FROM_ID = "FROM"
     private const val TO_ID = "TO"
     const val WHILE_ID = "WHILE"
+    const val ELEM_ID = "ELEM"
 
     private val KEYWORDS: HashMap<String, String> = HashMap()
     private val SYMBOLS: HashMap<String, String> = HashMap()
@@ -81,13 +80,13 @@ object Tokens {
     val INFIX_OPERATORS = setOf(
         PLUS_ID, MINUS_ID, TIMES_ID, DIVIDE_ID, POWER_ID,
         EQUALS_ID, LARGER_ID, SMALLER_ID, LARGER_EQUALS_ID, SMALLER_EQUALS_ID, NOT_EQUAL_ID,
-        ACCESS_ID, SEPARATOR_ID, AND_ID, OR_ID, APPLY_ID)
+        ACCESS_ID, SEPARATOR_ID, AND_ID, OR_ID, APPLY_ID, ELEM_ID)
     @JvmField
     val PREFIX_OPERATORS = setOf(UNARY_PLUS_ID, UNARY_MINUS_ID, NOT_ID)
     @JvmField
     val STARTING_OPERATORS = setOf(PLUS_ID, MINUS_ID, NOT_ID)
     @JvmField
-    val ROUND_BRACKETS = setOf(ROUND_BRACKET_START_ID, ROUND_BRACKET_END_ID)
+    val BRACKETS = setOf(BRACKET_START_ID, BRACKET_END_ID)
     @JvmField
     val TERMINATORS = setOf(NEWLINE_ID, TERMINATOR_ID)
     val KEYWORD_LITERALS = setOf(TRUE_ID,FALSE_ID,NOTHING_ID)
@@ -96,8 +95,6 @@ object Tokens {
     val STATEMENT_START_KEYWORDS = setOf(NOTHING_ID, METHOD_ID, DECLARE_ID,IF_ID, WHEN_ID, ELSE_ID, FOR_ID, WHILE_ID,
         BREAK_ID, CONTINUE_ID, RETURN_ID, DO_ID, START_BLOCK_ID, END_BLOCK_ID)
 
-    @JvmField
-    val VALID_LEFT_SIDE_OPERATORS = setOf(ACCESS_ID, APPLY_ID)
 
     init {
         KEYWORDS[if(!ROMANIAN_MODE) "nothing" else "nimic"] = NOTHING_ID
@@ -136,10 +133,9 @@ object Tokens {
         SYMBOLS[">="] = LARGER_EQUALS_ID
         SYMBOLS["<="] = SMALLER_EQUALS_ID
         SYMBOLS["=/="] = NOT_EQUAL_ID
-        SYMBOLS["("] = ROUND_BRACKET_START_ID
-        SYMBOLS[")"] = ROUND_BRACKET_END_ID
-        SYMBOLS["["] = SQUARE_BRACKET_START_ID
-        SYMBOLS["]"] = SQUARE_BRACKET_END_ID
+        SYMBOLS["("] = BRACKET_START_ID
+        SYMBOLS[")"] = BRACKET_END_ID
+        SYMBOLS["@"] = ELEM_ID
         SYMBOLS[","] = SEPARATOR_ID
         SYMBOLS["."] = ACCESS_ID
         SYMBOLS[":"] = TYPEOF_ID

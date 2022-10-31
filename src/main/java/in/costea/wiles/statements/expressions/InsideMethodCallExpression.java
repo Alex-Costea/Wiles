@@ -3,7 +3,7 @@ package in.costea.wiles.statements.expressions;
 import in.costea.wiles.builders.Context;
 import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.AbstractCompilationException;
-import in.costea.wiles.exceptions.InvalidStatementExpression;
+import in.costea.wiles.exceptions.InvalidStatementException;
 import in.costea.wiles.services.PrecedenceProcessor;
 import in.costea.wiles.statements.AbstractStatement;
 import in.costea.wiles.statements.TokenStatement;
@@ -35,18 +35,18 @@ public class InsideMethodCallExpression extends AbstractExpression{
 
     @Override
     protected void checkLeft() throws AbstractCompilationException {
-        if(left == null)
-            return;
-        if(left.getComponents().size() != 1)
-            throw new InvalidStatementExpression(IDENTIFIER_EXPECTED_ERROR,firstLocation);
-        AbstractStatement first = left.getComponents().get(0);
-        if(!(first instanceof TokenStatement) || !IS_IDENTIFIER.test(first.name))
-            throw new InvalidStatementExpression(IDENTIFIER_EXPECTED_ERROR,firstLocation);
+        if(isAssignment) {
+            if (left.getComponents().size() != 1)
+                throw new InvalidStatementException(IDENTIFIER_EXPECTED_ERROR, operation.getToken().getLocation());
+            AbstractStatement first = left.getComponents().get(0);
+            if (!(first instanceof TokenStatement) || !IS_IDENTIFIER.test(first.name))
+                throw new InvalidStatementException(IDENTIFIER_EXPECTED_ERROR, operation.getToken().getLocation());
+        }
     }
 
     @Override
     protected boolean handleToken(@NotNull Token token) throws AbstractCompilationException {
-        if(token.getContent().equals(SEPARATOR_ID) || token.getContent().equals(ROUND_BRACKET_END_ID))
+        if(token.getContent().equals(SEPARATOR_ID) || token.getContent().equals(BRACKET_END_ID))
             return lastExpression = true;
         if (token.getContent().equals(ASSIGN_ID)) {
             operation = new TokenStatement(transmitter.expect(tokenOf(ASSIGN_ID)), getContext());
