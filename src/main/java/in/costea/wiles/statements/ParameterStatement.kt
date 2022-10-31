@@ -8,7 +8,6 @@ import `in`.costea.wiles.constants.Predicates.IS_IDENTIFIER
 import `in`.costea.wiles.constants.Predicates.IS_LITERAL
 import `in`.costea.wiles.constants.Tokens.ASSIGN_ID
 import `in`.costea.wiles.constants.Tokens.TYPEOF_ID
-import `in`.costea.wiles.constants.Utils.isUnnamed
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.exceptions.AbstractCompilationException
@@ -18,11 +17,6 @@ class ParameterStatement(context: Context) : AbstractStatement(context) {
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
     private var typeDefinition: TypeDefinitionStatement
     private var defaultValue: TokenStatement? = null
-    private var isAnon = false
-        private set(value) {
-            name = if (value) "ANON" else ""
-            field = value
-        }
 
     init {
         typeDefinition = TypeDefinitionStatement(context)
@@ -41,8 +35,6 @@ class ParameterStatement(context: Context) : AbstractStatement(context) {
         try {
             nameToken = TokenStatement(
                 transmitter.expect(tokenOf(IS_IDENTIFIER).withErrorMessage(IDENTIFIER_EXPECTED_ERROR)),context)
-            if (isUnnamed(nameToken!!.token.content))
-                isAnon = true
             transmitter.expect(tokenOf(TYPEOF_ID))
             exceptions.addAll(typeDefinition.process())
             if (transmitter.expectMaybe(tokenOf(ASSIGN_ID)).isPresent) {

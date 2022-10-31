@@ -23,7 +23,7 @@ public class TopLevelExpression extends AbstractExpression {
     {
         if(exp.operation == null)
             return;
-        if(exp.operation.name.equals(ACCESS_ID) || exp.operation.name.equals(ELEM_ID)) {
+        if(exp.operation.name.equals(ACCESS_ID) || exp.operation.name.equals(ELEM_ACCESS_ID)) {
             if(exp.left instanceof AbstractExpression)
                 checkValid((AbstractExpression) exp.left);
             if(exp.operation.name.equals(ACCESS_ID) && exp.right instanceof AbstractExpression)

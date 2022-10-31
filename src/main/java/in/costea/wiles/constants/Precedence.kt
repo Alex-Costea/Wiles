@@ -4,7 +4,7 @@ import `in`.costea.wiles.constants.Tokens.ACCESS_ID
 import `in`.costea.wiles.constants.Tokens.AND_ID
 import `in`.costea.wiles.constants.Tokens.APPLY_ID
 import `in`.costea.wiles.constants.Tokens.DIVIDE_ID
-import `in`.costea.wiles.constants.Tokens.ELEM_ID
+import `in`.costea.wiles.constants.Tokens.ELEM_ACCESS_ID
 import `in`.costea.wiles.constants.Tokens.EQUALS_ID
 import `in`.costea.wiles.constants.Tokens.LARGER_EQUALS_ID
 import `in`.costea.wiles.constants.Tokens.LARGER_ID
@@ -43,7 +43,7 @@ object Precedence {
         PRECEDENCE[TIMES_ID] = 3
         PRECEDENCE[DIVIDE_ID] = 3
         PRECEDENCE[POWER_ID] = 4
-        PRECEDENCE[ELEM_ID] = 5
+        PRECEDENCE[ELEM_ACCESS_ID] = 5
         PRECEDENCE[ACCESS_ID] = 6
         PRECEDENCE[APPLY_ID] = 6
 

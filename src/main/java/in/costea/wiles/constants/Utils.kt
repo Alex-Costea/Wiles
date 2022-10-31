@@ -19,8 +19,5 @@ object Utils {
         return Character.isDigit(c)
     }
 
-    private const val UNNAMED_START = Tokens.IDENTIFIER_START + "arg"
-    fun isUnnamed(content : String)  = content.startsWith(UNNAMED_START)
-
     val nullLocation = TokenLocation(-1,-1)
 }

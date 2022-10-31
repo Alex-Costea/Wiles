@@ -67,7 +67,7 @@ object Tokens {
     private const val FROM_ID = "FROM"
     private const val TO_ID = "TO"
     const val WHILE_ID = "WHILE"
-    const val ELEM_ID = "ELEM"
+    const val ELEM_ACCESS_ID = "ELEM_ACCESS"
 
     private val KEYWORDS: HashMap<String, String> = HashMap()
     private val SYMBOLS: HashMap<String, String> = HashMap()
@@ -75,12 +75,11 @@ object Tokens {
     val TOKENS: BiMap<String, String>
     @JvmField
     val TOKENS_INVERSE: BiMap<String, String>
-
     @JvmField
     val INFIX_OPERATORS = setOf(
         PLUS_ID, MINUS_ID, TIMES_ID, DIVIDE_ID, POWER_ID,
         EQUALS_ID, LARGER_ID, SMALLER_ID, LARGER_EQUALS_ID, SMALLER_EQUALS_ID, NOT_EQUAL_ID,
-        ACCESS_ID, SEPARATOR_ID, AND_ID, OR_ID, APPLY_ID, ELEM_ID)
+        ACCESS_ID, SEPARATOR_ID, AND_ID, OR_ID, APPLY_ID, ELEM_ACCESS_ID)
     @JvmField
     val PREFIX_OPERATORS = setOf(UNARY_PLUS_ID, UNARY_MINUS_ID, NOT_ID)
     @JvmField
@@ -90,15 +89,13 @@ object Tokens {
     @JvmField
     val TERMINATORS = setOf(NEWLINE_ID, TERMINATOR_ID)
     val KEYWORD_LITERALS = setOf(TRUE_ID,FALSE_ID,NOTHING_ID)
-
     @JvmField
     val STATEMENT_START_KEYWORDS = setOf(NOTHING_ID, METHOD_ID, DECLARE_ID,IF_ID, WHEN_ID, ELSE_ID, FOR_ID, WHILE_ID,
         BREAK_ID, CONTINUE_ID, RETURN_ID, DO_ID, START_BLOCK_ID, END_BLOCK_ID)
 
-
     init {
         KEYWORDS[if(!ROMANIAN_MODE) "nothing" else "nimic"] = NOTHING_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "method" else "metodă"] = METHOD_ID
+        KEYWORDS["fun"] = METHOD_ID
         KEYWORDS[if(!ROMANIAN_MODE) "let" else "fie"] = DECLARE_ID
         KEYWORDS["var"] = MUTABLE_ID
         KEYWORDS[if(!ROMANIAN_MODE) "if" else "dacă"] = IF_ID
@@ -135,7 +132,7 @@ object Tokens {
         SYMBOLS["=/="] = NOT_EQUAL_ID
         SYMBOLS["("] = BRACKET_START_ID
         SYMBOLS[")"] = BRACKET_END_ID
-        SYMBOLS["@"] = ELEM_ID
+        SYMBOLS["@"] = ELEM_ACCESS_ID
         SYMBOLS[","] = SEPARATOR_ID
         SYMBOLS["."] = ACCESS_ID
         SYMBOLS[":"] = TYPEOF_ID
