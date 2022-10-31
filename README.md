@@ -61,8 +61,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 ### Named parameters
 - Methods calling with named parameters by default: `my_method(a := 1, b := 10)`
 - If a method parameter's identifier starts with `arg`, it can be used without naming
-- `arg` identifiers must be last
-- When using one `arg` list, `my_method(a,b,c)` is the same as `my_method([a,b,c])`
+- When using one `arg` list, `my_method(a,b,c)` is the same as `my_method(listOf(a,b,c))`
 
 ### Miscellaneous
 - `;` can be specified or inferred from newline
