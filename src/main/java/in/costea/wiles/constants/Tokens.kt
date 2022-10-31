@@ -64,7 +64,7 @@ object Tokens {
     const val ELSE_ID = "ELSE"
     const val BREAK_ID = "BREAK"
     const val CONTINUE_ID = "CONTINUE"
-    const val FOR_ID = "FOR"
+    private const val FOR_ID = "FOR"
     private const val IN_ID = "IN"
     private const val FROM_ID = "FROM"
     private const val TO_ID = "TO"

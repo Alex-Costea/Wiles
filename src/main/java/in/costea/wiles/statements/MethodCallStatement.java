@@ -3,15 +3,18 @@ package in.costea.wiles.statements;
 import in.costea.wiles.builders.Context;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.enums.SyntaxType;
-import in.costea.wiles.exceptions.AbstractCompilationException;
+import in.costea.wiles.statements.expressions.InsideMethodCallExpression;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import static in.costea.wiles.builders.ExpectParamsBuilder.tokenOf;
 import static in.costea.wiles.constants.Tokens.ROUND_BRACKET_END_ID;
+import static in.costea.wiles.constants.Tokens.SEPARATOR_ID;
 
 public class MethodCallStatement extends AbstractStatement{
+    ArrayList<AbstractStatement> components = new ArrayList<>();
+
     public MethodCallStatement(@NotNull Context context) {
         super(context);
     }
@@ -22,24 +25,25 @@ public class MethodCallStatement extends AbstractStatement{
         return SyntaxType.METHOD_CALL;
     }
 
-    @NotNull
     @Override
-    public List<AbstractStatement> getComponents() {
-        //TODO: complete
-        return List.of();
+    public @NotNull ArrayList<AbstractStatement> getComponents() {
+        return components;
     }
 
     @NotNull
     @Override
     public CompilationExceptionsCollection process() {
-        //TODO: complete
         var exceptions = new CompilationExceptionsCollection();
-        try{
-            transmitter.expect(tokenOf(ROUND_BRACKET_END_ID));
-        }
-        catch (AbstractCompilationException ex)
+        InsideMethodCallExpression newComp;
+        if(transmitter.expectMaybe(tokenOf(ROUND_BRACKET_END_ID)).isEmpty())
         {
-            exceptions.add(ex);
+            newComp =  new InsideMethodCallExpression(getContext());
+            while (components.size() == 0 || !newComp.isLastExpression()) {
+                exceptions.addAll(newComp.process());
+                components.add(newComp);
+                if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty()) break;
+                newComp = new InsideMethodCallExpression(getContext());
+            }
         }
         return exceptions;
     }

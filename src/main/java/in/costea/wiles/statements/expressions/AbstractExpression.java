@@ -3,6 +3,7 @@ package in.costea.wiles.statements.expressions;
 import in.costea.wiles.builders.Context;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.data.Token;
+import in.costea.wiles.data.TokenLocation;
 import in.costea.wiles.enums.ExpectNext;
 import in.costea.wiles.enums.SyntaxType;
 import in.costea.wiles.enums.WhenRemoveToken;
@@ -30,6 +31,7 @@ public abstract class AbstractExpression extends AbstractStatement {
     protected AbstractStatement left = null;
     protected TokenStatement operation = null;
     protected AbstractStatement right = null;
+    protected TokenLocation firstLocation;
 
     protected AbstractExpression(@NotNull Context context) {
         super(context);
@@ -78,10 +80,15 @@ public abstract class AbstractExpression extends AbstractStatement {
         this.right = result;
     }
 
+    protected void checkLeft() throws AbstractCompilationException {
+        //Nothing to check by default
+    }
+
     @Override
     public @NotNull CompilationExceptionsCollection process() {
         try {
             @NotNull Token mainCurrentToken = transmitter.expect(START_OF_EXPRESSION);
+            firstLocation = mainCurrentToken.getLocation();
             @NotNull var precedenceProcessor = new PrecedenceProcessor(getContext());
             @NotNull Optional<Token> maybeTempToken;
             @NotNull String content = mainCurrentToken.getContent();
@@ -98,7 +105,7 @@ public abstract class AbstractExpression extends AbstractStatement {
                 //It finalizes on keywords that correspond to the start of the next statement for better error messages
                 if ((expectNext == ExpectNext.OPERATOR)) {
                     maybeTempToken = transmitter.expectMaybe(tokenOf(IS_CONTAINED_IN.invoke(TERMINATORS)).or(ASSIGN_ID)
-                            .or(IS_CONTAINED_IN.invoke(STATEMENT_START_KEYWORDS)).dontIgnoreNewLine()
+                            .or(IS_CONTAINED_IN.invoke(STATEMENT_START_KEYWORDS)).or(SEPARATOR_ID).dontIgnoreNewLine()
                             .removeWhen(WhenRemoveToken.Never));
                     if (maybeTempToken.isPresent())
                         if (handleToken(maybeTempToken.get()))
@@ -176,6 +183,7 @@ public abstract class AbstractExpression extends AbstractStatement {
             if (this instanceof InnerExpression && !mainCurrentToken.getContent().equals(ROUND_BRACKET_END_ID))
                 throw new UnexpectedEndException(UNEXPECTED_OPENING_BRACKET_ERROR, transmitter.getLastLocation());
             setComponents(precedenceProcessor);
+            checkLeft();
         } catch (AbstractCompilationException ex) {
             exceptions.add(ex);
         }

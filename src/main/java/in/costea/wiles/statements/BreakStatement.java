@@ -18,9 +18,8 @@ public class BreakStatement extends AbstractStatement{
         return SyntaxType.BREAK;
     }
 
-    @NotNull
     @Override
-    public List<AbstractStatement> getComponents() {
+    public @NotNull List<AbstractStatement> getComponents() {
         return List.of();
     }
 

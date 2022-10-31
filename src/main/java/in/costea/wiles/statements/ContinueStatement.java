@@ -18,9 +18,8 @@ public class ContinueStatement extends AbstractStatement{
         return SyntaxType.CONTINUE;
     }
 
-    @NotNull
     @Override
-    public List<AbstractStatement> getComponents() {
+    public @NotNull List<AbstractStatement> getComponents() {
         return List.of();
     }
 
