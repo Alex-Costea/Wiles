@@ -96,6 +96,9 @@ object Tokens {
     val STATEMENT_START_KEYWORDS = setOf(NOTHING_ID, METHOD_ID, DECLARE_ID,IF_ID, WHEN_ID, ELSE_ID, FOR_ID, WHILE_ID,
         BREAK_ID, CONTINUE_ID, RETURN_ID, DO_ID, START_BLOCK_ID, END_BLOCK_ID)
 
+    @JvmField
+    val VALID_LEFT_SIDE_OPERATORS = setOf(ACCESS_ID, APPLY_ID)
+
     init {
         KEYWORDS[if(!ROMANIAN_MODE) "nothing" else "nimic"] = NOTHING_ID
         KEYWORDS[if(!ROMANIAN_MODE) "method" else "metodă"] = METHOD_ID
