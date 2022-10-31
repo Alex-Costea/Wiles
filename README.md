@@ -28,11 +28,11 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - String: `text`
 - Floating point: `rational` (equivalent to `double` in other languages)
 - Method type: methods must be assigned to value
-- Sum types: `either[type1,type2]`, either a value of `type1`, or of `type2`
-- List: `list[type]`
+- Sum types: `either(type1,type2)`, either a value of `type1`, or of `type2`
+- List: `list(type)`
 
 ### Statements
-#### Note: {} means optional
+#### Note: [] means required, {} means optional
 - Method: `method({param1 : type, param2 : type}) {-> return_type}` (return assumed `nothing` if unspecified)
 - Value: `let {var} name {: type} := value` (`var` makes it mutable, type can be inferred)
 - Assignment: `name := value`
@@ -53,15 +53,15 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - `+=`, `-=`, `*=`, `/=`, `^=` (syntactic sugar for `a +=` = `a := a +`)
 - `.` (method / field access)
 - `:` (type annotation)
-- `[]` (subtypes, also `a[b]` = `a.get(b)`,`a[b] := c` = `a.set(to := c, a)`)
+- `@` (access element in collection)
 - `()` (order of operations, method access)
 - `,` (separator between elements)
-- `?` (syntactic sugar for `type? = either[type,nothing]`)
+- `?` (syntactic sugar for `type? = either(type,nothing)`)
 
 ### Named parameters
 - Methods calling with named parameters by default: `my_method(a := 1, b := 10)`
 - If a method parameter's identifier starts with `arg`, it can be used without naming
-- When using one `arg` list, `my_method(a,b,c)` is the same as `my_method(listOf(a,b,c))`
+- When using one `arg` list, `my_method(a,b,c)` is the same as `my_method(list_of(a,b,c))`
 
 ### Miscellaneous
 - `;` can be specified or inferred from newline
@@ -75,11 +75,10 @@ This is a one-man project mostly meant for myself to try out making an interpret
 ### Potential additions (no promises!)
 - `infint` (infinite precision integer)
 - `decimal` (stored as fraction, not as float)
-- Other generic types: `dict[type,type]`, `linkedlist[type]`, `set[type]`, `ref[type]`, `range[type]`
+- Other generic types: `dict(type,type)`, `linked_list(type)`, `set(type)`, `ref(type)`
 - Using `method` types like first class objects 
-- Classes with `class` keyword. Internally, maybe something like `dict[text,method]`?
+- Classes with `class` keyword. Internally, maybe something like `dict(text,method)`?
 - Declare fields `readonly` for getter with no setter, `public` for getter and setter
-- Direct field access is impossible, instead it is transferred to getters/setters
 - Warnings, e.g. unreachable code
 - Garbage collection
 - `anything`, `anything?` types
@@ -108,11 +107,11 @@ end
 ### Minimum value
 
 ```
-let min := method(args : list[int]) -> int?
+let min := method(args : list(int)) -> int?
 begin
     if args.size = 0 do
         yield nothing
-    let var min_value := args[0]
+    let var min_value := args @ 0
     for x in args from 1 do
         if x < min_value do
             min_value := x
