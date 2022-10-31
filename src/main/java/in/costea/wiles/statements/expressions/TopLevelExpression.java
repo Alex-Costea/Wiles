@@ -24,9 +24,9 @@ public class TopLevelExpression extends AbstractExpression {
         if(exp.operation == null)
             return;
         if(exp.operation.name.equals(ACCESS_ID) || exp.operation.name.equals(ELEM_ID)) {
-            if (exp.left instanceof BinaryExpression)
+            if(exp.left instanceof AbstractExpression)
                 checkValid((AbstractExpression) exp.left);
-            if(exp.operation.name.equals(ACCESS_ID) && exp.right instanceof BinaryExpression)
+            if(exp.operation.name.equals(ACCESS_ID) && exp.right instanceof AbstractExpression)
                 checkValid((AbstractExpression) exp.right);
         }
         else throw new InvalidStatementException(INVALID_LEFT_EXCEPTION, exp.operation.getToken().getLocation());
