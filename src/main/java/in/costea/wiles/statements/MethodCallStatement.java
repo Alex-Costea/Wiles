@@ -3,6 +3,7 @@ package in.costea.wiles.statements;
 import in.costea.wiles.builders.Context;
 import in.costea.wiles.data.CompilationExceptionsCollection;
 import in.costea.wiles.enums.SyntaxType;
+import in.costea.wiles.exceptions.AbstractCompilationException;
 import in.costea.wiles.statements.expressions.InsideMethodCallExpression;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,16 +35,21 @@ public class MethodCallStatement extends AbstractStatement{
     @Override
     public CompilationExceptionsCollection process() {
         var exceptions = new CompilationExceptionsCollection();
-        InsideMethodCallExpression newComp;
-        if(transmitter.expectMaybe(tokenOf(BRACKET_END_ID)).isEmpty())
+        try
         {
-            newComp =  new InsideMethodCallExpression(getContext());
-            while (components.size() == 0 || !newComp.isLastExpression()) {
+            while (transmitter.expectMaybe(tokenOf(BRACKET_END_ID)).isEmpty()) {
+                InsideMethodCallExpression newComp = new InsideMethodCallExpression(getContext());
                 exceptions.addAll(newComp.process());
                 components.add(newComp);
-                if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty()) break;
-                newComp = new InsideMethodCallExpression(getContext());
+                if (!newComp.isLastExpression())
+                    transmitter.expect(tokenOf(SEPARATOR_ID));
+                else break;
             }
+
+        }
+        catch (AbstractCompilationException ex)
+        {
+            exceptions.add(ex);
         }
         return exceptions;
     }
