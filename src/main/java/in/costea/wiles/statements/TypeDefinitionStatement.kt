@@ -5,8 +5,8 @@ import `in`.costea.wiles.builders.ExpectParamsBuilder.Companion.tokenOf
 import `in`.costea.wiles.constants.ErrorMessages.TYPE_EXPECTED_ERROR
 import `in`.costea.wiles.constants.Predicates.IS_CONTAINED_IN
 import `in`.costea.wiles.constants.Tokens
-import `in`.costea.wiles.constants.Tokens.BRACKET_END_ID
-import `in`.costea.wiles.constants.Tokens.BRACKET_START_ID
+import `in`.costea.wiles.constants.Tokens.PAREN_END_ID
+import `in`.costea.wiles.constants.Tokens.PAREN_START_ID
 import `in`.costea.wiles.constants.Tokens.MAYBE_ID
 import `in`.costea.wiles.constants.Tokens.METHOD_ID
 import `in`.costea.wiles.constants.Types.GENERIC_ID
@@ -17,6 +17,7 @@ import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.enums.WhenRemoveToken
 import `in`.costea.wiles.exceptions.AbstractCompilationException
+import kotlin.collections.ArrayList
 
 class TypeDefinitionStatement(context: Context) : AbstractStatement(context) {
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
@@ -34,19 +35,17 @@ class TypeDefinitionStatement(context: Context) : AbstractStatement(context) {
             name = TYPES[content]!!
             if(REQUIRES_SUBTYPE.contains(name))
             {
-                transmitter.expect(tokenOf(BRACKET_START_ID))
-                var i = 0
-                val max = MAX_NR_TYPES.getOrDefault(name,-1)
-                while(transmitter.expectMaybe(tokenOf(BRACKET_END_ID).removeWhen(WhenRemoveToken.Never)).isEmpty) {
-                    i+=1
-                    if(max!=-1 && i > max)
+                transmitter.expect(tokenOf(PAREN_START_ID))
+                val max : Int? = MAX_NR_TYPES[name]
+                for(i in 1..(max?:Int.MAX_VALUE)) {
+                    if(transmitter.expectMaybe(tokenOf(PAREN_END_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
                         break
                     val subType = TypeDefinitionStatement(context)
                     subType.process().throwFirstIfExists()
                     subtypes.add(subType)
                     if (transmitter.expectMaybe(tokenOf(Tokens.SEPARATOR_ID)).isEmpty) break
                 }
-                transmitter.expect(tokenOf(BRACKET_END_ID))
+                transmitter.expect(tokenOf(PAREN_END_ID))
             }
             if(name == METHOD_ID)
                 TODO("Function types")

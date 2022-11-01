@@ -18,8 +18,10 @@ object Tokens {
     const val END_BLOCK_ID = "END_BLOCK"
     const val SPACE_ID = "SPACE"
     const val NEWLINE_ID = "NEWLINE"
-    const val BRACKET_START_ID = "ROUND_BRACKET_START"
-    const val BRACKET_END_ID = "ROUND_BRACKET_END"
+    const val PAREN_START_ID = "PAREN_START"
+    const val PAREN_END_ID = "PAREN_END"
+    private const val BRACKET_START_ID = "BRACKET_START"
+    private const val BRACKET_END_ID = "BRACKET_END"
     const val METHOD_ID = "METHOD"
     const val TERMINATOR_ID = "TERMINATOR"
     const val CONTINUE_LINE_ID = "CONTINUE_LINE"
@@ -85,7 +87,7 @@ object Tokens {
     @JvmField
     val STARTING_OPERATORS = setOf(PLUS_ID, MINUS_ID, NOT_ID)
     @JvmField
-    val BRACKETS = setOf(BRACKET_START_ID, BRACKET_END_ID)
+    val PARENS = setOf(PAREN_START_ID, PAREN_END_ID)
     @JvmField
     val TERMINATORS = setOf(NEWLINE_ID, TERMINATOR_ID)
     val KEYWORD_LITERALS = setOf(TRUE_ID,FALSE_ID,NOTHING_ID)
@@ -130,8 +132,10 @@ object Tokens {
         SYMBOLS[">="] = LARGER_EQUALS_ID
         SYMBOLS["<="] = SMALLER_EQUALS_ID
         SYMBOLS["=/="] = NOT_EQUAL_ID
-        SYMBOLS["("] = BRACKET_START_ID
-        SYMBOLS[")"] = BRACKET_END_ID
+        SYMBOLS["("] = PAREN_START_ID
+        SYMBOLS[")"] = PAREN_END_ID
+        SYMBOLS["["] = BRACKET_START_ID
+        SYMBOLS["]"] = BRACKET_END_ID
         SYMBOLS["@"] = ELEM_ACCESS_ID
         SYMBOLS[","] = SEPARATOR_ID
         SYMBOLS["."] = ACCESS_ID

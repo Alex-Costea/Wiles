@@ -5,7 +5,7 @@ import in.costea.wiles.data.Token;
 import in.costea.wiles.exceptions.AbstractCompilationException;
 import org.jetbrains.annotations.NotNull;
 
-import static in.costea.wiles.constants.Tokens.BRACKET_END_ID;
+import static in.costea.wiles.constants.Tokens.PAREN_END_ID;
 import static in.costea.wiles.constants.Tokens.SEPARATOR_ID;
 
 public class EndAtSeparatorExpression extends AbstractExpression {
@@ -15,7 +15,7 @@ public class EndAtSeparatorExpression extends AbstractExpression {
 
     @Override
     protected boolean handleToken(@NotNull Token token) throws AbstractCompilationException {
-        if(token.getContent().equals(SEPARATOR_ID) || token.getContent().equals(BRACKET_END_ID))
+        if(token.getContent().equals(SEPARATOR_ID) || token.getContent().equals(PAREN_END_ID))
             return true;
         return super.handleToken(token);
     }

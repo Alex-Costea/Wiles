@@ -46,7 +46,7 @@ public class InsideMethodCallExpression extends AbstractExpression{
 
     @Override
     protected boolean handleToken(@NotNull Token token) throws AbstractCompilationException {
-        if(token.getContent().equals(BRACKET_END_ID))
+        if(token.getContent().equals(PAREN_END_ID))
             return lastExpression = true;
         if(token.getContent().equals(SEPARATOR_ID))
             return true;

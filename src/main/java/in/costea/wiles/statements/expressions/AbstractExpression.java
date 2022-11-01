@@ -53,7 +53,7 @@ public abstract class AbstractExpression extends AbstractStatement {
     }
 
     protected boolean handleToken(@NotNull Token token) throws AbstractCompilationException {
-        if (token.getContent().equals(BRACKET_END_ID))
+        if (token.getContent().equals(PAREN_END_ID))
             throw new UnexpectedTokenException(UNEXPECTED_CLOSING_BRACKET_ERROR, token.getLocation());
         return STATEMENT_START_KEYWORDS.contains(token.getContent());
     }
@@ -88,7 +88,7 @@ public abstract class AbstractExpression extends AbstractStatement {
 
             //Decide what token to expect first
             @NotNull ExpectNext expectNext;
-            if (IS_LITERAL.test(content) || BRACKETS.contains(content) || STARTING_OPERATORS.contains(content))
+            if (IS_LITERAL.test(content) || PARENS.contains(content) || STARTING_OPERATORS.contains(content))
                 expectNext = ExpectNext.TOKEN;
             else
                 expectNext = ExpectNext.OPERATOR;
@@ -106,7 +106,7 @@ public abstract class AbstractExpression extends AbstractStatement {
                 }
 
                 //Handle method calls and inner expressions
-                maybeTempToken =transmitter.expectMaybe(tokenOf(BRACKET_START_ID));
+                maybeTempToken =transmitter.expectMaybe(tokenOf(PAREN_START_ID));
                 if (maybeTempToken.isPresent()) {
                     if (expectNext == ExpectNext.OPERATOR) { //Method call
                         precedenceProcessor.add(new TokenStatement(new Token(APPLY_ID,maybeTempToken.get()
@@ -125,7 +125,7 @@ public abstract class AbstractExpression extends AbstractStatement {
                 }
 
                 //Handle closing brackets token
-                maybeTempToken = transmitter.expectMaybe(tokenOf(BRACKET_END_ID));
+                maybeTempToken = transmitter.expectMaybe(tokenOf(PAREN_END_ID));
                 if (maybeTempToken.isPresent()) {
                     mainCurrentToken = maybeTempToken.get();
                     if (handleToken(mainCurrentToken))
@@ -161,7 +161,7 @@ public abstract class AbstractExpression extends AbstractStatement {
             //Final processing
             if (expectNext == ExpectNext.TOKEN)
                 throw new UnexpectedEndException(EXPRESSION_UNFINISHED_ERROR, mainCurrentToken.getLocation());
-            if (this instanceof InnerExpression && !mainCurrentToken.getContent().equals(BRACKET_END_ID))
+            if (this instanceof InnerExpression && !mainCurrentToken.getContent().equals(PAREN_END_ID))
                 throw new UnexpectedEndException(UNEXPECTED_OPENING_BRACKET_ERROR, transmitter.getLastLocation());
             setComponents(precedenceProcessor);
             checkValid();

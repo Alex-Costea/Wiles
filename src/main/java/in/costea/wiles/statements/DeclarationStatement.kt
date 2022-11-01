@@ -47,7 +47,7 @@ class DeclarationStatement(context: Context) : AbstractStatement(context) {
 
             if(transmitter.expectMaybe(tokenOf(TYPEDEF_ID)).isPresent) {
                 typeStatement = TypeDefinitionStatement(context)
-                exceptions.addAll(typeStatement!!.process())
+                typeStatement!!.process().throwFirstIfExists()
             }
             transmitter.expect(tokenOf(ASSIGN_ID))
 
