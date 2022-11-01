@@ -21,9 +21,10 @@ object Types {
     private const val LIST_ID = "LIST"
     private const val ANYTHING_ID = "ANYTHING"
     const val GENERIC_ID = "GENERIC"
+    private const val EITHER_ID = "EITHER"
 
-
-    val REQUIRES_SUBTYPE = setOf(LIST_ID)
+    val REQUIRES_SUBTYPE = setOf(LIST_ID,EITHER_ID)
+    val MAX_NR_TYPES = hashMapOf(Pair(LIST_ID,1))
 
     init {
         TYPES["!bit"] = BOOLEAN_ID
@@ -35,6 +36,7 @@ object Types {
         TYPES[if(!ROMANIAN_MODE) "!rational" else "!rațional"] = DOUBLE_ID
         TYPES[if(!ROMANIAN_MODE) "!list" else "!listă"] = LIST_ID
         TYPES[if(!ROMANIAN_MODE) "!anything" else "!orice"] = ANYTHING_ID
+        TYPES[if(!ROMANIAN_MODE) "!either" else "!ori"] = EITHER_ID
         TYPES["!"] =  GENERIC_ID
         TYPES[NOTHING_ID] = NOTHING_ID
         TYPES[MAYBE_ID] = MAYBE_ID
