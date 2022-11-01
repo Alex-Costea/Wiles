@@ -65,6 +65,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - `args size n : type` means take n unnamed args
 - `args: type` is of type `list[type]`
 - `args` must always be last
+- `func(a := a)` can also be written as `func(a)` (if the identifier names match)
 
 ### Miscellaneous
 - `;` can be specified or inferred from newline
@@ -119,8 +120,8 @@ begin
     yield min_value
 end
 
-let my_list := [10, 3, 55, 8] : int
-let result := min(list := my_list)
+let list := [10, 3, 55, 8] : int
+let result := min(list)
 when result is nothing do
     writeline("Error: no min found!")
 otherwise do
