@@ -19,7 +19,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Floating: `12345.6`
 - String: `"abc"`
 - Boolean: `true` (1) and `false` (0)
-- List literal: `list_of(1,2,3)`
+- List literal: `[a, b, c] : type`
 
 ### Types
 - Nothing: only valid value is `nothing`
@@ -45,7 +45,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - `nothing` (no operation)
 - `stop`, `skip` (`break`/`return;`, `continue` equivalents)
 
-### Operators
+### Symbols
 - `+`, `-`, `*`, `/`, `^` (power)
 - `and`, `or`, `not` (not bitwise!)
 - `=`, `>`, `>=`, `<`, `<=`, `=/=`
@@ -55,11 +55,16 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - `:` (type annotation)
 - `@` (access element in collection)
 - `()` (order of operations, function access)
+- `[]` (used in list literals)
 - `,` (separator between elements)
 - `?` (syntactic sugar for `type? = either(type,nothing)`)
 
 ### Named parameters
 - Function calling with named parameters by default: `my_function(a := 1, b := 10)`
+- `args : type` means take in an unspecified number of unnamed args
+- `args size n : type` means take n unnamed args
+- `args: type` is of type `list[type]`
+- `args` must always be last
 
 ### Miscellaneous
 - `;` can be specified or inferred from newline
@@ -78,7 +83,6 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Declare fields `readonly` for getter with no setter, `public` for getter and setter
 - Warnings, e.g. unreachable code
 - Garbage collection
-- `anything`, `anything?` types
 - `either` with more than 2 types
 - `error` types. syntax: `int? io_error, illegal_state_error`, internally also an `either`
 
@@ -104,18 +108,19 @@ end
 ### Minimum value
 
 ```
-let min := fun(args : list(int)) -> int?
+let min := fun(list : list(int)) -> int?
 begin
-    if args.size = 0 do
+    if list.size = 0 do
         yield nothing
-    let var min_value := args @ 0
-    for x in args from 1 do
+    let var min_value := list @ 0
+    for x in list from 1 do
         if x < min_value do
             min_value := x
     yield min_value
 end
 
-let result := min(10, 3, 55, 8)
+let my_list := [10, 3, 55, 8] : int
+let result := min(list := my_list)
 when result is nothing do
     writeline("Error: no min found!")
 otherwise do
