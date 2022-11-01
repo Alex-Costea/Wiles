@@ -71,7 +71,7 @@ class StatementFactory {
             params[DeclarationStatement::class.java] = tokenOf(DECLARE_ID)
             params[MethodStatement::class.java] = tokenOf(METHOD_ID)
             params[ReturnStatement::class.java] = tokenOf(RETURN_ID)
-            params[IfStatement::class.java] = tokenOf(WHEN_ID)
+            params[WhenStatement::class.java] = tokenOf(WHEN_ID)
             params[WhileStatement::class.java] = tokenOf(WHILE_ID)
             params[BreakStatement::class.java] = tokenOf(BREAK_ID)
             params[ContinueStatement::class.java] = tokenOf(CONTINUE_ID)
@@ -86,8 +86,8 @@ class StatementFactory {
                 Function { context: Context -> MethodStatement(context) }
             createObject[ReturnStatement::class.java] =
                 Function { context: Context -> ReturnStatement(context) }
-            createObject[IfStatement::class.java] =
-                Function { context: Context -> IfStatement(context) }
+            createObject[WhenStatement::class.java] =
+                Function { context: Context -> WhenStatement(context) }
             createObject[WhileStatement::class.java] =
                 Function { context: Context -> WhileStatement(context) }
             createObject[BreakStatement::class.java] =

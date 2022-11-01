@@ -23,7 +23,7 @@ class CodeBlockStatement(context: Context) : AbstractStatement(context) {
         val statementFactory = StatementFactory()
             .addType(TopLevelExpression::class.java)
             .addType(DeclarationStatement::class.java)
-            .addType(IfStatement::class.java)
+            .addType(WhenStatement::class.java)
             .addType(WhileStatement::class.java)
             .addType(BreakStatement::class.java)
             .addType(ReturnStatement::class.java)
