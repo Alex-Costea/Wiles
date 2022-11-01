@@ -30,7 +30,7 @@ import `in`.costea.wiles.constants.Tokens.START_BLOCK_ID
 import `in`.costea.wiles.constants.Tokens.TERMINATOR_ID
 import `in`.costea.wiles.constants.Tokens.TIMES_ID
 import `in`.costea.wiles.constants.Tokens.TRUE_ID
-import `in`.costea.wiles.constants.Tokens.TYPEOF_ID
+import `in`.costea.wiles.constants.Tokens.TYPEDEF_ID
 import `in`.costea.wiles.constants.Utils.nullLocation
 import `in`.costea.wiles.converters.TokensToSyntaxTreeConverter
 import `in`.costea.wiles.data.CompilationExceptionsCollection
@@ -160,13 +160,13 @@ class SyntaxTreeConverterTests {
             DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, BRACKET_START_ID, BRACKET_END_ID, RIGHT_ARROW_ID, "!int",
                 START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
         assertResults(null, "CODE_BLOCK(DECLARATION(!main; METHOD(TYPE INT32; PARAMETER(!a; TYPE INT32); CODE_BLOCK)))",
-            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, BRACKET_START_ID, "!a", TYPEOF_ID, "!int", BRACKET_END_ID,
+            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, BRACKET_START_ID, "!a", TYPEDEF_ID, "!int", BRACKET_END_ID,
             RIGHT_ARROW_ID, "!int", START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
         assertResults(null, "CODE_BLOCK(DECLARATION(!main; METHOD(TYPE INT32; PARAMETER(!a; TYPE INT32); PARAMETER(!b; TYPE STRING); CODE_BLOCK)))",
-            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, BRACKET_START_ID, "!a", TYPEOF_ID, "!int",
-                SEPARATOR_ID, "!b", TYPEOF_ID, "!text", BRACKET_END_ID, RIGHT_ARROW_ID, "!int", START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
+            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, BRACKET_START_ID, "!a", TYPEDEF_ID, "!int",
+                SEPARATOR_ID, "!b", TYPEDEF_ID, "!text", BRACKET_END_ID, RIGHT_ARROW_ID, "!int", START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
         assertResults(null, "CODE_BLOCK(DECLARATION(!main; METHOD(TYPE INT32; PARAMETER(!a; TYPE NOTHING); CODE_BLOCK)))",
-            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, BRACKET_START_ID, "!a", TYPEOF_ID, NOTHING_ID, BRACKET_END_ID,
+            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, BRACKET_START_ID, "!a", TYPEDEF_ID, NOTHING_ID, BRACKET_END_ID,
             RIGHT_ARROW_ID, "!int", START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
         assertResults(null, "CODE_BLOCK(DECLARATION(!a; METHOD(TYPE NOTHING; CODE_BLOCK(EXPRESSION(NOTHING)))))",
             DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, BRACKET_START_ID, BRACKET_END_ID, DO_ID, NOTHING_ID)
@@ -174,11 +174,11 @@ class SyntaxTreeConverterTests {
             DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, BRACKET_START_ID, BRACKET_END_ID, DO_ID,
              "!b", ASSIGN_ID, "#3")
         assertResults(null, "CODE_BLOCK(DECLARATION(!product; METHOD(TYPE INT64; PARAMETER(!a; TYPE INT32); PARAMETER(!b; TYPE INT32); CODE_BLOCK(EXPRESSION(EXPRESSION(!product); ASSIGN; EXPRESSION(!a; TIMES; !b))))))",
-            DECLARE_ID, "!product", ASSIGN_ID, METHOD_ID, BRACKET_START_ID, "!a", TYPEOF_ID, "!int",
-                SEPARATOR_ID, "!b", TYPEOF_ID, "!int", BRACKET_END_ID, RIGHT_ARROW_ID, "!bigint", NEWLINE_ID,
+            DECLARE_ID, "!product", ASSIGN_ID, METHOD_ID, BRACKET_START_ID, "!a", TYPEDEF_ID, "!int",
+                SEPARATOR_ID, "!b", TYPEDEF_ID, "!int", BRACKET_END_ID, RIGHT_ARROW_ID, "!bigint", NEWLINE_ID,
                 DO_ID,  "!product", ASSIGN_ID, "!a", TIMES_ID, "!b")
         assertResults(null,"CODE_BLOCK(DECLARATION(!main; METHOD(TYPE NOTHING; PARAMETER(!args; TYPE INT32); CODE_BLOCK(EXPRESSION(NOTHING)))))",
-            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, BRACKET_START_ID, "!args", TYPEOF_ID, "!int", BRACKET_END_ID, DO_ID, NOTHING_ID)
+            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, BRACKET_START_ID, "!args", TYPEDEF_ID, "!int", BRACKET_END_ID, DO_ID, NOTHING_ID)
         assertResults(null,"CODE_BLOCK(DECLARATION(!a; METHOD(TYPE NOTHING; CODE_BLOCK(DECLARATION(!b; METHOD(TYPE NOTHING; CODE_BLOCK(EXPRESSION(NOTHING))))))))",
             DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, BRACKET_START_ID, BRACKET_END_ID, NEWLINE_ID, START_BLOCK_ID, NEWLINE_ID, DECLARE_ID,
             "!b", ASSIGN_ID, METHOD_ID, BRACKET_START_ID, BRACKET_END_ID, DO_ID, NOTHING_ID, NEWLINE_ID, END_BLOCK_ID, NEWLINE_ID, NEWLINE_ID, NEWLINE_ID)
@@ -217,7 +217,7 @@ class SyntaxTreeConverterTests {
     fun declarationsTest()
     {
         assertResults(null,"CODE_BLOCK(DECLARATION(TYPE INT32; !a; EXPRESSION(#10)))",
-            DECLARE_ID, "!a", TYPEOF_ID, "!int", ASSIGN_ID, "#10")
+            DECLARE_ID, "!a", TYPEDEF_ID, "!int", ASSIGN_ID, "#10")
     }
 
     @Test
@@ -234,27 +234,15 @@ class SyntaxTreeConverterTests {
     }
 
     @Test
-    fun forTest()
-    {
-
-    }
-
-    @Test
     fun whileTest()
     {
-
+        //TODO: tests
     }
 
     @Test
-    fun breakTest()
+    fun breakContinueTest()
     {
-
-    }
-
-    @Test
-    fun continueTest()
-    {
-
+        //TODO: tests
     }
 
     @Test
@@ -262,6 +250,7 @@ class SyntaxTreeConverterTests {
     {
         assertResults(null,"CODE_BLOCK(EXPRESSION(!a; PLUS; EXPRESSION(!b; APPLY; METHOD_CALL)))",
             "!a", PLUS_ID, "!b", BRACKET_START_ID, BRACKET_END_ID)
+        //TODO: tests
     }
 
     private class CreateConverter(tokens: List<String>) {

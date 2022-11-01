@@ -35,7 +35,7 @@ object Tokens {
     const val IDENTIFIER_START = "!"
     const val STRING_START = "@"
     const val NUM_START = "#"
-    const val TYPEOF_ID = "TYPEOF"
+    const val TYPEDEF_ID = "TYPEDEF"
     const val NOTHING_ID = "NOTHING"
     const val SEPARATOR_ID = "SEPARATOR"
     const val DO_ID = "DO"
@@ -53,7 +53,7 @@ object Tokens {
     const val APPLY_ID = "APPLY"
     const val OR_ID = "OR"
     const val NOT_ID = "NOT"
-    private const val MAYBE_ID = "MAYBE"
+    const val MAYBE_ID = "MAYBE"
     const val RETURN_ID = "RETURN"
     const val TRUE_ID = "TRUE"
     private const val FALSE_ID = "FALSE"
@@ -135,7 +135,7 @@ object Tokens {
         SYMBOLS["@"] = ELEM_ACCESS_ID
         SYMBOLS[","] = SEPARATOR_ID
         SYMBOLS["."] = ACCESS_ID
-        SYMBOLS[":"] = TYPEOF_ID
+        SYMBOLS[":"] = TYPEDEF_ID
         SYMBOLS[";"] = TERMINATOR_ID
         SYMBOLS["->"] = RIGHT_ARROW_ID
         SYMBOLS["?"] = MAYBE_ID

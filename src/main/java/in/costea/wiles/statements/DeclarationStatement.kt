@@ -8,7 +8,7 @@ import `in`.costea.wiles.constants.ErrorMessages.IDENTIFIER_EXPECTED_ERROR
 import `in`.costea.wiles.constants.Predicates.IS_IDENTIFIER
 import `in`.costea.wiles.constants.Tokens.ASSIGN_ID
 import `in`.costea.wiles.constants.Tokens.MUTABLE_ID
-import `in`.costea.wiles.constants.Tokens.TYPEOF_ID
+import `in`.costea.wiles.constants.Tokens.TYPEDEF_ID
 import `in`.costea.wiles.data.CompilationExceptionsCollection
 import `in`.costea.wiles.enums.SyntaxType
 import `in`.costea.wiles.exceptions.AbstractCompilationException
@@ -45,7 +45,7 @@ class DeclarationStatement(context: Context) : AbstractStatement(context) {
             this.left = TokenStatement(transmitter.expect(tokenOf(IS_IDENTIFIER)
                 .withErrorMessage(IDENTIFIER_EXPECTED_ERROR)),context)
 
-            if(transmitter.expectMaybe(tokenOf(TYPEOF_ID)).isPresent) {
+            if(transmitter.expectMaybe(tokenOf(TYPEDEF_ID)).isPresent) {
                 typeStatement = TypeDefinitionStatement(context)
                 exceptions.addAll(typeStatement!!.process())
             }
