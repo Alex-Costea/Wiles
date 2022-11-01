@@ -75,15 +75,16 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Types are not reserved keywords and can be used as variable names
 - Function potentially not returning value is a compilation error
 - `nothing` type is invalid in comparisons
+- Garbage collection
 
 ### Potential additions (no promises!)
 - `infint` (infinite precision integer)
 - `decimal` (stored as fraction, not as float)
-- Other generic types: `dict(type,type)`, `linked_list(type)`, `set(type)`, `ref(type)`
+- Other types: `dict(type,type)`, `linked_list(type)`, `set(type)`, `ref(type)`
+- Generic types, e.g.: `fun(a : !b) -> !b`
 - Classes with `class` keyword. Internally, maybe something like `dict(text,fun)`?
 - Declare fields `readonly` for getter with no setter, `public` for getter and setter
 - Warnings, e.g. unreachable code
-- Garbage collection
 - `either` with more than 2 types
 - `error` types. syntax: `int? io_error, illegal_state_error`, internally also an `either`
 
