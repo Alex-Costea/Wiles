@@ -39,17 +39,17 @@ class MethodStatement(oldContext : Context) : AbstractStatement(oldContext.setWi
 
     override fun process(): CompilationExceptionsCollection {
         try {
-            transmitter.expect(tokenOf(PAREN_START_ID))
-
-            //TODO: args param
-            while (transmitter.expectMaybe(tokenOf(IS_IDENTIFIER).removeWhen(WhenRemoveToken.Never)).isPresent) {
-                val parameterStatement = ParameterStatement(context)
-                exceptions.addAll(parameterStatement.process())
-                parameters.add(parameterStatement)
-                if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break
+            if(transmitter.expectMaybe(tokenOf(PAREN_START_ID)).isPresent)
+            {
+                //TODO: args param
+                while (transmitter.expectMaybe(tokenOf(IS_IDENTIFIER).removeWhen(WhenRemoveToken.Never)).isPresent) {
+                    val parameterStatement = ParameterStatement(context)
+                    exceptions.addAll(parameterStatement.process())
+                    parameters.add(parameterStatement)
+                    if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break
+                }
+                transmitter.expect(tokenOf(PAREN_END_ID))
             }
-
-            transmitter.expect(tokenOf(PAREN_END_ID))
 
             //Return type
             if (transmitter.expectMaybe(tokenOf(RIGHT_ARROW_ID)).isPresent) {

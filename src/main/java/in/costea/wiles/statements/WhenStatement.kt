@@ -66,7 +66,7 @@ class WhenStatement(context: Context) : AbstractStatement(context) {
                 exceptions.addAll(condition.process())
                 exceptions.addAll(blockStatement.process())
                 branches.add(Pair(condition, blockStatement))
-                transmitter.expectMaybe(tokenOf(TERMINATOR_ID))
+                transmitter.expectMaybe(tokenOf(TERMINATOR_ID).dontIgnoreNewLine())
             }
             while(transmitter.expectMaybe(tokenOf(CASE_ID).or(ELSE_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
         }
