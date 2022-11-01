@@ -10,10 +10,10 @@ import `in`.costea.wiles.constants.Tokens.BREAK_ID
 import `in`.costea.wiles.constants.Tokens.CONTINUE_ID
 import `in`.costea.wiles.constants.Tokens.DECLARE_ID
 import `in`.costea.wiles.constants.Tokens.DO_ID
-import `in`.costea.wiles.constants.Tokens.IF_ID
 import `in`.costea.wiles.constants.Tokens.METHOD_ID
 import `in`.costea.wiles.constants.Tokens.RETURN_ID
 import `in`.costea.wiles.constants.Tokens.START_BLOCK_ID
+import `in`.costea.wiles.constants.Tokens.WHEN_ID
 import `in`.costea.wiles.constants.Tokens.WHILE_ID
 import `in`.costea.wiles.enums.WhenRemoveToken
 import `in`.costea.wiles.exceptions.AbstractCompilationException
@@ -71,7 +71,7 @@ class StatementFactory {
             params[DeclarationStatement::class.java] = tokenOf(DECLARE_ID)
             params[MethodStatement::class.java] = tokenOf(METHOD_ID)
             params[ReturnStatement::class.java] = tokenOf(RETURN_ID)
-            params[IfStatement::class.java] = tokenOf(IF_ID)
+            params[IfStatement::class.java] = tokenOf(WHEN_ID)
             params[WhileStatement::class.java] = tokenOf(WHILE_ID)
             params[BreakStatement::class.java] = tokenOf(BREAK_ID)
             params[ContinueStatement::class.java] = tokenOf(CONTINUE_ID)

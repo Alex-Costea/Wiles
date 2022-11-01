@@ -36,8 +36,10 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Function: `fun({param1 : type, param2 : type}) {-> return_type}` (return assumed `nothing` if unspecified)
 - Value: `let {var} name {: type} := value` (`var` makes it mutable, type can be inferred)
 - Assignment: `name := value`
-- Conditional: `if condition [block] {otherwise [block]}`
-- Conditional type casting: `when value is type [block] {otherwise block}`
+- Conditional: `when condition [block] {other clauses}`
+  - Type casting: `value is type [block]`
+  - Other cases: `case [block]`
+  - Else/default cases: `otherwise [block]`
 - For loop: `for x {in collection} {from a} {to b} [block]`
 - While loop: `while condition [block]`
 - Code block: `do [operation]` or `begin; [op1];[op2]; end`
@@ -98,11 +100,11 @@ writeline("Hello, world!")
 for i from 1 to 100
 begin
     let var text := ""
-    if modulo(i, 3) = 0 do
+    when modulo(i, 3) = 0 do
         text += "Fizz"
-    if modulo(i, 5) = 0 do
+    when modulo(i, 5) = 0 do
         text += "Buzz"
-    if text = "" do
+    when text = "" do
         text := i.as_text
     writeline(text)
 end 
@@ -112,19 +114,19 @@ end
 ```
 let min := fun(list : list(int)) -> int?
 begin
-    if list.size = 0 do
+    when list.size = 0 do
         yield nothing
     let var min_value := list @ 0
     for x in list from 1 do
-        if x < min_value do
+        when x < min_value do
             min_value := x
     yield min_value
 end
 
 let list := [10, 3, 55, 8] : int
 let result := min(list)
-when result is nothing do
-    writeline("Error: no min found!")
-otherwise do
+when result is int do
     writeline("Min found: " + result)
+otherwise do
+    writeline("Error: no min found!")
 ```

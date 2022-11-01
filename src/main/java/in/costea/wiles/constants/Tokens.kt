@@ -59,8 +59,7 @@ object Tokens {
     const val RETURN_ID = "RETURN"
     const val TRUE_ID = "TRUE"
     private const val FALSE_ID = "FALSE"
-    const val IF_ID = "IF"
-    private const val WHEN_ID = "WHEN"
+    const val WHEN_ID = "WHEN"
     const val ELSE_ID = "ELSE"
     const val BREAK_ID = "BREAK"
     const val CONTINUE_ID = "CONTINUE"
@@ -70,6 +69,7 @@ object Tokens {
     private const val TO_ID = "TO"
     const val WHILE_ID = "WHILE"
     const val ELEM_ACCESS_ID = "ELEM_ACCESS"
+    const val CASE_ID = "CASE"
 
     private val KEYWORDS: HashMap<String, String> = HashMap()
     private val SYMBOLS: HashMap<String, String> = HashMap()
@@ -92,7 +92,7 @@ object Tokens {
     val TERMINATORS = setOf(NEWLINE_ID, TERMINATOR_ID)
     val KEYWORD_LITERALS = setOf(TRUE_ID,FALSE_ID,NOTHING_ID)
     @JvmField
-    val STATEMENT_START_KEYWORDS = setOf(NOTHING_ID, METHOD_ID, DECLARE_ID,IF_ID, WHEN_ID, ELSE_ID, FOR_ID, WHILE_ID,
+    val STATEMENT_START_KEYWORDS = setOf(NOTHING_ID, METHOD_ID, DECLARE_ID, WHEN_ID, ELSE_ID, FOR_ID, WHILE_ID,
         BREAK_ID, CONTINUE_ID, RETURN_ID, DO_ID, START_BLOCK_ID, END_BLOCK_ID)
 
     init {
@@ -100,7 +100,6 @@ object Tokens {
         KEYWORDS["fun"] = METHOD_ID
         KEYWORDS[if(!ROMANIAN_MODE) "let" else "fie"] = DECLARE_ID
         KEYWORDS["var"] = MUTABLE_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "if" else "dacă"] = IF_ID
         KEYWORDS[if(!ROMANIAN_MODE) "when" else "când"] = WHEN_ID
         KEYWORDS[if(!ROMANIAN_MODE) "otherwise" else "altfel"] = ELSE_ID
         KEYWORDS[if(!ROMANIAN_MODE) "for" else "pentru"] = FOR_ID
@@ -119,6 +118,7 @@ object Tokens {
         KEYWORDS[if(!ROMANIAN_MODE) "in" else "în"] = IN_ID
         KEYWORDS[if(!ROMANIAN_MODE) "from" else "de_la"] = FROM_ID
         KEYWORDS[if(!ROMANIAN_MODE) "to" else "la"] = TO_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "case" else "caz"] = CASE_ID
 
         SYMBOLS["+"] = PLUS_ID
         SYMBOLS["-"] = MINUS_ID

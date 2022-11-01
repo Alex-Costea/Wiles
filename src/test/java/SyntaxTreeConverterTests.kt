@@ -5,13 +5,13 @@ import `in`.costea.wiles.constants.ErrorMessages.INVALID_STATEMENT_ERROR
 import `in`.costea.wiles.constants.ErrorMessages.TOKEN_EXPECTED_ERROR
 import `in`.costea.wiles.constants.ErrorMessages.INVALID_EXPRESSION_ERROR
 import `in`.costea.wiles.constants.Tokens.ASSIGN_ID
+import `in`.costea.wiles.constants.Tokens.CASE_ID
 import `in`.costea.wiles.constants.Tokens.CONTINUE_ID
 import `in`.costea.wiles.constants.Tokens.DECLARE_ID
 import `in`.costea.wiles.constants.Tokens.DO_ID
 import `in`.costea.wiles.constants.Tokens.ELSE_ID
 import `in`.costea.wiles.constants.Tokens.END_BLOCK_ID
 import `in`.costea.wiles.constants.Tokens.EQUALS_ID
-import `in`.costea.wiles.constants.Tokens.IF_ID
 import `in`.costea.wiles.constants.Tokens.LARGER_ID
 import `in`.costea.wiles.constants.Tokens.METHOD_ID
 import `in`.costea.wiles.constants.Tokens.MINUS_ID
@@ -31,6 +31,7 @@ import `in`.costea.wiles.constants.Tokens.TERMINATOR_ID
 import `in`.costea.wiles.constants.Tokens.TIMES_ID
 import `in`.costea.wiles.constants.Tokens.TRUE_ID
 import `in`.costea.wiles.constants.Tokens.TYPEDEF_ID
+import `in`.costea.wiles.constants.Tokens.WHEN_ID
 import `in`.costea.wiles.constants.Utils.nullLocation
 import `in`.costea.wiles.converters.TokensToSyntaxTreeConverter
 import `in`.costea.wiles.data.CompilationExceptionsCollection
@@ -223,13 +224,13 @@ class SyntaxTreeConverterTests {
     @Test
     fun ifTest()
     {
-        assertResults(null,"CODE_BLOCK(DECLARATION(!a; METHOD(TYPE NOTHING; CODE_BLOCK(IF(EXPRESSION(TRUE); CODE_BLOCK(RETURN(EXPRESSION(!a))); CODE_BLOCK(RETURN(EXPRESSION(!b))))))); IF(EXPRESSION(TRUE); CODE_BLOCK(EXPRESSION(!c))); EXPRESSION(!d))",
+        assertResults(null,"CODE_BLOCK(DECLARATION(!a; METHOD(TYPE NOTHING; CODE_BLOCK(WHEN(EXPRESSION(TRUE); CODE_BLOCK(RETURN(EXPRESSION(!a))); ELSE; CODE_BLOCK(RETURN(EXPRESSION(!b))))))); WHEN(EXPRESSION(TRUE); CODE_BLOCK(EXPRESSION(!c))); EXPRESSION(!d))",
             DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, DO_ID, NEWLINE_ID,
-            IF_ID, TRUE_ID, DO_ID, RETURN_ID, "!a", TERMINATOR_ID, ELSE_ID, DO_ID, RETURN_ID, "!b",
-            NEWLINE_ID, IF_ID, TRUE_ID, DO_ID, "!c", NEWLINE_ID, "!d")
+            WHEN_ID, TRUE_ID, DO_ID, RETURN_ID, "!a", TERMINATOR_ID, ELSE_ID, DO_ID, RETURN_ID, "!b",
+            NEWLINE_ID, WHEN_ID, TRUE_ID, DO_ID, "!c", NEWLINE_ID, "!d")
 
-        assertResults(null,"CODE_BLOCK(IF(EXPRESSION(!a; LARGER; #10); CODE_BLOCK(EXPRESSION(NOTHING)); IF(EXPRESSION(!a; LARGER; #0); CODE_BLOCK(EXPRESSION(NOTHING)); CODE_BLOCK(EXPRESSION(NOTHING)))))",
-            IF_ID, "!a", LARGER_ID, "#10", DO_ID, NOTHING_ID, NEWLINE_ID, ELSE_ID, IF_ID, "!a", LARGER_ID, "#0",
+        assertResults(null,"CODE_BLOCK(WHEN(EXPRESSION(!a; LARGER; #10); CODE_BLOCK(EXPRESSION(NOTHING)); EXPRESSION(!a; LARGER; #0); CODE_BLOCK(EXPRESSION(NOTHING)); ELSE; CODE_BLOCK(EXPRESSION(NOTHING))))",
+            WHEN_ID, "!a", LARGER_ID, "#10", DO_ID, NOTHING_ID, NEWLINE_ID, CASE_ID, "!a", LARGER_ID, "#0",
             DO_ID, NOTHING_ID, NEWLINE_ID, ELSE_ID, DO_ID, NOTHING_ID)
     }
 
