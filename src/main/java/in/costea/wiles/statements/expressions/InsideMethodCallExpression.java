@@ -34,7 +34,7 @@ public class InsideMethodCallExpression extends AbstractExpression{
     }
 
     @Override
-    protected void checkLeft() throws AbstractCompilationException {
+    protected void checkValid() throws AbstractCompilationException {
         if(isAssignment) {
             if (left.getComponents().size() != 1)
                 throw new InvalidStatementException(IDENTIFIER_EXPECTED_ERROR, operation.getToken().getLocation());

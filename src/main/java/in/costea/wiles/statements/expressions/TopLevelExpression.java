@@ -33,7 +33,7 @@ public class TopLevelExpression extends AbstractExpression {
     }
 
     @Override
-    protected void checkLeft() throws InvalidStatementException {
+    protected void checkValid() throws InvalidStatementException {
         if(!isAssignment)
             return;
         checkValid((AbstractExpression) this.left);

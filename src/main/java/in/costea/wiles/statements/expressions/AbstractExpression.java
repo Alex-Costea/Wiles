@@ -52,10 +52,6 @@ public abstract class AbstractExpression extends AbstractStatement {
         return components;
     }
 
-    protected Optional<AbstractStatement> handleSpecialStatements() {
-        return Optional.empty();
-    }
-
     protected boolean handleToken(@NotNull Token token) throws AbstractCompilationException {
         if (token.getContent().equals(BRACKET_END_ID))
             throw new UnexpectedTokenException(UNEXPECTED_CLOSING_BRACKET_ERROR, token.getLocation());
@@ -78,7 +74,7 @@ public abstract class AbstractExpression extends AbstractStatement {
         this.right = result;
     }
 
-    protected void checkLeft() throws AbstractCompilationException {
+    protected void checkValid() throws AbstractCompilationException {
         //Nothing to check by default
     }
 
@@ -136,18 +132,6 @@ public abstract class AbstractExpression extends AbstractStatement {
                         break;
                 }
 
-                //Special statements
-                if (expectNext == ExpectNext.TOKEN) {
-                    Optional<AbstractStatement> maybeStatement;
-                    if ((maybeStatement = handleSpecialStatements()).isPresent()) {
-                        AbstractStatement statement = maybeStatement.get();
-                        exceptions.addAll(statement.process());
-                        precedenceProcessor.add(maybeStatement.get());
-                        expectNext = ExpectNext.OPERATOR;
-                        continue;
-                    }
-                }
-
                 //Handle unary operators
                 if (expectNext == ExpectNext.TOKEN) {
                     maybeTempToken = transmitter.expectMaybe(tokenOf(IS_CONTAINED_IN.invoke(STARTING_OPERATORS)));
@@ -180,7 +164,7 @@ public abstract class AbstractExpression extends AbstractStatement {
             if (this instanceof InnerExpression && !mainCurrentToken.getContent().equals(BRACKET_END_ID))
                 throw new UnexpectedEndException(UNEXPECTED_OPENING_BRACKET_ERROR, transmitter.getLastLocation());
             setComponents(precedenceProcessor);
-            checkLeft();
+            checkValid();
         } catch (AbstractCompilationException ex) {
             exceptions.add(ex);
         }
