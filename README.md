@@ -36,9 +36,10 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Function: `fun({param1 : type, param2 : type}) {-> return_type}` (return assumed `nothing` if unspecified)
 - Value: `let {var} name {: type} := value` (`var` makes it mutable, type can be inferred)
 - Assignment: `name := value`
-- Conditional: `when condition [block] {other clauses}`
+- Conditional: `when [first clause] {other clauses}`
+  - Default clause: `[condition]`
   - Type casting: `value is type [block]`
-  - Other cases: `case [block]`
+  - Other cases: `case [condition] [block]`
   - Else/default cases: `otherwise [block]`
 - For loop: `for x {in collection} {from a} {to b} [block]`
 - While loop: `while condition [block]`
