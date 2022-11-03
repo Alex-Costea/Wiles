@@ -1,0 +1,6 @@
+package wiles.parser.enums
+
+enum class SyntaxType {
+    METHOD, EXPRESSION, CODE_BLOCK, TOKEN, PARAMETER, TYPE, WHEN,
+    DECLARATION, RETURN, WHILE, BREAK, CONTINUE, METHOD_CALL
+}
