@@ -2,8 +2,6 @@ package wiles.parser.statements
 
 import wiles.parser.builders.Context
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
-import wiles.parser.builders.StatementFactory
-import wiles.parser.constants.ErrorMessages.EXPRESSION_EXPECTED_ERROR
 import wiles.parser.constants.ErrorMessages.IDENTIFIER_EXPECTED_ERROR
 import wiles.parser.constants.Predicates.IS_IDENTIFIER
 import wiles.parser.constants.Tokens.ASSIGN_ID
@@ -12,19 +10,13 @@ import wiles.parser.constants.Tokens.TYPEDEF_ID
 import wiles.parser.data.CompilationExceptionsCollection
 import wiles.parser.enums.SyntaxType
 import wiles.parser.exceptions.AbstractCompilationException
+import wiles.parser.statements.expressions.DefaultExpression
 
 class DeclarationStatement(context: Context) : AbstractStatement(context) {
     private var left: AbstractStatement? = null
     private var typeStatement : TypeDefinitionStatement? = null
-    private var right: AbstractStatement? = null
+    private var right: DefaultExpression? = null
     private val exceptions = CompilationExceptionsCollection()
-
-    companion object
-    {
-        val rightExpressionFactory = StatementFactory()
-            .addType(wiles.parser.statements.expressions.DefaultExpression::class.java)
-            .addType(MethodStatement::class.java)
-    }
 
     override val type: SyntaxType
         get() = SyntaxType.DECLARATION
@@ -35,7 +27,6 @@ class DeclarationStatement(context: Context) : AbstractStatement(context) {
             x.add(0,typeStatement!!)
         return x
     }
-
     override fun process(): CompilationExceptionsCollection {
         try {
             if(transmitter.expectMaybe(tokenOf(MUTABLE_ID)).isPresent)
@@ -50,7 +41,7 @@ class DeclarationStatement(context: Context) : AbstractStatement(context) {
             }
             transmitter.expect(tokenOf(ASSIGN_ID))
 
-            val rightExpression = rightExpressionFactory.setContext(context).create(EXPRESSION_EXPECTED_ERROR)
+            val rightExpression = DefaultExpression(context)
 
             this.right = rightExpression
             exceptions.addAll(rightExpression.process())

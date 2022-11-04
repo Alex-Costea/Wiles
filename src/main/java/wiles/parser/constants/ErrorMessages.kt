@@ -11,7 +11,6 @@ object ErrorMessages {
     const val LITERAL_EXPECTED_ERROR = "Definition expected."
     const val TYPE_EXPECTED_ERROR = "Type definition is unknown."
     const val EXPRESSION_EXPECTED_ERROR = "Invalid or missing expression"
-    const val UNEXPECTED_CLOSING_BRACKET_ERROR = "Closing bracket has no matching opening bracket."
     const val UNEXPECTED_OPENING_BRACKET_ERROR = "Closing bracket expected here."
     const val OPERATOR_EXPECTED_ERROR = "Operator expected."
     const val EXPRESSION_UNFINISHED_ERROR = "Expression unfinished."

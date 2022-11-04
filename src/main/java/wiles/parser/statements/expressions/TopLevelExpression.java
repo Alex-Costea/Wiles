@@ -52,8 +52,9 @@ public class TopLevelExpression extends AbstractExpression {
             return true;
         if (token.getContent().equals(ASSIGN_ID)) {
             operation = new TokenStatement(transmitter.expect(tokenOf(ASSIGN_ID)), getContext());
-            right = new DefaultExpression(getContext());
-            exceptions.addAll(right.process());
+            var new_right = new DefaultExpression(getContext());
+            exceptions.addAll(new_right.process());
+            right = new_right;
             isAssignment = true;
             return true;
         }

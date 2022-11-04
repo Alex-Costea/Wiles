@@ -26,6 +26,7 @@ class WhenStatement(context: Context) : AbstractStatement(context) {
 
     override fun handleEndOfStatement()
     {
+        // done already as part of processing
     }
 
     override fun process(): CompilationExceptionsCollection {

@@ -22,8 +22,12 @@ public class InsideMethodCallExpression extends AbstractExpression{
         return lastExpression;
     }
 
-    public InsideMethodCallExpression(@NotNull Context context) {
-        super(context);
+    public InsideMethodCallExpression(@NotNull Context oldContext) {
+        super(oldContext.setWithinInnerExpression(true));
+    }
+
+    {
+        isInner = true;
     }
 
     protected void setComponents(@NotNull PrecedenceProcessor precedenceProcessor) {
@@ -51,9 +55,9 @@ public class InsideMethodCallExpression extends AbstractExpression{
             return true;
         if (token.getContent().equals(Tokens.ASSIGN_ID)) {
             operation = new TokenStatement(transmitter.expect(ExpectParamsBuilder.tokenOf(Tokens.ASSIGN_ID)), getContext());
-            right = new RightSideInMethodCallExpression(getContext());
-            exceptions.addAll(right.process());
-            isAssignment = true;
+            var new_right = new RightSideInMethodCallExpression(getContext());
+            exceptions.addAll(new_right.process());
+            right = new_right;
             return true;
         }
         return super.handleToken(token);
