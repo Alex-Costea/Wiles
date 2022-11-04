@@ -11,19 +11,14 @@ import wiles.parser.enums.ExpectNext;
 import wiles.parser.enums.SyntaxType;
 import wiles.parser.exceptions.AbstractCompilationException;
 import wiles.parser.exceptions.UnexpectedEndException;
-import wiles.parser.exceptions.UnexpectedTokenException;
 import wiles.parser.services.PrecedenceProcessor;
-import wiles.parser.statements.AbstractStatement;
-import wiles.parser.statements.ListStatement;
-import wiles.parser.statements.MethodCallStatement;
-import wiles.parser.statements.TokenStatement;
+import wiles.parser.statements.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static wiles.parser.builders.ExpectParamsBuilder.tokenOf;
-import static wiles.parser.constants.ErrorMessages.UNEXPECTED_CLOSING_BRACKET_ERROR;
 import static wiles.parser.constants.Predicates.*;
 import static wiles.parser.constants.Tokens.*;
 
@@ -34,7 +29,7 @@ public abstract class AbstractExpression extends AbstractStatement {
     protected TokenStatement operation = null;
     protected AbstractStatement right = null;
     private final StatementFactory SpecialStatementFactory = new StatementFactory().setContext(getContext())
-            .addType(ListStatement.class);
+            .addType(ListStatement.class).addType(MethodStatement.class);
 
     protected AbstractExpression(@NotNull Context context) {
         super(context);
@@ -58,9 +53,7 @@ public abstract class AbstractExpression extends AbstractStatement {
     }
 
     protected boolean handleToken(@NotNull Token token) throws AbstractCompilationException {
-        if (token.getContent().equals(PAREN_END_ID))
-            throw new UnexpectedTokenException(UNEXPECTED_CLOSING_BRACKET_ERROR, token.getLocation());
-        return STATEMENT_START_KEYWORDS.contains(token.getContent());
+        return NEW_STATEMENT_START_KEYWORDS.contains(token.getContent());
     }
 
     protected void setComponents(@NotNull PrecedenceProcessor precedenceProcessor)
@@ -102,7 +95,8 @@ public abstract class AbstractExpression extends AbstractStatement {
 
             //Decide what token to expect first
             @NotNull ExpectNext expectNext;
-            if (IS_LITERAL.test(content) || PARENS.contains(content) || STARTING_OPERATORS.contains(content))
+            if (IS_LITERAL.test(content) || PARENS.contains(content)
+                    || STARTING_OPERATORS.contains(content) || content.equals(METHOD_ID))
                 expectNext = ExpectNext.TOKEN;
             else
                 expectNext = ExpectNext.OPERATOR;
@@ -112,9 +106,11 @@ public abstract class AbstractExpression extends AbstractStatement {
                 //It finalizes on keywords that correspond to the start of the next statement for better error messages
                 if ((expectNext == ExpectNext.OPERATOR)) {
                     maybeTempToken = transmitter.expectMaybe(FINALIZE_EXPRESSION);
-                    if (maybeTempToken.isPresent())
-                        if (handleToken(maybeTempToken.get()))
+                    if (maybeTempToken.isPresent()) {
+                        mainCurrentToken = maybeTempToken.get();
+                        if (handleToken(mainCurrentToken))
                             break;
+                    }
                 }
 
                 //Handle method calls and inner expressions
@@ -136,21 +132,15 @@ public abstract class AbstractExpression extends AbstractStatement {
                     continue;
                 }
 
-                //Handle closing brackets token
-                maybeTempToken = transmitter.expectMaybe(ExpectParamsBuilder.tokenOf(PAREN_END_ID));
-                if (maybeTempToken.isPresent()) {
-                    mainCurrentToken = maybeTempToken.get();
-                    if (handleToken(mainCurrentToken))
-                        break;
-                }
-
                 //Special statements
                 if (expectNext == ExpectNext.TOKEN) {
                     Optional<AbstractStatement> maybeStatement = handleSpecialStatements();
                     if (maybeStatement.isPresent()) {
                         AbstractStatement statement = maybeStatement.get();
-                        exceptions.addAll(statement.process());
+                        statement.process().throwFirstIfExists();
                         precedenceProcessor.add(maybeStatement.get());
+                        if(statement instanceof MethodStatement)
+                            transmitter.expectMaybe(EXPECT_TERMINATOR);
                         expectNext = ExpectNext.OPERATOR;
                         continue;
                     }
