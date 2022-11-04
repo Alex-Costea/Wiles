@@ -33,6 +33,8 @@ public abstract class AbstractExpression extends AbstractStatement {
     protected AbstractStatement left = null;
     protected TokenStatement operation = null;
     protected AbstractStatement right = null;
+    private final StatementFactory SpecialStatementFactory = new StatementFactory().setContext(getContext())
+            .addType(ListStatement.class);
 
     protected AbstractExpression(@NotNull Context context) {
         super(context);
@@ -79,9 +81,7 @@ public abstract class AbstractExpression extends AbstractStatement {
 
     protected Optional<AbstractStatement> handleSpecialStatements(){
         try {
-            return Optional.of(new StatementFactory().setContext(getContext())
-                    .addType(ListStatement.class)
-                    .create());
+            return Optional.of(SpecialStatementFactory.create());
         } catch (AbstractCompilationException e) {
             return Optional.empty();
         }
