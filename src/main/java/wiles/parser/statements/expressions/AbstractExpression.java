@@ -79,6 +79,7 @@ public abstract class AbstractExpression extends AbstractStatement {
         //Nothing to check by default
     }
 
+    //TODO: read list literals and function declarations properly
     @Override
     public @NotNull CompilationExceptionsCollection process() {
         try {
