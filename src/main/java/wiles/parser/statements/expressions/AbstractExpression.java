@@ -33,6 +33,7 @@ public abstract class AbstractExpression extends AbstractStatement {
     private final StatementFactory SpecialStatementFactory = new StatementFactory().setContext(getContext())
             .addType(ListStatement.class);
     protected boolean isInner = false;
+    protected boolean handledEOL = false;
 
     protected AbstractExpression(@NotNull Context context) {
         super(context);
@@ -77,12 +78,16 @@ public abstract class AbstractExpression extends AbstractStatement {
 
     protected Optional<AbstractStatement> handleSpecialStatements(){
         try {
-            if(isInner)
-                SpecialStatementFactory.addType(MethodStatement.class);
+            SpecialStatementFactory.addType(MethodStatement.class);
             return Optional.of(SpecialStatementFactory.create());
         } catch (AbstractCompilationException e) {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public void handleEndOfStatement() {
+        //no operation
     }
 
     protected void checkValid() throws AbstractCompilationException {
@@ -145,8 +150,17 @@ public abstract class AbstractExpression extends AbstractStatement {
                         statement.process().throwFirstIfExists();
                         precedenceProcessor.add(maybeStatement.get());
                         expectNext = ExpectNext.OPERATOR;
-                        if(statement instanceof MethodStatement && !isInner)
-                            transmitter.expect(EXPECT_TERMINATOR);
+                        if(statement instanceof MethodStatement) {
+                            handledEOL = true;
+                            if(!isInner) {
+                                try
+                                {
+                                    transmitter.expect(EXPECT_TERMINATOR);
+                                }
+                                catch(UnexpectedEndException ignored) {}
+                                break;
+                            }
+                        }
                         continue;
                     }
                 }
@@ -184,6 +198,8 @@ public abstract class AbstractExpression extends AbstractStatement {
                 throw new UnexpectedEndException(UNEXPECTED_OPENING_BRACKET_ERROR, transmitter.getLastLocation());
             setComponents(precedenceProcessor);
             checkValid();
+            if(!handledEOL && this instanceof TopLevelExpression)
+                super.handleEndOfStatement();
         } catch (AbstractCompilationException ex) {
             exceptions.add(ex);
         }

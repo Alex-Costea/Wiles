@@ -69,7 +69,6 @@ class CodeBlockStatement(context: Context) : AbstractStatement(context) {
             if(!(doExpression && context.isWithinInnerExpression))
                 statement.handleEndOfStatement()
         }
-        catch(ignored : UnexpectedEndException){}
         catch(ex : AbstractCompilationException)
         {
             readRestOfLine()

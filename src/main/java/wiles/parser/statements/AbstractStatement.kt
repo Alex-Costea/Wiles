@@ -7,6 +7,7 @@ import wiles.parser.builders.Context
 import wiles.parser.constants.Predicates.EXPECT_TERMINATOR_DONT_REMOVE
 import wiles.parser.data.CompilationExceptionsCollection
 import wiles.parser.enums.SyntaxType
+import wiles.parser.exceptions.UnexpectedEndException
 
 @JsonPropertyOrder("compiledSuccessfully", "name", "type", "components")
 abstract class AbstractStatement(val context: Context)
@@ -29,7 +30,11 @@ abstract class AbstractStatement(val context: Context)
 
     open fun handleEndOfStatement()
     {
-        transmitter.expect(EXPECT_TERMINATOR_DONT_REMOVE)
+        try
+        {
+            transmitter.expect(EXPECT_TERMINATOR_DONT_REMOVE)
+        }
+        catch (ignored : UnexpectedEndException){}
     }
 
     override fun toString(): String {

@@ -55,9 +55,10 @@ public class InsideMethodCallExpression extends AbstractExpression{
             return true;
         if (token.getContent().equals(Tokens.ASSIGN_ID)) {
             operation = new TokenStatement(transmitter.expect(ExpectParamsBuilder.tokenOf(Tokens.ASSIGN_ID)), getContext());
-            right = new RightSideInMethodCallExpression(getContext());
-            exceptions.addAll(right.process());
-            isAssignment = true;
+            var new_right = new RightSideInMethodCallExpression(getContext());
+            exceptions.addAll(new_right.process());
+            handledEOL = new_right.handledEOL;
+            right = new_right;
             return true;
         }
         return super.handleToken(token);
