@@ -3,6 +3,7 @@ package wiles.parser.statements;
 import wiles.parser.builders.Context;
 import wiles.parser.data.CompilationExceptionsCollection;
 import wiles.parser.enums.SyntaxType;
+import wiles.parser.enums.WhenRemoveToken;
 import wiles.parser.exceptions.AbstractCompilationException;
 import wiles.parser.statements.expressions.InsideMethodCallExpression;
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +38,7 @@ public class MethodCallStatement extends AbstractStatement{
         var exceptions = new CompilationExceptionsCollection();
         try
         {
-            while (transmitter.expectMaybe(tokenOf(PAREN_END_ID)).isEmpty()) {
+            while (transmitter.expectMaybe(tokenOf(PAREN_END_ID).removeWhen(WhenRemoveToken.Never)).isEmpty()) {
                 InsideMethodCallExpression newComp = new InsideMethodCallExpression(getContext());
                 exceptions.addAll(newComp.process());
                 components.add(newComp);

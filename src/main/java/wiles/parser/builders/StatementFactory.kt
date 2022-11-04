@@ -5,7 +5,7 @@ import wiles.parser.constants.ErrorMessages.INTERNAL_ERROR
 import wiles.parser.constants.ErrorMessages.INVALID_STATEMENT_ERROR
 import wiles.parser.constants.ErrorMessages.NOT_YET_IMPLEMENTED_ERROR
 import wiles.parser.constants.Predicates.ANYTHING
-import wiles.parser.constants.Predicates.START_OF_EXPRESSION
+import wiles.parser.constants.Predicates.START_OF_EXPRESSION_NO_CODE_BLOCK
 import wiles.parser.constants.Tokens.BRACKET_START_ID
 import wiles.parser.constants.Tokens.BREAK_ID
 import wiles.parser.constants.Tokens.CONTINUE_ID
@@ -21,6 +21,8 @@ import wiles.parser.exceptions.AbstractCompilationException
 import wiles.parser.exceptions.UnexpectedTokenException
 import wiles.parser.services.TokenTransmitter
 import wiles.parser.statements.*
+import wiles.parser.statements.expressions.DefaultExpression
+import wiles.parser.statements.expressions.TopLevelExpression
 import java.util.function.Function
 
 class StatementFactory {
@@ -66,21 +68,21 @@ class StatementFactory {
             HashMap()
 
         init {
-            params[wiles.parser.statements.expressions.TopLevelExpression::class.java] = START_OF_EXPRESSION
-            params[wiles.parser.statements.expressions.DefaultExpression::class.java] = START_OF_EXPRESSION
+            params[TopLevelExpression::class.java] = START_OF_EXPRESSION_NO_CODE_BLOCK
+            params[DefaultExpression::class.java] = START_OF_EXPRESSION_NO_CODE_BLOCK
             params[DeclarationStatement::class.java] = tokenOf(DECLARE_ID)
             params[MethodStatement::class.java] = tokenOf(METHOD_ID)
+                .or(DO_ID).or(START_BLOCK_ID).removeWhen(WhenRemoveToken.Never)
             params[ReturnStatement::class.java] = tokenOf(RETURN_ID)
             params[WhenStatement::class.java] = tokenOf(WHEN_ID)
             params[WhileStatement::class.java] = tokenOf(WHILE_ID)
             params[BreakStatement::class.java] = tokenOf(BREAK_ID)
             params[ContinueStatement::class.java] = tokenOf(CONTINUE_ID)
-            params[CodeBlockStatement::class.java] = tokenOf(DO_ID).or(START_BLOCK_ID).removeWhen(WhenRemoveToken.Never)
             params[ListStatement::class.java] = tokenOf(BRACKET_START_ID)
-            createObject[wiles.parser.statements.expressions.TopLevelExpression::class.java] =
-                Function { context: Context -> wiles.parser.statements.expressions.TopLevelExpression(context) }
-            createObject[wiles.parser.statements.expressions.DefaultExpression::class.java] =
-                Function { context: Context -> wiles.parser.statements.expressions.DefaultExpression(context) }
+            createObject[TopLevelExpression::class.java] =
+                Function { context: Context -> TopLevelExpression(context) }
+            createObject[DefaultExpression::class.java] =
+                Function { context: Context -> DefaultExpression(context) }
             createObject[DeclarationStatement::class.java] =
                 Function { context: Context -> DeclarationStatement(context) }
             createObject[MethodStatement::class.java] =
@@ -95,8 +97,6 @@ class StatementFactory {
                 Function { context: Context -> BreakStatement(context) }
             createObject[ContinueStatement::class.java] =
                 Function { context: Context -> ContinueStatement(context) }
-            createObject[CodeBlockStatement::class.java] =
-                Function { context : Context -> CodeBlockStatement(context) }
             createObject[ListStatement::class.java] =
                 Function { context : Context -> ListStatement(context) }
         }

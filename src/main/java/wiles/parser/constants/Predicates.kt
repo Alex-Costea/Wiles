@@ -6,12 +6,14 @@ import wiles.parser.constants.ErrorMessages.INTERNAL_ERROR
 import wiles.parser.constants.Tokens.ASSIGN_ID
 import wiles.parser.constants.Tokens.BRACKET_END_ID
 import wiles.parser.constants.Tokens.BRACKET_START_ID
+import wiles.parser.constants.Tokens.DO_ID
 import wiles.parser.constants.Tokens.METHOD_ID
 import wiles.parser.constants.Tokens.NEWLINE_ID
 import wiles.parser.constants.Tokens.PAREN_START_ID
 import wiles.parser.constants.Tokens.SEPARATOR_ID
 import wiles.parser.constants.Tokens.STARTING_OPERATORS
 import wiles.parser.constants.Tokens.NEW_STATEMENT_START_KEYWORDS
+import wiles.parser.constants.Tokens.START_BLOCK_ID
 import wiles.parser.constants.Tokens.TERMINATORS
 import wiles.parser.enums.WhenRemoveToken
 import java.util.function.Predicate
@@ -45,8 +47,14 @@ object Predicates {
         .withErrorMessage(INTERNAL_ERROR).removeWhen(WhenRemoveToken.WhenFound).freeze()
 
     @JvmField
-    val START_OF_EXPRESSION =tokenOf(IS_CONTAINED_IN(STARTING_OPERATORS)).or(IS_LITERAL).or(PAREN_START_ID)
-        .or(BRACKET_START_ID).or(METHOD_ID)
+    val START_OF_EXPRESSION =tokenOf(IS_CONTAINED_IN(STARTING_OPERATORS)).or(IS_LITERAL)
+        .or(PAREN_START_ID).or(BRACKET_START_ID).or(METHOD_ID).or(DO_ID).or(START_BLOCK_ID)
+        .withErrorMessage(EXPRESSION_EXPECTED_ERROR).removeWhen(WhenRemoveToken.Never).freeze()
+
+
+    @JvmField
+    val START_OF_EXPRESSION_NO_CODE_BLOCK = tokenOf(IS_CONTAINED_IN(STARTING_OPERATORS))
+        .or(IS_LITERAL).or(PAREN_START_ID).or(BRACKET_START_ID).or(METHOD_ID)
         .withErrorMessage(EXPRESSION_EXPECTED_ERROR).removeWhen(WhenRemoveToken.Never).freeze()
 
     @JvmField

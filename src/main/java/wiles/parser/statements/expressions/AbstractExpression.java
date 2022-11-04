@@ -99,8 +99,8 @@ public abstract class AbstractExpression extends AbstractStatement {
 
             //Decide what token to expect first
             @NotNull ExpectNext expectNext;
-            if (IS_LITERAL.test(content) || PARENS.contains(content)
-                    || STARTING_OPERATORS.contains(content) || content.equals(METHOD_ID))
+            if (IS_LITERAL.test(content) || PARENS.contains(content) || content.equals(DO_ID) ||
+                    content.equals(START_BLOCK_ID) || STARTING_OPERATORS.contains(content) || content.equals(METHOD_ID))
                 expectNext = ExpectNext.TOKEN;
             else
                 expectNext = ExpectNext.OPERATOR;

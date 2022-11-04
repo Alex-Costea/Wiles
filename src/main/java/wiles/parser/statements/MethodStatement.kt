@@ -3,11 +3,14 @@ package wiles.parser.statements
 import wiles.parser.builders.Context
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.constants.Predicates.IS_IDENTIFIER
+import wiles.parser.constants.Tokens.DO_ID
+import wiles.parser.constants.Tokens.METHOD_ID
 import wiles.parser.constants.Tokens.NOTHING_ID
 import wiles.parser.constants.Tokens.RIGHT_ARROW_ID
 import wiles.parser.constants.Tokens.PAREN_END_ID
 import wiles.parser.constants.Tokens.PAREN_START_ID
 import wiles.parser.constants.Tokens.SEPARATOR_ID
+import wiles.parser.constants.Tokens.START_BLOCK_ID
 import wiles.parser.data.CompilationExceptionsCollection
 import wiles.parser.enums.SyntaxType
 import wiles.parser.enums.WhenRemoveToken
@@ -39,24 +42,27 @@ class MethodStatement(oldContext : Context) : AbstractStatement(oldContext.setWi
 
     override fun process(): CompilationExceptionsCollection {
         try {
-            if(transmitter.expectMaybe(tokenOf(PAREN_START_ID)).isPresent)
-            {
-                //TODO: args param
-                while (transmitter.expectMaybe(tokenOf(IS_IDENTIFIER).removeWhen(WhenRemoveToken.Never)).isPresent) {
-                    val parameterStatement = ParameterStatement(context)
-                    exceptions.addAll(parameterStatement.process())
-                    parameters.add(parameterStatement)
-                    if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break
+            if(transmitter.expectMaybe(tokenOf(DO_ID).or(START_BLOCK_ID).removeWhen(WhenRemoveToken.Never)).isEmpty) {
+                transmitter.expect(tokenOf(METHOD_ID))
+
+                //Params
+                if (transmitter.expectMaybe(tokenOf(PAREN_START_ID)).isPresent) {
+                    //TODO: args param
+                    while(transmitter.expectMaybe(tokenOf(IS_IDENTIFIER).removeWhen(WhenRemoveToken.Never)).isPresent) {
+                        val parameterStatement = ParameterStatement(context)
+                        exceptions.addAll(parameterStatement.process())
+                        parameters.add(parameterStatement)
+                        if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break
+                    }
+                    transmitter.expect(tokenOf(PAREN_END_ID))
                 }
-                transmitter.expect(tokenOf(PAREN_END_ID))
-            }
 
-            //Return type
-            if (transmitter.expectMaybe(tokenOf(RIGHT_ARROW_ID)).isPresent) {
-                returnType = TypeDefinitionStatement(context)
-                exceptions.addAll(returnType.process())
+                //Return type
+                if (transmitter.expectMaybe(tokenOf(RIGHT_ARROW_ID)).isPresent) {
+                    returnType = TypeDefinitionStatement(context)
+                    exceptions.addAll(returnType.process())
+                }
             }
-
             //Read body
             exceptions.addAll(methodBody.process())
         } catch (ex: AbstractCompilationException) {
