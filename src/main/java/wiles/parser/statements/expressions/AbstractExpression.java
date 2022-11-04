@@ -29,7 +29,8 @@ public abstract class AbstractExpression extends AbstractStatement {
     protected TokenStatement operation = null;
     protected AbstractStatement right = null;
     private final StatementFactory SpecialStatementFactory = new StatementFactory().setContext(getContext())
-            .addType(ListStatement.class).addType(MethodStatement.class);
+            .addType(ListStatement.class);
+    protected boolean isInner = false;
 
     protected AbstractExpression(@NotNull Context context) {
         super(context);
@@ -74,6 +75,8 @@ public abstract class AbstractExpression extends AbstractStatement {
 
     protected Optional<AbstractStatement> handleSpecialStatements(){
         try {
+            if(isInner)
+                SpecialStatementFactory.addType(MethodStatement.class);
             return Optional.of(SpecialStatementFactory.create());
         } catch (AbstractCompilationException e) {
             return Optional.empty();
@@ -139,9 +142,8 @@ public abstract class AbstractExpression extends AbstractStatement {
                         AbstractStatement statement = maybeStatement.get();
                         statement.process().throwFirstIfExists();
                         precedenceProcessor.add(maybeStatement.get());
-                        if(statement instanceof MethodStatement)
-                            transmitter.expectMaybe(EXPECT_TERMINATOR);
                         expectNext = ExpectNext.OPERATOR;
+                        transmitter.expect(EXPECT_TERMINATOR);
                         continue;
                     }
                 }

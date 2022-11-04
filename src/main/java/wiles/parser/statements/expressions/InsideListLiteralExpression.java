@@ -13,6 +13,10 @@ public class InsideListLiteralExpression extends AbstractExpression {
         super(context);
     }
 
+    {
+        isInner = true;
+    }
+
     @Override
     protected boolean handleToken(@NotNull Token token) throws AbstractCompilationException {
         if(token.getContent().equals(SEPARATOR_ID) || token.getContent().equals(BRACKET_END_ID))

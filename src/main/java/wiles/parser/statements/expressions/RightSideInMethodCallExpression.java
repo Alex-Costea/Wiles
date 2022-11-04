@@ -7,6 +7,9 @@ import org.jetbrains.annotations.NotNull;
 import wiles.parser.constants.Tokens;
 
 public class RightSideInMethodCallExpression extends AbstractExpression {
+    {
+        isInner = true;
+    }
     public RightSideInMethodCallExpression(@NotNull Context context) {
         super(context);
     }

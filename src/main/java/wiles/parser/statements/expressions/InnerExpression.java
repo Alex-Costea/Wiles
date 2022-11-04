@@ -15,6 +15,10 @@ public class InnerExpression extends AbstractExpression {
         super(context);
     }
 
+    {
+        isInner = true;
+    }
+
     @Override
     protected boolean handleToken(@NotNull Token token) throws TokenExpectedException, UnexpectedEndException {
         if(token.getContent().equals(PAREN_END_ID)) {

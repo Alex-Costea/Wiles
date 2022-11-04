@@ -23,6 +23,7 @@ class DeclarationStatement(context: Context) : AbstractStatement(context) {
     companion object
     {
         val rightExpressionFactory = StatementFactory().addType(DefaultExpression::class.java)
+            .addType(MethodStatement::class.java)
     }
 
     override val type: SyntaxType

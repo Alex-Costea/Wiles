@@ -4,13 +4,9 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import wiles.parser.builders.Context
-import wiles.parser.builders.ExpectParamsBuilder
-import wiles.parser.constants.ErrorMessages
-import wiles.parser.constants.Predicates
-import wiles.parser.constants.Tokens
+import wiles.parser.constants.Predicates.EXPECT_TERMINATOR_DONT_REMOVE
 import wiles.parser.data.CompilationExceptionsCollection
 import wiles.parser.enums.SyntaxType
-import wiles.parser.enums.WhenRemoveToken
 
 @JsonPropertyOrder("compiledSuccessfully", "name", "type", "components")
 abstract class AbstractStatement(val context: Context)
@@ -33,9 +29,7 @@ abstract class AbstractStatement(val context: Context)
 
     open fun handleEndOfStatement()
     {
-        transmitter.expect(
-            ExpectParamsBuilder.tokenOf(Predicates.IS_CONTAINED_IN(Tokens.TERMINATORS)).dontIgnoreNewLine()
-            .withErrorMessage(ErrorMessages.END_OF_STATEMENT_EXPECTED_ERROR).removeWhen(WhenRemoveToken.Never))
+        transmitter.expect(EXPECT_TERMINATOR_DONT_REMOVE)
     }
 
     override fun toString(): String {

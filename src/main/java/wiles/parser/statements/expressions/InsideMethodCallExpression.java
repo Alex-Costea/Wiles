@@ -15,6 +15,10 @@ import wiles.parser.constants.Tokens;
 
 public class InsideMethodCallExpression extends AbstractExpression{
 
+    {
+        isInner = true;
+    }
+
     protected boolean isAssignment=false;
     private boolean lastExpression=false;
 
