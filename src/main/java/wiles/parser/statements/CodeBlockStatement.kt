@@ -94,7 +94,10 @@ class CodeBlockStatement(context: Context) : AbstractStatement(context) {
             else {
                 if (!context.isOutermost) {
                     transmitter.expect(tokenOf(START_BLOCK_ID))
-                    transmitter.expect(EXPECT_TERMINATOR)
+                    try {
+                        transmitter.expect(EXPECT_TERMINATOR)
+                    }
+                    catch(_ : UnexpectedEndException){}
                 }
                 while (!transmitter.tokensExhausted()) {
                     if (!context.isOutermost && transmitter.expectMaybe(tokenOf(END_BLOCK_ID)

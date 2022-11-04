@@ -147,9 +147,11 @@ public abstract class AbstractExpression extends AbstractStatement {
                     Optional<AbstractStatement> maybeStatement = handleSpecialStatements();
                     if (maybeStatement.isPresent()) {
                         AbstractStatement statement = maybeStatement.get();
-                        statement.process().throwFirstIfExists();
+                        exceptions.addAll(statement.process());
                         precedenceProcessor.add(maybeStatement.get());
                         expectNext = ExpectNext.OPERATOR;
+                        if(exceptions.size()>0)
+                            break;
                         if(statement instanceof MethodStatement) {
                             handledEOL = true;
                             if(!isInner) {
