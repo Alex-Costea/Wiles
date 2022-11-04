@@ -12,6 +12,7 @@ import wiles.parser.constants.Tokens.TYPEDEF_ID
 import wiles.parser.data.CompilationExceptionsCollection
 import wiles.parser.enums.SyntaxType
 import wiles.parser.exceptions.AbstractCompilationException
+import wiles.parser.statements.expressions.DefaultExpression
 
 class DeclarationStatement(context: Context) : AbstractStatement(context) {
     private var left: AbstractStatement? = null
@@ -21,9 +22,7 @@ class DeclarationStatement(context: Context) : AbstractStatement(context) {
 
     companion object
     {
-        val rightExpressionFactory = StatementFactory()
-            .addType(wiles.parser.statements.expressions.DefaultExpression::class.java)
-            .addType(MethodStatement::class.java)
+        val rightExpressionFactory = StatementFactory().addType(DefaultExpression::class.java)
     }
 
     override val type: SyntaxType
