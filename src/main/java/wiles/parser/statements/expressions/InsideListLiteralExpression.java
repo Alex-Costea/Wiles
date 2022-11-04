@@ -9,14 +9,13 @@ import static wiles.parser.constants.Tokens.BRACKET_END_ID;
 import static wiles.parser.constants.Tokens.SEPARATOR_ID;
 
 public class InsideListLiteralExpression extends AbstractExpression {
-    public InsideListLiteralExpression(@NotNull Context context) {
-        super(context);
+    public InsideListLiteralExpression(@NotNull Context oldContext) {
+        super(oldContext.setWithinInnerExpression(true));
     }
 
     {
         isInner = true;
     }
-
     @Override
     protected boolean handleToken(@NotNull Token token) throws AbstractCompilationException {
         if(token.getContent().equals(SEPARATOR_ID) || token.getContent().equals(BRACKET_END_ID))

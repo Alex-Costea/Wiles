@@ -16,17 +16,18 @@ import wiles.parser.enums.SyntaxType
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.exceptions.AbstractCompilationException
 import wiles.parser.exceptions.UnexpectedEndException
+import wiles.parser.statements.expressions.TopLevelExpression
 
 class CodeBlockStatement(context: Context) : AbstractStatement(context) {
     companion object{
         val statementFactory = StatementFactory()
-            .addType(wiles.parser.statements.expressions.TopLevelExpression::class.java)
+            .addType(TopLevelExpression::class.java)
             .addType(DeclarationStatement::class.java)
             .addType(WhenStatement::class.java)
             .addType(WhileStatement::class.java)
-            .addType(wiles.parser.statements.BreakStatement::class.java)
+            .addType(BreakStatement::class.java)
             .addType(ReturnStatement::class.java)
-            .addType(wiles.parser.statements.ContinueStatement::class.java)
+            .addType(ContinueStatement::class.java)
     }
 
     private val components: MutableList<AbstractStatement> = ArrayList()
@@ -43,11 +44,14 @@ class CodeBlockStatement(context: Context) : AbstractStatement(context) {
         return components
     }
 
-    private fun readOneStatement() {
+    private fun readOneStatement(doExpression : Boolean = false) {
         val statement : AbstractStatement
         try
         {
-            statement = statementFactory.setContext(context.setOutermost(false)).create()
+            var newContext = context.setOutermost(false)
+            if(!doExpression)
+                newContext = newContext.setWithinInnerExpression(false)
+            statement = statementFactory.setContext(newContext).create()
         }
         catch (ex : AbstractCompilationException)
         {
@@ -62,7 +66,8 @@ class CodeBlockStatement(context: Context) : AbstractStatement(context) {
             components.add(statement)
         }
         else try {
-            statement.handleEndOfStatement()
+            if(!(doExpression && context.isWithinInnerExpression))
+                statement.handleEndOfStatement()
         }
         catch(ignored : UnexpectedEndException){}
         catch(ex : AbstractCompilationException)
@@ -85,7 +90,7 @@ class CodeBlockStatement(context: Context) : AbstractStatement(context) {
             if (!context.isOutermost && transmitter.expectMaybe(tokenOf(DO_ID)).isPresent) {
                 while(transmitter.expectMaybe(EXPECT_TERMINATOR).isPresent)
                     Unit
-                readOneStatement()
+                readOneStatement(true)
             }
             else {
                 if (!context.isOutermost) {

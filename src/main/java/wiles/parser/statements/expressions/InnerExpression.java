@@ -11,8 +11,8 @@ import static wiles.parser.constants.ErrorMessages.INTERNAL_ERROR;
 import static wiles.parser.constants.Tokens.PAREN_END_ID;
 
 public class InnerExpression extends AbstractExpression {
-    public InnerExpression(@NotNull Context context) {
-        super(context);
+    public InnerExpression(@NotNull Context oldContext) {
+        super(oldContext.setWithinInnerExpression(true));
     }
 
     {

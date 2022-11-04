@@ -10,6 +10,9 @@ class Context(val transmitter: TokenTransmitter) {
     var isWithinLoop = false
     private set
 
+    var isWithinInnerExpression = false
+        private set
+
     fun setOutermost(to:Boolean) : Context
     {
         if(isOutermost == to)
@@ -37,7 +40,18 @@ class Context(val transmitter: TokenTransmitter) {
         return x
     }
 
+    fun setWithinInnerExpression(to:Boolean) : Context
+    {
+        if(isWithinInnerExpression == to)
+            return this
+        val x = clone()
+        x.isWithinInnerExpression = to
+        return x
+    }
+
     private fun clone(): Context {
-        return Context(transmitter).setOutermost(isOutermost).setWithinLoop(isWithinLoop).setWithinMethod(isWithinMethod)
+        return Context(transmitter)
+            .setOutermost(isOutermost).setWithinLoop(isWithinLoop)
+            .setWithinMethod(isWithinMethod).setWithinInnerExpression(isWithinInnerExpression)
     }
 }

@@ -23,8 +23,7 @@ class ListStatement(context: Context) : AbstractStatement(context) {
         try{
             while(transmitter.expectMaybe(tokenOf(BRACKET_END_ID).removeWhen(WhenRemoveToken.Never)).isEmpty)
             {
-                val newComp =
-                    InsideListLiteralExpression(context)
+                val newComp = InsideListLiteralExpression(context)
                 newComp.process().throwFirstIfExists()
                 components.add(newComp)
                 if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break

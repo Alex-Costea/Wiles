@@ -7,11 +7,12 @@ import org.jetbrains.annotations.NotNull;
 import wiles.parser.constants.Tokens;
 
 public class RightSideInMethodCallExpression extends AbstractExpression {
+    public RightSideInMethodCallExpression(@NotNull Context oldContext) {
+        super(oldContext.setWithinInnerExpression(true));
+    }
+
     {
         isInner = true;
-    }
-    public RightSideInMethodCallExpression(@NotNull Context context) {
-        super(context);
     }
 
     @Override

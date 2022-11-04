@@ -143,7 +143,8 @@ public abstract class AbstractExpression extends AbstractStatement {
                         statement.process().throwFirstIfExists();
                         precedenceProcessor.add(maybeStatement.get());
                         expectNext = ExpectNext.OPERATOR;
-                        transmitter.expect(EXPECT_TERMINATOR);
+                        if(statement instanceof MethodStatement && !getContext().isWithinInnerExpression())
+                            transmitter.expect(EXPECT_TERMINATOR);
                         continue;
                     }
                 }

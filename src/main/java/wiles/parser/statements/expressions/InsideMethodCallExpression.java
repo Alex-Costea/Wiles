@@ -15,10 +15,6 @@ import wiles.parser.constants.Tokens;
 
 public class InsideMethodCallExpression extends AbstractExpression{
 
-    {
-        isInner = true;
-    }
-
     protected boolean isAssignment=false;
     private boolean lastExpression=false;
 
@@ -26,8 +22,12 @@ public class InsideMethodCallExpression extends AbstractExpression{
         return lastExpression;
     }
 
-    public InsideMethodCallExpression(@NotNull Context context) {
-        super(context);
+    public InsideMethodCallExpression(@NotNull Context oldContext) {
+        super(oldContext.setWithinInnerExpression(true));
+    }
+
+    {
+        isInner = true;
     }
 
     protected void setComponents(@NotNull PrecedenceProcessor precedenceProcessor) {
