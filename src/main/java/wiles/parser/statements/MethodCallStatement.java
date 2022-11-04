@@ -6,10 +6,12 @@ import wiles.parser.enums.SyntaxType;
 import wiles.parser.exceptions.AbstractCompilationException;
 import wiles.parser.statements.expressions.InsideMethodCallExpression;
 import org.jetbrains.annotations.NotNull;
-import wiles.parser.builders.ExpectParamsBuilder;
-import wiles.parser.constants.Tokens;
 
 import java.util.ArrayList;
+
+import static wiles.parser.builders.ExpectParamsBuilder.tokenOf;
+import static wiles.parser.constants.Tokens.PAREN_END_ID;
+import static wiles.parser.constants.Tokens.SEPARATOR_ID;
 
 public class MethodCallStatement extends AbstractStatement{
     ArrayList<AbstractStatement> components = new ArrayList<>();
@@ -35,15 +37,15 @@ public class MethodCallStatement extends AbstractStatement{
         var exceptions = new CompilationExceptionsCollection();
         try
         {
-            while (transmitter.expectMaybe(ExpectParamsBuilder.tokenOf(Tokens.PAREN_END_ID)).isEmpty()) {
+            while (transmitter.expectMaybe(tokenOf(PAREN_END_ID)).isEmpty()) {
                 InsideMethodCallExpression newComp = new InsideMethodCallExpression(getContext());
                 exceptions.addAll(newComp.process());
                 components.add(newComp);
                 if (!newComp.isLastExpression())
-                    transmitter.expect(ExpectParamsBuilder.tokenOf(Tokens.SEPARATOR_ID));
+                    transmitter.expect(tokenOf(SEPARATOR_ID));
                 else break;
             }
-
+            transmitter.expect(tokenOf(PAREN_END_ID));
         }
         catch (AbstractCompilationException ex)
         {
