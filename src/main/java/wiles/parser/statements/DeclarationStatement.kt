@@ -27,11 +27,6 @@ class DeclarationStatement(context: Context) : AbstractStatement(context) {
             x.add(0,typeStatement!!)
         return x
     }
-
-    override fun handleEndOfStatement() {
-        (right?.handleEndOfStatement())?:super.handleEndOfStatement()
-    }
-
     override fun process(): CompilationExceptionsCollection {
         try {
             if(transmitter.expectMaybe(tokenOf(MUTABLE_ID)).isPresent)

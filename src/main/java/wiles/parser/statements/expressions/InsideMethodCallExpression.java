@@ -57,7 +57,6 @@ public class InsideMethodCallExpression extends AbstractExpression{
             operation = new TokenStatement(transmitter.expect(ExpectParamsBuilder.tokenOf(Tokens.ASSIGN_ID)), getContext());
             var new_right = new RightSideInMethodCallExpression(getContext());
             exceptions.addAll(new_right.process());
-            handledEOL = new_right.handledEOL;
             right = new_right;
             return true;
         }

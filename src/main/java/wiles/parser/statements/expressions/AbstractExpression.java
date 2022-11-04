@@ -33,7 +33,6 @@ public abstract class AbstractExpression extends AbstractStatement {
     private final StatementFactory SpecialStatementFactory = new StatementFactory().setContext(getContext())
             .addType(ListStatement.class);
     protected boolean isInner = false;
-    protected boolean handledEOL = false;
 
     protected AbstractExpression(@NotNull Context context) {
         super(context);
@@ -83,11 +82,6 @@ public abstract class AbstractExpression extends AbstractStatement {
         } catch (AbstractCompilationException e) {
             return Optional.empty();
         }
-    }
-
-    @Override
-    public void handleEndOfStatement() {
-        //no operation
     }
 
     protected void checkValid() throws AbstractCompilationException {
@@ -153,11 +147,10 @@ public abstract class AbstractExpression extends AbstractStatement {
                         if(exceptions.size()>0)
                             break;
                         if(statement instanceof MethodStatement) {
-                            handledEOL = true;
                             if(!isInner) {
                                 try
                                 {
-                                    transmitter.expect(EXPECT_TERMINATOR);
+                                    transmitter.expect(EXPECT_TERMINATOR_DONT_REMOVE);
                                 }
                                 catch(UnexpectedEndException ignored) {}
                                 break;
@@ -200,8 +193,6 @@ public abstract class AbstractExpression extends AbstractStatement {
                 throw new UnexpectedEndException(UNEXPECTED_OPENING_BRACKET_ERROR, transmitter.getLastLocation());
             setComponents(precedenceProcessor);
             checkValid();
-            if(!handledEOL && this instanceof TopLevelExpression)
-                super.handleEndOfStatement();
         } catch (AbstractCompilationException ex) {
             exceptions.add(ex);
         }

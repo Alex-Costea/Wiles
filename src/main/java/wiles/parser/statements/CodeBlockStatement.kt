@@ -109,7 +109,8 @@ class CodeBlockStatement(context: Context) : AbstractStatement(context) {
                 if (!context.isOutermost) {
                     transmitter.expect(tokenOf(END_BLOCK_ID))
                     try {
-                        transmitter.expect(EXPECT_TERMINATOR_DONT_REMOVE)
+                        if(!context.isWithinInnerExpression)
+                            transmitter.expect(EXPECT_TERMINATOR_DONT_REMOVE)
                     }
                     catch(_: UnexpectedEndException) {}
                 }

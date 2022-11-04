@@ -54,7 +54,6 @@ public class TopLevelExpression extends AbstractExpression {
             operation = new TokenStatement(transmitter.expect(tokenOf(ASSIGN_ID)), getContext());
             var new_right = new DefaultExpression(getContext());
             exceptions.addAll(new_right.process());
-            handledEOL = new_right.handledEOL;
             right = new_right;
             isAssignment = true;
             return true;

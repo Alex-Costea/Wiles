@@ -16,10 +16,6 @@ class ReturnStatement(context : Context) : AbstractStatement(context) {
         return listOf(expression)
     }
 
-    override fun handleEndOfStatement() {
-        expression.handleEndOfStatement()
-    }
-
     override fun process(): CompilationExceptionsCollection {
         val exceptions = CompilationExceptionsCollection()
         try {
