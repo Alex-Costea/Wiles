@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static wiles.parser.builders.ExpectParamsBuilder.tokenOf;
+import static wiles.parser.constants.ErrorMessages.EXPRESSION_UNFINISHED_ERROR;
+import static wiles.parser.constants.ErrorMessages.UNEXPECTED_OPENING_BRACKET_ERROR;
 import static wiles.parser.constants.Predicates.*;
 import static wiles.parser.constants.Tokens.*;
 
@@ -143,7 +145,7 @@ public abstract class AbstractExpression extends AbstractStatement {
                         statement.process().throwFirstIfExists();
                         precedenceProcessor.add(maybeStatement.get());
                         expectNext = ExpectNext.OPERATOR;
-                        if(statement instanceof MethodStatement && !getContext().isWithinInnerExpression())
+                        if(statement instanceof MethodStatement && !isInner)
                             transmitter.expect(EXPECT_TERMINATOR);
                         continue;
                     }
@@ -177,9 +179,9 @@ public abstract class AbstractExpression extends AbstractStatement {
 
             //Final processing
             if (expectNext == ExpectNext.TOKEN)
-                throw new UnexpectedEndException(ErrorMessages.EXPRESSION_UNFINISHED_ERROR, mainCurrentToken.getLocation());
+                throw new UnexpectedEndException(EXPRESSION_UNFINISHED_ERROR, mainCurrentToken.getLocation());
             if (this instanceof InnerExpression && !mainCurrentToken.getContent().equals(PAREN_END_ID))
-                throw new UnexpectedEndException(ErrorMessages.UNEXPECTED_OPENING_BRACKET_ERROR, transmitter.getLastLocation());
+                throw new UnexpectedEndException(UNEXPECTED_OPENING_BRACKET_ERROR, transmitter.getLastLocation());
             setComponents(precedenceProcessor);
             checkValid();
         } catch (AbstractCompilationException ex) {
