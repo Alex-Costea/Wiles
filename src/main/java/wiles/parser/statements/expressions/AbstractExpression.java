@@ -144,7 +144,7 @@ public abstract class AbstractExpression extends AbstractStatement {
                         exceptions.addAll(statement.process());
                         precedenceProcessor.add(maybeStatement.get());
                         expectNext = ExpectNext.OPERATOR;
-                        if(exceptions.size()>0)
+                        if(exceptions.size()>0) //TODO: why is this necessary?
                             break;
                         if(statement instanceof MethodStatement) {
                             if(!isInner) {
@@ -153,7 +153,6 @@ public abstract class AbstractExpression extends AbstractStatement {
                                     transmitter.expect(EXPECT_TERMINATOR_DONT_REMOVE);
                                 }
                                 catch(UnexpectedEndException ignored) {}
-                                break;
                             }
                         }
                         continue;
