@@ -6,6 +6,7 @@ import wiles.parser.constants.ErrorMessages.INVALID_STATEMENT_ERROR
 import wiles.parser.constants.ErrorMessages.NOT_YET_IMPLEMENTED_ERROR
 import wiles.parser.constants.Predicates.ANYTHING
 import wiles.parser.constants.Predicates.START_OF_EXPRESSION
+import wiles.parser.constants.Tokens.BRACKET_START_ID
 import wiles.parser.constants.Tokens.BREAK_ID
 import wiles.parser.constants.Tokens.CONTINUE_ID
 import wiles.parser.constants.Tokens.DECLARE_ID
@@ -75,6 +76,7 @@ class StatementFactory {
             params[BreakStatement::class.java] = tokenOf(BREAK_ID)
             params[ContinueStatement::class.java] = tokenOf(CONTINUE_ID)
             params[CodeBlockStatement::class.java] = tokenOf(DO_ID).or(START_BLOCK_ID).removeWhen(WhenRemoveToken.Never)
+            params[ListStatement::class.java] = tokenOf(BRACKET_START_ID)
             createObject[wiles.parser.statements.expressions.TopLevelExpression::class.java] =
                 Function { context: Context -> wiles.parser.statements.expressions.TopLevelExpression(context) }
             createObject[wiles.parser.statements.expressions.DefaultExpression::class.java] =
@@ -95,6 +97,8 @@ class StatementFactory {
                 Function { context: Context -> ContinueStatement(context) }
             createObject[CodeBlockStatement::class.java] =
                 Function { context : Context -> CodeBlockStatement(context) }
+            createObject[ListStatement::class.java] =
+                Function { context : Context -> ListStatement(context) }
         }
     }
 }

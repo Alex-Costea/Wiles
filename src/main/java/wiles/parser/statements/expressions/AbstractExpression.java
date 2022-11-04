@@ -3,18 +3,18 @@ package wiles.parser.statements.expressions;
 import org.jetbrains.annotations.NotNull;
 import wiles.parser.builders.Context;
 import wiles.parser.builders.ExpectParamsBuilder;
+import wiles.parser.builders.StatementFactory;
 import wiles.parser.constants.ErrorMessages;
-import wiles.parser.constants.Tokens;
 import wiles.parser.data.CompilationExceptionsCollection;
 import wiles.parser.data.Token;
 import wiles.parser.enums.ExpectNext;
 import wiles.parser.enums.SyntaxType;
-import wiles.parser.enums.WhenRemoveToken;
 import wiles.parser.exceptions.AbstractCompilationException;
 import wiles.parser.exceptions.UnexpectedEndException;
 import wiles.parser.exceptions.UnexpectedTokenException;
 import wiles.parser.services.PrecedenceProcessor;
 import wiles.parser.statements.AbstractStatement;
+import wiles.parser.statements.ListStatement;
 import wiles.parser.statements.MethodCallStatement;
 import wiles.parser.statements.TokenStatement;
 
@@ -23,7 +23,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static wiles.parser.builders.ExpectParamsBuilder.tokenOf;
+import static wiles.parser.constants.ErrorMessages.UNEXPECTED_CLOSING_BRACKET_ERROR;
 import static wiles.parser.constants.Predicates.*;
+import static wiles.parser.constants.Tokens.*;
 
 public abstract class AbstractExpression extends AbstractStatement {
     @NotNull
@@ -54,9 +56,9 @@ public abstract class AbstractExpression extends AbstractStatement {
     }
 
     protected boolean handleToken(@NotNull Token token) throws AbstractCompilationException {
-        if (token.getContent().equals(Tokens.PAREN_END_ID))
-            throw new UnexpectedTokenException(ErrorMessages.UNEXPECTED_CLOSING_BRACKET_ERROR, token.getLocation());
-        return Tokens.STATEMENT_START_KEYWORDS.contains(token.getContent());
+        if (token.getContent().equals(PAREN_END_ID))
+            throw new UnexpectedTokenException(UNEXPECTED_CLOSING_BRACKET_ERROR, token.getLocation());
+        return STATEMENT_START_KEYWORDS.contains(token.getContent());
     }
 
     protected void setComponents(@NotNull PrecedenceProcessor precedenceProcessor)
@@ -75,11 +77,21 @@ public abstract class AbstractExpression extends AbstractStatement {
         this.right = result;
     }
 
+    protected Optional<AbstractStatement> handleSpecialStatements(){
+        try {
+            return Optional.of(new StatementFactory().setContext(getContext())
+                    .addType(ListStatement.class)
+                    .create());
+        } catch (AbstractCompilationException e) {
+            return Optional.empty();
+        }
+    }
+
     protected void checkValid() throws AbstractCompilationException {
         //Nothing to check by default
     }
 
-    //TODO: read list literals and function declarations properly
+    //TODO: parse function declarations
     @Override
     public @NotNull CompilationExceptionsCollection process() {
         try {
@@ -90,7 +102,7 @@ public abstract class AbstractExpression extends AbstractStatement {
 
             //Decide what token to expect first
             @NotNull ExpectNext expectNext;
-            if (IS_LITERAL.test(content) || Tokens.PARENS.contains(content) || Tokens.STARTING_OPERATORS.contains(content))
+            if (IS_LITERAL.test(content) || PARENS.contains(content) || STARTING_OPERATORS.contains(content))
                 expectNext = ExpectNext.TOKEN;
             else
                 expectNext = ExpectNext.OPERATOR;
@@ -99,19 +111,17 @@ public abstract class AbstractExpression extends AbstractStatement {
                 //Finalize expression
                 //It finalizes on keywords that correspond to the start of the next statement for better error messages
                 if ((expectNext == ExpectNext.OPERATOR)) {
-                    maybeTempToken = transmitter.expectMaybe(tokenOf(IS_CONTAINED_IN.invoke(Tokens.TERMINATORS)).or(Tokens.ASSIGN_ID)
-                            .or(IS_CONTAINED_IN.invoke(Tokens.STATEMENT_START_KEYWORDS)).or(Tokens.SEPARATOR_ID).dontIgnoreNewLine()
-                            .removeWhen(WhenRemoveToken.Never));
+                    maybeTempToken = transmitter.expectMaybe(FINALIZE_EXPRESSION);
                     if (maybeTempToken.isPresent())
                         if (handleToken(maybeTempToken.get()))
                             break;
                 }
 
                 //Handle method calls and inner expressions
-                maybeTempToken =transmitter.expectMaybe(ExpectParamsBuilder.tokenOf(Tokens.PAREN_START_ID));
+                maybeTempToken =transmitter.expectMaybe(ExpectParamsBuilder.tokenOf(PAREN_START_ID));
                 if (maybeTempToken.isPresent()) {
                     if (expectNext == ExpectNext.OPERATOR) { //Method call
-                        precedenceProcessor.add(new TokenStatement(new Token(Tokens.APPLY_ID,maybeTempToken.get()
+                        precedenceProcessor.add(new TokenStatement(new Token(APPLY_ID,maybeTempToken.get()
                                 .getLocation()),getContext()));
                         var newExpression = new MethodCallStatement(getContext());
                         newExpression.process().throwFirstIfExists();
@@ -127,20 +137,32 @@ public abstract class AbstractExpression extends AbstractStatement {
                 }
 
                 //Handle closing brackets token
-                maybeTempToken = transmitter.expectMaybe(ExpectParamsBuilder.tokenOf(Tokens.PAREN_END_ID));
+                maybeTempToken = transmitter.expectMaybe(ExpectParamsBuilder.tokenOf(PAREN_END_ID));
                 if (maybeTempToken.isPresent()) {
                     mainCurrentToken = maybeTempToken.get();
                     if (handleToken(mainCurrentToken))
                         break;
                 }
 
+                //Special statements
+                if (expectNext == ExpectNext.TOKEN) {
+                    Optional<AbstractStatement> maybeStatement = handleSpecialStatements();
+                    if (maybeStatement.isPresent()) {
+                        AbstractStatement statement = maybeStatement.get();
+                        exceptions.addAll(statement.process());
+                        precedenceProcessor.add(maybeStatement.get());
+                        expectNext = ExpectNext.OPERATOR;
+                        continue;
+                    }
+                }
+
                 //Handle unary operators
                 if (expectNext == ExpectNext.TOKEN) {
-                    maybeTempToken = transmitter.expectMaybe(tokenOf(IS_CONTAINED_IN.invoke(Tokens.STARTING_OPERATORS)));
+                    maybeTempToken = transmitter.expectMaybe(tokenOf(IS_CONTAINED_IN.invoke(STARTING_OPERATORS)));
                     if (maybeTempToken.isPresent()) {
                         mainCurrentToken = maybeTempToken.get();
-                        if (Tokens.INFIX_OPERATORS.contains(mainCurrentToken.getContent()))
-                            mainCurrentToken = new Token(Tokens.UNARY_ID + mainCurrentToken.getContent(),
+                        if (INFIX_OPERATORS.contains(mainCurrentToken.getContent()))
+                            mainCurrentToken = new Token(UNARY_ID + mainCurrentToken.getContent(),
                                     mainCurrentToken.getLocation());
                         precedenceProcessor.add(new TokenStatement(mainCurrentToken, getContext()));
                         continue;
@@ -149,10 +171,10 @@ public abstract class AbstractExpression extends AbstractStatement {
 
                 //Expect the next token
                 if (expectNext == ExpectNext.OPERATOR)
-                    mainCurrentToken = transmitter.expect(tokenOf(IS_CONTAINED_IN.invoke(Tokens.INFIX_OPERATORS))
+                    mainCurrentToken = transmitter.expect(tokenOf(IS_CONTAINED_IN.invoke(INFIX_OPERATORS))
                             .withErrorMessage(ErrorMessages.INVALID_EXPRESSION_ERROR));
                 else
-                    mainCurrentToken = transmitter.expect(tokenOf(IS_CONTAINED_IN.invoke(Tokens.STARTING_OPERATORS))
+                    mainCurrentToken = transmitter.expect(tokenOf(IS_CONTAINED_IN.invoke(STARTING_OPERATORS))
                             .or(IS_LITERAL).withErrorMessage(ErrorMessages.INVALID_EXPRESSION_ERROR));
 
                 //Add token and change next expected token
@@ -163,7 +185,7 @@ public abstract class AbstractExpression extends AbstractStatement {
             //Final processing
             if (expectNext == ExpectNext.TOKEN)
                 throw new UnexpectedEndException(ErrorMessages.EXPRESSION_UNFINISHED_ERROR, mainCurrentToken.getLocation());
-            if (this instanceof InnerExpression && !mainCurrentToken.getContent().equals(Tokens.PAREN_END_ID))
+            if (this instanceof InnerExpression && !mainCurrentToken.getContent().equals(PAREN_END_ID))
                 throw new UnexpectedEndException(ErrorMessages.UNEXPECTED_OPENING_BRACKET_ERROR, transmitter.getLastLocation());
             setComponents(precedenceProcessor);
             checkValid();

@@ -4,16 +4,18 @@ import wiles.parser.builders.Context;
 import wiles.parser.data.Token;
 import wiles.parser.exceptions.AbstractCompilationException;
 import org.jetbrains.annotations.NotNull;
-import wiles.parser.constants.Tokens;
 
-public class EndAtSeparatorExpression extends AbstractExpression {
-    public EndAtSeparatorExpression(@NotNull Context context) {
+import static wiles.parser.constants.Tokens.BRACKET_END_ID;
+import static wiles.parser.constants.Tokens.SEPARATOR_ID;
+
+public class InsideListLiteralExpression extends AbstractExpression {
+    public InsideListLiteralExpression(@NotNull Context context) {
         super(context);
     }
 
     @Override
     protected boolean handleToken(@NotNull Token token) throws AbstractCompilationException {
-        if(token.getContent().equals(Tokens.SEPARATOR_ID) || token.getContent().equals(Tokens.PAREN_END_ID))
+        if(token.getContent().equals(SEPARATOR_ID) || token.getContent().equals(BRACKET_END_ID))
             return true;
         return super.handleToken(token);
     }
