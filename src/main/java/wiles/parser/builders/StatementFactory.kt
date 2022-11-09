@@ -17,6 +17,7 @@ import wiles.parser.constants.Tokens.RETURN_ID
 import wiles.parser.constants.Tokens.START_BLOCK_ID
 import wiles.parser.constants.Tokens.WHEN_ID
 import wiles.parser.constants.Tokens.WHILE_ID
+import wiles.parser.enums.StatementFactoryTypes
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.exceptions.AbstractCompilationException
 import wiles.parser.exceptions.UnexpectedTokenException
@@ -27,10 +28,10 @@ import wiles.parser.statements.expressions.TopLevelExpression
 import java.util.function.Function
 
 class StatementFactory {
-    private val statements: MutableSet<Class<out AbstractStatement>> = HashSet()
+    private val statements: MutableSet<StatementFactoryTypes> = HashSet()
     private lateinit var transmitter: TokenTransmitter
     private lateinit var context: Context
-    fun addType(statement: Class<out AbstractStatement>): StatementFactory {
+    fun addType(statement: StatementFactoryTypes): StatementFactory {
         if (!params.containsKey(statement)) throw wiles.parser.exceptions.InternalErrorException(
             NOT_YET_IMPLEMENTED_ERROR
         )
@@ -49,8 +50,8 @@ class StatementFactory {
     @Throws(AbstractCompilationException::class)
     fun create(errorMessage: String = INTERNAL_ERROR): AbstractStatement {
         for (statement in statements) {
-            if (!context.isWithinMethod && statement == ReturnStatement::class.java) continue
-            if (!context.isWithinLoop && statement == ContinueStatement::class.java) continue
+            if (!context.isWithinMethod && statement == StatementFactoryTypes.RETURN_STATEMENT) continue
+            if (!context.isWithinLoop && statement == StatementFactoryTypes.CONTINUE_STATEMENT) continue
             if (transmitter.expectMaybe(params[statement]!!).isPresent) return createObject[statement]!!
                 .apply(context)
         }
@@ -63,45 +64,42 @@ class StatementFactory {
     }
 
     companion object {
-        private val params: HashMap<Class<out AbstractStatement>, ExpectParamsBuilder> =
-            HashMap()
-        private val createObject: HashMap<Class<out AbstractStatement>, Function<Context, AbstractStatement>> =
-            HashMap()
+        private val params: HashMap<StatementFactoryTypes, ExpectParamsBuilder> = HashMap()
+        private val createObject: HashMap<StatementFactoryTypes, Function<Context, AbstractStatement>> = HashMap()
 
         init {
-            params[TopLevelExpression::class.java] = START_OF_EXPRESSION_NO_CODE_BLOCK
-            params[DefaultExpression::class.java] = START_OF_EXPRESSION_NO_CODE_BLOCK
-            params[DeclarationStatement::class.java] = tokenOf(DECLARE_ID)
-            params[MethodStatement::class.java] = tokenOf(METHOD_ID)
-                .or(DO_ID).or(START_BLOCK_ID).removeWhen(WhenRemoveToken.Never)
-            params[ReturnStatement::class.java] = tokenOf(RETURN_ID)
-            params[WhenStatement::class.java] = tokenOf(WHEN_ID)
-            params[WhileStatement::class.java] = tokenOf(WHILE_ID)
-            params[BreakStatement::class.java] = tokenOf(BREAK_ID)
-            params[ContinueStatement::class.java] = tokenOf(CONTINUE_ID)
-            params[ListStatement::class.java] = tokenOf(BRACKET_START_ID)
-            params[ForStatement::class.java] = tokenOf(FOR_ID)
-            createObject[TopLevelExpression::class.java] =
+            params[StatementFactoryTypes.TOP_LEVEL_EXPRESSION_NO_CODE_BLOCK] = START_OF_EXPRESSION_NO_CODE_BLOCK
+            params[StatementFactoryTypes.DECLARATION_STATEMENT] = tokenOf(DECLARE_ID)
+            params[StatementFactoryTypes.METHOD_STATEMENT] = tokenOf(METHOD_ID).or(DO_ID).or(START_BLOCK_ID)
+                .removeWhen(WhenRemoveToken.Never)
+            params[StatementFactoryTypes.RETURN_STATEMENT] = tokenOf(RETURN_ID)
+            params[StatementFactoryTypes.WHEN_STATEMENT] = tokenOf(WHEN_ID)
+            params[StatementFactoryTypes.WHILE_STATEMENT] = tokenOf(WHILE_ID)
+            params[StatementFactoryTypes.BREAK_STATEMENT] = tokenOf(BREAK_ID)
+            params[StatementFactoryTypes.CONTINUE_STATEMENT] = tokenOf(CONTINUE_ID)
+            params[StatementFactoryTypes.LIST_STATEMENT] = tokenOf(BRACKET_START_ID)
+            params[StatementFactoryTypes.FOR_STATEMENT] = tokenOf(FOR_ID)
+            createObject[StatementFactoryTypes.TOP_LEVEL_EXPRESSION_NO_CODE_BLOCK] =
                 Function { context: Context -> TopLevelExpression(context) }
-            createObject[DefaultExpression::class.java] =
+            createObject[StatementFactoryTypes.DEFAULT_EXPRESSION_NO_CODE_BLOCK] =
                 Function { context: Context -> DefaultExpression(context) }
-            createObject[DeclarationStatement::class.java] =
+            createObject[StatementFactoryTypes.DECLARATION_STATEMENT] =
                 Function { context: Context -> DeclarationStatement(context) }
-            createObject[MethodStatement::class.java] =
+            createObject[StatementFactoryTypes.METHOD_STATEMENT] =
                 Function { context: Context -> MethodStatement(context) }
-            createObject[ReturnStatement::class.java] =
+            createObject[StatementFactoryTypes.RETURN_STATEMENT] =
                 Function { context: Context -> ReturnStatement(context) }
-            createObject[WhenStatement::class.java] =
+            createObject[StatementFactoryTypes.WHEN_STATEMENT] =
                 Function { context: Context -> WhenStatement(context) }
-            createObject[WhileStatement::class.java] =
+            createObject[StatementFactoryTypes.WHILE_STATEMENT] =
                 Function { context: Context -> WhileStatement(context) }
-            createObject[BreakStatement::class.java] =
+            createObject[StatementFactoryTypes.BREAK_STATEMENT] =
                 Function { context: Context -> BreakStatement(context) }
-            createObject[ContinueStatement::class.java] =
+            createObject[StatementFactoryTypes.CONTINUE_STATEMENT] =
                 Function { context: Context -> ContinueStatement(context) }
-            createObject[ListStatement::class.java] =
+            createObject[StatementFactoryTypes.LIST_STATEMENT] =
                 Function { context : Context -> ListStatement(context) }
-            createObject[ForStatement::class.java] =
+            createObject[StatementFactoryTypes.FOR_STATEMENT] =
                 Function { context : Context -> ForStatement(context) }
         }
     }

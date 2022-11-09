@@ -30,7 +30,6 @@ class WhenStatement(context: Context) : AbstractStatement(context) {
         // done already as part of processing
     }
 
-    //TODO: when-is statements
     override fun process(): CompilationExceptionsCollection {
         val exceptions = CompilationExceptionsCollection()
         var condition : AbstractStatement

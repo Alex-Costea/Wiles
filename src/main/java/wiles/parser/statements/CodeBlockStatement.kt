@@ -12,23 +12,23 @@ import wiles.parser.constants.Tokens.DO_ID
 import wiles.parser.constants.Tokens.END_BLOCK_ID
 import wiles.parser.constants.Tokens.START_BLOCK_ID
 import wiles.parser.data.CompilationExceptionsCollection
+import wiles.parser.enums.StatementFactoryTypes
 import wiles.parser.enums.SyntaxType
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.exceptions.AbstractCompilationException
 import wiles.parser.exceptions.UnexpectedEndException
-import wiles.parser.statements.expressions.TopLevelExpression
 
 class CodeBlockStatement(context: Context) : AbstractStatement(context) {
     companion object{
         val statementFactory = StatementFactory()
-            .addType(TopLevelExpression::class.java)
-            .addType(DeclarationStatement::class.java)
-            .addType(WhenStatement::class.java)
-            .addType(WhileStatement::class.java)
-            .addType(ForStatement::class.java)
-            .addType(BreakStatement::class.java)
-            .addType(ReturnStatement::class.java)
-            .addType(ContinueStatement::class.java)
+            .addType(StatementFactoryTypes.TOP_LEVEL_EXPRESSION_NO_CODE_BLOCK)
+            .addType(StatementFactoryTypes.DECLARATION_STATEMENT)
+            .addType(StatementFactoryTypes.WHEN_STATEMENT)
+            .addType(StatementFactoryTypes.WHILE_STATEMENT)
+            .addType(StatementFactoryTypes.FOR_STATEMENT)
+            .addType(StatementFactoryTypes.BREAK_STATEMENT)
+            .addType(StatementFactoryTypes.RETURN_STATEMENT)
+            .addType(StatementFactoryTypes.CONTINUE_STATEMENT)
     }
 
     private val components: MutableList<AbstractStatement> = ArrayList()

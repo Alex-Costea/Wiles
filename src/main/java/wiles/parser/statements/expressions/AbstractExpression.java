@@ -6,6 +6,7 @@ import wiles.parser.builders.StatementFactory;
 import wiles.parser.data.CompilationExceptionsCollection;
 import wiles.parser.data.Token;
 import wiles.parser.enums.ExpectNext;
+import wiles.parser.enums.StatementFactoryTypes;
 import wiles.parser.enums.SyntaxType;
 import wiles.parser.exceptions.AbstractCompilationException;
 import wiles.parser.exceptions.InvalidStatementException;
@@ -30,7 +31,7 @@ public abstract class AbstractExpression extends AbstractStatement {
     protected AbstractStatement right = null;
     @NotNull
     private final StatementFactory SpecialStatementFactory = new StatementFactory().setContext(getContext())
-            .addType(ListStatement.class);
+            .addType(StatementFactoryTypes.LIST_STATEMENT);
     protected boolean isInner = false;
 
     protected AbstractExpression(@NotNull Context context) {
@@ -76,7 +77,7 @@ public abstract class AbstractExpression extends AbstractStatement {
 
     protected Optional<AbstractStatement> handleSpecialStatements(){
         try {
-            SpecialStatementFactory.addType(MethodStatement.class);
+            SpecialStatementFactory.addType(StatementFactoryTypes.METHOD_STATEMENT);
             return Optional.of(SpecialStatementFactory.create());
         } catch (AbstractCompilationException e) {
             return Optional.empty();
