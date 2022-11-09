@@ -17,5 +17,4 @@ public class DefaultExpression extends AbstractExpression {
             return true;
         return super.handleToken(token);
     }
-
 }

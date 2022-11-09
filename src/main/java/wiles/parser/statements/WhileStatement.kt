@@ -4,9 +4,10 @@ import wiles.parser.builders.Context
 import wiles.parser.data.CompilationExceptionsCollection
 import wiles.parser.enums.SyntaxType
 import wiles.parser.exceptions.AbstractCompilationException
+import wiles.parser.statements.expressions.DefaultExpression
 
 class WhileStatement(oldContext: Context) : AbstractStatement(oldContext.setWithinLoop(true)) {
-    private val condition = wiles.parser.statements.expressions.DefaultExpression(context)
+    private val condition = DefaultExpression(context)
     private val codeBlock = CodeBlockStatement(context)
 
     override val type: SyntaxType

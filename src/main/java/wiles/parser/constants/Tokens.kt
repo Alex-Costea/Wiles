@@ -62,10 +62,10 @@ object Tokens {
     const val ELSE_ID = "ELSE"
     const val BREAK_ID = "BREAK"
     const val CONTINUE_ID = "CONTINUE"
-    private const val FOR_ID = "FOR"
-    private const val IN_ID = "IN"
-    private const val FROM_ID = "FROM"
-    private const val TO_ID = "TO"
+    const val FOR_ID = "FOR"
+    const val IN_ID = "IN"
+    const val FROM_ID = "FROM"
+    const val TO_ID = "TO"
     const val WHILE_ID = "WHILE"
     const val ELEM_ACCESS_ID = "ELEM_ACCESS"
     const val CASE_ID = "CASE"
@@ -93,7 +93,8 @@ object Tokens {
     val KEYWORD_LITERALS = setOf(TRUE_ID,FALSE_ID,NOTHING_ID)
     @JvmField
     val NEW_STATEMENT_START_KEYWORDS = setOf(NOTHING_ID, DECLARE_ID, WHEN_ID, CASE_ID, ELSE_ID, CONTINUE_ID, RETURN_ID,
-        WHILE_ID, BREAK_ID, FOR_ID, DO_ID, START_BLOCK_ID, END_BLOCK_ID, BRACKET_END_ID, PAREN_END_ID, SEPARATOR_ID)
+        WHILE_ID, BREAK_ID, FOR_ID, DO_ID, START_BLOCK_ID, END_BLOCK_ID, BRACKET_END_ID, PAREN_END_ID, SEPARATOR_ID,
+        IN_ID, FROM_ID, TO_ID)
 
     init {
         KEYWORDS[if(!ROMANIAN_MODE) "nothing" else "nimic"] = NOTHING_ID

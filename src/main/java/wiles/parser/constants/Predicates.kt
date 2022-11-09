@@ -7,6 +7,7 @@ import wiles.parser.constants.Tokens.ASSIGN_ID
 import wiles.parser.constants.Tokens.BRACKET_END_ID
 import wiles.parser.constants.Tokens.BRACKET_START_ID
 import wiles.parser.constants.Tokens.DO_ID
+import wiles.parser.constants.Tokens.KEYWORD_LITERALS
 import wiles.parser.constants.Tokens.METHOD_ID
 import wiles.parser.constants.Tokens.NEWLINE_ID
 import wiles.parser.constants.Tokens.PAREN_START_ID
@@ -23,7 +24,7 @@ object Predicates {
     val IS_IDENTIFIER = Predicate { x: String -> x.startsWith(Tokens.IDENTIFIER_START) }
     private val IS_TEXT_LITERAL = Predicate { x: String -> x.startsWith(Tokens.STRING_START) }
     private val IS_NUMBER_LITERAL = Predicate { x: String -> x.startsWith(Tokens.NUM_START) }
-    private val IS_KEYWORD_LITERAL= Predicate { x:String -> Tokens.KEYWORD_LITERALS.contains(x) }
+    private val IS_KEYWORD_LITERAL= Predicate { x:String -> KEYWORD_LITERALS.contains(x) }
     @JvmField
     val IS_LITERAL: Predicate<String> = IS_IDENTIFIER.or(IS_TEXT_LITERAL).or(IS_NUMBER_LITERAL).or(IS_KEYWORD_LITERAL)
 

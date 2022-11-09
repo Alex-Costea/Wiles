@@ -11,6 +11,7 @@ import wiles.parser.constants.Tokens.BREAK_ID
 import wiles.parser.constants.Tokens.CONTINUE_ID
 import wiles.parser.constants.Tokens.DECLARE_ID
 import wiles.parser.constants.Tokens.DO_ID
+import wiles.parser.constants.Tokens.FOR_ID
 import wiles.parser.constants.Tokens.METHOD_ID
 import wiles.parser.constants.Tokens.RETURN_ID
 import wiles.parser.constants.Tokens.START_BLOCK_ID
@@ -79,6 +80,7 @@ class StatementFactory {
             params[BreakStatement::class.java] = tokenOf(BREAK_ID)
             params[ContinueStatement::class.java] = tokenOf(CONTINUE_ID)
             params[ListStatement::class.java] = tokenOf(BRACKET_START_ID)
+            params[ForStatement::class.java] = tokenOf(FOR_ID)
             createObject[TopLevelExpression::class.java] =
                 Function { context: Context -> TopLevelExpression(context) }
             createObject[DefaultExpression::class.java] =
@@ -99,6 +101,8 @@ class StatementFactory {
                 Function { context: Context -> ContinueStatement(context) }
             createObject[ListStatement::class.java] =
                 Function { context : Context -> ListStatement(context) }
+            createObject[ForStatement::class.java] =
+                Function { context : Context -> ForStatement(context) }
         }
     }
 }

@@ -25,6 +25,7 @@ class CodeBlockStatement(context: Context) : AbstractStatement(context) {
             .addType(DeclarationStatement::class.java)
             .addType(WhenStatement::class.java)
             .addType(WhileStatement::class.java)
+            .addType(ForStatement::class.java)
             .addType(BreakStatement::class.java)
             .addType(ReturnStatement::class.java)
             .addType(ContinueStatement::class.java)

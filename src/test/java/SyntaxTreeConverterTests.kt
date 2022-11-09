@@ -240,6 +240,13 @@ class SyntaxTreeConverterTests {
     }
 
     @Test
+    fun forTest()
+    {
+        //TODO: tests
+    }
+
+
+    @Test
     fun whileTest()
     {
         //TODO: tests
