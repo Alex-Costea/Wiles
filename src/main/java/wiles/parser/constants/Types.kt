@@ -24,6 +24,7 @@ object Types {
 
     val REQUIRES_SUBTYPE = setOf(LIST_ID,EITHER_ID)
     val MAX_NR_TYPES = hashMapOf(Pair(LIST_ID,1))
+    val MIN_NR_TYPES = hashMapOf(Pair(LIST_ID,1),Pair(EITHER_ID,2))
 
     init {
         TYPES["!bit"] = BOOLEAN_ID

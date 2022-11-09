@@ -10,6 +10,7 @@ import wiles.parser.data.Token;
 import wiles.parser.enums.ExpectNext;
 import wiles.parser.enums.SyntaxType;
 import wiles.parser.exceptions.AbstractCompilationException;
+import wiles.parser.exceptions.InvalidStatementException;
 import wiles.parser.exceptions.UnexpectedEndException;
 import wiles.parser.services.PrecedenceProcessor;
 import wiles.parser.statements.*;
@@ -19,8 +20,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static wiles.parser.builders.ExpectParamsBuilder.tokenOf;
-import static wiles.parser.constants.ErrorMessages.EXPRESSION_UNFINISHED_ERROR;
-import static wiles.parser.constants.ErrorMessages.UNEXPECTED_OPENING_BRACKET_ERROR;
+import static wiles.parser.constants.ErrorMessages.*;
+import static wiles.parser.constants.ErrorMessages.IDENTIFIER_EXPECTED_ERROR;
 import static wiles.parser.constants.Predicates.*;
 import static wiles.parser.constants.Tokens.*;
 
@@ -86,6 +87,15 @@ public abstract class AbstractExpression extends AbstractStatement {
 
     protected void checkValid() throws AbstractCompilationException {
         //Nothing to check by default
+    }
+
+    protected final void checkLeftIsOneIdentifier() throws InvalidStatementException {
+        //TODO: better token location
+        if (left.getComponents().size() != 1)
+            throw new InvalidStatementException(IDENTIFIER_EXPECTED_ERROR, operation.getToken().getLocation());
+        AbstractStatement first = left.getComponents().get(0);
+        if (!(first instanceof TokenStatement) || !IS_IDENTIFIER.test(first.name))
+            throw new InvalidStatementException(IDENTIFIER_EXPECTED_ERROR, operation.getToken().getLocation());
     }
 
     @Override

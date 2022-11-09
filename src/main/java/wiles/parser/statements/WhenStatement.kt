@@ -12,6 +12,7 @@ import wiles.parser.enums.SyntaxType
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.exceptions.AbstractCompilationException
 import wiles.parser.exceptions.UnexpectedTokenException
+import wiles.parser.statements.expressions.ConditionExpression
 
 class WhenStatement(context: Context) : AbstractStatement(context) {
 
@@ -62,7 +63,7 @@ class WhenStatement(context: Context) : AbstractStatement(context) {
                 else if(transmitter.expectMaybe(tokenOf(CASE_ID)).isEmpty)
                     startsWithCase = false
                 isFirst = false
-                condition = wiles.parser.statements.expressions.DefaultExpression(context)
+                condition = ConditionExpression(context)
                 blockStatement = CodeBlockStatement(context)
                 exceptions.addAll(condition.process())
                 exceptions.addAll(blockStatement.process())

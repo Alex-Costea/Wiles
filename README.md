@@ -28,7 +28,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - String: `text`
 - Floating point: `rational` (equivalent to `double` in other languages)
 - Function type: functions must be assigned to value
-- Sum types: `either(type1,type2)`, either a value of `type1`, or of `type2`
+- Sum types: `either(type1,type2,type3)`
 - List: `list(type)`
 
 ### Statements
@@ -84,7 +84,6 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - Classes with `class` keyword. Internally, maybe something like `dict(text,fun)`?
 - Declare fields `readonly` for getter with no setter, `public` for getter and setter
 - Warnings, e.g. unreachable code
-- `either` with more than 2 types
 - `error` types. syntax: `int? io_error, illegal_state_error`, internally also an `either`
 
 ## Examples

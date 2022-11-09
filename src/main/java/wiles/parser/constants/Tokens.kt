@@ -59,6 +59,7 @@ object Tokens {
     const val TRUE_ID = "TRUE"
     private const val FALSE_ID = "FALSE"
     const val WHEN_ID = "WHEN"
+    const val IS_ID = "IS"
     const val ELSE_ID = "ELSE"
     const val BREAK_ID = "BREAK"
     const val CONTINUE_ID = "CONTINUE"
@@ -91,10 +92,11 @@ object Tokens {
     @JvmField
     val TERMINATORS = setOf(NEWLINE_ID, TERMINATOR_ID)
     val KEYWORD_LITERALS = setOf(TRUE_ID,FALSE_ID,NOTHING_ID)
+
     @JvmField
-    val NEW_STATEMENT_START_KEYWORDS = setOf(NOTHING_ID, DECLARE_ID, WHEN_ID, CASE_ID, ELSE_ID, CONTINUE_ID, RETURN_ID,
-        WHILE_ID, BREAK_ID, FOR_ID, DO_ID, START_BLOCK_ID, END_BLOCK_ID, BRACKET_END_ID, PAREN_END_ID, SEPARATOR_ID,
-        IN_ID, FROM_ID, TO_ID)
+    val NEW_STATEMENT_START_KEYWORDS = setOf(NOTHING_ID, DECLARE_ID, WHEN_ID, CASE_ID, ELSE_ID, CONTINUE_ID,
+        RETURN_ID, WHILE_ID, BREAK_ID, FOR_ID, DO_ID, START_BLOCK_ID, END_BLOCK_ID, BRACKET_END_ID, PAREN_END_ID,
+        SEPARATOR_ID, IN_ID, FROM_ID, TO_ID, IS_ID, ASSIGN_ID, TERMINATOR_ID, NEWLINE_ID)
 
     init {
         KEYWORDS[if(!ROMANIAN_MODE) "nothing" else "nimic"] = NOTHING_ID
@@ -121,6 +123,7 @@ object Tokens {
         KEYWORDS[if(!ROMANIAN_MODE) "true" else "adevărat"] = TRUE_ID
         KEYWORDS[if(!ROMANIAN_MODE) "false" else "fals"] = FALSE_ID
         KEYWORDS["arg"] = ANON_ARG_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "is" else "este"] = IS_ID
 
         SYMBOLS["+"] = PLUS_ID
         SYMBOLS["-"] = MINUS_ID

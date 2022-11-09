@@ -18,6 +18,7 @@ object ErrorMessages {
     const val INVALID_STATEMENT_ERROR = "Invalid statement."
     const val STRING_UNFINISHED_ERROR = "Text unfinished."
     const val INVALID_LEFT_EXCEPTION = "Left side of assignment invalid."
+    const val NOT_ENOUGH_TYPES_EXCEPTION = "Not enough types have been specified."
     val END_OF_STATEMENT_EXPECTED_ERROR = "End of statement expected. " +
             "Please use the ${TOKENS_INVERSE[TERMINATOR_ID]!!} symbol or start a new line."
 

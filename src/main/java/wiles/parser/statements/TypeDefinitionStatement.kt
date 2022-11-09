@@ -2,6 +2,7 @@ package wiles.parser.statements
 
 import wiles.parser.builders.Context
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
+import wiles.parser.constants.ErrorMessages.NOT_ENOUGH_TYPES_EXCEPTION
 import wiles.parser.constants.ErrorMessages.TYPE_EXPECTED_ERROR
 import wiles.parser.constants.Predicates.IS_CONTAINED_IN
 import wiles.parser.constants.Tokens
@@ -12,12 +13,14 @@ import wiles.parser.constants.Tokens.PAREN_END_ID
 import wiles.parser.constants.Tokens.PAREN_START_ID
 import wiles.parser.constants.Types.EITHER_ID
 import wiles.parser.constants.Types.MAX_NR_TYPES
+import wiles.parser.constants.Types.MIN_NR_TYPES
 import wiles.parser.constants.Types.REQUIRES_SUBTYPE
 import wiles.parser.constants.Types.TYPES
 import wiles.parser.data.CompilationExceptionsCollection
 import wiles.parser.enums.SyntaxType
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.exceptions.AbstractCompilationException
+import wiles.parser.exceptions.TokenExpectedException
 
 class TypeDefinitionStatement(context: Context) : AbstractStatement(context) {
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
@@ -31,7 +34,7 @@ class TypeDefinitionStatement(context: Context) : AbstractStatement(context) {
 
     override fun process(): CompilationExceptionsCollection {
         try {
-            val (content) = transmitter.expect(tokenOf(IS_CONTAINED_IN(TYPES.keys)).withErrorMessage(TYPE_EXPECTED_ERROR))
+            val (content,location) = transmitter.expect(tokenOf(IS_CONTAINED_IN(TYPES.keys)).withErrorMessage(TYPE_EXPECTED_ERROR))
             name = TYPES[content]!!
             if(REQUIRES_SUBTYPE.contains(name))
             {
@@ -45,6 +48,8 @@ class TypeDefinitionStatement(context: Context) : AbstractStatement(context) {
                     subtypes.add(subType)
                     if (transmitter.expectMaybe(tokenOf(Tokens.SEPARATOR_ID)).isEmpty) break
                 }
+                if(subtypes.size < (MIN_NR_TYPES[name] ?: Int.MAX_VALUE))
+                    throw TokenExpectedException(NOT_ENOUGH_TYPES_EXCEPTION,location)
                 transmitter.expect(tokenOf(PAREN_END_ID))
             }
             if(name == METHOD_ID) {

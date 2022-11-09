@@ -3,17 +3,14 @@ package wiles.parser.constants
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.constants.ErrorMessages.EXPRESSION_EXPECTED_ERROR
 import wiles.parser.constants.ErrorMessages.INTERNAL_ERROR
-import wiles.parser.constants.Tokens.ASSIGN_ID
-import wiles.parser.constants.Tokens.BRACKET_END_ID
 import wiles.parser.constants.Tokens.BRACKET_START_ID
 import wiles.parser.constants.Tokens.DO_ID
 import wiles.parser.constants.Tokens.KEYWORD_LITERALS
 import wiles.parser.constants.Tokens.METHOD_ID
 import wiles.parser.constants.Tokens.NEWLINE_ID
-import wiles.parser.constants.Tokens.PAREN_START_ID
-import wiles.parser.constants.Tokens.SEPARATOR_ID
-import wiles.parser.constants.Tokens.STARTING_OPERATORS
 import wiles.parser.constants.Tokens.NEW_STATEMENT_START_KEYWORDS
+import wiles.parser.constants.Tokens.PAREN_START_ID
+import wiles.parser.constants.Tokens.STARTING_OPERATORS
 import wiles.parser.constants.Tokens.START_BLOCK_ID
 import wiles.parser.constants.Tokens.TERMINATORS
 import wiles.parser.enums.WhenRemoveToken
@@ -59,7 +56,6 @@ object Predicates {
         .withErrorMessage(EXPRESSION_EXPECTED_ERROR).removeWhen(WhenRemoveToken.Never).freeze()
 
     @JvmField
-    val FINALIZE_EXPRESSION = tokenOf(IS_CONTAINED_IN.invoke(TERMINATORS)).or(ASSIGN_ID)
-            .or(IS_CONTAINED_IN.invoke(NEW_STATEMENT_START_KEYWORDS)).or(SEPARATOR_ID).or(BRACKET_END_ID)
+    val FINALIZE_EXPRESSION = tokenOf(IS_CONTAINED_IN.invoke(NEW_STATEMENT_START_KEYWORDS))
             .withErrorMessage(INTERNAL_ERROR).dontIgnoreNewLine().removeWhen(WhenRemoveToken.Never).freeze()
 }
