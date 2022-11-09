@@ -21,7 +21,7 @@ import wiles.parser.exceptions.UnexpectedEndException
 class CodeBlockStatement(context: Context) : AbstractStatement(context) {
     companion object{
         val statementFactory = StatementFactory()
-            .addType(StatementFactoryTypes.TOP_LEVEL_EXPRESSION_NO_CODE_BLOCK)
+            .addType(StatementFactoryTypes.TOP_LEVEL_EXPRESSION)
             .addType(StatementFactoryTypes.DECLARATION_STATEMENT)
             .addType(StatementFactoryTypes.WHEN_STATEMENT)
             .addType(StatementFactoryTypes.WHILE_STATEMENT)

@@ -20,6 +20,7 @@ import wiles.parser.constants.Tokens.WHILE_ID
 import wiles.parser.enums.StatementFactoryTypes
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.exceptions.AbstractCompilationException
+import wiles.parser.exceptions.InternalErrorException
 import wiles.parser.exceptions.UnexpectedTokenException
 import wiles.parser.services.TokenTransmitter
 import wiles.parser.statements.*
@@ -32,9 +33,7 @@ class StatementFactory {
     private lateinit var transmitter: TokenTransmitter
     private lateinit var context: Context
     fun addType(statement: StatementFactoryTypes): StatementFactory {
-        if (!params.containsKey(statement)) throw wiles.parser.exceptions.InternalErrorException(
-            NOT_YET_IMPLEMENTED_ERROR
-        )
+        if (!params.containsKey(statement)) throw InternalErrorException(NOT_YET_IMPLEMENTED_ERROR)
         statements.add(statement)
         return this
     }
@@ -68,7 +67,7 @@ class StatementFactory {
         private val createObject: HashMap<StatementFactoryTypes, Function<Context, AbstractStatement>> = HashMap()
 
         init {
-            params[StatementFactoryTypes.TOP_LEVEL_EXPRESSION_NO_CODE_BLOCK] = START_OF_EXPRESSION_NO_CODE_BLOCK
+            params[StatementFactoryTypes.TOP_LEVEL_EXPRESSION] = START_OF_EXPRESSION_NO_CODE_BLOCK
             params[StatementFactoryTypes.DECLARATION_STATEMENT] = tokenOf(DECLARE_ID)
             params[StatementFactoryTypes.METHOD_STATEMENT] = tokenOf(METHOD_ID).or(DO_ID).or(START_BLOCK_ID)
                 .removeWhen(WhenRemoveToken.Never)
@@ -79,7 +78,7 @@ class StatementFactory {
             params[StatementFactoryTypes.CONTINUE_STATEMENT] = tokenOf(CONTINUE_ID)
             params[StatementFactoryTypes.LIST_STATEMENT] = tokenOf(BRACKET_START_ID)
             params[StatementFactoryTypes.FOR_STATEMENT] = tokenOf(FOR_ID)
-            createObject[StatementFactoryTypes.TOP_LEVEL_EXPRESSION_NO_CODE_BLOCK] =
+            createObject[StatementFactoryTypes.TOP_LEVEL_EXPRESSION] =
                 Function { context: Context -> TopLevelExpression(context) }
             createObject[StatementFactoryTypes.DEFAULT_EXPRESSION_NO_CODE_BLOCK] =
                 Function { context: Context -> DefaultExpression(context) }
