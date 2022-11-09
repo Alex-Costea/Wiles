@@ -5,11 +5,11 @@ import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.constants.ErrorMessages.TYPE_EXPECTED_ERROR
 import wiles.parser.constants.Predicates.IS_CONTAINED_IN
 import wiles.parser.constants.Tokens
-import wiles.parser.constants.Tokens.PAREN_END_ID
-import wiles.parser.constants.Tokens.PAREN_START_ID
 import wiles.parser.constants.Tokens.MAYBE_ID
 import wiles.parser.constants.Tokens.METHOD_ID
 import wiles.parser.constants.Tokens.NOTHING_ID
+import wiles.parser.constants.Tokens.PAREN_END_ID
+import wiles.parser.constants.Tokens.PAREN_START_ID
 import wiles.parser.constants.Types.EITHER_ID
 import wiles.parser.constants.Types.GENERIC_ID
 import wiles.parser.constants.Types.MAX_NR_TYPES
@@ -19,11 +19,10 @@ import wiles.parser.data.CompilationExceptionsCollection
 import wiles.parser.enums.SyntaxType
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.exceptions.AbstractCompilationException
-import kotlin.collections.ArrayList
 
 class TypeDefinitionStatement(context: Context) : AbstractStatement(context) {
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
-    private val subtypes : ArrayList<TypeDefinitionStatement> = ArrayList()
+    private val subtypes : ArrayList<AbstractStatement> = ArrayList()
     override val type: SyntaxType
         get() = SyntaxType.TYPE
 
@@ -49,8 +48,11 @@ class TypeDefinitionStatement(context: Context) : AbstractStatement(context) {
                 }
                 transmitter.expect(tokenOf(PAREN_END_ID))
             }
-            if(name == METHOD_ID)
-                TODO("Function types")
+            if(name == METHOD_ID) {
+                val funStatement = MethodStatement(context, false)
+                funStatement.process().throwFirstIfExists()
+                subtypes.add(funStatement)
+            }
             if(name == GENERIC_ID)
                 TODO("Generic types")
             if(transmitter.expectMaybe(tokenOf(MAYBE_ID).dontIgnoreNewLine()).isPresent)

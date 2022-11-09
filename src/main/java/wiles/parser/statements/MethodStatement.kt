@@ -17,7 +17,9 @@ import wiles.parser.enums.SyntaxType
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.exceptions.AbstractCompilationException
 
-class MethodStatement(oldContext : Context) : AbstractStatement(oldContext.setWithinMethod(true)) {
+class MethodStatement(oldContext : Context, private val isTypeDeclaration: Boolean = true)
+    : AbstractStatement(oldContext.setWithinMethod(true)) {
+
     private val parameters: MutableList<ParameterStatement> = ArrayList()
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
 
@@ -37,14 +39,16 @@ class MethodStatement(oldContext : Context) : AbstractStatement(oldContext.setWi
         val components = ArrayList<AbstractStatement>()
         components.add(returnType)
         components.addAll(parameters)
-        components.add(methodBody)
+        if(isTypeDeclaration)
+            components.add(methodBody)
         return components
     }
 
     override fun process(): CompilationExceptionsCollection {
         try {
             if(transmitter.expectMaybe(tokenOf(DO_ID).or(START_BLOCK_ID).removeWhen(WhenRemoveToken.Never)).isEmpty) {
-                transmitter.expect(tokenOf(METHOD_ID))
+                if(isTypeDeclaration)
+                    transmitter.expect(tokenOf(METHOD_ID))
 
                 //Params
                 if (transmitter.expectMaybe(tokenOf(PAREN_START_ID)).isPresent) {
@@ -59,13 +63,14 @@ class MethodStatement(oldContext : Context) : AbstractStatement(oldContext.setWi
                 }
 
                 //Return type
-                if (transmitter.expectMaybe(tokenOf(RIGHT_ARROW_ID)).isPresent) {
+                if (transmitter.expectMaybe(tokenOf(RIGHT_ARROW_ID).dontIgnoreNewLine()).isPresent) {
                     returnType = TypeDefinitionStatement(context)
                     exceptions.addAll(returnType.process())
                 }
             }
             //Read body
-            exceptions.addAll(methodBody.process())
+            if(isTypeDeclaration)
+                exceptions.addAll(methodBody.process())
         } catch (ex: AbstractCompilationException) {
             exceptions.add(ex)
         }
