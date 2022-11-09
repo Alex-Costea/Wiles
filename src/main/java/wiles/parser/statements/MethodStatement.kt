@@ -3,6 +3,7 @@ package wiles.parser.statements
 import wiles.parser.builders.Context
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.constants.Predicates.IS_IDENTIFIER
+import wiles.parser.constants.Tokens.ANON_ARG_ID
 import wiles.parser.constants.Tokens.DO_ID
 import wiles.parser.constants.Tokens.METHOD_ID
 import wiles.parser.constants.Tokens.NOTHING_ID
@@ -47,8 +48,8 @@ class MethodStatement(oldContext : Context) : AbstractStatement(oldContext.setWi
 
                 //Params
                 if (transmitter.expectMaybe(tokenOf(PAREN_START_ID)).isPresent) {
-                    //TODO: args param
-                    while(transmitter.expectMaybe(tokenOf(IS_IDENTIFIER).removeWhen(WhenRemoveToken.Never)).isPresent) {
+                    while(transmitter.expectMaybe(tokenOf(IS_IDENTIFIER).or(ANON_ARG_ID)
+                            .removeWhen(WhenRemoveToken.Never)).isPresent) {
                         val parameterStatement = ParameterStatement(context)
                         exceptions.addAll(parameterStatement.process())
                         parameters.add(parameterStatement)

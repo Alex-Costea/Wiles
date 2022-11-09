@@ -64,10 +64,7 @@ This is a one-man project mostly meant for myself to try out making an interpret
 
 ### Named parameters
 - Function calling with named parameters by default: `my_function(a := 1, b := 10)`
-- `args : type` means take in an unspecified number of unnamed args
-- `args size n : type` means take n unnamed args
-- `args: type` is of type `list[type]`
-- `args` must always be last
+  - Parameter can be made unnamed using the `arg` keyword: `fun(arg a : int)`
 - `func(a := a)` can also be written as `func(a)` (if the identifier names match)
 
 ### Miscellaneous

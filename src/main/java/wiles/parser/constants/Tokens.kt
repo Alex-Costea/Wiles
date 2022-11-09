@@ -69,6 +69,7 @@ object Tokens {
     const val WHILE_ID = "WHILE"
     const val ELEM_ACCESS_ID = "ELEM_ACCESS"
     const val CASE_ID = "CASE"
+    const val ANON_ARG_ID = "ANON_ARG"
 
     private val KEYWORDS: HashMap<String, String> = HashMap()
     private val SYMBOLS: HashMap<String, String> = HashMap()
@@ -100,8 +101,12 @@ object Tokens {
         KEYWORDS[if(!ROMANIAN_MODE) "let" else "fie"] = DECLARE_ID
         KEYWORDS["var"] = MUTABLE_ID
         KEYWORDS[if(!ROMANIAN_MODE) "when" else "când"] = WHEN_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "case" else "caz"] = CASE_ID
         KEYWORDS[if(!ROMANIAN_MODE) "otherwise" else "altfel"] = ELSE_ID
         KEYWORDS[if(!ROMANIAN_MODE) "for" else "pentru"] = FOR_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "in" else "în"] = IN_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "from" else "de_la"] = FROM_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "to" else "la"] = TO_ID
         KEYWORDS[if(!ROMANIAN_MODE) "while" else "cât_timp"] = WHILE_ID
         KEYWORDS[if(!ROMANIAN_MODE) "and" else "și"] = AND_ID
         KEYWORDS[if(!ROMANIAN_MODE) "or" else "sau"] = OR_ID
@@ -114,10 +119,7 @@ object Tokens {
         KEYWORDS[if(!ROMANIAN_MODE) "end" else "sfârșit"] = END_BLOCK_ID
         KEYWORDS[if(!ROMANIAN_MODE) "true" else "adevărat"] = TRUE_ID
         KEYWORDS[if(!ROMANIAN_MODE) "false" else "fals"] = FALSE_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "in" else "în"] = IN_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "from" else "de_la"] = FROM_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "to" else "la"] = TO_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "case" else "caz"] = CASE_ID
+        KEYWORDS["arg"] = ANON_ARG_ID
 
         SYMBOLS["+"] = PLUS_ID
         SYMBOLS["-"] = MINUS_ID
