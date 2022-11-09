@@ -2,9 +2,7 @@ package wiles.parser.statements.expressions;
 
 import org.jetbrains.annotations.NotNull;
 import wiles.parser.builders.Context;
-import wiles.parser.builders.ExpectParamsBuilder;
 import wiles.parser.builders.StatementFactory;
-import wiles.parser.constants.ErrorMessages;
 import wiles.parser.data.CompilationExceptionsCollection;
 import wiles.parser.data.Token;
 import wiles.parser.enums.ExpectNext;
@@ -21,7 +19,6 @@ import java.util.Optional;
 
 import static wiles.parser.builders.ExpectParamsBuilder.tokenOf;
 import static wiles.parser.constants.ErrorMessages.*;
-import static wiles.parser.constants.ErrorMessages.IDENTIFIER_EXPECTED_ERROR;
 import static wiles.parser.constants.Predicates.*;
 import static wiles.parser.constants.Tokens.*;
 
@@ -31,6 +28,7 @@ public abstract class AbstractExpression extends AbstractStatement {
     protected AbstractStatement left = null;
     protected TokenStatement operation = null;
     protected AbstractStatement right = null;
+    @NotNull
     private final StatementFactory SpecialStatementFactory = new StatementFactory().setContext(getContext())
             .addType(ListStatement.class);
     protected boolean isInner = false;
@@ -108,8 +106,7 @@ public abstract class AbstractExpression extends AbstractStatement {
 
             //Decide what token to expect first
             @NotNull ExpectNext expectNext;
-            if (IS_LITERAL.test(content) || PARENS.contains(content) || content.equals(DO_ID) ||
-                    content.equals(START_BLOCK_ID) || STARTING_OPERATORS.contains(content) || content.equals(METHOD_ID))
+            if (STARTS_AS_TOKEN.test(content))
                 expectNext = ExpectNext.TOKEN;
             else
                 expectNext = ExpectNext.OPERATOR;
@@ -127,7 +124,7 @@ public abstract class AbstractExpression extends AbstractStatement {
                 }
 
                 //Handle method calls and inner expressions
-                maybeTempToken =transmitter.expectMaybe(ExpectParamsBuilder.tokenOf(PAREN_START_ID));
+                maybeTempToken =transmitter.expectMaybe(tokenOf(PAREN_START_ID));
                 if (maybeTempToken.isPresent()) {
                     if (expectNext == ExpectNext.OPERATOR) { //Method call
                         precedenceProcessor.add(new TokenStatement(new Token(APPLY_ID,maybeTempToken.get()
@@ -153,16 +150,12 @@ public abstract class AbstractExpression extends AbstractStatement {
                         exceptions.addAll(statement.process());
                         precedenceProcessor.add(maybeStatement.get());
                         expectNext = ExpectNext.OPERATOR;
-                        if(exceptions.size()>0) //TODO: why is this necessary?
-                            break;
-                        if(statement instanceof MethodStatement) {
-                            if(!isInner) {
-                                try
-                                {
-                                    transmitter.expect(EXPECT_TERMINATOR_DONT_REMOVE);
-                                }
-                                catch(UnexpectedEndException ignored) {}
+                        if(statement instanceof MethodStatement && !isInner) {
+                            try
+                            {
+                                transmitter.expect(EXPECT_TERMINATOR_DONT_REMOVE);
                             }
+                            catch(UnexpectedEndException ignored) {}
                         }
                         continue;
                     }
@@ -183,11 +176,9 @@ public abstract class AbstractExpression extends AbstractStatement {
 
                 //Expect the next token
                 if (expectNext == ExpectNext.OPERATOR)
-                    mainCurrentToken = transmitter.expect(tokenOf(IS_CONTAINED_IN.invoke(INFIX_OPERATORS))
-                            .withErrorMessage(ErrorMessages.INVALID_EXPRESSION_ERROR));
+                    mainCurrentToken = transmitter.expect(EXPECT_OPERATOR);
                 else
-                    mainCurrentToken = transmitter.expect(tokenOf(IS_CONTAINED_IN.invoke(STARTING_OPERATORS))
-                            .or(IS_LITERAL).withErrorMessage(ErrorMessages.INVALID_EXPRESSION_ERROR));
+                    mainCurrentToken = transmitter.expect(EXPECT_TOKEN);
 
                 //Add token and change next expected token
                 precedenceProcessor.add(new TokenStatement(mainCurrentToken, getContext()));
