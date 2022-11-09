@@ -41,6 +41,7 @@ class ParameterStatement(context: Context) : AbstractStatement(context) {
             transmitter.expect(tokenOf(TYPEDEF_ID))
             exceptions.addAll(typeDefinition.process())
             if (transmitter.expectMaybe(tokenOf(ASSIGN_ID)).isPresent) {
+                //TODO: list and function literals
                 defaultValue = TokenStatement(
                     transmitter.expect(tokenOf(IS_LITERAL).withErrorMessage(LITERAL_EXPECTED_ERROR)),context)
             }
