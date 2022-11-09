@@ -42,13 +42,10 @@ public class InsideMethodCallExpression extends AbstractExpression{
     @Override
     protected boolean handleToken(@NotNull Token token) throws AbstractCompilationException {
         if(token.getContent().equals(PAREN_END_ID))
-            return lastExpression = true;
-        if(token.getContent().equals(SEPARATOR_ID))
-            return true;
-
+            lastExpression = true;
         if (token.getContent().equals(ASSIGN_ID)) {
             operation = new TokenStatement(transmitter.expect(ExpectParamsBuilder.tokenOf(ASSIGN_ID)), getContext());
-            var new_right = new RightSideInMethodCallExpression(getContext());
+            var new_right = new InnerDefaultExpression(getContext());
             exceptions.addAll(new_right.process());
             right = new_right;
             isAssignment = true;

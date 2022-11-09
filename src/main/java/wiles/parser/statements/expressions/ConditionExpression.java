@@ -3,7 +3,6 @@ package wiles.parser.statements.expressions;
 import org.jetbrains.annotations.NotNull;
 import wiles.parser.builders.Context;
 import wiles.parser.builders.ExpectParamsBuilder;
-import wiles.parser.constants.Tokens;
 import wiles.parser.data.Token;
 import wiles.parser.exceptions.AbstractCompilationException;
 import wiles.parser.services.PrecedenceProcessor;
@@ -44,8 +43,6 @@ public class ConditionExpression extends AbstractExpression{
             isAssignment = true;
             return true;
         }
-        if(Tokens.TERMINATORS.contains(token.getContent()))
-            return true;
         return super.handleToken(token);
     }
 }

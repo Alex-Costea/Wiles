@@ -9,7 +9,7 @@ import wiles.parser.data.CompilationExceptionsCollection
 import wiles.parser.enums.SyntaxType
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.exceptions.AbstractCompilationException
-import wiles.parser.statements.expressions.InsideListLiteralExpression
+import wiles.parser.statements.expressions.InnerDefaultExpression
 
 class ListStatement(context: Context) : AbstractStatement(context) {
     override val type = SyntaxType.LIST
@@ -24,7 +24,7 @@ class ListStatement(context: Context) : AbstractStatement(context) {
         try{
             while(transmitter.expectMaybe(tokenOf(BRACKET_END_ID).removeWhen(WhenRemoveToken.Never)).isEmpty)
             {
-                val newComp = InsideListLiteralExpression(context)
+                val newComp = InnerDefaultExpression(context)
                 newComp.process().throwFirstIfExists()
                 components.add(newComp)
                 if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break

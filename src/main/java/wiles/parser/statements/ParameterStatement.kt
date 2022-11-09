@@ -3,21 +3,20 @@ package wiles.parser.statements
 import wiles.parser.builders.Context
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.constants.ErrorMessages.IDENTIFIER_EXPECTED_ERROR
-import wiles.parser.constants.ErrorMessages.LITERAL_EXPECTED_ERROR
 import wiles.parser.constants.Predicates.IS_IDENTIFIER
-import wiles.parser.constants.Predicates.IS_LITERAL
 import wiles.parser.constants.Tokens.ANON_ARG_ID
 import wiles.parser.constants.Tokens.ASSIGN_ID
 import wiles.parser.constants.Tokens.TYPEDEF_ID
 import wiles.parser.data.CompilationExceptionsCollection
 import wiles.parser.enums.SyntaxType
 import wiles.parser.exceptions.AbstractCompilationException
+import wiles.parser.statements.expressions.DefaultExpression
 
 class ParameterStatement(context: Context) : AbstractStatement(context) {
     private var nameToken: TokenStatement? = null
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
     private var typeDefinition: TypeDefinitionStatement
-    private var defaultValue: TokenStatement? = null
+    private var defaultValue: DefaultExpression? = null
 
     init {
         typeDefinition = TypeDefinitionStatement(context)
@@ -41,9 +40,8 @@ class ParameterStatement(context: Context) : AbstractStatement(context) {
             transmitter.expect(tokenOf(TYPEDEF_ID))
             exceptions.addAll(typeDefinition.process())
             if (transmitter.expectMaybe(tokenOf(ASSIGN_ID)).isPresent) {
-                //TODO: list and function literals
-                defaultValue = TokenStatement(
-                    transmitter.expect(tokenOf(IS_LITERAL).withErrorMessage(LITERAL_EXPECTED_ERROR)),context)
+                defaultValue = DefaultExpression(context)
+                exceptions.addAll(defaultValue!!.process())
             }
         } catch (e: AbstractCompilationException) {
             exceptions.add(e)

@@ -3,6 +3,7 @@ package wiles.parser.statements.expressions
 import wiles.parser.builders.Context
 import wiles.parser.constants.ErrorMessages.CANNOT_BE_PROCESSED_ERROR
 import wiles.parser.data.CompilationExceptionsCollection
+import wiles.parser.exceptions.InternalErrorException
 import wiles.parser.statements.AbstractStatement
 import wiles.parser.statements.TokenStatement
 
@@ -19,6 +20,6 @@ class BinaryExpression(
     }
 
     override fun process(): CompilationExceptionsCollection {
-        throw wiles.parser.exceptions.InternalErrorException(CANNOT_BE_PROCESSED_ERROR)
+        throw InternalErrorException(CANNOT_BE_PROCESSED_ERROR)
     }
 }

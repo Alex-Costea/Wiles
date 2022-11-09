@@ -48,8 +48,6 @@ public class TopLevelExpression extends AbstractExpression {
 
     @Override
     protected boolean handleToken(@NotNull Token token) throws AbstractCompilationException {
-        if(TERMINATORS.contains(token.getContent()))
-            return true;
         if (token.getContent().equals(ASSIGN_ID)) {
             operation = new TokenStatement(transmitter.expect(tokenOf(ASSIGN_ID)), getContext());
             var new_right = new DefaultExpression(getContext());
