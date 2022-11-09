@@ -11,7 +11,6 @@ import wiles.parser.constants.Tokens.NOTHING_ID
 import wiles.parser.constants.Tokens.PAREN_END_ID
 import wiles.parser.constants.Tokens.PAREN_START_ID
 import wiles.parser.constants.Types.EITHER_ID
-import wiles.parser.constants.Types.GENERIC_ID
 import wiles.parser.constants.Types.MAX_NR_TYPES
 import wiles.parser.constants.Types.REQUIRES_SUBTYPE
 import wiles.parser.constants.Types.TYPES
@@ -53,8 +52,6 @@ class TypeDefinitionStatement(context: Context) : AbstractStatement(context) {
                 funStatement.process().throwFirstIfExists()
                 subtypes.add(funStatement)
             }
-            if(name == GENERIC_ID)
-                TODO("Generic types")
             if(transmitter.expectMaybe(tokenOf(MAYBE_ID).dontIgnoreNewLine()).isPresent)
             {
                 val oldName = name
