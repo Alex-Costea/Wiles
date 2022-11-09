@@ -4,6 +4,7 @@ import wiles.parser.builders.Context
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.constants.ErrorMessages.IDENTIFIER_EXPECTED_ERROR
 import wiles.parser.constants.Predicates.IS_IDENTIFIER
+import wiles.parser.constants.Tokens.ANON_ARG_ID
 import wiles.parser.constants.Tokens.ASSIGN_ID
 import wiles.parser.constants.Tokens.MUTABLE_ID
 import wiles.parser.constants.Tokens.TYPEDEF_ID
@@ -12,7 +13,7 @@ import wiles.parser.enums.SyntaxType
 import wiles.parser.exceptions.AbstractCompilationException
 import wiles.parser.statements.expressions.DefaultExpression
 
-class DeclarationStatement(context: Context) : AbstractStatement(context) {
+class DeclarationStatement(context: Context, private val isParam: Boolean = false) : AbstractStatement(context) {
     private var left: AbstractStatement? = null
     private var typeStatement : TypeDefinitionStatement? = null
     private var right: DefaultExpression? = null
@@ -37,6 +38,9 @@ class DeclarationStatement(context: Context) : AbstractStatement(context) {
     }
     override fun process(): CompilationExceptionsCollection {
         try {
+            if(isParam && transmitter.expectMaybe(tokenOf(ANON_ARG_ID)).isPresent)
+                name = ANON_ARG_ID
+
             if(transmitter.expectMaybe(tokenOf(MUTABLE_ID)).isPresent)
                 name = MUTABLE_ID
 

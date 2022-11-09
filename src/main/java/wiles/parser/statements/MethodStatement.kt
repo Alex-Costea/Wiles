@@ -20,7 +20,7 @@ import wiles.parser.exceptions.AbstractCompilationException
 class MethodStatement(oldContext : Context, private val isTypeDeclaration: Boolean = true)
     : AbstractStatement(oldContext.setWithinMethod(true)) {
 
-    private val parameters: MutableList<ParameterStatement> = ArrayList()
+    private val parameters: MutableList<DeclarationStatement> = ArrayList()
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
 
     private var returnType: TypeDefinitionStatement
@@ -54,7 +54,7 @@ class MethodStatement(oldContext : Context, private val isTypeDeclaration: Boole
                 if (transmitter.expectMaybe(tokenOf(PAREN_START_ID)).isPresent) {
                     while(transmitter.expectMaybe(tokenOf(IS_IDENTIFIER).or(ANON_ARG_ID)
                             .removeWhen(WhenRemoveToken.Never)).isPresent) {
-                        val parameterStatement = ParameterStatement(context)
+                        val parameterStatement = DeclarationStatement(context,true)
                         exceptions.addAll(parameterStatement.process())
                         parameters.add(parameterStatement)
                         if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break
