@@ -53,7 +53,6 @@ This is a one-man project mostly meant for myself to try out making an interpret
 - `and`, `or`, `not` (not bitwise!)
 - `=`, `>`, `>=`, `<`, `<=`, `=/=`
 - `:=` (assign, declare or name parameters)
-- `+=`, `-=`, `*=`, `/=`, `^=` (syntactic sugar for `a +=` = `a := a +`)
 - `.` (function / field access)
 - `:` (type annotation)
 - `@` (access element in collection)
@@ -99,9 +98,9 @@ for i from 1 to 100
 begin
     let var text := ""
     when modulo(i, 3) = 0 do
-        text += "Fizz"
+        text := text + "Fizz"
     when modulo(i, 5) = 0 do
-        text += "Buzz"
+        text := text + "Buzz"
     when text = "" do
         text := i.as_text
     writeline(text)
