@@ -2,6 +2,7 @@ package wiles.parser.statements
 
 import wiles.parser.builders.Context
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
+import wiles.parser.constants.Tokens
 import wiles.parser.constants.Tokens.BRACKET_END_ID
 import wiles.parser.constants.Tokens.SEPARATOR_ID
 import wiles.parser.data.CompilationExceptionsCollection
@@ -29,6 +30,11 @@ class ListStatement(context: Context) : AbstractStatement(context) {
                 if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break
             }
             transmitter.expect(tokenOf(BRACKET_END_ID))
+            if(transmitter.expectMaybe(tokenOf(Tokens.TYPEDEF_ID).dontIgnoreNewLine()).isPresent) {
+                val typeStatement = TypeDefinitionStatement(context)
+                typeStatement.process().throwFirstIfExists()
+                components.add(0,typeStatement)
+            }
         }
         catch(ex : AbstractCompilationException)
         {
