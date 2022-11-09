@@ -51,7 +51,7 @@ class TypeDefinitionStatement(context: Context) : AbstractStatement(context) {
                 TODO("Function types")
             if(name == GENERIC_ID)
                 TODO("Generic types")
-            if(transmitter.expectMaybe(tokenOf(MAYBE_ID)).isPresent)
+            if(transmitter.expectMaybe(tokenOf(MAYBE_ID).dontIgnoreNewLine()).isPresent)
                 TODO("Nullable types")
         } catch (e: AbstractCompilationException) {
             exceptions.add(e)

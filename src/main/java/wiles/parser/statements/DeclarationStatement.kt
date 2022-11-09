@@ -22,10 +22,18 @@ class DeclarationStatement(context: Context) : AbstractStatement(context) {
         get() = SyntaxType.DECLARATION
 
     override fun getComponents(): List<AbstractStatement> {
-        val x = mutableListOf(left ?: return emptyList(), right ?: return emptyList())
+        val x = mutableListOf(left ?: return emptyList())
+        if(right != null)
+            x.add(0,right!!)
         if(typeStatement != null)
             x.add(0,typeStatement!!)
         return x
+    }
+    private fun readRight()
+    {
+        val rightExpression = DefaultExpression(context)
+        this.right = rightExpression
+        exceptions.addAll(rightExpression.process())
     }
     override fun process(): CompilationExceptionsCollection {
         try {
@@ -38,13 +46,14 @@ class DeclarationStatement(context: Context) : AbstractStatement(context) {
             if(transmitter.expectMaybe(tokenOf(TYPEDEF_ID)).isPresent) {
                 typeStatement = TypeDefinitionStatement(context)
                 typeStatement!!.process().throwFirstIfExists()
+                if(transmitter.expectMaybe(tokenOf(ASSIGN_ID).dontIgnoreNewLine()).isPresent)
+                    readRight()
             }
-            transmitter.expect(tokenOf(ASSIGN_ID))
-
-            val rightExpression = DefaultExpression(context)
-
-            this.right = rightExpression
-            exceptions.addAll(rightExpression.process())
+            else
+            {
+                transmitter.expect(tokenOf(ASSIGN_ID))
+                readRight()
+            }
         } catch (ex: AbstractCompilationException) {
             exceptions.add(ex)
         }

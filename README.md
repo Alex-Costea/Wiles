@@ -33,8 +33,8 @@ This is a one-man project mostly meant for myself to try out making an interpret
 
 ### Statements
 #### Note: [] means required, {} means optional
-- Function: `{fun} {(param1 : type, param2 : type) {-> return_type}} [block]` (return type can be inferred)
-- Value: `let {var} name {: type} := value` (`var` makes it mutable, type can be inferred)
+- Function: `{fun} {(param1 : type, param2 : type) {-> return_type}} [block]` (no return type implies `nothing`)
+- Value: `let {var} name {: type} {:= value}` (`var` makes it mutable, type can be inferred)
 - Assignment: `name := value`
 - Conditional: `when [first clause] {other clauses}`
   - Default clause: `[condition]`
