@@ -24,7 +24,7 @@ class DeclarationStatement(context: Context) : AbstractStatement(context) {
     override fun getComponents(): List<AbstractStatement> {
         val x = mutableListOf(left ?: return emptyList())
         if(right != null)
-            x.add(0,right!!)
+            x.add(right!!)
         if(typeStatement != null)
             x.add(0,typeStatement!!)
         return x
