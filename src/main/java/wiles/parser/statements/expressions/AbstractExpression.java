@@ -88,7 +88,6 @@ public abstract class AbstractExpression extends AbstractStatement {
         //Nothing to check by default
     }
 
-    //TODO: parse function declarations
     @Override
     public @NotNull CompilationExceptionsCollection process() {
         try {
