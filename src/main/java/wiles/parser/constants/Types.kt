@@ -21,7 +21,7 @@ object Types {
     private const val LIST_ID = "LIST"
     private const val ANYTHING_ID = "ANYTHING"
     const val GENERIC_ID = "GENERIC"
-    private const val EITHER_ID = "EITHER"
+    const val EITHER_ID = "EITHER"
 
     val REQUIRES_SUBTYPE = setOf(LIST_ID,EITHER_ID)
     val MAX_NR_TYPES = hashMapOf(Pair(LIST_ID,1))

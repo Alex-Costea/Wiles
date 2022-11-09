@@ -9,6 +9,8 @@ import wiles.parser.constants.Tokens.PAREN_END_ID
 import wiles.parser.constants.Tokens.PAREN_START_ID
 import wiles.parser.constants.Tokens.MAYBE_ID
 import wiles.parser.constants.Tokens.METHOD_ID
+import wiles.parser.constants.Tokens.NOTHING_ID
+import wiles.parser.constants.Types.EITHER_ID
 import wiles.parser.constants.Types.GENERIC_ID
 import wiles.parser.constants.Types.MAX_NR_TYPES
 import wiles.parser.constants.Types.REQUIRES_SUBTYPE
@@ -52,7 +54,20 @@ class TypeDefinitionStatement(context: Context) : AbstractStatement(context) {
             if(name == GENERIC_ID)
                 TODO("Generic types")
             if(transmitter.expectMaybe(tokenOf(MAYBE_ID).dontIgnoreNewLine()).isPresent)
-                TODO("Nullable types")
+            {
+                val oldName = name
+                name = EITHER_ID
+
+                val component1 = TypeDefinitionStatement(context)
+                component1.name = oldName
+                component1.subtypes.addAll(subtypes)
+                subtypes.clear()
+                subtypes.add(component1)
+
+                val component2 = TypeDefinitionStatement(context)
+                component2.name = NOTHING_ID
+                subtypes.add(component2)
+            }
         } catch (e: AbstractCompilationException) {
             exceptions.add(e)
         }
