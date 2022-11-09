@@ -41,7 +41,7 @@ class DeclarationStatement(context: Context, private val isParam: Boolean = fals
             if(isParam && transmitter.expectMaybe(tokenOf(ANON_ARG_ID)).isPresent)
                 name = ANON_ARG_ID
 
-            if(transmitter.expectMaybe(tokenOf(MUTABLE_ID)).isPresent)
+            if(!isParam && transmitter.expectMaybe(tokenOf(MUTABLE_ID)).isPresent)
                 name = MUTABLE_ID
 
             this.left = TokenStatement(transmitter.expect(tokenOf(IS_IDENTIFIER)
