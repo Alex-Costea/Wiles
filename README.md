@@ -52,7 +52,7 @@ end
 
 let list := [10, 3, 55, 8] : int
 let result := min(list)
-when result is int do
+when case result is int do
     writeline("Min found: " + result)
 otherwise do
     writeline("Error: no min found!")

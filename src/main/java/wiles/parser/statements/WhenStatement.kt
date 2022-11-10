@@ -2,16 +2,12 @@ package wiles.parser.statements
 
 import wiles.parser.builders.Context
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
-import wiles.parser.constants.ErrorMessages.INVALID_STATEMENT_ERROR
-import wiles.parser.constants.Predicates.ANYTHING
 import wiles.parser.constants.Tokens.CASE_ID
 import wiles.parser.constants.Tokens.ELSE_ID
 import wiles.parser.constants.Tokens.TERMINATOR_ID
 import wiles.parser.data.CompilationExceptionsCollection
 import wiles.parser.enums.SyntaxType
-import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.exceptions.AbstractCompilationException
-import wiles.parser.exceptions.UnexpectedTokenException
 import wiles.parser.statements.expressions.ConditionExpression
 
 class WhenStatement(context: Context) : AbstractStatement(context) {
@@ -25,11 +21,6 @@ class WhenStatement(context: Context) : AbstractStatement(context) {
         return branches.flatMap { (x, y) -> listOf(x, y) }
     }
 
-    override fun handleEndOfStatement()
-    {
-        // done already as part of processing
-    }
-
     override fun process(): CompilationExceptionsCollection {
         val exceptions = CompilationExceptionsCollection()
         var condition : AbstractStatement
@@ -38,7 +29,7 @@ class WhenStatement(context: Context) : AbstractStatement(context) {
         try
         {
             var startsWithCase = true
-            do
+            while(true)
             {
                 if(!isFirst)
                 {
@@ -52,24 +43,23 @@ class WhenStatement(context: Context) : AbstractStatement(context) {
                         break
                     }
                 }
-                if(!startsWithCase)
-                {
-                    throw UnexpectedTokenException(INVALID_STATEMENT_ERROR,
-                        transmitter.expect(tokenOf(ANYTHING).withErrorMessage(INVALID_STATEMENT_ERROR)).location)
-                }
+
                 if(!isFirst)
                     transmitter.expect(tokenOf(CASE_ID))
                 else if(transmitter.expectMaybe(tokenOf(CASE_ID)).isEmpty)
                     startsWithCase = false
-                isFirst = false
+
                 condition = ConditionExpression(context)
                 blockStatement = CodeBlockStatement(context)
                 exceptions.addAll(condition.process())
                 exceptions.addAll(blockStatement.process())
                 branches.add(Pair(condition, blockStatement))
                 transmitter.expectMaybe(tokenOf(TERMINATOR_ID).dontIgnoreNewLine())
+
+                if(isFirst && !startsWithCase)
+                    break
+                isFirst = false
             }
-            while(transmitter.expectMaybe(tokenOf(CASE_ID).or(ELSE_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
         }
         catch (ex : AbstractCompilationException){
             exceptions.add(ex)

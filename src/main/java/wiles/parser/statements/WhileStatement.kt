@@ -10,11 +10,6 @@ class WhileStatement(oldContext: Context) : AbstractStatement(oldContext.setWith
     private val condition = DefaultExpression(context)
     private val codeBlock = CodeBlockStatement(context)
 
-    override fun handleEndOfStatement() {
-        if(codeBlock.getComponents().isNotEmpty())
-            codeBlock.getComponents().last().handleEndOfStatement()
-    }
-
     override val type: SyntaxType
         get() = SyntaxType.WHILE
 

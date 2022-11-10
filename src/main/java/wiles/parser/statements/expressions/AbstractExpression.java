@@ -149,15 +149,8 @@ public abstract class AbstractExpression extends AbstractStatement {
                     if (maybeStatement.isPresent()) {
                         AbstractStatement statement = maybeStatement.get();
                         exceptions.addAll(statement.process());
-                        precedenceProcessor.add(maybeStatement.get());
+                        precedenceProcessor.add(statement);
                         expectNext = ExpectNext.OPERATOR;
-                        if(statement instanceof MethodStatement && !isInner) {
-                            try
-                            {
-                                transmitter.expect(EXPECT_TERMINATOR_DONT_REMOVE);
-                            }
-                            catch(UnexpectedEndException ignored) {}
-                        }
                         continue;
                     }
                 }

@@ -25,9 +25,9 @@
 ### Statements
 - Value: `let {var} name {: type} {:= value}` (`var` makes it mutable, type can be inferred)
 - Assignment: `name := value`
-- Conditional: `when [first clause] {{; other clauses}}`
-    - Default clause: `[condition]`
-    - Type casting: `value is type [block]`
+- Simple conditional: `when [clause] [block]`
+- Conditional: `when [first clause] {{; other clauses}} [else clause]`
+    - Type casting: `case value is type [block]`
     - Other cases: `case [condition] [block]`
     - Else/default cases: `otherwise [block]`
 - For loop: `for x {in collection} {from a} {to b} [block]`

@@ -45,6 +45,14 @@ class CodeBlockStatement(context: Context) : AbstractStatement(context) {
         return components
     }
 
+    private fun expectTerminator() {
+        try
+        {
+            transmitter.expect(EXPECT_TERMINATOR_DONT_REMOVE)
+        }
+        catch (ignored: UnexpectedEndException) { }
+    }
+
     private fun readOneStatement(doExpression : Boolean = false) {
         val statement : AbstractStatement
         try
@@ -68,7 +76,7 @@ class CodeBlockStatement(context: Context) : AbstractStatement(context) {
         }
         else try {
             if(!(doExpression && context.isWithinInnerExpression))
-                statement.handleEndOfStatement()
+                expectTerminator()
         }
         catch(ex : AbstractCompilationException)
         {
@@ -109,11 +117,8 @@ class CodeBlockStatement(context: Context) : AbstractStatement(context) {
                 }
                 if (!context.isOutermost) {
                     transmitter.expect(tokenOf(END_BLOCK_ID))
-                    try {
-                        if(!context.isWithinInnerExpression)
-                            transmitter.expect(EXPECT_TERMINATOR_DONT_REMOVE)
-                    }
-                    catch(_: UnexpectedEndException) {}
+                    if(!context.isWithinInnerExpression)
+                        expectTerminator()
                 }
             }
         } catch (ex: AbstractCompilationException) {

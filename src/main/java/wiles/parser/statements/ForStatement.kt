@@ -22,11 +22,6 @@ class ForStatement(oldContext: Context) : AbstractStatement(oldContext.setWithin
     private var toExpression : DefaultExpression? = null
     private val codeBlock = CodeBlockStatement(context)
 
-    override fun handleEndOfStatement() {
-        if(codeBlock.getComponents().isNotEmpty())
-            codeBlock.getComponents().last().handleEndOfStatement()
-    }
-
     override val type: SyntaxType
         get() = SyntaxType.FOR
 
