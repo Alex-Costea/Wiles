@@ -1,5 +1,3 @@
-# Wiles
-
 This is a WIP programming language interpreter for my own language. The goal is to make a simple, C-style language with clean syntax inspired by Python and Pascal, that is also easier to understand for beginners. However, even more so, the goal is to learn how to make simple interpreters 😄
 
 The informal specifications can be found [here](specifications.md).
