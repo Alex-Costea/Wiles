@@ -43,6 +43,7 @@ import wiles.parser.exceptions.UnexpectedTokenException
 import wiles.parser.statements.AbstractStatement
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import wiles.parser.constants.Tokens.IF_ID
 
 class SyntaxTreeConverterTests {
     private fun assertResults(exceptions: CompilationExceptionsCollection?, expectedResult: String?, vararg tokens: String) {
@@ -227,7 +228,7 @@ class SyntaxTreeConverterTests {
         assertResults(null,"CODE_BLOCK(DECLARATION(!a; EXPRESSION(METHOD(TYPE NOTHING; CODE_BLOCK(WHEN(EXPRESSION(TRUE); CODE_BLOCK(RETURN(EXPRESSION(!a))); ELSE; CODE_BLOCK(RETURN(EXPRESSION(!b)))))))); WHEN(EXPRESSION(TRUE); CODE_BLOCK(EXPRESSION(!c))); EXPRESSION(!d))",
             DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, DO_ID, NEWLINE_ID,
             WHEN_ID, CASE_ID,TRUE_ID, DO_ID, RETURN_ID, "!a", TERMINATOR_ID, ELSE_ID, DO_ID, RETURN_ID, "!b",
-            NEWLINE_ID, WHEN_ID, TRUE_ID, DO_ID, "!c", NEWLINE_ID, "!d")
+            NEWLINE_ID, IF_ID, TRUE_ID, DO_ID, "!c", NEWLINE_ID, "!d")
 
         assertResults(null,"CODE_BLOCK(WHEN(EXPRESSION(!a; LARGER; #10); CODE_BLOCK(EXPRESSION(NOTHING)); EXPRESSION(!a; LARGER; #0); CODE_BLOCK(EXPRESSION(NOTHING)); ELSE; CODE_BLOCK(EXPRESSION(NOTHING))))",
             WHEN_ID, CASE_ID, "!a", LARGER_ID, "#10", DO_ID, NOTHING_ID, NEWLINE_ID, CASE_ID, "!a", LARGER_ID, "#0",
@@ -235,7 +236,7 @@ class SyntaxTreeConverterTests {
 
         assertResults(null,"CODE_BLOCK(WHEN(EXPRESSION(!a; LARGER; #0); CODE_BLOCK(EXPRESSION(NOTHING)); ELSE; CODE_BLOCK(WHEN(EXPRESSION(!a; LARGER; #10); CODE_BLOCK(EXPRESSION(NOTHING))))); EXPRESSION(EXPRESSION(!a); ASSIGN; EXPRESSION(!b)))",
             WHEN_ID, CASE_ID, "!a", LARGER_ID, "#0", DO_ID, NOTHING_ID, NEWLINE_ID,
-            ELSE_ID, DO_ID, WHEN_ID, "!a", LARGER_ID, "#10", DO_ID, NOTHING_ID, NEWLINE_ID,
+            ELSE_ID, DO_ID, IF_ID, "!a", LARGER_ID, "#10", DO_ID, NOTHING_ID, NEWLINE_ID,
             "!a", ASSIGN_ID, "!b" )
     }
 

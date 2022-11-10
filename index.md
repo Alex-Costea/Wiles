@@ -25,11 +25,11 @@ writeline("Hello, world!")
 for i from 1 to 100
 begin
     let var text := ""
-    when modulo(i, 3) = 0 do
+    if modulo(i, 3) = 0 do
         text := text + "Fizz"
-    when modulo(i, 5) = 0 do
+    if modulo(i, 5) = 0 do
         text := text + "Buzz"
-    when text = "" do
+    if text = "" do
         text := i.as_text
     writeline(text)
 end 
@@ -39,17 +39,17 @@ end
 ```
 let min := fun(list : list[int]) -> int?
 begin
-    when list.size = 0 do
+    if list.size = 0 do
         yield nothing
     let var min_value := list @ 0
     for x in list from 1 do
-        when x < min_value do
+        if x < min_value do
             min_value := x
     yield min_value
 end
 
 let result := min(list := [10, 3, 55, 8])
-when case result is int do
+when result is int do
     writeline("Min found: " + result)
 otherwise do
     writeline("Error: no min found!")

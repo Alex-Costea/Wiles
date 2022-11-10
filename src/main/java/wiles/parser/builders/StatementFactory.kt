@@ -12,6 +12,7 @@ import wiles.parser.constants.Tokens.CONTINUE_ID
 import wiles.parser.constants.Tokens.DECLARE_ID
 import wiles.parser.constants.Tokens.DO_ID
 import wiles.parser.constants.Tokens.FOR_ID
+import wiles.parser.constants.Tokens.IF_ID
 import wiles.parser.constants.Tokens.METHOD_ID
 import wiles.parser.constants.Tokens.RETURN_ID
 import wiles.parser.constants.Tokens.START_BLOCK_ID
@@ -72,7 +73,7 @@ class StatementFactory {
             params[StatementFactoryTypes.METHOD_STATEMENT] = tokenOf(METHOD_ID).or(DO_ID).or(START_BLOCK_ID)
                 .removeWhen(WhenRemoveToken.Never)
             params[StatementFactoryTypes.RETURN_STATEMENT] = tokenOf(RETURN_ID)
-            params[StatementFactoryTypes.WHEN_STATEMENT] = tokenOf(WHEN_ID)
+            params[StatementFactoryTypes.WHEN_STATEMENT] = tokenOf(WHEN_ID).or(IF_ID).removeWhen(WhenRemoveToken.Never)
             params[StatementFactoryTypes.WHILE_STATEMENT] = tokenOf(WHILE_ID)
             params[StatementFactoryTypes.BREAK_STATEMENT] = tokenOf(BREAK_ID)
             params[StatementFactoryTypes.CONTINUE_STATEMENT] = tokenOf(CONTINUE_ID)

@@ -4,8 +4,10 @@ import wiles.parser.builders.Context
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.constants.Tokens.CASE_ID
 import wiles.parser.constants.Tokens.ELSE_ID
+import wiles.parser.constants.Tokens.IF_ID
 import wiles.parser.constants.Tokens.TERMINATOR_ID
 import wiles.parser.constants.Tokens.THEN_ID
+import wiles.parser.constants.Tokens.WHEN_ID
 import wiles.parser.data.CompilationExceptionsCollection
 import wiles.parser.enums.SyntaxType
 import wiles.parser.exceptions.AbstractCompilationException
@@ -29,7 +31,9 @@ class WhenStatement(context: Context) : AbstractStatement(context) {
         var isFirst = true
         try
         {
-            var startsWithCase = true
+            val ifStatement = transmitter.expectMaybe(tokenOf(IF_ID)).isPresent
+            if(!ifStatement)
+                transmitter.expect(tokenOf(WHEN_ID))
             while(true)
             {
                 if(!isFirst)
@@ -44,11 +48,11 @@ class WhenStatement(context: Context) : AbstractStatement(context) {
                         break
                     }
                 }
-
-                if(!isFirst)
-                    transmitter.expect(tokenOf(CASE_ID))
-                else if(transmitter.expectMaybe(tokenOf(CASE_ID)).isEmpty)
-                    startsWithCase = false
+                if(!ifStatement) {
+                    if (!isFirst)
+                        transmitter.expect(tokenOf(CASE_ID))
+                    else transmitter.expectMaybe(tokenOf(CASE_ID))
+                }
 
                 condition = ConditionExpression(context)
                 blockStatement = CodeBlockStatement(context)
@@ -58,7 +62,7 @@ class WhenStatement(context: Context) : AbstractStatement(context) {
                 branches.add(Pair(condition, blockStatement))
                 transmitter.expectMaybe(tokenOf(TERMINATOR_ID).dontIgnoreNewLine())
 
-                if(isFirst && !startsWithCase)
+                if(isFirst && ifStatement)
                     break
                 isFirst = false
             }
