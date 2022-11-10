@@ -2,13 +2,15 @@ package wiles.parser.statements.expressions;
 
 import org.jetbrains.annotations.NotNull;
 import wiles.parser.builders.Context;
-import wiles.parser.builders.ExpectParamsBuilder;
 import wiles.parser.data.Token;
+import wiles.parser.enums.WhenRemoveToken;
 import wiles.parser.exceptions.AbstractCompilationException;
 import wiles.parser.services.PrecedenceProcessor;
 import wiles.parser.statements.TokenStatement;
 
-import static wiles.parser.constants.Tokens.*;
+import static wiles.parser.builders.ExpectParamsBuilder.tokenOf;
+import static wiles.parser.constants.Tokens.ASSIGN_ID;
+import static wiles.parser.constants.Tokens.PAREN_END_ID;
 
 public class InsideMethodCallExpression extends AbstractExpression{
 
@@ -35,16 +37,15 @@ public class InsideMethodCallExpression extends AbstractExpression{
 
     @Override
     protected void checkValid() throws AbstractCompilationException {
+        lastExpression = transmitter.expectMaybe(tokenOf(PAREN_END_ID).removeWhen(WhenRemoveToken.Never)).isPresent();
         if(isAssignment)
             checkLeftIsOneIdentifier();
     }
 
     @Override
     protected boolean handleToken(@NotNull Token token) throws AbstractCompilationException {
-        if(token.getContent().equals(PAREN_END_ID))
-            lastExpression = true;
         if (token.getContent().equals(ASSIGN_ID)) {
-            operation = new TokenStatement(transmitter.expect(ExpectParamsBuilder.tokenOf(ASSIGN_ID)), getContext());
+            operation = new TokenStatement(transmitter.expect(tokenOf(ASSIGN_ID)), getContext());
             var new_right = new InnerDefaultExpression(getContext());
             exceptions.addAll(new_right.process());
             right = new_right;

@@ -263,6 +263,8 @@ class SyntaxTreeConverterTests {
     {
         assertResults(null,"CODE_BLOCK(EXPRESSION(!a; PLUS; EXPRESSION(!b; APPLY; METHOD_CALL)))",
             "!a", PLUS_ID, "!b", PAREN_START_ID, PAREN_END_ID)
+        assertResults(null,"CODE_BLOCK(EXPRESSION(!min; APPLY; METHOD_CALL(EXPRESSION(EXPRESSION(!list); ASSIGN; EXPRESSION(!a)))))",
+            "!min", PAREN_START_ID, "!list", ASSIGN_ID, "!a", PAREN_END_ID)
         //TODO: tests
     }
 

@@ -48,8 +48,7 @@ begin
     yield min_value
 end
 
-let list := [10, 3, 55, 8] : int
-let result := min(list)
+let result := min(list := [10, 3, 55, 8])
 when case result is int do
     writeline("Min found: " + result)
 otherwise do
