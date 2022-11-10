@@ -12,10 +12,11 @@ import wiles.parser.data.CompilationExceptionsCollection
 import wiles.parser.enums.SyntaxType
 import wiles.parser.exceptions.AbstractCompilationException
 import wiles.parser.statements.expressions.ConditionExpression
+import wiles.parser.statements.expressions.InnerDefaultExpression
 
-class WhenStatement(context: Context) : AbstractStatement(context) {
+class WhenStatement(context: Context, private val isExpression : Boolean = false) : AbstractStatement(context) {
 
-    private val branches : MutableList<Pair<AbstractStatement,CodeBlockStatement>> = mutableListOf()
+    private val branches : MutableList<Pair<AbstractStatement,AbstractStatement>> = mutableListOf()
 
     override val type: SyntaxType
         get() = SyntaxType.WHEN
@@ -27,11 +28,11 @@ class WhenStatement(context: Context) : AbstractStatement(context) {
     override fun process(): CompilationExceptionsCollection {
         val exceptions = CompilationExceptionsCollection()
         var condition : AbstractStatement
-        var blockStatement : CodeBlockStatement
+        var body : AbstractStatement
         var isFirst = true
         try
         {
-            val ifStatement = transmitter.expectMaybe(tokenOf(IF_ID)).isPresent
+            val ifStatement = if(!isExpression) transmitter.expectMaybe(tokenOf(IF_ID)).isPresent else false
             if(!ifStatement)
                 transmitter.expect(tokenOf(WHEN_ID))
             while(true)
@@ -41,10 +42,10 @@ class WhenStatement(context: Context) : AbstractStatement(context) {
                     val tempToken = transmitter.expectMaybe(tokenOf(ELSE_ID))
                     if (tempToken.isPresent) {
                         condition = TokenStatement(tempToken.get(), context)
-                        blockStatement = CodeBlockStatement(context)
-                        exceptions.addAll(blockStatement.process())
+                        body = if(isExpression) InnerDefaultExpression(context) else CodeBlockStatement(context)
+                        exceptions.addAll(body.process())
                         transmitter.expectMaybe(tokenOf(TERMINATOR_ID).dontIgnoreNewLine())
-                        branches.add(Pair(condition, blockStatement))
+                        branches.add(Pair(condition, body))
                         break
                     }
                 }
@@ -55,11 +56,13 @@ class WhenStatement(context: Context) : AbstractStatement(context) {
                 }
 
                 condition = ConditionExpression(context)
-                blockStatement = CodeBlockStatement(context)
+                body = if(isExpression) InnerDefaultExpression(context) else CodeBlockStatement(context)
                 exceptions.addAll(condition.process())
-                transmitter.expectMaybe(tokenOf(THEN_ID))
-                exceptions.addAll(blockStatement.process())
-                branches.add(Pair(condition, blockStatement))
+                if(isExpression)
+                    transmitter.expect(tokenOf(THEN_ID))
+                else transmitter.expectMaybe(tokenOf(THEN_ID))
+                exceptions.addAll(body.process())
+                branches.add(Pair(condition, body))
                 transmitter.expectMaybe(tokenOf(TERMINATOR_ID).dontIgnoreNewLine())
 
                 if(isFirst && ifStatement)

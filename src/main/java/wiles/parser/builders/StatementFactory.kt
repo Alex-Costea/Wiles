@@ -30,7 +30,7 @@ import wiles.parser.statements.expressions.TopLevelExpression
 import java.util.function.Function
 
 class StatementFactory {
-    private val statements: MutableSet<StatementFactoryTypes> = HashSet()
+    private val statements = LinkedHashSet<StatementFactoryTypes>()
     private lateinit var transmitter: TokenTransmitter
     private lateinit var context: Context
     fun addType(statement: StatementFactoryTypes): StatementFactory {
@@ -52,8 +52,7 @@ class StatementFactory {
         for (statement in statements) {
             if (!context.isWithinMethod && statement == StatementFactoryTypes.RETURN_STATEMENT) continue
             if (!context.isWithinLoop && statement == StatementFactoryTypes.CONTINUE_STATEMENT) continue
-            if (transmitter.expectMaybe(params[statement]!!).isPresent) return createObject[statement]!!
-                .apply(context)
+            if (transmitter.expectMaybe(params[statement]!!).isPresent) return createObject[statement]!!.apply(context)
         }
 
         //Expression not found
@@ -64,8 +63,8 @@ class StatementFactory {
     }
 
     companion object {
-        private val params: HashMap<StatementFactoryTypes, ExpectParamsBuilder> = HashMap()
-        private val createObject: HashMap<StatementFactoryTypes, Function<Context, AbstractStatement>> = HashMap()
+        private val params = LinkedHashMap<StatementFactoryTypes, ExpectParamsBuilder>()
+        private val createObject = LinkedHashMap<StatementFactoryTypes, Function<Context, AbstractStatement>>()
 
         init {
             params[StatementFactoryTypes.TOP_LEVEL_EXPRESSION] = START_OF_EXPRESSION_NO_CODE_BLOCK
@@ -74,6 +73,7 @@ class StatementFactory {
                 .removeWhen(WhenRemoveToken.Never)
             params[StatementFactoryTypes.RETURN_STATEMENT] = tokenOf(RETURN_ID)
             params[StatementFactoryTypes.WHEN_STATEMENT] = tokenOf(WHEN_ID).or(IF_ID).removeWhen(WhenRemoveToken.Never)
+            params[StatementFactoryTypes.WHEN_EXPRESSION] = tokenOf(WHEN_ID).removeWhen(WhenRemoveToken.Never)
             params[StatementFactoryTypes.WHILE_STATEMENT] = tokenOf(WHILE_ID)
             params[StatementFactoryTypes.BREAK_STATEMENT] = tokenOf(BREAK_ID)
             params[StatementFactoryTypes.CONTINUE_STATEMENT] = tokenOf(CONTINUE_ID)
@@ -91,6 +91,8 @@ class StatementFactory {
                 Function { context: Context -> ReturnStatement(context) }
             createObject[StatementFactoryTypes.WHEN_STATEMENT] =
                 Function { context: Context -> WhenStatement(context) }
+            createObject[StatementFactoryTypes.WHEN_EXPRESSION] =
+                Function { context: Context -> WhenStatement(context,true) }
             createObject[StatementFactoryTypes.WHILE_STATEMENT] =
                 Function { context: Context -> WhileStatement(context) }
             createObject[StatementFactoryTypes.BREAK_STATEMENT] =

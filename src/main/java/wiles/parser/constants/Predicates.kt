@@ -16,6 +16,7 @@ import wiles.parser.constants.Tokens.PAREN_START_ID
 import wiles.parser.constants.Tokens.STARTING_OPERATORS
 import wiles.parser.constants.Tokens.START_BLOCK_ID
 import wiles.parser.constants.Tokens.TERMINATORS
+import wiles.parser.constants.Tokens.WHEN_ID
 import wiles.parser.enums.WhenRemoveToken
 import java.util.function.Predicate
 
@@ -34,7 +35,7 @@ object Predicates {
 
     @JvmField
     val STARTS_AS_TOKEN = Predicate { content : String ->
-        IS_LITERAL.test(content) || PARENS.contains(content) || content == DO_ID
+        IS_LITERAL.test(content) || PARENS.contains(content) || content == DO_ID || content == WHEN_ID
                 || content == START_BLOCK_ID || STARTING_OPERATORS.contains(content) || content == METHOD_ID }
 
     @JvmField
@@ -63,7 +64,7 @@ object Predicates {
         .withErrorMessage(INTERNAL_ERROR).removeWhen(WhenRemoveToken.WhenFound).freeze()
 
     @JvmField
-    val START_OF_EXPRESSION =tokenOf(IS_CONTAINED_IN(STARTING_OPERATORS)).or(IS_LITERAL)
+    val START_OF_EXPRESSION =tokenOf(IS_CONTAINED_IN(STARTING_OPERATORS)).or(IS_LITERAL).or(WHEN_ID)
         .or(PAREN_START_ID).or(BRACKET_START_ID).or(METHOD_ID).or(DO_ID).or(START_BLOCK_ID)
         .withErrorMessage(EXPRESSION_EXPECTED_ERROR).removeWhen(WhenRemoveToken.Never).freeze()
 
