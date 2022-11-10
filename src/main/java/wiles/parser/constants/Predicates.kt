@@ -70,8 +70,7 @@ object Predicates {
 
 
     @JvmField
-    val START_OF_EXPRESSION_NO_CODE_BLOCK = tokenOf(IS_CONTAINED_IN(STARTING_OPERATORS))
-        .or(IS_LITERAL).or(PAREN_START_ID).or(BRACKET_START_ID).or(METHOD_ID)
+    val START_OF_TOP_LEVEL_EXPRESSION = tokenOf(IS_CONTAINED_IN(STARTING_OPERATORS)).or(IS_LITERAL).or(PAREN_START_ID)
         .withErrorMessage(EXPRESSION_EXPECTED_ERROR).removeWhen(WhenRemoveToken.Never).freeze()
 
     @JvmField
