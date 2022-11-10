@@ -9,7 +9,7 @@
 - Floating: `12345.6`
 - String: `"abc"`
 - Boolean: `true` (1) and `false` (0)
-- List literal: `[{{value}}] : type`
+- List literal: `[{{value,}}] : type`
 - Functions literals: `{fun} {({{param1 : type := value,}}) {-> return_type}} [block]` (no return type implies `nothing`)
 
 ### Types
@@ -26,13 +26,13 @@
 - Value: `let {var} name {: type} {:= value}` (`var` makes it mutable, type can be inferred)
 - Assignment: `name := value`
 - Simple conditional: `when [clause] [block]`
-- Conditional: `when [first clause] {{; other clauses}} [else clause]`
+- Conditional: `when [first clause]; {{other clauses;}} [else clause]`
     - Type casting: `case value is type [block]`
     - Other cases: `case [condition] [block]`
     - Else/default cases: `otherwise [block]`
 - For loop: `for x {in collection} {from a} {to b} [block]`
 - While loop: `while condition [block]`
-- Code block: `do [operation]` or `begin; {{operation}}; end`
+- Code block: `do [operation]` or `begin; {{operation;}} end`
 - Yield: `yield [expression]` (return equivalent)
 - `nothing` (no operation)
 - `stop`, `skip` (`break`/`return;`, `continue` equivalents)
@@ -64,6 +64,6 @@
 - Top level expressions must be of type `nothing`
 - `nothing` type is invalid in comparisons
 - Garbage collection
-- Trailing commas can be included or excluded, both are valid
+- Trailing commas are valid but not necessary
 
 ### [Potential future additions](future.md)
