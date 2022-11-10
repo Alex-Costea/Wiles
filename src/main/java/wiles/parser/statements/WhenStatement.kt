@@ -5,6 +5,7 @@ import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.constants.Tokens.CASE_ID
 import wiles.parser.constants.Tokens.ELSE_ID
 import wiles.parser.constants.Tokens.TERMINATOR_ID
+import wiles.parser.constants.Tokens.THEN_ID
 import wiles.parser.data.CompilationExceptionsCollection
 import wiles.parser.enums.SyntaxType
 import wiles.parser.exceptions.AbstractCompilationException
@@ -52,6 +53,7 @@ class WhenStatement(context: Context) : AbstractStatement(context) {
                 condition = ConditionExpression(context)
                 blockStatement = CodeBlockStatement(context)
                 exceptions.addAll(condition.process())
+                transmitter.expectMaybe(tokenOf(THEN_ID))
                 exceptions.addAll(blockStatement.process())
                 branches.add(Pair(condition, blockStatement))
                 transmitter.expectMaybe(tokenOf(TERMINATOR_ID).dontIgnoreNewLine())
