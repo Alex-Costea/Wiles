@@ -54,10 +54,9 @@ class TypeDefinitionStatement(context: Context) : AbstractStatement(context) {
             }
             if(name == METHOD_ID) {
                 transmitter.expect(tokenOf(BRACKET_START_ID))
-                val funStatement = MethodStatement(context, false)
+                val funStatement = MethodStatement(context, true)
                 funStatement.process().throwFirstIfExists()
                 subtypes.add(funStatement)
-                transmitter.expectMaybe(tokenOf(SEPARATOR_ID))
                 transmitter.expect(tokenOf(BRACKET_END_ID))
             }
             if(transmitter.expectMaybe(tokenOf(MAYBE_ID).dontIgnoreNewLine()).isPresent)

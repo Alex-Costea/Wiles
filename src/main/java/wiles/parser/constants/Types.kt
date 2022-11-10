@@ -19,7 +19,6 @@ object Types {
     private const val STRING_ID = "STRING"
     private const val DOUBLE_ID = "DOUBLE"
     private const val LIST_ID = "LIST"
-    private const val ANYTHING_ID = "ANYTHING"
     const val EITHER_ID = "EITHER"
 
     val REQUIRES_SUBTYPE = setOf(LIST_ID,EITHER_ID)
@@ -35,7 +34,6 @@ object Types {
         TYPES["!text"] = STRING_ID
         TYPES[if(!ROMANIAN_MODE) "!rational" else "!rațional"] = DOUBLE_ID
         TYPES[if(!ROMANIAN_MODE) "!list" else "!listă"] = LIST_ID
-        TYPES[if(!ROMANIAN_MODE) "!anything" else "!orice"] = ANYTHING_ID
         TYPES[if(!ROMANIAN_MODE) "!either" else "!ori"] = EITHER_ID
         TYPES[NOTHING_ID] = NOTHING_ID
         TYPES[MAYBE_ID] = MAYBE_ID
