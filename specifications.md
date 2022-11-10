@@ -19,8 +19,8 @@
 - String: `text`
 - Floating point: `rational` (equivalent to `double` in other languages)
 - Function type: like function literals, but no function body
-- Sum types: `either(type1,type2,type3)`
-- List: `list(type)`
+- Sum types: `either[type1,type2,type3]`
+- List: `list[type]`
 
 ### Statements
 - Value: `let {var} name {: type} {:= value}` (`var` makes it mutable, type can be inferred)
@@ -46,9 +46,9 @@
 - `:` (type annotation)
 - `@` (access element in collection)
 - `()` (order of operations, function access)
-- `[]` (used in list literals)
+- `[]` (used in list literals and type definitions)
 - `,` (separator between elements)
-- `?` (syntactic sugar for `type? = either(type,nothing)`)
+- `?` (syntactic sugar for `type? = either[type,nothing]`)
 
 ### Named parameters
 - Function calling with named parameters by default: `my_function(a := 1, b := 10)`

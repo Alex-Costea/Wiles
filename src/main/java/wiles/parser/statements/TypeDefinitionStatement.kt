@@ -5,12 +5,12 @@ import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.constants.ErrorMessages.NOT_ENOUGH_TYPES_EXCEPTION
 import wiles.parser.constants.ErrorMessages.TYPE_EXPECTED_ERROR
 import wiles.parser.constants.Predicates.IS_CONTAINED_IN
-import wiles.parser.constants.Tokens
+import wiles.parser.constants.Tokens.BRACKET_END_ID
+import wiles.parser.constants.Tokens.BRACKET_START_ID
 import wiles.parser.constants.Tokens.MAYBE_ID
 import wiles.parser.constants.Tokens.METHOD_ID
 import wiles.parser.constants.Tokens.NOTHING_ID
-import wiles.parser.constants.Tokens.PAREN_END_ID
-import wiles.parser.constants.Tokens.PAREN_START_ID
+import wiles.parser.constants.Tokens.SEPARATOR_ID
 import wiles.parser.constants.Types.EITHER_ID
 import wiles.parser.constants.Types.MAX_NR_TYPES
 import wiles.parser.constants.Types.MIN_NR_TYPES
@@ -38,24 +38,27 @@ class TypeDefinitionStatement(context: Context) : AbstractStatement(context) {
             name = TYPES[content]!!
             if(REQUIRES_SUBTYPE.contains(name))
             {
-                transmitter.expect(tokenOf(PAREN_START_ID))
+                transmitter.expect(tokenOf(BRACKET_START_ID))
                 val max : Int? = MAX_NR_TYPES[name]
                 for(i in 1..(max?:Int.MAX_VALUE)) {
-                    if(transmitter.expectMaybe(tokenOf(PAREN_END_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
+                    if(transmitter.expectMaybe(tokenOf(BRACKET_END_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
                         break
                     val subType = TypeDefinitionStatement(context)
                     subType.process().throwFirstIfExists()
                     subtypes.add(subType)
-                    if (transmitter.expectMaybe(tokenOf(Tokens.SEPARATOR_ID)).isEmpty) break
+                    if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break
                 }
                 if(subtypes.size < (MIN_NR_TYPES[name] ?: Int.MAX_VALUE))
                     throw TokenExpectedException(NOT_ENOUGH_TYPES_EXCEPTION,location)
-                transmitter.expect(tokenOf(PAREN_END_ID))
+                transmitter.expect(tokenOf(BRACKET_END_ID))
             }
             if(name == METHOD_ID) {
+                transmitter.expect(tokenOf(BRACKET_START_ID))
                 val funStatement = MethodStatement(context, false)
                 funStatement.process().throwFirstIfExists()
                 subtypes.add(funStatement)
+                transmitter.expectMaybe(tokenOf(SEPARATOR_ID))
+                transmitter.expect(tokenOf(BRACKET_END_ID))
             }
             if(transmitter.expectMaybe(tokenOf(MAYBE_ID).dontIgnoreNewLine()).isPresent)
             {

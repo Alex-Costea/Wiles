@@ -39,7 +39,7 @@ end
 ### Minimum value
 
 ```
-let min := fun(list : list(int)) -> int?
+let min := fun(list : list[int]) -> int?
 begin
     when list.size = 0 do
         yield nothing
