@@ -1,6 +1,6 @@
 ## Language specification
 ### NOTE: WORK IN PROGRESS, SUBJECT TO CHANGE
-#### Note: [] means required, {} means optional, {{}} means repeating
+#### Note: [] means required, {} means optional, {@ @} means repeating
 
 ### Literals
 
@@ -9,8 +9,8 @@
 - Floating: `12345.6`
 - String: `"abc"`
 - Boolean: `true` (1) and `false` (0)
-- List literal: `[{{value,}}] : type`
-- Functions literals: `{fun} {({{param1 : type := value,}}) {-> return_type}} [block]` (no return type implies `nothing`)
+- List literal: `[{@value,@}] : type`
+- Functions literals: `{fun} {({@param1 : type := value,@}) {-> return_type}} [block]` (no return type implies `nothing`)
 
 ### Types
 - Nothing: only valid value is `nothing`
@@ -26,13 +26,13 @@
 - Value: `let {var} name {: type} {:= value}` (`var` makes it mutable, type can be inferred)
 - Assignment: `name := value`
 - Simple conditional: `when [clause] [block]`
-- Conditional: `when [first clause]; {{other clauses;}} [else clause]`
+- Conditional: `when [first clause]; {@other clauses;@} [else clause]`
     - Type casting: `case value is type [block]`
     - Other cases: `case [condition] [block]`
     - Else/default cases: `otherwise [block]`
 - For loop: `for x {in collection} {from a} {to b} [block]`
 - While loop: `while condition [block]`
-- Code block: `do [operation]` or `begin; {{operation;}} end`
+- Code block: `do [operation]` or `begin; {@operation;@} end`
 - Yield: `yield [expression]` (return equivalent)
 - `nothing` (no operation)
 - `stop`, `skip` (`break`/`return;`, `continue` equivalents)
