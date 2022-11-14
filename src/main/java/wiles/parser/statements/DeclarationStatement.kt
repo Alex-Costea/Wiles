@@ -8,7 +8,7 @@ import wiles.parser.constants.Tokens.ANON_ARG_ID
 import wiles.parser.constants.Tokens.ASSIGN_ID
 import wiles.parser.constants.Tokens.MUTABLE_ID
 import wiles.parser.constants.Tokens.TYPEDEF_ID
-import wiles.parser.data.CompilationExceptionsCollection
+import wiles.shared.CompilationExceptionsCollection
 import wiles.parser.enums.SyntaxType
 import wiles.parser.exceptions.AbstractCompilationException
 import wiles.parser.statements.expressions.DefaultExpression

@@ -5,7 +5,7 @@ import wiles.parser.constants.ErrorMessages;
 import wiles.parser.constants.Settings;
 import wiles.parser.constants.Tokens;
 import wiles.parser.constants.Utils;
-import wiles.parser.data.CompilationExceptionsCollection;
+import wiles.shared.CompilationExceptionsCollection;
 import wiles.parser.data.Token;
 import wiles.parser.data.TokenLocation;
 import wiles.parser.exceptions.AbstractCompilationException;

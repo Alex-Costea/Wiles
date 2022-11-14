@@ -34,7 +34,7 @@ import wiles.parser.constants.Tokens.TYPEDEF_ID
 import wiles.parser.constants.Tokens.WHEN_ID
 import wiles.parser.constants.Utils.nullLocation
 import wiles.parser.converters.TokensToSyntaxTreeConverter
-import wiles.parser.data.CompilationExceptionsCollection
+import wiles.shared.CompilationExceptionsCollection
 import wiles.parser.data.Token
 import wiles.parser.exceptions.AbstractCompilationException
 import wiles.parser.exceptions.TokenExpectedException
@@ -44,6 +44,7 @@ import wiles.parser.statements.AbstractStatement
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import wiles.parser.constants.Tokens.IF_ID
+import wiles.parser.constants.Tokens.THEN_ID
 
 class SyntaxTreeConverterTests {
     private fun assertResults(exceptions: CompilationExceptionsCollection?, expectedResult: String?, vararg tokens: String) {
@@ -61,12 +62,12 @@ class SyntaxTreeConverterTests {
 
     @Test
     fun newlineTests() {
-        assertResults(null, "CODE_BLOCK(DECLARATION(!a; EXPRESSION(METHOD(TYPE NOTHING; CODE_BLOCK))))",
+        assertResults(null, "CODE_BLOCK(DECLARATION(!a; EXPRESSION(METHOD(CODE_BLOCK))))",
                 DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
-        assertResults(null, "CODE_BLOCK(DECLARATION(!a; EXPRESSION(METHOD(TYPE NOTHING; CODE_BLOCK))))",
+        assertResults(null, "CODE_BLOCK(DECLARATION(!a; EXPRESSION(METHOD(CODE_BLOCK))))",
                 NEWLINE_ID, NEWLINE_ID,
                 DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
-        assertResults(null, "CODE_BLOCK(DECLARATION(!a; EXPRESSION(METHOD(TYPE NOTHING; CODE_BLOCK))))",
+        assertResults(null, "CODE_BLOCK(DECLARATION(!a; EXPRESSION(METHOD(CODE_BLOCK))))",
                 DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID,
                 NEWLINE_ID, PAREN_END_ID,
                 NEWLINE_ID, START_BLOCK_ID,
@@ -75,11 +76,11 @@ class SyntaxTreeConverterTests {
 
     @Test
     fun expressionsTest() {
-        assertResults(null, "CODE_BLOCK(DECLARATION(!main; EXPRESSION(METHOD(TYPE NOTHING; CODE_BLOCK(EXPRESSION(EXPRESSION(!b); ASSIGN; EXPRESSION(!c)))))))",
+        assertResults(null, "CODE_BLOCK(DECLARATION(!main; EXPRESSION(METHOD(CODE_BLOCK(EXPRESSION(EXPRESSION(!b); ASSIGN; EXPRESSION(!c)))))))",
                 DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID,
                 PAREN_START_ID, PAREN_END_ID, START_BLOCK_ID, TERMINATOR_ID,
                 "!b", ASSIGN_ID, "!c", TERMINATOR_ID, END_BLOCK_ID)
-        assertResults(null, "CODE_BLOCK(DECLARATION(!main; EXPRESSION(METHOD(TYPE NOTHING; CODE_BLOCK(EXPRESSION(EXPRESSION(!b); ASSIGN; EXPRESSION(#3)))))))",
+        assertResults(null, "CODE_BLOCK(DECLARATION(!main; EXPRESSION(METHOD(CODE_BLOCK(EXPRESSION(EXPRESSION(!b); ASSIGN; EXPRESSION(#3)))))))",
             DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID,
             PAREN_START_ID, PAREN_END_ID, START_BLOCK_ID, TERMINATOR_ID,
             "!b", ASSIGN_ID, "#3", TERMINATOR_ID, END_BLOCK_ID)
@@ -146,12 +147,12 @@ class SyntaxTreeConverterTests {
                 null,
             DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID)
         assertResults(createExceptions(TokenExpectedException(INVALID_EXPRESSION_ERROR, nullLocation),TokenExpectedException(
-            END_OF_STATEMENT_EXPECTED_ERROR, nullLocation)),"CODE_BLOCK(DECLARATION(!main; EXPRESSION(METHOD(TYPE NOTHING; CODE_BLOCK(EXPRESSION; EXPRESSION(!a; PLUS; !b))))))",
+            END_OF_STATEMENT_EXPECTED_ERROR, nullLocation)),"CODE_BLOCK(DECLARATION(!main; EXPRESSION(METHOD(CODE_BLOCK(EXPRESSION; EXPRESSION(!a; PLUS; !b))))))",
             DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, NEWLINE_ID,
             START_BLOCK_ID, NEWLINE_ID, "!a", TIMES_ID, TIMES_ID, "!b", NEWLINE_ID, "!a", PLUS_ID, "!b",
             DECLARE_ID, "!c", ASSIGN_ID, "!d", NEWLINE_ID, END_BLOCK_ID)
         assertResults(createExceptions(UnexpectedTokenException(INVALID_STATEMENT_ERROR, nullLocation)),
-        "CODE_BLOCK(DECLARATION(!a; EXPRESSION(METHOD(TYPE NOTHING; CODE_BLOCK))); EXPRESSION(!a; PLUS; !b))",
+        "CODE_BLOCK(DECLARATION(!a; EXPRESSION(METHOD(CODE_BLOCK))); EXPRESSION(!a; PLUS; !b))",
             DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, DO_ID, CONTINUE_ID
             , NEWLINE_ID, "!a", PLUS_ID, "!b")
     }
@@ -170,18 +171,18 @@ class SyntaxTreeConverterTests {
         assertResults(null, "CODE_BLOCK(DECLARATION(!main; EXPRESSION(METHOD(TYPE INT32; DECLARATION(TYPE NOTHING; !a); CODE_BLOCK))))",
             DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, PAREN_START_ID, "!a", TYPEDEF_ID, NOTHING_ID, PAREN_END_ID,
             RIGHT_ARROW_ID, "!int", START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
-        assertResults(null, "CODE_BLOCK(DECLARATION(!a; EXPRESSION(METHOD(TYPE NOTHING; CODE_BLOCK(EXPRESSION(NOTHING))))))",
+        assertResults(null, "CODE_BLOCK(DECLARATION(!a; EXPRESSION(METHOD(CODE_BLOCK(EXPRESSION(NOTHING))))))",
             DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, DO_ID, NOTHING_ID)
-        assertResults(null, "CODE_BLOCK(DECLARATION(!main; EXPRESSION(METHOD(TYPE NOTHING; CODE_BLOCK(EXPRESSION(EXPRESSION(!b); ASSIGN; EXPRESSION(#3)))))))",
+        assertResults(null, "CODE_BLOCK(DECLARATION(!main; EXPRESSION(METHOD(CODE_BLOCK(EXPRESSION(EXPRESSION(!b); ASSIGN; EXPRESSION(#3)))))))",
             DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, DO_ID,
              "!b", ASSIGN_ID, "#3")
         assertResults(null, "CODE_BLOCK(DECLARATION(!product; EXPRESSION(METHOD(TYPE INT64; DECLARATION(TYPE INT32; !a); DECLARATION(TYPE INT32; !b); CODE_BLOCK(EXPRESSION(EXPRESSION(!product); ASSIGN; EXPRESSION(!a; TIMES; !b)))))))",
             DECLARE_ID, "!product", ASSIGN_ID, METHOD_ID, PAREN_START_ID, "!a", TYPEDEF_ID, "!int",
                 SEPARATOR_ID, "!b", TYPEDEF_ID, "!int", PAREN_END_ID, RIGHT_ARROW_ID, "!bigint", NEWLINE_ID,
                 DO_ID,  "!product", ASSIGN_ID, "!a", TIMES_ID, "!b")
-        assertResults(null,"CODE_BLOCK(DECLARATION(!main; EXPRESSION(METHOD(TYPE NOTHING; DECLARATION(TYPE INT32; !args); CODE_BLOCK(EXPRESSION(NOTHING))))))",
+        assertResults(null,"CODE_BLOCK(DECLARATION(!main; EXPRESSION(METHOD(DECLARATION(TYPE INT32; !args); CODE_BLOCK(EXPRESSION(NOTHING))))))",
             DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, PAREN_START_ID, "!args", TYPEDEF_ID, "!int", PAREN_END_ID, DO_ID, NOTHING_ID)
-        assertResults(null,"CODE_BLOCK(DECLARATION(!a; EXPRESSION(METHOD(TYPE NOTHING; CODE_BLOCK(DECLARATION(!b; EXPRESSION(METHOD(TYPE NOTHING; CODE_BLOCK(EXPRESSION(NOTHING))))))))))",
+        assertResults(null,"CODE_BLOCK(DECLARATION(!a; EXPRESSION(METHOD(CODE_BLOCK(DECLARATION(!b; EXPRESSION(METHOD(CODE_BLOCK(EXPRESSION(NOTHING))))))))))",
             DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, NEWLINE_ID, START_BLOCK_ID, NEWLINE_ID, DECLARE_ID,
             "!b", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, DO_ID, NOTHING_ID, NEWLINE_ID, END_BLOCK_ID, NEWLINE_ID, NEWLINE_ID, NEWLINE_ID)
     }
@@ -225,7 +226,7 @@ class SyntaxTreeConverterTests {
     @Test
     fun whenTest()
     {
-        assertResults(null,"CODE_BLOCK(DECLARATION(!a; EXPRESSION(METHOD(TYPE NOTHING; CODE_BLOCK(WHEN(EXPRESSION(TRUE); CODE_BLOCK(RETURN(EXPRESSION(!a))); ELSE; CODE_BLOCK(RETURN(EXPRESSION(!b)))))))); WHEN(EXPRESSION(TRUE); CODE_BLOCK(EXPRESSION(!c))); EXPRESSION(!d))",
+        assertResults(null,"CODE_BLOCK(DECLARATION(!a; EXPRESSION(METHOD(CODE_BLOCK(WHEN(EXPRESSION(TRUE); CODE_BLOCK(RETURN(EXPRESSION(!a))); ELSE; CODE_BLOCK(RETURN(EXPRESSION(!b)))))))); WHEN(EXPRESSION(TRUE); CODE_BLOCK(EXPRESSION(!c))); EXPRESSION(!d))",
             DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, DO_ID, NEWLINE_ID,
             WHEN_ID, CASE_ID,TRUE_ID, DO_ID, RETURN_ID, "!a", TERMINATOR_ID, ELSE_ID, DO_ID, RETURN_ID, "!b",
             NEWLINE_ID, IF_ID, TRUE_ID, DO_ID, "!c", NEWLINE_ID, "!d")
@@ -238,6 +239,10 @@ class SyntaxTreeConverterTests {
             WHEN_ID, CASE_ID, "!a", LARGER_ID, "#0", DO_ID, NOTHING_ID, NEWLINE_ID,
             ELSE_ID, DO_ID, IF_ID, "!a", LARGER_ID, "#10", DO_ID, NOTHING_ID, NEWLINE_ID,
             "!a", ASSIGN_ID, "!b" )
+
+        assertResults(null, "CODE_BLOCK(DECLARATION(!a; EXPRESSION(WHEN(EXPRESSION(!b; LARGER; #10); EXPRESSION(#1); EXPRESSION(!b; LARGER; #0); EXPRESSION(#0); ELSE; EXPRESSION(UNARY_MINUS; #1)))))",
+            DECLARE_ID, "!a", ASSIGN_ID, WHEN_ID, "!b", LARGER_ID, "#10", THEN_ID, "#1", CASE_ID, "!b", LARGER_ID, "#0",
+            THEN_ID, "#0", ELSE_ID, MINUS_ID, "#1")
     }
 
     @Test

@@ -7,7 +7,7 @@ import wiles.parser.constants.Predicates
 import wiles.parser.constants.Tokens.FROM_ID
 import wiles.parser.constants.Tokens.IN_ID
 import wiles.parser.constants.Tokens.TO_ID
-import wiles.parser.data.CompilationExceptionsCollection
+import wiles.shared.CompilationExceptionsCollection
 import wiles.parser.enums.SyntaxType
 import wiles.parser.exceptions.AbstractCompilationException
 import wiles.parser.statements.expressions.DefaultExpression

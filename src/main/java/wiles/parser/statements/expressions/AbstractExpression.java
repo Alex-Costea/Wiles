@@ -3,7 +3,7 @@ package wiles.parser.statements.expressions;
 import org.jetbrains.annotations.NotNull;
 import wiles.parser.builders.Context;
 import wiles.parser.builders.StatementFactory;
-import wiles.parser.data.CompilationExceptionsCollection;
+import wiles.shared.CompilationExceptionsCollection;
 import wiles.parser.data.Token;
 import wiles.parser.enums.ExpectNext;
 import wiles.parser.enums.StatementFactoryTypes;

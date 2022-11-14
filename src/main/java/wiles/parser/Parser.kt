@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper
 import com.google.common.base.CharMatcher
 import wiles.parser.constants.ErrorMessages.IO_ERROR
 import wiles.parser.converters.TokensToSyntaxTreeConverter
-import wiles.parser.data.CompilationExceptionsCollection
+import wiles.shared.CompilationExceptionsCollection
 import wiles.parser.data.Token
 import wiles.parser.data.TokenLocation
 import wiles.parser.statements.CodeBlockStatement
@@ -17,18 +17,12 @@ import java.io.InputStreamReader
 import java.util.*
 import java.util.stream.Collectors
 
-object Parser {
+class Parser(filename : String) {
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
+    private var results : CodeBlockStatement
+    val input = loadFile(filename)
 
-    @Throws(IOException::class)
-    @JvmStatic
-    fun main(args: Array<String>) {
-        parse("input.wiles")
-    }
-
-    fun parse(filename : String)
-    {
-        val input = loadFile(filename)
+    init{
         val tokens = sourceToTokens(input)
         print("Tokens: ")
         println(tokens.stream().map(Token::content).toList())
@@ -37,14 +31,20 @@ object Parser {
         val mapper =
             JsonMapper.builder().disable(MapperFeature.AUTO_DETECT_CREATORS).disable(MapperFeature.AUTO_DETECT_FIELDS)
                 .disable(MapperFeature.AUTO_DETECT_GETTERS).disable(MapperFeature.AUTO_DETECT_IS_GETTERS).build()
-        print("Syntax tree: ")
-        println(ast)
+        results = ast
 
-        //Print exceptions
         val writer = mapper.writer(DefaultPrettyPrinter())
         writer.writeValue(File("syntaxTree.json"), ast)
-        if (exceptions.size > 0)
-            System.err.println(exceptions.getExceptionsString(input))
+    }
+
+    fun getExceptions() : CompilationExceptionsCollection
+    {
+        return exceptions
+    }
+
+    fun getResults() : CodeBlockStatement
+    {
+        return results
     }
 
     private fun lastLocation(input : String) : TokenLocation

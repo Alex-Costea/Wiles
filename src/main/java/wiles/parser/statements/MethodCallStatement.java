@@ -1,7 +1,7 @@
 package wiles.parser.statements;
 
 import wiles.parser.builders.Context;
-import wiles.parser.data.CompilationExceptionsCollection;
+import wiles.shared.CompilationExceptionsCollection;
 import wiles.parser.enums.SyntaxType;
 import wiles.parser.enums.WhenRemoveToken;
 import wiles.parser.exceptions.AbstractCompilationException;

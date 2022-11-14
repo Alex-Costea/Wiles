@@ -5,7 +5,7 @@ import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.constants.Tokens
 import wiles.parser.constants.Tokens.BRACKET_END_ID
 import wiles.parser.constants.Tokens.SEPARATOR_ID
-import wiles.parser.data.CompilationExceptionsCollection
+import wiles.shared.CompilationExceptionsCollection
 import wiles.parser.enums.SyntaxType
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.exceptions.AbstractCompilationException

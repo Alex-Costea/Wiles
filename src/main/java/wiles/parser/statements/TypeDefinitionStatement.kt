@@ -16,7 +16,7 @@ import wiles.parser.constants.Types.MAX_NR_TYPES
 import wiles.parser.constants.Types.MIN_NR_TYPES
 import wiles.parser.constants.Types.REQUIRES_SUBTYPE
 import wiles.parser.constants.Types.TYPES
-import wiles.parser.data.CompilationExceptionsCollection
+import wiles.shared.CompilationExceptionsCollection
 import wiles.parser.enums.SyntaxType
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.exceptions.AbstractCompilationException

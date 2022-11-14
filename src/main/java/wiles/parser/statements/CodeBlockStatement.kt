@@ -11,7 +11,7 @@ import wiles.parser.constants.Predicates.READ_REST_OF_LINE
 import wiles.parser.constants.Tokens.DO_ID
 import wiles.parser.constants.Tokens.END_BLOCK_ID
 import wiles.parser.constants.Tokens.START_BLOCK_ID
-import wiles.parser.data.CompilationExceptionsCollection
+import wiles.shared.CompilationExceptionsCollection
 import wiles.parser.enums.StatementFactoryTypes
 import wiles.parser.enums.SyntaxType
 import wiles.parser.enums.WhenRemoveToken

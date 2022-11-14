@@ -2,7 +2,7 @@ package wiles.parser.statements;
 
 import org.jetbrains.annotations.NotNull;
 import wiles.parser.builders.Context;
-import wiles.parser.data.CompilationExceptionsCollection;
+import wiles.shared.CompilationExceptionsCollection;
 import wiles.parser.enums.SyntaxType;
 
 import java.util.List;

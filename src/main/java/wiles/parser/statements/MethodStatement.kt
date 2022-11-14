@@ -6,13 +6,12 @@ import wiles.parser.constants.Predicates.IS_IDENTIFIER
 import wiles.parser.constants.Tokens.ANON_ARG_ID
 import wiles.parser.constants.Tokens.DO_ID
 import wiles.parser.constants.Tokens.METHOD_ID
-import wiles.parser.constants.Tokens.NOTHING_ID
-import wiles.parser.constants.Tokens.RIGHT_ARROW_ID
 import wiles.parser.constants.Tokens.PAREN_END_ID
 import wiles.parser.constants.Tokens.PAREN_START_ID
+import wiles.parser.constants.Tokens.RIGHT_ARROW_ID
 import wiles.parser.constants.Tokens.SEPARATOR_ID
 import wiles.parser.constants.Tokens.START_BLOCK_ID
-import wiles.parser.data.CompilationExceptionsCollection
+import wiles.shared.CompilationExceptionsCollection
 import wiles.parser.enums.SyntaxType
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.exceptions.AbstractCompilationException
@@ -23,21 +22,16 @@ class MethodStatement(oldContext : Context, private val isTypeDeclaration: Boole
     private val parameters: MutableList<DeclarationStatement> = ArrayList()
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
 
-    private var returnType: TypeDefinitionStatement
-    private var methodBody: CodeBlockStatement
-
-    init {
-        returnType = TypeDefinitionStatement(context)
-        methodBody = CodeBlockStatement(context)
-        returnType.name = NOTHING_ID
-    }
+    private var returnType: TypeDefinitionStatement? = null
+    private var methodBody: CodeBlockStatement = CodeBlockStatement(context)
 
     override val type: SyntaxType
         get() = SyntaxType.METHOD
 
     override fun getComponents(): List<AbstractStatement> {
         val components = ArrayList<AbstractStatement>()
-        components.add(returnType)
+        if(returnType != null)
+            components.add(returnType!!)
         components.addAll(parameters)
         if(!isTypeDeclaration)
             components.add(methodBody)
@@ -66,7 +60,7 @@ class MethodStatement(oldContext : Context, private val isTypeDeclaration: Boole
                 //Return type
                 if (transmitter.expectMaybe(tokenOf(RIGHT_ARROW_ID).dontIgnoreNewLine()).isPresent) {
                     returnType = TypeDefinitionStatement(context)
-                    exceptions.addAll(returnType.process())
+                    exceptions.addAll(returnType!!.process())
                 }
             }
             //Read body

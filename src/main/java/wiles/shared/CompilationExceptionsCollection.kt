@@ -1,4 +1,4 @@
-package wiles.parser.data
+package wiles.shared
 
 import wiles.parser.constants.ErrorMessages.COMPILATION_FAILED_ERROR
 import wiles.parser.constants.ErrorMessages.LINE_SYMBOL

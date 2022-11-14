@@ -8,7 +8,7 @@ import wiles.parser.constants.Tokens.IF_ID
 import wiles.parser.constants.Tokens.TERMINATOR_ID
 import wiles.parser.constants.Tokens.THEN_ID
 import wiles.parser.constants.Tokens.WHEN_ID
-import wiles.parser.data.CompilationExceptionsCollection
+import wiles.shared.CompilationExceptionsCollection
 import wiles.parser.enums.SyntaxType
 import wiles.parser.exceptions.AbstractCompilationException
 import wiles.parser.statements.expressions.ConditionExpression
