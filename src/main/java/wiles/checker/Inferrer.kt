@@ -18,23 +18,23 @@ import wiles.shared.constants.Types.STRING_ID
 
 class Inferrer(private val checker: Checker){
 
-    private fun fromToken(token : Token) : String
+    private fun fromToken(token : Token) : TypeDefinition
     {
         val name = token.content
         if (IS_TEXT_LITERAL.test(name))
-            return STRING_ID
+            return TypeDefinition(STRING_ID)
         if (IS_NUMBER_LITERAL.test(name))
         {
             if(name.contains(DECIMAL_DELIMITER))
-                return DOUBLE_ID
-            return INT64_ID
+                return TypeDefinition(DOUBLE_ID)
+            return TypeDefinition(INT64_ID)
         }
         if(IS_IDENTIFIER.test(name))
             return checker.getTypeOfIdentifier(token)
         throw TypeInferenceException(INFERENCE_ERROR, token.location)
     }
 
-    fun fromExpression(expression: AbstractStatement?): String? {
+    fun fromExpression(expression: AbstractStatement?): TypeDefinition? {
         if(expression == null)
             return null
         val newLocation : TokenLocation

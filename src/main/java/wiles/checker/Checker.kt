@@ -34,15 +34,17 @@ class Checker(identifiers: HashMap<Int, String>, idDetailsSet : HashMap<String,I
             identifiers[identifiers.size] = id
             val isVar = component.name == MUTABLE_ID
             val isInit = component.right != null
-            val inferredType = inferrer.fromExpression(component.right)?:ERROR_TOKEN
+            val inferredType = inferrer.fromExpression(component.right)?: TypeDefinition(ERROR_TOKEN)
             //TODO: check if matching
-            val type = component.typeStatement?.toString() ?: inferredType
+            val type : TypeDefinition = if(component.typeStatement != null)
+                TypeDefinition(component.typeStatement)
+            else inferredType
             idDetailsSet[id] = IdentifierDetails(type,isInit,isVar)
         }
         else throw IdentifierExistsException(IDENTIFIER_EXISTS_EXCEPTION, location)
     }
 
-    fun getTypeOfIdentifier(token : Token) : String
+    fun getTypeOfIdentifier(token : Token) : TypeDefinition
     {
         val content = token.content
         if(idDetailsSet[content]?.isInit == false)
@@ -71,8 +73,8 @@ class Checker(identifiers: HashMap<Int, String>, idDetailsSet : HashMap<String,I
                             TODO()
                         else
                         {
-                            val inferredType = inferrer.fromExpression(component.right)?:ERROR_TOKEN
-                            if(inferredType != "TYPE $NOTHING_ID")
+                            val inferredType = inferrer.fromExpression(component.right)
+                            if(inferredType != TypeDefinition(NOTHING_ID))
                                 throw ResultUnusedException(location)
                         }
                     }

@@ -22,7 +22,8 @@ class ResultInferrer(private val location: TokenLocation) {
         resultsIn[Triple(STRING_ID, PLUS_ID, STRING_ID)] = STRING_ID
     }
 
-    fun results(left: String?, operation: String, right: String): String {
-        return resultsIn[Triple(left, operation, right)] ?: throw InvalidOperationException(location)
+    fun results(left: TypeDefinition?, operation: String, right: TypeDefinition): TypeDefinition {
+        return TypeDefinition(resultsIn[Triple(left?.name, operation, right.name)]
+            ?: throw InvalidOperationException(location))
     }
 }
