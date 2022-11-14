@@ -54,6 +54,7 @@ class StatementFactory {
         for (statement in statements) {
             if (!context.isWithinMethod && statement == StatementFactoryTypes.RETURN_STATEMENT) continue
             if (!context.isWithinLoop && statement == StatementFactoryTypes.CONTINUE_STATEMENT) continue
+            if (!context.isWithinLoop && statement == StatementFactoryTypes.BREAK_STATEMENT) continue
             if (transmitter.expectMaybe(params[statement]!!).isPresent) return createObject[statement]!!.apply(context)
         }
 

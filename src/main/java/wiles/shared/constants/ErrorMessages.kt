@@ -20,6 +20,8 @@ object ErrorMessages {
     const val NOT_ENOUGH_TYPES_EXCEPTION = "Not enough types have been specified."
     const val IDENTIFIER_EXISTS_EXCEPTION = "Identifier is already defined."
     const val INFERENCE_ERROR = "Type inference error. Please specify type explicitly."
+    const val NON_EXISTENT_IDENTIFIER_ERROR = "Identifier hasn't been declared."
+    const val NON_INIT_IDENTIFIER_ERROR = "Identifier hasn't been initialized."
     val END_OF_STATEMENT_EXPECTED_ERROR = "End of statement expected. " +
             "Please use the ${TOKENS_INVERSE[TERMINATOR_ID]!!} symbol or start a new line."
 
