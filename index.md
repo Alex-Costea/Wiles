@@ -30,7 +30,7 @@ begin
     if modulo(i, 5) = 0 do
         text := text + "Buzz"
     if text = "" do
-        text := i.as_text
+        text := text_of(i)
     writeline(text)
 end 
 ```
