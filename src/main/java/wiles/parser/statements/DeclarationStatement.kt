@@ -15,8 +15,8 @@ import wiles.parser.statements.expressions.DefaultExpression
 
 class DeclarationStatement(context: Context, private val isParam: Boolean = false) : AbstractStatement(context) {
     var left: TokenStatement? = null
-    private var typeStatement : TypeDefinitionStatement? = null
-    private var right: DefaultExpression? = null
+    var typeStatement : TypeDefinitionStatement? = null
+    var right: DefaultExpression? = null
     private val exceptions = CompilationExceptionsCollection()
 
     override val type: SyntaxType

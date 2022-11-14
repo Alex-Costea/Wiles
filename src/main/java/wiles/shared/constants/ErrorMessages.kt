@@ -18,6 +18,8 @@ object ErrorMessages {
     const val STRING_UNFINISHED_ERROR = "Text unfinished."
     const val INVALID_LEFT_EXCEPTION = "Left side of assignment invalid."
     const val NOT_ENOUGH_TYPES_EXCEPTION = "Not enough types have been specified."
+    const val IDENTIFIER_EXISTS_EXCEPTION = "Identifier is already defined."
+    const val INFERENCE_ERROR = "Type inference error. Please specify type explicitly."
     val END_OF_STATEMENT_EXPECTED_ERROR = "End of statement expected. " +
             "Please use the ${TOKENS_INVERSE[TERMINATOR_ID]!!} symbol or start a new line."
 

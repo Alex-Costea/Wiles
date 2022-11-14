@@ -14,7 +14,7 @@
 
 ### Types
 - Nothing: only valid value is `nothing`
-- Integers: `byte`, `smallint`, `int`, `bigint`
+- Integers: `int` (64 bits unsigned)
 - Boolean: `bit`
 - String: `text`
 - Floating point: `rational` (equivalent to `double` in other languages)

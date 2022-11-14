@@ -1,4 +1,4 @@
-package wiles.checker;
+package wiles.checker.exceptions;
 
 import org.jetbrains.annotations.NotNull;
 import wiles.shared.TokenLocation;
