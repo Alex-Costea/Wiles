@@ -13,7 +13,7 @@ import static wiles.parser.builders.ExpectParamsBuilder.tokenOf;
 import static wiles.shared.constants.Tokens.*;
 
 public class TopLevelExpression extends AbstractExpression {
-    protected boolean isAssignment=false;
+    public boolean isAssignment=false;
 
     public TopLevelExpression(@NotNull Context context) {
         super(context);

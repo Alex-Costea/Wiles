@@ -26,9 +26,9 @@ import static wiles.shared.constants.Tokens.*;
 public abstract class AbstractExpression extends AbstractStatement {
     @NotNull
     protected final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
-    protected AbstractStatement left = null;
-    protected TokenStatement operation = null;
-    protected AbstractStatement right = null;
+    public AbstractStatement left = null;
+    public TokenStatement operation = null;
+    public AbstractStatement right = null;
     @NotNull
     private final StatementFactory SpecialStatementFactory = new StatementFactory().setContext(getContext())
             .addType(StatementFactoryTypes.LIST_STATEMENT).addType(StatementFactoryTypes.WHEN_EXPRESSION);

@@ -23,6 +23,7 @@ object ErrorMessages {
     const val NON_EXISTENT_IDENTIFIER_ERROR = "Identifier hasn't been declared."
     const val NON_INIT_IDENTIFIER_ERROR = "Identifier hasn't been initialized."
     const val INVALID_OPERATION_ERROR = "Operation invalid."
+    const val RESULT_UNUSED_ERROR = "Result of expression is not used."
     val END_OF_STATEMENT_EXPECTED_ERROR = "End of statement expected. " +
             "Please use the ${TOKENS_INVERSE[TERMINATOR_ID]!!} symbol or start a new line."
 

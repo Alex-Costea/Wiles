@@ -4,12 +4,14 @@ import wiles.checker.exceptions.TypeInferenceException
 import wiles.parser.data.Token
 import wiles.parser.statements.AbstractStatement
 import wiles.parser.statements.TokenStatement
+import wiles.parser.statements.expressions.AbstractExpression
+import wiles.shared.InternalErrorException
 import wiles.shared.TokenLocation
 import wiles.shared.constants.Chars.DECIMAL_DELIMITER
 import wiles.shared.constants.ErrorMessages.INFERENCE_ERROR
+import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Predicates.IS_NUMBER_LITERAL
 import wiles.shared.constants.Predicates.IS_TEXT_LITERAL
-import wiles.shared.constants.Tokens.ERROR_TOKEN
 import wiles.shared.constants.Types.DOUBLE_ID
 import wiles.shared.constants.Types.INT64_ID
 import wiles.shared.constants.Types.STRING_ID
@@ -27,43 +29,36 @@ class Inferrer(private val checker: Checker){
                 return DOUBLE_ID
             return INT64_ID
         }
-        return checker.getTypeOfIdentifier(token)
+        if(IS_IDENTIFIER.test(name))
+            return checker.getTypeOfIdentifier(token)
+        throw TypeInferenceException(INFERENCE_ERROR, token.location)
     }
 
-    fun fromExpression(expression: AbstractStatement?, location: TokenLocation): String {
+    fun fromExpression(expression: AbstractStatement?): String? {
         if(expression == null)
-            return ERROR_TOKEN
+            return null
         val newLocation : TokenLocation
         when (expression.getComponents().size)
         {
-            0 ->{
-                return fromToken((expression as TokenStatement).token)
-            }
+            0 -> return fromToken((expression as TokenStatement).token)
             1 -> {
                 val component = expression.getComponents()[0]
                 if(component is TokenStatement)
                     return fromToken(component.token)
+                TODO()
             }
-            2 -> {
-                newLocation = (expression.getComponents()[0] as TokenStatement).token.location
+            2, 3 -> {
+                if(expression !is AbstractExpression)
+                    throw InternalErrorException()
+                newLocation = expression.operation.token.location
                 val resultInferrer = ResultInferrer(newLocation)
                 return resultInferrer.results(
-                    null,
-                    expression.getComponents()[0].name,
-                    fromExpression(expression.getComponents()[1], newLocation)
+                    fromExpression(expression.left),
+                    expression.operation.name,
+                    fromExpression(expression.right)!!
                 )
             }
-            3 -> {
-                newLocation = (expression.getComponents()[1] as TokenStatement).token.location
-                val resultInferrer = ResultInferrer(newLocation)
-                return resultInferrer.results(
-                    fromExpression(expression.getComponents()[0], newLocation),
-                    expression.getComponents()[1].name,
-                    fromExpression(expression.getComponents()[2], newLocation)
-                )
-            }
-            else -> throw InternalError()
+            else -> throw InternalErrorException()
         }
-        throw TypeInferenceException(INFERENCE_ERROR, location)
     }
 }
