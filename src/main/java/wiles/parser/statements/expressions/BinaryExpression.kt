@@ -1,9 +1,9 @@
 package wiles.parser.statements.expressions
 
 import wiles.parser.builders.Context
-import wiles.parser.constants.ErrorMessages.CANNOT_BE_PROCESSED_ERROR
+import wiles.shared.constants.ErrorMessages.CANNOT_BE_PROCESSED_ERROR
 import wiles.shared.CompilationExceptionsCollection
-import wiles.parser.exceptions.InternalErrorException
+import wiles.shared.InternalErrorException
 import wiles.parser.statements.AbstractStatement
 import wiles.parser.statements.TokenStatement
 

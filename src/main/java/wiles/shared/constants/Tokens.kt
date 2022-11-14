@@ -1,12 +1,13 @@
-package wiles.parser.constants
+package wiles.shared.constants
 
 import com.google.common.collect.BiMap
 import com.google.common.collect.HashBiMap
-import wiles.parser.constants.Chars.CONTINUE_LINE
-import wiles.parser.constants.ErrorMessages.MAX_SYMBOL_TOO_LARGE_ERROR
-import wiles.parser.constants.Settings.DEBUG
-import wiles.parser.constants.Settings.MAX_SYMBOL_LENGTH
-import wiles.parser.constants.Settings.ROMANIAN_MODE
+import wiles.shared.constants.Chars.CONTINUE_LINE
+import wiles.shared.constants.ErrorMessages.MAX_SYMBOL_TOO_LARGE_ERROR
+import wiles.shared.constants.Settings.DEBUG
+import wiles.shared.constants.Settings.MAX_SYMBOL_LENGTH
+import wiles.shared.constants.Settings.ROMANIAN_MODE
+import wiles.shared.InternalErrorException
 import java.util.*
 import kotlin.collections.HashMap
 import kotlin.streams.toList
@@ -57,7 +58,7 @@ object Tokens {
     const val MAYBE_ID = "MAYBE"
     const val RETURN_ID = "RETURN"
     const val TRUE_ID = "TRUE"
-    private const val FALSE_ID = "FALSE"
+    const val FALSE_ID = "FALSE"
     const val WHEN_ID = "WHEN"
     const val IF_ID = "IF"
     const val IS_ID = "IS"
@@ -84,7 +85,8 @@ object Tokens {
     val INFIX_OPERATORS = setOf(
         PLUS_ID, MINUS_ID, TIMES_ID, DIVIDE_ID, POWER_ID,
         EQUALS_ID, LARGER_ID, SMALLER_ID, LARGER_EQUALS_ID, SMALLER_EQUALS_ID, NOT_EQUAL_ID,
-        ACCESS_ID, SEPARATOR_ID, AND_ID, OR_ID, APPLY_ID, ELEM_ACCESS_ID)
+        ACCESS_ID, SEPARATOR_ID, AND_ID, OR_ID, APPLY_ID, ELEM_ACCESS_ID
+    )
     @JvmField
     val PREFIX_OPERATORS = setOf(UNARY_PLUS_ID, UNARY_MINUS_ID, NOT_ID)
     @JvmField
@@ -93,12 +95,14 @@ object Tokens {
     val PARENS = setOf(PAREN_START_ID, PAREN_END_ID, BRACKET_START_ID)
     @JvmField
     val TERMINATORS = setOf(NEWLINE_ID, TERMINATOR_ID)
-    val KEYWORD_LITERALS = setOf(TRUE_ID,FALSE_ID,NOTHING_ID)
+    val KEYWORD_LITERALS = setOf(TRUE_ID, FALSE_ID, NOTHING_ID)
 
     @JvmField
-    val NEW_STATEMENT_START_KEYWORDS = setOf(NOTHING_ID, DECLARE_ID, WHEN_ID, CASE_ID, ELSE_ID, CONTINUE_ID,
+    val NEW_STATEMENT_START_KEYWORDS = setOf(
+        NOTHING_ID, DECLARE_ID, WHEN_ID, CASE_ID, ELSE_ID, CONTINUE_ID,
         RETURN_ID, WHILE_ID, BREAK_ID, FOR_ID, DO_ID, START_BLOCK_ID, END_BLOCK_ID, BRACKET_END_ID, PAREN_END_ID,
-        SEPARATOR_ID, IN_ID, FROM_ID, TO_ID, IS_ID, ASSIGN_ID, TERMINATOR_ID, NEWLINE_ID, IF_ID, THEN_ID)
+        SEPARATOR_ID, IN_ID, FROM_ID, TO_ID, IS_ID, ASSIGN_ID, TERMINATOR_ID, NEWLINE_ID, IF_ID, THEN_ID
+    )
 
     init {
         KEYWORDS[if(!ROMANIAN_MODE) "nothing" else "nimic"] = NOTHING_ID
@@ -163,6 +167,6 @@ object Tokens {
         TOKENS.putAll(SYMBOLS)
         TOKENS_INVERSE = TOKENS.inverse()
         if(Collections.max(SYMBOLS.keys.stream().mapToInt { obj: String -> obj.length }.toList()) > MAX_SYMBOL_LENGTH)
-            throw wiles.parser.exceptions.InternalErrorException(MAX_SYMBOL_TOO_LARGE_ERROR)
+            throw InternalErrorException(MAX_SYMBOL_TOO_LARGE_ERROR)
     }
 }

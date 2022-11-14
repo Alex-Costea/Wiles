@@ -2,15 +2,15 @@ package wiles.parser.statements.expressions;
 
 import wiles.parser.builders.Context;
 import wiles.parser.data.Token;
-import wiles.parser.exceptions.AbstractCompilationException;
+import wiles.shared.AbstractCompilationException;
 import wiles.parser.exceptions.InvalidStatementException;
 import wiles.parser.services.PrecedenceProcessor;
 import wiles.parser.statements.TokenStatement;
 import org.jetbrains.annotations.NotNull;
-import wiles.parser.constants.ErrorMessages;
+import wiles.shared.constants.ErrorMessages;
 
 import static wiles.parser.builders.ExpectParamsBuilder.tokenOf;
-import static wiles.parser.constants.Tokens.*;
+import static wiles.shared.constants.Tokens.*;
 
 public class TopLevelExpression extends AbstractExpression {
     protected boolean isAssignment=false;

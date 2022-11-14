@@ -1,5 +1,6 @@
 package wiles
 
+import wiles.checker.Checker
 import wiles.parser.Parser
 import wiles.shared.CompilationExceptionsCollection
 import java.io.IOException
@@ -18,10 +19,11 @@ object Main {
         val exceptions = CompilationExceptionsCollection()
         val parser = Parser("input.wiles")
         exceptions.addAll(parser.getExceptions())
+        val result = parser.getResults()
         print("Syntax tree: ")
-        println(parser.getResults())
+        println(result)
+        exceptions.addAll(Checker(result).exceptions)
         printExceptions(exceptions,parser.input)
-        //val checker = Checker(result)
     }
 
 }

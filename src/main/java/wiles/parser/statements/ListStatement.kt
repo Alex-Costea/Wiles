@@ -2,13 +2,13 @@ package wiles.parser.statements
 
 import wiles.parser.builders.Context
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
-import wiles.parser.constants.Tokens
-import wiles.parser.constants.Tokens.BRACKET_END_ID
-import wiles.parser.constants.Tokens.SEPARATOR_ID
+import wiles.shared.constants.Tokens
+import wiles.shared.constants.Tokens.BRACKET_END_ID
+import wiles.shared.constants.Tokens.SEPARATOR_ID
 import wiles.shared.CompilationExceptionsCollection
 import wiles.parser.enums.SyntaxType
 import wiles.parser.enums.WhenRemoveToken
-import wiles.parser.exceptions.AbstractCompilationException
+import wiles.shared.AbstractCompilationException
 import wiles.parser.statements.expressions.InnerDefaultExpression
 
 class ListStatement(context: Context) : AbstractStatement(context) {

@@ -1,20 +1,20 @@
 package wiles.parser.converters;
 
 import org.jetbrains.annotations.NotNull;
-import wiles.parser.constants.ErrorMessages;
-import wiles.parser.constants.Settings;
-import wiles.parser.constants.Tokens;
-import wiles.parser.constants.Utils;
+import wiles.shared.constants.ErrorMessages;
+import wiles.shared.constants.Settings;
+import wiles.shared.constants.Tokens;
+import wiles.shared.constants.Utils;
 import wiles.shared.CompilationExceptionsCollection;
 import wiles.parser.data.Token;
-import wiles.parser.data.TokenLocation;
-import wiles.parser.exceptions.AbstractCompilationException;
+import wiles.shared.TokenLocation;
+import wiles.shared.AbstractCompilationException;
 import wiles.parser.exceptions.StringUnfinishedException;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static wiles.parser.constants.Chars.*;
+import static wiles.shared.constants.Chars.*;
 
 public class InputToTokensConverter {
     private final char[] arrayChars;

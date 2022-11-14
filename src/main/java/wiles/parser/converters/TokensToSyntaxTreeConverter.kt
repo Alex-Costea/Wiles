@@ -4,7 +4,7 @@ import wiles.parser.statements.CodeBlockStatement
 import wiles.shared.CompilationExceptionsCollection
 import wiles.parser.data.Token
 import wiles.parser.builders.Context
-import wiles.parser.data.TokenLocation
+import wiles.shared.TokenLocation
 import wiles.parser.services.TokenTransmitter
 
 class TokensToSyntaxTreeConverter(tokens: List<Token>, lastLocation : TokenLocation) {

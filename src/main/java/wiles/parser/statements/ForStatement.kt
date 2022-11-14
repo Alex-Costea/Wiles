@@ -2,14 +2,14 @@ package wiles.parser.statements
 
 import wiles.parser.builders.Context
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
-import wiles.parser.constants.ErrorMessages.IDENTIFIER_EXPECTED_ERROR
-import wiles.parser.constants.Predicates
-import wiles.parser.constants.Tokens.FROM_ID
-import wiles.parser.constants.Tokens.IN_ID
-import wiles.parser.constants.Tokens.TO_ID
+import wiles.shared.constants.ErrorMessages.IDENTIFIER_EXPECTED_ERROR
+import wiles.shared.constants.Predicates
+import wiles.shared.constants.Tokens.FROM_ID
+import wiles.shared.constants.Tokens.IN_ID
+import wiles.shared.constants.Tokens.TO_ID
 import wiles.shared.CompilationExceptionsCollection
 import wiles.parser.enums.SyntaxType
-import wiles.parser.exceptions.AbstractCompilationException
+import wiles.shared.AbstractCompilationException
 import wiles.parser.statements.expressions.DefaultExpression
 
 class ForStatement(oldContext: Context) : AbstractStatement(oldContext.setWithinLoop(true)) {

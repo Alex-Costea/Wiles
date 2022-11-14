@@ -1,4 +1,4 @@
-package wiles.parser.constants
+package wiles.shared.constants
 
 object Chars {
     const val STRING_DELIMITER = '"'

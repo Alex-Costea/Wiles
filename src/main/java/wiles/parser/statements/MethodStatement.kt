@@ -2,19 +2,19 @@ package wiles.parser.statements
 
 import wiles.parser.builders.Context
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
-import wiles.parser.constants.Predicates.IS_IDENTIFIER
-import wiles.parser.constants.Tokens.ANON_ARG_ID
-import wiles.parser.constants.Tokens.DO_ID
-import wiles.parser.constants.Tokens.METHOD_ID
-import wiles.parser.constants.Tokens.PAREN_END_ID
-import wiles.parser.constants.Tokens.PAREN_START_ID
-import wiles.parser.constants.Tokens.RIGHT_ARROW_ID
-import wiles.parser.constants.Tokens.SEPARATOR_ID
-import wiles.parser.constants.Tokens.START_BLOCK_ID
+import wiles.shared.constants.Predicates.IS_IDENTIFIER
+import wiles.shared.constants.Tokens.ANON_ARG_ID
+import wiles.shared.constants.Tokens.DO_ID
+import wiles.shared.constants.Tokens.METHOD_ID
+import wiles.shared.constants.Tokens.PAREN_END_ID
+import wiles.shared.constants.Tokens.PAREN_START_ID
+import wiles.shared.constants.Tokens.RIGHT_ARROW_ID
+import wiles.shared.constants.Tokens.SEPARATOR_ID
+import wiles.shared.constants.Tokens.START_BLOCK_ID
 import wiles.shared.CompilationExceptionsCollection
 import wiles.parser.enums.SyntaxType
 import wiles.parser.enums.WhenRemoveToken
-import wiles.parser.exceptions.AbstractCompilationException
+import wiles.shared.AbstractCompilationException
 
 class MethodStatement(oldContext : Context, private val isTypeDeclaration: Boolean = false)
     : AbstractStatement(oldContext.setWithinMethod(true)) {

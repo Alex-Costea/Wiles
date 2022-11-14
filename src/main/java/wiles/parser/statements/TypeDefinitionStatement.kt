@@ -2,24 +2,24 @@ package wiles.parser.statements
 
 import wiles.parser.builders.Context
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
-import wiles.parser.constants.ErrorMessages.NOT_ENOUGH_TYPES_EXCEPTION
-import wiles.parser.constants.ErrorMessages.TYPE_EXPECTED_ERROR
-import wiles.parser.constants.Predicates.IS_CONTAINED_IN
-import wiles.parser.constants.Tokens.BRACKET_END_ID
-import wiles.parser.constants.Tokens.BRACKET_START_ID
-import wiles.parser.constants.Tokens.MAYBE_ID
-import wiles.parser.constants.Tokens.METHOD_ID
-import wiles.parser.constants.Tokens.NOTHING_ID
-import wiles.parser.constants.Tokens.SEPARATOR_ID
-import wiles.parser.constants.Types.EITHER_ID
-import wiles.parser.constants.Types.MAX_NR_TYPES
-import wiles.parser.constants.Types.MIN_NR_TYPES
-import wiles.parser.constants.Types.REQUIRES_SUBTYPE
-import wiles.parser.constants.Types.TYPES
+import wiles.shared.constants.ErrorMessages.NOT_ENOUGH_TYPES_EXCEPTION
+import wiles.shared.constants.ErrorMessages.TYPE_EXPECTED_ERROR
+import wiles.shared.constants.Predicates.IS_CONTAINED_IN
+import wiles.shared.constants.Tokens.BRACKET_END_ID
+import wiles.shared.constants.Tokens.BRACKET_START_ID
+import wiles.shared.constants.Tokens.MAYBE_ID
+import wiles.shared.constants.Tokens.METHOD_ID
+import wiles.shared.constants.Tokens.NOTHING_ID
+import wiles.shared.constants.Tokens.SEPARATOR_ID
+import wiles.shared.constants.Types.EITHER_ID
+import wiles.shared.constants.Types.MAX_NR_TYPES
+import wiles.shared.constants.Types.MIN_NR_TYPES
+import wiles.shared.constants.Types.REQUIRES_SUBTYPE
+import wiles.shared.constants.Types.TYPES
 import wiles.shared.CompilationExceptionsCollection
 import wiles.parser.enums.SyntaxType
 import wiles.parser.enums.WhenRemoveToken
-import wiles.parser.exceptions.AbstractCompilationException
+import wiles.shared.AbstractCompilationException
 import wiles.parser.exceptions.TokenExpectedException
 
 class TypeDefinitionStatement(context: Context) : AbstractStatement(context) {

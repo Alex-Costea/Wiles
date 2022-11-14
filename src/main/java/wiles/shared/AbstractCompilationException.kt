@@ -1,6 +1,4 @@
-package wiles.parser.exceptions
-
-import wiles.parser.data.TokenLocation
+package wiles.shared
 
 abstract class AbstractCompilationException(s: String, @JvmField val tokenLocation: TokenLocation) : Exception(s) {
     @JvmName("getTokenLocationNullable")

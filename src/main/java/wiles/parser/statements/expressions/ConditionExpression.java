@@ -4,12 +4,12 @@ import org.jetbrains.annotations.NotNull;
 import wiles.parser.builders.Context;
 import wiles.parser.builders.ExpectParamsBuilder;
 import wiles.parser.data.Token;
-import wiles.parser.exceptions.AbstractCompilationException;
+import wiles.shared.AbstractCompilationException;
 import wiles.parser.services.PrecedenceProcessor;
 import wiles.parser.statements.TokenStatement;
 import wiles.parser.statements.TypeDefinitionStatement;
 
-import static wiles.parser.constants.Tokens.IS_ID;
+import static wiles.shared.constants.Tokens.IS_ID;
 
 public class ConditionExpression extends AbstractExpression{
 

@@ -1,7 +1,7 @@
-package wiles.parser.constants
+package wiles.shared.constants
 
-import wiles.parser.constants.Chars.DIGIT_SEPARATOR
-import wiles.parser.data.TokenLocation
+import wiles.shared.constants.Chars.DIGIT_SEPARATOR
+import wiles.shared.TokenLocation
 
 object Utils {
     @JvmStatic

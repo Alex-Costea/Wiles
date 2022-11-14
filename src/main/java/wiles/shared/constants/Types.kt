@@ -1,11 +1,11 @@
-package wiles.parser.constants
+package wiles.shared.constants
 
 import com.google.common.collect.BiMap
 import com.google.common.collect.HashBiMap
-import wiles.parser.constants.Settings.ROMANIAN_MODE
-import wiles.parser.constants.Tokens.MAYBE_ID
-import wiles.parser.constants.Tokens.METHOD_ID
-import wiles.parser.constants.Tokens.NOTHING_ID
+import wiles.shared.constants.Settings.ROMANIAN_MODE
+import wiles.shared.constants.Tokens.MAYBE_ID
+import wiles.shared.constants.Tokens.METHOD_ID
+import wiles.shared.constants.Tokens.NOTHING_ID
 
 object Types {
     @JvmField
@@ -21,7 +21,7 @@ object Types {
     private const val LIST_ID = "LIST"
     const val EITHER_ID = "EITHER"
 
-    val REQUIRES_SUBTYPE = setOf(LIST_ID,EITHER_ID)
+    val REQUIRES_SUBTYPE = setOf(LIST_ID, EITHER_ID)
     val MAX_NR_TYPES = hashMapOf(Pair(LIST_ID,1))
     val MIN_NR_TYPES = hashMapOf(Pair(LIST_ID,1),Pair(EITHER_ID,2))
 

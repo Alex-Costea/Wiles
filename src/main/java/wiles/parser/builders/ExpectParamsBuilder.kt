@@ -1,11 +1,12 @@
 package wiles.parser.builders
 
-import wiles.parser.constants.ErrorMessages.FROZEN_ERROR
-import wiles.parser.constants.ErrorMessages.ERROR_MESSAGE_EXPECTED_ERROR
+import wiles.shared.constants.ErrorMessages.FROZEN_ERROR
+import wiles.shared.constants.ErrorMessages.ERROR_MESSAGE_EXPECTED_ERROR
 import wiles.parser.enums.WhenRemoveToken
-import wiles.parser.constants.Tokens.TOKENS_INVERSE
-import wiles.parser.constants.ErrorMessages.TOKEN_EXPECTED_ERROR
-import wiles.parser.constants.ErrorMessages.WHEN_REMOVE_EXPECTED_ERROR
+import wiles.shared.constants.Tokens.TOKENS_INVERSE
+import wiles.shared.constants.ErrorMessages.TOKEN_EXPECTED_ERROR
+import wiles.shared.constants.ErrorMessages.WHEN_REMOVE_EXPECTED_ERROR
+import wiles.shared.InternalErrorException
 import java.util.function.Predicate
 
 class ExpectParamsBuilder private constructor(var foundTest: Predicate<String>) {
@@ -53,16 +54,16 @@ class ExpectParamsBuilder private constructor(var foundTest: Predicate<String>) 
     {
         frozen = true
         if(errorMessage == null)
-            throw wiles.parser.exceptions.InternalErrorException(ERROR_MESSAGE_EXPECTED_ERROR)
+            throw InternalErrorException(ERROR_MESSAGE_EXPECTED_ERROR)
         if(whenRemove == WhenRemoveToken.Default)
-            throw wiles.parser.exceptions.InternalErrorException(WHEN_REMOVE_EXPECTED_ERROR)
+            throw InternalErrorException(WHEN_REMOVE_EXPECTED_ERROR)
         return this
     }
 
     private fun checkFrozen()
     {
         if(frozen)
-            throw wiles.parser.exceptions.InternalErrorException(FROZEN_ERROR)
+            throw InternalErrorException(FROZEN_ERROR)
     }
 
     companion object {

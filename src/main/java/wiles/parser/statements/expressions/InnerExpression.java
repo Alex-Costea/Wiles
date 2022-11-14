@@ -7,8 +7,8 @@ import wiles.parser.exceptions.TokenExpectedException;
 import wiles.parser.exceptions.UnexpectedEndException;
 
 import static wiles.parser.builders.ExpectParamsBuilder.tokenOf;
-import static wiles.parser.constants.ErrorMessages.INTERNAL_ERROR;
-import static wiles.parser.constants.Tokens.PAREN_END_ID;
+import static wiles.shared.constants.ErrorMessages.INTERNAL_ERROR;
+import static wiles.shared.constants.Tokens.PAREN_END_ID;
 
 public class InnerExpression extends AbstractExpression {
     public InnerExpression(@NotNull Context oldContext) {

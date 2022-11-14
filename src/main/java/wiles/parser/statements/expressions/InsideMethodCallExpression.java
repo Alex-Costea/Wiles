@@ -4,13 +4,13 @@ import org.jetbrains.annotations.NotNull;
 import wiles.parser.builders.Context;
 import wiles.parser.data.Token;
 import wiles.parser.enums.WhenRemoveToken;
-import wiles.parser.exceptions.AbstractCompilationException;
+import wiles.shared.AbstractCompilationException;
 import wiles.parser.services.PrecedenceProcessor;
 import wiles.parser.statements.TokenStatement;
 
 import static wiles.parser.builders.ExpectParamsBuilder.tokenOf;
-import static wiles.parser.constants.Tokens.ASSIGN_ID;
-import static wiles.parser.constants.Tokens.PAREN_END_ID;
+import static wiles.shared.constants.Tokens.ASSIGN_ID;
+import static wiles.shared.constants.Tokens.PAREN_END_ID;
 
 public class InsideMethodCallExpression extends AbstractExpression{
 

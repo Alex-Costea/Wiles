@@ -1,9 +1,8 @@
 package wiles.shared
 
-import wiles.parser.constants.ErrorMessages.COMPILATION_FAILED_ERROR
-import wiles.parser.constants.ErrorMessages.LINE_SYMBOL
-import wiles.parser.constants.Settings.DEBUG
-import wiles.parser.exceptions.AbstractCompilationException
+import wiles.shared.constants.ErrorMessages.COMPILATION_FAILED_ERROR
+import wiles.shared.constants.ErrorMessages.LINE_SYMBOL
+import wiles.shared.constants.Settings.DEBUG
 
 class CompilationExceptionsCollection : ArrayList<AbstractCompilationException>() {
     fun getExceptionsString(input: String): String {
@@ -13,7 +12,7 @@ class CompilationExceptionsCollection : ArrayList<AbstractCompilationException>(
                     it.tokenLocation.displayLocation(input) + (if (DEBUG) "\n"+it.stackTraceToString() else "") }
             .fold("") { a, b -> a + b }
         if (optional.isEmpty())
-            throw wiles.parser.exceptions.InternalErrorException()
+            throw InternalErrorException()
         return COMPILATION_FAILED_ERROR+optional
     }
 

@@ -1,6 +1,6 @@
-package wiles.parser.exceptions;
+package wiles.shared;
 
-import wiles.parser.constants.ErrorMessages;
+import wiles.shared.constants.ErrorMessages;
 
 public class InternalErrorException extends RuntimeException{
     public InternalErrorException(String message) {

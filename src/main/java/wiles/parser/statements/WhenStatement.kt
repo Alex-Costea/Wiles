@@ -2,15 +2,15 @@ package wiles.parser.statements
 
 import wiles.parser.builders.Context
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
-import wiles.parser.constants.Tokens.CASE_ID
-import wiles.parser.constants.Tokens.ELSE_ID
-import wiles.parser.constants.Tokens.IF_ID
-import wiles.parser.constants.Tokens.TERMINATOR_ID
-import wiles.parser.constants.Tokens.THEN_ID
-import wiles.parser.constants.Tokens.WHEN_ID
+import wiles.shared.constants.Tokens.CASE_ID
+import wiles.shared.constants.Tokens.ELSE_ID
+import wiles.shared.constants.Tokens.IF_ID
+import wiles.shared.constants.Tokens.TERMINATOR_ID
+import wiles.shared.constants.Tokens.THEN_ID
+import wiles.shared.constants.Tokens.WHEN_ID
 import wiles.shared.CompilationExceptionsCollection
 import wiles.parser.enums.SyntaxType
-import wiles.parser.exceptions.AbstractCompilationException
+import wiles.shared.AbstractCompilationException
 import wiles.parser.statements.expressions.ConditionExpression
 import wiles.parser.statements.expressions.InnerDefaultExpression
 

@@ -1,6 +1,6 @@
-package wiles.parser.data
+package wiles.shared
 
-import wiles.parser.constants.ErrorMessages.LINE_SYMBOL
+import wiles.shared.constants.ErrorMessages.LINE_SYMBOL
 
 data class TokenLocation(val line: Int, val lineIndex: Int) {
     override fun equals(other: Any?): Boolean {

@@ -1,27 +1,27 @@
 package wiles.parser.builders
 
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
-import wiles.parser.constants.ErrorMessages.INTERNAL_ERROR
-import wiles.parser.constants.ErrorMessages.INVALID_STATEMENT_ERROR
-import wiles.parser.constants.ErrorMessages.NOT_YET_IMPLEMENTED_ERROR
-import wiles.parser.constants.Predicates.ANYTHING
-import wiles.parser.constants.Predicates.START_OF_TOP_LEVEL_EXPRESSION
-import wiles.parser.constants.Tokens.BRACKET_START_ID
-import wiles.parser.constants.Tokens.BREAK_ID
-import wiles.parser.constants.Tokens.CONTINUE_ID
-import wiles.parser.constants.Tokens.DECLARE_ID
-import wiles.parser.constants.Tokens.DO_ID
-import wiles.parser.constants.Tokens.FOR_ID
-import wiles.parser.constants.Tokens.IF_ID
-import wiles.parser.constants.Tokens.METHOD_ID
-import wiles.parser.constants.Tokens.RETURN_ID
-import wiles.parser.constants.Tokens.START_BLOCK_ID
-import wiles.parser.constants.Tokens.WHEN_ID
-import wiles.parser.constants.Tokens.WHILE_ID
+import wiles.shared.constants.ErrorMessages.INTERNAL_ERROR
+import wiles.shared.constants.ErrorMessages.INVALID_STATEMENT_ERROR
+import wiles.shared.constants.ErrorMessages.NOT_YET_IMPLEMENTED_ERROR
+import wiles.shared.constants.Predicates.ANYTHING
+import wiles.shared.constants.Predicates.START_OF_TOP_LEVEL_EXPRESSION
+import wiles.shared.constants.Tokens.BRACKET_START_ID
+import wiles.shared.constants.Tokens.BREAK_ID
+import wiles.shared.constants.Tokens.CONTINUE_ID
+import wiles.shared.constants.Tokens.DECLARE_ID
+import wiles.shared.constants.Tokens.DO_ID
+import wiles.shared.constants.Tokens.FOR_ID
+import wiles.shared.constants.Tokens.IF_ID
+import wiles.shared.constants.Tokens.METHOD_ID
+import wiles.shared.constants.Tokens.RETURN_ID
+import wiles.shared.constants.Tokens.START_BLOCK_ID
+import wiles.shared.constants.Tokens.WHEN_ID
+import wiles.shared.constants.Tokens.WHILE_ID
 import wiles.parser.enums.StatementFactoryTypes
 import wiles.parser.enums.WhenRemoveToken
-import wiles.parser.exceptions.AbstractCompilationException
-import wiles.parser.exceptions.InternalErrorException
+import wiles.shared.AbstractCompilationException
+import wiles.shared.InternalErrorException
 import wiles.parser.exceptions.UnexpectedTokenException
 import wiles.parser.services.TokenTransmitter
 import wiles.parser.statements.*
@@ -34,7 +34,9 @@ class StatementFactory {
     private lateinit var transmitter: TokenTransmitter
     private lateinit var context: Context
     fun addType(statement: StatementFactoryTypes): StatementFactory {
-        if (!params.containsKey(statement)) throw InternalErrorException(NOT_YET_IMPLEMENTED_ERROR)
+        if (!params.containsKey(statement)) throw InternalErrorException(
+            NOT_YET_IMPLEMENTED_ERROR
+        )
         statements.add(statement)
         return this
     }

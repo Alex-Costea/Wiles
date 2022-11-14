@@ -3,7 +3,7 @@ package wiles.parser.statements
 import wiles.parser.builders.Context
 import wiles.shared.CompilationExceptionsCollection
 import wiles.parser.enums.SyntaxType
-import wiles.parser.exceptions.AbstractCompilationException
+import wiles.shared.AbstractCompilationException
 import wiles.parser.statements.expressions.DefaultExpression
 
 class WhileStatement(oldContext: Context) : AbstractStatement(oldContext.setWithinLoop(true)) {

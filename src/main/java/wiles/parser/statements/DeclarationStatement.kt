@@ -2,19 +2,19 @@ package wiles.parser.statements
 
 import wiles.parser.builders.Context
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
-import wiles.parser.constants.ErrorMessages.IDENTIFIER_EXPECTED_ERROR
-import wiles.parser.constants.Predicates.IS_IDENTIFIER
-import wiles.parser.constants.Tokens.ANON_ARG_ID
-import wiles.parser.constants.Tokens.ASSIGN_ID
-import wiles.parser.constants.Tokens.MUTABLE_ID
-import wiles.parser.constants.Tokens.TYPEDEF_ID
+import wiles.shared.constants.ErrorMessages.IDENTIFIER_EXPECTED_ERROR
+import wiles.shared.constants.Predicates.IS_IDENTIFIER
+import wiles.shared.constants.Tokens.ANON_ARG_ID
+import wiles.shared.constants.Tokens.ASSIGN_ID
+import wiles.shared.constants.Tokens.MUTABLE_ID
+import wiles.shared.constants.Tokens.TYPEDEF_ID
 import wiles.shared.CompilationExceptionsCollection
 import wiles.parser.enums.SyntaxType
-import wiles.parser.exceptions.AbstractCompilationException
+import wiles.shared.AbstractCompilationException
 import wiles.parser.statements.expressions.DefaultExpression
 
 class DeclarationStatement(context: Context, private val isParam: Boolean = false) : AbstractStatement(context) {
-    private var left: AbstractStatement? = null
+    var left: TokenStatement? = null
     private var typeStatement : TypeDefinitionStatement? = null
     private var right: DefaultExpression? = null
     private val exceptions = CompilationExceptionsCollection()
@@ -23,7 +23,7 @@ class DeclarationStatement(context: Context, private val isParam: Boolean = fals
         get() = SyntaxType.DECLARATION
 
     override fun getComponents(): List<AbstractStatement> {
-        val x = mutableListOf(left ?: return emptyList())
+        val x = mutableListOf<AbstractStatement>(left ?: return emptyList())
         if(right != null)
             x.add(right!!)
         if(typeStatement != null)

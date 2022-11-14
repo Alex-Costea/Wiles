@@ -1,14 +1,13 @@
-package wiles.parser.constants
+package wiles.shared.constants
 
-import wiles.parser.constants.Tokens.TERMINATOR_ID
-import wiles.parser.constants.Tokens.TOKENS_INVERSE
+import wiles.shared.constants.Tokens.TERMINATOR_ID
+import wiles.shared.constants.Tokens.TOKENS_INVERSE
 
 object ErrorMessages {
     const val LINE_SYMBOL = "\n>>> "
-    const val COMPILATION_FAILED_ERROR ="${LINE_SYMBOL}COMPILATION FAILED${LINE_SYMBOL}"
+    const val COMPILATION_FAILED_ERROR ="${LINE_SYMBOL}COMPILATION FAILED$LINE_SYMBOL"
     const val TOKEN_EXPECTED_ERROR = "Token is incorrect or missing. Did you mean: \"%s\"?"
     const val IDENTIFIER_EXPECTED_ERROR = "Invalid or missing identifier name."
-    const val LITERAL_EXPECTED_ERROR = "Definition expected."
     const val TYPE_EXPECTED_ERROR = "Type definition is unknown."
     const val EXPRESSION_EXPECTED_ERROR = "Invalid or missing expression"
     const val UNEXPECTED_OPENING_BRACKET_ERROR = "Closing bracket expected here."

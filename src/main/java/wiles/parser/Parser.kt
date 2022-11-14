@@ -4,12 +4,13 @@ import com.fasterxml.jackson.core.util.DefaultPrettyPrinter
 import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.google.common.base.CharMatcher
-import wiles.parser.constants.ErrorMessages.IO_ERROR
+import wiles.shared.constants.ErrorMessages.IO_ERROR
 import wiles.parser.converters.TokensToSyntaxTreeConverter
 import wiles.shared.CompilationExceptionsCollection
 import wiles.parser.data.Token
-import wiles.parser.data.TokenLocation
+import wiles.shared.TokenLocation
 import wiles.parser.statements.CodeBlockStatement
+import wiles.shared.InternalErrorException
 import java.io.BufferedReader
 import java.io.File
 import java.io.IOException
@@ -66,9 +67,9 @@ class Parser(filename : String) {
                 return input
             }
         } catch (ex: NullPointerException) {
-            throw wiles.parser.exceptions.InternalErrorException(IO_ERROR)
+            throw InternalErrorException(IO_ERROR)
         } catch (ex: IOException) {
-            throw wiles.parser.exceptions.InternalErrorException(IO_ERROR)
+            throw InternalErrorException(IO_ERROR)
         }
     }
 

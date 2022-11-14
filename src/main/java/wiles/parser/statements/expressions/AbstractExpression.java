@@ -8,7 +8,7 @@ import wiles.parser.data.Token;
 import wiles.parser.enums.ExpectNext;
 import wiles.parser.enums.StatementFactoryTypes;
 import wiles.parser.enums.SyntaxType;
-import wiles.parser.exceptions.AbstractCompilationException;
+import wiles.shared.AbstractCompilationException;
 import wiles.parser.exceptions.InvalidStatementException;
 import wiles.parser.exceptions.UnexpectedEndException;
 import wiles.parser.services.PrecedenceProcessor;
@@ -19,9 +19,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static wiles.parser.builders.ExpectParamsBuilder.tokenOf;
-import static wiles.parser.constants.ErrorMessages.*;
-import static wiles.parser.constants.Predicates.*;
-import static wiles.parser.constants.Tokens.*;
+import static wiles.shared.constants.ErrorMessages.*;
+import static wiles.shared.constants.Predicates.*;
+import static wiles.shared.constants.Tokens.*;
 
 public abstract class AbstractExpression extends AbstractStatement {
     @NotNull
