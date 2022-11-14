@@ -2,8 +2,8 @@ package wiles.checker
 
 import wiles.checker.exceptions.TypeInferenceException
 import wiles.parser.data.Token
+import wiles.parser.statements.AbstractStatement
 import wiles.parser.statements.TokenStatement
-import wiles.parser.statements.expressions.AbstractExpression
 import wiles.shared.TokenLocation
 import wiles.shared.constants.Chars.DECIMAL_DELIMITER
 import wiles.shared.constants.ErrorMessages.INFERENCE_ERROR
@@ -30,16 +30,40 @@ class Inferrer(private val checker: Checker){
         return checker.getTypeOfIdentifier(token)
     }
 
-    fun fromExpression(expression: AbstractExpression?, location: TokenLocation): String {
+    fun fromExpression(expression: AbstractStatement?, location: TokenLocation): String {
         if(expression == null)
             return ERROR_TOKEN
-        if(expression.getComponents().size == 1) {
-            val component = expression.getComponents()[0]
-            if(component is TokenStatement)
-                return fromToken(component.token)
+        val newLocation : TokenLocation
+        when (expression.getComponents().size)
+        {
+            0 ->{
+                return fromToken((expression as TokenStatement).token)
+            }
+            1 -> {
+                val component = expression.getComponents()[0]
+                if(component is TokenStatement)
+                    return fromToken(component.token)
+            }
+            2 -> {
+                newLocation = (expression.getComponents()[0] as TokenStatement).token.location
+                val resultInferrer = ResultInferrer(newLocation)
+                return resultInferrer.results(
+                    null,
+                    expression.getComponents()[0].name,
+                    fromExpression(expression.getComponents()[1], newLocation)
+                )
+            }
+            3 -> {
+                newLocation = (expression.getComponents()[1] as TokenStatement).token.location
+                val resultInferrer = ResultInferrer(newLocation)
+                return resultInferrer.results(
+                    fromExpression(expression.getComponents()[0], newLocation),
+                    expression.getComponents()[1].name,
+                    fromExpression(expression.getComponents()[2], newLocation)
+                )
+            }
+            else -> throw InternalError()
         }
-
-        //TODO: infer recursively
         throw TypeInferenceException(INFERENCE_ERROR, location)
     }
 }
