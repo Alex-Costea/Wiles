@@ -16,6 +16,8 @@ import wiles.shared.constants.Types.DOUBLE_ID
 import wiles.shared.constants.Types.INT64_ID
 import wiles.shared.constants.Types.STRING_ID
 
+
+//NOTE: this needs to be run even if types don't necessitate inferring, as it also checks whether identifiers are valid
 class Inferrer(private val checker: Checker){
 
     private fun fromToken(token : Token) : TypeDefinition
