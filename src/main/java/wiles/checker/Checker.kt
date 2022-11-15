@@ -8,10 +8,12 @@ import wiles.parser.enums.SyntaxType
 import wiles.parser.statements.CodeBlockStatement
 import wiles.parser.statements.DeclarationStatement
 import wiles.parser.statements.TokenStatement
+import wiles.parser.statements.expressions.AbstractExpression
 import wiles.parser.statements.expressions.TopLevelExpression
 import wiles.shared.AbstractCompilationException
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.InternalErrorException
+import wiles.shared.TokenLocation
 import wiles.shared.constants.ErrorMessages.IDENTIFIER_EXISTS_EXCEPTION
 import wiles.shared.constants.ErrorMessages.NON_EXISTENT_IDENTIFIER_ERROR
 import wiles.shared.constants.ErrorMessages.NON_INIT_IDENTIFIER_ERROR
@@ -53,6 +55,16 @@ class Checker(identifiers: HashMap<Int, String>, idDetailsSet : HashMap<String,I
             throw InvalidIdentifierException(NON_EXISTENT_IDENTIFIER_ERROR, token.location)
     }
 
+    private fun getTokenLocationFromExpression(component : AbstractExpression) : TokenLocation
+    {
+        return if(component.operation == null) {
+            val right = component.right
+            if(right is TokenStatement)
+                right.token.location
+            else throw InternalErrorException()
+        } else component.operation.token.location
+    }
+
     fun check(program: CodeBlockStatement): CompilationExceptionsCollection {
         try
         {
@@ -63,12 +75,7 @@ class Checker(identifiers: HashMap<Int, String>, idDetailsSet : HashMap<String,I
                     {
                         if(component !is TopLevelExpression)
                             throw InternalErrorException()
-                        val location = if(component.operation == null) {
-                            val right = component.right
-                            if(right is TokenStatement)
-                                right.token.location
-                            else throw InternalErrorException()
-                        } else component.operation.token.location
+                        val location = getTokenLocationFromExpression(component)
                         if(component.isAssignment)
                             TODO()
                         else
