@@ -1,6 +1,4 @@
-package wiles.parser.data
-
-import wiles.shared.TokenLocation
+package wiles.shared
 
 data class Token(val content: String, val location: TokenLocation) {
     override fun hashCode(): Int {

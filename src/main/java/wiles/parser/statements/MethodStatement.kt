@@ -12,7 +12,7 @@ import wiles.shared.constants.Tokens.RIGHT_ARROW_ID
 import wiles.shared.constants.Tokens.SEPARATOR_ID
 import wiles.shared.constants.Tokens.START_BLOCK_ID
 import wiles.shared.CompilationExceptionsCollection
-import wiles.parser.enums.SyntaxType
+import wiles.shared.SyntaxType
 import wiles.parser.enums.WhenRemoveToken
 import wiles.shared.AbstractCompilationException
 

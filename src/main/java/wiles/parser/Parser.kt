@@ -7,7 +7,7 @@ import com.google.common.base.CharMatcher
 import wiles.shared.constants.ErrorMessages.IO_ERROR
 import wiles.parser.converters.TokensToSyntaxTreeConverter
 import wiles.shared.CompilationExceptionsCollection
-import wiles.parser.data.Token
+import wiles.shared.Token
 import wiles.shared.TokenLocation
 import wiles.parser.statements.CodeBlockStatement
 import wiles.shared.InternalErrorException

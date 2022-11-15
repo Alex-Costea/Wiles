@@ -3,7 +3,7 @@ package wiles.parser.statements.expressions;
 import org.jetbrains.annotations.NotNull;
 import wiles.parser.builders.Context;
 import wiles.parser.builders.ExpectParamsBuilder;
-import wiles.parser.data.Token;
+import wiles.shared.Token;
 import wiles.shared.AbstractCompilationException;
 import wiles.parser.services.PrecedenceProcessor;
 import wiles.parser.statements.TokenStatement;

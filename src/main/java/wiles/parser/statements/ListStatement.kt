@@ -6,7 +6,7 @@ import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.BRACKET_END_ID
 import wiles.shared.constants.Tokens.SEPARATOR_ID
 import wiles.shared.CompilationExceptionsCollection
-import wiles.parser.enums.SyntaxType
+import wiles.shared.SyntaxType
 import wiles.parser.enums.WhenRemoveToken
 import wiles.shared.AbstractCompilationException
 import wiles.parser.statements.expressions.InnerDefaultExpression

@@ -8,7 +8,7 @@ import wiles.shared.constants.Tokens.FROM_ID
 import wiles.shared.constants.Tokens.IN_ID
 import wiles.shared.constants.Tokens.TO_ID
 import wiles.shared.CompilationExceptionsCollection
-import wiles.parser.enums.SyntaxType
+import wiles.shared.SyntaxType
 import wiles.shared.AbstractCompilationException
 import wiles.parser.statements.expressions.DefaultExpression
 

@@ -1,7 +1,7 @@
 package wiles.parser.statements.expressions;
 
 import wiles.parser.builders.Context;
-import wiles.parser.data.Token;
+import wiles.shared.Token;
 import org.jetbrains.annotations.NotNull;
 import wiles.parser.exceptions.TokenExpectedException;
 import wiles.parser.exceptions.UnexpectedEndException;

@@ -9,7 +9,7 @@ import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Tokens.TYPEDEF_ID
 import wiles.shared.CompilationExceptionsCollection
-import wiles.parser.enums.SyntaxType
+import wiles.shared.SyntaxType
 import wiles.shared.AbstractCompilationException
 import wiles.parser.statements.expressions.DefaultExpression
 

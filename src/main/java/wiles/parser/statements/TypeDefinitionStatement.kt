@@ -17,7 +17,7 @@ import wiles.shared.constants.Types.MIN_NR_TYPES
 import wiles.shared.constants.Types.REQUIRES_SUBTYPE
 import wiles.shared.constants.Types.TYPES
 import wiles.shared.CompilationExceptionsCollection
-import wiles.parser.enums.SyntaxType
+import wiles.shared.SyntaxType
 import wiles.parser.enums.WhenRemoveToken
 import wiles.shared.AbstractCompilationException
 import wiles.parser.exceptions.TokenExpectedException

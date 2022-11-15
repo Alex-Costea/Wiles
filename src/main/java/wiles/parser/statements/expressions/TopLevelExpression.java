@@ -1,7 +1,7 @@
 package wiles.parser.statements.expressions;
 
 import wiles.parser.builders.Context;
-import wiles.parser.data.Token;
+import wiles.shared.Token;
 import wiles.shared.AbstractCompilationException;
 import wiles.parser.exceptions.InvalidStatementException;
 import wiles.parser.services.PrecedenceProcessor;

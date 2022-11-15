@@ -13,7 +13,7 @@ import wiles.shared.constants.Tokens.END_BLOCK_ID
 import wiles.shared.constants.Tokens.START_BLOCK_ID
 import wiles.shared.CompilationExceptionsCollection
 import wiles.parser.enums.StatementFactoryTypes
-import wiles.parser.enums.SyntaxType
+import wiles.shared.SyntaxType
 import wiles.parser.enums.WhenRemoveToken
 import wiles.shared.AbstractCompilationException
 import wiles.parser.exceptions.UnexpectedEndException

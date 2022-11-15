@@ -2,7 +2,7 @@ package wiles.parser.converters
 
 import wiles.parser.statements.CodeBlockStatement
 import wiles.shared.CompilationExceptionsCollection
-import wiles.parser.data.Token
+import wiles.shared.Token
 import wiles.parser.builders.Context
 import wiles.shared.TokenLocation
 import wiles.parser.services.TokenTransmitter

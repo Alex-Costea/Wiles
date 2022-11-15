@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import wiles.parser.builders.Context
 import wiles.shared.CompilationExceptionsCollection
-import wiles.parser.enums.SyntaxType
+import wiles.shared.SyntaxType
 
 @JsonPropertyOrder("compiledSuccessfully", "name", "type", "components")
 abstract class AbstractStatement(val context: Context)

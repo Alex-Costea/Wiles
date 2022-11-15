@@ -6,7 +6,7 @@ import wiles.shared.constants.Settings;
 import wiles.shared.constants.Tokens;
 import wiles.shared.constants.Utils;
 import wiles.shared.CompilationExceptionsCollection;
-import wiles.parser.data.Token;
+import wiles.shared.Token;
 import wiles.shared.TokenLocation;
 import wiles.shared.AbstractCompilationException;
 import wiles.parser.exceptions.StringUnfinishedException;

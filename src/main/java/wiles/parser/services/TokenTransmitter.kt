@@ -2,7 +2,7 @@ package wiles.parser.services
 
 import wiles.parser.builders.ExpectParamsBuilder
 import wiles.shared.constants.ErrorMessages.ERROR_MESSAGE_EXPECTED_ERROR
-import wiles.parser.data.Token
+import wiles.shared.Token
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.exceptions.TokenExpectedException
 import wiles.parser.exceptions.UnexpectedEndException

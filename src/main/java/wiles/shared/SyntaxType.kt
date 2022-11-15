@@ -1,4 +1,4 @@
-package wiles.parser.enums
+package wiles.shared
 
 enum class SyntaxType {
     METHOD, EXPRESSION, CODE_BLOCK, TOKEN, TYPE, WHEN,

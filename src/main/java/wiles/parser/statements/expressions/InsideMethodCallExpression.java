@@ -2,7 +2,7 @@ package wiles.parser.statements.expressions;
 
 import org.jetbrains.annotations.NotNull;
 import wiles.parser.builders.Context;
-import wiles.parser.data.Token;
+import wiles.shared.Token;
 import wiles.parser.enums.WhenRemoveToken;
 import wiles.shared.AbstractCompilationException;
 import wiles.parser.services.PrecedenceProcessor;

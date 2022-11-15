@@ -29,6 +29,6 @@ class CheckerProcessor(program: CodeBlockStatement) {
         }
     }
     init {
-        exceptions.addAll(Checker(defaultIdentifiers, idDetailsSet).check(program))
+        exceptions.addAll(Checker(defaultIdentifiers, idDetailsSet).checkCodeBlock(program))
     }
 }

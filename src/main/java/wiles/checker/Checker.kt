@@ -4,8 +4,8 @@ import wiles.checker.exceptions.IdentifierExistsException
 import wiles.checker.exceptions.InvalidIdentifierException
 import wiles.checker.exceptions.ResultUnusedException
 import wiles.checker.exceptions.TypeInferenceException
-import wiles.parser.data.Token
-import wiles.parser.enums.SyntaxType
+import wiles.shared.Token
+import wiles.shared.SyntaxType
 import wiles.parser.statements.AbstractStatement
 import wiles.parser.statements.CodeBlockStatement
 import wiles.parser.statements.DeclarationStatement
@@ -32,7 +32,7 @@ class Checker(identifiers: HashMap<Int, String>, idDetailsSet : HashMap<String,I
     private val idDetailsSet = idDetailsSet.toMutableMap()
     private val exceptions = CompilationExceptionsCollection()
 
-    private fun inferFromToken(token : Token) : TypeDefinition
+    private fun inferTypeFromLiteral(token : Token) : TypeDefinition
     {
         val name = token.content
         if (Predicates.IS_TEXT_LITERAL.test(name))
@@ -44,21 +44,21 @@ class Checker(identifiers: HashMap<Int, String>, idDetailsSet : HashMap<String,I
             return TypeDefinition(Types.INT64_ID)
         }
         if(Predicates.IS_IDENTIFIER.test(name))
-            return getTypeOfIdentifier(token)
+            return getTypeOfExistingIdentifier(token)
         throw TypeInferenceException(ErrorMessages.INFERENCE_ERROR, token.location)
     }
 
-    private fun inferFromExpression(expression: AbstractStatement?): TypeDefinition? {
+    private fun inferTypeFromExpression(expression: AbstractStatement?): TypeDefinition? {
         if(expression == null)
             return null
         val newLocation : TokenLocation
         when (expression.getComponents().size)
         {
-            0 -> return inferFromToken((expression as TokenStatement).token)
+            0 -> return inferTypeFromLiteral((expression as TokenStatement).token)
             1 -> {
                 val component = expression.getComponents()[0]
                 if(component is TokenStatement)
-                    return inferFromToken(component.token)
+                    return inferTypeFromLiteral(component.token)
                 TODO()
             }
             2, 3 -> {
@@ -67,16 +67,16 @@ class Checker(identifiers: HashMap<Int, String>, idDetailsSet : HashMap<String,I
                 newLocation = expression.operation.token.location
                 val resultInferrer = ResultInferrer(newLocation)
                 return resultInferrer.results(
-                    inferFromExpression(expression.left),
+                    inferTypeFromExpression(expression.left),
                     expression.operation.name,
-                    inferFromExpression(expression.right)!!
+                    inferTypeFromExpression(expression.right)!!
                 )
             }
             else -> throw InternalErrorException()
         }
     }
 
-    private fun addIdentifier(component : DeclarationStatement)
+    private fun addIdentifierFromDeclaration(component : DeclarationStatement)
     {
         val left = component.left?:return
         val id = left.name
@@ -85,7 +85,7 @@ class Checker(identifiers: HashMap<Int, String>, idDetailsSet : HashMap<String,I
             identifiers[identifiers.size] = id
             val isVar = component.name == MUTABLE_ID
             val isInit = component.right != null
-            val inferredType = inferFromExpression(component.right)?: TypeDefinition(ERROR_TOKEN)
+            val inferredType = inferTypeFromExpression(component.right)?: TypeDefinition(ERROR_TOKEN)
             //TODO: check if matching
             val type : TypeDefinition = if(component.typeStatement != null)
                 TypeDefinition(component.typeStatement)
@@ -95,7 +95,7 @@ class Checker(identifiers: HashMap<Int, String>, idDetailsSet : HashMap<String,I
         else throw IdentifierExistsException(IDENTIFIER_EXISTS_EXCEPTION, location)
     }
 
-    private fun getTypeOfIdentifier(token : Token) : TypeDefinition
+    private fun getTypeOfExistingIdentifier(token : Token) : TypeDefinition
     {
         val content = token.content
         if(idDetailsSet[content]?.isInit == false)
@@ -114,7 +114,7 @@ class Checker(identifiers: HashMap<Int, String>, idDetailsSet : HashMap<String,I
         } else component.operation.token.location
     }
 
-    fun check(program: CodeBlockStatement): CompilationExceptionsCollection {
+    fun checkCodeBlock(program: CodeBlockStatement): CompilationExceptionsCollection {
         try
         {
             for (component in program.getComponents()) {
@@ -129,7 +129,7 @@ class Checker(identifiers: HashMap<Int, String>, idDetailsSet : HashMap<String,I
                             TODO()
                         else
                         {
-                            val inferredType = inferFromExpression(component.right)
+                            val inferredType = inferTypeFromExpression(component.right)
                             if(inferredType != TypeDefinition(NOTHING_ID))
                                 throw ResultUnusedException(location)
                         }
@@ -142,7 +142,7 @@ class Checker(identifiers: HashMap<Int, String>, idDetailsSet : HashMap<String,I
                     SyntaxType.DECLARATION -> {
                         if (component !is DeclarationStatement)
                             throw InternalErrorException()
-                        addIdentifier(component)
+                        addIdentifierFromDeclaration(component)
                     }
 
                     SyntaxType.BREAK -> {}

@@ -2,8 +2,8 @@ package wiles.parser.statements
 
 import wiles.parser.builders.Context
 import wiles.shared.CompilationExceptionsCollection
-import wiles.parser.data.Token
-import wiles.parser.enums.SyntaxType
+import wiles.shared.Token
+import wiles.shared.SyntaxType
 
 class TokenStatement(val token: Token, context : Context) : AbstractStatement(context) {
     init {

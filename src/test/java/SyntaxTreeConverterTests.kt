@@ -35,7 +35,7 @@ import wiles.shared.constants.Tokens.WHEN_ID
 import wiles.shared.constants.Utils.nullLocation
 import wiles.parser.converters.TokensToSyntaxTreeConverter
 import wiles.shared.CompilationExceptionsCollection
-import wiles.parser.data.Token
+import wiles.shared.Token
 import wiles.shared.AbstractCompilationException
 import wiles.parser.exceptions.TokenExpectedException
 import wiles.parser.exceptions.UnexpectedEndException

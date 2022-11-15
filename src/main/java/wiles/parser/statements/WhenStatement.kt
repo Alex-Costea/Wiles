@@ -9,7 +9,7 @@ import wiles.shared.constants.Tokens.TERMINATOR_ID
 import wiles.shared.constants.Tokens.THEN_ID
 import wiles.shared.constants.Tokens.WHEN_ID
 import wiles.shared.CompilationExceptionsCollection
-import wiles.parser.enums.SyntaxType
+import wiles.shared.SyntaxType
 import wiles.shared.AbstractCompilationException
 import wiles.parser.statements.expressions.ConditionExpression
 import wiles.parser.statements.expressions.InnerDefaultExpression
