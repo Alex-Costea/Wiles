@@ -65,8 +65,8 @@ class Checker(identifiers: HashMap<Int, String>, idDetailsSet : HashMap<String,I
                 if(expression !is AbstractExpression)
                     throw InternalErrorException()
                 newLocation = expression.operation.token.location
-                val resultInferrer = ResultInferrer(newLocation)
-                return resultInferrer.results(
+                val resultInferrer = OperationInferrer(newLocation)
+                return resultInferrer.resultsType(
                     inferTypeFromExpression(expression.left),
                     expression.operation.name,
                     inferTypeFromExpression(expression.right)!!
