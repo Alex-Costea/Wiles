@@ -80,7 +80,7 @@ public class InputToTokensConverter {
                 if (lastNonSpaceCharacter == CONTINUE_LINE)
                     sb.setLength(lastNonSpaceCharacterIndex - index - 1);
                 else {
-                    //TODO: ugly hack i don't understand
+                    //TODO: explain why
                     if (!isComment)
                         currentIndex--;
                     break;
