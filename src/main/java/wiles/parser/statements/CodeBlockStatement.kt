@@ -124,7 +124,8 @@ class CodeBlockStatement(context: Context) : AbstractStatement(context) {
         } catch (ex: AbstractCompilationException) {
             exceptions.add(ex)
         }
-        compiledSuccessfully = exceptions.isEmpty()
+        if(context.isOutermost)
+            compiledSuccessfully = exceptions.isEmpty()
         return exceptions
     }
 }
