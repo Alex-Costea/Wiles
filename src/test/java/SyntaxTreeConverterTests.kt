@@ -43,8 +43,14 @@ import wiles.parser.exceptions.UnexpectedTokenException
 import wiles.parser.statements.AbstractStatement
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import wiles.shared.constants.Tokens.BREAK_ID
+import wiles.shared.constants.Tokens.FOR_ID
+import wiles.shared.constants.Tokens.FROM_ID
 import wiles.shared.constants.Tokens.IF_ID
+import wiles.shared.constants.Tokens.IN_ID
 import wiles.shared.constants.Tokens.THEN_ID
+import wiles.shared.constants.Tokens.TO_ID
+import wiles.shared.constants.Tokens.WHILE_ID
 
 class SyntaxTreeConverterTests {
     private fun assertResults(exceptions: CompilationExceptionsCollection?, expectedResult: String?, vararg tokens: String) {
@@ -132,7 +138,6 @@ class SyntaxTreeConverterTests {
 
     @Test
     fun programExceptionsTest() {
-        //TODO: more, updated tests
         assertResults(createExceptions(UnexpectedEndException(TOKEN_EXPECTED_ERROR.format("end"), nullLocation)),
             null,
             DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, START_BLOCK_ID)
@@ -221,6 +226,9 @@ class SyntaxTreeConverterTests {
     {
         assertResults(null,"CODE_BLOCK(DECLARATION(TYPE INT64; !a; EXPRESSION(#10)))",
             DECLARE_ID, "!a", TYPEDEF_ID, "!int", ASSIGN_ID, "#10")
+        assertResults(createExceptions(UnexpectedEndException(TOKEN_EXPECTED_ERROR.format(":="), nullLocation)),
+            "CODE_BLOCK(DECLARATION(TYPE INT64; !a; EXPRESSION(#2)); DECLARATION(!a; EXPRESSION(#2)); DECLARATION(TYPE INT64; !a); DECLARATION(!a))",
+            DECLARE_ID, "!a", TYPEDEF_ID, "!int", ASSIGN_ID, "#2", NEWLINE_ID, DECLARE_ID, "!a", ASSIGN_ID, "#2", NEWLINE_ID, DECLARE_ID, "!a", TYPEDEF_ID, "!int", NEWLINE_ID, DECLARE_ID, "!a")
     }
 
     @Test
@@ -248,20 +256,26 @@ class SyntaxTreeConverterTests {
     @Test
     fun forTest()
     {
-        //TODO: tests
+        assertResults(null,"CODE_BLOCK(FOR(!i; IN; EXPRESSION(!list); FROM; EXPRESSION(#1); TO; EXPRESSION(#100); CODE_BLOCK(EXPRESSION(!writeline; APPLY; METHOD_CALL(EXPRESSION(@hello!))))))",
+            FOR_ID, "!i", IN_ID, "!list", FROM_ID, "#1", TO_ID, "#100", NEWLINE_ID, START_BLOCK_ID, NEWLINE_ID, "!writeline", PAREN_START_ID, "@hello!", PAREN_END_ID, NEWLINE_ID, END_BLOCK_ID)
+        assertResults(null, "CODE_BLOCK(FOR(!i; CODE_BLOCK(EXPRESSION(NOTHING))))",
+            FOR_ID, "!i", DO_ID, NOTHING_ID)
     }
-
 
     @Test
     fun whileTest()
     {
-        //TODO: tests
+        assertResults(null,"CODE_BLOCK(WHILE(EXPRESSION(TRUE); CODE_BLOCK(CONTINUE)))",
+            WHILE_ID, TRUE_ID, START_BLOCK_ID, NEWLINE_ID, CONTINUE_ID, NEWLINE_ID, END_BLOCK_ID)
     }
 
     @Test
-    fun breakContinueTest()
+    fun breakContinueErrorTest()
     {
-        //TODO: tests
+        assertResults(createExceptions(TokenExpectedException(INVALID_STATEMENT_ERROR, nullLocation)),
+            "CODE_BLOCK", BREAK_ID)
+        assertResults(createExceptions(TokenExpectedException(INVALID_STATEMENT_ERROR, nullLocation)),
+            "CODE_BLOCK", CONTINUE_ID)
     }
 
     @Test
@@ -271,7 +285,8 @@ class SyntaxTreeConverterTests {
             "!a", PLUS_ID, "!b", PAREN_START_ID, PAREN_END_ID)
         assertResults(null,"CODE_BLOCK(EXPRESSION(!min; APPLY; METHOD_CALL(EXPRESSION(EXPRESSION(!list); ASSIGN; EXPRESSION(!a)))))",
             "!min", PAREN_START_ID, "!list", ASSIGN_ID, "!a", PAREN_END_ID)
-        //TODO: tests
+        assertResults(null, "CODE_BLOCK(EXPRESSION(!call; APPLY; METHOD_CALL(EXPRESSION(EXPRESSION(!a); ASSIGN; EXPRESSION(!b; PLUS; !c)); EXPRESSION(!d); EXPRESSION(!e; EQUALS; !f))))",
+            "!call", PAREN_START_ID, "!a", ASSIGN_ID, "!b", PLUS_ID, "!c", SEPARATOR_ID, "!d", SEPARATOR_ID, "!e", EQUALS_ID, "!f", PAREN_END_ID)
     }
 
     private class CreateConverter(tokens: List<String>) {
