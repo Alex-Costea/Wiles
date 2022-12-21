@@ -2,6 +2,7 @@ package wiles.parser.statements
 
 import wiles.parser.builders.Context
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
+import wiles.parser.enums.WhenRemoveToken
 import wiles.shared.constants.Tokens.CASE_ID
 import wiles.shared.constants.Tokens.ELSE_ID
 import wiles.shared.constants.Tokens.IF_ID
@@ -33,6 +34,7 @@ class WhenStatement(context: Context, private val isExpression : Boolean = false
         try
         {
             val ifStatement = if(!isExpression) transmitter.expectMaybe(tokenOf(IF_ID)).isPresent else false
+            var finalCase = false
             if(!ifStatement)
                 transmitter.expect(tokenOf(WHEN_ID))
             while(true)
@@ -41,14 +43,25 @@ class WhenStatement(context: Context, private val isExpression : Boolean = false
                 {
                     val tempToken = transmitter.expectMaybe(tokenOf(ELSE_ID))
                     if (tempToken.isPresent) {
-                        condition = TokenStatement(tempToken.get(), context)
-                        body = if(isExpression) InnerDefaultExpression(context) else CodeBlockStatement(context)
-                        exceptions.addAll(body.process())
-                        transmitter.expectMaybe(tokenOf(TERMINATOR_ID).dontIgnoreNewLine())
-                        branches.add(Pair(condition, body))
-                        break
+                        val handleOtherwise = fun(): Boolean {
+                            if (!isExpression &&
+                                transmitter.expectMaybe(tokenOf(CASE_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
+                            {
+                                return false
+                            }
+                            condition = TokenStatement(tempToken.get(), context)
+                            body = if (isExpression) InnerDefaultExpression(context) else CodeBlockStatement(context)
+                            exceptions.addAll(body.process())
+                            transmitter.expectMaybe(tokenOf(TERMINATOR_ID).dontIgnoreNewLine())
+                            branches.add(Pair(condition, body))
+                            return true
+                        }
+                        finalCase = !handleOtherwise()
+                        if(!finalCase)
+                            break
                     }
                 }
+
                 if(!ifStatement) {
                     if (!isFirst)
                         transmitter.expect(tokenOf(CASE_ID))
@@ -65,7 +78,7 @@ class WhenStatement(context: Context, private val isExpression : Boolean = false
                 branches.add(Pair(condition, body))
                 transmitter.expectMaybe(tokenOf(TERMINATOR_ID).dontIgnoreNewLine())
 
-                if(isFirst && ifStatement)
+                if((isFirst && ifStatement) || finalCase)
                     break
                 isFirst = false
             }
