@@ -51,6 +51,6 @@ end
 let result := min(list := [10, 3, 55, 8])
 when result is int do
     writeline("Min found: " + result)
-otherwise do
+default do
     writeline("Error: no min found!")
 ```

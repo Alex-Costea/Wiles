@@ -114,7 +114,7 @@ object Tokens {
         KEYWORDS[if(!ROMANIAN_MODE) "is" else "este"] = IS_ID
         KEYWORDS[if(!ROMANIAN_MODE) "then" else "atunci"] = THEN_ID
         KEYWORDS[if(!ROMANIAN_MODE) "case" else "caz"] = CASE_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "otherwise" else "altfel"] = ELSE_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "default" else "altfel"] = ELSE_ID
         KEYWORDS[if(!ROMANIAN_MODE) "for" else "pentru"] = FOR_ID
         KEYWORDS[if(!ROMANIAN_MODE) "in" else "în"] = IN_ID
         KEYWORDS[if(!ROMANIAN_MODE) "from" else "de_la"] = FROM_ID
