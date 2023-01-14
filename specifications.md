@@ -10,7 +10,7 @@
 - String: `"abc"`
 - Boolean: `true` (1) and `false` (0)
 - List literal: `[{@value,@}] : type`
-- Functions literals: `{fun} {({@param1 : type := value,@}) {-> return_type}} [block]` (no return type implies `nothing`)
+- Functions literals: `{fun ({@param1 : type := value,@})} {-> return_type}} [block]` (no return type implies `nothing`)
 
 ### Types
 - Nothing: only valid value is `nothing`

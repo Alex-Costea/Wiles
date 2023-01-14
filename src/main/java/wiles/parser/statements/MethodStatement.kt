@@ -38,6 +38,19 @@ class MethodStatement(oldContext : Context, private val isTypeDeclaration: Boole
         return components
     }
 
+    private fun readParams()
+    {
+        while(transmitter.expectMaybe(tokenOf(IS_IDENTIFIER).or(ANON_ARG_ID)
+                .removeWhen(WhenRemoveToken.Never)).isPresent) {
+            val parameterStatement = DeclarationStatement(context,true)
+            exceptions.addAll(parameterStatement.process())
+            parameters.add(parameterStatement)
+            if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break
+        }
+        if(!isTypeDeclaration)
+            transmitter.expect(tokenOf(PAREN_END_ID))
+    }
+
     override fun process(): CompilationExceptionsCollection {
         try {
             if(transmitter.expectMaybe(tokenOf(DO_ID).or(START_BLOCK_ID).removeWhen(WhenRemoveToken.Never)).isEmpty) {
@@ -45,16 +58,13 @@ class MethodStatement(oldContext : Context, private val isTypeDeclaration: Boole
                     transmitter.expect(tokenOf(METHOD_ID))
 
                 //Params
-                if (isTypeDeclaration || transmitter.expectMaybe(tokenOf(PAREN_START_ID)).isPresent) {
-                    while(transmitter.expectMaybe(tokenOf(IS_IDENTIFIER).or(ANON_ARG_ID)
-                            .removeWhen(WhenRemoveToken.Never)).isPresent) {
-                        val parameterStatement = DeclarationStatement(context,true)
-                        exceptions.addAll(parameterStatement.process())
-                        parameters.add(parameterStatement)
-                        if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break
-                    }
-                    if(!isTypeDeclaration)
-                        transmitter.expect(tokenOf(PAREN_END_ID))
+                if(!isTypeDeclaration) {
+                    transmitter.expect(tokenOf(PAREN_START_ID))
+                    readParams()
+                }
+                else {
+                    if(transmitter.expectMaybe(tokenOf(PAREN_START_ID)).isPresent)
+                        readParams()
                 }
 
                 //Return type
