@@ -8,6 +8,7 @@ import wiles.shared.SyntaxType
 class TokenStatement(val token: Token, context : Context) : AbstractStatement(context) {
     init {
         name = token.content
+        location = token.location.toString()
     }
 
     override val type: SyntaxType
