@@ -1,5 +1,6 @@
 package wiles.checker
 
+import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Chars
@@ -8,10 +9,9 @@ import wiles.shared.constants.Types
 import java.lang.Exception
 
 object Utils {
-    fun isSubtype(type1 : JSONStatement, type2 : JSONStatement) : Boolean
+    fun isSubtype(supertype : JSONStatement, subtype : JSONStatement) : Boolean
     {
-        //TODO
-        return true
+        TODO("subtypes")
     }
 
     fun inferTypeFromLiteral(name : String, variables : HashMap<String,VariableDetails>) : JSONStatement
@@ -25,7 +25,7 @@ object Utils {
             return JSONStatement(Types.INT64_ID, type = SyntaxType.TYPE)
         }
         if(Predicates.IS_IDENTIFIER.test(name))
-            return variables[name]?.type ?: TODO("figure out")
-        throw Exception("Unknown type or something")
+            return variables[name]?.type ?: throw Exception("Unknown variable!")
+        throw InternalErrorException("Not one token!")
     }
 }

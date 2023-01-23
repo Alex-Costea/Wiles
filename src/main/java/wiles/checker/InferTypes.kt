@@ -1,16 +1,16 @@
 package wiles.checker
 
+import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType.*
 
 //TODO
 // Add inferred type definitions and return types
 // Check correct declarations/initializations
-// Add types to operations
+// Add types to all expressions
 // Check correct types when specified
 class InferTypes(private val statement : JSONStatement, private val variables : HashMap<String,VariableDetails>)
 {
-
     private fun inferFromCodeBlock()
     {
         for(part in statement.components)
@@ -25,16 +25,24 @@ class InferTypes(private val statement : JSONStatement, private val variables : 
         assert(statement.components.size>1)
         val name = if(statement.components[0].type==TYPE) statement.components[1] else statement.components[0]
         var type = if(statement.components[0].type==TYPE) statement.components[0] else null
-        val default =statement.components.getOrNull(if(type==null) 1 else 2)
+        val default = statement.components.getOrNull(if(type==null) 1 else 2)
 
         if(variables.containsKey(name.name))
             throw Exception("Variable already declared!")
 
-        if(type==null)
-        {
-            val inferrer = InferTypes(default!!,variables)
+        var inferredType : JSONStatement? = null
+        if(default!=null) {
+            val inferrer = InferTypes(default, variables)
             inferrer.infer()
-            type = inferrer.getType()
+            inferredType = inferrer.getType()
+        }
+
+        if(type == null)
+            type = inferredType!!
+        else
+        {
+            if(inferredType!=null && !Utils.isSubtype(inferredType,type))
+                throw Exception("Type definition is wrong!")
         }
 
         variables[name.name] = VariableDetails(type,default != null)
@@ -43,13 +51,13 @@ class InferTypes(private val statement : JSONStatement, private val variables : 
     private fun getType(): JSONStatement {
         if(statement.components.getOrNull(0)?.type == TYPE)
             return statement.components[0]
-        throw Exception("Idk!")
+        throw InternalErrorException()
     }
 
 
     private fun inferFromExpression()
     {
-        if(statement.components.size==1)
+        if(statement.components.size==1 && statement.components[0].type == TOKEN)
         {
             val type = Utils.inferTypeFromLiteral(statement.components[0].name,variables)
             statement.components.add(0,type)
@@ -77,7 +85,7 @@ class InferTypes(private val statement : JSONStatement, private val variables : 
             CONTINUE -> TODO()
             METHOD_CALL -> TODO()
             FOR -> TODO()
-            null -> TODO()
+            null -> throw InternalErrorException("Unknown statement")
         }
     }
 }
