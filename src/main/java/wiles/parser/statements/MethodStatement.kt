@@ -63,8 +63,7 @@ class MethodStatement(oldContext : Context, private val isTypeDeclaration: Boole
                     readParams()
                 }
                 else {
-                    if(transmitter.expectMaybe(tokenOf(PAREN_START_ID)).isPresent)
-                        readParams()
+                    readParams()
                 }
 
                 //Return type

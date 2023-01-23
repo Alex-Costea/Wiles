@@ -9,6 +9,7 @@ import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.SyntaxType
 import wiles.shared.constants.ErrorMessages.NOT_ENOUGH_TYPES_EXCEPTION
 import wiles.shared.constants.ErrorMessages.TYPE_EXPECTED_ERROR
+import wiles.shared.constants.Predicates.IS_CONTAINED_IN
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.BRACKET_END_ID
 import wiles.shared.constants.Tokens.BRACKET_START_ID
@@ -34,7 +35,8 @@ class TypeDefinitionStatement(context: Context) : AbstractStatement(context) {
 
     override fun process(): CompilationExceptionsCollection {
         try {
-            val (content,location) = transmitter.expect(tokenOf(IS_IDENTIFIER).withErrorMessage(TYPE_EXPECTED_ERROR))
+            val (content,location) = transmitter.expect(tokenOf(IS_CONTAINED_IN(TYPES.keys)
+                .or(IS_IDENTIFIER)).withErrorMessage(TYPE_EXPECTED_ERROR))
             name = TYPES[content]?:content
             if(REQUIRES_SUBTYPE.contains(name))
             {

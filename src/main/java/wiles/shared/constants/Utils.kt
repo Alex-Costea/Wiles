@@ -26,9 +26,10 @@ object Utils {
     {
         val hasComponents = components.isNotEmpty()
         val isToken = (type == SyntaxType.TOKEN)
+        val hasName = name.isNotEmpty()
         return ((if(!isToken) "$type" else "") +
-                (if(!hasComponents) " " else "") +
-                (name + (if(hasComponents && name.isNotEmpty()) "$name; " else ""))+
+                (if(hasName) " " else "") +
+                (name + (if(hasComponents && name.isNotEmpty()) "; " else ""))+
                 (if(hasComponents) "(" else "") +
                 (if(!hasComponents) "" else components.joinToString("; ")+")")).trim()
     }

@@ -43,11 +43,14 @@ import wiles.parser.exceptions.UnexpectedTokenException
 import wiles.parser.statements.AbstractStatement
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import wiles.shared.constants.Tokens.BRACKET_END_ID
+import wiles.shared.constants.Tokens.BRACKET_START_ID
 import wiles.shared.constants.Tokens.BREAK_ID
 import wiles.shared.constants.Tokens.FOR_ID
 import wiles.shared.constants.Tokens.FROM_ID
 import wiles.shared.constants.Tokens.IF_ID
 import wiles.shared.constants.Tokens.IN_ID
+import wiles.shared.constants.Tokens.MAYBE_ID
 import wiles.shared.constants.Tokens.THEN_ID
 import wiles.shared.constants.Tokens.TO_ID
 import wiles.shared.constants.Tokens.WHILE_ID
@@ -291,6 +294,19 @@ class SyntaxTreeConverterTests {
             "!min", PAREN_START_ID, "!list", ASSIGN_ID, "!a", PAREN_END_ID)
         assertResults(null, "CODE_BLOCK(EXPRESSION(!call; APPLY; METHOD_CALL(EXPRESSION(EXPRESSION(!a); ASSIGN; EXPRESSION(!b; PLUS; !c)); EXPRESSION(!d); EXPRESSION(!e; EQUALS; !f))))",
             "!call", PAREN_START_ID, "!a", ASSIGN_ID, "!b", PLUS_ID, "!c", SEPARATOR_ID, "!d", SEPARATOR_ID, "!e", EQUALS_ID, "!f", PAREN_END_ID)
+    }
+
+    @Test
+    fun typesTest()
+    {
+        assertResults(null, "CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD); !a))",
+            DECLARE_ID, "!a", TYPEDEF_ID, METHOD_ID, BRACKET_START_ID, BRACKET_END_ID)
+        assertResults(null,"CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE BOOLEAN; DECLARATION(TYPE INT64; !a); DECLARATION(TYPE STRING; !b))); !func))",
+            DECLARE_ID, "!func", TYPEDEF_ID, METHOD_ID, BRACKET_START_ID, "!a", TYPEDEF_ID, "!int", SEPARATOR_ID,
+            "!b", TYPEDEF_ID, "!text", SEPARATOR_ID, RIGHT_ARROW_ID, "!bit", BRACKET_END_ID)
+        assertResults(null,"CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE INT64; TYPE NOTHING); !a); DECLARATION(TYPE EITHER; (TYPE INT64; TYPE NOTHING); !b))",
+            DECLARE_ID, "!a", TYPEDEF_ID, "!int", MAYBE_ID, NEWLINE_ID,
+            DECLARE_ID, "!b", TYPEDEF_ID, "!either", BRACKET_START_ID, "!int", SEPARATOR_ID, NOTHING_ID, BRACKET_END_ID)
     }
 
     private class CreateConverter(tokens: List<String>) {
