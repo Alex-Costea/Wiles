@@ -1,8 +1,8 @@
 package wiles.shared.constants
 
 import wiles.shared.SyntaxType
-import wiles.shared.constants.Chars.DIGIT_SEPARATOR
 import wiles.shared.TokenLocation
+import wiles.shared.constants.Chars.DIGIT_SEPARATOR
 
 object Utils {
     @JvmStatic

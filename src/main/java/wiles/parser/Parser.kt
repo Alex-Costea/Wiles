@@ -11,6 +11,7 @@ import wiles.shared.Token
 import wiles.shared.TokenLocation
 import wiles.parser.statements.CodeBlockStatement
 import wiles.shared.InternalErrorException
+import wiles.shared.constants.Settings.SYNTAX_TREE_FILE
 import java.io.BufferedReader
 import java.io.File
 import java.io.IOException
@@ -35,7 +36,7 @@ class Parser(filename : String) {
         results = ast
 
         val writer = mapper.writer(DefaultPrettyPrinter())
-        writer.writeValue(File("syntaxTree.json"), ast)
+        writer.writeValue(File(SYNTAX_TREE_FILE), ast)
     }
 
     fun getExceptions() : CompilationExceptionsCollection

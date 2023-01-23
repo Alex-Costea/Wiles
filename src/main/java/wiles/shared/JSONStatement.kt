@@ -1,7 +1,6 @@
-package wiles.interpreter
+package wiles.shared
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import wiles.shared.SyntaxType
 import wiles.shared.constants.Utils
 
 data class JSONStatement(

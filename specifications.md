@@ -10,7 +10,7 @@
 - String: `"abc"`
 - Boolean: `true` (1) and `false` (0)
 - List literal: `[{@value,@}] : type`
-- Functions literals: `{fun ({@param1 : type := value,@})} {-> return_type}} [block]` (no return type implies `nothing`)
+- Functions literals: `{fun ({@param1 : type := value,@})} {-> return_type}} [block]` (types inferrable)
 
 ### Types
 - Nothing: only valid value is `nothing`
@@ -65,7 +65,7 @@
 - `\` can be used to continue a line after a newline (including string literals and comments)
 - Types are not reserved keywords and can be used as variable names
 - Top level expressions must be of type `nothing`
-- `nothing` type is invalid in comparisons
+- `nothing` type is invalid in equality/comparisons
 - Garbage collection
 - Trailing commas are valid but not necessary
 
