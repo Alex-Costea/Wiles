@@ -3,8 +3,9 @@ package wiles.interpreter
 import com.fasterxml.jackson.databind.ObjectMapper
 import java.io.File
 
-object Interpreter
+class Interpreter
 {
+    var codeText : String? = null
     private fun jsonParse(): JSONStatement {
         val mapper = ObjectMapper()
         return mapper.readValue(File("syntaxTree.json"), JSONStatement::class.java)
@@ -13,7 +14,7 @@ object Interpreter
     fun interpret()
     {
         val code = jsonParse()
-        print(code)
+        codeText = code.toString()
         //TODO: check types/initializations and then interpret
     }
 }

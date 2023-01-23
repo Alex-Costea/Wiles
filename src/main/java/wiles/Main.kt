@@ -24,7 +24,9 @@ object Main {
         println(result)
         printExceptions(exceptions,parser.input)
 
-        Interpreter.interpret()
+        val interpreter = Interpreter()
+        interpreter.interpret()
+        assert(interpreter.codeText == result.toString())
     }
 
 }

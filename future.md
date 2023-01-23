@@ -8,3 +8,4 @@
 - Declare fields `readonly` for getter with no setter, `public` for getter and setter
 - Warnings, e.g. unreachable code
 - `error` types. syntax: `int? io_error, illegal_state_error`, internally also an `either`
+- Type declarations? `let type a = fun[a : int, -> int]`
