@@ -16,11 +16,8 @@ class Checker {
     fun check() : CompilationExceptionsCollection
     {
         val exceptions = CompilationExceptionsCollection()
-        //TODO: check correct types when specified
-        //      check correct declarations/initializations
-        //      check top level definitions are of type nothing
-        //      add inferred type definitions and return types
-        //      convert operations e.g. STRING + INT64 -> CONCAT_STRING_INT64
+        InferTypes(code, hashMapOf()).infer()
+        //TODO: check top level definitions are of type nothing
         return exceptions
     }
 }

@@ -8,8 +8,8 @@ data class JSONStatement(
     @JsonProperty var location: String? = null,
     @JsonProperty val type : SyntaxType? = null,
     @JsonProperty var parsed: Boolean? = null,
-    @JsonProperty var components : List<JSONStatement> = listOf()
-    )
+    @JsonProperty var components : MutableList<JSONStatement> = mutableListOf()
+)
 {
     override fun toString(): String {
         assert(parsed==true)

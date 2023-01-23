@@ -26,6 +26,6 @@ object Main {
         val checker = Checker()
         exceptions.addAll(checker.check())
         printExceptions(exceptions,parser.input)
-        assert(checker.code.toString() == result.toString())
+        println(checker.code)
     }
 }
