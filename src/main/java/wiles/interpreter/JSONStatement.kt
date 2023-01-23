@@ -12,11 +12,11 @@ data class JSONStatement(
     )
 {
     override fun toString(): String {
-        return "(" +
+        return "{" +
                 (if(name==null) "" else "name=$name, ")+
                 (if(type==null) "" else "type=$type, ") +
-                (if(location==null) "" else "location=$location, ") +
                 (if(compiledSuccessfully==null) "" else "compiledSuccessfully=$compiledSuccessfully, ") +
-                ("components=$components)")
+                (if(components.isEmpty()) "" else "components=$components") +
+                "}"
     }
 }
