@@ -22,11 +22,11 @@ object Main {
         val result = parser.getResults()
         print("Syntax tree: ")
         println(result)
-        printExceptions(exceptions,parser.input)
 
         val interpreter = Interpreter()
-        interpreter.interpret()
+        exceptions.addAll(interpreter.interpret())
         assert(interpreter.codeText == result.toString())
+        printExceptions(exceptions,parser.input)
     }
 
 }

@@ -36,7 +36,7 @@ class CodeBlockStatement(context: Context) : AbstractStatement(context) {
 
     @JsonProperty
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private var compiledSuccessfully: Boolean? = null
+    private var parsed: Boolean? = null
 
     override val type: SyntaxType
         get() = SyntaxType.CODE_BLOCK
@@ -125,7 +125,7 @@ class CodeBlockStatement(context: Context) : AbstractStatement(context) {
             exceptions.add(ex)
         }
         if(context.isOutermost)
-            compiledSuccessfully = exceptions.isEmpty()
+            parsed = exceptions.isEmpty()
         return exceptions
     }
 }

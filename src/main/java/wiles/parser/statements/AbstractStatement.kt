@@ -8,7 +8,7 @@ import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Utils
 
-@JsonPropertyOrder("compiledSuccessfully", "name", "type", "location", "components")
+@JsonPropertyOrder("parsed", "name", "type", "location", "components")
 abstract class AbstractStatement(val context: Context)
 {
     @JvmField

@@ -8,12 +8,12 @@ data class JSONStatement(
     @JsonProperty var name: String = "",
     @JsonProperty var location: String? = null,
     @JsonProperty val type : SyntaxType? = null,
-    @JsonProperty var compiledSuccessfully: Boolean? = null,
+    @JsonProperty var parsed: Boolean? = null,
     @JsonProperty var components : List<JSONStatement> = listOf()
     )
 {
     override fun toString(): String {
-        assert(compiledSuccessfully==true)
+        assert(parsed==true)
         return Utils.statementToString(name,type!!,components)
     }
 }

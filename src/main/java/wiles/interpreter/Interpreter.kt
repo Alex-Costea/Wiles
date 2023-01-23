@@ -1,6 +1,8 @@
 package wiles.interpreter
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import wiles.interpreter.checker.Checker
+import wiles.shared.CompilationExceptionsCollection
 import java.io.File
 
 class Interpreter
@@ -11,10 +13,17 @@ class Interpreter
         return mapper.readValue(File("syntaxTree.json"), JSONStatement::class.java)
     }
 
-    fun interpret()
+    fun interpret() : CompilationExceptionsCollection
     {
         val code = jsonParse()
         codeText = code.toString()
-        //TODO: check types/initializations and then interpret
+        val checker = Checker(code)
+        val exceptions = checker.check()
+        if(exceptions.isNotEmpty())
+            return exceptions
+
+        //TODO: interpret
+
+        return CompilationExceptionsCollection()
     }
 }
