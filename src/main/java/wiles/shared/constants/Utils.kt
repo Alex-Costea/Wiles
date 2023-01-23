@@ -1,5 +1,6 @@
 package wiles.shared.constants
 
+import wiles.shared.SyntaxType
 import wiles.shared.constants.Chars.DIGIT_SEPARATOR
 import wiles.shared.TokenLocation
 
@@ -20,4 +21,15 @@ object Utils {
     }
 
     val nullLocation = TokenLocation(-1,-1)
+
+    fun <T> statementToString(name : String, type : SyntaxType, components : List<T>) : String
+    {
+        val hasComponents = components.isNotEmpty()
+        val isToken = (type == SyntaxType.TOKEN)
+        return ((if(!isToken) "$type" else "") +
+                (if(!hasComponents) " " else "") +
+                (name + (if(hasComponents && name.isNotEmpty()) "$name; " else ""))+
+                (if(hasComponents) "(" else "") +
+                (if(!hasComponents) "" else components.joinToString("; ")+")")).trim()
+    }
 }

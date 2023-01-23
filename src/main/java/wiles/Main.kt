@@ -1,5 +1,6 @@
 package wiles
 
+import wiles.interpreter.Interpreter
 import wiles.parser.Parser
 import wiles.shared.CompilationExceptionsCollection
 import java.io.IOException
@@ -22,6 +23,8 @@ object Main {
         print("Syntax tree: ")
         println(result)
         printExceptions(exceptions,parser.input)
+
+        Interpreter.interpret()
     }
 
 }

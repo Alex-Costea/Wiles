@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import wiles.parser.builders.Context
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.SyntaxType
+import wiles.shared.constants.Utils
 
 @JsonPropertyOrder("compiledSuccessfully", "name", "type", "location", "components")
 abstract class AbstractStatement(val context: Context)
@@ -31,17 +32,6 @@ abstract class AbstractStatement(val context: Context)
     abstract fun process(): CompilationExceptionsCollection
 
     override fun toString(): String {
-        val sb = StringBuilder()
-        sb.append(type)
-        if (name != "") sb.append(" ").append(name)
-        if (getComponents().isNotEmpty()) {
-            sb.append("(")
-            for ((i, component) in getComponents().withIndex()) {
-                sb.append(component.toString())
-                if (i < getComponents().size - 1) sb.append("; ")
-            }
-            sb.append(")")
-        }
-        return sb.toString()
+        return Utils.statementToString(name,type,getComponents())
     }
 }

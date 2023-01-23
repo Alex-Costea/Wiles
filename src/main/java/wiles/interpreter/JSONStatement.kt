@@ -2,9 +2,10 @@ package wiles.interpreter
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import wiles.shared.SyntaxType
+import wiles.shared.constants.Utils
 
 data class JSONStatement(
-    @JsonProperty var name: String? = null,
+    @JsonProperty var name: String = "",
     @JsonProperty var location: String? = null,
     @JsonProperty val type : SyntaxType? = null,
     @JsonProperty var compiledSuccessfully: Boolean? = null,
@@ -12,11 +13,7 @@ data class JSONStatement(
     )
 {
     override fun toString(): String {
-        return "{" +
-                (if(name==null) "" else "name=$name, ")+
-                (if(type==null) "" else "type=$type, ") +
-                (if(compiledSuccessfully==null) "" else "compiledSuccessfully=$compiledSuccessfully, ") +
-                (if(components.isEmpty()) "" else "components=$components") +
-                "}"
+        assert(compiledSuccessfully==true)
+        return Utils.statementToString(name,type!!,components)
     }
 }

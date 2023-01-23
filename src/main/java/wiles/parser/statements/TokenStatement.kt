@@ -21,8 +21,4 @@ class TokenStatement(val token: Token, context : Context) : AbstractStatement(co
     override fun process(): CompilationExceptionsCollection {
         return CompilationExceptionsCollection()
     }
-
-    override fun toString(): String {
-        return name
-    }
 }
