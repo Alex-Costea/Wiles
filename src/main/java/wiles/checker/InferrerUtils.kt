@@ -10,12 +10,14 @@ import wiles.shared.constants.Predicates
 import wiles.shared.constants.Types
 
 object InferrerUtils {
+    //TODO: not complete!
     fun isSubtype(supertype : JSONStatement, subtype : JSONStatement) : Boolean
     {
         assert(supertype.type == SyntaxType.TYPE)
         assert(subtype.type == SyntaxType.TYPE)
+        if(supertype.toString() == subtype.toString())
+            return true
         return false
-        //TODO("subtypes")
     }
 
     fun inferTypeFromLiteral(token : JSONStatement, variables : HashMap<String,VariableDetails>) : JSONStatement

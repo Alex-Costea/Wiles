@@ -13,6 +13,7 @@ import wiles.shared.SyntaxType.*
 // Check correct declarations/initializations
 // Add types to all expressions
 // Check correct types when specified
+// Add error for unknown types (not done in parser!)
 class Inferrer(private val statement : JSONStatement, private val variables : HashMap<String,VariableDetails>)
 {
     private val errorType = JSONStatement(name = "ERROR")
