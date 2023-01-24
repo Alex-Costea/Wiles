@@ -22,19 +22,10 @@ object InferrerUtils {
         if(supertype.toString() == subtype.toString())
             return true
 
-        if(supertype.name == ANYTHING_ID)
+        if(supertype.name == ANYTHING_ID && subtype.name != EITHER_ID)
         {
             if(subtype.name == NOTHING_ID)
                 return false
-            if(subtype.name == EITHER_ID)
-            {
-                for(component in subtype.components)
-                {
-                    if(!isSubtype(supertype, component)) {
-                        return false
-                    }
-                }
-            }
             return true
         }
 
@@ -54,6 +45,10 @@ object InferrerUtils {
             {
                 for(subtypeComponent in subtype.components)
                 {
+                    if(isSubtype(supertype,subtypeComponent))
+                    {
+                        continue
+                    }
                     var hasMatch = false
                     for(supertypeComponent in supertype.components)
                     {
@@ -68,6 +63,16 @@ object InferrerUtils {
                 }
                 return true
             }
+        }
+        else if(subtype.name == EITHER_ID)
+        {
+            for(component in subtype.components)
+            {
+                if(!isSubtype(supertype, component)) {
+                    return false
+                }
+            }
+            return true
         }
 
         return false
