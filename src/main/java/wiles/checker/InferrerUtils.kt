@@ -1,21 +1,27 @@
 package wiles.checker
 
+import wiles.checker.exceptions.UnknownIdentifierException
+import wiles.checker.exceptions.UsedBeforeInitializationException
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Chars
 import wiles.shared.constants.Predicates
 import wiles.shared.constants.Types
-import kotlin.Exception
 
-object Utils {
+object InferrerUtils {
     fun isSubtype(supertype : JSONStatement, subtype : JSONStatement) : Boolean
     {
-        TODO("subtypes")
+        assert(supertype.type == SyntaxType.TYPE)
+        assert(subtype.type == SyntaxType.TYPE)
+        return false
+        //TODO("subtypes")
     }
 
-    fun inferTypeFromLiteral(name : String, variables : HashMap<String,VariableDetails>) : JSONStatement
+    fun inferTypeFromLiteral(token : JSONStatement, variables : HashMap<String,VariableDetails>) : JSONStatement
     {
+        assert(token.type == SyntaxType.TOKEN)
+        val name = token.name
         if (Predicates.IS_TEXT_LITERAL.test(name))
             return JSONStatement(Types.STRING_ID, type = SyntaxType.TYPE)
         if (Predicates.IS_NUMBER_LITERAL.test(name))
@@ -26,8 +32,8 @@ object Utils {
         }
         if(Predicates.IS_IDENTIFIER.test(name)) {
             if(variables[name]?.initialized==false)
-                throw Exception("Variable used before being initialized!")
-            return variables[name]?.type ?: throw Exception("Unknown variable!")
+                throw UsedBeforeInitializationException(token.location!!)
+            return variables[name]?.type ?: throw UnknownIdentifierException(token.location!!)
         }
         throw InternalErrorException("Not one token!")
     }

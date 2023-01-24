@@ -15,9 +15,9 @@ class Checker {
     }
     fun check() : CompilationExceptionsCollection
     {
-        val exceptions = CompilationExceptionsCollection()
-        InferTypes(code, hashMapOf()).infer()
+        val inferrer = Inferrer(code, hashMapOf())
+        inferrer.infer()
         //TODO: check top level definitions are of type nothing
-        return exceptions
+        return inferrer.exceptions
     }
 }

@@ -5,7 +5,7 @@ import wiles.shared.constants.Utils
 
 data class JSONStatement(
     @JsonProperty var name: String = "",
-    @JsonProperty var location: String? = null,
+    @JsonProperty var location: TokenLocation? = null,
     @JsonProperty val type : SyntaxType? = null,
     @JsonProperty var parsed: Boolean? = null,
     @JsonProperty var components : MutableList<JSONStatement> = mutableListOf()

@@ -37,6 +37,7 @@ class TypeDefinitionStatement(context: Context) : AbstractStatement(context) {
         try {
             val (content,location) = transmitter.expect(tokenOf(IS_CONTAINED_IN(TYPES.keys)
                 .or(IS_IDENTIFIER)).withErrorMessage(TYPE_EXPECTED_ERROR))
+            this.location=location
             name = TYPES[content]?:content
             if(REQUIRES_SUBTYPE.contains(name))
             {
