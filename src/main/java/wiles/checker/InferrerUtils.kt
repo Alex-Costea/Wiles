@@ -10,6 +10,8 @@ import wiles.shared.constants.Predicates
 import wiles.shared.constants.Tokens.BOOLEAN_LITERALS
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Types
+import wiles.shared.constants.Types.ANYTHING_ID
+import wiles.shared.constants.Types.EITHER_ID
 
 object InferrerUtils {
     //TODO: not complete!
@@ -19,6 +21,55 @@ object InferrerUtils {
         assert(subtype.type == SyntaxType.TYPE)
         if(supertype.toString() == subtype.toString())
             return true
+
+        if(supertype.name == ANYTHING_ID)
+        {
+            if(subtype.name == NOTHING_ID)
+                return false
+            if(subtype.name == EITHER_ID)
+            {
+                for(component in subtype.components)
+                {
+                    if(!isSubtype(supertype, component)) {
+                        return false
+                    }
+                }
+            }
+            return true
+        }
+
+        if(supertype.name == EITHER_ID)
+        {
+            if(subtype.name != EITHER_ID)
+            {
+                for (component in supertype.components)
+                {
+                    if (isSubtype(component,subtype))
+                    {
+                        return true
+                    }
+                }
+            }
+            else
+            {
+                for(subtypeComponent in subtype.components)
+                {
+                    var hasMatch = false
+                    for(supertypeComponent in supertype.components)
+                    {
+                        if(isSubtype(supertypeComponent,subtypeComponent))
+                        {
+                            hasMatch = true
+                            break
+                        }
+                    }
+                    if(!hasMatch)
+                        return false
+                }
+                return true
+            }
+        }
+
         return false
     }
 

@@ -64,8 +64,8 @@ class Inferrer(private val statement : JSONStatement, private val variables : Ha
 
         if(type != null)
         {
-            if(inferredType!=null && !InferrerUtils.isSubtype(inferredType,type))
-                throw ConflictingTypeDefinitionException(type.location!!)
+            if(inferredType!=null && !InferrerUtils.isSubtype(type,inferredType))
+                throw ConflictingTypeDefinitionException(type.location!!,type.toString(),inferredType.toString())
         }
     }
 
