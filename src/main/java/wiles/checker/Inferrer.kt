@@ -70,7 +70,7 @@ class Inferrer(private val statement : JSONStatement, private val variables : Ha
 
         //type nothing is auto-initialized with nothing
         variables[name.name] = VariableDetails(type?:inferredType!!,
-            default != null || (if(type!=null) isSubtype(type, NOTHING_TYPE) else false))
+            default != null || (if(type!=null) isSubtype(NOTHING_TYPE, type) else false))
 
         if(type != null)
         {
