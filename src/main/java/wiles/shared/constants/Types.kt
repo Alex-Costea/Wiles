@@ -24,8 +24,8 @@ object Types {
     val MIN_NR_TYPES = hashMapOf(Pair(LIST_ID,1),Pair(EITHER_ID,2))
 
     init {
-        TYPES["!bit"] = BOOLEAN_ID
-        TYPES[if(!ROMANIAN_MODE) "!int" else "!întreg"] = INT64_ID
+        TYPES[if(!ROMANIAN_MODE)"!truth" else "adevăr"] = BOOLEAN_ID
+        TYPES[if(!ROMANIAN_MODE) "!integer" else "!întreg"] = INT64_ID
         TYPES["!text"] = STRING_ID
         TYPES[if(!ROMANIAN_MODE) "!rational" else "!rațional"] = DOUBLE_ID
         TYPES[if(!ROMANIAN_MODE) "!list" else "!listă"] = LIST_ID
