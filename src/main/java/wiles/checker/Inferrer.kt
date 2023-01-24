@@ -1,6 +1,8 @@
 package wiles.checker
 
 import wiles.checker.exceptions.ConflictingTypeDefinitionException
+import wiles.checker.exceptions.InferenceFailException
+import wiles.checker.exceptions.UnusedValueException
 import wiles.checker.exceptions.VariableAlreadyDeclaredException
 import wiles.shared.AbstractCompilationException
 import wiles.shared.CompilationExceptionsCollection
@@ -17,6 +19,7 @@ import wiles.shared.constants.Tokens.NOTHING_ID
 // Add error for unknown types (not done in parser!)
 class Inferrer(private val statement : JSONStatement, private val variables : HashMap<String,VariableDetails>)
 {
+    //TODO in general: only check types using isSubtype
     private val errorType = JSONStatement(name = "ERROR")
     val exceptions = CompilationExceptionsCollection()
     private fun inferFromCodeBlock()
@@ -25,7 +28,12 @@ class Inferrer(private val statement : JSONStatement, private val variables : Ha
         {
             try
             {
-                Inferrer(part, variables).infer()
+                val inferrer = Inferrer(part, variables)
+                inferrer.infer()
+                if(part.type==EXPRESSION && inferrer.getType().name != NOTHING_ID)
+                {
+                    throw UnusedValueException(part.getFirstLocation())
+                }
             }
             catch (ex : AbstractCompilationException)
             {
@@ -60,12 +68,18 @@ class Inferrer(private val statement : JSONStatement, private val variables : Ha
             throw ex
         }
 
-        variables[name.name] = VariableDetails(type?:inferredType!!,default != null)
+        variables[name.name] = VariableDetails(type?:inferredType!!,
+            default != null || type?.name== NOTHING_ID) //type nothing is auto-initialized with nothing
 
         if(type != null)
         {
             if(inferredType!=null && !InferrerUtils.isSubtype(type,inferredType))
                 throw ConflictingTypeDefinitionException(type.location!!,type.toString(),inferredType.toString())
+        }
+        else
+        {
+            if(inferredType?.name == NOTHING_ID)
+                throw InferenceFailException(statement.getFirstLocation())
         }
     }
 
@@ -92,12 +106,7 @@ class Inferrer(private val statement : JSONStatement, private val variables : Ha
         {
             CODE_BLOCK -> inferFromCodeBlock()
             DECLARATION -> inferFromDeclaration()
-            EXPRESSION -> {
-                inferFromExpression()
-                if(getType().name == NOTHING_ID &&
-                    !(statement.components.isNotEmpty() && statement.components[0].name == NOTHING_ID))
-                    throw Exception("Type nothing!")
-            }
+            EXPRESSION -> inferFromExpression()
             LIST -> TODO()
             METHOD -> TODO()
 
