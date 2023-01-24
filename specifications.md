@@ -15,7 +15,7 @@
 ### Types
 - Nothing: only valid value is `nothing`
 - Integers: `integer` (64 bits unsigned)
-- Boolean: `bit`
+- Boolean: `truth`
 - String: `text`
 - Floating point: `rational` (equivalent to `double` in other languages)
 - Function type: like function literals, but no function body
