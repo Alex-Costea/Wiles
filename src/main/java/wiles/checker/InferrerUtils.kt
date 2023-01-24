@@ -7,14 +7,16 @@ import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Chars
 import wiles.shared.constants.Predicates
-import wiles.shared.constants.Tokens.BOOLEAN_LITERALS
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Types
 import wiles.shared.constants.Types.ANYTHING_ID
+import wiles.shared.constants.Types.BOOLEAN_ID
 import wiles.shared.constants.Types.EITHER_ID
 
 object InferrerUtils {
     //TODO: not complete!
+    val NOTHING_TYPE = JSONStatement(type = SyntaxType.TYPE, name = NOTHING_ID)
+    val BOOLEAN_TYPE = JSONStatement(type = SyntaxType.TYPE, name = BOOLEAN_ID)
     fun isSubtype(supertype : JSONStatement, subtype : JSONStatement) : Boolean
     {
         assert(supertype.type == SyntaxType.TYPE)
@@ -24,7 +26,7 @@ object InferrerUtils {
 
         if(supertype.name == ANYTHING_ID && subtype.name != EITHER_ID)
         {
-            if(subtype.name == NOTHING_ID)
+            if(isSubtype(NOTHING_TYPE,subtype))
                 return false
             return true
         }
@@ -90,14 +92,13 @@ object InferrerUtils {
                 return JSONStatement(Types.DOUBLE_ID, type = SyntaxType.TYPE)
             return JSONStatement(Types.INT64_ID, type = SyntaxType.TYPE)
         }
-        if(BOOLEAN_LITERALS.contains(name))
-            return JSONStatement(Types.BOOLEAN_ID, type = SyntaxType.TYPE)
-        if(name == NOTHING_ID)
-            return JSONStatement(NOTHING_ID, type = SyntaxType.TYPE)
         if(Predicates.IS_IDENTIFIER.test(name)) {
             if(variables[name]?.initialized==false)
                 throw UsedBeforeInitializationException(token.location!!)
-            return variables[name]?.type ?: throw UnknownIdentifierException(token.location!!)
+            return JSONStatement(
+                name = variables[name]?.type?.name ?: throw UnknownIdentifierException(token.location!!),
+                type = SyntaxType.TYPE,
+                components = variables[name]!!.type.components)
         }
         throw InternalErrorException("Not one token!")
     }

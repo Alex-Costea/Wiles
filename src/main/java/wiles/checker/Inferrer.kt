@@ -1,15 +1,16 @@
 package wiles.checker
 
+import wiles.checker.InferrerUtils.NOTHING_TYPE
+import wiles.checker.InferrerUtils.isSubtype
 import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.exceptions.InferenceFailException
-import wiles.checker.exceptions.UnusedValueException
+import wiles.checker.exceptions.UnusedExpressionException
 import wiles.checker.exceptions.VariableAlreadyDeclaredException
 import wiles.shared.AbstractCompilationException
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType.*
-import wiles.shared.constants.Tokens.NOTHING_ID
 
 //TODO
 // Add inferred type definitions and return types
@@ -19,7 +20,6 @@ import wiles.shared.constants.Tokens.NOTHING_ID
 // Add error for unknown types (not done in parser!)
 class Inferrer(private val statement : JSONStatement, private val variables : HashMap<String,VariableDetails>)
 {
-    //TODO in general: only check types using isSubtype
     private val errorType = JSONStatement(name = "ERROR")
     val exceptions = CompilationExceptionsCollection()
     private fun inferFromCodeBlock()
@@ -30,9 +30,9 @@ class Inferrer(private val statement : JSONStatement, private val variables : Ha
             {
                 val inferrer = Inferrer(part, variables)
                 inferrer.infer()
-                if(part.type==EXPRESSION && inferrer.getType().name != NOTHING_ID)
+                if(part.type==EXPRESSION && !isSubtype(NOTHING_TYPE,inferrer.getType()))
                 {
-                    throw UnusedValueException(part.getFirstLocation())
+                    throw UnusedExpressionException(part.getFirstLocation())
                 }
             }
             catch (ex : AbstractCompilationException)
@@ -68,17 +68,18 @@ class Inferrer(private val statement : JSONStatement, private val variables : Ha
             throw ex
         }
 
+        //type nothing is auto-initialized with nothing
         variables[name.name] = VariableDetails(type?:inferredType!!,
-            default != null || type?.name== NOTHING_ID) //type nothing is auto-initialized with nothing
+            default != null || (if(type!=null) isSubtype(type, NOTHING_TYPE) else false))
 
         if(type != null)
         {
-            if(inferredType!=null && !InferrerUtils.isSubtype(type,inferredType))
+            if(inferredType!=null && !isSubtype(type,inferredType))
                 throw ConflictingTypeDefinitionException(type.location!!,type.toString(),inferredType.toString())
         }
         else
         {
-            if(inferredType?.name == NOTHING_ID)
+            if(isSubtype(NOTHING_TYPE,inferredType!!))
                 throw InferenceFailException(statement.getFirstLocation())
         }
     }
