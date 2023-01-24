@@ -17,7 +17,7 @@ object Main {
     @JvmStatic
     fun main(args: Array<String>) {
         val exceptions = CompilationExceptionsCollection()
-        val parser = Parser("input.wiles")
+        val parser = Parser(args[0])
         exceptions.addAll(parser.getExceptions())
         val result = parser.getResults()
         print("Syntax tree: ")

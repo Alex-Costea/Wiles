@@ -16,7 +16,14 @@ class Checker {
     fun check() : CompilationExceptionsCollection
     {
         val inferrer = Inferrer(code, hashMapOf())
-        inferrer.infer()
+        try
+        {
+            inferrer.infer()
+        }
+        catch (ex : NotImplementedError)
+        {
+            ex.printStackTrace()
+        }
         //TODO: check top level definitions are of type nothing
         return inferrer.exceptions
     }
