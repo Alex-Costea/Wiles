@@ -24,7 +24,6 @@ class Checker {
         {
             ex.printStackTrace()
         }
-        //TODO: check top level definitions are of type nothing
         return inferrer.exceptions
     }
 }

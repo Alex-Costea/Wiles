@@ -7,6 +7,8 @@ import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Chars
 import wiles.shared.constants.Predicates
+import wiles.shared.constants.Tokens.BOOLEAN_LITERALS
+import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Types
 
 object InferrerUtils {
@@ -32,6 +34,10 @@ object InferrerUtils {
                 return JSONStatement(Types.DOUBLE_ID, type = SyntaxType.TYPE)
             return JSONStatement(Types.INT64_ID, type = SyntaxType.TYPE)
         }
+        if(BOOLEAN_LITERALS.contains(name))
+            return JSONStatement(Types.BOOLEAN_ID, type = SyntaxType.TYPE)
+        if(name == NOTHING_ID)
+            return JSONStatement(NOTHING_ID, type = SyntaxType.TYPE)
         if(Predicates.IS_IDENTIFIER.test(name)) {
             if(variables[name]?.initialized==false)
                 throw UsedBeforeInitializationException(token.location!!)

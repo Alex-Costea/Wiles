@@ -96,6 +96,7 @@ object Tokens {
     @JvmField
     val TERMINATORS = setOf(NEWLINE_ID, TERMINATOR_ID)
     val KEYWORD_LITERALS = setOf(TRUE_ID, FALSE_ID, NOTHING_ID)
+    val BOOLEAN_LITERALS = setOf(TRUE_ID, FALSE_ID)
 
     @JvmField
     val NEW_STATEMENT_START_KEYWORDS = setOf(

@@ -7,6 +7,7 @@ import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType.*
+import wiles.shared.constants.Tokens.NOTHING_ID
 
 //TODO
 // Add inferred type definitions and return types
@@ -91,7 +92,12 @@ class Inferrer(private val statement : JSONStatement, private val variables : Ha
         {
             CODE_BLOCK -> inferFromCodeBlock()
             DECLARATION -> inferFromDeclaration()
-            EXPRESSION -> inferFromExpression()
+            EXPRESSION -> {
+                inferFromExpression()
+                if(getType().name == NOTHING_ID &&
+                    !(statement.components.isNotEmpty() && statement.components[0].name == NOTHING_ID))
+                    throw Exception("Type nothing!")
+            }
             LIST -> TODO()
             METHOD -> TODO()
 
