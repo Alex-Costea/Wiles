@@ -14,9 +14,11 @@ import wiles.shared.constants.Types.BOOLEAN_ID
 import wiles.shared.constants.Types.EITHER_ID
 
 object InferrerUtils {
-    //TODO: not complete!
     val NOTHING_TYPE = JSONStatement(type = SyntaxType.TYPE, name = NOTHING_ID)
     val BOOLEAN_TYPE = JSONStatement(type = SyntaxType.TYPE, name = BOOLEAN_ID)
+    val ERROR_TYPE = JSONStatement(type = SyntaxType.TYPE, name = "ERROR")
+
+    //TODO: not complete!
     fun isSubtype(supertype : JSONStatement, subtype : JSONStatement) : Boolean
     {
         assert(supertype.type == SyntaxType.TYPE)
@@ -24,14 +26,17 @@ object InferrerUtils {
         if(supertype.toString() == subtype.toString())
             return true
 
-        if(supertype.name == ANYTHING_ID && subtype.name != EITHER_ID)
+        if(supertype.name == ANYTHING_ID)
         {
-            if(isSubtype(NOTHING_TYPE,subtype))
-                return false
-            return true
+            if(subtype.name != EITHER_ID)
+            {
+                if (isSubtype(NOTHING_TYPE, subtype))
+                    return false
+                return true
+            }
         }
 
-        if(supertype.name == EITHER_ID)
+        else if(supertype.name == EITHER_ID)
         {
             if(subtype.name != EITHER_ID)
             {
@@ -66,6 +71,7 @@ object InferrerUtils {
                 return true
             }
         }
+
         else if(subtype.name == EITHER_ID)
         {
             for(component in subtype.components)
