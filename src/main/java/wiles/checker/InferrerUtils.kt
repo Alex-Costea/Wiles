@@ -1,5 +1,6 @@
 package wiles.checker
 
+import wiles.checker.CheckerConstants.NOTHING_TYPE
 import wiles.checker.exceptions.UnknownIdentifierException
 import wiles.checker.exceptions.UsedBeforeInitializationException
 import wiles.shared.InternalErrorException
@@ -7,25 +8,13 @@ import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Chars
 import wiles.shared.constants.Predicates
-import wiles.shared.constants.Tokens.NOTHING_ID
-import wiles.shared.constants.Tokens.PLUS_ID
 import wiles.shared.constants.Types.ANYTHING_ID
-import wiles.shared.constants.Types.BOOLEAN_ID
 import wiles.shared.constants.Types.DOUBLE_ID
 import wiles.shared.constants.Types.EITHER_ID
 import wiles.shared.constants.Types.INT64_ID
 import wiles.shared.constants.Types.STRING_ID
 
 object InferrerUtils {
-    val NOTHING_TYPE = JSONStatement(type = SyntaxType.TYPE, name = NOTHING_ID)
-    val BOOLEAN_TYPE = JSONStatement(type = SyntaxType.TYPE, name = BOOLEAN_ID)
-    val INT64_TYPE = JSONStatement(type = SyntaxType.TYPE, name = INT64_ID)
-    val STRING_TYPE = JSONStatement(type = SyntaxType.TYPE, name = STRING_ID)
-    val DOUBLE_TYPE = JSONStatement(type = SyntaxType.TYPE, name = DOUBLE_ID)
-    val ERROR_TYPE = JSONStatement(type = SyntaxType.TYPE, name = "ERROR")
-
-    val PLUS_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = PLUS_ID)
-
     //TODO: not complete!
     fun isSubtype(supertype : JSONStatement, subtype : JSONStatement) : Boolean
     {

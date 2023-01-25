@@ -1,9 +1,9 @@
 package wiles.checker.inferrers
 
+import wiles.checker.CheckerConstants.ERROR_TYPE
+import wiles.checker.CheckerConstants.NOTHING_TYPE
 import wiles.checker.Inferrer
 import wiles.checker.InferrerDetails
-import wiles.checker.InferrerUtils.ERROR_TYPE
-import wiles.checker.InferrerUtils.NOTHING_TYPE
 import wiles.checker.InferrerUtils.isSubtype
 import wiles.checker.VariableDetails
 import wiles.checker.exceptions.ConflictingTypeDefinitionException

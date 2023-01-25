@@ -1,8 +1,8 @@
 package wiles.checker
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import wiles.checker.InferrerUtils.BOOLEAN_TYPE
-import wiles.checker.InferrerUtils.NOTHING_TYPE
+import wiles.checker.CheckerConstants.BOOLEAN_TYPE
+import wiles.checker.CheckerConstants.NOTHING_TYPE
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.JSONStatement
 import wiles.shared.constants.Settings

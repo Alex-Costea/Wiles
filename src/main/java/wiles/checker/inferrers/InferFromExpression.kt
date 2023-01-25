@@ -1,41 +1,14 @@
 package wiles.checker.inferrers
 
 import wiles.checker.InferrerDetails
-import wiles.checker.InferrerUtils.BOOLEAN_TYPE
-import wiles.checker.InferrerUtils.DOUBLE_TYPE
-import wiles.checker.InferrerUtils.INT64_TYPE
-import wiles.checker.InferrerUtils.NOTHING_TYPE
-import wiles.checker.InferrerUtils.PLUS_OPERATION
-import wiles.checker.InferrerUtils.STRING_TYPE
 import wiles.checker.InferrerUtils.inferTypeFromLiteral
+import wiles.checker.SimpleTypeGenerator.getSimpleTypes
 import wiles.checker.exceptions.WrongOperationException
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 
 class InferFromExpression(details: InferrerDetails) : InferFromStatement(details) {
-
-    private val getSimpleTypes = mapOf(
-        Pair(Triple(INT64_TYPE, PLUS_OPERATION, INT64_TYPE), INT64_TYPE),
-        Pair(Triple(DOUBLE_TYPE, PLUS_OPERATION, DOUBLE_TYPE), DOUBLE_TYPE),
-        Pair(Triple(INT64_TYPE, PLUS_OPERATION, DOUBLE_TYPE), DOUBLE_TYPE),
-        Pair(Triple(DOUBLE_TYPE, PLUS_OPERATION, INT64_TYPE), DOUBLE_TYPE),
-
-        //String concatenation
-        Pair(Triple(STRING_TYPE, PLUS_OPERATION, STRING_TYPE), STRING_TYPE),
-
-        Pair(Triple(INT64_TYPE, PLUS_OPERATION, STRING_TYPE), STRING_TYPE),
-        Pair(Triple(STRING_TYPE, PLUS_OPERATION, INT64_TYPE), STRING_TYPE),
-
-        Pair(Triple(DOUBLE_TYPE, PLUS_OPERATION, STRING_TYPE), STRING_TYPE),
-        Pair(Triple(STRING_TYPE, PLUS_OPERATION, DOUBLE_TYPE), STRING_TYPE),
-
-        Pair(Triple(BOOLEAN_TYPE, PLUS_OPERATION, STRING_TYPE), STRING_TYPE),
-        Pair(Triple(STRING_TYPE, PLUS_OPERATION, BOOLEAN_TYPE), STRING_TYPE),
-
-        Pair(Triple(NOTHING_TYPE, PLUS_OPERATION, STRING_TYPE), STRING_TYPE),
-        Pair(Triple(STRING_TYPE, PLUS_OPERATION, NOTHING_TYPE), STRING_TYPE),
-            )
 
     private lateinit var operationName : String
 
@@ -45,11 +18,10 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
             assert(left.type == SyntaxType.TYPE)
         assert(middle.type == SyntaxType.TOKEN)
         assert(right.type == SyntaxType.TYPE)
-        println("$left, $middle, $right")
         val triple = Triple(left,middle,right)
         val type = getSimpleTypes[triple]
         if(type !=null) {
-            operationName = "${left?.name}_${middle.name}_${right.name}"
+            operationName = "${left?.name?:""}|${middle.name}|${right.name}"
             return type
         }
         //TODO complex types
