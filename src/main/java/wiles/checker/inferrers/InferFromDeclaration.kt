@@ -40,9 +40,14 @@ class InferFromDeclaration(details: InferrerDetails) : InferFromStatement(detail
             throw ex
         }
 
+        val newType = type?:inferredType!!
+
         //type nothing is auto-initialized with nothing
-        variables[name.name] = VariableDetails(type?:inferredType!!,
+        variables[name.name] = VariableDetails(newType,
             default != null || (if(type!=null) isSubtype(NOTHING_TYPE, type) else false))
+
+        if(statement.components[0].type != TYPE)
+            statement.components.add(0,newType)
 
         if(type != null)
         {

@@ -8,15 +8,23 @@ import wiles.shared.SyntaxType
 import wiles.shared.constants.Chars
 import wiles.shared.constants.Predicates
 import wiles.shared.constants.Tokens.NOTHING_ID
-import wiles.shared.constants.Types
+import wiles.shared.constants.Tokens.PLUS_ID
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.BOOLEAN_ID
+import wiles.shared.constants.Types.DOUBLE_ID
 import wiles.shared.constants.Types.EITHER_ID
+import wiles.shared.constants.Types.INT64_ID
+import wiles.shared.constants.Types.STRING_ID
 
 object InferrerUtils {
     val NOTHING_TYPE = JSONStatement(type = SyntaxType.TYPE, name = NOTHING_ID)
     val BOOLEAN_TYPE = JSONStatement(type = SyntaxType.TYPE, name = BOOLEAN_ID)
+    val INT64_TYPE = JSONStatement(type = SyntaxType.TYPE, name = INT64_ID)
+    val STRING_TYPE = JSONStatement(type = SyntaxType.TYPE, name = STRING_ID)
+    val DOUBLE_TYPE = JSONStatement(type = SyntaxType.TYPE, name = DOUBLE_ID)
     val ERROR_TYPE = JSONStatement(type = SyntaxType.TYPE, name = "ERROR")
+
+    val PLUS_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = PLUS_ID)
 
     //TODO: not complete!
     fun isSubtype(supertype : JSONStatement, subtype : JSONStatement) : Boolean
@@ -91,12 +99,12 @@ object InferrerUtils {
         assert(token.type == SyntaxType.TOKEN)
         val name = token.name
         if (Predicates.IS_TEXT_LITERAL.test(name))
-            return JSONStatement(Types.STRING_ID, type = SyntaxType.TYPE)
+            return JSONStatement(STRING_ID, type = SyntaxType.TYPE)
         if (Predicates.IS_NUMBER_LITERAL.test(name))
         {
             if(name.contains(Chars.DECIMAL_DELIMITER))
-                return JSONStatement(Types.DOUBLE_ID, type = SyntaxType.TYPE)
-            return JSONStatement(Types.INT64_ID, type = SyntaxType.TYPE)
+                return JSONStatement(DOUBLE_ID, type = SyntaxType.TYPE)
+            return JSONStatement(INT64_ID, type = SyntaxType.TYPE)
         }
         if(Predicates.IS_IDENTIFIER.test(name)) {
             if(variables[name]?.initialized==false)
