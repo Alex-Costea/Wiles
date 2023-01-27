@@ -35,20 +35,20 @@ class Inferrer(private val statement : JSONStatement, private val variables : Ha
             CODE_BLOCK -> inferFromStatement = InferFromCodeBlock(details)
             DECLARATION -> inferFromStatement = InferFromDeclaration(details)
             EXPRESSION -> inferFromStatement = InferFromExpression(details)
-            LIST -> TODO()
-            METHOD -> TODO()
+
+            //should be part of expressions
+            LIST, METHOD, METHOD_CALL, TOKEN -> throw InternalErrorException("Unknown statement")
+
+            //should not appear at all
+            TYPE, null -> throw InternalErrorException("Unknown statement")
 
             //others
-            TOKEN -> TODO()
-            TYPE -> TODO()
             WHEN -> TODO()
-            RETURN -> TODO()
+            FOR -> TODO()
             WHILE -> TODO()
             BREAK -> TODO()
             CONTINUE -> TODO()
-            METHOD_CALL -> TODO()
-            FOR -> TODO()
-            null -> throw InternalErrorException("Unknown statement")
+            RETURN -> TODO()
         }
         inferFromStatement.infer()
     }

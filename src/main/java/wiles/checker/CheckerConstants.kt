@@ -12,6 +12,7 @@ object CheckerConstants {
     val INT64_TYPE = JSONStatement(type = SyntaxType.TYPE, name = Types.INT64_ID)
     val STRING_TYPE = JSONStatement(type = SyntaxType.TYPE, name = Types.STRING_ID)
     val DOUBLE_TYPE = JSONStatement(type = SyntaxType.TYPE, name = Types.DOUBLE_ID)
+    val TYPE_TYPE = JSONStatement(type = SyntaxType.TYPE, name = Types.TYPE_TYPE_ID)
     val ERROR_TYPE = JSONStatement(type = SyntaxType.TYPE, name = Tokens.ERROR_TOKEN)
 
     val BASIC_TYPES = listOf(NOTHING_TYPE, BOOLEAN_TYPE, INT64_TYPE, STRING_TYPE, DOUBLE_TYPE)
@@ -32,4 +33,5 @@ object CheckerConstants {
     val LARGER_EQUALS_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.LARGER_EQUALS_ID)
     val SMALLER_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.SMALLER_ID)
     val SMALLER_EQUALS_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.SMALLER_EQUALS_ID)
+    val IS_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.IS_ID)
 }

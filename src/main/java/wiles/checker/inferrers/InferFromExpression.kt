@@ -1,5 +1,8 @@
 package wiles.checker.inferrers
 
+import wiles.checker.CheckerConstants.BOOLEAN_TYPE
+import wiles.checker.CheckerConstants.IS_OPERATION
+import wiles.checker.CheckerConstants.TYPE_TYPE
 import wiles.checker.InferrerDetails
 import wiles.checker.InferrerUtils.inferTypeFromLiteral
 import wiles.checker.InferrerUtils.normalizeType
@@ -21,6 +24,10 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
             assert(left.type == SyntaxType.TYPE)
         assert(middle.type == SyntaxType.TOKEN)
         assert(right.type == SyntaxType.TYPE)
+
+        if(middle == IS_OPERATION && right == TYPE_TYPE)
+            return BOOLEAN_TYPE
+
         val leftComponents : List<JSONStatement?> =
             if(left?.name == EITHER_ID) left.components.toList() else listOf(left)
         val rightComponents : List<JSONStatement?> =
@@ -53,6 +60,29 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
         throw WrongOperationException(middle.location!!,left.toString(),right.toString())
     }
 
+    private fun inferFromMethod()
+    {
+        TODO()
+    }
+
+    private fun inferFromList()
+    {
+        TODO()
+    }
+
+    private fun inferFromWhenExpression()
+    {
+        TODO()
+    }
+
+    private fun inferFromMethodCall() {
+        TODO()
+    }
+
+    private fun inferFromType() {
+        TODO()
+    }
+
     override fun infer() {
         if(statement.components.size==1 && statement.components[0].type == SyntaxType.TOKEN)
         {
@@ -61,11 +91,23 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
         }
         else if(statement.components.size==1 && statement.components[0].type == SyntaxType.METHOD)
         {
-            TODO()
+            inferFromMethod()
         }
         else if(statement.components.size==1 && statement.components[0].type == SyntaxType.LIST)
         {
-            TODO()
+            inferFromList()
+        }
+        else if(statement.components.size==1 && statement.components[0].type == SyntaxType.WHEN)
+        {
+            inferFromWhenExpression()
+        }
+        else if(statement.components.size==1 && statement.components[0].type == SyntaxType.METHOD_CALL)
+        {
+            inferFromMethodCall()
+        }
+        else if(statement.components.size==1 && statement.components[0].type == SyntaxType.TYPE)
+        {
+            inferFromType()
         }
         else if (statement.components.size == 2 || statement.components.size == 3)
         {
