@@ -168,28 +168,28 @@ class SyntaxTreeConverterTests {
     @Test
     fun methodTest() {
         assertResults(null, "CODE_BLOCK(DECLARATION(!main; EXPRESSION(METHOD(TYPE INT64; CODE_BLOCK))))",
-            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, RIGHT_ARROW_ID, "!int",
+            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, RIGHT_ARROW_ID, "!integer",
                 START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
         assertResults(null, "CODE_BLOCK(DECLARATION(!main; EXPRESSION(METHOD(TYPE INT64; DECLARATION(TYPE INT64; !a); CODE_BLOCK))))",
-            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, PAREN_START_ID, "!a", TYPEDEF_ID, "!int", PAREN_END_ID,
-            RIGHT_ARROW_ID, "!int", START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
+            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, PAREN_START_ID, "!a", TYPEDEF_ID, "!integer", PAREN_END_ID,
+            RIGHT_ARROW_ID, "!integer", START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
         assertResults(null, "CODE_BLOCK(DECLARATION(!main; EXPRESSION(METHOD(TYPE INT64; DECLARATION(TYPE INT64; !a); DECLARATION(TYPE STRING; !b); CODE_BLOCK))))",
-            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, PAREN_START_ID, "!a", TYPEDEF_ID, "!int",
-                SEPARATOR_ID, "!b", TYPEDEF_ID, "!text", PAREN_END_ID, RIGHT_ARROW_ID, "!int", START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
+            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, PAREN_START_ID, "!a", TYPEDEF_ID, "!integer",
+                SEPARATOR_ID, "!b", TYPEDEF_ID, "!text", PAREN_END_ID, RIGHT_ARROW_ID, "!integer", START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
         assertResults(null, "CODE_BLOCK(DECLARATION(!main; EXPRESSION(METHOD(TYPE INT64; DECLARATION(TYPE NOTHING; !a); CODE_BLOCK))))",
             DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, PAREN_START_ID, "!a", TYPEDEF_ID, NOTHING_ID, PAREN_END_ID,
-            RIGHT_ARROW_ID, "!int", START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
+            RIGHT_ARROW_ID, "!integer", START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
         assertResults(null, "CODE_BLOCK(DECLARATION(!a; EXPRESSION(METHOD(CODE_BLOCK(EXPRESSION(NOTHING))))))",
             DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, DO_ID, NOTHING_ID)
         assertResults(null, "CODE_BLOCK(DECLARATION(!main; EXPRESSION(METHOD(CODE_BLOCK(EXPRESSION(EXPRESSION(!b); ASSIGN; EXPRESSION(#3)))))))",
             DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, DO_ID,
              "!b", ASSIGN_ID, "#3")
         assertResults(null, "CODE_BLOCK(DECLARATION(!product; EXPRESSION(METHOD(TYPE INT64; DECLARATION(TYPE INT64; !a); DECLARATION(TYPE INT64; !b); CODE_BLOCK(EXPRESSION(EXPRESSION(!product); ASSIGN; EXPRESSION(!a; TIMES; !b)))))))",
-            DECLARE_ID, "!product", ASSIGN_ID, METHOD_ID, PAREN_START_ID, "!a", TYPEDEF_ID, "!int",
-                SEPARATOR_ID, "!b", TYPEDEF_ID, "!int", PAREN_END_ID, RIGHT_ARROW_ID, "!int", NEWLINE_ID,
+            DECLARE_ID, "!product", ASSIGN_ID, METHOD_ID, PAREN_START_ID, "!a", TYPEDEF_ID, "!integer",
+                SEPARATOR_ID, "!b", TYPEDEF_ID, "!integer", PAREN_END_ID, RIGHT_ARROW_ID, "!integer", NEWLINE_ID,
                 DO_ID,  "!product", ASSIGN_ID, "!a", TIMES_ID, "!b")
         assertResults(null,"CODE_BLOCK(DECLARATION(!main; EXPRESSION(METHOD(DECLARATION(TYPE INT64; !args); CODE_BLOCK(EXPRESSION(NOTHING))))))",
-            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, PAREN_START_ID, "!args", TYPEDEF_ID, "!int", PAREN_END_ID, DO_ID, NOTHING_ID)
+            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, PAREN_START_ID, "!args", TYPEDEF_ID, "!integer", PAREN_END_ID, DO_ID, NOTHING_ID)
         assertResults(null,"CODE_BLOCK(DECLARATION(!a; EXPRESSION(METHOD(CODE_BLOCK(DECLARATION(!b; EXPRESSION(METHOD(CODE_BLOCK(EXPRESSION(NOTHING))))))))))",
             DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, NEWLINE_ID, START_BLOCK_ID, NEWLINE_ID, DECLARE_ID,
             "!b", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, DO_ID, NOTHING_ID, NEWLINE_ID, END_BLOCK_ID, NEWLINE_ID, NEWLINE_ID, NEWLINE_ID)
@@ -218,7 +218,7 @@ class SyntaxTreeConverterTests {
     fun returnTest()
     {
         assertResults(null,"CODE_BLOCK(DECLARATION(!a; EXPRESSION(METHOD(TYPE INT64; CODE_BLOCK(RETURN(EXPRESSION(#10)))))))",
-            DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, RIGHT_ARROW_ID, "!int",
+            DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, RIGHT_ARROW_ID, "!integer",
             START_BLOCK_ID, NEWLINE_ID, RETURN_ID, "#10", NEWLINE_ID, END_BLOCK_ID)
         assertResults(createExceptions(UnexpectedTokenException(INVALID_STATEMENT_ERROR, nullLocation)),null,
             RETURN_ID, "#10")
@@ -228,10 +228,10 @@ class SyntaxTreeConverterTests {
     fun declarationsTest()
     {
         assertResults(null,"CODE_BLOCK(DECLARATION(TYPE INT64; !a; EXPRESSION(#10)))",
-            DECLARE_ID, "!a", TYPEDEF_ID, "!int", ASSIGN_ID, "#10")
+            DECLARE_ID, "!a", TYPEDEF_ID, "!integer", ASSIGN_ID, "#10")
         assertResults(createExceptions(UnexpectedEndException(TOKEN_EXPECTED_ERROR.format(":="), nullLocation)),
             "CODE_BLOCK(DECLARATION(TYPE INT64; !a; EXPRESSION(#2)); DECLARATION(!a; EXPRESSION(#2)); DECLARATION(TYPE INT64; !a); DECLARATION(!a))",
-            DECLARE_ID, "!a", TYPEDEF_ID, "!int", ASSIGN_ID, "#2", NEWLINE_ID, DECLARE_ID, "!a", ASSIGN_ID, "#2", NEWLINE_ID, DECLARE_ID, "!a", TYPEDEF_ID, "!int", NEWLINE_ID, DECLARE_ID, "!a")
+            DECLARE_ID, "!a", TYPEDEF_ID, "!integer", ASSIGN_ID, "#2", NEWLINE_ID, DECLARE_ID, "!a", ASSIGN_ID, "#2", NEWLINE_ID, DECLARE_ID, "!a", TYPEDEF_ID, "!integer", NEWLINE_ID, DECLARE_ID, "!a")
     }
 
     @Test
@@ -302,11 +302,11 @@ class SyntaxTreeConverterTests {
         assertResults(null, "CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD); !a))",
             DECLARE_ID, "!a", TYPEDEF_ID, METHOD_ID, BRACKET_START_ID, BRACKET_END_ID)
         assertResults(null,"CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE BOOLEAN; DECLARATION(TYPE INT64; !a); DECLARATION(TYPE STRING; !b))); !func))",
-            DECLARE_ID, "!func", TYPEDEF_ID, METHOD_ID, BRACKET_START_ID, "!a", TYPEDEF_ID, "!int", SEPARATOR_ID,
-            "!b", TYPEDEF_ID, "!text", SEPARATOR_ID, RIGHT_ARROW_ID, "!bit", BRACKET_END_ID)
+            DECLARE_ID, "!func", TYPEDEF_ID, METHOD_ID, BRACKET_START_ID, "!a", TYPEDEF_ID, "!integer", SEPARATOR_ID,
+            "!b", TYPEDEF_ID, "!text", SEPARATOR_ID, RIGHT_ARROW_ID, "!truth", BRACKET_END_ID)
         assertResults(null,"CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE INT64; TYPE NOTHING); !a); DECLARATION(TYPE EITHER; (TYPE INT64; TYPE NOTHING); !b))",
-            DECLARE_ID, "!a", TYPEDEF_ID, "!int", MAYBE_ID, NEWLINE_ID,
-            DECLARE_ID, "!b", TYPEDEF_ID, "!either", BRACKET_START_ID, "!int", SEPARATOR_ID, NOTHING_ID, BRACKET_END_ID)
+            DECLARE_ID, "!a", TYPEDEF_ID, "!integer", MAYBE_ID, NEWLINE_ID,
+            DECLARE_ID, "!b", TYPEDEF_ID, "!either", BRACKET_START_ID, "!integer", SEPARATOR_ID, NOTHING_ID, BRACKET_END_ID)
     }
 
     private class CreateConverter(tokens: List<String>) {

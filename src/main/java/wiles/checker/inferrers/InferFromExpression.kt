@@ -49,7 +49,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
                 components = resultingTypesSet.toMutableList())
             return normalizeType(unNormalizedType)!!
         }
-        //TODO complex types
+        //TODO other types
         throw WrongOperationException(middle.location!!,left.toString(),right.toString())
     }
 
@@ -58,6 +58,14 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
         {
             val type = inferTypeFromLiteral(statement.components[0],variables)
             statement.components.add(0,type)
+        }
+        else if(statement.components.size==1 && statement.components[0].type == SyntaxType.METHOD)
+        {
+            TODO()
+        }
+        else if(statement.components.size==1 && statement.components[0].type == SyntaxType.LIST)
+        {
+            TODO()
         }
         else if (statement.components.size == 2 || statement.components.size == 3)
         {
