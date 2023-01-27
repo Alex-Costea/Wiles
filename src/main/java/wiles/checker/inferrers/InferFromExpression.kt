@@ -2,6 +2,7 @@ package wiles.checker.inferrers
 
 import wiles.checker.InferrerDetails
 import wiles.checker.InferrerUtils.inferTypeFromLiteral
+import wiles.checker.InferrerUtils.normalizeType
 import wiles.checker.SimpleTypeGenerator.getSimpleTypes
 import wiles.checker.exceptions.WrongOperationException
 import wiles.shared.InternalErrorException
@@ -18,7 +19,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
             assert(left.type == SyntaxType.TYPE)
         assert(middle.type == SyntaxType.TOKEN)
         assert(right.type == SyntaxType.TYPE)
-        val triple = Triple(left,middle,right)
+        val triple = Triple(normalizeType(left),middle,normalizeType(right))
         val type = getSimpleTypes[triple]
         if(type !=null) {
             operationName = "${left?.name?:""}|${middle.name}|${right.name}"

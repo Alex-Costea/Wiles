@@ -83,6 +83,17 @@ object InferrerUtils {
         return false
     }
 
+    fun normalizeType(type : JSONStatement?) : JSONStatement?
+    {
+        type?:return null
+        for(basicType in CheckerConstants.BASIC_TYPES)
+        {
+            if(isSubtype(basicType,type))
+                return basicType
+        }
+        return type
+    }
+
     fun inferTypeFromLiteral(token : JSONStatement, variables : HashMap<String,VariableDetails>) : JSONStatement
     {
         assert(token.type == SyntaxType.TOKEN)

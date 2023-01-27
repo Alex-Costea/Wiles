@@ -17,11 +17,8 @@ class InferFromCodeBlock(details: InferrerDetails) : InferFromStatement(details)
             {
                 val inferrer = Inferrer(part, variables)
                 inferrer.infer()
-                if(part.type== SyntaxType.EXPRESSION && !isSubtype(NOTHING_TYPE, inferrer.getType())
-                )
-                {
+                if(part.type== SyntaxType.EXPRESSION && !isSubtype(NOTHING_TYPE, inferrer.getType()))
                     throw UnusedExpressionException(part.getFirstLocation())
-                }
             }
             catch (ex : AbstractCompilationException)
             {
