@@ -8,6 +8,8 @@ import wiles.checker.exceptions.WrongOperationException
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
+import wiles.shared.constants.Types.ANYTHING_ID
+import wiles.shared.constants.Types.EITHER_ID
 
 class InferFromExpression(details: InferrerDetails) : InferFromStatement(details) {
 
@@ -19,11 +21,33 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
             assert(left.type == SyntaxType.TYPE)
         assert(middle.type == SyntaxType.TOKEN)
         assert(right.type == SyntaxType.TYPE)
-        val triple = Triple(normalizeType(left),middle,normalizeType(right))
-        val type = getSimpleTypes[triple]
-        if(type !=null) {
-            operationName = "${left?.name?:""}|${middle.name}|${right.name}"
-            return type
+        val leftComponents : List<JSONStatement?> =
+            if(left?.name == EITHER_ID) left.components.toList() else listOf(left)
+        val rightComponents : List<JSONStatement?> =
+            if(right.name == EITHER_ID) right.components.toList() else listOf(right)
+        val resultingTypesSet : MutableSet<JSONStatement> = mutableSetOf()
+        var isValid = true
+        for(newLeft in leftComponents)
+        {
+            for(newRight in rightComponents)
+            {
+                val triple = Triple(newLeft,middle,newRight)
+                val type = getSimpleTypes[triple]
+                if(type != null)
+                    resultingTypesSet.add(type)
+                else isValid = false
+            }
+        }
+        if(!isValid)
+            throw WrongOperationException(middle.location!!,left.toString(),right.toString())
+        if(resultingTypesSet.isNotEmpty())
+        {
+            val leftText : String = if(leftComponents.size == 1) left?.name?:"" else ANYTHING_ID
+            val rightText : String = if(rightComponents.size == 1) right.name else ANYTHING_ID
+            operationName = "${leftText}|${middle.name}|${rightText}"
+            val unNormalizedType = JSONStatement(name = EITHER_ID, type = SyntaxType.TYPE,
+                components = resultingTypesSet.toMutableList())
+            return normalizeType(unNormalizedType)!!
         }
         //TODO complex types
         throw WrongOperationException(middle.location!!,left.toString(),right.toString())

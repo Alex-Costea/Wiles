@@ -86,6 +86,13 @@ object InferrerUtils {
     fun normalizeType(type : JSONStatement?) : JSONStatement?
     {
         type?:return null
+        if(type.name == EITHER_ID)
+        {
+            for(eitherType in type.components)
+            {
+                normalizeType(eitherType)
+            }
+        }
         for(basicType in CheckerConstants.BASIC_TYPES)
         {
             if(isSubtype(basicType,type))
