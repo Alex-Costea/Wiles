@@ -11,8 +11,8 @@ import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.TRUE_ID
 import java.io.File
 
-class Checker {
-    val code = parseSyntaxTreeJson()
+class Checker(private val jsonCode : String? = null) {
+    val code: JSONStatement = parseSyntaxTreeJson()
     private val variables = hashMapOf(
             Pair(TRUE_ID, VariableDetails(BOOLEAN_TYPE)),
             Pair(FALSE_ID, VariableDetails(BOOLEAN_TYPE)),
@@ -20,9 +20,11 @@ class Checker {
         )
 
     private fun parseSyntaxTreeJson(): JSONStatement {
-        val mapper = ObjectMapper()
-        return mapper.readValue(File(Settings.SYNTAX_TREE_FILE), JSONStatement::class.java)
+        if(jsonCode==null)
+            return ObjectMapper().readValue(File(Settings.SYNTAX_TREE_FILE), JSONStatement::class.java)
+        return ObjectMapper().readValue(jsonCode, JSONStatement::class.java)
     }
+
     fun check() : CompilationExceptionsCollection
     {
         val inferrer = Inferrer(code, variables)

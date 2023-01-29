@@ -12,7 +12,6 @@ data class JSONStatement(
 )
 {
     override fun toString(): String {
-        assert(parsed==true)
         return Utils.statementToString(name,type!!,components)
     }
 
