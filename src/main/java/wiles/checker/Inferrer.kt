@@ -37,7 +37,11 @@ class Inferrer(private val statement : JSONStatement, private val variables : Ha
             EXPRESSION -> inferFromStatement = InferFromExpression(details)
 
             //should be part of expressions
-            LIST, METHOD, METHOD_CALL, TOKEN -> throw InternalErrorException("Unknown statement")
+            LIST -> TODO()
+            METHOD -> TODO()
+            METHOD_CALL -> TODO()
+            TOKEN -> TODO()
+            WHEN_EXPRESSION -> TODO()
 
             //should not appear at all
             TYPE, null -> throw InternalErrorException("Unknown statement")

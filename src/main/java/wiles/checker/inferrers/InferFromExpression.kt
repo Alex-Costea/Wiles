@@ -60,54 +60,17 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
         throw WrongOperationException(middle.location!!,left.toString(),right.toString())
     }
 
-    private fun inferFromMethod()
-    {
-        TODO()
-    }
-
-    private fun inferFromList()
-    {
-        TODO()
-    }
-
-    private fun inferFromWhenExpression()
-    {
-        TODO()
-    }
-
-    private fun inferFromMethodCall() {
-        TODO()
-    }
-
-    private fun inferFromType() {
-        TODO()
-    }
-
     override fun infer() {
+        val typesList =
+            listOf(SyntaxType.METHOD,SyntaxType.LIST, SyntaxType.WHEN, SyntaxType.METHOD_CALL, SyntaxType.TYPE)
         if(statement.components.size==1 && statement.components[0].type == SyntaxType.TOKEN)
         {
             val type = inferTypeFromLiteral(statement.components[0],variables)
             statement.components.add(0,type)
         }
-        else if(statement.components.size==1 && statement.components[0].type == SyntaxType.METHOD)
+        else if(statement.components.size==1 && statement.components[0].type in typesList)
         {
-            inferFromMethod()
-        }
-        else if(statement.components.size==1 && statement.components[0].type == SyntaxType.LIST)
-        {
-            inferFromList()
-        }
-        else if(statement.components.size==1 && statement.components[0].type == SyntaxType.WHEN)
-        {
-            inferFromWhenExpression()
-        }
-        else if(statement.components.size==1 && statement.components[0].type == SyntaxType.METHOD_CALL)
-        {
-            inferFromMethodCall()
-        }
-        else if(statement.components.size==1 && statement.components[0].type == SyntaxType.TYPE)
-        {
-            inferFromType()
+            InferFromExpression(InferrerDetails(statement.components[0], variables, exceptions)).infer()
         }
         else if (statement.components.size == 2 || statement.components.size == 3)
         {

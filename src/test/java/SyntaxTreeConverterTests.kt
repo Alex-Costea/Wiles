@@ -251,7 +251,7 @@ class SyntaxTreeConverterTests {
             ELSE_ID, DO_ID, IF_ID, "!a", LARGER_ID, "#10", DO_ID, NOTHING_ID, NEWLINE_ID,
             "!a", ASSIGN_ID, "!b" )
 
-        assertResults(null, "CODE_BLOCK(DECLARATION(!a; EXPRESSION(WHEN(EXPRESSION(!b; LARGER; #10); EXPRESSION(#1); EXPRESSION(!b; LARGER; #0); EXPRESSION(#0); ELSE; EXPRESSION(UNARY_MINUS; #1)))))",
+        assertResults(null, "CODE_BLOCK(DECLARATION(!a; EXPRESSION(WHEN_EXPRESSION(EXPRESSION(!b; LARGER; #10); EXPRESSION(#1); EXPRESSION(!b; LARGER; #0); EXPRESSION(#0); ELSE; EXPRESSION(UNARY_MINUS; #1)))))",
             DECLARE_ID, "!a", ASSIGN_ID, WHEN_ID, "!b", LARGER_ID, "#10", THEN_ID, "#1", CASE_ID, "!b", LARGER_ID, "#0",
             THEN_ID, "#0", ELSE_ID, MINUS_ID, "#1")
 

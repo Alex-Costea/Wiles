@@ -20,7 +20,7 @@ class WhenStatement(context: Context, private val isExpression : Boolean = false
     private val branches : MutableList<Pair<AbstractStatement,AbstractStatement>> = mutableListOf()
 
     override val type: SyntaxType
-        get() = SyntaxType.WHEN
+        get() = if(isExpression) SyntaxType.WHEN_EXPRESSION else SyntaxType.WHEN
 
     override fun getComponents(): List<AbstractStatement> {
         return branches.flatMap { (x, y) -> listOf(x, y) }
