@@ -56,6 +56,7 @@ class InferFromDeclaration(details: InferrerDetails) : InferFromStatement(detail
         }
         else
         {
+            // if default value is literal nothing, there's not enough information
             if(isSubtype(NOTHING_TYPE, inferredType!!))
                 throw InferenceFailException(statement.getFirstLocation())
         }

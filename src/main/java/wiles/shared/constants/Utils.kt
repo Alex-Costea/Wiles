@@ -20,7 +20,7 @@ object Utils {
         return Character.isDigit(c)
     }
 
-    val nullLocation = TokenLocation(-1,-1)
+    val NULL_LOCATION = TokenLocation(-1,-1)
 
     fun <T> statementToString(name : String, type : SyntaxType, components : List<T>) : String
     {

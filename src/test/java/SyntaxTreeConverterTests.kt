@@ -32,7 +32,7 @@ import wiles.shared.constants.Tokens.TIMES_ID
 import wiles.shared.constants.Tokens.TRUE_ID
 import wiles.shared.constants.Tokens.TYPEDEF_ID
 import wiles.shared.constants.Tokens.WHEN_ID
-import wiles.shared.constants.Utils.nullLocation
+import wiles.shared.constants.Utils.NULL_LOCATION
 import wiles.parser.converters.TokensToSyntaxTreeConverter
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.Token
@@ -106,20 +106,20 @@ class SyntaxTreeConverterTests {
 
     @Test
     fun expressionsTestException() {
-        assertResults(createExceptions(UnexpectedEndException(EXPRESSION_UNFINISHED_ERROR, nullLocation)),
+        assertResults(createExceptions(UnexpectedEndException(EXPRESSION_UNFINISHED_ERROR, NULL_LOCATION)),
                 null,
                 "!a", PLUS_ID, "!b", PLUS_ID)
-        assertResults(createExceptions(TokenExpectedException(INVALID_EXPRESSION_ERROR, nullLocation)),
+        assertResults(createExceptions(TokenExpectedException(INVALID_EXPRESSION_ERROR, NULL_LOCATION)),
                 null,
                 "!b", PLUS_ID, TIMES_ID, "#5")
-        assertResults(createExceptions(UnexpectedTokenException(INVALID_STATEMENT_ERROR, nullLocation)),
+        assertResults(createExceptions(UnexpectedTokenException(INVALID_STATEMENT_ERROR, NULL_LOCATION)),
                 null,
                 TIMES_ID, "!a")
-        assertResults(createExceptions(TokenExpectedException(EXPRESSION_EXPECTED_ERROR, nullLocation)),
+        assertResults(createExceptions(TokenExpectedException(EXPRESSION_EXPECTED_ERROR, NULL_LOCATION)),
                 null,
                 "!a", PLUS_ID, PAREN_START_ID, "BREAK", PAREN_END_ID)
 
-        assertResults(createExceptions(TokenExpectedException(INVALID_EXPRESSION_ERROR, nullLocation)),
+        assertResults(createExceptions(TokenExpectedException(INVALID_EXPRESSION_ERROR, NULL_LOCATION)),
             null,
             "!a", PLUS_ID, PAREN_START_ID,"!b",PLUS_ID, END_BLOCK_ID, PAREN_END_ID)
     }
@@ -141,25 +141,25 @@ class SyntaxTreeConverterTests {
 
     @Test
     fun programExceptionsTest() {
-        assertResults(createExceptions(UnexpectedEndException(TOKEN_EXPECTED_ERROR.format("end"), nullLocation)),
+        assertResults(createExceptions(UnexpectedEndException(TOKEN_EXPECTED_ERROR.format("end"), NULL_LOCATION)),
             null,
             DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, START_BLOCK_ID)
-        assertResults(createExceptions(TokenExpectedException(END_OF_STATEMENT_EXPECTED_ERROR, nullLocation)),
+        assertResults(createExceptions(TokenExpectedException(END_OF_STATEMENT_EXPECTED_ERROR, NULL_LOCATION)),
             null,
             DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, NEWLINE_ID,
             START_BLOCK_ID, NEWLINE_ID, "!a", PLUS_ID, "!b", DECLARE_ID, NEWLINE_ID, END_BLOCK_ID)
-        assertResults(createExceptions(UnexpectedEndException(TOKEN_EXPECTED_ERROR.format("end"), nullLocation)),
+        assertResults(createExceptions(UnexpectedEndException(TOKEN_EXPECTED_ERROR.format("end"), NULL_LOCATION)),
                 null,
             DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, START_BLOCK_ID, TERMINATOR_ID)
-        assertResults(createExceptions(UnexpectedEndException(TOKEN_EXPECTED_ERROR.format(")"), nullLocation)),
+        assertResults(createExceptions(UnexpectedEndException(TOKEN_EXPECTED_ERROR.format(")"), NULL_LOCATION)),
                 null,
             DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID)
-        assertResults(createExceptions(TokenExpectedException(INVALID_EXPRESSION_ERROR, nullLocation),TokenExpectedException(
-            END_OF_STATEMENT_EXPECTED_ERROR, nullLocation)),"CODE_BLOCK(DECLARATION(!main; EXPRESSION(METHOD(CODE_BLOCK(EXPRESSION; EXPRESSION(!a; PLUS; !b))))))",
+        assertResults(createExceptions(TokenExpectedException(INVALID_EXPRESSION_ERROR, NULL_LOCATION),TokenExpectedException(
+            END_OF_STATEMENT_EXPECTED_ERROR, NULL_LOCATION)),"CODE_BLOCK(DECLARATION(!main; EXPRESSION(METHOD(CODE_BLOCK(EXPRESSION; EXPRESSION(!a; PLUS; !b))))))",
             DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, NEWLINE_ID,
             START_BLOCK_ID, NEWLINE_ID, "!a", TIMES_ID, TIMES_ID, "!b", NEWLINE_ID, "!a", PLUS_ID, "!b",
             DECLARE_ID, "!c", ASSIGN_ID, "!d", NEWLINE_ID, END_BLOCK_ID)
-        assertResults(createExceptions(UnexpectedTokenException(INVALID_STATEMENT_ERROR, nullLocation)),
+        assertResults(createExceptions(UnexpectedTokenException(INVALID_STATEMENT_ERROR, NULL_LOCATION)),
         "CODE_BLOCK(DECLARATION(!a; EXPRESSION(METHOD(CODE_BLOCK))); EXPRESSION(!a; PLUS; !b))",
             DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, DO_ID, CONTINUE_ID
             , NEWLINE_ID, "!a", PLUS_ID, "!b")
@@ -220,7 +220,7 @@ class SyntaxTreeConverterTests {
         assertResults(null,"CODE_BLOCK(DECLARATION(!a; EXPRESSION(METHOD(TYPE INT64; CODE_BLOCK(RETURN(EXPRESSION(#10)))))))",
             DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, RIGHT_ARROW_ID, "!integer",
             START_BLOCK_ID, NEWLINE_ID, RETURN_ID, "#10", NEWLINE_ID, END_BLOCK_ID)
-        assertResults(createExceptions(UnexpectedTokenException(INVALID_STATEMENT_ERROR, nullLocation)),null,
+        assertResults(createExceptions(UnexpectedTokenException(INVALID_STATEMENT_ERROR, NULL_LOCATION)),null,
             RETURN_ID, "#10")
     }
 
@@ -229,7 +229,7 @@ class SyntaxTreeConverterTests {
     {
         assertResults(null,"CODE_BLOCK(DECLARATION(TYPE INT64; !a; EXPRESSION(#10)))",
             DECLARE_ID, "!a", TYPEDEF_ID, "!integer", ASSIGN_ID, "#10")
-        assertResults(createExceptions(UnexpectedEndException(TOKEN_EXPECTED_ERROR.format(":="), nullLocation)),
+        assertResults(createExceptions(UnexpectedEndException(TOKEN_EXPECTED_ERROR.format(":="), NULL_LOCATION)),
             "CODE_BLOCK(DECLARATION(TYPE INT64; !a; EXPRESSION(#2)); DECLARATION(!a; EXPRESSION(#2)); DECLARATION(TYPE INT64; !a); DECLARATION(!a))",
             DECLARE_ID, "!a", TYPEDEF_ID, "!integer", ASSIGN_ID, "#2", NEWLINE_ID, DECLARE_ID, "!a", ASSIGN_ID, "#2", NEWLINE_ID, DECLARE_ID, "!a", TYPEDEF_ID, "!integer", NEWLINE_ID, DECLARE_ID, "!a")
     }
@@ -279,9 +279,9 @@ class SyntaxTreeConverterTests {
     @Test
     fun breakContinueErrorTest()
     {
-        assertResults(createExceptions(TokenExpectedException(INVALID_STATEMENT_ERROR, nullLocation)),
+        assertResults(createExceptions(TokenExpectedException(INVALID_STATEMENT_ERROR, NULL_LOCATION)),
             "CODE_BLOCK", BREAK_ID)
-        assertResults(createExceptions(TokenExpectedException(INVALID_STATEMENT_ERROR, nullLocation)),
+        assertResults(createExceptions(TokenExpectedException(INVALID_STATEMENT_ERROR, NULL_LOCATION)),
             "CODE_BLOCK", CONTINUE_ID)
     }
 
@@ -315,7 +315,7 @@ class SyntaxTreeConverterTests {
         var tree: AbstractStatement
 
         init {
-            converter = TokensToSyntaxTreeConverter(tokens.map { content-> Token(content, nullLocation) }, nullLocation)
+            converter = TokensToSyntaxTreeConverter(tokens.map { content-> Token(content, NULL_LOCATION) }, NULL_LOCATION)
             tree = converter.convert()
             exceptions = converter.exceptions
         }

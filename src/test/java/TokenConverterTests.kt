@@ -3,7 +3,7 @@ import wiles.shared.constants.Settings.DEBUG
 import wiles.shared.constants.Settings.MAX_SYMBOL_LENGTH
 import wiles.shared.constants.Tokens.ACCESS_ID
 import wiles.shared.constants.Tokens.DO_ID
-import wiles.shared.constants.Utils.nullLocation
+import wiles.shared.constants.Utils.NULL_LOCATION
 import wiles.parser.converters.InputToTokensConverter
 import wiles.shared.Token
 import wiles.shared.AbstractCompilationException
@@ -11,6 +11,7 @@ import wiles.parser.exceptions.StringUnfinishedException
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.api.Test
+import wiles.shared.constants.Tokens.ELEM_ACCESS_ID
 import java.util.*
 
 class TokenConverterTests {
@@ -18,7 +19,7 @@ class TokenConverterTests {
     private fun tokenConverterEquals(input: String, solution: Array<String>) {
         val solutionList: MutableList<Token> = ArrayList()
         for (s in solution) {
-            solutionList.add(Token(s, nullLocation))
+            solutionList.add(Token(s, NULL_LOCATION))
         }
         val givenList = InputToTokensConverter(input).convert()
         assert(givenList.size == solutionList.size)
@@ -62,7 +63,7 @@ class TokenConverterTests {
             tokenConverterEquals("$=", arrayOf("TEMP"))
             tokenConverterEquals("=$=", arrayOf("TEMP2"))
         }
-        tokenConverterEquals( "$\n@", arrayOf("$","NEWLINE","@"))
+        tokenConverterEquals( "$\n@", arrayOf("$","NEWLINE", ELEM_ACCESS_ID))
     }
 
     @Test
