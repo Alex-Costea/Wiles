@@ -22,8 +22,8 @@ class DeclarationStatement(context: Context, private val isParam: Boolean = fals
     override val type: SyntaxType
         get() = SyntaxType.DECLARATION
 
-    override fun getComponents(): List<AbstractStatement> {
-        val x = mutableListOf<AbstractStatement>(left ?: return emptyList())
+    override fun getComponents(): MutableList<AbstractStatement> {
+        val x = mutableListOf<AbstractStatement>(left ?: return mutableListOf())
         if(right != null)
             x.add(right!!)
         if(typeStatement != null)

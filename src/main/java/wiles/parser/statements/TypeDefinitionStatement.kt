@@ -29,7 +29,7 @@ class TypeDefinitionStatement(context: Context) : AbstractStatement(context) {
     override val type: SyntaxType
         get() = SyntaxType.TYPE
 
-    override fun getComponents(): List<AbstractStatement> {
+    override fun getComponents(): MutableList<AbstractStatement> {
         return subtypes
     }
 

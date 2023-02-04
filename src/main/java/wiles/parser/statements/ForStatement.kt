@@ -25,8 +25,8 @@ class ForStatement(oldContext: Context) : AbstractStatement(oldContext.setWithin
     override val type: SyntaxType
         get() = SyntaxType.FOR
 
-    override fun getComponents(): List<AbstractStatement> {
-        val list = mutableListOf<AbstractStatement>(identifierStatement?:return emptyList())
+    override fun getComponents(): MutableList<AbstractStatement> {
+        val list = mutableListOf<AbstractStatement>(identifierStatement?:return mutableListOf())
         if(inExpression != null) {
             list.add(inToken!!)
             list.add(inExpression!!)

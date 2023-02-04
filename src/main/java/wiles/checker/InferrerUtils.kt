@@ -15,7 +15,6 @@ import wiles.shared.constants.Types.INT64_ID
 import wiles.shared.constants.Types.STRING_ID
 
 object InferrerUtils {
-    //TODO: not complete!
     fun isSubtype(supertype : JSONStatement, subtype : JSONStatement) : Boolean
     {
         assert(supertype.type == SyntaxType.TYPE)
@@ -79,6 +78,8 @@ object InferrerUtils {
             }
             return true
         }
+
+        //TODO: not complete!
 
         return false
     }

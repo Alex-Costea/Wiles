@@ -1,38 +1,30 @@
 package wiles.parser.statements
 
-import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import wiles.parser.builders.Context
 import wiles.shared.CompilationExceptionsCollection
+import wiles.shared.StatementInterface
 import wiles.shared.SyntaxType
 import wiles.shared.TokenLocation
 import wiles.shared.constants.Utils
 
 @JsonPropertyOrder("parsed", "name", "type", "location", "components")
-abstract class AbstractStatement(val context: Context)
+abstract class AbstractStatement(val context: Context) : StatementInterface
 {
     @JvmField
     protected val transmitter = context.transmitter
-    @JvmField
-    @JsonProperty
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    var name = ""
 
-    @get:JsonProperty
-    abstract val type: SyntaxType
+    abstract override val type: SyntaxType
 
-    @JsonProperty
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    protected var location: TokenLocation? = null
+    override var name = ""
 
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonProperty
-    abstract fun getComponents(): List<AbstractStatement>
+    override var location: TokenLocation? = null
 
     abstract fun process(): CompilationExceptionsCollection
 
     override fun toString(): String {
         return Utils.statementToString(name,type,getComponents())
     }
+
+    abstract override fun getComponents(): MutableList<AbstractStatement>
 }

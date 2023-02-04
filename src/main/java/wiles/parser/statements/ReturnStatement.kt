@@ -12,8 +12,8 @@ class ReturnStatement(context : Context) : AbstractStatement(context) {
 
     private val expression = DefaultExpression(context)
 
-    override fun getComponents(): List<AbstractStatement> {
-        return listOf(expression)
+    override fun getComponents(): MutableList<AbstractStatement> {
+        return mutableListOf(expression)
     }
 
     override fun process(): CompilationExceptionsCollection {

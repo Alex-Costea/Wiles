@@ -3,32 +3,20 @@ package wiles.shared
 import com.fasterxml.jackson.annotation.JsonProperty
 import wiles.shared.constants.Utils
 
-data class JSONStatement(
-    @JsonProperty var name: String = "",
-    @JsonProperty var location: TokenLocation? = null,
-    @JsonProperty val type : SyntaxType? = null,
+class JSONStatement(
+    @JsonProperty override var name: String = "",
+    @JsonProperty override var location: TokenLocation? = null,
+    @JsonProperty override val type : SyntaxType? = null,
     @JsonProperty var parsed: Boolean? = null,
-    @JsonProperty var components : MutableList<JSONStatement> = mutableListOf()
-)
+    @JvmField @JsonProperty var components : MutableList<JSONStatement> = mutableListOf()
+) : StatementInterface
 {
     override fun toString(): String {
         return Utils.statementToString(name,type!!,components)
     }
 
-    fun getFirstLocation() : TokenLocation
-    {
-        val location = location
-        if(location!= null)
-            return location
-        else for(part in components)
-        {
-            try
-            {
-                return part.getFirstLocation()
-            }
-            catch (_: InternalErrorException) {}
-        }
-        throw InternalErrorException("No token locations found!")
+    override fun getComponents(): MutableList<JSONStatement> {
+        return components.toMutableList()
     }
 
     override fun equals(other: Any?): Boolean {
@@ -50,6 +38,5 @@ data class JSONStatement(
         result = 31 * result + components.hashCode()
         return result
     }
-
 
 }

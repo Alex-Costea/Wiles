@@ -22,8 +22,8 @@ class WhenStatement(context: Context, private val isExpression : Boolean = false
     override val type: SyntaxType
         get() = if(isExpression) SyntaxType.WHEN_EXPRESSION else SyntaxType.WHEN
 
-    override fun getComponents(): List<AbstractStatement> {
-        return branches.flatMap { (x, y) -> listOf(x, y) }
+    override fun getComponents(): MutableList<AbstractStatement> {
+        return branches.flatMap { (x, y) -> listOf(x, y) }.toMutableList()
     }
 
     override fun process(): CompilationExceptionsCollection {

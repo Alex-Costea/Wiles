@@ -15,7 +15,7 @@ class ListStatement(context: Context) : AbstractStatement(context) {
     override val type = SyntaxType.LIST
     private val components : ArrayList<AbstractStatement> = arrayListOf()
 
-    override fun getComponents(): List<AbstractStatement> {
+    override fun getComponents(): MutableList<AbstractStatement> {
         return components
     }
 

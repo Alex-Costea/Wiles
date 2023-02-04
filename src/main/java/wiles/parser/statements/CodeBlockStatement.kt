@@ -41,7 +41,7 @@ class CodeBlockStatement(context: Context) : AbstractStatement(context) {
     override val type: SyntaxType
         get() = SyntaxType.CODE_BLOCK
 
-    override fun getComponents(): List<AbstractStatement> {
+    override fun getComponents(): MutableList<AbstractStatement> {
         return components
     }
 

@@ -28,7 +28,7 @@ class MethodStatement(oldContext : Context, private val isTypeDeclaration: Boole
     override val type: SyntaxType
         get() = SyntaxType.METHOD
 
-    override fun getComponents(): List<AbstractStatement> {
+    override fun getComponents(): MutableList<AbstractStatement> {
         val components = ArrayList<AbstractStatement>()
         if(returnType != null)
             components.add(returnType!!)

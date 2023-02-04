@@ -13,8 +13,8 @@ class WhileStatement(oldContext: Context) : AbstractStatement(oldContext.setWith
     override val type: SyntaxType
         get() = SyntaxType.WHILE
 
-    override fun getComponents(): List<AbstractStatement> {
-        return listOf(condition,codeBlock)
+    override fun getComponents(): MutableList<AbstractStatement> {
+        return mutableListOf(condition,codeBlock)
     }
 
     override fun process(): CompilationExceptionsCollection {
