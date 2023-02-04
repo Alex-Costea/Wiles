@@ -89,12 +89,11 @@ public abstract class AbstractExpression extends AbstractStatement {
     }
 
     protected final void checkLeftIsOneIdentifier() throws InvalidStatementException {
-        //TODO: better token location
         if (left.getComponents().size() != 1)
-            throw new InvalidStatementException(IDENTIFIER_TOO_LONG_ERROR, operation.getToken().getLocation());
+            throw new InvalidStatementException(IDENTIFIER_TOO_LONG_ERROR, getFirstLocation());
         AbstractStatement first = left.getComponents().get(0);
         if (!(first instanceof TokenStatement) || !IS_IDENTIFIER.test(first.getName()))
-            throw new InvalidStatementException(IDENTIFIER_TOO_LONG_ERROR, operation.getToken().getLocation());
+            throw new InvalidStatementException(IDENTIFIER_TOO_LONG_ERROR, getFirstLocation());
     }
 
     @Override
