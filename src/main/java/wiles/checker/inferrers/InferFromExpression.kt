@@ -84,15 +84,16 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
             val middle = if(isThree) statement.components[1] else statement.components[0]
             val right = if(isThree) statement.components[2] else statement.components[1]
 
-            //check if value can be assigned to
+            //Check if value can be assigned to
             if(middle.name == ASSIGN_ID)
             {
-                val variableName = if(left.components.size == 1) {
-                    left.components[0].name
-                } else TODO()
-                if(variables[variableName]?.modifiable != true && variables[variableName]?.initialized != false)
-                    throw CannotModifyException(left.getFirstLocation())
-                variables[variableName]?.initialized  = true
+                if(left.components.size == 1) {
+                    val variableName = left.components[0].name
+                    if(variables[variableName]?.modifiable != true && variables[variableName]?.initialized != false)
+                        throw CannotModifyException(left.getFirstLocation())
+                    variables[variableName]?.initialized  = true
+                }
+                //TODO: check stuff like "can't assign to 2.as_text"
             }
 
             val leftIsToken = left.type == SyntaxType.TOKEN
