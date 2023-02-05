@@ -1,44 +1,20 @@
 package wiles.parser.statements.expressions;
 
+import org.jetbrains.annotations.NotNull;
 import wiles.parser.builders.Context;
-import wiles.shared.Token;
-import wiles.shared.AbstractCompilationException;
-import wiles.parser.exceptions.InvalidStatementException;
 import wiles.parser.services.PrecedenceProcessor;
 import wiles.parser.statements.TokenStatement;
-import org.jetbrains.annotations.NotNull;
-import wiles.shared.constants.ErrorMessages;
+import wiles.shared.AbstractCompilationException;
+import wiles.shared.Token;
 
 import static wiles.parser.builders.ExpectParamsBuilder.tokenOf;
-import static wiles.shared.constants.Tokens.*;
+import static wiles.shared.constants.Tokens.ASSIGN_ID;
 
 public class TopLevelExpression extends AbstractExpression {
     public boolean isAssignment=false;
 
     public TopLevelExpression(@NotNull Context context) {
         super(context);
-    }
-
-    private void checkValid(AbstractExpression exp) throws InvalidStatementException
-    {
-        if(exp.operation == null)
-            return;
-        if(exp.operation.getName().equals(ACCESS_ID)
-                || exp.operation.getName().equals(ELEM_ACCESS_ID)
-                || exp.operation.getName().equals(APPLY_ID)) {
-            if(exp.left instanceof AbstractExpression)
-                checkValid((AbstractExpression) exp.left);
-            if(exp.operation.getName().equals(ACCESS_ID) && exp.right instanceof AbstractExpression)
-                checkValid((AbstractExpression) exp.right);
-        }
-        else throw new InvalidStatementException(ErrorMessages.INVALID_LEFT_EXCEPTION, exp.getFirstLocation());
-    }
-
-    @Override
-    protected void checkValid() throws InvalidStatementException {
-        if(!isAssignment)
-            return;
-        checkValid((AbstractExpression) this.left);
     }
 
     @Override
