@@ -4,7 +4,6 @@ import wiles.checker.inferrers.InferFromCodeBlock
 import wiles.checker.inferrers.InferFromDeclaration
 import wiles.checker.inferrers.InferFromExpression
 import wiles.checker.inferrers.InferFromStatement
-import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType.*
@@ -15,9 +14,11 @@ import wiles.shared.SyntaxType.*
 // Add types to all expressions
 // Check correct types when specified
 // Add error for unknown types (not done in parser!)
-class Inferrer(private val statement : JSONStatement, private val variables : HashMap<String,VariableDetails>)
+class Inferrer(details: InferrerDetails)
 {
-    val exceptions = CompilationExceptionsCollection()
+    val statement = details.statement
+    private val variables = details.variables
+    val exceptions = details.exceptions
 
     fun getType(): JSONStatement {
         if(statement.components.getOrNull(0)?.type == TYPE)

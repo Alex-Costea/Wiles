@@ -27,7 +27,7 @@ class Checker(private val jsonCode : String? = null) {
 
     fun check() : CompilationExceptionsCollection
     {
-        val inferrer = Inferrer(code, variables)
+        val inferrer = Inferrer(InferrerDetails(code, variables, CompilationExceptionsCollection()))
         try
         {
             inferrer.infer()

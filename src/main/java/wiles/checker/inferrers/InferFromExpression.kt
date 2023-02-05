@@ -66,14 +66,14 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
         }
         else if(statement.components.size==1 && statement.components[0].type in typesList)
         {
-            val inferrer = Inferrer(statement.components[0], variables)
+            val inferrer = Inferrer(InferrerDetails(statement.components[0], variables, exceptions))
             inferrer.infer()
             exceptions.addAll(inferrer.exceptions)
         }
         else if (statement.components.size == 2 || statement.components.size == 3)
         {
             assert(statement.type == SyntaxType.EXPRESSION)
-            
+
             val isThree = statement.components.size == 3
 
             val left = if(isThree) statement.components[0] else NOTHING_TOKEN

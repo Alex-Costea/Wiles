@@ -29,7 +29,7 @@ class InferFromDeclaration(details: InferrerDetails) : InferFromStatement(detail
         try
         {
             if (default != null) {
-                val inferrer = Inferrer(default, variables)
+                val inferrer = Inferrer(InferrerDetails(default,variables, exceptions))
                 inferrer.infer()
                 inferredType = inferrer.getType()
             }

@@ -15,7 +15,7 @@ class InferFromCodeBlock(details: InferrerDetails) : InferFromStatement(details)
         {
             try
             {
-                val inferrer = Inferrer(part, variables)
+                val inferrer = Inferrer(InferrerDetails(part,variables, exceptions))
                 inferrer.infer()
                 if(part.type== SyntaxType.EXPRESSION && !isFormerSuperTypeOfLatter(NOTHING_TYPE, inferrer.getType()))
                     throw UnusedExpressionException(part.getFirstLocation())
