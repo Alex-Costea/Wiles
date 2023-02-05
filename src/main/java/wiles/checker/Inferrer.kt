@@ -8,12 +8,11 @@ import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType.*
 
-//TODO
-// Add inferred type definitions and return types
-// Check correct declarations/initializations
-// Add types to all expressions
-// Check correct types when specified
-// Add error for unknown types (not done in parser!)
+// Adds inferred type definitions and return types
+// Checks correct declarations/initializations
+// Adds types to all expressions
+// Checks correct types when specified
+// Adds error for unknown types (not done in parser!)
 class Inferrer(details: InferrerDetails)
 {
     val statement = details.statement

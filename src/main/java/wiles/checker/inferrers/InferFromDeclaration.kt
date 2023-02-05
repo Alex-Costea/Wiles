@@ -4,6 +4,7 @@ import wiles.checker.CheckerConstants.ERROR_TYPE
 import wiles.checker.CheckerConstants.NOTHING_TYPE
 import wiles.checker.Inferrer
 import wiles.checker.InferrerDetails
+import wiles.checker.InferrerUtils.checkTypeIsDefined
 import wiles.checker.InferrerUtils.isFormerSuperTypeOfLatter
 import wiles.checker.VariableDetails
 import wiles.checker.exceptions.ConflictingTypeDefinitionException
@@ -23,6 +24,9 @@ class InferFromDeclaration(details: InferrerDetails) : InferFromStatement(detail
         val type = if(statement.components[0].type== TYPE) statement.components[0] else null
         val default = statement.components.getOrNull(if(type==null) 1 else 2)
         var inferredType : JSONStatement? = null
+
+        if(type!=null)
+            checkTypeIsDefined(type)
 
         if(variables.containsKey(name.name))
             throw VariableAlreadyDeclaredException(name.location!!)

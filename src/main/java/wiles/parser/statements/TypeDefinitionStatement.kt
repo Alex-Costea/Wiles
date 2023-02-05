@@ -69,6 +69,7 @@ class TypeDefinitionStatement(context: Context) : AbstractStatement(context) {
 
                 val component1 = TypeDefinitionStatement(context)
                 component1.name = oldName
+                component1.location = location
                 component1.subtypes.addAll(subtypes)
                 subtypes.clear()
                 subtypes.add(component1)

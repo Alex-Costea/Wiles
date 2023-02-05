@@ -2,12 +2,14 @@ package wiles.checker
 
 import wiles.checker.CheckerConstants.NOTHING_TYPE
 import wiles.checker.exceptions.UnknownIdentifierException
+import wiles.checker.exceptions.UnknownTypeException
 import wiles.checker.exceptions.UsedBeforeInitializationException
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Chars
 import wiles.shared.constants.Predicates
+import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.DOUBLE_ID
 import wiles.shared.constants.Types.EITHER_ID
@@ -115,7 +117,7 @@ object InferrerUtils {
                 return JSONStatement(DOUBLE_ID, type = SyntaxType.TYPE)
             return JSONStatement(INT64_ID, type = SyntaxType.TYPE)
         }
-        if(Predicates.IS_IDENTIFIER.test(name)) {
+        if(IS_IDENTIFIER.test(name)) {
             if( variables[name]?.initialized==false)
                 throw UsedBeforeInitializationException(token.location!!)
             return JSONStatement(
@@ -124,5 +126,18 @@ object InferrerUtils {
                 components = variables[name]!!.type.components)
         }
         throw InternalErrorException("Not one token!")
+    }
+
+    fun checkTypeIsDefined(type : JSONStatement)
+    {
+        if(type.type == SyntaxType.TYPE && type.name.startsWith("!"))
+            throw UnknownTypeException(type.location!!)
+        if(type.components.isNotEmpty())
+        {
+            for(component in type.components)
+            {
+                checkTypeIsDefined(component)
+            }
+        }
     }
 }

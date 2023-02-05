@@ -187,8 +187,7 @@ class CheckerTests {
   } ]
 }""","CODE_BLOCK(DECLARATION(TYPE INT64; !a; EXPRESSION(TYPE INT64; #1)); DECLARATION(!a; EXPRESSION(#2)))")
 
-    checkResult(null,
-"""{
+    checkResult(null,"""{
   "parsed" : true,
   "type" : "CODE_BLOCK",
   "components" : [ {
@@ -218,8 +217,12 @@ class CheckerTests {
         "lineIndex" : 9
       },
       "components" : [ {
-        "name" : "!int",
-        "type" : "TYPE"
+        "name" : "INT64",
+        "type" : "TYPE",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 9
+        }
       }, {
         "name" : "NOTHING",
         "type" : "TYPE"
@@ -238,12 +241,12 @@ class CheckerTests {
         "type" : "TOKEN",
         "location" : {
           "line" : 2,
-          "lineIndex" : 17
+          "lineIndex" : 21
         }
       } ]
     } ]
   } ]
-}""", "CODE_BLOCK(DECLARATION(TYPE NOTHING; !a); DECLARATION(TYPE EITHER; (TYPE !int; TYPE NOTHING); !b; EXPRESSION(TYPE NOTHING; !a)))")
+}""","CODE_BLOCK(DECLARATION(TYPE NOTHING; !a); DECLARATION(TYPE EITHER; (TYPE INT64; TYPE NOTHING); !b; EXPRESSION(TYPE NOTHING; !a)))")
 
     checkResult(createExceptions(UsedBeforeInitializationException(NULL_LOCATION)),
 """{
@@ -252,7 +255,7 @@ class CheckerTests {
   "components" : [ {
     "type" : "DECLARATION",
     "components" : [ {
-      "name" : "!int",
+      "name" : "INT64",
       "type" : "TYPE",
       "location" : {
         "line" : 1,
@@ -287,7 +290,7 @@ class CheckerTests {
       } ]
     } ]
   } ]
-}""", "CODE_BLOCK(DECLARATION(TYPE !int; !a); DECLARATION(!b; EXPRESSION(!a)))")
+}""", "CODE_BLOCK(DECLARATION(TYPE INT64; !a); DECLARATION(!b; EXPRESSION(!a)))")
 
         checkResult(createExceptions(UnknownIdentifierException(NULL_LOCATION)),
 """{
@@ -315,6 +318,30 @@ class CheckerTests {
     } ]
   } ]
 }""", "CODE_BLOCK(DECLARATION(!a; EXPRESSION(!b)))")
+
+        checkResult(createExceptions(UnknownTypeException(NULL_LOCATION)),
+            """{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "!fake",
+      "type" : "TYPE",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 9
+      }
+    }, {
+      "name" : "!a",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    } ]
+  } ]
+}""", "CODE_BLOCK(DECLARATION(TYPE !fake; !a))")
         }
 
     @Test
