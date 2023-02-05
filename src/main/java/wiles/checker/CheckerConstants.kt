@@ -40,6 +40,7 @@ object CheckerConstants {
     val ACCESS_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.ACCESS_ID)
     val ELEM_ACCESS_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.ELEM_ACCESS_ID)
     val APPLY_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.APPLY_ID)
+    val ASSIGN_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.ASSIGN_ID)
 
     val INT_TO_TEXT_TYPE = JSONStatement(type = SyntaxType.TYPE, name = Tokens.METHOD_ID,
         components = mutableListOf(

@@ -821,6 +821,88 @@ class CheckerTests {
     } ]
   } ]
 }""", "CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE STRING; TYPE NOTHING); !a; EXPRESSION(TYPE STRING; @3)); DECLARATION(TYPE STRING; !b); EXPRESSION(EXPRESSION(TYPE STRING; !b); ASSIGN; EXPRESSION(TYPE EITHER; (TYPE STRING; TYPE NOTHING); !a)))")
+
+    checkResult(null,"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "EITHER",
+      "type" : "TYPE",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 9
+      },
+      "components" : [ {
+        "name" : "STRING",
+        "type" : "TYPE",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 16
+        }
+      }, {
+        "name" : "INT64",
+        "type" : "TYPE",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 22
+        }
+      } ]
+    }, {
+      "name" : "!a",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "@3",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 34
+        }
+      } ]
+    } ]
+  }, {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "!b",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 2,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "@hi",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 10
+        }
+      }, {
+        "name" : "PLUS",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 15
+        }
+      }, {
+        "name" : "!a",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 17
+        }
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE STRING; TYPE INT64); !a; EXPRESSION(TYPE STRING; @3)); DECLARATION(TYPE STRING; !b; EXPRESSION(TYPE STRING; @hi; STRING|PLUS|ANYTHING; !a)))")
     }
 
     companion object {

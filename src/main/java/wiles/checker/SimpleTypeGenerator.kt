@@ -2,6 +2,7 @@ package wiles.checker
 
 import wiles.checker.CheckerConstants.AND_OPERATION
 import wiles.checker.CheckerConstants.APPLY_OPERATION
+import wiles.checker.CheckerConstants.ASSIGN_OPERATION
 import wiles.checker.CheckerConstants.BOOLEAN_TYPE
 import wiles.checker.CheckerConstants.DIVIDE_OPERATION
 import wiles.checker.CheckerConstants.DOUBLE_TYPE
@@ -142,7 +143,8 @@ object SimpleTypeGenerator {
             TODO()
         }
 
-        if(isFormerSuperTypeOfLatter(triple.first,triple.third))
+        if(triple.second == ASSIGN_OPERATION &&
+            isFormerSuperTypeOfLatter(triple.first,triple.third))
         {
             return NOTHING_TYPE
         }
