@@ -23,13 +23,15 @@ public class TopLevelExpression extends AbstractExpression {
     {
         if(exp.operation == null)
             return;
-        if(exp.operation.getName().equals(ACCESS_ID) || exp.operation.getName().equals(ELEM_ACCESS_ID)) {
+        if(exp.operation.getName().equals(ACCESS_ID)
+                || exp.operation.getName().equals(ELEM_ACCESS_ID)
+                || exp.operation.getName().equals(APPLY_ID)) {
             if(exp.left instanceof AbstractExpression)
                 checkValid((AbstractExpression) exp.left);
             if(exp.operation.getName().equals(ACCESS_ID) && exp.right instanceof AbstractExpression)
                 checkValid((AbstractExpression) exp.right);
         }
-        else throw new InvalidStatementException(ErrorMessages.INVALID_LEFT_EXCEPTION, exp.operation.getToken().getLocation());
+        else throw new InvalidStatementException(ErrorMessages.INVALID_LEFT_EXCEPTION, exp.getFirstLocation());
     }
 
     @Override
