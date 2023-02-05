@@ -930,6 +930,172 @@ class CheckerTests {
     } ]
   } ]
 }""","CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE STRING; TYPE INT64); !a; EXPRESSION(TYPE STRING; @3)); DECLARATION(TYPE STRING; !b; EXPRESSION(TYPE STRING; @hi; STRING|PLUS|ANYTHING; !a)))")
+
+    checkResult(null,"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "EITHER",
+      "type" : "TYPE",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 9
+      },
+      "components" : [ {
+        "name" : "DOUBLE",
+        "type" : "TYPE",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 16
+        }
+      }, {
+        "name" : "STRING",
+        "type" : "TYPE",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 26
+        }
+      } ]
+    }, {
+      "name" : "!a",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "@a",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 35
+        }
+      } ]
+    } ]
+  }, {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "EITHER",
+      "type" : "TYPE",
+      "location" : {
+        "line" : 2,
+        "lineIndex" : 9
+      },
+      "components" : [ {
+        "name" : "INT64",
+        "type" : "TYPE",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 16
+        }
+      }, {
+        "name" : "STRING",
+        "type" : "TYPE",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 25
+        }
+      } ]
+    }, {
+      "name" : "!b",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 2,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "#1",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 34
+        }
+      } ]
+    } ]
+  }, {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "EITHER",
+      "type" : "TYPE",
+      "location" : {
+        "line" : 3,
+        "lineIndex" : 9
+      },
+      "components" : [ {
+        "name" : "DOUBLE",
+        "type" : "TYPE",
+        "location" : {
+          "line" : 3,
+          "lineIndex" : 16
+        }
+      }, {
+        "name" : "STRING",
+        "type" : "TYPE",
+        "location" : {
+          "line" : 3,
+          "lineIndex" : 26
+        }
+      } ]
+    }, {
+      "name" : "!c",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 3,
+        "lineIndex" : 5
+      }
+    } ]
+  }, {
+    "type" : "EXPRESSION",
+    "components" : [ {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!c",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 4,
+          "lineIndex" : 1
+        }
+      } ]
+    }, {
+      "name" : "ASSIGN",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 4,
+        "lineIndex" : 3
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!a",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 4,
+          "lineIndex" : 6
+        }
+      }, {
+        "name" : "PLUS",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 4,
+          "lineIndex" : 8
+        }
+      }, {
+        "name" : "!b",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 4,
+          "lineIndex" : 10
+        }
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE DOUBLE; TYPE STRING); !a; EXPRESSION(TYPE STRING; @a)); DECLARATION(TYPE EITHER; (TYPE INT64; TYPE STRING); !b; EXPRESSION(TYPE INT64; #1)); DECLARATION(TYPE EITHER; (TYPE DOUBLE; TYPE STRING); !c); EXPRESSION(TYPE NOTHING; EXPRESSION(TYPE EITHER; (TYPE DOUBLE; TYPE STRING); !c); EITHER|ASSIGN|EITHER; EXPRESSION(TYPE EITHER; (TYPE DOUBLE; TYPE STRING); !a; ANYTHING|PLUS|ANYTHING; !b)))")
     }
 
     companion object {
