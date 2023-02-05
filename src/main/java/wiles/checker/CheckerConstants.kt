@@ -15,6 +15,8 @@ object CheckerConstants {
     val TYPE_TYPE = JSONStatement(type = SyntaxType.TYPE, name = Types.TYPE_TYPE_ID)
     val ERROR_TYPE = JSONStatement(type = SyntaxType.TYPE, name = Tokens.ERROR_TOKEN)
 
+    val NOTHING_TOKEN = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.NOTHING_ID)
+
     val BASIC_TYPES = listOf(NOTHING_TYPE, BOOLEAN_TYPE, INT64_TYPE, STRING_TYPE, DOUBLE_TYPE)
 
     val PLUS_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.PLUS_ID)

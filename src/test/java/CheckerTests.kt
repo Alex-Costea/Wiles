@@ -315,6 +315,119 @@ class CheckerTests {
     } ]
   } ]
 }""", "CODE_BLOCK(DECLARATION(!a; EXPRESSION(!b)))")
+        }
+
+    @Test
+    fun inferFromExpression()
+    {
+        checkResult(null,"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "!a",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "UNARY_PLUS",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 10
+        }
+      }, {
+        "name" : "#2",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 11
+        }
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(DECLARATION(TYPE INT64; !a; EXPRESSION(TYPE INT64; NOTHING|UNARY_PLUS|INT64; #2)))")
+
+
+        checkResult(createExceptions(WrongOperationException(NULL_LOCATION,"TYPE EITHER; (TYPE INT64; TYPE NOTHING)","TYPE INT64")),
+"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "EITHER",
+      "type" : "TYPE",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 9
+      },
+      "components" : [ {
+        "name" : "INT64",
+        "type" : "TYPE"
+      }, {
+        "name" : "NOTHING",
+        "type" : "TYPE"
+      } ]
+    }, {
+      "name" : "!a",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "#2",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 21
+        }
+      } ]
+    } ]
+  }, {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "!b",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 2,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!a",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 10
+        }
+      }, {
+        "name" : "EQUALS",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 12
+        }
+      }, {
+        "name" : "#3",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 14
+        }
+      } ]
+    } ]
+  } ]
+}""", "CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE INT64; TYPE NOTHING); !a; EXPRESSION(TYPE INT64; #2)); DECLARATION(!b; EXPRESSION(!a; EQUALS; #3)))")
     }
 
     companion object {

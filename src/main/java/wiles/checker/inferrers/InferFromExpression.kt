@@ -1,8 +1,7 @@
 package wiles.checker.inferrers
 
-import wiles.checker.CheckerConstants.BOOLEAN_TYPE
-import wiles.checker.CheckerConstants.IS_OPERATION
-import wiles.checker.CheckerConstants.TYPE_TYPE
+import wiles.checker.CheckerConstants.NOTHING_TOKEN
+import wiles.checker.Inferrer
 import wiles.checker.InferrerDetails
 import wiles.checker.InferrerUtils.inferTypeFromLiteral
 import wiles.checker.InferrerUtils.normalizeType
@@ -18,19 +17,15 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
 
     private lateinit var operationName : String
 
-    private fun getTypeOfExpression(left : JSONStatement?, middle : JSONStatement, right: JSONStatement) : JSONStatement
+    private fun getTypeOfExpression(left : JSONStatement, middle : JSONStatement, right: JSONStatement) : JSONStatement
     {
-        if(left != null)
-            assert(left.type == SyntaxType.TYPE)
+        assert(left.type == SyntaxType.TYPE)
         assert(middle.type == SyntaxType.TOKEN)
         assert(right.type == SyntaxType.TYPE)
 
-        if(middle == IS_OPERATION && right == TYPE_TYPE)
-            return BOOLEAN_TYPE
-
-        val leftComponents : List<JSONStatement?> =
-            if(left?.name == EITHER_ID) left.components.toList() else listOf(left)
-        val rightComponents : List<JSONStatement?> =
+        val leftComponents : List<JSONStatement> =
+            if(left.name == EITHER_ID) left.components.toList() else listOf(left)
+        val rightComponents : List<JSONStatement> =
             if(right.name == EITHER_ID) right.components.toList() else listOf(right)
         val resultingTypesSet : MutableSet<JSONStatement> = mutableSetOf()
         var isValid = true
@@ -38,8 +33,8 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
         {
             for(newRight in rightComponents)
             {
-                val triple = Triple(newLeft,middle,newRight)
-                val type = getSimpleTypes[triple]
+                val triple = Triple(newLeft,middle, newRight)
+                val type = getSimpleTypes(triple)
                 if(type != null)
                     resultingTypesSet.add(type)
                 else isValid = false
@@ -49,7 +44,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
             throw WrongOperationException(middle.location!!,left.toString(),right.toString())
         if(resultingTypesSet.isNotEmpty())
         {
-            val leftText : String = if(leftComponents.size == 1) left?.name?:"" else ANYTHING_ID
+            val leftText : String = if(leftComponents.size == 1) left.name else ANYTHING_ID
             val rightText : String = if(rightComponents.size == 1) right.name else ANYTHING_ID
             operationName = "${leftText}|${middle.name}|${rightText}"
             val unNormalizedType = JSONStatement(name = EITHER_ID, type = SyntaxType.TYPE,
@@ -61,8 +56,9 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
     }
 
     override fun infer() {
-        val typesList =
-            listOf(SyntaxType.METHOD,SyntaxType.LIST, SyntaxType.WHEN, SyntaxType.METHOD_CALL, SyntaxType.TYPE)
+        val typesList = listOf(SyntaxType.METHOD, SyntaxType.LIST, SyntaxType.WHEN_EXPRESSION,
+                SyntaxType.METHOD_CALL, SyntaxType.TYPE)
+
         if(statement.components.size==1 && statement.components[0].type == SyntaxType.TOKEN)
         {
             val type = inferTypeFromLiteral(statement.components[0],variables)
@@ -70,25 +66,29 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
         }
         else if(statement.components.size==1 && statement.components[0].type in typesList)
         {
-            InferFromExpression(InferrerDetails(statement.components[0], variables, exceptions)).infer()
+            val inferrer = Inferrer(statement.components[0], variables)
+            inferrer.infer()
+            exceptions.addAll(inferrer.exceptions)
         }
         else if (statement.components.size == 2 || statement.components.size == 3)
         {
+            assert(statement.type == SyntaxType.EXPRESSION)
+            
             val isThree = statement.components.size == 3
 
-            val left = if(isThree) statement.components[0] else null
+            val left = if(isThree) statement.components[0] else NOTHING_TOKEN
             val middle = if(isThree) statement.components[1] else statement.components[0]
             val right = if(isThree) statement.components[2] else statement.components[1]
 
-            val leftIsToken = left?.type == SyntaxType.TOKEN
+            val leftIsToken = left.type == SyntaxType.TOKEN
             val rightIsToken = right.type == SyntaxType.TOKEN
 
-            if(left != null && !leftIsToken)
+            if(!leftIsToken)
                 InferFromExpression(InferrerDetails(left, variables, exceptions)).infer()
             if(!rightIsToken)
                 InferFromExpression(InferrerDetails(right, variables, exceptions)).infer()
 
-            val leftType = if(leftIsToken) inferTypeFromLiteral(left!!,variables) else left?.components?.get(0)
+            val leftType = if(leftIsToken) inferTypeFromLiteral(left,variables) else left.components[0]
             val rightType = if(rightIsToken) inferTypeFromLiteral(right,variables) else right.components[0]
 
             statement.components.add(0,getTypeOfExpression(leftType,middle,rightType))

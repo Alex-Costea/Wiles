@@ -4,7 +4,7 @@ import wiles.checker.CheckerConstants.ERROR_TYPE
 import wiles.checker.CheckerConstants.NOTHING_TYPE
 import wiles.checker.Inferrer
 import wiles.checker.InferrerDetails
-import wiles.checker.InferrerUtils.isSubtype
+import wiles.checker.InferrerUtils.isFormerSuperTypeOfLatter
 import wiles.checker.VariableDetails
 import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.exceptions.InferenceFailException
@@ -44,20 +44,20 @@ class InferFromDeclaration(details: InferrerDetails) : InferFromStatement(detail
 
         //type nothing is auto-initialized with nothing
         variables[name.name] = VariableDetails(newType,
-            default != null || (if(type!=null) isSubtype(NOTHING_TYPE, type) else false))
+            default != null || (if(type!=null) isFormerSuperTypeOfLatter(NOTHING_TYPE, type) else false))
 
         if(statement.components[0].type != TYPE)
             statement.components.add(0,newType)
 
         if(type != null)
         {
-            if(inferredType!=null && !isSubtype(type, inferredType))
+            if(inferredType!=null && !isFormerSuperTypeOfLatter(type, inferredType))
                 throw ConflictingTypeDefinitionException(type.location!!,type.toString(),inferredType.toString())
         }
         else
         {
             // if default value is literal nothing, there's not enough information
-            if(isSubtype(NOTHING_TYPE, inferredType!!))
+            if(isFormerSuperTypeOfLatter(NOTHING_TYPE, inferredType!!))
                 throw InferenceFailException(statement.getFirstLocation())
         }
     }

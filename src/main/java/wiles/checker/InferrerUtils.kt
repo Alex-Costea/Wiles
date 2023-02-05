@@ -15,7 +15,7 @@ import wiles.shared.constants.Types.INT64_ID
 import wiles.shared.constants.Types.STRING_ID
 
 object InferrerUtils {
-    fun isSubtype(supertype : JSONStatement, subtype : JSONStatement) : Boolean
+    fun isFormerSuperTypeOfLatter(supertype : JSONStatement, subtype : JSONStatement) : Boolean
     {
         assert(supertype.type == SyntaxType.TYPE)
         assert(subtype.type == SyntaxType.TYPE)
@@ -26,7 +26,7 @@ object InferrerUtils {
         {
             if(subtype.name != EITHER_ID)
             {
-                if (isSubtype(NOTHING_TYPE, subtype))
+                if (isFormerSuperTypeOfLatter(NOTHING_TYPE, subtype))
                     return false
                 return true
             }
@@ -38,7 +38,7 @@ object InferrerUtils {
             {
                 for (component in supertype.components)
                 {
-                    if (isSubtype(component,subtype))
+                    if (isFormerSuperTypeOfLatter(component,subtype))
                     {
                         return true
                     }
@@ -48,14 +48,14 @@ object InferrerUtils {
             {
                 for(subtypeComponent in subtype.components)
                 {
-                    if(isSubtype(supertype,subtypeComponent))
+                    if(isFormerSuperTypeOfLatter(supertype,subtypeComponent))
                     {
                         continue
                     }
                     var hasMatch = false
                     for(supertypeComponent in supertype.components)
                     {
-                        if(isSubtype(supertypeComponent,subtypeComponent))
+                        if(isFormerSuperTypeOfLatter(supertypeComponent,subtypeComponent))
                         {
                             hasMatch = true
                             break
@@ -72,7 +72,7 @@ object InferrerUtils {
         {
             for(component in subtype.components)
             {
-                if(!isSubtype(supertype, component)) {
+                if(!isFormerSuperTypeOfLatter(supertype, component)) {
                     return false
                 }
             }
@@ -96,7 +96,7 @@ object InferrerUtils {
         }
         for(basicType in CheckerConstants.BASIC_TYPES)
         {
-            if(isSubtype(basicType,type))
+            if(isFormerSuperTypeOfLatter(basicType,type))
                 return basicType
         }
         return type

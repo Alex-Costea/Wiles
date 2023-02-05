@@ -9,6 +9,7 @@ import wiles.checker.CheckerConstants.INT64_TYPE
 import wiles.checker.CheckerConstants.LARGER_EQUALS_OPERATION
 import wiles.checker.CheckerConstants.LARGER_OPERATION
 import wiles.checker.CheckerConstants.MINUS_OPERATION
+import wiles.checker.CheckerConstants.NOTHING_TYPE
 import wiles.checker.CheckerConstants.NOT_EQUAL_OPERATION
 import wiles.checker.CheckerConstants.NOT_OPERATION
 import wiles.checker.CheckerConstants.OR_OPERATION
@@ -20,10 +21,11 @@ import wiles.checker.CheckerConstants.STRING_TYPE
 import wiles.checker.CheckerConstants.TIMES_OPERATION
 import wiles.checker.CheckerConstants.UNARY_MINUS_OPERATION
 import wiles.checker.CheckerConstants.UNARY_PLUS_OPERATION
+import wiles.shared.JSONStatement
 
 object SimpleTypeGenerator {
 
-    val getSimpleTypes = mapOf(
+    private val simpleTypes = mapOf(
         //Addition
         Pair(Triple(INT64_TYPE, PLUS_OPERATION, INT64_TYPE), INT64_TYPE),
         Pair(Triple(DOUBLE_TYPE, PLUS_OPERATION, DOUBLE_TYPE), DOUBLE_TYPE),
@@ -55,15 +57,15 @@ object SimpleTypeGenerator {
         Pair(Triple(DOUBLE_TYPE, POWER_OPERATION, INT64_TYPE), DOUBLE_TYPE),
 
         //Prefix plus/minus
-        Pair(Triple(null, UNARY_PLUS_OPERATION, INT64_TYPE), INT64_TYPE),
-        Pair(Triple(null, UNARY_PLUS_OPERATION, DOUBLE_TYPE), DOUBLE_TYPE),
-        Pair(Triple(null, UNARY_MINUS_OPERATION, INT64_TYPE), INT64_TYPE),
-        Pair(Triple(null, UNARY_MINUS_OPERATION, DOUBLE_TYPE), DOUBLE_TYPE),
+        Pair(Triple(NOTHING_TYPE, UNARY_PLUS_OPERATION, INT64_TYPE), INT64_TYPE),
+        Pair(Triple(NOTHING_TYPE, UNARY_PLUS_OPERATION, DOUBLE_TYPE), DOUBLE_TYPE),
+        Pair(Triple(NOTHING_TYPE, UNARY_MINUS_OPERATION, INT64_TYPE), INT64_TYPE),
+        Pair(Triple(NOTHING_TYPE, UNARY_MINUS_OPERATION, DOUBLE_TYPE), DOUBLE_TYPE),
 
         //Boolean operations
         Pair(Triple(BOOLEAN_TYPE, AND_OPERATION, BOOLEAN_TYPE), BOOLEAN_TYPE),
         Pair(Triple(BOOLEAN_TYPE, OR_OPERATION, BOOLEAN_TYPE), BOOLEAN_TYPE),
-        Pair(Triple(null, NOT_OPERATION, BOOLEAN_TYPE), BOOLEAN_TYPE),
+        Pair(Triple(NOTHING_TYPE, NOT_OPERATION, BOOLEAN_TYPE), BOOLEAN_TYPE),
 
         //String concatenation
         Pair(Triple(STRING_TYPE, PLUS_OPERATION, STRING_TYPE), STRING_TYPE),
@@ -114,4 +116,12 @@ object SimpleTypeGenerator {
         Pair(Triple(DOUBLE_TYPE, SMALLER_EQUALS_OPERATION, INT64_TYPE), BOOLEAN_TYPE),
         Pair(Triple(DOUBLE_TYPE, SMALLER_EQUALS_OPERATION, DOUBLE_TYPE), BOOLEAN_TYPE),
     )
+
+    fun getSimpleTypes(triple : Triple<JSONStatement, JSONStatement, JSONStatement>) : JSONStatement?
+    {
+        //TODO: throw exception if it's impossible
+        if(triple.second == CheckerConstants.IS_OPERATION && triple.third == CheckerConstants.TYPE_TYPE)
+            return BOOLEAN_TYPE
+        return simpleTypes[triple]
+    }
 }
