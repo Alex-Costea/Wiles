@@ -14,6 +14,7 @@ import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.APPLY_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
+import wiles.shared.constants.Tokens.ELEM_ACCESS_ID
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.EITHER_ID
 
@@ -87,13 +88,18 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
             //Check if value can be assigned to
             if(middle.name == ASSIGN_ID)
             {
+                //Change value of variable
                 if(left.components.size == 1) {
                     val variableName = left.components[0].name
                     if(variables[variableName]?.modifiable != true && variables[variableName]?.initialized != false)
                         throw CannotModifyException(left.getFirstLocation())
                     variables[variableName]?.initialized  = true
                 }
-                //TODO: check stuff like "can't assign to 2.as_text"
+
+                //Check if element access
+                //TODO: transform elem access - assign into one instruction for running
+                if(!(left.components.size==3 && left.components[1].name == ELEM_ACCESS_ID))
+                    throw CannotModifyException(left.getFirstLocation())
             }
 
             val leftIsToken = left.type == SyntaxType.TOKEN
@@ -106,6 +112,7 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
 
             val leftType = if(leftIsToken) inferTypeFromLiteral(left,variables) else left.components[0]
 
+            //Transform access operation into apply operation
             if(middle == CheckerConstants.ACCESS_OPERATION)
             {
                 //Correct right-hand name for access operation
