@@ -428,6 +428,399 @@ class CheckerTests {
     } ]
   } ]
 }""", "CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE INT64; TYPE NOTHING); !a; EXPRESSION(TYPE INT64; #2)); DECLARATION(!b; EXPRESSION(!a; EQUALS; #3)))")
+
+    checkResult(null,
+        """{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "INT64",
+      "type" : "TYPE",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 9
+      }
+    }, {
+      "name" : "!a",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    } ]
+  }, {
+    "type" : "EXPRESSION",
+    "components" : [ {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!a",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 1
+        }
+      } ]
+    }, {
+      "name" : "ASSIGN",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 2,
+        "lineIndex" : 3
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "#3",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 6
+        }
+      } ]
+    } ]
+  } ]
+}""", "CODE_BLOCK(DECLARATION(TYPE INT64; !a); EXPRESSION(TYPE NOTHING; EXPRESSION(TYPE INT64; !a); INT64|ASSIGN|INT64; EXPRESSION(TYPE INT64; #3)))")
+
+
+        checkResult(createExceptions(CannotModifyException(NULL_LOCATION)),"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "!a",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "#2",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 10
+        }
+      } ]
+    } ]
+  }, {
+    "type" : "EXPRESSION",
+    "components" : [ {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!a",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 1
+        }
+      } ]
+    }, {
+      "name" : "ASSIGN",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 2,
+        "lineIndex" : 3
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "#3",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 6
+        }
+      } ]
+    } ]
+  } ]
+}""", "CODE_BLOCK(DECLARATION(TYPE INT64; !a; EXPRESSION(TYPE INT64; #2)); EXPRESSION(EXPRESSION(!a); ASSIGN; EXPRESSION(#3)))")
+
+    checkResult(null,"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "name" : "MUTABLE",
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "!a",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 9
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "#2",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 14
+        }
+      } ]
+    } ]
+  }, {
+    "type" : "EXPRESSION",
+    "components" : [ {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!a",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 1
+        }
+      } ]
+    }, {
+      "name" : "ASSIGN",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 2,
+        "lineIndex" : 3
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "#3",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 6
+        }
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(DECLARATION MUTABLE; (TYPE INT64; !a; EXPRESSION(TYPE INT64; #2)); EXPRESSION(TYPE NOTHING; EXPRESSION(TYPE INT64; !a); INT64|ASSIGN|INT64; EXPRESSION(TYPE INT64; #3)))")
+
+    checkResult(createExceptions(WrongOperationException(NULL_LOCATION,"TYPE INT64","TYPE STRING")),
+        """{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "name" : "MUTABLE",
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "!a",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 9
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "#2",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 14
+        }
+      } ]
+    } ]
+  }, {
+    "type" : "EXPRESSION",
+    "components" : [ {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!a",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 1
+        }
+      } ]
+    }, {
+      "name" : "ASSIGN",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 2,
+        "lineIndex" : 3
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "@3",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 6
+        }
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(DECLARATION MUTABLE; (TYPE INT64; !a; EXPRESSION(TYPE INT64; #2)); EXPRESSION(EXPRESSION(TYPE INT64; !a); ASSIGN; EXPRESSION(TYPE STRING; @3)))")
+
+    checkResult(null,"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "name" : "MUTABLE",
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "EITHER",
+      "type" : "TYPE",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 13
+      },
+      "components" : [ {
+        "name" : "INT64",
+        "type" : "TYPE",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 20
+        }
+      }, {
+        "name" : "STRING",
+        "type" : "TYPE",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 28
+        }
+      } ]
+    }, {
+      "name" : "!a",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 9
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "#2",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 37
+        }
+      } ]
+    } ]
+  }, {
+    "type" : "EXPRESSION",
+    "components" : [ {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!a",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 1
+        }
+      } ]
+    }, {
+      "name" : "ASSIGN",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 2,
+        "lineIndex" : 3
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "@3",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 6
+        }
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(DECLARATION MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE STRING); !a; EXPRESSION(TYPE INT64; #2)); EXPRESSION(TYPE NOTHING; EXPRESSION(TYPE EITHER; (TYPE INT64; TYPE STRING); !a); EITHER|ASSIGN|STRING; EXPRESSION(TYPE STRING; @3)))")
+
+    checkResult(createExceptions(WrongOperationException(NULL_LOCATION,"TYPE STRING", "TYPE EITHER; (TYPE STRING; TYPE NOTHING)")),
+        """{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "EITHER",
+      "type" : "TYPE",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 9
+      },
+      "components" : [ {
+        "name" : "STRING",
+        "type" : "TYPE"
+      }, {
+        "name" : "NOTHING",
+        "type" : "TYPE"
+      } ]
+    }, {
+      "name" : "!a",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "@3",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 18
+        }
+      } ]
+    } ]
+  }, {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "STRING",
+      "type" : "TYPE",
+      "location" : {
+        "line" : 2,
+        "lineIndex" : 9
+      }
+    }, {
+      "name" : "!b",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 2,
+        "lineIndex" : 5
+      }
+    } ]
+  }, {
+    "type" : "EXPRESSION",
+    "components" : [ {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!b",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 3,
+          "lineIndex" : 1
+        }
+      } ]
+    }, {
+      "name" : "ASSIGN",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 3,
+        "lineIndex" : 3
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!a",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 3,
+          "lineIndex" : 6
+        }
+      } ]
+    } ]
+  } ]
+}""", "CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE STRING; TYPE NOTHING); !a; EXPRESSION(TYPE STRING; @3)); DECLARATION(TYPE STRING; !b); EXPRESSION(EXPRESSION(TYPE STRING; !b); ASSIGN; EXPRESSION(TYPE EITHER; (TYPE STRING; TYPE NOTHING); !a)))")
     }
 
     companion object {

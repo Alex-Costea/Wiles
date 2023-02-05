@@ -27,10 +27,10 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
         assert(middle.type == SyntaxType.TOKEN)
         assert(right.type == SyntaxType.TYPE)
 
-        val leftComponents : List<JSONStatement> =
-            if(left.name == EITHER_ID) left.components.toList() else listOf(left)
-        val rightComponents : List<JSONStatement> =
-            if(right.name == EITHER_ID) right.components.toList() else listOf(right)
+        val leftComponents  = if(left.name == EITHER_ID && middle.name != ASSIGN_ID)
+            left.components.toList() else listOf(left)
+        val rightComponents  = if(right.name == EITHER_ID && middle.name != ASSIGN_ID)
+            right.components.toList() else listOf(right)
         val resultingTypesSet : MutableSet<JSONStatement> = mutableSetOf()
         var isValid = true
         for(newLeft in leftComponents)
