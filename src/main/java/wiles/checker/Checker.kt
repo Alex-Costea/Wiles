@@ -2,6 +2,7 @@ package wiles.checker
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import wiles.checker.CheckerConstants.BOOLEAN_TYPE
+import wiles.checker.CheckerConstants.INT_TO_TEXT_TYPE
 import wiles.checker.CheckerConstants.NOTHING_TYPE
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.JSONStatement
@@ -9,14 +10,17 @@ import wiles.shared.constants.Settings
 import wiles.shared.constants.Tokens.FALSE_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.TRUE_ID
+import wiles.shared.constants.Types.INT64_ID
 import java.io.File
 
 class Checker(private val jsonCode : String? = null) {
     val code: JSONStatement = parseSyntaxTreeJson()
+
     private val variables = hashMapOf(
             Pair(TRUE_ID, VariableDetails(BOOLEAN_TYPE)),
             Pair(FALSE_ID, VariableDetails(BOOLEAN_TYPE)),
             Pair(NOTHING_ID, VariableDetails(NOTHING_TYPE)),
+            Pair("!$INT64_ID.!as_text", VariableDetails(INT_TO_TEXT_TYPE)),
         )
 
     private fun parseSyntaxTreeJson(): JSONStatement {

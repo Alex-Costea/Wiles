@@ -1,9 +1,11 @@
 package wiles.checker
 
 import wiles.checker.CheckerConstants.AND_OPERATION
+import wiles.checker.CheckerConstants.APPLY_OPERATION
 import wiles.checker.CheckerConstants.BOOLEAN_TYPE
 import wiles.checker.CheckerConstants.DIVIDE_OPERATION
 import wiles.checker.CheckerConstants.DOUBLE_TYPE
+import wiles.checker.CheckerConstants.ELEM_ACCESS_OPERATION
 import wiles.checker.CheckerConstants.EQUALS_OPERATION
 import wiles.checker.CheckerConstants.INT64_TYPE
 import wiles.checker.CheckerConstants.LARGER_EQUALS_OPERATION
@@ -21,7 +23,10 @@ import wiles.checker.CheckerConstants.STRING_TYPE
 import wiles.checker.CheckerConstants.TIMES_OPERATION
 import wiles.checker.CheckerConstants.UNARY_MINUS_OPERATION
 import wiles.checker.CheckerConstants.UNARY_PLUS_OPERATION
+import wiles.checker.InferrerUtils.isFormerSuperTypeOfLatter
+import wiles.checker.InferrerUtils.normalizeType
 import wiles.shared.JSONStatement
+import wiles.shared.constants.Types.LIST_ID
 
 object SimpleTypeGenerator {
 
@@ -122,6 +127,26 @@ object SimpleTypeGenerator {
         //TODO: throw exception if it's impossible
         if(triple.second == CheckerConstants.IS_OPERATION && triple.third == CheckerConstants.TYPE_TYPE)
             return BOOLEAN_TYPE
+
+        if(triple.second == ELEM_ACCESS_OPERATION)
+        {
+            //TODO: normalize
+            if(triple.first.name == LIST_ID && isFormerSuperTypeOfLatter(INT64_TYPE,triple.third))
+            {
+                assert(triple.first.components.size == 1)
+                return normalizeType(triple.first.components[0])
+            }
+        }
+
+        if(triple.second == APPLY_OPERATION) {
+            TODO()
+        }
+
+        if(isFormerSuperTypeOfLatter(triple.first,triple.third))
+        {
+            return NOTHING_TYPE
+        }
+
         return simpleTypes[triple]
     }
 }

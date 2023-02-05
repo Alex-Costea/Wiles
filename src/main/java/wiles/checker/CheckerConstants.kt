@@ -3,6 +3,7 @@ package wiles.checker
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens
+import wiles.shared.constants.Tokens.ANON_ARG_ID
 import wiles.shared.constants.Types
 
 object CheckerConstants {
@@ -36,4 +37,18 @@ object CheckerConstants {
     val SMALLER_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.SMALLER_ID)
     val SMALLER_EQUALS_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.SMALLER_EQUALS_ID)
     val IS_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.IS_ID)
+    val ACCESS_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.ACCESS_ID)
+    val ELEM_ACCESS_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.ELEM_ACCESS_ID)
+    val APPLY_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.APPLY_ID)
+
+    val INT_TO_TEXT_TYPE = JSONStatement(type = SyntaxType.TYPE, name = Tokens.METHOD_ID,
+        components = mutableListOf(
+            JSONStatement(type = SyntaxType.METHOD,
+            components = mutableListOf(
+                STRING_TYPE,
+                JSONStatement(type = SyntaxType.DECLARATION, name = ANON_ARG_ID,
+                    components = mutableListOf(INT64_TYPE,
+                        JSONStatement(type = SyntaxType.TOKEN, name = "!elem"))),
+            ))
+        ))
 }

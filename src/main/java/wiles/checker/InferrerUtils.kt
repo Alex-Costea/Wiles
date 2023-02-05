@@ -102,7 +102,8 @@ object InferrerUtils {
         return type
     }
 
-    fun inferTypeFromLiteral(token : JSONStatement, variables : HashMap<String,VariableDetails>) : JSONStatement
+    fun inferTypeFromLiteral(token : JSONStatement, variables : HashMap<String,VariableDetails>,
+                             ) : JSONStatement
     {
         assert(token.type == SyntaxType.TOKEN)
         val name = token.name
@@ -115,7 +116,7 @@ object InferrerUtils {
             return JSONStatement(INT64_ID, type = SyntaxType.TYPE)
         }
         if(Predicates.IS_IDENTIFIER.test(name)) {
-            if(variables[name]?.initialized==false)
+            if( variables[name]?.initialized==false)
                 throw UsedBeforeInitializationException(token.location!!)
             return JSONStatement(
                 name = variables[name]?.type?.name ?: throw UnknownIdentifierException(token.location!!),

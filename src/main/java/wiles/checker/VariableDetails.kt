@@ -4,6 +4,6 @@ import wiles.shared.JSONStatement
 
 data class VariableDetails(
     val type : JSONStatement,
-    val initialized: Boolean = true,
+    var initialized: Boolean = true,
     val modifiable : Boolean = false,
 )
