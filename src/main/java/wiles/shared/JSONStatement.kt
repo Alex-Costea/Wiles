@@ -39,4 +39,9 @@ class JSONStatement(
         return result
     }
 
+    fun copyRemovingLocation() : JSONStatement
+    {
+        return JSONStatement(name = name,type = type, parsed = parsed,
+            components = components.map { it.copyRemovingLocation() }.toMutableList())
+    }
 }

@@ -101,7 +101,7 @@ object InferrerUtils {
             if(isFormerSuperTypeOfLatter(basicType,type))
                 return basicType
         }
-        return type
+        return type.copyRemovingLocation()
     }
 
     fun inferTypeFromLiteral(token : JSONStatement, variables : HashMap<String,VariableDetails>,
@@ -123,7 +123,7 @@ object InferrerUtils {
             return JSONStatement(
                 name = variables[name]?.type?.name ?: throw UnknownIdentifierException(token.location!!),
                 type = SyntaxType.TYPE,
-                components = variables[name]!!.type.components)
+                components = variables[name]!!.type.components.map { it.copyRemovingLocation() }.toMutableList())
         }
         throw InternalErrorException("Not one token!")
     }
