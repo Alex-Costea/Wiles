@@ -26,7 +26,6 @@ import wiles.checker.CheckerConstants.TIMES_OPERATION
 import wiles.checker.CheckerConstants.UNARY_MINUS_OPERATION
 import wiles.checker.CheckerConstants.UNARY_PLUS_OPERATION
 import wiles.checker.InferrerUtils.isFormerSuperTypeOfLatter
-import wiles.checker.InferrerUtils.normalizeType
 import wiles.shared.JSONStatement
 import wiles.shared.constants.Types.LIST_ID
 
@@ -136,7 +135,7 @@ object SimpleTypeGenerator {
             if(triple.first.name == LIST_ID && isFormerSuperTypeOfLatter(INT64_TYPE,triple.third))
             {
                 assert(triple.first.components.size == 1)
-                return normalizeType(triple.first.components[0])
+                return triple.first.components[0]
             }
         }
 

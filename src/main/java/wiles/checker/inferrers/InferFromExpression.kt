@@ -1,18 +1,16 @@
 package wiles.checker.inferrers
 
-import wiles.checker.CheckerConstants
 import wiles.checker.CheckerConstants.NOTHING_TOKEN
 import wiles.checker.Inferrer
 import wiles.checker.InferrerDetails
+import wiles.checker.InferrerUtils
 import wiles.checker.InferrerUtils.inferTypeFromLiteral
-import wiles.checker.InferrerUtils.normalizeType
 import wiles.checker.SimpleTypeGenerator.getSimpleTypes
 import wiles.checker.exceptions.CannotModifyException
 import wiles.checker.exceptions.WrongOperationException
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
-import wiles.shared.constants.Tokens.APPLY_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.ELEM_ACCESS_ID
 import wiles.shared.constants.Tokens.ELEM_ACCESS_REF_ID
@@ -30,11 +28,27 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
         assert(middle.type == SyntaxType.TOKEN)
         assert(right.type == SyntaxType.TYPE)
 
-        val leftComponents  = if(left.name == EITHER_ID && middle.name != ASSIGN_ID)
-            left.components.toList() else listOf(left)
-        val rightComponents  = if(right.name == EITHER_ID && middle.name != ASSIGN_ID)
-            right.components.toList() else listOf(right)
-        val resultingTypesSet : MutableSet<JSONStatement> = mutableSetOf()
+        val leftComponents : List<JSONStatement>
+        if(left.name == EITHER_ID && middle.name != ASSIGN_ID) {
+            leftComponents = mutableListOf()
+            for(component in left.components)
+            {
+                addIfNecessary(leftComponents,component)
+            }
+        }
+        else leftComponents = listOf(left)
+
+        val rightComponents : List<JSONStatement>
+        if(right.name == EITHER_ID && middle.name != ASSIGN_ID) {
+            rightComponents = mutableListOf()
+            for(component in right.components)
+            {
+                addIfNecessary(rightComponents,component)
+            }
+        }
+        else rightComponents = listOf(right)
+
+        val resultingTypes : MutableList<JSONStatement> = mutableListOf()
         var isValid = true
         for(newLeft in leftComponents)
         {
@@ -42,24 +56,34 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
             {
                 val triple = Triple(newLeft, middle, newRight)
                 val type = getSimpleTypes(triple)
-                if(type != null)
-                    resultingTypesSet.add(type)
+                if(type != null) {
+                    addIfNecessary(resultingTypes,type)
+                }
                 else isValid = false
             }
         }
         if(!isValid)
             throw WrongOperationException(middle.location!!,left.toString(),right.toString())
-        if(resultingTypesSet.isNotEmpty())
+        if(resultingTypes.isNotEmpty())
         {
-            val leftText : String = if(leftComponents.size == 1) left.name else ANYTHING_ID
-            val rightText : String = if(rightComponents.size == 1) right.name else ANYTHING_ID
+            val leftText : String = if(leftComponents.size == 1) leftComponents[0].name else ANYTHING_ID
+            val rightText : String = if(rightComponents.size == 1) rightComponents[0].name else ANYTHING_ID
             operationName = "${leftText}|${middle.name}|${rightText}"
-            val unNormalizedType = JSONStatement(name = EITHER_ID, type = SyntaxType.TYPE,
-                components = resultingTypesSet.toMutableList())
-            return normalizeType(unNormalizedType)!!
+            return if(resultingTypes.size == 1)
+                resultingTypes[0]
+            else JSONStatement(name = EITHER_ID, type = SyntaxType.TYPE, components = resultingTypes)
         }
         //TODO other types
         throw WrongOperationException(middle.location!!,left.toString(),right.toString())
+    }
+
+    private fun addIfNecessary(typeList: MutableList<JSONStatement>, type: JSONStatement) {
+        var alreadyExists = false
+        for(alreadyExistingType in typeList)
+            if(InferrerUtils.isFormerSuperTypeOfLatter(alreadyExistingType,type))
+                alreadyExists = true
+        if(!alreadyExists)
+            typeList.add(type)
     }
 
     override fun infer() {
@@ -128,28 +152,6 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
                 InferFromExpression(InferrerDetails(right, variables, exceptions)).infer()
 
             val leftType = if(leftIsToken) inferTypeFromLiteral(left,variables) else left.components[0]
-
-            //Transform access operation into apply operation
-            if(middle == CheckerConstants.ACCESS_OPERATION)
-            {
-                //Correct right-hand name for access operation
-                val normalizedLeftType = normalizeType(leftType)!!
-                if(normalizedLeftType.components.size > 0)
-                        normalizedLeftType.name = ANYTHING_ID
-                right.name = "!" + normalizedLeftType.name + "." + right.name
-
-                //create correct components
-                assert(isThree)
-                middle.name = APPLY_ID
-                val oldLeft = statement.components[0]
-                statement.components[0] = statement.components[2]
-                statement.components[2] = JSONStatement(type = SyntaxType.METHOD_CALL,
-                    components = mutableListOf(oldLeft))
-
-                infer()
-                return
-            }
-
             val rightType = if(rightIsToken) inferTypeFromLiteral(right,variables) else right.components[0]
 
             statement.components.add(0,getTypeOfExpression(leftType,middle,rightType))

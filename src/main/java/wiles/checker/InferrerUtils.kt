@@ -86,26 +86,6 @@ object InferrerUtils {
         return false
     }
 
-    fun normalizeType(type : JSONStatement?) : JSONStatement?
-    {
-        type?:return null
-        if(type.name == EITHER_ID)
-        {
-            if(type.components.size==1)
-                return type.components[0].copyRemovingLocation()
-            for(eitherType in type.components)
-            {
-                normalizeType(eitherType)
-            }
-        }
-        for(basicType in CheckerConstants.BASIC_TYPES)
-        {
-            if(isFormerSuperTypeOfLatter(basicType,type))
-                return basicType
-        }
-        return type.copyRemovingLocation()
-    }
-
     fun inferTypeFromLiteral(token : JSONStatement, variables : HashMap<String,VariableDetails>) : JSONStatement
     {
         assert(token.type == SyntaxType.TOKEN)
@@ -132,7 +112,7 @@ object InferrerUtils {
     fun checkTypeIsDefined(type : JSONStatement)
     {
         if(type.type == SyntaxType.TYPE && type.name.startsWith("!"))
-            throw UnknownTypeException(type.location!!)
+            throw UnknownTypeException(type.getFirstLocation())
         if(type.components.isNotEmpty())
         {
             for(component in type.components)
