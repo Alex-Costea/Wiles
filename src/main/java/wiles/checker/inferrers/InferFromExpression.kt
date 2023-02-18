@@ -1,16 +1,16 @@
 package wiles.checker.inferrers
 
+import wiles.checker.*
 import wiles.checker.CheckerConstants.NOTHING_TOKEN
-import wiles.checker.Inferrer
-import wiles.checker.InferrerDetails
-import wiles.checker.InferrerUtils
 import wiles.checker.InferrerUtils.inferTypeFromLiteral
 import wiles.checker.SimpleTypeGenerator.getSimpleTypes
 import wiles.checker.exceptions.CannotModifyException
+import wiles.checker.exceptions.UnknownIdentifierException
 import wiles.checker.exceptions.WrongOperationException
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
+import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.ELEM_ACCESS_ID
 import wiles.shared.constants.Tokens.ELEM_ACCESS_REF_ID
@@ -152,6 +152,28 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
                 InferFromExpression(InferrerDetails(right, variables, exceptions)).infer()
 
             val leftType = if(leftIsToken) inferTypeFromLiteral(left,variables) else left.components[0]
+
+            //Transform access operation into apply operation
+            if(middle == CheckerConstants.ACCESS_OPERATION)
+            {
+                if(right.type!=SyntaxType.TOKEN)
+                    throw UnknownIdentifierException(right.getFirstLocation())
+                right.name=CompatibleAccess.get(right.name,leftType) ?:
+                    throw UnknownIdentifierException(right.getFirstLocation())
+
+                //create correct components
+                assert(isThree)
+                middle.name = Tokens.APPLY_ID
+                val oldLeft = statement.components[0]
+                statement.components[0] = statement.components[2]
+                statement.components[2] = JSONStatement(type = SyntaxType.METHOD_CALL,
+                    components = mutableListOf(oldLeft))
+
+                //redo infer
+                infer()
+                return
+            }
+
             val rightType = if(rightIsToken) inferTypeFromLiteral(right,variables) else right.components[0]
 
             statement.components.add(0,getTypeOfExpression(leftType,middle,rightType))
