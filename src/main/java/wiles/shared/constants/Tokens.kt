@@ -71,6 +71,7 @@ object Tokens {
     const val TO_ID = "TO"
     const val WHILE_ID = "WHILE"
     const val ELEM_ACCESS_ID = "ELEM_ACCESS"
+    const val ELEM_ACCESS_REF_ID = "ELEM_ACCESS_REF"
     const val CASE_ID = "CASE"
     const val ANON_ARG_ID = "ANON_ARG"
     const val THEN_ID = "THEN"

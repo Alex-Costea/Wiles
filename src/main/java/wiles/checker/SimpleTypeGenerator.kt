@@ -7,6 +7,7 @@ import wiles.checker.CheckerConstants.BOOLEAN_TYPE
 import wiles.checker.CheckerConstants.DIVIDE_OPERATION
 import wiles.checker.CheckerConstants.DOUBLE_TYPE
 import wiles.checker.CheckerConstants.ELEM_ACCESS_OPERATION
+import wiles.checker.CheckerConstants.ELEM_ACCESS_REF_OPERATION
 import wiles.checker.CheckerConstants.EQUALS_OPERATION
 import wiles.checker.CheckerConstants.INT64_TYPE
 import wiles.checker.CheckerConstants.LARGER_EQUALS_OPERATION
@@ -129,7 +130,7 @@ object SimpleTypeGenerator {
         if(triple.second == CheckerConstants.IS_OPERATION && triple.third == CheckerConstants.TYPE_TYPE)
             return BOOLEAN_TYPE
 
-        if(triple.second == ELEM_ACCESS_OPERATION)
+        if(triple.second in arrayOf(ELEM_ACCESS_OPERATION, ELEM_ACCESS_REF_OPERATION))
         {
             //TODO: normalize
             if(triple.first.name == LIST_ID && isFormerSuperTypeOfLatter(INT64_TYPE,triple.third))
