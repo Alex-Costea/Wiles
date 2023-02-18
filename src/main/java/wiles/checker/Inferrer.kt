@@ -1,9 +1,6 @@
 package wiles.checker
 
-import wiles.checker.inferrers.InferFromCodeBlock
-import wiles.checker.inferrers.InferFromDeclaration
-import wiles.checker.inferrers.InferFromExpression
-import wiles.checker.inferrers.InferFromStatement
+import wiles.checker.inferrers.*
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType.*
@@ -37,7 +34,7 @@ class Inferrer(details: InferrerDetails)
             EXPRESSION -> inferFromStatement = InferFromExpression(details)
 
             //should be part of expressions
-            LIST -> TODO()
+            LIST -> inferFromStatement = InferFromList(details)
             METHOD -> TODO()
             METHOD_CALL -> TODO()
             TOKEN -> TODO()

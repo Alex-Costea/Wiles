@@ -17,6 +17,7 @@ import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.ELEM_ACCESS_ID
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.EITHER_ID
+import wiles.shared.constants.Types.LIST_ID
 
 class InferFromExpression(private val details: InferrerDetails) : InferFromStatement(details) {
 
@@ -68,6 +69,20 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
         {
             val inferrer = Inferrer(details)
             inferrer.infer()
+            exceptions.addAll(inferrer.exceptions)
+        }
+        else if(statement.components.size==1 && statement.components[0].type in typesList)
+        {
+            val inferrer = Inferrer(InferrerDetails(statement.components[0], variables, exceptions))
+            inferrer.infer()
+            if(statement.components[0].type==SyntaxType.LIST) {
+                //set list type
+                val newListType = JSONStatement(type = SyntaxType.TYPE,
+                    name = LIST_ID,
+                    components = mutableListOf(statement.components[0].components[0]))
+                statement.components.add(0, newListType)
+            }
+            else throw InternalErrorException("Unknown type")
             exceptions.addAll(inferrer.exceptions)
         }
         else if(statement.components.size==1 && statement.components[0].type == SyntaxType.TOKEN)
@@ -138,6 +153,6 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
             statement.components.add(0,getTypeOfExpression(leftType,middle,rightType))
             middle.name = operationName
         }
-        else throw InternalErrorException("Statement with irregular number of components found.")
+        else throw InternalErrorException("Irregular statement found.")
     }
 }

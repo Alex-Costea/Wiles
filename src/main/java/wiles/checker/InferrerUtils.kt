@@ -91,6 +91,8 @@ object InferrerUtils {
         type?:return null
         if(type.name == EITHER_ID)
         {
+            if(type.components.size==1)
+                return type.components[0].copyRemovingLocation()
             for(eitherType in type.components)
             {
                 normalizeType(eitherType)
@@ -104,8 +106,7 @@ object InferrerUtils {
         return type.copyRemovingLocation()
     }
 
-    fun inferTypeFromLiteral(token : JSONStatement, variables : HashMap<String,VariableDetails>,
-                             ) : JSONStatement
+    fun inferTypeFromLiteral(token : JSONStatement, variables : HashMap<String,VariableDetails>) : JSONStatement
     {
         assert(token.type == SyntaxType.TOKEN)
         val name = token.name

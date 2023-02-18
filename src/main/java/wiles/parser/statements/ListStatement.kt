@@ -29,7 +29,7 @@ class ListStatement(context: Context) : AbstractStatement(context) {
                 components.add(newComp)
                 if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break
             }
-            transmitter.expect(tokenOf(BRACKET_END_ID))
+            location = transmitter.expect(tokenOf(BRACKET_END_ID)).location
             if(transmitter.expectMaybe(tokenOf(Tokens.TYPEDEF_ID).dontIgnoreNewLine()).isPresent) {
                 val typeStatement = TypeDefinitionStatement(context)
                 typeStatement.process().throwFirstIfExists()
