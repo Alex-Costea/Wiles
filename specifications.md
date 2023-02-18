@@ -65,8 +65,8 @@
 - `\` can be used to continue a line after a newline (including string literals and comments)
 - Types are not reserved keywords and can be used as variable names
 - Top level expressions must be of type `nothing`
-- `nothing` type is invalid in equality/comparisons
 - Garbage collection
 - Trailing commas are valid but not necessary
+- Pass by reference for all types
 
 ### [Potential future additions](future.md)
