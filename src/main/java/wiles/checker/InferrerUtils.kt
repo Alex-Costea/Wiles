@@ -15,6 +15,7 @@ import wiles.shared.constants.Types.DOUBLE_ID
 import wiles.shared.constants.Types.EITHER_ID
 import wiles.shared.constants.Types.INT64_ID
 import wiles.shared.constants.Types.LIST_ID
+import wiles.shared.constants.Types.MUTABLE_ID
 import wiles.shared.constants.Types.STRING_ID
 
 object InferrerUtils {
@@ -85,6 +86,9 @@ object InferrerUtils {
         else if (supertype.name == LIST_ID && subtype.name == LIST_ID)
             return isFormerSuperTypeOfLatter(supertype.components[0],subtype.components[0])
 
+        else if (subtype.name == MUTABLE_ID)
+            return isFormerSuperTypeOfLatter(supertype, subtype.components[0])
+
         //TODO: not complete!
 
         return false
@@ -131,5 +135,12 @@ object InferrerUtils {
         return JSONStatement(name = EITHER_ID,
             type = SyntaxType.TYPE,
             components = mutableListOf(type.copyRemovingLocation(), NOTHING_TYPE))
+    }
+
+    fun makeMutable(type : JSONStatement) : JSONStatement
+    {
+        return JSONStatement(name = MUTABLE_ID,
+            type = SyntaxType.TYPE,
+            components = mutableListOf(type.copyRemovingLocation()))
     }
 }

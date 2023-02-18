@@ -12,7 +12,7 @@ import wiles.checker.exceptions.InferenceFailException
 import wiles.checker.exceptions.VariableAlreadyDeclaredException
 import wiles.shared.AbstractCompilationException
 import wiles.shared.JSONStatement
-import wiles.shared.SyntaxType.*
+import wiles.shared.SyntaxType.TYPE
 import wiles.shared.constants.Tokens
 
 class InferFromDeclaration(details: InferrerDetails) : InferFromStatement(details)
@@ -50,7 +50,7 @@ class InferFromDeclaration(details: InferrerDetails) : InferFromStatement(detail
         //type nothing is auto-initialized with nothing
         variables[name.name] = VariableDetails(newType,
             initialized = default != null || (if(type!=null) isFormerSuperTypeOfLatter(NOTHING_TYPE, type) else false),
-            modifiable = statement.name == Tokens.MUTABLE_ID
+            modifiable = statement.name == Tokens.VARIABLE_ID
         )
 
         if(statement.components[0].type != TYPE)

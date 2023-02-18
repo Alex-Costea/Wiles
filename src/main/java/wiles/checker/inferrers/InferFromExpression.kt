@@ -143,8 +143,6 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
                         throw CannotModifyException(left.getFirstLocation())
                     variables[variableName]?.initialized  = true
                 }
-
-                //Check if element access
                 else throw CannotModifyException(left.getFirstLocation())
             }
 

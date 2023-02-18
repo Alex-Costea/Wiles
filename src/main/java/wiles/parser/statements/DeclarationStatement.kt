@@ -6,7 +6,7 @@ import wiles.shared.constants.ErrorMessages.IDENTIFIER_EXPECTED_ERROR
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.ANON_ARG_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
-import wiles.shared.constants.Tokens.MUTABLE_ID
+import wiles.shared.constants.Tokens.VARIABLE_ID
 import wiles.shared.constants.Tokens.TYPEDEF_ID
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.SyntaxType
@@ -41,8 +41,8 @@ class DeclarationStatement(context: Context, private val isParam: Boolean = fals
             if(isParam && transmitter.expectMaybe(tokenOf(ANON_ARG_ID)).isPresent)
                 name = ANON_ARG_ID
 
-            if(!isParam && transmitter.expectMaybe(tokenOf(MUTABLE_ID)).isPresent)
-                name = MUTABLE_ID
+            if(!isParam && transmitter.expectMaybe(tokenOf(VARIABLE_ID)).isPresent)
+                name = VARIABLE_ID
 
             this.left = TokenStatement(transmitter.expect(tokenOf(IS_IDENTIFIER)
                 .withErrorMessage(IDENTIFIER_EXPECTED_ERROR)),context)

@@ -44,7 +44,7 @@ object Tokens {
     const val DECLARE_ID = "DECLARE"
     const val EQUALS_ID = "EQUALS"
     const val LARGER_ID = "LARGER"
-    const val MUTABLE_ID = "MUTABLE"
+    const val VARIABLE_ID = "VARIABLE"
     const val SMALLER_ID = "SMALLER"
     const val LARGER_EQUALS_ID = "LARGER_EQUALS"
     const val SMALLER_EQUALS_ID = "SMALLER_EQUALS"
@@ -107,7 +107,7 @@ object Tokens {
         KEYWORDS[if(!ROMANIAN_MODE) "nothing" else "nimic"] = NOTHING_ID
         KEYWORDS["fun"] = METHOD_ID
         KEYWORDS[if(!ROMANIAN_MODE) "let" else "fie"] = DECLARE_ID
-        KEYWORDS["var"] = MUTABLE_ID
+        KEYWORDS["var"] = VARIABLE_ID
         KEYWORDS[if(!ROMANIAN_MODE) "if" else "dacă"] = IF_ID
         KEYWORDS[if(!ROMANIAN_MODE) "when" else "când"] = WHEN_ID
         KEYWORDS[if(!ROMANIAN_MODE) "is" else "este"] = IS_ID

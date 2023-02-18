@@ -17,7 +17,7 @@ object Types {
     const val DOUBLE_ID = "DOUBLE"
     const val LIST_ID = "LIST"
     const val EITHER_ID = "EITHER"
-    const val TYPE_TYPE_ID = "TYPE"
+    const val MUTABLE_ID = "MUTABLE"
     const val ANYTHING_ID = "ANYTHING"
 
     val REQUIRES_SUBTYPE = setOf(LIST_ID, EITHER_ID)

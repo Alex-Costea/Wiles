@@ -571,7 +571,7 @@ class CheckerTests {
   "parsed" : true,
   "type" : "CODE_BLOCK",
   "components" : [ {
-    "name" : "MUTABLE",
+    "name" : "VARIABLE",
     "type" : "DECLARATION",
     "components" : [ {
       "name" : "!a",
@@ -622,14 +622,14 @@ class CheckerTests {
       } ]
     } ]
   } ]
-}""","CODE_BLOCK(DECLARATION MUTABLE; (TYPE INT64; !a; EXPRESSION(TYPE INT64; #2)); EXPRESSION(TYPE NOTHING; EXPRESSION(TYPE INT64; !a); INT64|ASSIGN|INT64; EXPRESSION(TYPE INT64; #3)))")
+}""","CODE_BLOCK(DECLARATION VARIABLE; (TYPE INT64; !a; EXPRESSION(TYPE INT64; #2)); EXPRESSION(TYPE NOTHING; EXPRESSION(TYPE INT64; !a); INT64|ASSIGN|INT64; EXPRESSION(TYPE INT64; #3)))")
 
     checkResult(createExceptions(WrongOperationException(NULL_LOCATION,"TYPE INT64","TYPE STRING")),
         """{
   "parsed" : true,
   "type" : "CODE_BLOCK",
   "components" : [ {
-    "name" : "MUTABLE",
+    "name" : "VARIABLE",
     "type" : "DECLARATION",
     "components" : [ {
       "name" : "!a",
@@ -680,13 +680,13 @@ class CheckerTests {
       } ]
     } ]
   } ]
-}""","CODE_BLOCK(DECLARATION MUTABLE; (TYPE INT64; !a; EXPRESSION(TYPE INT64; #2)); EXPRESSION(EXPRESSION(TYPE INT64; !a); ASSIGN; EXPRESSION(TYPE STRING; @3)))")
+}""","CODE_BLOCK(DECLARATION VARIABLE; (TYPE INT64; !a; EXPRESSION(TYPE INT64; #2)); EXPRESSION(EXPRESSION(TYPE INT64; !a); ASSIGN; EXPRESSION(TYPE STRING; @3)))")
 
     checkResult(null,"""{
   "parsed" : true,
   "type" : "CODE_BLOCK",
   "components" : [ {
-    "name" : "MUTABLE",
+    "name" : "VARIABLE",
     "type" : "DECLARATION",
     "components" : [ {
       "name" : "EITHER",
@@ -759,7 +759,7 @@ class CheckerTests {
       } ]
     } ]
   } ]
-}""","CODE_BLOCK(DECLARATION MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE STRING); !a; EXPRESSION(TYPE INT64; #2)); EXPRESSION(TYPE NOTHING; EXPRESSION(TYPE EITHER; (TYPE INT64; TYPE STRING); !a); EITHER|ASSIGN|STRING; EXPRESSION(TYPE STRING; @3)))")
+}""","CODE_BLOCK(DECLARATION VARIABLE; (TYPE EITHER; (TYPE INT64; TYPE STRING); !a; EXPRESSION(TYPE INT64; #2)); EXPRESSION(TYPE NOTHING; EXPRESSION(TYPE EITHER; (TYPE INT64; TYPE STRING); !a); EITHER|ASSIGN|STRING; EXPRESSION(TYPE STRING; @3)))")
 
     checkResult(createExceptions(WrongOperationException(NULL_LOCATION,"TYPE STRING", "TYPE EITHER; (TYPE STRING; TYPE NOTHING)")),
         """{
