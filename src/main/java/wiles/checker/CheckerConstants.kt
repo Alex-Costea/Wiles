@@ -14,7 +14,6 @@ object CheckerConstants {
     val INT64_TYPE = JSONStatement(type = SyntaxType.TYPE, name = Types.INT64_ID)
     val STRING_TYPE = JSONStatement(type = SyntaxType.TYPE, name = Types.STRING_ID)
     val DOUBLE_TYPE = JSONStatement(type = SyntaxType.TYPE, name = Types.DOUBLE_ID)
-    val TYPE_TYPE = JSONStatement(type = SyntaxType.TYPE, name = Types.TYPE_TYPE_ID)
     val ERROR_TYPE = JSONStatement(type = SyntaxType.TYPE, name = Tokens.ERROR_TOKEN)
     val ANYTHING_TYPE = JSONStatement(type = SyntaxType.TYPE, name = ANYTHING_ID)
 

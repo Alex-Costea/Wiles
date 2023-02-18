@@ -28,6 +28,12 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
         assert(middle.type == SyntaxType.TOKEN)
         assert(right.type == SyntaxType.TYPE)
 
+        if(middle == CheckerConstants.IS_OPERATION)
+            if(InferrerUtils.isFormerSuperTypeOfLatter(left, right)) {
+                operationName="ANYTHING|IS|ANYTHING"
+                return CheckerConstants.BOOLEAN_TYPE
+            }
+
         val leftComponents : List<JSONStatement>
         if(left.name == EITHER_ID && middle.name != ASSIGN_ID) {
             leftComponents = mutableListOf()
@@ -125,6 +131,10 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
             val middle = if(isThree) statement.components[1] else statement.components[0]
             val right = if(isThree) statement.components[2] else statement.components[1]
 
+            val validWithZeroComponentsTypesList = listOf(SyntaxType.TYPE, SyntaxType.TOKEN)
+            assert(left.components.size > 0 || left.type in validWithZeroComponentsTypesList)
+            assert(right.components.size > 0 || right.type in validWithZeroComponentsTypesList)
+
             //Check if value can be assigned to
             if(middle.name == ASSIGN_ID)
             {
@@ -137,7 +147,6 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
                 }
 
                 //Check if element access
-                //TODO: transform elem access - assign into one instruction for running
                 else if(!(left.components.size==3 && left.components[1].name == ELEM_ACCESS_ID))
                     throw CannotModifyException(left.getFirstLocation())
                 else left.components[1].name=ELEM_ACCESS_REF_ID
@@ -151,7 +160,8 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
             if(!rightIsToken)
                 InferFromExpression(InferrerDetails(right, variables, exceptions)).infer()
 
-            val leftType = if(leftIsToken) inferTypeFromLiteral(left,variables) else left.components[0]
+            val leftType = if(leftIsToken) inferTypeFromLiteral(left,variables)
+                else left.components.getOrNull(0) ?: left
 
             //Transform access operation into apply operation
             if(middle == CheckerConstants.ACCESS_OPERATION)
@@ -174,7 +184,8 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
                 return
             }
 
-            val rightType = if(rightIsToken) inferTypeFromLiteral(right,variables) else right.components[0]
+            val rightType = if(rightIsToken) inferTypeFromLiteral(right,variables)
+                else right.components.getOrNull(0) ?: right
 
             statement.components.add(0,getTypeOfExpression(leftType,middle,rightType))
             middle.name = operationName

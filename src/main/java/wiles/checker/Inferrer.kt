@@ -35,13 +35,14 @@ class Inferrer(details: InferrerDetails)
 
             //should be part of expressions
             LIST -> inferFromStatement = InferFromList(details)
+            TYPE -> inferFromStatement = InferFromType(details)
             METHOD -> TODO()
             METHOD_CALL -> TODO()
             TOKEN -> TODO()
             WHEN_EXPRESSION -> TODO()
 
             //should not appear at all
-            TYPE, null -> throw InternalErrorException("Unknown statement")
+            null -> throw InternalErrorException("Null statement type")
 
             //others
             WHEN -> TODO()

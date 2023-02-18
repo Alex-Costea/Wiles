@@ -125,13 +125,8 @@ object SimpleTypeGenerator {
 
     fun getSimpleTypes(triple : Triple<JSONStatement, JSONStatement, JSONStatement>) : JSONStatement?
     {
-        //TODO: throw exception if it's impossible
-        if(triple.second == CheckerConstants.IS_OPERATION && triple.third == CheckerConstants.TYPE_TYPE)
-            return BOOLEAN_TYPE
-
         if(triple.second in arrayOf(ELEM_ACCESS_OPERATION, ELEM_ACCESS_REF_OPERATION))
         {
-            //TODO: normalize
             if(triple.first.name == LIST_ID && isFormerSuperTypeOfLatter(INT64_TYPE,triple.third))
             {
                 assert(triple.first.components.size == 1)
@@ -143,8 +138,7 @@ object SimpleTypeGenerator {
             TODO()
         }
 
-        if(triple.second == ASSIGN_OPERATION &&
-            isFormerSuperTypeOfLatter(triple.first,triple.third))
+        if(triple.second == ASSIGN_OPERATION && isFormerSuperTypeOfLatter(triple.first,triple.third))
         {
             return NOTHING_TYPE
         }
