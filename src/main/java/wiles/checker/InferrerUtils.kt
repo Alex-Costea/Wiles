@@ -125,4 +125,11 @@ object InferrerUtils {
             }
         }
     }
+
+    fun makeNullable(type: JSONStatement) : JSONStatement
+    {
+        return JSONStatement(name = EITHER_ID,
+            type = SyntaxType.TYPE,
+            components = mutableListOf(type.copyRemovingLocation(), NOTHING_TYPE))
+    }
 }

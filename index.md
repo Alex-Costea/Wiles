@@ -39,12 +39,11 @@ end
 ```
 let min := fun(list : list[integer]) -> integer?
 begin
-    if list.size = 0 do
-        yield nothing
     let var min_value := list @ 0
-    for x in list from 1 do
-        if x < min_value do
-            min_value := x
+    if min_value is anything do
+        for x in list from 1 do
+            if x < min_value do
+                min_value := x
     yield min_value
 end
 

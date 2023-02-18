@@ -47,7 +47,7 @@
 - `:=` (assign, declare or name parameters)
 - `.` (function / field access)
 - `:` (type annotation)
-- `@` (access element in collection)
+- `@` (access element in collection. returns nullable type)
 - `()` (order of operations, function access)
 - `[]` (used in list literals and type definitions)
 - `,` (separator between elements)
