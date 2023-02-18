@@ -40,7 +40,7 @@ end
 let min := fun(list : list[integer]) -> integer?
 begin
     let var min_value := list @ 0
-    if min_value is anything do
+    if min_value is integer do
         for x in list from 1 do
             if x < min_value do
                 min_value := x
