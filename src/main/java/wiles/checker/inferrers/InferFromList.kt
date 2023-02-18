@@ -2,6 +2,7 @@ package wiles.checker.inferrers
 
 import wiles.checker.InferrerDetails
 import wiles.checker.InferrerUtils
+import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.exceptions.InferenceFailException
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.JSONStatement
@@ -44,8 +45,8 @@ class InferFromList(details: InferrerDetails) : InferFromStatement(details) {
         if(statedType!=null) {
             if(inferredType!=null) {
                 if (!InferrerUtils.isFormerSuperTypeOfLatter(statedType, inferredType))
-                    throw InferenceFailException(reason = "conflicting type definitions.",
-                        location = statement.getFirstLocation())
+                    throw ConflictingTypeDefinitionException(statement.components[0].getFirstLocation(),
+                        statedType.toString(),inferredType.toString())
             }
         }
         else if(inferredType!=null) {
