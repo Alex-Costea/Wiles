@@ -12,8 +12,6 @@ import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.ASSIGN_ID
-import wiles.shared.constants.Tokens.ELEM_ACCESS_ID
-import wiles.shared.constants.Tokens.ELEM_ACCESS_REF_ID
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.EITHER_ID
 import wiles.shared.constants.Types.LIST_ID
@@ -147,9 +145,7 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
                 }
 
                 //Check if element access
-                else if(!(left.components.size==3 && left.components[1].name == ELEM_ACCESS_ID))
-                    throw CannotModifyException(left.getFirstLocation())
-                else left.components[1].name=ELEM_ACCESS_REF_ID
+                else throw CannotModifyException(left.getFirstLocation())
             }
 
             val leftIsToken = left.type == SyntaxType.TOKEN

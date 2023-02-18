@@ -2,14 +2,13 @@ package wiles.shared.constants
 
 import com.google.common.collect.BiMap
 import com.google.common.collect.HashBiMap
+import wiles.shared.InternalErrorException
 import wiles.shared.constants.Chars.CONTINUE_LINE
 import wiles.shared.constants.ErrorMessages.MAX_SYMBOL_TOO_LARGE_ERROR
 import wiles.shared.constants.Settings.DEBUG
 import wiles.shared.constants.Settings.MAX_SYMBOL_LENGTH
 import wiles.shared.constants.Settings.ROMANIAN_MODE
-import wiles.shared.InternalErrorException
 import java.util.*
-import kotlin.collections.HashMap
 import kotlin.streams.toList
 
 object Tokens {
@@ -71,7 +70,6 @@ object Tokens {
     const val TO_ID = "TO"
     const val WHILE_ID = "WHILE"
     const val ELEM_ACCESS_ID = "ELEM_ACCESS"
-    const val ELEM_ACCESS_REF_ID = "ELEM_ACCESS_REF"
     const val CASE_ID = "CASE"
     const val ANON_ARG_ID = "ANON_ARG"
     const val THEN_ID = "THEN"

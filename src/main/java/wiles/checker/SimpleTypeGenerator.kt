@@ -7,7 +7,6 @@ import wiles.checker.CheckerConstants.BOOLEAN_TYPE
 import wiles.checker.CheckerConstants.DIVIDE_OPERATION
 import wiles.checker.CheckerConstants.DOUBLE_TYPE
 import wiles.checker.CheckerConstants.ELEM_ACCESS_OPERATION
-import wiles.checker.CheckerConstants.ELEM_ACCESS_REF_OPERATION
 import wiles.checker.CheckerConstants.EQUALS_OPERATION
 import wiles.checker.CheckerConstants.INT64_TYPE
 import wiles.checker.CheckerConstants.LARGER_EQUALS_OPERATION
@@ -126,14 +125,12 @@ object SimpleTypeGenerator {
 
     fun getSimpleTypes(triple : Triple<JSONStatement, JSONStatement, JSONStatement>) : JSONStatement?
     {
-        if(triple.second in arrayOf(ELEM_ACCESS_OPERATION, ELEM_ACCESS_REF_OPERATION))
+        if(triple.second == ELEM_ACCESS_OPERATION)
         {
             if(triple.first.name == LIST_ID && isFormerSuperTypeOfLatter(INT64_TYPE,triple.third))
             {
                 assert(triple.first.components.size == 1)
-                if(triple.second == ELEM_ACCESS_OPERATION)
-                    return makeNullable(triple.first.components[0])
-                return triple.first.components[0]
+                return makeNullable(triple.first.components[0])
             }
         }
 
