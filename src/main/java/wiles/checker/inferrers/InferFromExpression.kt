@@ -113,7 +113,7 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
 
                 //Check if element access
                 //TODO: transform elem access - assign into one instruction for running
-                if(!(left.components.size==3 && left.components[1].name == ELEM_ACCESS_ID))
+                else if(!(left.components.size==3 && left.components[1].name == ELEM_ACCESS_ID))
                     throw CannotModifyException(left.getFirstLocation())
             }
 
