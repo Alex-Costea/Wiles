@@ -14,6 +14,7 @@ import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.DOUBLE_ID
 import wiles.shared.constants.Types.EITHER_ID
 import wiles.shared.constants.Types.INT64_ID
+import wiles.shared.constants.Types.LIST_ID
 import wiles.shared.constants.Types.STRING_ID
 
 object InferrerUtils {
@@ -80,6 +81,9 @@ object InferrerUtils {
             }
             return true
         }
+
+        else if (supertype.name == LIST_ID && subtype.name == LIST_ID)
+            return isFormerSuperTypeOfLatter(supertype.components[0],subtype.components[0])
 
         //TODO: not complete!
 
