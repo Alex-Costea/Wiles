@@ -8,6 +8,7 @@ import wiles.checker.SimpleTypeGenerator.getSimpleTypes
 import wiles.checker.exceptions.CannotModifyException
 import wiles.checker.exceptions.UnknownIdentifierException
 import wiles.checker.exceptions.WrongOperationException
+import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
@@ -113,7 +114,8 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
         }
         else if(statement.components.size==1 && statement.components[0].type in typesList)
         {
-            val inferrer = Inferrer(InferrerDetails(statement.components[0], variables, exceptions))
+            val inferrer = Inferrer(InferrerDetails(statement.components[0],
+                variables, CompilationExceptionsCollection()))
             inferrer.infer()
             when (statement.components[0].type) {
                 SyntaxType.LIST -> {
