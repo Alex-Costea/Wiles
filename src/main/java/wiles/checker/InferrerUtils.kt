@@ -253,14 +253,14 @@ object InferrerUtils {
 
         //Handle named args
         val namedArgsInMethod = hashMapOf<String,Pair<JSONStatement,Boolean>>()
-        val unnamedArgsInMethod = mutableListOf<Pair<JSONStatement,Boolean>>()
+        val unnamedArgsInMethod = hashMapOf<String,Pair<JSONStatement,Boolean>>()
         for(component in methodComponents)
         {
             if(component.name != ANON_ARG_ID)
                 namedArgsInMethod[component.components[1].name]=Pair(component.components[0],
                     component.components.size!=2)
-            else unnamedArgsInMethod.add(Pair(component.components[0],
-                component.components.size!=2))
+            else unnamedArgsInMethod[component.components[1].name]=Pair(component.components[0],
+                component.components.size!=2)
         }
 
         val namedArgsInCall = hashMapOf<String,JSONStatement>()
@@ -275,27 +275,33 @@ object InferrerUtils {
         for(component in namedArgsInCall)
         {
             val name = component.component1()
-            val matchingType = namedArgsInMethod[name]?.first ?:
-               return false
-            if(isFormerSuperTypeOfLatter(supertype = matchingType, subtype = component.component2()))
+            val superType = namedArgsInMethod[name]?.first ?:
+                unnamedArgsInMethod[name]?.first ?:
+                return false
+            val subType = component.component2()
+            if(isFormerSuperTypeOfLatter(supertype = superType, subtype = subType)) {
                 namedArgsInMethod.remove(name)
+                unnamedArgsInMethod.remove(name)
+            }
         }
 
         if(namedArgsInMethod.any { !it.component2().second })
             return false
 
+        val unnamedArgsInMethodList = unnamedArgsInMethod.values.toMutableList()
+
         for(component in unnamedArgsInCall.withIndex())
         {
             if(unnamedArgsInMethod.isEmpty())
                 return false
-            val superType = unnamedArgsInMethod[component.index].first
+            val superType = unnamedArgsInMethodList[component.index].first
             val subType = component.value.components[0]
-            unnamedArgsInMethod.removeFirst()
+            unnamedArgsInMethodList.removeFirst()
             if(!isFormerSuperTypeOfLatter(superType,subType))
                 return false
         }
 
-        if(unnamedArgsInMethod.any { !it.component2() })
+        if(unnamedArgsInMethodList.any { !it.component2() })
             return false
 
         return true
