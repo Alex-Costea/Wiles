@@ -10,7 +10,8 @@ import wiles.shared.SyntaxType
 import wiles.shared.constants.Chars
 import wiles.shared.constants.Predicates
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
-import wiles.shared.constants.Tokens
+import wiles.shared.constants.Tokens.ANON_ARG_ID
+import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Types.ANYTHING_ID
@@ -122,13 +123,13 @@ object InferrerUtils {
         while(list1.isNotEmpty() && list2.isNotEmpty())
         {
             val elem1 = list1[0]
-            if(elem1.type == SyntaxType.TYPE || elem1.name!= Tokens.ANON_ARG_ID) {
+            if(elem1.type == SyntaxType.TYPE || elem1.name!= ANON_ARG_ID) {
                 list1.removeFirst()
                 continue
             }
 
             val elem2 = list2[0]
-            if(elem2.type == SyntaxType.TYPE || elem2.name!= Tokens.ANON_ARG_ID) {
+            if(elem2.type == SyntaxType.TYPE || elem2.name!= ANON_ARG_ID) {
                 list2.removeFirst()
                 continue
             }
@@ -141,13 +142,13 @@ object InferrerUtils {
         }
 
         while(list1.isNotEmpty()) {
-            if (list1[0].type == SyntaxType.TYPE || list1[0].name!= Tokens.ANON_ARG_ID)
+            if (list1[0].type == SyntaxType.TYPE || list1[0].name!= ANON_ARG_ID)
                 list1.removeFirst()
             else break
         }
 
         while(list2.isNotEmpty()) {
-            if (list2[0].type == SyntaxType.TYPE || list2[0].name!= Tokens.ANON_ARG_ID)
+            if (list2[0].type == SyntaxType.TYPE || list2[0].name!= ANON_ARG_ID)
                 list2.removeFirst()
             else break
         }
@@ -242,5 +243,61 @@ object InferrerUtils {
         return JSONStatement(name = LIST_ID,
             type = SyntaxType.TYPE,
             components = mutableListOf(type.copyRemovingLocation()))
+    }
+
+    //TODO: match unnamed arguments
+    fun checkMethodAccessCorrect(methodType : JSONStatement, methodCallType : JSONStatement) : Boolean
+    {
+        val methodComponents = methodType.components[0].components.filter{it.type!=SyntaxType.TYPE}
+        val callComponents = methodCallType.components[0].components
+
+        //Handle named args
+        val namedArgsInMethod = hashMapOf<String,Pair<JSONStatement,Boolean>>()
+        val unnamedArgsInMethod = mutableListOf<Pair<JSONStatement,Boolean>>()
+        for(component in methodComponents)
+        {
+            if(component.name != ANON_ARG_ID)
+                namedArgsInMethod[component.components[1].name]=Pair(component.components[0],
+                    component.components.size!=2)
+            else unnamedArgsInMethod.add(Pair(component.components[0],
+                component.components.size!=2))
+        }
+
+        val namedArgsInCall = hashMapOf<String,JSONStatement>()
+        val unnamedArgsInCall = mutableListOf<JSONStatement>()
+        for(component in callComponents)
+        {
+            if(component.components.size>1 && component.components[1].name == ASSIGN_ID)
+                namedArgsInCall[component.components[0].name]=component.components[2].components[0]
+            else unnamedArgsInCall.add(component)
+        }
+
+        for(component in namedArgsInCall)
+        {
+            val name = component.component1()
+            val matchingType = namedArgsInMethod[name]?.first ?:
+               return false
+            if(isFormerSuperTypeOfLatter(supertype = matchingType, subtype = component.component2()))
+                namedArgsInMethod.remove(name)
+        }
+
+        if(namedArgsInMethod.any { !it.component2().second })
+            return false
+
+        for(component in unnamedArgsInCall.withIndex())
+        {
+            if(unnamedArgsInMethod.isEmpty())
+                return false
+            val superType = unnamedArgsInMethod[component.index].first
+            val subType = component.value.components[0]
+            unnamedArgsInMethod.removeFirst()
+            if(!isFormerSuperTypeOfLatter(superType,subType))
+                return false
+        }
+
+        if(unnamedArgsInMethod.any { !it.component2() })
+            return false
+
+        return true
     }
 }

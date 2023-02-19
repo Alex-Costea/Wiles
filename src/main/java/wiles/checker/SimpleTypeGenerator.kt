@@ -25,6 +25,7 @@ import wiles.checker.CheckerConstants.STRING_TYPE
 import wiles.checker.CheckerConstants.TIMES_OPERATION
 import wiles.checker.CheckerConstants.UNARY_MINUS_OPERATION
 import wiles.checker.CheckerConstants.UNARY_PLUS_OPERATION
+import wiles.checker.InferrerUtils.checkMethodAccessCorrect
 import wiles.checker.InferrerUtils.isFormerSuperTypeOfLatter
 import wiles.checker.InferrerUtils.makeMutable
 import wiles.shared.JSONStatement
@@ -155,8 +156,9 @@ object SimpleTypeGenerator {
 
         if(triple.second == APPLY_OPERATION) {
             assert(triple.third.name == METHOD_CALL_ID)
-            //TODO: check if correct
-            return triple.first.components[0].components[0]
+            if(checkMethodAccessCorrect(triple.first,triple.third))
+                return triple.first.components[0].components[0]
+            return null
         }
 
         if(triple.second == ASSIGN_OPERATION && isFormerSuperTypeOfLatter(triple.first,triple.third))
