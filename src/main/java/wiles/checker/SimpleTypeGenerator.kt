@@ -156,7 +156,7 @@ object SimpleTypeGenerator {
         if(triple.second == APPLY_OPERATION) {
             assert(triple.third.name == METHOD_CALL_ID)
             //TODO: check if correct
-            return NOTHING_TYPE
+            return triple.first.components[0].components[0]
         }
 
         if(triple.second == ASSIGN_OPERATION && isFormerSuperTypeOfLatter(triple.first,triple.third))

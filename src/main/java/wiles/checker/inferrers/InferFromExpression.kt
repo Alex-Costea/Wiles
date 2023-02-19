@@ -194,7 +194,8 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
                 val oldLeft = statement.components[0]
                 statement.components[0] = statement.components[2]
                 statement.components[2] = JSONStatement(type = SyntaxType.METHOD_CALL,
-                    components = mutableListOf(oldLeft))
+                    components = mutableListOf(JSONStatement(type = SyntaxType.EXPRESSION,
+                        components = mutableListOf(oldLeft))))
 
                 //redo infer
                 infer()
