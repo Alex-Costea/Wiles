@@ -105,9 +105,8 @@ object InferrerUtils {
             if(!isFormerSuperTypeOfLatter(supertypeReturnType,subtypeReturnType))
                 return false
 
-            //TODO: better method matching, with subtyping
-            if(matchMethodComponentList(subtypeComponents,supertypeComponents) &&
-                    matchMethodComponentList(supertypeComponents,subtypeComponents))
+            if(matchMethodComponentList(subtypeComponents,supertypeComponents,false) &&
+                    matchMethodComponentList(supertypeComponents,subtypeComponents,true))
             {
                 //check unnamed args are in same order
                 while(supertypeComponents.isNotEmpty() && subtypeComponents.isNotEmpty())
@@ -152,7 +151,8 @@ object InferrerUtils {
         return false
     }
 
-    private fun matchMethodComponentList(list1 : List<JSONStatement>, list2 : List<JSONStatement>) : Boolean
+    private fun matchMethodComponentList(list1 : List<JSONStatement>, list2 : List<JSONStatement>,
+                                         isSuperType : Boolean) : Boolean
     {
         for (component1 in list1) {
             if (component1.type == SyntaxType.TYPE)
@@ -161,8 +161,19 @@ object InferrerUtils {
             for (component2 in list2) {
                 if (component2.type == SyntaxType.TYPE)
                     continue
-                if (component2.toString() == component1.toString())
-                    matchFound = true
+
+                val nameMatches = component1.components[1].name == component2.components[1].name
+                if(nameMatches) {
+                    val defaultValueMatches = !isSuperType || (component1.components.size <= component2.components.size)
+                    if(defaultValueMatches) {
+                        if(isSuperType) {
+                            if (isFormerSuperTypeOfLatter(component1.components[0], component2.components[0]))
+                                matchFound = true
+                        }
+                        else if(isFormerSuperTypeOfLatter(component2.components[0], component1.components[0]))
+                            matchFound = true
+                    }
+                }
             }
             if (!matchFound)
                 return false

@@ -84,6 +84,7 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
                 break
 
             assert(component.type == SyntaxType.DECLARATION)
+            //TODO: avoid name collision
             val inferrer = InferFromDeclaration(InferrerDetails(component, variables, exceptions), alwaysInit = true)
             inferrer.infer()
         }
