@@ -130,6 +130,19 @@ object InferrerUtils {
                     supertypeComponents.removeFirst()
                     subtypeComponents.removeFirst()
                 }
+
+                while(supertypeComponents.isNotEmpty()) {
+                    if (supertypeComponents[0].type == SyntaxType.TYPE || supertypeComponents[0].name!= ANON_ARG_ID)
+                        supertypeComponents.removeFirst()
+                    else break
+                }
+
+                while(subtypeComponents.isNotEmpty()) {
+                    if (subtypeComponents[0].type == SyntaxType.TYPE || subtypeComponents[0].name!= ANON_ARG_ID)
+                        subtypeComponents.removeFirst()
+                    else break
+                }
+
                 if(supertypeComponents.isNotEmpty() || subtypeComponents.isNotEmpty())
                     return false
                 return true
