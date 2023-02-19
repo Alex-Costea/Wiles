@@ -60,6 +60,7 @@ class InferFromDeclaration(details: InferrerDetails,
 
         if(type != null)
         {
+            InferFromType(InferrerDetails(type, variables, exceptions)).infer()
             if(inferredType!=null && !isFormerSuperTypeOfLatter(type, inferredType))
                 throw ConflictingTypeDefinitionException(type.location!!,type.toString(),inferredType.toString())
         }

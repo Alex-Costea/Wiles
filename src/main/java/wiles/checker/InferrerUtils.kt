@@ -10,7 +10,7 @@ import wiles.shared.SyntaxType
 import wiles.shared.constants.Chars
 import wiles.shared.constants.Predicates
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
-import wiles.shared.constants.Tokens.ANON_ARG_ID
+import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Types.ANYTHING_ID
@@ -108,49 +108,53 @@ object InferrerUtils {
                 return false
 
             if(matchMethodComponentList(subtypeComponents,supertypeComponents,false) &&
-                    matchMethodComponentList(supertypeComponents,subtypeComponents,true))
-            {
-                //check unnamed args are in same order
-                while(supertypeComponents.isNotEmpty() && subtypeComponents.isNotEmpty())
-                {
-                    val elem1 = supertypeComponents[0]
-                    if(elem1.type == SyntaxType.TYPE || elem1.name!= ANON_ARG_ID) {
-                        supertypeComponents.removeFirst()
-                        continue
-                    }
-
-                    val elem2 = subtypeComponents[0]
-                    if(elem2.type == SyntaxType.TYPE || elem2.name!= ANON_ARG_ID) {
-                        subtypeComponents.removeFirst()
-                        continue
-                    }
-
-                    if(elem1.toString()!=elem2.toString())
-                        return false
-
-                    supertypeComponents.removeFirst()
-                    subtypeComponents.removeFirst()
-                }
-
-                while(supertypeComponents.isNotEmpty()) {
-                    if (supertypeComponents[0].type == SyntaxType.TYPE || supertypeComponents[0].name!= ANON_ARG_ID)
-                        supertypeComponents.removeFirst()
-                    else break
-                }
-
-                while(subtypeComponents.isNotEmpty()) {
-                    if (subtypeComponents[0].type == SyntaxType.TYPE || subtypeComponents[0].name!= ANON_ARG_ID)
-                        subtypeComponents.removeFirst()
-                    else break
-                }
-
-                if(supertypeComponents.isNotEmpty() || subtypeComponents.isNotEmpty())
-                    return false
+                    matchMethodComponentList(supertypeComponents,subtypeComponents,true)
+                && checkUnnamedArgsInSameOrder(supertypeComponents,subtypeComponents))
                 return true
-            }
         }
 
         return false
+    }
+
+    private fun checkUnnamedArgsInSameOrder(list1: MutableList<JSONStatement>,
+                                            list2: MutableList<JSONStatement>) : Boolean
+    {
+        while(list1.isNotEmpty() && list2.isNotEmpty())
+        {
+            val elem1 = list1[0]
+            if(elem1.type == SyntaxType.TYPE || elem1.name!= Tokens.ANON_ARG_ID) {
+                list1.removeFirst()
+                continue
+            }
+
+            val elem2 = list2[0]
+            if(elem2.type == SyntaxType.TYPE || elem2.name!= Tokens.ANON_ARG_ID) {
+                list2.removeFirst()
+                continue
+            }
+
+            if(elem1.components[1].name !=elem2.components[1].name)
+                return false
+
+            list1.removeFirst()
+            list2.removeFirst()
+        }
+
+        while(list1.isNotEmpty()) {
+            if (list1[0].type == SyntaxType.TYPE || list1[0].name!= Tokens.ANON_ARG_ID)
+                list1.removeFirst()
+            else break
+        }
+
+        while(list2.isNotEmpty()) {
+            if (list2[0].type == SyntaxType.TYPE || list2[0].name!= Tokens.ANON_ARG_ID)
+                list2.removeFirst()
+            else break
+        }
+
+        if(list1.isNotEmpty() || list2.isNotEmpty())
+            return false
+        return true
     }
 
     private fun matchMethodComponentList(list1 : List<JSONStatement>, list2 : List<JSONStatement>,
