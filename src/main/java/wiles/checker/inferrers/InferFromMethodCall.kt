@@ -1,9 +1,23 @@
 package wiles.checker.inferrers
 
+import wiles.checker.CheckerConstants.METHOD_CALL_TYPE
 import wiles.checker.InferrerDetails
+import wiles.shared.constants.Tokens.ASSIGN_ID
 
 class InferFromMethodCall(details: InferrerDetails) : InferFromStatement(details) {
     override fun infer() {
-        TODO("Not yet implemented")
+        for(expression in statement.components)
+        {
+            val expressionToInfer =
+                if(expression.components.size>=2 && expression.components[1].name == ASSIGN_ID) {
+                    expression.components[0]=expression.components[0].components[0]
+                    expression.components[2]
+            } else expression
+            InferFromExpression(InferrerDetails(expressionToInfer,variables, exceptions)).infer()
+        }
+        val type = METHOD_CALL_TYPE.copyRemovingLocation()
+        type.components.add(statement.copyRemovingLocation())
+        statement.components.clear()
+        statement.components.add(type)
     }
 }

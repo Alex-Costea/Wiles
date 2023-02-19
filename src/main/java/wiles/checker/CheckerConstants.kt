@@ -7,6 +7,7 @@ import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens
 import wiles.shared.constants.Types
 import wiles.shared.constants.Types.ANYTHING_ID
+import wiles.shared.constants.Types.METHOD_CALL_ID
 
 object CheckerConstants {
 
@@ -17,6 +18,7 @@ object CheckerConstants {
     val DOUBLE_TYPE = JSONStatement(type = SyntaxType.TYPE, name = Types.DOUBLE_ID)
     val ERROR_TYPE = JSONStatement(type = SyntaxType.TYPE, name = Tokens.ERROR_TOKEN)
     val ANYTHING_TYPE = JSONStatement(type = SyntaxType.TYPE, name = ANYTHING_ID)
+    val METHOD_CALL_TYPE = JSONStatement(type = SyntaxType.TYPE, name = METHOD_CALL_ID)
 
     val LIST_OF_ANYTHING_TYPE = makeList(ANYTHING_TYPE)
 

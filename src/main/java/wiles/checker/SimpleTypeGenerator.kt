@@ -29,6 +29,7 @@ import wiles.checker.InferrerUtils.isFormerSuperTypeOfLatter
 import wiles.checker.InferrerUtils.makeMutable
 import wiles.shared.JSONStatement
 import wiles.shared.constants.Tokens.MUTABLE_ID
+import wiles.shared.constants.Types.METHOD_CALL_ID
 
 object SimpleTypeGenerator {
 
@@ -153,7 +154,9 @@ object SimpleTypeGenerator {
         }
 
         if(triple.second == APPLY_OPERATION) {
-            TODO()
+            assert(triple.third.name == METHOD_CALL_ID)
+            //TODO: check if correct
+            return NOTHING_TYPE
         }
 
         if(triple.second == ASSIGN_OPERATION && isFormerSuperTypeOfLatter(triple.first,triple.third))
