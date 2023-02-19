@@ -6,12 +6,13 @@ import wiles.checker.CheckerConstants.ASSIGN_OPERATION
 import wiles.checker.CheckerConstants.BOOLEAN_TYPE
 import wiles.checker.CheckerConstants.DIVIDE_OPERATION
 import wiles.checker.CheckerConstants.DOUBLE_TYPE
-import wiles.checker.CheckerConstants.ELEM_ACCESS_OPERATION
 import wiles.checker.CheckerConstants.EQUALS_OPERATION
 import wiles.checker.CheckerConstants.INT64_TYPE
 import wiles.checker.CheckerConstants.LARGER_EQUALS_OPERATION
 import wiles.checker.CheckerConstants.LARGER_OPERATION
+import wiles.checker.CheckerConstants.LIST_OF_NULLABLE_ANYTHING_TYPE
 import wiles.checker.CheckerConstants.MINUS_OPERATION
+import wiles.checker.CheckerConstants.MUTABLE_OPERATION
 import wiles.checker.CheckerConstants.NOTHING_TYPE
 import wiles.checker.CheckerConstants.NOT_EQUAL_OPERATION
 import wiles.checker.CheckerConstants.NOT_OPERATION
@@ -26,9 +27,8 @@ import wiles.checker.CheckerConstants.UNARY_MINUS_OPERATION
 import wiles.checker.CheckerConstants.UNARY_PLUS_OPERATION
 import wiles.checker.InferrerUtils.isFormerSuperTypeOfLatter
 import wiles.checker.InferrerUtils.makeMutable
-import wiles.checker.InferrerUtils.makeNullable
 import wiles.shared.JSONStatement
-import wiles.shared.constants.Types.LIST_ID
+import wiles.shared.constants.Tokens.MUTABLE_ID
 
 object SimpleTypeGenerator {
 
@@ -124,15 +124,32 @@ object SimpleTypeGenerator {
         Pair(Triple(DOUBLE_TYPE, SMALLER_EQUALS_OPERATION, DOUBLE_TYPE), BOOLEAN_TYPE),
     )
 
-    fun getSimpleTypes(triple : Triple<JSONStatement, JSONStatement, JSONStatement>) : JSONStatement?
+    fun getSimpleTypes(triple : Triple<JSONStatement, JSONStatement, JSONStatement>)
+        : JSONStatement?
     {
-        if(triple.second == ELEM_ACCESS_OPERATION)
+        //unbox
+        if(triple.first.name == MUTABLE_ID)
+            return getSimpleTypes(Triple(triple.first.components[0],triple.second,triple.third))
+
+        if(triple.third.name == MUTABLE_ID)
+            return getSimpleTypes(Triple(triple.first,triple.second,triple.third.components[0]))
+
+        if(triple.second == CheckerConstants.ELEM_ACCESS_OPERATION)
         {
-            if(triple.first.name == LIST_ID && isFormerSuperTypeOfLatter(INT64_TYPE,triple.third))
+            if(isFormerSuperTypeOfLatter(LIST_OF_NULLABLE_ANYTHING_TYPE,triple.first)
+                && isFormerSuperTypeOfLatter(INT64_TYPE,triple.third))
             {
-                assert(triple.first.components.size == 1)
-                return makeNullable(makeMutable(triple.first.components[0]))
+                return InferrerUtils.makeNullable(triple.first.components[0])
             }
+        }
+
+        if(triple.second == MUTABLE_OPERATION)
+        {
+            assert(triple.first == NOTHING_TYPE)
+            val result = makeMutable(triple.third)
+            if(isFormerSuperTypeOfLatter(LIST_OF_NULLABLE_ANYTHING_TYPE,triple.third))
+                result.components[0].components[0] = makeMutable(result.components[0].components[0])
+            return result
         }
 
         if(triple.second == APPLY_OPERATION) {

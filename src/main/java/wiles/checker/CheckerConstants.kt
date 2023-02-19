@@ -1,11 +1,12 @@
 package wiles.checker
 
+import wiles.checker.InferrerUtils.makeList
+import wiles.checker.InferrerUtils.makeNullable
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens
 import wiles.shared.constants.Types
 import wiles.shared.constants.Types.ANYTHING_ID
-import wiles.shared.constants.Types.LIST_ID
 
 object CheckerConstants {
 
@@ -17,8 +18,9 @@ object CheckerConstants {
     val ERROR_TYPE = JSONStatement(type = SyntaxType.TYPE, name = Tokens.ERROR_TOKEN)
     val ANYTHING_TYPE = JSONStatement(type = SyntaxType.TYPE, name = ANYTHING_ID)
 
-    val LIST_OF_ANYTHING_TYPE = JSONStatement(type = SyntaxType.TYPE, name = LIST_ID,
-        components = mutableListOf(ANYTHING_TYPE))
+    val LIST_OF_ANYTHING_TYPE = makeList(ANYTHING_TYPE)
+
+    val LIST_OF_NULLABLE_ANYTHING_TYPE = makeList(makeNullable(ANYTHING_TYPE))
 
     val NOTHING_TOKEN = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.NOTHING_ID)
 
@@ -43,4 +45,5 @@ object CheckerConstants {
     val ELEM_ACCESS_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.ELEM_ACCESS_ID)
     val APPLY_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.APPLY_ID)
     val ASSIGN_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.ASSIGN_ID)
+    val MUTABLE_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.MUTABLE_ID)
 }

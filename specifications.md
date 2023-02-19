@@ -14,7 +14,7 @@
 
 ### Types
 - Nothing: only valid value is `nothing`
-- Integers: `integer` (64 bits unsigned)
+- Integers: `int` (64 bits unsigned)
 - Boolean: `truth`
 - String: `text`
 - Floating point: `rational` (equivalent to `double` in other languages)
@@ -55,7 +55,7 @@
 
 ### Named parameters
 - Function calling with named parameters by default: `my_function(a := 1, b := 10)`
-    - Parameter can be made unnamed using the `arg` keyword: `fun(arg a : integer)`
+    - Parameter can be made unnamed using the `arg` keyword: `fun(arg a : int)`
 - `func(a := a)` can also be written as `func(a)` (if the identifier names match)
 
 ### Miscellaneous

@@ -10,12 +10,12 @@ import wiles.shared.SyntaxType
 import wiles.shared.constants.Chars
 import wiles.shared.constants.Predicates
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
+import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.DOUBLE_ID
 import wiles.shared.constants.Types.EITHER_ID
 import wiles.shared.constants.Types.INT64_ID
 import wiles.shared.constants.Types.LIST_ID
-import wiles.shared.constants.Types.MUTABLE_ID
 import wiles.shared.constants.Types.STRING_ID
 
 object InferrerUtils {
@@ -140,6 +140,13 @@ object InferrerUtils {
     fun makeMutable(type : JSONStatement) : JSONStatement
     {
         return JSONStatement(name = MUTABLE_ID,
+            type = SyntaxType.TYPE,
+            components = mutableListOf(type.copyRemovingLocation()))
+    }
+
+    fun makeList(type : JSONStatement) : JSONStatement
+    {
+        return JSONStatement(name = LIST_ID,
             type = SyntaxType.TYPE,
             components = mutableListOf(type.copyRemovingLocation()))
     }

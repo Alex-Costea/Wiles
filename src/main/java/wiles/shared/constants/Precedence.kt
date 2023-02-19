@@ -9,6 +9,7 @@ import wiles.shared.constants.Tokens.EQUALS_ID
 import wiles.shared.constants.Tokens.LARGER_EQUALS_ID
 import wiles.shared.constants.Tokens.LARGER_ID
 import wiles.shared.constants.Tokens.MINUS_ID
+import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Tokens.NOT_EQUAL_ID
 import wiles.shared.constants.Tokens.NOT_ID
 import wiles.shared.constants.Tokens.OR_ID
@@ -19,7 +20,6 @@ import wiles.shared.constants.Tokens.SMALLER_ID
 import wiles.shared.constants.Tokens.TIMES_ID
 import wiles.shared.constants.Tokens.UNARY_MINUS_ID
 import wiles.shared.constants.Tokens.UNARY_PLUS_ID
-import java.util.HashMap
 
 object Precedence {
 
@@ -45,6 +45,7 @@ object Precedence {
         PRECEDENCE[POWER_ID] = 4
         PRECEDENCE[ELEM_ACCESS_ID] = 5
         PRECEDENCE[ACCESS_ID] = 6
+        PRECEDENCE[MUTABLE_ID] = 6
         PRECEDENCE[APPLY_ID] = 6
 
         RIGHT_TO_LEFT = setOf(PRECEDENCE[NOT_ID]!!, PRECEDENCE[UNARY_PLUS_ID]!!, PRECEDENCE[POWER_ID]!!)

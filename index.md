@@ -37,10 +37,10 @@ end
 ### Minimum value
 
 ```
-let min := fun(list : list[integer]) -> integer?
+let min := fun(list : list[int]) -> int?
 begin
     let var min_value := list @ 0
-    if min_value is integer do
+    if min_value is int do
         for x in list from 1 do
             if x < min_value do
                 min_value := x
@@ -48,7 +48,7 @@ begin
 end
 
 let result := min(list := [10, 3, 55, 8])
-when result is integer do
+when result is int do
     writeline("Min found: " + result)
 default do
     writeline("Error: no min found!")

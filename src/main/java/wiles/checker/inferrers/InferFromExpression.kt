@@ -3,6 +3,7 @@ package wiles.checker.inferrers
 import wiles.checker.*
 import wiles.checker.CheckerConstants.NOTHING_TOKEN
 import wiles.checker.InferrerUtils.inferTypeFromLiteral
+import wiles.checker.InferrerUtils.makeList
 import wiles.checker.SimpleTypeGenerator.getSimpleTypes
 import wiles.checker.exceptions.CannotModifyException
 import wiles.checker.exceptions.UnknownIdentifierException
@@ -20,6 +21,23 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
 
     private lateinit var operationName : String
 
+    private fun createComponents(statement : JSONStatement, middleName : String): List<JSONStatement> {
+        var newComponents = listOf(statement)
+        val flattenTypes = listOf(EITHER_ID)
+        if(middleName != ASSIGN_ID) {
+            if(statement.name in flattenTypes) {
+                newComponents = mutableListOf()
+                for (component in statement.components) {
+                    if(component.name !in flattenTypes)
+                        addIfNecessary(newComponents, component)
+                    else for(subComponents in createComponents(component,middleName))
+                        addIfNecessary(newComponents, subComponents)
+                }
+            }
+        }
+        return newComponents
+    }
+
     private fun getTypeOfExpression(left : JSONStatement, middle : JSONStatement, right: JSONStatement) : JSONStatement
     {
         assert(left.type == SyntaxType.TYPE)
@@ -32,25 +50,9 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
                 return CheckerConstants.BOOLEAN_TYPE
             }
 
-        val leftComponents : List<JSONStatement>
-        if(left.name == EITHER_ID && middle.name != ASSIGN_ID) {
-            leftComponents = mutableListOf()
-            for(component in left.components)
-            {
-                addIfNecessary(leftComponents,component)
-            }
-        }
-        else leftComponents = listOf(left)
+        val leftComponents = createComponents(left,middle.name)
 
-        val rightComponents : List<JSONStatement>
-        if(right.name == EITHER_ID && middle.name != ASSIGN_ID) {
-            rightComponents = mutableListOf()
-            for(component in right.components)
-            {
-                addIfNecessary(rightComponents,component)
-            }
-        }
-        else rightComponents = listOf(right)
+        val rightComponents = createComponents(right,middle.name)
 
         val resultingTypes : MutableList<JSONStatement> = mutableListOf()
         var isValid = true
@@ -72,6 +74,7 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
         {
             val leftText : String = if(leftComponents.size == 1) leftComponents[0].name else ANYTHING_ID
             val rightText : String = if(rightComponents.size == 1) rightComponents[0].name else ANYTHING_ID
+            //TODO: better operation names
             operationName = "${leftText}|${middle.name}|${rightText}"
             return if(resultingTypes.size == 1)
                 resultingTypes[0]
@@ -155,7 +158,8 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
                 InferFromExpression(InferrerDetails(right, variables, exceptions)).infer()
 
             val leftType = if(leftIsToken) inferTypeFromLiteral(left,variables)
-                else left.components.getOrNull(0) ?: left
+                else if(left.type != SyntaxType.LIST) left.components.getOrNull(0) ?: left
+                else makeList(right.components[0])
 
             //Transform access operation into apply operation
             if(middle == CheckerConstants.ACCESS_OPERATION)
@@ -179,7 +183,8 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
             }
 
             val rightType = if(rightIsToken) inferTypeFromLiteral(right,variables)
-                else right.components.getOrNull(0) ?: right
+                else if(right.type != SyntaxType.LIST) right.components.getOrNull(0) ?: right
+                else makeList(right.components[0])
 
             statement.components.add(0,getTypeOfExpression(leftType,middle,rightType))
             middle.name = operationName

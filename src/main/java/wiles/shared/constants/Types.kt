@@ -17,7 +17,6 @@ object Types {
     const val DOUBLE_ID = "DOUBLE"
     const val LIST_ID = "LIST"
     const val EITHER_ID = "EITHER"
-    const val MUTABLE_ID = "MUTABLE"
     const val ANYTHING_ID = "ANYTHING"
 
     val REQUIRES_SUBTYPE = setOf(LIST_ID, EITHER_ID)
@@ -26,7 +25,7 @@ object Types {
 
     init {
         TYPES[if(!ROMANIAN_MODE)"!truth" else "adevăr"] = BOOLEAN_ID
-        TYPES[if(!ROMANIAN_MODE) "!integer" else "!întreg"] = INT64_ID
+        TYPES["!int"] = INT64_ID
         TYPES["!text"] = STRING_ID
         TYPES[if(!ROMANIAN_MODE) "!rational" else "!rațional"] = DOUBLE_ID
         TYPES[if(!ROMANIAN_MODE) "!list" else "!listă"] = LIST_ID
