@@ -13,6 +13,7 @@ import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.ASSIGN_ID
+import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.EITHER_ID
 import wiles.shared.constants.Types.LIST_ID
@@ -36,6 +37,13 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
             }
         }
         return newComponents
+    }
+
+    private fun unbox(statement: JSONStatement) : JSONStatement
+    {
+        if(statement.name == MUTABLE_ID)
+            return unbox(statement.components[0])
+        return statement
     }
 
     private fun getTypeOfExpression(left : JSONStatement, middle : JSONStatement, right: JSONStatement) : JSONStatement
@@ -72,9 +80,8 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
             throw WrongOperationException(middle.location!!,left.toString(),right.toString())
         if(resultingTypes.isNotEmpty())
         {
-            val leftText : String = if(leftComponents.size == 1) leftComponents[0].name else ANYTHING_ID
-            val rightText : String = if(rightComponents.size == 1) rightComponents[0].name else ANYTHING_ID
-            //TODO: better operation names
+            val leftText : String = if(leftComponents.size == 1) unbox(leftComponents[0]).name else ANYTHING_ID
+            val rightText : String = if(rightComponents.size == 1) unbox(rightComponents[0]).name else ANYTHING_ID
             operationName = "${leftText}|${middle.name}|${rightText}"
             return if(resultingTypes.size == 1)
                 resultingTypes[0]

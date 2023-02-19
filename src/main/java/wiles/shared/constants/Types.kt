@@ -5,6 +5,7 @@ import com.google.common.collect.HashBiMap
 import wiles.shared.constants.Settings.ROMANIAN_MODE
 import wiles.shared.constants.Tokens.MAYBE_ID
 import wiles.shared.constants.Tokens.METHOD_ID
+import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 
 object Types {
@@ -19,9 +20,9 @@ object Types {
     const val EITHER_ID = "EITHER"
     const val ANYTHING_ID = "ANYTHING"
 
-    val REQUIRES_SUBTYPE = setOf(LIST_ID, EITHER_ID)
-    val MAX_NR_TYPES = hashMapOf(Pair(LIST_ID,1))
-    val MIN_NR_TYPES = hashMapOf(Pair(LIST_ID,1),Pair(EITHER_ID,2))
+    val REQUIRES_SUBTYPE = setOf(LIST_ID, EITHER_ID, MUTABLE_ID)
+    val MAX_NR_TYPES = hashMapOf(Pair(LIST_ID,1),Pair(MUTABLE_ID,1))
+    val MIN_NR_TYPES = hashMapOf(Pair(LIST_ID,1),Pair(MUTABLE_ID,1),Pair(EITHER_ID,2))
 
     init {
         TYPES[if(!ROMANIAN_MODE)"!truth" else "adevăr"] = BOOLEAN_ID
@@ -34,5 +35,6 @@ object Types {
         TYPES[NOTHING_ID] = NOTHING_ID
         TYPES[MAYBE_ID] = MAYBE_ID
         TYPES[METHOD_ID] = METHOD_ID
+        TYPES[MUTABLE_ID] = MUTABLE_ID
     }
 }
