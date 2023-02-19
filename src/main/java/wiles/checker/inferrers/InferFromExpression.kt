@@ -191,11 +191,13 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
                 //create correct components
                 assert(isThree)
                 middle.name = Tokens.APPLY_ID
-                val oldLeft = statement.components[0]
+                val oldLeft = if(statement.components[0].type==SyntaxType.EXPRESSION)
+                    statement.components[0]
+                else JSONStatement(type = SyntaxType.EXPRESSION,
+                    components = mutableListOf(statement.components[0]))
                 statement.components[0] = statement.components[2]
                 statement.components[2] = JSONStatement(type = SyntaxType.METHOD_CALL,
-                    components = mutableListOf(JSONStatement(type = SyntaxType.EXPRESSION,
-                        components = mutableListOf(oldLeft))))
+                    components = mutableListOf(oldLeft))
 
                 //redo infer
                 infer()
@@ -209,6 +211,8 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
             statement.components.add(0,getTypeOfExpression(leftType,middle,rightType))
             middle.name = operationName
         }
+        else if(statement.components.size==4)
+            return
         else throw InternalErrorException("Irregular statement found.")
     }
 }

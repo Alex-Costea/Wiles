@@ -1785,6 +1785,57 @@ class CheckerTests {
 }""","CODE_BLOCK(DECLARATION(TYPE MUTABLE; (TYPE LIST; (TYPE MUTABLE; (TYPE INT64))); !a; EXPRESSION(TYPE MUTABLE; (TYPE LIST; (TYPE MUTABLE; (TYPE INT64))); NOTHING|MUTABLE|LIST; LIST(TYPE INT64))); DECLARATION(TYPE EITHER; (TYPE INT64; TYPE NOTHING); !b; EXPRESSION(TYPE EITHER; (TYPE MUTABLE; (TYPE INT64); TYPE NOTHING); !a; LIST|ELEM_ACCESS|INT64; #0)))")
     }
 
+    @Test
+    fun methodCallTest()
+    {
+        checkResult(null,"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "EXPRESSION",
+    "components" : [ {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "#2",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 1
+        }
+      }, {
+        "name" : "ACCESS",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 2
+        }
+      }, {
+        "name" : "!as_text",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 3
+        }
+      } ]
+    }, {
+      "name" : "ACCESS",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 10
+      }
+    }, {
+      "name" : "!write",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 11
+      }
+    } ]
+  } ]
+}""", "CODE_BLOCK(EXPRESSION(TYPE NOTHING; !TYPE STRING!write; METHOD|APPLY|METHOD_CALL; METHOD_CALL(TYPE METHOD_CALL; (METHOD_CALL(EXPRESSION(TYPE STRING; !TYPE ANYTHING!as_text; METHOD|APPLY|METHOD_CALL; METHOD_CALL(TYPE METHOD_CALL; (METHOD_CALL(EXPRESSION(TYPE INT64; #2))))))))))")
+    }
+
     companion object {
         private const val TYPE = "TYPE "
     }
