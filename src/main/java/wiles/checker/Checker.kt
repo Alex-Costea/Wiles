@@ -14,11 +14,11 @@ import java.io.File
 class Checker(private val jsonCode : String? = null) {
     val code: JSONStatement = parseSyntaxTreeJson()
 
-    private val variables = hashMapOf(
+    private val variables = VariableMap(hashMapOf(
             Pair(TRUE_ID, VariableDetails(BOOLEAN_TYPE)),
             Pair(FALSE_ID, VariableDetails(BOOLEAN_TYPE)),
             Pair(NOTHING_ID, VariableDetails(NOTHING_TYPE)),
-        )
+        ))
 
     private fun parseSyntaxTreeJson(): JSONStatement {
         if(jsonCode==null)

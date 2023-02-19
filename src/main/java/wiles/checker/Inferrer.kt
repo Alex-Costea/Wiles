@@ -36,21 +36,20 @@ class Inferrer(details: InferrerDetails)
             //should be part of expressions
             LIST -> inferFromStatement = InferFromList(details)
             TYPE -> inferFromStatement = InferFromType(details)
-            METHOD -> TODO()
-            METHOD_CALL -> TODO()
-            TOKEN -> TODO()
+            METHOD -> inferFromStatement = InferFromMethod(details)
+            METHOD_CALL -> inferFromStatement = InferFromMethodCall(details)
             WHEN_EXPRESSION -> TODO()
 
             //should not appear at all
-            null -> throw InternalErrorException("Null statement type")
+            null, TOKEN -> throw InternalErrorException("Null statement type")
 
             //others
+            RETURN -> inferFromStatement = InferFromReturn(details)
             WHEN -> TODO()
             FOR -> TODO()
             WHILE -> TODO()
             BREAK -> TODO()
             CONTINUE -> TODO()
-            RETURN -> TODO()
         }
         inferFromStatement.infer()
     }

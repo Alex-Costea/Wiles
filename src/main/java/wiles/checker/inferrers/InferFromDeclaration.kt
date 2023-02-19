@@ -15,7 +15,9 @@ import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType.TYPE
 import wiles.shared.constants.Tokens
 
-class InferFromDeclaration(details: InferrerDetails) : InferFromStatement(details)
+class InferFromDeclaration(details: InferrerDetails,
+                           private val alwaysInit: Boolean = false)
+    : InferFromStatement(details)
 {
     override fun infer() {
         //get details
@@ -49,7 +51,7 @@ class InferFromDeclaration(details: InferrerDetails) : InferFromStatement(detail
 
         //type nothing is auto-initialized with nothing
         variables[name.name] = VariableDetails(newType,
-            initialized = default != null || (if(type!=null) isFormerSuperTypeOfLatter(NOTHING_TYPE, type) else false),
+            initialized = alwaysInit || default != null || (if(type!=null) isFormerSuperTypeOfLatter(NOTHING_TYPE, type) else false),
             modifiable = statement.name == Tokens.VARIABLE_ID
         )
 

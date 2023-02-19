@@ -13,6 +13,7 @@ import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.ASSIGN_ID
+import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.EITHER_ID
@@ -114,14 +115,23 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
         {
             val inferrer = Inferrer(InferrerDetails(statement.components[0], variables, exceptions))
             inferrer.infer()
-            if(statement.components[0].type==SyntaxType.LIST) {
-                //set list type
-                val newListType = JSONStatement(type = SyntaxType.TYPE,
-                    name = LIST_ID,
-                    components = mutableListOf(statement.components[0].components[0]))
-                statement.components.add(0, newListType)
+            when (statement.components[0].type) {
+                SyntaxType.LIST -> {
+                    //set list type
+                    val newListType = JSONStatement(type = SyntaxType.TYPE,
+                        name = LIST_ID,
+                        components = mutableListOf(statement.components[0].components[0]))
+                    statement.components.add(0, newListType)
+                }
+                SyntaxType.METHOD -> {
+                    val newType = statement.components[0].copyRemovingLocation()
+                    newType.components.removeLast()
+                    statement.components.add(0, JSONStatement(type = SyntaxType.TYPE,
+                        name = METHOD_ID,
+                        components = mutableListOf(newType)))
+                }
+                else -> throw InternalErrorException("Unknown type")
             }
-            else throw InternalErrorException("Unknown type")
             exceptions.addAll(inferrer.exceptions)
         }
         else if(statement.components.size==1 && statement.components[0].type == SyntaxType.TOKEN)

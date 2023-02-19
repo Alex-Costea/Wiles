@@ -10,6 +10,8 @@ import wiles.shared.SyntaxType
 import wiles.shared.constants.Chars
 import wiles.shared.constants.Predicates
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
+import wiles.shared.constants.Tokens.ANON_ARG_ID
+import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.DOUBLE_ID
@@ -89,9 +91,70 @@ object InferrerUtils {
         else if (subtype.name == MUTABLE_ID)
             return isFormerSuperTypeOfLatter(supertype, subtype.components[0])
 
-        //TODO: not complete!
+        else if(supertype.name == METHOD_ID && subtype.name == METHOD_ID)
+        {
+            val supertypeComponents = supertype.components[0].components.toMutableList()
+            val subtypeComponents = subtype.components[0].components.toMutableList()
+
+            val supertypeReturnType = supertypeComponents.filter { it.type == SyntaxType.TYPE }
+                .getOrNull(0) ?: NOTHING_TYPE
+
+            val subtypeReturnType = subtypeComponents.filter { it.type == SyntaxType.TYPE }
+                .getOrNull(0) ?: NOTHING_TYPE
+
+            if(!isFormerSuperTypeOfLatter(supertypeReturnType,subtypeReturnType))
+                return false
+
+            //TODO: better method matching, with subtyping
+            if(matchMethodComponentList(subtypeComponents,supertypeComponents) &&
+                    matchMethodComponentList(supertypeComponents,subtypeComponents))
+            {
+                //check unnamed args are in same order
+                while(supertypeComponents.isNotEmpty() && subtypeComponents.isNotEmpty())
+                {
+                    val elem1 = supertypeComponents[0]
+                    if(elem1.type == SyntaxType.TYPE || elem1.name!= ANON_ARG_ID) {
+                        supertypeComponents.removeFirst()
+                        continue
+                    }
+
+                    val elem2 = subtypeComponents[0]
+                    if(elem2.type == SyntaxType.TYPE || elem2.name!= ANON_ARG_ID) {
+                        subtypeComponents.removeFirst()
+                        continue
+                    }
+
+                    if(elem1.toString()!=elem2.toString())
+                        return false
+
+                    supertypeComponents.removeFirst()
+                    subtypeComponents.removeFirst()
+                }
+                if(supertypeComponents.isNotEmpty() || subtypeComponents.isNotEmpty())
+                    return false
+                return true
+            }
+        }
 
         return false
+    }
+
+    private fun matchMethodComponentList(list1 : List<JSONStatement>, list2 : List<JSONStatement>) : Boolean
+    {
+        for (component1 in list1) {
+            if (component1.type == SyntaxType.TYPE)
+                continue
+            var matchFound = false
+            for (component2 in list2) {
+                if (component2.type == SyntaxType.TYPE)
+                    continue
+                if (component2.toString() == component1.toString())
+                    matchFound = true
+            }
+            if (!matchFound)
+                return false
+        }
+        return true
     }
 
     fun inferTypeFromLiteral(token : JSONStatement, variables : HashMap<String,VariableDetails>) : JSONStatement
