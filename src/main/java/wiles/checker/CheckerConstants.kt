@@ -48,4 +48,17 @@ object CheckerConstants {
     val APPLY_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.APPLY_ID)
     val ASSIGN_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.ASSIGN_ID)
     val MUTABLE_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.MUTABLE_ID)
+
+    val TAKES_STRING_YIELDS_NOTHING_TYPE = JSONStatement(name = Tokens.METHOD_ID, type = SyntaxType.TYPE,
+        components = mutableListOf(JSONStatement(name = Tokens.METHOD_ID, type = SyntaxType.METHOD,
+            components = mutableListOf(
+                JSONStatement(name = Tokens.NOTHING_ID, type = SyntaxType.TYPE),
+                JSONStatement(name = Tokens.ANON_ARG_ID, type = SyntaxType.DECLARATION,
+                    components = mutableListOf(
+                        JSONStatement(name = Types.STRING_ID, type = SyntaxType.TYPE),
+                        JSONStatement(name = "!value", type = SyntaxType.TOKEN)
+                    )
+                ))
+        ))
+    )
 }

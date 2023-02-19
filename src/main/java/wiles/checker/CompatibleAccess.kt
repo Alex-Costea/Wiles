@@ -3,6 +3,7 @@ package wiles.checker
 import wiles.checker.CheckerConstants.ANYTHING_TYPE
 import wiles.checker.CheckerConstants.INT64_TYPE
 import wiles.checker.CheckerConstants.LIST_OF_ANYTHING_TYPE
+import wiles.checker.CheckerConstants.NOTHING_TYPE
 import wiles.checker.CheckerConstants.STRING_TYPE
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
@@ -11,7 +12,9 @@ import wiles.shared.constants.Tokens
 object CompatibleAccess {
     private val access : HashMap<String,List<Pair<JSONStatement,JSONStatement>>> = hashMapOf(
         Pair("!as_text", listOf(Pair(ANYTHING_TYPE, STRING_TYPE))),
-        Pair("!size", listOf(Pair(LIST_OF_ANYTHING_TYPE, INT64_TYPE)))
+        Pair("!size", listOf(Pair(LIST_OF_ANYTHING_TYPE, INT64_TYPE))),
+        Pair("!write", listOf(Pair(STRING_TYPE, NOTHING_TYPE))),
+        Pair("!writeline", listOf(Pair(STRING_TYPE, NOTHING_TYPE))),
     )
 
     private fun createFunctionType(variableType: Pair<JSONStatement, JSONStatement>): JSONStatement
