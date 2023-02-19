@@ -96,11 +96,13 @@ object InferrerUtils {
             val supertypeComponents = supertype.components[0].components.toMutableList()
             val subtypeComponents = subtype.components[0].components.toMutableList()
 
-            val supertypeReturnType = supertypeComponents.filter { it.type == SyntaxType.TYPE }
-                .getOrNull(0) ?: NOTHING_TYPE
+            val supertypeReturnType = if(supertypeComponents[0].type == SyntaxType.TYPE)
+                supertypeComponents[0]
+                else NOTHING_TYPE
 
-            val subtypeReturnType = subtypeComponents.filter { it.type == SyntaxType.TYPE }
-                .getOrNull(0) ?: NOTHING_TYPE
+            val subtypeReturnType = if(subtypeComponents[0].type == SyntaxType.TYPE)
+                subtypeComponents[0]
+                else NOTHING_TYPE
 
             if(!isFormerSuperTypeOfLatter(supertypeReturnType,subtypeReturnType))
                 return false
