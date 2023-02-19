@@ -283,6 +283,7 @@ object InferrerUtils {
                 namedArgsInMethod.remove(name)
                 unnamedArgsInMethod.remove(name)
             }
+            else return false
         }
 
         if(namedArgsInMethod.any { !it.component2().second })
