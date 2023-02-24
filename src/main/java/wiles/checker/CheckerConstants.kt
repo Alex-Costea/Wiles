@@ -56,7 +56,7 @@ object CheckerConstants {
                 JSONStatement(name = Tokens.ANON_ARG_ID, type = SyntaxType.DECLARATION,
                     components = mutableListOf(
                         JSONStatement(name = Types.STRING_ID, type = SyntaxType.TYPE),
-                        JSONStatement(name = "!value", type = SyntaxType.TOKEN)
+                        JSONStatement(name = "!elem", type = SyntaxType.TOKEN)
                     )
                 ))
         ))

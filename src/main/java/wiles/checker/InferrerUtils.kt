@@ -252,7 +252,6 @@ object InferrerUtils {
         val finalCallArgumentsMap = hashMapOf<String,Pair<JSONStatement,Boolean>>()
 
         val methodComponents = methodType.components[0].components.filter{it.type!=SyntaxType.TYPE}
-        val methodComponentsMap = methodComponents.associateBy({it.components[1].name}, { it })
         val callComponents = methodCallType.components[0].components
 
         //Handle named args
@@ -317,12 +316,6 @@ object InferrerUtils {
 
         if(unnamedArgsInMethodList.any { !it.component2().second })
             return null
-
-        for(component in namedArgsInMethod)
-        {
-            val name = component.component1()
-            finalCallArgumentsMap[name] = Pair(methodComponentsMap[name]!!.components[2],true)
-        }
 
         return finalCallArgumentsMap
     }
