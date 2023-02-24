@@ -4,6 +4,7 @@ import wiles.checker.*
 import wiles.checker.CheckerConstants.NOTHING_TOKEN
 import wiles.checker.InferrerUtils.inferTypeFromLiteral
 import wiles.checker.InferrerUtils.makeList
+import wiles.checker.InferrerUtils.makeMethod
 import wiles.checker.SimpleTypeGenerator.getSimpleTypes
 import wiles.checker.exceptions.CannotCallMethodException
 import wiles.checker.exceptions.CannotModifyException
@@ -73,10 +74,10 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
             for(newRight in rightComponents)
             {
                 val type = getSimpleTypes(Triple(newLeft, middle, newRight)) ?:
-                    if(newLeft.name == METHOD_ID &&
+                    if(unbox(newLeft).name == METHOD_ID &&
                             middle == CheckerConstants.APPLY_OPERATION &&
                             newRight.name == METHOD_CALL_ID) {
-                        val result = InferrerUtils.getFunctionArguments(newLeft, newRight)
+                        val result = InferrerUtils.getFunctionArguments(unbox(newLeft), newRight)
                         if(result!=null) {
                             val newResult = result.map {
                                 if(it.value.second)
@@ -93,7 +94,7 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
                             newRight.components[0].components = newResult
 
                             //return
-                            newLeft.components[0].components[0]
+                            unbox(newLeft).components[0].components[0]
                         }
                         else throw CannotCallMethodException(middle.location!!)
 
@@ -204,8 +205,11 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
                 InferFromExpression(InferrerDetails(right, variables, exceptions)).infer()
 
             val leftType = if(leftIsToken) inferTypeFromLiteral(left,variables)
-                else if(left.type != SyntaxType.LIST) left.components.getOrNull(0) ?: left
-                else makeList(right.components[0])
+                else if(left.type == SyntaxType.EXPRESSION) left.components[0]
+                else if(left.type == SyntaxType.LIST) makeList(left.components[0])
+                else if(left.type == SyntaxType.METHOD) makeMethod(left)
+                else if(left.type == SyntaxType.METHOD_CALL) left.components[0]
+                else left.components.getOrNull(0) ?: left
 
             //Transform access operation into apply operation
             if(middle == CheckerConstants.ACCESS_OPERATION)
@@ -232,8 +236,11 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
             }
 
             val rightType = if(rightIsToken) inferTypeFromLiteral(right,variables)
-                else if(right.type != SyntaxType.LIST) right.components.getOrNull(0) ?: right
-                else makeList(right.components[0])
+                else if(right.type == SyntaxType.EXPRESSION) right.components[0]
+                else if(right.type == SyntaxType.LIST) makeList(right.components[0])
+                else if(right.type == SyntaxType.METHOD) makeMethod(right)
+                else if(right.type == SyntaxType.METHOD_CALL) right.components[0]
+                else throw InternalErrorException()
 
             statement.components.add(0,getTypeOfExpression(leftType,middle,rightType))
             middle.name = operationName

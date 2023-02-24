@@ -245,6 +245,15 @@ object InferrerUtils {
             components = mutableListOf(type.copyRemovingLocation()))
     }
 
+    fun makeMethod(type : JSONStatement) : JSONStatement
+    {
+        val newType = type.copyRemovingLocation()
+        newType.components.removeLast()
+        return JSONStatement(name = METHOD_ID,
+            type = SyntaxType.TYPE,
+            components = mutableListOf(newType))
+    }
+
     fun getFunctionArguments(methodType : JSONStatement, methodCallType : JSONStatement)
         : Map<String,Pair<JSONStatement,Boolean>>?
     {
