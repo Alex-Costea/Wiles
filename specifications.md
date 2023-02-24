@@ -8,7 +8,7 @@
 - Integer: `12345`
 - Floating: `12345.6`
 - String: `"abc"`
-- Boolean: `true` (1) and `false` (0)
+- Boolean: `true` and `false`
 - List literal: `[{@value,@}] : type`
 - Functions literals: `{fun ({@param1 {: type} {:= default_value},@})} {-> return_type}} [block]`
 
@@ -72,7 +72,6 @@
 - `\` can be used to continue a line after a newline (including string literals and comments)
 - Types are not reserved keywords and can be used as variable names
 - Top level expressions must be of type `nothing`
-- Garbage collection
 - Trailing commas are valid but not necessary
 - Pass by reference to object, immutable by default 
 
