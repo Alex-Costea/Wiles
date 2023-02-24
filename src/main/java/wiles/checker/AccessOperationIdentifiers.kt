@@ -46,7 +46,6 @@ object AccessOperationIdentifiers {
 
     fun get(name: String, type: JSONStatement) : String?
     {
-        //TODO: `set` for mutable values
         val list = access[name] ?: return null
         for(validType in list)
             if(InferrerUtils.isFormerSuperTypeOfLatter(validType.first,type))

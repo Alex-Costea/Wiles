@@ -13,8 +13,7 @@ import wiles.shared.SyntaxType
 class InferFromMethod(details: InferrerDetails) : InferFromStatement(
     InferrerDetails(details.statement,details.variables.copy(),details.exceptions))
 {
-
-    private val statedType = if(statement.components[0].type == SyntaxType.TYPE)
+    private val statedType = if(statement.components.getOrNull(0)?.type == SyntaxType.TYPE)
         statement.components[0]
     else null
 
@@ -81,9 +80,8 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
                 continue
             if(component.type==SyntaxType.CODE_BLOCK)
                 break
-
             assert(component.type == SyntaxType.DECLARATION)
-            //TODO: avoid name collision
+
             val inferrer = InferFromDeclaration(InferrerDetails(component, variables, exceptions), alwaysInit = true)
             inferrer.infer()
         }
@@ -107,5 +105,4 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
             if(!checkAlwaysReturns(statement.components.last()))
                 throw ReturnNotGuaranteedException(statement.getFirstLocation())
     }
-
 }

@@ -107,7 +107,6 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
                 resultingTypes[0]
             else JSONStatement(name = EITHER_ID, type = SyntaxType.TYPE, components = resultingTypes)
         }
-        //TODO other types
         throw WrongOperationException(middle.location!!,left.toString(),right.toString())
     }
 
