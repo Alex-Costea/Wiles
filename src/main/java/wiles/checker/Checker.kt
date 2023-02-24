@@ -3,7 +3,7 @@ package wiles.checker
 import com.fasterxml.jackson.databind.ObjectMapper
 import wiles.checker.CheckerConstants.BOOLEAN_TYPE
 import wiles.checker.CheckerConstants.NOTHING_TYPE
-import wiles.checker.CheckerConstants.TAKES_STRING_YIELDS_NOTHING_TYPE
+import wiles.checker.CheckerConstants.WRITELINE_TYPE
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.JSONStatement
 import wiles.shared.constants.Settings
@@ -19,8 +19,8 @@ class Checker(private val jsonCode : String? = null) {
             Pair(TRUE_ID, VariableDetails(BOOLEAN_TYPE)),
             Pair(FALSE_ID, VariableDetails(BOOLEAN_TYPE)),
             Pair(NOTHING_ID, VariableDetails(NOTHING_TYPE)),
-            Pair("!write", VariableDetails(TAKES_STRING_YIELDS_NOTHING_TYPE)),
-            Pair("!writeline", VariableDetails(TAKES_STRING_YIELDS_NOTHING_TYPE))
+            Pair("!write", VariableDetails(WRITELINE_TYPE)),
+            Pair("!writeline", VariableDetails(WRITELINE_TYPE))
         ))
 
     private fun parseSyntaxTreeJson(): JSONStatement {

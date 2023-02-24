@@ -285,12 +285,8 @@ object InferrerUtils {
                 return null
             val subType = component.component2()
             if(isFormerSuperTypeOfLatter(supertype = superType, subtype = subType)) {
-                if(name in namedArgsInCall) {
-                    namedArgsInMethod.remove(name)
-                }
-                else if(name in unnamedArgsInMethod) {
-                    unnamedArgsInMethod.remove(name)
-                }
+                namedArgsInMethod.remove(name)
+                unnamedArgsInMethod.remove(name)
             }
             else return null
         }
