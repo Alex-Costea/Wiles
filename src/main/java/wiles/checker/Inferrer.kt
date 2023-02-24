@@ -40,16 +40,17 @@ class Inferrer(details: InferrerDetails)
             METHOD_CALL -> inferFromStatement = InferFromMethodCall(details)
             WHEN_EXPRESSION -> TODO()
 
-            //should not appear at all
-            null, TOKEN -> throw InternalErrorException("Null statement type")
-
             //others
             RETURN -> inferFromStatement = InferFromReturn(details)
             WHEN -> TODO()
             FOR -> TODO()
             WHILE -> TODO()
-            BREAK -> TODO()
-            CONTINUE -> TODO()
+
+            //should not appear at all
+            null, TOKEN -> throw InternalErrorException("Invalid statement type")
+
+            //nothing to infer
+            BREAK, CONTINUE -> return
         }
         inferFromStatement.infer()
     }
