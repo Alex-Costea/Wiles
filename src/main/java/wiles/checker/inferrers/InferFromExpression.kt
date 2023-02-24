@@ -12,10 +12,11 @@ import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
-import wiles.shared.constants.Tokens
+import wiles.shared.constants.Tokens.APPLY_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
+import wiles.shared.constants.Types
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.EITHER_ID
 import wiles.shared.constants.Types.LIST_ID
@@ -190,7 +191,7 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
 
                 //create correct components
                 assert(isThree)
-                middle.name = Tokens.APPLY_ID
+                middle.name = APPLY_ID
                 val oldLeft = if(statement.components[0].type==SyntaxType.EXPRESSION)
                     statement.components[0]
                 else JSONStatement(type = SyntaxType.EXPRESSION,
@@ -208,7 +209,29 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
                 else if(right.type != SyntaxType.LIST) right.components.getOrNull(0) ?: right
                 else makeList(right.components[0])
 
-            statement.components.add(0,getTypeOfExpression(leftType,middle,rightType))
+            if(middle == CheckerConstants.APPLY_OPERATION) {
+                assert(rightType.name == Types.METHOD_CALL_ID)
+                val result = InferrerUtils.checkMethodAccessCorrect(leftType, rightType)
+                if(result!=null) {
+                    statement.components.add(0, leftType.components[0].components[0])
+                    val newResult = result.map {
+                        if(it.value.second)
+                            JSONStatement(type = SyntaxType.EXPRESSION,
+                                components = mutableListOf(
+                                    JSONStatement(type = SyntaxType.TOKEN, name = it.key),
+                                    JSONStatement(type = SyntaxType.TOKEN, name = ASSIGN_ID),
+                                    it.value.first
+                                ))
+                        else it.value.first
+                    }.toMutableList()
+                    operationName= APPLY_ID
+
+                    //lmao
+                    right.components[0].components[0].components = newResult
+                }
+                else throw WrongOperationException(middle.location!!,left.toString(),right.toString())
+            }
+            else statement.components.add(0,getTypeOfExpression(leftType,middle,rightType))
             middle.name = operationName
         }
         else if(statement.components.size==4)

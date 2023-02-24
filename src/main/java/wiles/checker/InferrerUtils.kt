@@ -245,10 +245,14 @@ object InferrerUtils {
             components = mutableListOf(type.copyRemovingLocation()))
     }
 
-    //TODO: match unnamed arguments
-    fun checkMethodAccessCorrect(methodType : JSONStatement, methodCallType : JSONStatement) : Boolean
+    fun checkMethodAccessCorrect(methodType : JSONStatement, methodCallType : JSONStatement)
+        : Map<String,Pair<JSONStatement,Boolean>>?
     {
+        // statement, does it need name addition
+        val finalCallArgumentsMap = hashMapOf<String,Pair<JSONStatement,Boolean>>()
+
         val methodComponents = methodType.components[0].components.filter{it.type!=SyntaxType.TYPE}
+        val methodComponentsMap = methodComponents.associateBy({it.components[1].name}, { it })
         val callComponents = methodCallType.components[0].components
 
         //Handle named args
@@ -267,8 +271,10 @@ object InferrerUtils {
         val unnamedArgsInCall = mutableListOf<JSONStatement>()
         for(component in callComponents)
         {
-            if(component.components.size>1 && component.components[1].name == ASSIGN_ID)
-                namedArgsInCall[component.components[0].name]=component.components[2].components[0]
+            if(component.components.size>1 && component.components[1].name == ASSIGN_ID) {
+                namedArgsInCall[component.components[0].name] = component.components[2].components[0]
+                finalCallArgumentsMap[component.components[0].name] = Pair(component,false)
+            }
             else unnamedArgsInCall.add(component)
         }
 
@@ -277,34 +283,47 @@ object InferrerUtils {
             val name = component.component1()
             val superType = namedArgsInMethod[name]?.first ?:
                 unnamedArgsInMethod[name]?.first ?:
-                return false
+                return null
             val subType = component.component2()
             if(isFormerSuperTypeOfLatter(supertype = superType, subtype = subType)) {
-                namedArgsInMethod.remove(name)
-                unnamedArgsInMethod.remove(name)
+                if(name in namedArgsInCall) {
+                    namedArgsInMethod.remove(name)
+                }
+                else if(name in unnamedArgsInMethod) {
+                    unnamedArgsInMethod.remove(name)
+                }
             }
-            else return false
+            else return null
         }
 
         if(namedArgsInMethod.any { !it.component2().second })
-            return false
+            return null
 
-        val unnamedArgsInMethodList = unnamedArgsInMethod.values.toMutableList()
+        val unnamedArgsInMethodList = unnamedArgsInMethod.toList().toMutableList()
 
         for(component in unnamedArgsInCall.withIndex())
         {
             if(unnamedArgsInMethod.isEmpty())
-                return false
-            val superType = unnamedArgsInMethodList[component.index].first
+                return null
+            val superType = unnamedArgsInMethodList[component.index].second.first
             val subType = component.value.components[0]
-            unnamedArgsInMethodList.removeFirst()
+            val name = unnamedArgsInMethodList.removeFirst().first
+
+            finalCallArgumentsMap[name] = Pair(component.value,true)
+
             if(!isFormerSuperTypeOfLatter(superType,subType))
-                return false
+                return null
         }
 
-        if(unnamedArgsInMethodList.any { !it.component2() })
-            return false
+        if(unnamedArgsInMethodList.any { !it.component2().second })
+            return null
 
-        return true
+        for(component in namedArgsInMethod)
+        {
+            val name = component.component1()
+            finalCallArgumentsMap[name] = Pair(methodComponentsMap[name]!!.components[2],true)
+        }
+
+        return finalCallArgumentsMap
     }
 }

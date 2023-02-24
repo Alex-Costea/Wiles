@@ -1,7 +1,6 @@
 package wiles.checker
 
 import wiles.checker.CheckerConstants.AND_OPERATION
-import wiles.checker.CheckerConstants.APPLY_OPERATION
 import wiles.checker.CheckerConstants.ASSIGN_OPERATION
 import wiles.checker.CheckerConstants.BOOLEAN_TYPE
 import wiles.checker.CheckerConstants.DIVIDE_OPERATION
@@ -25,12 +24,10 @@ import wiles.checker.CheckerConstants.STRING_TYPE
 import wiles.checker.CheckerConstants.TIMES_OPERATION
 import wiles.checker.CheckerConstants.UNARY_MINUS_OPERATION
 import wiles.checker.CheckerConstants.UNARY_PLUS_OPERATION
-import wiles.checker.InferrerUtils.checkMethodAccessCorrect
 import wiles.checker.InferrerUtils.isFormerSuperTypeOfLatter
 import wiles.checker.InferrerUtils.makeMutable
 import wiles.shared.JSONStatement
 import wiles.shared.constants.Tokens.MUTABLE_ID
-import wiles.shared.constants.Types.METHOD_CALL_ID
 
 object SimpleTypeGenerator {
 
@@ -152,13 +149,6 @@ object SimpleTypeGenerator {
             if(isFormerSuperTypeOfLatter(LIST_OF_NULLABLE_ANYTHING_TYPE,triple.third))
                 result.components[0].components[0] = makeMutable(result.components[0].components[0])
             return result
-        }
-
-        if(triple.second == APPLY_OPERATION) {
-            assert(triple.third.name == METHOD_CALL_ID)
-            if(checkMethodAccessCorrect(triple.first,triple.third))
-                return triple.first.components[0].components[0]
-            return null
         }
 
         if(triple.second == ASSIGN_OPERATION && isFormerSuperTypeOfLatter(triple.first,triple.third))
