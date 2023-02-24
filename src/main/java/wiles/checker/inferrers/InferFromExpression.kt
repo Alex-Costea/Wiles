@@ -226,7 +226,7 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
                         else it.value.first
                     }.toMutableList()
 
-                    operationName= METHOD_ID + APPLY_ID + METHOD_CALL_ID
+                    operationName= "$METHOD_ID|$APPLY_ID|$METHOD_CALL_ID"
 
                     //lmao
                     right.components[0].components[0].components = newResult

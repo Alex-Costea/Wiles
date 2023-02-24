@@ -301,7 +301,7 @@ object InferrerUtils {
         {
             if(unnamedArgsInMethodList.isEmpty())
                 return null
-            val superType = unnamedArgsInMethodList[component.index].second.first
+            val superType = unnamedArgsInMethodList[0].second.first
             val subType = component.value.components[0]
             val name = unnamedArgsInMethodList.removeFirst().first
 
