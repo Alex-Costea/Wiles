@@ -10,7 +10,7 @@
 - String: `"abc"`
 - Boolean: `true` (1) and `false` (0)
 - List literal: `[{@value,@}] : type`
-- Functions literals: `{fun ({@param1 : type := value,@})} {-> return_type}} [block]` (types inferrable)
+- Functions literals: `{fun ({@param1 {: type} {:= default_value},@})} {-> return_type}} [block]`
 
 ### Types
 - Nothing: only valid value is `nothing`
@@ -55,8 +55,15 @@
 
 ### Named parameters
 - Function calling with named parameters by default: `my_function(a := 1, b := 10)`
-    - Parameter can be made unnamed using the `arg` keyword: `fun(arg a : int)`
-- `func(a := a)` can also be written as `func(a)` (if the identifier names match)
+- Parameter can be made unnamed using the `arg` keyword: `fun(arg a : int)`
+- You can always specify unnamed parameters by name
+- Named parameters can be in any order. Unnamed parameters are matched in order of appearance.
+
+### Mutable types
+- Type: `mut[type]`, always subtype of `type`
+- Make an immutable type into a mutable type with `mut` prefix operator
+- Change the value of a mutable object with `<-` infix operator
+- `mut [collection]` also makes its elements mutable
 
 ### Miscellaneous
 - `;` can be specified or inferred from newline
@@ -67,6 +74,6 @@
 - Top level expressions must be of type `nothing`
 - Garbage collection
 - Trailing commas are valid but not necessary
-- Pass by reference for all types
+- Pass by reference to object, immutable by default 
 
 ### [Potential future additions](future.md)
