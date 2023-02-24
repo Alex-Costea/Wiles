@@ -9,7 +9,7 @@ import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens
 
-object CompatibleAccess {
+object AccessOperationIdentifiers {
     private val access : HashMap<String,List<Pair<JSONStatement,JSONStatement>>> = hashMapOf(
         Pair("!as_text", listOf(Pair(ANYTHING_TYPE, STRING_TYPE))),
         Pair("!size", listOf(Pair(LIST_OF_ANYTHING_TYPE, INT64_TYPE))),

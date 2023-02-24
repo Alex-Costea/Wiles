@@ -38,7 +38,7 @@
 - Code block: `do [operation]` or `begin; {@operation;@} end`
 - Yield: `yield [expression]` (return equivalent)
 - `nothing` (no operation)
-- `stop`, `skip` (`break`/`return;`, `continue` equivalents)
+- `stop`, `skip` (`break`, `continue` equivalents)
 
 ### Symbols
 - `+`, `-`, `*`, `/`, `^` (power)

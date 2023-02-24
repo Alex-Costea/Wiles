@@ -206,7 +206,7 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
             {
                 if(right.type!=SyntaxType.TOKEN)
                     throw UnknownIdentifierException(right.getFirstLocation())
-                right.name=CompatibleAccess.get(right.name,leftType) ?:
+                right.name=AccessOperationIdentifiers.get(right.name,leftType) ?:
                     throw UnknownIdentifierException(right.getFirstLocation())
 
                 //create correct components
