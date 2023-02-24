@@ -1,17 +1,18 @@
+
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assumptions
+import org.junit.jupiter.api.Test
+import wiles.parser.converters.InputToTokensConverter
+import wiles.parser.exceptions.StringInvalidException
+import wiles.shared.AbstractCompilationException
+import wiles.shared.Token
 import wiles.shared.constants.ErrorMessages.STRING_UNFINISHED_ERROR
 import wiles.shared.constants.Settings.DEBUG
 import wiles.shared.constants.Settings.MAX_SYMBOL_LENGTH
 import wiles.shared.constants.Tokens.ACCESS_ID
 import wiles.shared.constants.Tokens.DO_ID
-import wiles.shared.constants.Utils.NULL_LOCATION
-import wiles.parser.converters.InputToTokensConverter
-import wiles.shared.Token
-import wiles.shared.AbstractCompilationException
-import wiles.parser.exceptions.StringUnfinishedException
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Assumptions
-import org.junit.jupiter.api.Test
 import wiles.shared.constants.Tokens.ELEM_ACCESS_ID
+import wiles.shared.constants.Utils.NULL_LOCATION
 import java.util.*
 
 class TokenConverterTests {
@@ -79,13 +80,13 @@ class TokenConverterTests {
     @Test
     fun stringLiteralsTest() {
         tokenConverterEquals("\"abc\"", arrayOf("@abc"))
-        tokenConverterThrows(0, "\"abc", StringUnfinishedException::class.java, STRING_UNFINISHED_ERROR)
+        tokenConverterThrows(0, "\"abc", StringInvalidException::class.java, STRING_UNFINISHED_ERROR)
         tokenConverterEquals("\"\"\"\"", arrayOf("@", "@"))
-        tokenConverterThrows(0, "\"\"\"\"\"", StringUnfinishedException::class.java, STRING_UNFINISHED_ERROR)
-        tokenConverterThrows(0, "abc\"def\nghi\"jkl", StringUnfinishedException::class.java, null, null)
-        tokenConverterThrows(0, "true\n\nhello\"\n\"", StringUnfinishedException::class.java, null,3)
-        tokenConverterThrows(0, "@\n\"\n\"\n", StringUnfinishedException::class.java,null, 2)
-        tokenConverterThrows(1, "@\n\"\n\"\n", StringUnfinishedException::class.java, null,3)
+        tokenConverterThrows(0, "\"\"\"\"\"", StringInvalidException::class.java, STRING_UNFINISHED_ERROR)
+        tokenConverterThrows(0, "abc\"def\nghi\"jkl", StringInvalidException::class.java, null, null)
+        tokenConverterThrows(0, "true\n\nhello\"\n\"", StringInvalidException::class.java, null,3)
+        tokenConverterThrows(0, "@\n\"\n\"\n", StringInvalidException::class.java,null, 2)
+        tokenConverterThrows(1, "@\n\"\n\"\n", StringInvalidException::class.java, null,3)
     }
 
     @Test

@@ -1,19 +1,20 @@
 package wiles.parser.converters;
 
 import org.jetbrains.annotations.NotNull;
+import wiles.parser.exceptions.StringInvalidException;
+import wiles.shared.AbstractCompilationException;
+import wiles.shared.CompilationExceptionsCollection;
+import wiles.shared.Token;
+import wiles.shared.TokenLocation;
 import wiles.shared.constants.ErrorMessages;
 import wiles.shared.constants.Settings;
 import wiles.shared.constants.Tokens;
 import wiles.shared.constants.Utils;
-import wiles.shared.CompilationExceptionsCollection;
-import wiles.shared.Token;
-import wiles.shared.TokenLocation;
-import wiles.shared.AbstractCompilationException;
-import wiles.parser.exceptions.StringUnfinishedException;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.apache.commons.text.StringEscapeUtils.unescapeHtml4;
 import static wiles.shared.constants.Chars.*;
 
 public class InputToTokensConverter {
@@ -38,7 +39,13 @@ public class InputToTokensConverter {
                 originalIndex = index;
                 if (arrayChars[index] == STRING_DELIMITER) //string literal
                 {
-                    tokens.add(createToken(readStringLiteral()));
+                    try {
+                        tokens.add(createToken(unescapeHtml4(readStringLiteral())));
+                    }
+                    catch(IllegalArgumentException ex)
+                    {
+                        throw new StringInvalidException(ErrorMessages.STRING_ESCAPE_INVALID_ERROR, line, getIndexOnCurrentLine());
+                    }
                 } else if (Utils.isAlphabetic(arrayChars[index])) //identifier
                 {
                     tokens.add(createToken(readIdentifier()));
@@ -101,9 +108,9 @@ public class InputToTokensConverter {
     }
 
     @NotNull
-    private String readStringLiteral() throws StringUnfinishedException {
+    private String readStringLiteral() throws StringInvalidException {
         if (index >= arrayChars.length)
-            throw new StringUnfinishedException(ErrorMessages.STRING_UNFINISHED_ERROR, line, getIndexOnCurrentLine());
+            throw new StringInvalidException(ErrorMessages.STRING_UNFINISHED_ERROR, line, getIndexOnCurrentLine());
         StringBuilder sb = createString(true);
         if (index < arrayChars.length && arrayChars[index] == STRING_DELIMITER)
             return Tokens.STRING_START + sb;
@@ -111,7 +118,7 @@ public class InputToTokensConverter {
         //String not properly finished at this point
         if (index < arrayChars.length && arrayChars[index] == '\n') //of the newline token regardless
             index--;
-        throw new StringUnfinishedException(ErrorMessages.STRING_UNFINISHED_ERROR, line, getIndexOnCurrentLine());
+        throw new StringInvalidException(ErrorMessages.STRING_UNFINISHED_ERROR, line, getIndexOnCurrentLine());
     }
 
     @NotNull

@@ -3,6 +3,7 @@ package wiles
 import wiles.checker.Checker
 import wiles.parser.Parser
 import wiles.shared.CompilationExceptionsCollection
+import wiles.shared.InternalErrorException
 import java.io.IOException
 
 object Main {
@@ -24,7 +25,13 @@ object Main {
         println(result)
 
         val checker = Checker()
-        exceptions.addAll(checker.check())
+        try{
+            exceptions.addAll(checker.check())
+        }
+        catch(ex : InternalErrorException)
+        {
+            ex.printStackTrace()
+        }
         printExceptions(exceptions,parser.input)
         println(checker.code)
     }

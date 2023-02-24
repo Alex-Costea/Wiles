@@ -1,7 +1,7 @@
 package wiles.parser.exceptions
 
-import wiles.shared.TokenLocation
 import wiles.shared.AbstractCompilationException
+import wiles.shared.TokenLocation
 
-class StringUnfinishedException(s: String, line: Int, lineIndex: Int) :
+class StringInvalidException(s: String, line: Int, lineIndex: Int) :
     AbstractCompilationException(s, TokenLocation(line, lineIndex))
