@@ -87,6 +87,8 @@ class TokenConverterTests {
         tokenConverterThrows(0, "true\n\nhello\"\n\"", StringInvalidException::class.java, null,3)
         tokenConverterThrows(0, "@\n\"\n\"\n", StringInvalidException::class.java,null, 2)
         tokenConverterThrows(1, "@\n\"\n\"\n", StringInvalidException::class.java, null,3)
+        tokenConverterEquals("\"Hi, my name is &quot;Alex&quot;!\\\nWhat's your name? &#9786;&#65039;\"",
+            arrayOf("@Hi, my name is \"Alex\"!\nWhat's your name? ☺️"))
     }
 
     @Test
