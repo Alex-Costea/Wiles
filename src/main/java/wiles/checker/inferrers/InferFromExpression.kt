@@ -5,8 +5,8 @@ import wiles.checker.CheckerConstants.NOTHING_TOKEN
 import wiles.checker.InferrerUtils.inferTypeFromLiteral
 import wiles.checker.InferrerUtils.makeList
 import wiles.checker.InferrerUtils.makeMethod
+import wiles.checker.InferrerUtils.unbox
 import wiles.checker.SimpleTypeGenerator.getSimpleTypes
-import wiles.checker.exceptions.CannotCallMethodException
 import wiles.checker.exceptions.CannotModifyException
 import wiles.checker.exceptions.UnknownIdentifierException
 import wiles.checker.exceptions.WrongOperationException
@@ -17,7 +17,6 @@ import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.APPLY_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.METHOD_ID
-import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.EITHER_ID
 import wiles.shared.constants.Types.LIST_ID
@@ -44,13 +43,6 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
         return newComponents
     }
 
-    private fun unbox(statement: JSONStatement) : JSONStatement
-    {
-        if(statement.name == MUTABLE_ID)
-            return unbox(statement.components[0])
-        return statement
-    }
-
     private fun getTypeOfExpression(left : JSONStatement, middle : JSONStatement, right: JSONStatement) : JSONStatement
     {
         assert(left.type == SyntaxType.TYPE)
@@ -73,30 +65,28 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
         {
             for(newRight in rightComponents)
             {
+                val unboxedNewLeft = unbox(newLeft)
                 val type = getSimpleTypes(Triple(newLeft, middle, newRight)) ?:
-                    if(unbox(newLeft).name == METHOD_ID &&
+                    if(unboxedNewLeft.name == METHOD_ID &&
                             middle == CheckerConstants.APPLY_OPERATION &&
                             newRight.name == METHOD_CALL_ID) {
-                        val result = InferrerUtils.getFunctionArguments(unbox(newLeft), newRight)
-                        if(result!=null) {
-                            val newResult = result.map {
-                                if(it.value.second)
-                                    JSONStatement(type = SyntaxType.EXPRESSION,
-                                        components = mutableListOf(
-                                            JSONStatement(type = SyntaxType.TOKEN, name = it.key),
-                                            JSONStatement(type = SyntaxType.TOKEN, name = ASSIGN_ID),
-                                            it.value.first
-                                        ))
-                                else it.value.first
-                            }.toMutableList()
+                        val result = InferrerUtils.getFunctionArguments(unboxedNewLeft, newRight, middle.location!!)
+                        val newResult = result.map {
+                            if(it.value.second)
+                                JSONStatement(type = SyntaxType.EXPRESSION,
+                                    components = mutableListOf(
+                                        JSONStatement(type = SyntaxType.TOKEN, name = it.key),
+                                        JSONStatement(type = SyntaxType.TOKEN, name = ASSIGN_ID),
+                                        it.value.first
+                                    ))
+                            else it.value.first
+                        }.toMutableList()
 
-                            //set parameters in method call
-                            newRight.components[0].components = newResult
+                        //set parameters in method call
+                        newRight.components[0].components = newResult
 
-                            //return
-                            unbox(newLeft).components[0].components[0]
-                        }
-                        else throw CannotCallMethodException(middle.location!!)
+                        //return
+                        unboxedNewLeft.components[0].components[0]
 
                     } else null
 

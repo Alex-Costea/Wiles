@@ -1,12 +1,14 @@
 package wiles.checker
 
 import wiles.checker.CheckerConstants.NOTHING_TYPE
+import wiles.checker.exceptions.CannotCallMethodException
 import wiles.checker.exceptions.UnknownIdentifierException
 import wiles.checker.exceptions.UnknownTypeException
 import wiles.checker.exceptions.UsedBeforeInitializationException
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
+import wiles.shared.TokenLocation
 import wiles.shared.constants.Chars
 import wiles.shared.constants.Predicates
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
@@ -254,8 +256,8 @@ object InferrerUtils {
             components = mutableListOf(newType))
     }
 
-    fun getFunctionArguments(methodType : JSONStatement, methodCallType : JSONStatement)
-        : Map<String,Pair<JSONStatement,Boolean>>?
+    fun getFunctionArguments(methodType : JSONStatement, methodCallType : JSONStatement, location: TokenLocation)
+        : Map<String,Pair<JSONStatement,Boolean>>
     {
         // statement, does it need name addition
         val finalCallArgumentsMap = hashMapOf<String,Pair<JSONStatement,Boolean>>()
@@ -292,24 +294,24 @@ object InferrerUtils {
             val name = component.component1()
             val superType = namedArgsInMethod[name]?.first ?:
                 unnamedArgsInMethod[name]?.first ?:
-                return null
+                throw CannotCallMethodException(location)
             val subType = component.component2()
             if(isFormerSuperTypeOfLatter(supertype = superType, subtype = subType)) {
                 namedArgsInMethod.remove(name)
                 unnamedArgsInMethod.remove(name)
             }
-            else return null
+            else throw CannotCallMethodException(location)
         }
 
         if(namedArgsInMethod.any { !it.component2().second })
-            return null
+            throw CannotCallMethodException(location)
 
         val unnamedArgsInMethodList = unnamedArgsInMethod.toList().toMutableList()
 
         for(component in unnamedArgsInCall.withIndex())
         {
             if(unnamedArgsInMethodList.isEmpty())
-                return null
+                throw CannotCallMethodException(location)
             val superType = unnamedArgsInMethodList[0].second.first
             val subType = component.value.components[0]
             val name = unnamedArgsInMethodList.removeFirst().first
@@ -317,12 +319,19 @@ object InferrerUtils {
             finalCallArgumentsMap[name] = Pair(component.value,true)
 
             if(!isFormerSuperTypeOfLatter(superType,subType))
-                return null
+                throw CannotCallMethodException(location)
         }
 
         if(unnamedArgsInMethodList.any { !it.component2().second })
-            return null
+            throw CannotCallMethodException(location)
 
         return finalCallArgumentsMap
+    }
+
+    fun unbox(statement: JSONStatement) : JSONStatement
+    {
+        if(statement.name == MUTABLE_ID)
+            return unbox(statement.components[0])
+        return statement
     }
 }

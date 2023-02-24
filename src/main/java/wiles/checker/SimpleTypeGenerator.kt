@@ -26,8 +26,8 @@ import wiles.checker.CheckerConstants.UNARY_MINUS_OPERATION
 import wiles.checker.CheckerConstants.UNARY_PLUS_OPERATION
 import wiles.checker.InferrerUtils.isFormerSuperTypeOfLatter
 import wiles.checker.InferrerUtils.makeMutable
+import wiles.checker.InferrerUtils.unbox
 import wiles.shared.JSONStatement
-import wiles.shared.constants.Tokens.MUTABLE_ID
 
 object SimpleTypeGenerator {
 
@@ -123,39 +123,33 @@ object SimpleTypeGenerator {
         Pair(Triple(DOUBLE_TYPE, SMALLER_EQUALS_OPERATION, DOUBLE_TYPE), BOOLEAN_TYPE),
     )
 
-    fun getSimpleTypes(triple : Triple<JSONStatement, JSONStatement, JSONStatement>)
-        : JSONStatement?
+    fun getSimpleTypes(triple : Triple<JSONStatement, JSONStatement, JSONStatement>) : JSONStatement?
     {
-        //unbox
-        if(triple.first.name == MUTABLE_ID)
-            return getSimpleTypes(Triple(triple.first.components[0],triple.second,triple.third))
+        val newTriple = Triple(unbox(triple.first), triple.second, unbox(triple.third))
 
-        if(triple.third.name == MUTABLE_ID)
-            return getSimpleTypes(Triple(triple.first,triple.second,triple.third.components[0]))
-
-        if(triple.second == CheckerConstants.ELEM_ACCESS_OPERATION)
+        if(newTriple.second == CheckerConstants.ELEM_ACCESS_OPERATION)
         {
-            if(isFormerSuperTypeOfLatter(LIST_OF_NULLABLE_ANYTHING_TYPE,triple.first)
-                && isFormerSuperTypeOfLatter(INT64_TYPE,triple.third))
+            if(isFormerSuperTypeOfLatter(LIST_OF_NULLABLE_ANYTHING_TYPE,newTriple.first)
+                && isFormerSuperTypeOfLatter(INT64_TYPE,newTriple.third))
             {
-                return InferrerUtils.makeNullable(triple.first.components[0])
+                return InferrerUtils.makeNullable(newTriple.first.components[0])
             }
         }
 
-        if(triple.second == MUTABLE_OPERATION)
+        if(newTriple.second == MUTABLE_OPERATION)
         {
-            assert(triple.first == NOTHING_TYPE)
-            val result = makeMutable(triple.third)
-            if(isFormerSuperTypeOfLatter(LIST_OF_NULLABLE_ANYTHING_TYPE,triple.third))
+            assert(newTriple.first == NOTHING_TYPE)
+            val result = makeMutable(newTriple.third)
+            if(isFormerSuperTypeOfLatter(LIST_OF_NULLABLE_ANYTHING_TYPE,newTriple.third))
                 result.components[0].components[0] = makeMutable(result.components[0].components[0])
             return result
         }
 
-        if(triple.second == ASSIGN_OPERATION && isFormerSuperTypeOfLatter(triple.first,triple.third))
+        if(newTriple.second == ASSIGN_OPERATION && isFormerSuperTypeOfLatter(newTriple.first,newTriple.third))
         {
             return NOTHING_TYPE
         }
 
-        return simpleTypes[triple]
+        return simpleTypes[newTriple]
     }
 }
