@@ -27,16 +27,15 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
 
         this.inferredType = if (inferredType == null || InferrerUtils.isFormerSuperTypeOfLatter(newType, inferredType))
             newType
-        else if (InferrerUtils.isFormerSuperTypeOfLatter(inferredType, newType)) {
+        else if (InferrerUtils.isFormerSuperTypeOfLatter(inferredType, newType))
             return
-        } else {
-            if (statedType != null) {
-                if (InferrerUtils.isFormerSuperTypeOfLatter(statedType, newType))
-                    this.inferredType = statedType
+        else if (statedType != null) {
+            if (InferrerUtils.isFormerSuperTypeOfLatter(statedType, newType))
+                statedType
+            else throw ConflictingTypeDefinitionException(statement.getFirstLocation(),
+                statedType.toString(),newType.toString())
             }
-            throw InferenceFailException(statement.getFirstLocation())
-        }
-
+        else throw InferenceFailException(statement.getFirstLocation())
     }
 
     private fun checkAlwaysReturns(statement: JSONStatement) : Boolean
