@@ -81,3 +81,4 @@ fabric.properties
 target/classes/input.wiles
 input.wiles
 syntaxTree.json
+/object.json

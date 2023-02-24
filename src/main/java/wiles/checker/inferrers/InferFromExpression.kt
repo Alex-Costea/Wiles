@@ -232,6 +232,13 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
                 else throw InternalErrorException()
 
             statement.components.add(0,getTypeOfExpression(leftType,middle,rightType))
+
+            // simplify format
+            if(right.type == SyntaxType.METHOD_CALL)
+            {
+                right.components = right.components[0].components[0].components
+            }
+
             middle.name = operationName
         }
         else if(statement.components.size==4)
