@@ -72,8 +72,33 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
         {
             for(newRight in rightComponents)
             {
-                val triple = Triple(newLeft, middle, newRight)
-                val type = getSimpleTypes(triple)
+                val type = getSimpleTypes(Triple(newLeft, middle, newRight)) ?:
+                    if(newLeft.name == METHOD_ID &&
+                            middle == CheckerConstants.APPLY_OPERATION &&
+                            newRight.name == METHOD_CALL_ID) {
+                        val result = InferrerUtils.getFunctionArguments(newLeft, newRight)
+                        if(result!=null) {
+                            val newResult = result.map {
+                                if(it.value.second)
+                                    JSONStatement(type = SyntaxType.EXPRESSION,
+                                        components = mutableListOf(
+                                            JSONStatement(type = SyntaxType.TOKEN, name = it.key),
+                                            JSONStatement(type = SyntaxType.TOKEN, name = ASSIGN_ID),
+                                            it.value.first
+                                        ))
+                                else it.value.first
+                            }.toMutableList()
+
+                            //set parameters in method call
+                            newRight.components[0].components = newResult
+
+                            //return
+                            newLeft.components[0].components[0]
+                        }
+                        else throw CannotCallMethodException(middle.location!!)
+
+                    } else null
+
                 if(type != null) {
                     addIfNecessary(resultingTypes,type)
                 }
@@ -210,30 +235,7 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
                 else if(right.type != SyntaxType.LIST) right.components.getOrNull(0) ?: right
                 else makeList(right.components[0])
 
-            if(middle == CheckerConstants.APPLY_OPERATION) {
-                assert(rightType.name == METHOD_CALL_ID)
-                val result = InferrerUtils.getFunctionArguments(leftType, rightType)
-                if(result!=null) {
-                    statement.components.add(0, leftType.components[0].components[0])
-                    val newResult = result.map {
-                        if(it.value.second)
-                            JSONStatement(type = SyntaxType.EXPRESSION,
-                                components = mutableListOf(
-                                    JSONStatement(type = SyntaxType.TOKEN, name = it.key),
-                                    JSONStatement(type = SyntaxType.TOKEN, name = ASSIGN_ID),
-                                    it.value.first
-                                ))
-                        else it.value.first
-                    }.toMutableList()
-
-                    operationName= "$METHOD_ID|$APPLY_ID|$METHOD_CALL_ID"
-
-                    //lmao
-                    right.components[0].components[0].components = newResult
-                }
-                else throw CannotCallMethodException(middle.location!!)
-            }
-            else statement.components.add(0,getTypeOfExpression(leftType,middle,rightType))
+            statement.components.add(0,getTypeOfExpression(leftType,middle,rightType))
             middle.name = operationName
         }
         else if(statement.components.size==4)
