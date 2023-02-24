@@ -254,7 +254,7 @@ object InferrerUtils {
         val methodComponents = methodType.components[0].components.filter{it.type!=SyntaxType.TYPE}
         val callComponents = methodCallType.components[0].components
 
-        //Handle named args
+        //Create method arguments
         val namedArgsInMethod = hashMapOf<String,Pair<JSONStatement,Boolean>>()
         val unnamedArgsInMethod = hashMapOf<String,Pair<JSONStatement,Boolean>>()
         for(component in methodComponents)
@@ -266,6 +266,7 @@ object InferrerUtils {
                 component.components.size!=2)
         }
 
+        //create method call arguments
         val namedArgsInCall = hashMapOf<String,JSONStatement>()
         val unnamedArgsInCall = mutableListOf<JSONStatement>()
         for(component in callComponents)
@@ -298,7 +299,7 @@ object InferrerUtils {
 
         for(component in unnamedArgsInCall.withIndex())
         {
-            if(unnamedArgsInMethod.isEmpty())
+            if(unnamedArgsInMethodList.isEmpty())
                 return null
             val superType = unnamedArgsInMethodList[component.index].second.first
             val subType = component.value.components[0]
