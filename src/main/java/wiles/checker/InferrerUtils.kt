@@ -245,7 +245,7 @@ object InferrerUtils {
             components = mutableListOf(type.copyRemovingLocation()))
     }
 
-    fun checkMethodAccessCorrect(methodType : JSONStatement, methodCallType : JSONStatement)
+    fun getFunctionArguments(methodType : JSONStatement, methodCallType : JSONStatement)
         : Map<String,Pair<JSONStatement,Boolean>>?
     {
         // statement, does it need name addition

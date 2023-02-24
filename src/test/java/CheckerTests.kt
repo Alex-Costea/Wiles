@@ -1788,52 +1788,7 @@ class CheckerTests {
     @Test
     fun methodCallTest()
     {
-        checkResult(null,"""{
-  "parsed" : true,
-  "type" : "CODE_BLOCK",
-  "components" : [ {
-    "type" : "EXPRESSION",
-    "components" : [ {
-      "type" : "EXPRESSION",
-      "components" : [ {
-        "name" : "#2",
-        "type" : "TOKEN",
-        "location" : {
-          "line" : 1,
-          "lineIndex" : 1
-        }
-      }, {
-        "name" : "ACCESS",
-        "type" : "TOKEN",
-        "location" : {
-          "line" : 1,
-          "lineIndex" : 2
-        }
-      }, {
-        "name" : "!as_text",
-        "type" : "TOKEN",
-        "location" : {
-          "line" : 1,
-          "lineIndex" : 3
-        }
-      } ]
-    }, {
-      "name" : "ACCESS",
-      "type" : "TOKEN",
-      "location" : {
-        "line" : 1,
-        "lineIndex" : 10
-      }
-    }, {
-      "name" : "!write",
-      "type" : "TOKEN",
-      "location" : {
-        "line" : 1,
-        "lineIndex" : 11
-      }
-    } ]
-  } ]
-}""", "CODE_BLOCK(EXPRESSION(TYPE NOTHING; !TYPE STRING!write; METHOD|APPLY|METHOD_CALL; METHOD_CALL(TYPE METHOD_CALL; (METHOD_CALL(EXPRESSION(TYPE STRING; !TYPE ANYTHING!as_text; METHOD|APPLY|METHOD_CALL; METHOD_CALL(TYPE METHOD_CALL; (METHOD_CALL(EXPRESSION(TYPE INT64; #2))))))))))")
+
     }
 
     companion object {

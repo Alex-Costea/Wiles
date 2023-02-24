@@ -5,6 +5,7 @@ import wiles.checker.CheckerConstants.NOTHING_TOKEN
 import wiles.checker.InferrerUtils.inferTypeFromLiteral
 import wiles.checker.InferrerUtils.makeList
 import wiles.checker.SimpleTypeGenerator.getSimpleTypes
+import wiles.checker.exceptions.CannotCallMethodException
 import wiles.checker.exceptions.CannotModifyException
 import wiles.checker.exceptions.UnknownIdentifierException
 import wiles.checker.exceptions.WrongOperationException
@@ -16,10 +17,10 @@ import wiles.shared.constants.Tokens.APPLY_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
-import wiles.shared.constants.Types
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.EITHER_ID
 import wiles.shared.constants.Types.LIST_ID
+import wiles.shared.constants.Types.METHOD_CALL_ID
 
 class InferFromExpression(private val details: InferrerDetails) : InferFromStatement(details) {
 
@@ -210,8 +211,8 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
                 else makeList(right.components[0])
 
             if(middle == CheckerConstants.APPLY_OPERATION) {
-                assert(rightType.name == Types.METHOD_CALL_ID)
-                val result = InferrerUtils.checkMethodAccessCorrect(leftType, rightType)
+                assert(rightType.name == METHOD_CALL_ID)
+                val result = InferrerUtils.getFunctionArguments(leftType, rightType)
                 if(result!=null) {
                     statement.components.add(0, leftType.components[0].components[0])
                     val newResult = result.map {
@@ -224,12 +225,13 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
                                 ))
                         else it.value.first
                     }.toMutableList()
-                    operationName= APPLY_ID
+
+                    operationName= METHOD_ID + APPLY_ID + METHOD_CALL_ID
 
                     //lmao
                     right.components[0].components[0].components = newResult
                 }
-                else throw WrongOperationException(middle.location!!,left.toString(),right.toString())
+                else throw CannotCallMethodException(middle.location!!)
             }
             else statement.components.add(0,getTypeOfExpression(leftType,middle,rightType))
             middle.name = operationName
