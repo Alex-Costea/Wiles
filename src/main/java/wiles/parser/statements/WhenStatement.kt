@@ -3,24 +3,22 @@ package wiles.parser.statements
 import wiles.parser.builders.Context
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.enums.WhenRemoveToken
+import wiles.parser.statements.expressions.ConditionExpression
+import wiles.shared.AbstractCompilationException
+import wiles.shared.CompilationExceptionsCollection
+import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.CASE_ID
 import wiles.shared.constants.Tokens.ELSE_ID
 import wiles.shared.constants.Tokens.IF_ID
 import wiles.shared.constants.Tokens.TERMINATOR_ID
-import wiles.shared.constants.Tokens.THEN_ID
 import wiles.shared.constants.Tokens.WHEN_ID
-import wiles.shared.CompilationExceptionsCollection
-import wiles.shared.SyntaxType
-import wiles.shared.AbstractCompilationException
-import wiles.parser.statements.expressions.ConditionExpression
-import wiles.parser.statements.expressions.InnerDefaultExpression
 
-class WhenStatement(context: Context, private val isExpression : Boolean = false) : AbstractStatement(context) {
+class WhenStatement(context: Context) : AbstractStatement(context) {
 
     private val branches : MutableList<Pair<AbstractStatement,AbstractStatement>> = mutableListOf()
 
     override val type: SyntaxType
-        get() = if(isExpression) SyntaxType.WHEN_EXPRESSION else SyntaxType.WHEN
+        get() = SyntaxType.WHEN
 
     override fun getComponents(): MutableList<AbstractStatement> {
         return branches.flatMap { (x, y) -> listOf(x, y) }.toMutableList()
@@ -33,7 +31,7 @@ class WhenStatement(context: Context, private val isExpression : Boolean = false
         var isFirst = true
         try
         {
-            val ifStatement = if(!isExpression) transmitter.expectMaybe(tokenOf(IF_ID)).isPresent else false
+            val ifStatement = transmitter.expectMaybe(tokenOf(IF_ID)).isPresent
             var finalCase = false
             if(!ifStatement)
                 transmitter.expect(tokenOf(WHEN_ID))
@@ -44,13 +42,12 @@ class WhenStatement(context: Context, private val isExpression : Boolean = false
                     val tempToken = transmitter.expectMaybe(tokenOf(ELSE_ID))
                     if (tempToken.isPresent) {
                         val handleOtherwise = fun(): Boolean {
-                            if (!isExpression &&
-                                transmitter.expectMaybe(tokenOf(CASE_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
+                            if (transmitter.expectMaybe(tokenOf(CASE_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
                             {
                                 return false
                             }
                             condition = TokenStatement(tempToken.get(), context)
-                            body = if (isExpression) InnerDefaultExpression(context) else CodeBlockStatement(context)
+                            body = CodeBlockStatement(context)
                             exceptions.addAll(body.process())
                             transmitter.expectMaybe(tokenOf(TERMINATOR_ID).dontIgnoreNewLine())
                             branches.add(Pair(condition, body))
@@ -69,11 +66,8 @@ class WhenStatement(context: Context, private val isExpression : Boolean = false
                 }
 
                 condition = ConditionExpression(context)
-                body = if(isExpression) InnerDefaultExpression(context) else CodeBlockStatement(context)
+                body = CodeBlockStatement(context)
                 exceptions.addAll(condition.process())
-                if(isExpression)
-                    transmitter.expect(tokenOf(THEN_ID))
-                else transmitter.expectMaybe(tokenOf(THEN_ID))
                 exceptions.addAll(body.process())
                 branches.add(Pair(condition, body))
                 transmitter.expectMaybe(tokenOf(TERMINATOR_ID).dontIgnoreNewLine())

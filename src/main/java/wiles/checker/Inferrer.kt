@@ -38,7 +38,6 @@ class Inferrer(details: InferrerDetails)
             TYPE -> inferFromStatement = InferFromType(details)
             METHOD -> inferFromStatement = InferFromMethod(details)
             METHOD_CALL -> inferFromStatement = InferFromMethodCall(details)
-            WHEN_EXPRESSION -> TODO()
 
             //others
             RETURN -> inferFromStatement = InferFromReturn(details)

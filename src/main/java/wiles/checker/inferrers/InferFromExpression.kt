@@ -120,8 +120,7 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
     }
 
     override fun infer() {
-        val typesList = listOf(SyntaxType.METHOD, SyntaxType.LIST, SyntaxType.WHEN_EXPRESSION,
-                SyntaxType.METHOD_CALL, SyntaxType.TYPE)
+        val typesList = listOf(SyntaxType.METHOD, SyntaxType.LIST, SyntaxType.METHOD_CALL, SyntaxType.TYPE)
 
         if(statement.type in typesList)
         {

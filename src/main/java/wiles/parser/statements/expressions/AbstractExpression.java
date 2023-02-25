@@ -31,7 +31,7 @@ public abstract class AbstractExpression extends AbstractStatement {
     public AbstractStatement right = null;
     @NotNull
     private final StatementFactory SpecialStatementFactory = new StatementFactory().setContext(getContext())
-            .addType(StatementFactoryTypes.LIST_STATEMENT).addType(StatementFactoryTypes.WHEN_EXPRESSION);
+            .addType(StatementFactoryTypes.LIST_STATEMENT);
     protected boolean isInner = false;
 
     protected AbstractExpression(@NotNull Context context) {

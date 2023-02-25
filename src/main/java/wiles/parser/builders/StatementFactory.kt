@@ -1,6 +1,15 @@
 package wiles.parser.builders
 
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
+import wiles.parser.enums.StatementFactoryTypes
+import wiles.parser.enums.WhenRemoveToken
+import wiles.parser.exceptions.UnexpectedTokenException
+import wiles.parser.services.TokenTransmitter
+import wiles.parser.statements.*
+import wiles.parser.statements.expressions.DefaultExpression
+import wiles.parser.statements.expressions.TopLevelExpression
+import wiles.shared.AbstractCompilationException
+import wiles.shared.InternalErrorException
 import wiles.shared.constants.ErrorMessages.INTERNAL_ERROR
 import wiles.shared.constants.ErrorMessages.INVALID_STATEMENT_ERROR
 import wiles.shared.constants.ErrorMessages.NOT_YET_IMPLEMENTED_ERROR
@@ -18,15 +27,6 @@ import wiles.shared.constants.Tokens.RETURN_ID
 import wiles.shared.constants.Tokens.START_BLOCK_ID
 import wiles.shared.constants.Tokens.WHEN_ID
 import wiles.shared.constants.Tokens.WHILE_ID
-import wiles.parser.enums.StatementFactoryTypes
-import wiles.parser.enums.WhenRemoveToken
-import wiles.shared.AbstractCompilationException
-import wiles.shared.InternalErrorException
-import wiles.parser.exceptions.UnexpectedTokenException
-import wiles.parser.services.TokenTransmitter
-import wiles.parser.statements.*
-import wiles.parser.statements.expressions.DefaultExpression
-import wiles.parser.statements.expressions.TopLevelExpression
 import java.util.function.Function
 
 class StatementFactory {
@@ -76,7 +76,6 @@ class StatementFactory {
                 .removeWhen(WhenRemoveToken.Never)
             params[StatementFactoryTypes.RETURN_STATEMENT] = tokenOf(RETURN_ID)
             params[StatementFactoryTypes.WHEN_STATEMENT] = tokenOf(WHEN_ID).or(IF_ID).removeWhen(WhenRemoveToken.Never)
-            params[StatementFactoryTypes.WHEN_EXPRESSION] = tokenOf(WHEN_ID).removeWhen(WhenRemoveToken.Never)
             params[StatementFactoryTypes.WHILE_STATEMENT] = tokenOf(WHILE_ID)
             params[StatementFactoryTypes.BREAK_STATEMENT] = tokenOf(BREAK_ID)
             params[StatementFactoryTypes.CONTINUE_STATEMENT] = tokenOf(CONTINUE_ID)
@@ -94,8 +93,6 @@ class StatementFactory {
                 Function { context: Context -> ReturnStatement(context) }
             createObject[StatementFactoryTypes.WHEN_STATEMENT] =
                 Function { context: Context -> WhenStatement(context) }
-            createObject[StatementFactoryTypes.WHEN_EXPRESSION] =
-                Function { context: Context -> WhenStatement(context,true) }
             createObject[StatementFactoryTypes.WHILE_STATEMENT] =
                 Function { context: Context -> WhileStatement(context) }
             createObject[StatementFactoryTypes.BREAK_STATEMENT] =

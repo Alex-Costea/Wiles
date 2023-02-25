@@ -72,7 +72,6 @@ object Tokens {
     const val ELEM_ACCESS_ID = "ELEM_ACCESS"
     const val CASE_ID = "CASE"
     const val ANON_ARG_ID = "ANON_ARG"
-    const val THEN_ID = "THEN"
     const val MUTABLE_ID = "MUTABLE"
 
     private val KEYWORDS: HashMap<String, String> = HashMap()
@@ -101,7 +100,7 @@ object Tokens {
     val NEW_STATEMENT_START_KEYWORDS = setOf(
         NOTHING_ID, DECLARE_ID, WHEN_ID, CASE_ID, ELSE_ID, CONTINUE_ID,
         RETURN_ID, WHILE_ID, BREAK_ID, FOR_ID, DO_ID, START_BLOCK_ID, END_BLOCK_ID, BRACKET_END_ID, PAREN_END_ID,
-        SEPARATOR_ID, IN_ID, FROM_ID, TO_ID, IS_ID, ASSIGN_ID, TERMINATOR_ID, NEWLINE_ID, IF_ID, THEN_ID
+        SEPARATOR_ID, IN_ID, FROM_ID, TO_ID, IS_ID, ASSIGN_ID, TERMINATOR_ID, NEWLINE_ID, IF_ID
     )
 
     init {
@@ -112,7 +111,6 @@ object Tokens {
         KEYWORDS[if(!ROMANIAN_MODE) "if" else "dacă"] = IF_ID
         KEYWORDS[if(!ROMANIAN_MODE) "when" else "când"] = WHEN_ID
         KEYWORDS[if(!ROMANIAN_MODE) "is" else "este"] = IS_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "then" else "atunci"] = THEN_ID
         KEYWORDS[if(!ROMANIAN_MODE) "case" else "caz"] = CASE_ID
         KEYWORDS[if(!ROMANIAN_MODE) "default" else "altfel"] = ELSE_ID
         KEYWORDS[if(!ROMANIAN_MODE) "for" else "pentru"] = FOR_ID

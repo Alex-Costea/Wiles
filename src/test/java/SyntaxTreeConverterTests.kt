@@ -47,7 +47,6 @@ import wiles.shared.constants.Tokens.RIGHT_ARROW_ID
 import wiles.shared.constants.Tokens.SEPARATOR_ID
 import wiles.shared.constants.Tokens.START_BLOCK_ID
 import wiles.shared.constants.Tokens.TERMINATOR_ID
-import wiles.shared.constants.Tokens.THEN_ID
 import wiles.shared.constants.Tokens.TIMES_ID
 import wiles.shared.constants.Tokens.TO_ID
 import wiles.shared.constants.Tokens.TRUE_ID
@@ -251,10 +250,6 @@ class SyntaxTreeConverterTests {
             WHEN_ID, CASE_ID, "!a", LARGER_ID, "#0", DO_ID, NOTHING_ID, NEWLINE_ID,
             ELSE_ID, DO_ID, IF_ID, "!a", LARGER_ID, "#10", DO_ID, NOTHING_ID, NEWLINE_ID,
             "!a", ASSIGN_ID, "!b" )
-
-        assertResults(null, "CODE_BLOCK(DECLARATION(!a; EXPRESSION(WHEN_EXPRESSION(EXPRESSION(!b; LARGER; #10); EXPRESSION(#1); EXPRESSION(!b; LARGER; #0); EXPRESSION(#0); ELSE; EXPRESSION(UNARY_MINUS; #1)))))",
-            DECLARE_ID, "!a", ASSIGN_ID, WHEN_ID, "!b", LARGER_ID, "#10", THEN_ID, "#1", CASE_ID, "!b", LARGER_ID, "#0",
-            THEN_ID, "#0", ELSE_ID, MINUS_ID, "#1")
 
         assertResults(null,"CODE_BLOCK(WHEN(EXPRESSION(!a; LARGER; #10); CODE_BLOCK(EXPRESSION(NOTHING)); EXPRESSION(!a; LARGER; #0); CODE_BLOCK(EXPRESSION(NOTHING))))",
             WHEN_ID, "!a", LARGER_ID, "#10", DO_ID, NOTHING_ID, NEWLINE_ID, ELSE_ID, CASE_ID, "!a", LARGER_ID,
