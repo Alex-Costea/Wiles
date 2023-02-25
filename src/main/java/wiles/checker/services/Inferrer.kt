@@ -1,5 +1,6 @@
-package wiles.checker
+package wiles.checker.services
 
+import wiles.checker.data.InferrerDetails
 import wiles.checker.inferrers.*
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement

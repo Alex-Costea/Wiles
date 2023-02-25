@@ -1,9 +1,9 @@
 package wiles.checker.inferrers
 
-import wiles.checker.CheckerConstants.NOTHING_TYPE
-import wiles.checker.Inferrer
-import wiles.checker.InferrerDetails
-import wiles.checker.InferrerUtils.isFormerSuperTypeOfLatter
+import wiles.checker.statics.CheckerConstants.NOTHING_TYPE
+import wiles.checker.services.Inferrer
+import wiles.checker.data.InferrerDetails
+import wiles.checker.statics.InferrerUtils.isFormerSuperTypeOfLatter
 import wiles.checker.exceptions.UnusedExpressionException
 import wiles.shared.AbstractCompilationException
 import wiles.shared.SyntaxType

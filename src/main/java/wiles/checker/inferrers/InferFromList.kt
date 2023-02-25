@@ -1,7 +1,7 @@
 package wiles.checker.inferrers
 
-import wiles.checker.InferrerDetails
-import wiles.checker.InferrerUtils
+import wiles.checker.data.InferrerDetails
+import wiles.checker.statics.InferrerUtils
 import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.exceptions.InferenceFailException
 import wiles.shared.CompilationExceptionsCollection

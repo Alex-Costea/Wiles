@@ -1,4 +1,4 @@
-package wiles.checker
+package wiles.checker.data
 
 import wiles.shared.JSONStatement
 

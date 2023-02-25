@@ -1,9 +1,9 @@
 package wiles.checker.inferrers
 
-import wiles.checker.CheckerConstants.NOTHING_TYPE
-import wiles.checker.Inferrer
-import wiles.checker.InferrerDetails
-import wiles.checker.InferrerUtils
+import wiles.checker.statics.CheckerConstants.NOTHING_TYPE
+import wiles.checker.services.Inferrer
+import wiles.checker.data.InferrerDetails
+import wiles.checker.statics.InferrerUtils
 import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.exceptions.InferenceFailException
 import wiles.checker.exceptions.ReturnNotGuaranteedException
@@ -11,7 +11,8 @@ import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 
 class InferFromMethod(details: InferrerDetails) : InferFromStatement(
-    InferrerDetails(details.statement,details.variables.copy(),details.exceptions))
+    InferrerDetails(details.statement,details.variables.copy(),details.exceptions)
+)
 {
     private val statedType = if(statement.components.getOrNull(0)?.type == SyntaxType.TYPE)
         statement.components[0]

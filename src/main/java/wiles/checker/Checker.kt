@@ -4,9 +4,14 @@ import com.fasterxml.jackson.core.util.DefaultPrettyPrinter
 import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.json.JsonMapper
-import wiles.checker.CheckerConstants.BOOLEAN_TYPE
-import wiles.checker.CheckerConstants.NOTHING_TYPE
-import wiles.checker.CheckerConstants.WRITELINE_TYPE
+import wiles.checker.statics.CheckerConstants.BOOLEAN_TYPE
+import wiles.checker.statics.CheckerConstants.NOTHING_TYPE
+import wiles.checker.statics.CheckerConstants.WRITELINE_TYPE
+import wiles.checker.data.InferrerDetails
+import wiles.checker.data.VariableDetails
+import wiles.checker.data.VariableMap
+import wiles.checker.services.AccessOperationIdentifiers
+import wiles.checker.services.Inferrer
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType

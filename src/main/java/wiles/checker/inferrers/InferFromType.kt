@@ -1,7 +1,7 @@
 package wiles.checker.inferrers
 
-import wiles.checker.CheckerConstants.NOTHING_TYPE
-import wiles.checker.InferrerDetails
+import wiles.checker.statics.CheckerConstants.NOTHING_TYPE
+import wiles.checker.data.InferrerDetails
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID

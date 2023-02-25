@@ -2,21 +2,21 @@ package wiles.parser.statements
 
 import wiles.parser.builders.Context
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
+import wiles.parser.statements.expressions.DefaultExpression
+import wiles.shared.AbstractCompilationException
+import wiles.shared.CompilationExceptionsCollection
+import wiles.shared.SyntaxType
 import wiles.shared.constants.ErrorMessages.IDENTIFIER_EXPECTED_ERROR
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.ANON_ARG_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
-import wiles.shared.constants.Tokens.VARIABLE_ID
 import wiles.shared.constants.Tokens.TYPEDEF_ID
-import wiles.shared.CompilationExceptionsCollection
-import wiles.shared.SyntaxType
-import wiles.shared.AbstractCompilationException
-import wiles.parser.statements.expressions.DefaultExpression
+import wiles.shared.constants.Tokens.VARIABLE_ID
 
 class DeclarationStatement(context: Context, private val isParam: Boolean = false) : AbstractStatement(context) {
-    var left: TokenStatement? = null
-    var typeStatement : TypeDefinitionStatement? = null
-    var right: DefaultExpression? = null
+    private var left: TokenStatement? = null
+    private var typeStatement : TypeDefinitionStatement? = null
+    private var right: DefaultExpression? = null
     private val exceptions = CompilationExceptionsCollection()
 
     override val type: SyntaxType

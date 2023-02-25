@@ -1,10 +1,12 @@
-package wiles.checker
+package wiles.checker.services
 
-import wiles.checker.CheckerConstants.ANYTHING_TYPE
-import wiles.checker.CheckerConstants.INT64_TYPE
-import wiles.checker.CheckerConstants.LIST_OF_ANYTHING_TYPE
-import wiles.checker.CheckerConstants.NOTHING_TYPE
-import wiles.checker.CheckerConstants.STRING_TYPE
+import wiles.checker.data.VariableDetails
+import wiles.checker.statics.CheckerConstants.ANYTHING_TYPE
+import wiles.checker.statics.CheckerConstants.INT64_TYPE
+import wiles.checker.statics.CheckerConstants.LIST_OF_ANYTHING_TYPE
+import wiles.checker.statics.CheckerConstants.NOTHING_TYPE
+import wiles.checker.statics.CheckerConstants.STRING_TYPE
+import wiles.checker.statics.InferrerUtils
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens
@@ -31,9 +33,9 @@ object AccessOperationIdentifiers {
             ))
     }
 
-    fun getVariables() : List<Pair<String,VariableDetails>>
+    fun getVariables() : List<Pair<String, VariableDetails>>
     {
-        val list = mutableListOf<Pair<String,VariableDetails>>()
+        val list = mutableListOf<Pair<String, VariableDetails>>()
         for(key in access.keys)
         {
             for(variableType in access[key]!!)
@@ -48,7 +50,7 @@ object AccessOperationIdentifiers {
     {
         val list = access[name] ?: return null
         for(validType in list)
-            if(InferrerUtils.isFormerSuperTypeOfLatter(validType.first,type))
+            if(InferrerUtils.isFormerSuperTypeOfLatter(validType.first, type))
                 return "!${validType.first}$name"
         return null
     }

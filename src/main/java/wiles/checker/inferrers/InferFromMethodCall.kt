@@ -1,7 +1,7 @@
 package wiles.checker.inferrers
 
-import wiles.checker.CheckerConstants.METHOD_CALL_TYPE
-import wiles.checker.InferrerDetails
+import wiles.checker.statics.CheckerConstants.METHOD_CALL_TYPE
+import wiles.checker.data.InferrerDetails
 import wiles.shared.constants.Tokens.ASSIGN_ID
 
 class InferFromMethodCall(details: InferrerDetails) : InferFromStatement(details) {

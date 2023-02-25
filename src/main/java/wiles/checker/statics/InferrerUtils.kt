@@ -1,10 +1,11 @@
-package wiles.checker
+package wiles.checker.statics
 
-import wiles.checker.CheckerConstants.NOTHING_TYPE
+import wiles.checker.data.VariableDetails
 import wiles.checker.exceptions.CannotCallMethodException
 import wiles.checker.exceptions.UnknownIdentifierException
 import wiles.checker.exceptions.UnknownTypeException
 import wiles.checker.exceptions.UsedBeforeInitializationException
+import wiles.checker.statics.CheckerConstants.NOTHING_TYPE
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
@@ -115,7 +116,8 @@ object InferrerUtils {
 
             if(matchMethodComponentList(subtypeComponents,supertypeComponents,false) &&
                     matchMethodComponentList(supertypeComponents,subtypeComponents,true)
-                && checkUnnamedArgsInSameOrder(supertypeComponents,subtypeComponents))
+                && checkUnnamedArgsInSameOrder(supertypeComponents,subtypeComponents)
+            )
                 return true
         }
 
@@ -128,13 +130,13 @@ object InferrerUtils {
         while(list1.isNotEmpty() && list2.isNotEmpty())
         {
             val elem1 = list1[0]
-            if(elem1.type == SyntaxType.TYPE || elem1.name!= ANON_ARG_ID) {
+            if(elem1.type == SyntaxType.TYPE || !elem1.name.contains(ANON_ARG_ID)) {
                 list1.removeFirst()
                 continue
             }
 
             val elem2 = list2[0]
-            if(elem2.type == SyntaxType.TYPE || elem2.name!= ANON_ARG_ID) {
+            if(elem2.type == SyntaxType.TYPE || !elem2.name.contains(ANON_ARG_ID)) {
                 list2.removeFirst()
                 continue
             }
@@ -147,13 +149,13 @@ object InferrerUtils {
         }
 
         while(list1.isNotEmpty()) {
-            if (list1[0].type == SyntaxType.TYPE || list1[0].name!= ANON_ARG_ID)
+            if (list1[0].type == SyntaxType.TYPE || !list1[0].name.contains(ANON_ARG_ID))
                 list1.removeFirst()
             else break
         }
 
         while(list2.isNotEmpty()) {
-            if (list2[0].type == SyntaxType.TYPE || list2[0].name!= ANON_ARG_ID)
+            if (list2[0].type == SyntaxType.TYPE || !list2[0].name.contains(ANON_ARG_ID))
                 list2.removeFirst()
             else break
         }
@@ -193,7 +195,7 @@ object InferrerUtils {
         return true
     }
 
-    fun inferTypeFromLiteral(token : JSONStatement, variables : HashMap<String,VariableDetails>) : JSONStatement
+    fun inferTypeFromLiteral(token : JSONStatement, variables : HashMap<String, VariableDetails>) : JSONStatement
     {
         assert(token.type == SyntaxType.TOKEN)
         val name = token.name
@@ -273,7 +275,7 @@ object InferrerUtils {
         val unnamedArgsInMethod = hashMapOf<String,Pair<JSONStatement,Boolean>>()
         for(component in methodComponents)
         {
-            if(component.name != ANON_ARG_ID)
+            if(!component.name.contains( ANON_ARG_ID))
                 namedArgsInMethod[component.components[1].name]=Pair(component.components[0],
                     component.components.size!=2)
             else unnamedArgsInMethod[component.components[1].name]=Pair(component.components[0],

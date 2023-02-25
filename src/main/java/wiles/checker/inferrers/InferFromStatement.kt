@@ -1,6 +1,6 @@
 package wiles.checker.inferrers
 
-import wiles.checker.InferrerDetails
+import wiles.checker.data.InferrerDetails
 
 abstract class InferFromStatement(details: InferrerDetails) {
     val statement = details.statement

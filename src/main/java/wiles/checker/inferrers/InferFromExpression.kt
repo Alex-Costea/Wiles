@@ -1,15 +1,19 @@
 package wiles.checker.inferrers
 
-import wiles.checker.*
-import wiles.checker.CheckerConstants.NOTHING_TOKEN
-import wiles.checker.InferrerUtils.inferTypeFromLiteral
-import wiles.checker.InferrerUtils.makeList
-import wiles.checker.InferrerUtils.makeMethod
-import wiles.checker.InferrerUtils.unbox
-import wiles.checker.SimpleTypeGenerator.getSimpleTypes
+import wiles.checker.statics.CheckerConstants.NOTHING_TOKEN
+import wiles.checker.statics.InferrerUtils.inferTypeFromLiteral
+import wiles.checker.statics.InferrerUtils.makeList
+import wiles.checker.statics.InferrerUtils.makeMethod
+import wiles.checker.statics.InferrerUtils.unbox
+import wiles.checker.statics.SimpleTypeGenerator.getSimpleTypes
+import wiles.checker.statics.CheckerConstants
+import wiles.checker.data.InferrerDetails
 import wiles.checker.exceptions.CannotModifyException
 import wiles.checker.exceptions.UnknownIdentifierException
 import wiles.checker.exceptions.WrongOperationException
+import wiles.checker.services.AccessOperationIdentifiers
+import wiles.checker.services.Inferrer
+import wiles.checker.statics.InferrerUtils
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
@@ -137,8 +141,10 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
         }
         else if(statement.components.size==1 && statement.components[0].type in typesList)
         {
-            val inferrer = Inferrer(InferrerDetails(statement.components[0],
-                variables, CompilationExceptionsCollection()))
+            val inferrer = Inferrer(
+                InferrerDetails(statement.components[0],
+                variables, CompilationExceptionsCollection())
+            )
             inferrer.infer()
             when (statement.components[0].type) {
                 SyntaxType.LIST -> {
@@ -211,7 +217,7 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
             {
                 if(right.type!=SyntaxType.TOKEN)
                     throw UnknownIdentifierException(right.getFirstLocation())
-                right.name=AccessOperationIdentifiers.get(right.name,leftType) ?:
+                right.name= AccessOperationIdentifiers.get(right.name,leftType) ?:
                     throw UnknownIdentifierException(right.getFirstLocation())
 
                 //create correct components

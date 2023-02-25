@@ -1,6 +1,6 @@
 package wiles.checker.inferrers
 
-import wiles.checker.InferrerDetails
+import wiles.checker.data.InferrerDetails
 
 class InferFromReturn(details: InferrerDetails) : InferFromStatement(details) {
     override fun infer() {

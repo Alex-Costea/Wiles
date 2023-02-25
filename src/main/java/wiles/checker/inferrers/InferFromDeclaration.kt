@@ -1,19 +1,19 @@
 package wiles.checker.inferrers
 
-import wiles.checker.CheckerConstants.ERROR_TYPE
-import wiles.checker.CheckerConstants.NOTHING_TYPE
-import wiles.checker.Inferrer
-import wiles.checker.InferrerDetails
-import wiles.checker.InferrerUtils.checkTypeIsDefined
-import wiles.checker.InferrerUtils.isFormerSuperTypeOfLatter
-import wiles.checker.VariableDetails
+import wiles.checker.statics.CheckerConstants.ERROR_TYPE
+import wiles.checker.statics.CheckerConstants.NOTHING_TYPE
+import wiles.checker.services.Inferrer
+import wiles.checker.data.InferrerDetails
+import wiles.checker.statics.InferrerUtils.checkTypeIsDefined
+import wiles.checker.statics.InferrerUtils.isFormerSuperTypeOfLatter
+import wiles.checker.data.VariableDetails
 import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.exceptions.InferenceFailException
 import wiles.checker.exceptions.VariableAlreadyDeclaredException
 import wiles.shared.AbstractCompilationException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType.TYPE
-import wiles.shared.constants.Tokens
+import wiles.shared.constants.Tokens.VARIABLE_ID
 
 class InferFromDeclaration(details: InferrerDetails,
                            private val alwaysInit: Boolean = false)
@@ -52,7 +52,7 @@ class InferFromDeclaration(details: InferrerDetails,
         //type nothing is auto-initialized with nothing
         variables[name.name] = VariableDetails(newType,
             initialized = alwaysInit || default != null || (if(type!=null) isFormerSuperTypeOfLatter(NOTHING_TYPE, type) else false),
-            modifiable = statement.name == Tokens.VARIABLE_ID
+            modifiable = statement.name.contains(VARIABLE_ID)
         )
 
         if(statement.components[0].type != TYPE)

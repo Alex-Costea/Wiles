@@ -1,6 +1,6 @@
-package wiles.checker
+package wiles.checker.data
 
-class VariableMap(map : HashMap<String,VariableDetails>) : HashMap<String, VariableDetails>(map) {
+class VariableMap(map : HashMap<String, VariableDetails>) : HashMap<String, VariableDetails>(map) {
     fun copy() : VariableMap
     {
         val newMap = VariableMap()

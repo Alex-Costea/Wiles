@@ -1,8 +1,8 @@
-package wiles.checker
+package wiles.checker.statics
 
-import wiles.checker.InferrerUtils.makeList
-import wiles.checker.InferrerUtils.makeMutable
-import wiles.checker.InferrerUtils.makeNullable
+import wiles.checker.statics.InferrerUtils.makeList
+import wiles.checker.statics.InferrerUtils.makeMutable
+import wiles.checker.statics.InferrerUtils.makeNullable
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens
