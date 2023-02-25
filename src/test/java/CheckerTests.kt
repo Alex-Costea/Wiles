@@ -1146,6 +1146,99 @@ class CheckerTests {
     } ]
   } ]
 }""","CODE_BLOCK(DECLARATION(TYPE INT64; !temp; EXPRESSION(TYPE INT64; #2; INT64|PLUS|INT64; EXPRESSION(TYPE MUTABLE; (TYPE INT64); NOTHING|MUTABLE|INT64; #3))))")
+
+    checkResult(null,"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "MUTABLE",
+      "type" : "TYPE",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 9
+      },
+      "components" : [ {
+        "name" : "EITHER",
+        "type" : "TYPE",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 13
+        },
+        "components" : [ {
+          "name" : "INT64",
+          "type" : "TYPE",
+          "location" : {
+            "line" : 1,
+            "lineIndex" : 20
+          }
+        }, {
+          "name" : "STRING",
+          "type" : "TYPE",
+          "location" : {
+            "line" : 1,
+            "lineIndex" : 24
+          }
+        } ]
+      } ]
+    }, {
+      "name" : "!a",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "MUTABLE",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 34
+        }
+      }, {
+        "name" : "@5",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 38
+        }
+      } ]
+    } ]
+  }, {
+    "type" : "EXPRESSION",
+    "components" : [ {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!a",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 1
+        }
+      } ]
+    }, {
+      "name" : "MODIFY",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 2,
+        "lineIndex" : 3
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "#10",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 6
+        }
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(DECLARATION(TYPE MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE STRING)); !a; EXPRESSION(TYPE MUTABLE; (TYPE STRING); NOTHING|MUTABLE|STRING; @5)); EXPRESSION(TYPE NOTHING; EXPRESSION(TYPE MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE STRING)); !a); EITHER|MODIFY|INT64; EXPRESSION(TYPE INT64; #10)))")
     }
 
     @Test

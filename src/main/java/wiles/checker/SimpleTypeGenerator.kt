@@ -11,6 +11,8 @@ import wiles.checker.CheckerConstants.LARGER_EQUALS_OPERATION
 import wiles.checker.CheckerConstants.LARGER_OPERATION
 import wiles.checker.CheckerConstants.LIST_OF_NULLABLE_ANYTHING_TYPE
 import wiles.checker.CheckerConstants.MINUS_OPERATION
+import wiles.checker.CheckerConstants.MODIFY_OPERATION
+import wiles.checker.CheckerConstants.MUTABLE_ANYTHING_INCLUDING_NOTHING_TYPE
 import wiles.checker.CheckerConstants.MUTABLE_OPERATION
 import wiles.checker.CheckerConstants.NOTHING_TYPE
 import wiles.checker.CheckerConstants.NOT_EQUAL_OPERATION
@@ -125,31 +127,38 @@ object SimpleTypeGenerator {
 
     fun getSimpleTypes(triple : Triple<JSONStatement, JSONStatement, JSONStatement>) : JSONStatement?
     {
-        val newTriple = Triple(unbox(triple.first), triple.second, unbox(triple.third))
+        val unboxedTriple = Triple(unbox(triple.first), triple.second, unbox(triple.third))
 
-        if(newTriple.second == CheckerConstants.ELEM_ACCESS_OPERATION)
+        if(unboxedTriple.second == CheckerConstants.ELEM_ACCESS_OPERATION)
         {
-            if(isFormerSuperTypeOfLatter(LIST_OF_NULLABLE_ANYTHING_TYPE,newTriple.first)
-                && isFormerSuperTypeOfLatter(INT64_TYPE,newTriple.third))
+            if(isFormerSuperTypeOfLatter(LIST_OF_NULLABLE_ANYTHING_TYPE,unboxedTriple.first)
+                && isFormerSuperTypeOfLatter(INT64_TYPE,unboxedTriple.third))
             {
-                return InferrerUtils.makeNullable(newTriple.first.components[0])
+                return InferrerUtils.makeNullable(unboxedTriple.first.components[0])
             }
         }
 
-        if(newTriple.second == MUTABLE_OPERATION)
+        if(unboxedTriple.second == MUTABLE_OPERATION)
         {
-            assert(newTriple.first == NOTHING_TYPE)
-            val result = makeMutable(newTriple.third)
-            if(isFormerSuperTypeOfLatter(LIST_OF_NULLABLE_ANYTHING_TYPE,newTriple.third))
+            assert(unboxedTriple.first == NOTHING_TYPE)
+            val result = makeMutable(unboxedTriple.third)
+            if(isFormerSuperTypeOfLatter(LIST_OF_NULLABLE_ANYTHING_TYPE,unboxedTriple.third))
                 result.components[0].components[0] = makeMutable(result.components[0].components[0])
             return result
         }
 
-        if(newTriple.second == ASSIGN_OPERATION && isFormerSuperTypeOfLatter(newTriple.first,newTriple.third))
+        if(unboxedTriple.second == ASSIGN_OPERATION && isFormerSuperTypeOfLatter(unboxedTriple.first,unboxedTriple.third))
         {
             return NOTHING_TYPE
         }
 
-        return simpleTypes[newTriple]
+        if(unboxedTriple.second == MODIFY_OPERATION
+            && isFormerSuperTypeOfLatter(MUTABLE_ANYTHING_INCLUDING_NOTHING_TYPE,triple.first)
+            && isFormerSuperTypeOfLatter(unboxedTriple.first,unboxedTriple.third))
+        {
+            return NOTHING_TYPE
+        }
+
+        return simpleTypes[unboxedTriple]
     }
 }

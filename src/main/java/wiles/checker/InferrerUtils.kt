@@ -91,6 +91,9 @@ object InferrerUtils {
         else if (supertype.name == LIST_ID && subtype.name == LIST_ID)
             return isFormerSuperTypeOfLatter(supertype.components[0],subtype.components[0])
 
+        else if (supertype.name == MUTABLE_ID && subtype.name == MUTABLE_ID)
+            return isFormerSuperTypeOfLatter(supertype.components[0], subtype.components[0])
+
         else if (subtype.name == MUTABLE_ID)
             return isFormerSuperTypeOfLatter(supertype, subtype.components[0])
 
