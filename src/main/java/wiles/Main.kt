@@ -24,6 +24,12 @@ object Main {
         print("Syntax tree: ")
         println(result)
 
+        if(exceptions.isNotEmpty())
+        {
+            printExceptions(exceptions, parser.input)
+            return
+        }
+
         val checker = Checker()
         try{
             exceptions.addAll(checker.check())
