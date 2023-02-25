@@ -174,7 +174,7 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
             val middle = if(isThree) statement.components[1] else statement.components[0]
             val right = if(isThree) statement.components[2] else statement.components[1]
 
-            val validWithZeroComponentsTypesList = listOf(SyntaxType.TYPE, SyntaxType.TOKEN)
+            val validWithZeroComponentsTypesList = listOf(SyntaxType.TYPE, SyntaxType.TOKEN, SyntaxType.METHOD_CALL)
             assert(left.components.size > 0 || left.type in validWithZeroComponentsTypesList)
             assert(right.components.size > 0 || right.type in validWithZeroComponentsTypesList)
 
