@@ -17,10 +17,15 @@ import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.APPLY_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.METHOD_ID
+import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Types.ANYTHING_ID
+import wiles.shared.constants.Types.BOOLEAN_ID
+import wiles.shared.constants.Types.DOUBLE_ID
 import wiles.shared.constants.Types.EITHER_ID
+import wiles.shared.constants.Types.INT64_ID
 import wiles.shared.constants.Types.LIST_ID
 import wiles.shared.constants.Types.METHOD_CALL_ID
+import wiles.shared.constants.Types.STRING_ID
 
 class InferFromExpression(private val details: InferrerDetails) : InferFromStatement(details) {
 
@@ -100,8 +105,10 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
             throw WrongOperationException(middle.location!!,left.toString(),right.toString())
         if(resultingTypes.isNotEmpty())
         {
-            val leftText : String = if(leftComponents.size == 1) unbox(leftComponents[0]).name else ANYTHING_ID
-            val rightText : String = if(rightComponents.size == 1) unbox(rightComponents[0]).name else ANYTHING_ID
+            var leftText : String = if(leftComponents.size == 1) unbox(leftComponents[0]).name else ANYTHING_ID
+            if(leftText !in VALID_NAMED) leftText = ANYTHING_ID
+            var rightText : String = if(rightComponents.size == 1) unbox(rightComponents[0]).name else ANYTHING_ID
+            if(rightText !in VALID_NAMED) rightText = ANYTHING_ID
             operationName = "${leftText}|${middle.name}|${rightText}"
             return if(resultingTypes.size == 1)
                 resultingTypes[0]
@@ -243,5 +250,10 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
         else if(statement.components.size==4)
             return
         else throw InternalErrorException("Irregular statement found.")
+    }
+
+    companion object {
+        val VALID_NAMED = arrayListOf(
+            METHOD_ID,DOUBLE_ID, INT64_ID, STRING_ID, BOOLEAN_ID, LIST_ID, ANYTHING_ID, NOTHING_ID, METHOD_CALL_ID)
     }
 }
