@@ -32,7 +32,6 @@
     - Other clauses: `case [condition] {then} [block]`
     - Default clause: `default [block]`
       - Default clause with case: `default case [condition] {then} [block]`
-    - `when` can also be an expression
 - For loop: `for x {in collection} {from a} {to b} [block]`
 - While loop: `while condition [block]`
 - Code block: `do [operation]` or `begin; {@operation;@} end`
