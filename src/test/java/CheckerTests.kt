@@ -347,6 +347,55 @@ class CheckerTests {
     @Test
     fun inferFromExpression()
     {
+        checkResult(createExceptions(ImportException(NULL_LOCATION)),"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "!a",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "IMPORT",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 10
+        }
+      }, {
+        "name" : "#1",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 17
+        }
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(DECLARATION(!a; EXPRESSION(IMPORT; #1)))")
+
+        checkResult(createExceptions(UnusedExpressionException(NULL_LOCATION)),"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "EXPRESSION",
+    "components" : [ {
+      "name" : "#1",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 1
+      }
+    } ]
+  } ]
+}""","CODE_BLOCK(EXPRESSION(TYPE INT64; #1))")
+
         checkResult(null,"""{
   "parsed" : true,
   "type" : "CODE_BLOCK",
@@ -3877,6 +3926,38 @@ class CheckerTests {
     } ]
   } ]
 }""","CODE_BLOCK(WHILE(EXPRESSION(TYPE BOOLEAN; TRUE); CODE_BLOCK(DECLARATION(TYPE STRING; !text; EXPRESSION(TYPE STRING; @hi!)))); EXPRESSION(!writeline; APPLY; METHOD_CALL(EXPRESSION(!text))))")
+
+    checkResult(createExceptions(ConflictingTypeDefinitionException(NULL_LOCATION,"TYPE BOOLEAN","TYPE INT64")),"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "WHILE",
+    "components" : [ {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "#1",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 7
+        }
+      } ]
+    }, {
+      "type" : "CODE_BLOCK",
+      "components" : [ {
+        "type" : "EXPRESSION",
+        "components" : [ {
+          "name" : "NOTHING",
+          "type" : "TOKEN",
+          "location" : {
+            "line" : 1,
+            "lineIndex" : 12
+          }
+        } ]
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(WHILE(EXPRESSION(TYPE INT64; #1); CODE_BLOCK(EXPRESSION(NOTHING))))")
     }
 
     companion object {

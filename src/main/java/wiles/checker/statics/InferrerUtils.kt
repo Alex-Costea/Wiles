@@ -108,26 +108,31 @@ object InferrerUtils {
             return isFormerSuperTypeOfLatter(supertype, subtype.components[0])
 
         else if(supertype.name == METHOD_ID && subtype.name == METHOD_ID)
-        {
-            val supertypeComponents = supertype.components[0].components.toMutableList()
-            val subtypeComponents = subtype.components[0].components.toMutableList()
+            return checkMethodIsSubtype(supertype, subtype)
 
-            val supertypeReturnType = if(supertypeComponents[0].type == SyntaxType.TYPE)
-                supertypeComponents[0]
-                else NOTHING_TYPE
+        return false
+    }
 
-            val subtypeReturnType = if(subtypeComponents[0].type == SyntaxType.TYPE)
-                subtypeComponents[0]
-                else NOTHING_TYPE
+    private fun checkMethodIsSubtype(supertype : JSONStatement, subtype: JSONStatement) : Boolean
+    {
+        val supertypeComponents = supertype.components[0].components.toMutableList()
+        val subtypeComponents = subtype.components[0].components.toMutableList()
 
-            if(!isFormerSuperTypeOfLatter(supertypeReturnType,subtypeReturnType))
-                return false
+        val supertypeReturnType = if(supertypeComponents[0].type == SyntaxType.TYPE)
+            supertypeComponents[0]
+        else NOTHING_TYPE
 
-            if(matchMethodComponentList(subtypeComponents,supertypeComponents,false) &&
-                    matchMethodComponentList(supertypeComponents,subtypeComponents,true)
-                && checkUnnamedArgsInSameOrder(supertypeComponents,subtypeComponents))
-                return true
-        }
+        val subtypeReturnType = if(subtypeComponents[0].type == SyntaxType.TYPE)
+            subtypeComponents[0]
+        else NOTHING_TYPE
+
+        if(!isFormerSuperTypeOfLatter(supertypeReturnType,subtypeReturnType))
+            return false
+
+        if(matchMethodComponentList(subtypeComponents,supertypeComponents,false) &&
+            matchMethodComponentList(supertypeComponents,subtypeComponents,true)
+            && checkUnnamedArgsInSameOrder(supertypeComponents,subtypeComponents))
+            return true
 
         return false
     }
