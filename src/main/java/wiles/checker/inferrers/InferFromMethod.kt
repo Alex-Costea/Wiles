@@ -1,17 +1,21 @@
 package wiles.checker.inferrers
 
-import wiles.checker.statics.CheckerConstants.NOTHING_TYPE
-import wiles.checker.services.Inferrer
+import wiles.checker.Checker
 import wiles.checker.data.InferrerDetails
-import wiles.checker.statics.InferrerUtils
 import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.exceptions.InferenceFailException
 import wiles.checker.exceptions.ReturnNotGuaranteedException
+import wiles.checker.services.Inferrer
+import wiles.checker.statics.CheckerConstants.NOTHING_TYPE
+import wiles.checker.statics.InferrerUtils
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 
 class InferFromMethod(details: InferrerDetails) : InferFromStatement(
-    InferrerDetails(details.statement,details.variables.copy(),details.exceptions)
+    InferrerDetails(details.statement,
+        Checker.getVariables(),
+        details.exceptions,
+        additionalVariables = details.variables.copy())
 )
 {
     private val statedType = if(statement.components.getOrNull(0)?.type == SyntaxType.TYPE)
@@ -75,6 +79,7 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
     }
 
     override fun infer() {
+        val declarationVariables = additionalVariables.copy()
         for(component in statement.components)
         {
             if(component.type==SyntaxType.TYPE)
@@ -83,11 +88,13 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
                 break
             assert(component.type == SyntaxType.DECLARATION)
 
-            val inferrer = InferFromDeclaration(InferrerDetails(component, variables, exceptions), alwaysInit = true)
+            val inferrer = InferFromDeclaration(InferrerDetails(component, declarationVariables, exceptions), alwaysInit = true)
             inferrer.infer()
         }
 
-        val inferrer = Inferrer(InferrerDetails(statement.components.last(),variables, exceptions))
+        variables.putAll(declarationVariables.filter { it.key !in additionalVariables })
+
+        val inferrer = Inferrer(InferrerDetails(statement.components.last(), variables, exceptions, additionalVariables))
         inferrer.infer()
 
         findReturnPoints(statement.components.last())

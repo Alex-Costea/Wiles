@@ -4,33 +4,21 @@ import com.fasterxml.jackson.core.util.DefaultPrettyPrinter
 import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.json.JsonMapper
-import wiles.checker.statics.CheckerConstants.BOOLEAN_TYPE
-import wiles.checker.statics.CheckerConstants.NOTHING_TYPE
-import wiles.checker.statics.CheckerConstants.WRITELINE_TYPE
 import wiles.checker.data.InferrerDetails
 import wiles.checker.data.VariableDetails
 import wiles.checker.data.VariableMap
 import wiles.checker.services.AccessOperationIdentifiers
 import wiles.checker.services.Inferrer
+import wiles.checker.statics.CheckerConstants
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Settings
-import wiles.shared.constants.Tokens.FALSE_ID
-import wiles.shared.constants.Tokens.NOTHING_ID
-import wiles.shared.constants.Tokens.TRUE_ID
+import wiles.shared.constants.Tokens
 import java.io.File
 
 class Checker(private val jsonCode : String? = null) {
     val code: JSONStatement = parseSyntaxTreeJson()
-
-    private val variables = VariableMap(hashMapOf(
-            Pair(TRUE_ID, VariableDetails(BOOLEAN_TYPE)),
-            Pair(FALSE_ID, VariableDetails(BOOLEAN_TYPE)),
-            Pair(NOTHING_ID, VariableDetails(NOTHING_TYPE)),
-            Pair("!write", VariableDetails(WRITELINE_TYPE)),
-            Pair("!writeline", VariableDetails(WRITELINE_TYPE))
-        ))
 
     private fun parseSyntaxTreeJson(): JSONStatement {
         if(jsonCode==null)
@@ -63,8 +51,7 @@ class Checker(private val jsonCode : String? = null) {
 
     fun check() : CompilationExceptionsCollection
     {
-        val inferrer = Inferrer(InferrerDetails(code, variables, CompilationExceptionsCollection()))
-        variables.putAll(AccessOperationIdentifiers.getVariables())
+        val inferrer = Inferrer(InferrerDetails(code, getVariables(), CompilationExceptionsCollection()))
         try
         {
             inferrer.infer()
@@ -75,5 +62,21 @@ class Checker(private val jsonCode : String? = null) {
         }
         writeObjectFile()
         return inferrer.exceptions
+    }
+
+    companion object {
+        fun getVariables(): VariableMap {
+            val vars = VariableMap(
+                hashMapOf(
+                    Pair(Tokens.TRUE_ID, VariableDetails(CheckerConstants.BOOLEAN_TYPE)),
+                    Pair(Tokens.FALSE_ID, VariableDetails(CheckerConstants.BOOLEAN_TYPE)),
+                    Pair(Tokens.NOTHING_ID, VariableDetails(CheckerConstants.NOTHING_TYPE)),
+                    Pair("!write", VariableDetails(CheckerConstants.WRITELINE_TYPE)),
+                    Pair("!writeline", VariableDetails(CheckerConstants.WRITELINE_TYPE))
+                )
+            ).copy()
+            vars.putAll(AccessOperationIdentifiers.getVariables())
+            return vars
+        }
     }
 }
