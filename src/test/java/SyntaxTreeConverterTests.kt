@@ -279,6 +279,11 @@ class SyntaxTreeConverterTests {
             "CODE_BLOCK", BREAK_ID)
         assertResults(createExceptions(TokenExpectedException(INVALID_STATEMENT_ERROR, NULL_LOCATION)),
             "CODE_BLOCK", CONTINUE_ID)
+        assertResults(createExceptions(TokenExpectedException(INVALID_STATEMENT_ERROR, NULL_LOCATION),
+                                       TokenExpectedException(INVALID_STATEMENT_ERROR, NULL_LOCATION)),
+            "CODE_BLOCK(WHILE(EXPRESSION(TRUE); CODE_BLOCK(EXPRESSION(METHOD(CODE_BLOCK)); EXPRESSION(METHOD(CODE_BLOCK)))))",
+            WHILE_ID, TRUE_ID, START_BLOCK_ID, NEWLINE_ID, DO_ID, BREAK_ID,
+            NEWLINE_ID, DO_ID, CONTINUE_ID, NEWLINE_ID, END_BLOCK_ID)
     }
 
     @Test

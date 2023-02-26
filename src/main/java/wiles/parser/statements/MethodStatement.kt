@@ -17,7 +17,7 @@ import wiles.shared.constants.Tokens.SEPARATOR_ID
 import wiles.shared.constants.Tokens.START_BLOCK_ID
 
 class MethodStatement(oldContext : Context, private val isTypeDeclaration: Boolean = false)
-    : AbstractStatement(oldContext.setWithinMethod(true)) {
+    : AbstractStatement(oldContext.setWithinMethod(true).setWithinLoop(false)) {
 
     private val parameters: MutableList<DeclarationStatement> = ArrayList()
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
