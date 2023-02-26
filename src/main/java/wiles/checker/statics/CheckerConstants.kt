@@ -20,10 +20,11 @@ object CheckerConstants {
     val ERROR_TYPE = JSONStatement(type = SyntaxType.TYPE, name = Tokens.ERROR_TOKEN)
     val ANYTHING_TYPE = JSONStatement(type = SyntaxType.TYPE, name = ANYTHING_ID)
     val METHOD_CALL_TYPE = JSONStatement(type = SyntaxType.TYPE, name = METHOD_CALL_ID)
+    private val NULLABLE_ANYTHING_TYPE = makeNullable(ANYTHING_TYPE)
 
     val LIST_OF_ANYTHING_TYPE = makeList(ANYTHING_TYPE)
 
-    val LIST_OF_NULLABLE_ANYTHING_TYPE = makeList(makeNullable(ANYTHING_TYPE))
+    val LIST_OF_NULLABLE_ANYTHING_TYPE = makeList(NULLABLE_ANYTHING_TYPE)
 
     val MUTABLE_ANYTHING_INCLUDING_NOTHING_TYPE = makeMutable(makeNullable(ANYTHING_TYPE))
 
@@ -62,6 +63,20 @@ object CheckerConstants {
                     components = mutableListOf(
                         JSONStatement(name = Types.STRING_ID, type = SyntaxType.TYPE),
                         JSONStatement(name = "!text", type = SyntaxType.TOKEN)
+                    )
+                ))
+        ))
+    )
+
+
+    val IGNORE_TYPE = JSONStatement(name = Tokens.METHOD_ID, type = SyntaxType.TYPE,
+        components = mutableListOf(JSONStatement(name = Tokens.METHOD_ID, type = SyntaxType.METHOD,
+            components = mutableListOf(
+                JSONStatement(name = Tokens.NOTHING_ID, type = SyntaxType.TYPE),
+                JSONStatement(name = Tokens.ANON_ARG_ID, type = SyntaxType.DECLARATION,
+                    components = mutableListOf(
+                        NULLABLE_ANYTHING_TYPE,
+                        JSONStatement(name = "!elem", type = SyntaxType.TOKEN)
                     )
                 ))
         ))
