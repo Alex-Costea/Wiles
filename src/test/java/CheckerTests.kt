@@ -3798,6 +3798,87 @@ class CheckerTests {
 }""","CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE LIST; (TYPE INT64); TYPE LIST; (TYPE STRING)); !list; EXPRESSION(TYPE LIST; (TYPE INT64); LIST(TYPE INT64; EXPRESSION(TYPE INT64; #1); EXPRESSION(TYPE INT64; #2); EXPRESSION(TYPE INT64; #3)))); FOR(TYPE EITHER; (TYPE INT64; TYPE STRING); !i; IN; EXPRESSION(TYPE EITHER; (TYPE LIST; (TYPE INT64); TYPE LIST; (TYPE STRING)); !list); FROM; EXPRESSION(TYPE INT64; #0); TO; EXPRESSION(TYPE INT64; #2); CODE_BLOCK(EXPRESSION(TYPE NOTHING; !writeline; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!text; ASSIGN; EXPRESSION(TYPE STRING; !TYPE ANYTHING!as_text; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE EITHER; (TYPE INT64; TYPE STRING); !i))))))))))")
     }
 
+    @Test
+    fun whileTests()
+    {
+        /*
+        while true do
+            let text := "hi!"
+        writeline(text)
+         */
+        checkResult(createExceptions(UnknownIdentifierException(NULL_LOCATION)),"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "WHILE",
+    "components" : [ {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "TRUE",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 7
+        }
+      } ]
+    }, {
+      "type" : "CODE_BLOCK",
+      "components" : [ {
+        "type" : "DECLARATION",
+        "components" : [ {
+          "name" : "!text",
+          "type" : "TOKEN",
+          "location" : {
+            "line" : 2,
+            "lineIndex" : 9
+          }
+        }, {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "@hi!",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 2,
+              "lineIndex" : 17
+            }
+          } ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "type" : "EXPRESSION",
+    "components" : [ {
+      "name" : "!writeline",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 3,
+        "lineIndex" : 1
+      }
+    }, {
+      "name" : "APPLY",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 3,
+        "lineIndex" : 10
+      }
+    }, {
+      "type" : "METHOD_CALL",
+      "components" : [ {
+        "type" : "EXPRESSION",
+        "components" : [ {
+          "name" : "!text",
+          "type" : "TOKEN",
+          "location" : {
+            "line" : 3,
+            "lineIndex" : 11
+          }
+        } ]
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(WHILE(EXPRESSION(TYPE BOOLEAN; TRUE); CODE_BLOCK(DECLARATION(TYPE STRING; !text; EXPRESSION(TYPE STRING; @hi!)))); EXPRESSION(!writeline; APPLY; METHOD_CALL(EXPRESSION(!text))))")
+    }
+
     companion object {
         private const val TYPE = "TYPE "
     }
