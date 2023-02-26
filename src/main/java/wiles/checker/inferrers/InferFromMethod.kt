@@ -6,7 +6,7 @@ import wiles.checker.data.VariableMap
 import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.exceptions.InferenceFailException
 import wiles.checker.exceptions.ReturnNotGuaranteedException
-import wiles.checker.services.Inferrer
+import wiles.checker.services.InferrerService
 import wiles.checker.statics.CheckerConstants.NOTHING_TYPE
 import wiles.checker.statics.InferrerUtils
 import wiles.shared.JSONStatement
@@ -95,7 +95,7 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
 
         variables.putAll(declarationVariables.filter { it.key !in additionalVars })
 
-        val inferrer = Inferrer(InferrerDetails(statement.components.last(), variables, exceptions, additionalVars))
+        val inferrer = InferrerService(InferrerDetails(statement.components.last(), variables, exceptions, additionalVars))
         inferrer.infer()
 
         findReturnPoints(statement.components.last())

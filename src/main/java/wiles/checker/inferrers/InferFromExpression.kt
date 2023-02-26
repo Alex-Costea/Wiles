@@ -6,7 +6,7 @@ import wiles.checker.exceptions.ImportException
 import wiles.checker.exceptions.UnknownIdentifierException
 import wiles.checker.exceptions.WrongOperationException
 import wiles.checker.services.AccessOperationIdentifiers
-import wiles.checker.services.Inferrer
+import wiles.checker.services.InferrerService
 import wiles.checker.statics.CheckerConstants
 import wiles.checker.statics.CheckerConstants.NOTHING_TOKEN
 import wiles.checker.statics.InferrerUtils
@@ -138,13 +138,13 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
 
         if(statement.type in typesList)
         {
-            val inferrer = Inferrer(details)
+            val inferrer = InferrerService(details)
             inferrer.infer()
             exceptions.addAll(inferrer.exceptions)
         }
         else if(statement.components.size==1 && statement.components[0].type in typesList)
         {
-            val inferrer = Inferrer(
+            val inferrer = InferrerService(
                 InferrerDetails(statement.components[0],
                 variables, CompilationExceptionsCollection(), additionalVars)
             )

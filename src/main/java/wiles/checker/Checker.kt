@@ -8,7 +8,7 @@ import wiles.checker.data.InferrerDetails
 import wiles.checker.data.VariableDetails
 import wiles.checker.data.VariableMap
 import wiles.checker.services.AccessOperationIdentifiers
-import wiles.checker.services.Inferrer
+import wiles.checker.services.InferrerService
 import wiles.checker.statics.CheckerConstants
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.JSONStatement
@@ -20,7 +20,7 @@ import java.io.File
 
 class Checker(private val jsonCode : String? = null) {
     val code: JSONStatement = parseSyntaxTreeJson()
-    private val inferrer = Inferrer(InferrerDetails(code, getVariables(), CompilationExceptionsCollection(), VariableMap()))
+    private val inferrer = InferrerService(InferrerDetails(code, getVariables(), CompilationExceptionsCollection(), VariableMap()))
 
 
     private fun parseSyntaxTreeJson(): JSONStatement {

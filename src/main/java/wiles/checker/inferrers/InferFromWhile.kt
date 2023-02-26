@@ -1,0 +1,26 @@
+package wiles.checker.inferrers
+
+import wiles.checker.data.InferrerDetails
+import wiles.checker.exceptions.ConflictingTypeDefinitionException
+import wiles.checker.statics.CheckerConstants.BOOLEAN_TYPE
+import wiles.checker.statics.InferrerUtils
+
+class InferFromWhile(details: InferrerDetails) : InferFromStatement(details) {
+    override fun infer() {
+        val expression = statement.components[0]
+        val inferFromExpression = InferFromExpression(InferrerDetails(expression,
+            variables, exceptions, additionalVars))
+        inferFromExpression.infer()
+
+        val expressionType = statement.components[0].components[0]
+        if(!InferrerUtils.isFormerSuperTypeOfLatter(BOOLEAN_TYPE,expressionType))
+            throw ConflictingTypeDefinitionException(expression.getFirstLocation(),
+                BOOLEAN_TYPE.toString(), expressionType.toString())
+
+        val codeBlock = statement.components[1]
+        val inferFromCodeBlock = InferFromCodeBlock(InferrerDetails(codeBlock,
+            variables, exceptions, additionalVars))
+        inferFromCodeBlock.infer()
+
+    }
+}

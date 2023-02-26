@@ -5,7 +5,7 @@ import wiles.checker.data.VariableDetails
 import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.exceptions.InferenceFailException
 import wiles.checker.exceptions.VariableAlreadyDeclaredException
-import wiles.checker.services.Inferrer
+import wiles.checker.services.InferrerService
 import wiles.checker.statics.CheckerConstants.ERROR_TYPE
 import wiles.checker.statics.CheckerConstants.NOTHING_TYPE
 import wiles.checker.statics.InferrerUtils.checkTypeIsDefined
@@ -36,7 +36,7 @@ class InferFromDeclaration(details: InferrerDetails,
         try
         {
             if (default != null) {
-                val inferrer = Inferrer(InferrerDetails(default, variables, exceptions, additionalVars))
+                val inferrer = InferrerService(InferrerDetails(default, variables, exceptions, additionalVars))
                 inferrer.infer()
                 inferredType = inferrer.getType()
             }

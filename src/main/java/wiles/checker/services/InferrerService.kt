@@ -11,12 +11,12 @@ import wiles.shared.SyntaxType.*
 // Adds types to all expressions
 // Checks correct types when specified
 // Adds error for unknown types (not done in parser!)
-class Inferrer(details: InferrerDetails)
+class InferrerService(details: InferrerDetails)
 {
     val statement = details.statement
     private val variables = details.variables
     val exceptions = details.exceptions
-    val additionalVariables = details.additionalVars
+    private val additionalVariables = details.additionalVars
 
     fun getType(): JSONStatement {
         if(statement.components.getOrNull(0)?.type == TYPE)
@@ -45,7 +45,7 @@ class Inferrer(details: InferrerDetails)
             RETURN -> inferFromStatement = InferFromReturn(details)
             WHEN -> TODO()
             FOR -> TODO()
-            WHILE -> TODO()
+            WHILE -> inferFromStatement = InferFromWhile(details)
 
             //should not appear at all
             null, TOKEN -> throw InternalErrorException("Invalid statement type")
