@@ -5,7 +5,12 @@ import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.statics.CheckerConstants.BOOLEAN_TYPE
 import wiles.checker.statics.InferrerUtils
 
-class InferFromWhile(details: InferrerDetails) : InferFromStatement(details) {
+class InferFromWhile(details: InferrerDetails) : InferFromStatement(
+    InferrerDetails(details.statement,
+        details.variables.copy(),
+        details.exceptions,
+        details.additionalVars)
+) {
     override fun infer() {
         val expression = statement.components[0]
         val inferFromExpression = InferFromExpression(InferrerDetails(expression,

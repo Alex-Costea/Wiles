@@ -40,6 +40,15 @@ object InferrerUtils {
                     return false
                 return true
             }
+            else
+            {
+                for (component in subtype.components)
+                {
+                    if(isFormerSuperTypeOfLatter(NOTHING_TYPE,component))
+                        return false
+                    return true
+                }
+            }
         }
 
         else if(supertype.name == EITHER_ID)
@@ -116,8 +125,7 @@ object InferrerUtils {
 
             if(matchMethodComponentList(subtypeComponents,supertypeComponents,false) &&
                     matchMethodComponentList(supertypeComponents,subtypeComponents,true)
-                && checkUnnamedArgsInSameOrder(supertypeComponents,subtypeComponents)
-            )
+                && checkUnnamedArgsInSameOrder(supertypeComponents,subtypeComponents))
                 return true
         }
 
@@ -238,6 +246,13 @@ object InferrerUtils {
             components = mutableListOf(type.copyRemovingLocation(), NOTHING_TYPE))
     }
 
+    private fun makeEither(types: MutableList<JSONStatement>) : JSONStatement
+    {
+        return JSONStatement(name = EITHER_ID,
+            type = SyntaxType.TYPE,
+            components = types.map { it.copyRemovingLocation() }.toMutableList())
+    }
+
     fun makeMutable(type : JSONStatement) : JSONStatement
     {
         return JSONStatement(name = MUTABLE_ID,
@@ -338,5 +353,24 @@ object InferrerUtils {
         if(statement.name == MUTABLE_ID)
             return unbox(statement.components[0])
         return statement
+    }
+
+    fun getElementTypeFromListType(statement: JSONStatement) : JSONStatement
+    {
+        val newStatement = unbox(statement)
+        if(newStatement.name == LIST_ID)
+            return newStatement.components[0]
+
+        if(newStatement.name == EITHER_ID)
+        {
+            val typesList = mutableListOf<JSONStatement>()
+            for(component in statement.components)
+            {
+                typesList.add(getElementTypeFromListType(component))
+            }
+            return makeEither(typesList)
+        }
+
+        throw InternalErrorException("Couldn't get list's element type")
     }
 }

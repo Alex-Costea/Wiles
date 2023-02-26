@@ -44,7 +44,7 @@ class InferrerService(details: InferrerDetails)
             //others
             RETURN -> inferFromStatement = InferFromReturn(details)
             WHEN -> TODO()
-            FOR -> TODO()
+            FOR -> inferFromStatement = InferFromFor(details)
             WHILE -> inferFromStatement = InferFromWhile(details)
 
             //should not appear at all
