@@ -19,6 +19,8 @@ import java.io.File
 
 class Checker(private val jsonCode : String? = null) {
     val code: JSONStatement = parseSyntaxTreeJson()
+    private val inferrer = Inferrer(InferrerDetails(code, getVariables(), CompilationExceptionsCollection(), VariableMap()))
+
 
     private fun parseSyntaxTreeJson(): JSONStatement {
         if(jsonCode==null)
@@ -37,6 +39,7 @@ class Checker(private val jsonCode : String? = null) {
         {
             removeTypes(component)
         }
+        statement.parsed = inferrer.exceptions.isEmpty()
         return statement
     }
 
@@ -51,15 +54,7 @@ class Checker(private val jsonCode : String? = null) {
 
     fun check() : CompilationExceptionsCollection
     {
-        val inferrer = Inferrer(InferrerDetails(code, getVariables(), CompilationExceptionsCollection(), VariableMap()))
-        try
-        {
-            inferrer.infer()
-        }
-        catch (ex : NotImplementedError)
-        {
-            ex.printStackTrace()
-        }
+        inferrer.infer()
         writeObjectFile()
         return inferrer.exceptions
     }

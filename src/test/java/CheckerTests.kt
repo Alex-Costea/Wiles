@@ -3384,6 +3384,209 @@ class CheckerTests {
 }""","CODE_BLOCK(DECLARATION(!func; EXPRESSION(METHOD(TYPE INT64; CODE_BLOCK(RETURN(EXPRESSION(TYPE STRING; @10)))))))")
     }
 
+    @Test
+    fun closureTest()
+    {
+        /*
+        let create_sum := fun(arg a : int) do
+            yield fun(arg b : int) do
+                yield (import a) + b
+
+        let add_5 := create_sum(5)
+        let number := add_5(5)
+         */
+
+        checkResult(null,"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "!create_sum",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "type" : "METHOD",
+        "components" : [ {
+          "name" : "ANON_ARG",
+          "type" : "DECLARATION",
+          "components" : [ {
+            "name" : "INT64",
+            "type" : "TYPE",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 31
+            }
+          }, {
+            "name" : "!a",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 27
+            }
+          } ]
+        }, {
+          "type" : "CODE_BLOCK",
+          "components" : [ {
+            "type" : "RETURN",
+            "components" : [ {
+              "type" : "EXPRESSION",
+              "components" : [ {
+                "type" : "METHOD",
+                "components" : [ {
+                  "name" : "ANON_ARG",
+                  "type" : "DECLARATION",
+                  "components" : [ {
+                    "name" : "INT64",
+                    "type" : "TYPE",
+                    "location" : {
+                      "line" : 2,
+                      "lineIndex" : 23
+                    }
+                  }, {
+                    "name" : "!b",
+                    "type" : "TOKEN",
+                    "location" : {
+                      "line" : 2,
+                      "lineIndex" : 19
+                    }
+                  } ]
+                }, {
+                  "type" : "CODE_BLOCK",
+                  "components" : [ {
+                    "type" : "RETURN",
+                    "components" : [ {
+                      "type" : "EXPRESSION",
+                      "components" : [ {
+                        "type" : "EXPRESSION",
+                        "components" : [ {
+                          "name" : "IMPORT",
+                          "type" : "TOKEN",
+                          "location" : {
+                            "line" : 3,
+                            "lineIndex" : 16
+                          }
+                        }, {
+                          "name" : "!a",
+                          "type" : "TOKEN",
+                          "location" : {
+                            "line" : 3,
+                            "lineIndex" : 23
+                          }
+                        } ]
+                      }, {
+                        "name" : "PLUS",
+                        "type" : "TOKEN",
+                        "location" : {
+                          "line" : 3,
+                          "lineIndex" : 26
+                        }
+                      }, {
+                        "name" : "!b",
+                        "type" : "TOKEN",
+                        "location" : {
+                          "line" : 3,
+                          "lineIndex" : 28
+                        }
+                      } ]
+                    } ]
+                  } ]
+                } ]
+              } ]
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "!add_5",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 5,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!create_sum",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 5,
+          "lineIndex" : 14
+        }
+      }, {
+        "name" : "APPLY",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 5,
+          "lineIndex" : 24
+        }
+      }, {
+        "type" : "METHOD_CALL",
+        "components" : [ {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "#5",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 5,
+              "lineIndex" : 25
+            }
+          } ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "!number",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 6,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!add_5",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 6,
+          "lineIndex" : 15
+        }
+      }, {
+        "name" : "APPLY",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 6,
+          "lineIndex" : 20
+        }
+      }, {
+        "type" : "METHOD_CALL",
+        "components" : [ {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "#5",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 6,
+              "lineIndex" : 21
+            }
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE METHOD; (METHOD(TYPE INT64; DECLARATION ANON_ARG; (TYPE INT64; !b))); DECLARATION ANON_ARG; (TYPE INT64; !a))); !create_sum; EXPRESSION(TYPE METHOD; (METHOD(TYPE METHOD; (METHOD(TYPE INT64; DECLARATION ANON_ARG; (TYPE INT64; !b))); DECLARATION ANON_ARG; (TYPE INT64; !a))); METHOD(TYPE METHOD; (METHOD(TYPE INT64; DECLARATION ANON_ARG; (TYPE INT64; !b))); DECLARATION ANON_ARG; (TYPE INT64; !a); CODE_BLOCK(RETURN(EXPRESSION(TYPE METHOD; (METHOD(TYPE INT64; DECLARATION ANON_ARG; (TYPE INT64; !b))); METHOD(TYPE INT64; DECLARATION ANON_ARG; (TYPE INT64; !b); CODE_BLOCK(RETURN(EXPRESSION(TYPE INT64; EXPRESSION(TYPE INT64; NOTHING|IMPORT|INT64; !a); INT64|PLUS|INT64; !b)))))))))); DECLARATION(TYPE METHOD; (METHOD(TYPE INT64; DECLARATION ANON_ARG; (TYPE INT64; !b))); !add_5; EXPRESSION(TYPE METHOD; (METHOD(TYPE INT64; DECLARATION ANON_ARG; (TYPE INT64; !b))); !create_sum; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!a; ASSIGN; EXPRESSION(TYPE INT64; #5))))); DECLARATION(TYPE INT64; !number; EXPRESSION(TYPE INT64; !add_5; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!b; ASSIGN; EXPRESSION(TYPE INT64; #5))))))")
+    }
+
     companion object {
         private const val TYPE = "TYPE "
     }
