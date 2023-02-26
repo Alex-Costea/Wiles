@@ -1,15 +1,15 @@
 package wiles.checker.inferrers
 
-import wiles.checker.statics.CheckerConstants.ERROR_TYPE
-import wiles.checker.statics.CheckerConstants.NOTHING_TYPE
-import wiles.checker.services.Inferrer
 import wiles.checker.data.InferrerDetails
-import wiles.checker.statics.InferrerUtils.checkTypeIsDefined
-import wiles.checker.statics.InferrerUtils.isFormerSuperTypeOfLatter
 import wiles.checker.data.VariableDetails
 import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.exceptions.InferenceFailException
 import wiles.checker.exceptions.VariableAlreadyDeclaredException
+import wiles.checker.services.Inferrer
+import wiles.checker.statics.CheckerConstants.ERROR_TYPE
+import wiles.checker.statics.CheckerConstants.NOTHING_TYPE
+import wiles.checker.statics.InferrerUtils.checkTypeIsDefined
+import wiles.checker.statics.InferrerUtils.isFormerSuperTypeOfLatter
 import wiles.shared.AbstractCompilationException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType.TYPE
@@ -36,7 +36,7 @@ class InferFromDeclaration(details: InferrerDetails,
         try
         {
             if (default != null) {
-                val inferrer = Inferrer(InferrerDetails(default,variables, exceptions))
+                val inferrer = Inferrer(InferrerDetails(default, variables, exceptions, additionalVars))
                 inferrer.infer()
                 inferredType = inferrer.getType()
             }
@@ -60,7 +60,7 @@ class InferFromDeclaration(details: InferrerDetails,
 
         if(type != null)
         {
-            InferFromType(InferrerDetails(type, variables, exceptions)).infer()
+            InferFromType(InferrerDetails(type, variables, exceptions, additionalVars)).infer()
             if(inferredType!=null && !isFormerSuperTypeOfLatter(type, inferredType))
                 throw ConflictingTypeDefinitionException(type.location!!,type.toString(),inferredType.toString())
         }

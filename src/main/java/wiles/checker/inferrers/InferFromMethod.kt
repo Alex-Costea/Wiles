@@ -2,6 +2,7 @@ package wiles.checker.inferrers
 
 import wiles.checker.Checker
 import wiles.checker.data.InferrerDetails
+import wiles.checker.data.VariableMap
 import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.exceptions.InferenceFailException
 import wiles.checker.exceptions.ReturnNotGuaranteedException
@@ -15,7 +16,7 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
     InferrerDetails(details.statement,
         Checker.getVariables(),
         details.exceptions,
-        additionalVariables = details.variables.copy())
+        additionalVars = details.variables.copy())
 )
 {
     private val statedType = if(statement.components.getOrNull(0)?.type == SyntaxType.TYPE)
@@ -79,7 +80,7 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
     }
 
     override fun infer() {
-        val declarationVariables = additionalVariables.copy()
+        val declarationVariables = additionalVars.copy()
         for(component in statement.components)
         {
             if(component.type==SyntaxType.TYPE)
@@ -88,13 +89,13 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
                 break
             assert(component.type == SyntaxType.DECLARATION)
 
-            val inferrer = InferFromDeclaration(InferrerDetails(component, declarationVariables, exceptions), alwaysInit = true)
+            val inferrer = InferFromDeclaration(InferrerDetails(component, declarationVariables, exceptions, VariableMap()), alwaysInit = true)
             inferrer.infer()
         }
 
-        variables.putAll(declarationVariables.filter { it.key !in additionalVariables })
+        variables.putAll(declarationVariables.filter { it.key !in additionalVars })
 
-        val inferrer = Inferrer(InferrerDetails(statement.components.last(), variables, exceptions, additionalVariables))
+        val inferrer = Inferrer(InferrerDetails(statement.components.last(), variables, exceptions, additionalVars))
         inferrer.infer()
 
         findReturnPoints(statement.components.last())

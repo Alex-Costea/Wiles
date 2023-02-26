@@ -6,6 +6,7 @@ import wiles.checker.statics.CheckerConstants.BOOLEAN_TYPE
 import wiles.checker.statics.CheckerConstants.DIVIDE_OPERATION
 import wiles.checker.statics.CheckerConstants.DOUBLE_TYPE
 import wiles.checker.statics.CheckerConstants.EQUALS_OPERATION
+import wiles.checker.statics.CheckerConstants.IMPORT_OPERATION
 import wiles.checker.statics.CheckerConstants.INT64_TYPE
 import wiles.checker.statics.CheckerConstants.LARGER_EQUALS_OPERATION
 import wiles.checker.statics.CheckerConstants.LARGER_OPERATION
@@ -123,11 +124,14 @@ object SimpleTypeGenerator {
         Pair(Triple(INT64_TYPE, SMALLER_EQUALS_OPERATION, DOUBLE_TYPE), BOOLEAN_TYPE),
         Pair(Triple(DOUBLE_TYPE, SMALLER_EQUALS_OPERATION, INT64_TYPE), BOOLEAN_TYPE),
         Pair(Triple(DOUBLE_TYPE, SMALLER_EQUALS_OPERATION, DOUBLE_TYPE), BOOLEAN_TYPE),
-    )
+        )
 
     fun getSimpleTypes(triple : Triple<JSONStatement, JSONStatement, JSONStatement>) : JSONStatement?
     {
         val unboxedTriple = Triple(unbox(triple.first), triple.second, unbox(triple.third))
+
+        if(unboxedTriple.second == IMPORT_OPERATION)
+            return unboxedTriple.third.copyRemovingLocation()
 
         if(unboxedTriple.second == CheckerConstants.ELEM_ACCESS_OPERATION)
         {

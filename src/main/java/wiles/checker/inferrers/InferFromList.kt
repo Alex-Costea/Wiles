@@ -1,9 +1,9 @@
 package wiles.checker.inferrers
 
 import wiles.checker.data.InferrerDetails
-import wiles.checker.statics.InferrerUtils
 import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.exceptions.InferenceFailException
+import wiles.checker.statics.InferrerUtils
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
@@ -20,7 +20,7 @@ class InferFromList(details: InferrerDetails) : InferFromStatement(details) {
                 continue
             assert(component.type==SyntaxType.EXPRESSION)
             val inferrer = InferFromExpression(
-                InferrerDetails(statement = component, variables, CompilationExceptionsCollection())
+                InferrerDetails(component, variables, CompilationExceptionsCollection(), additionalVars)
             )
             inferrer.infer()
             val newType = component.components[0]

@@ -52,6 +52,7 @@ object CheckerConstants {
     val ASSIGN_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.ASSIGN_ID)
     val MODIFY_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.MODIFY_ID)
     val MUTABLE_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.MUTABLE_ID)
+    val IMPORT_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.IMPORT_ID)
 
     val WRITELINE_TYPE = JSONStatement(name = Tokens.METHOD_ID, type = SyntaxType.TYPE,
         components = mutableListOf(JSONStatement(name = Tokens.METHOD_ID, type = SyntaxType.METHOD,

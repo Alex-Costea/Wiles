@@ -2,6 +2,10 @@ package wiles.parser.statements
 
 import wiles.parser.builders.Context
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
+import wiles.parser.enums.WhenRemoveToken
+import wiles.shared.AbstractCompilationException
+import wiles.shared.CompilationExceptionsCollection
+import wiles.shared.SyntaxType
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.ANON_ARG_ID
 import wiles.shared.constants.Tokens.DO_ID
@@ -11,10 +15,6 @@ import wiles.shared.constants.Tokens.PAREN_START_ID
 import wiles.shared.constants.Tokens.RIGHT_ARROW_ID
 import wiles.shared.constants.Tokens.SEPARATOR_ID
 import wiles.shared.constants.Tokens.START_BLOCK_ID
-import wiles.shared.CompilationExceptionsCollection
-import wiles.shared.SyntaxType
-import wiles.parser.enums.WhenRemoveToken
-import wiles.shared.AbstractCompilationException
 
 class MethodStatement(oldContext : Context, private val isTypeDeclaration: Boolean = false)
     : AbstractStatement(oldContext.setWithinMethod(true)) {
@@ -53,7 +53,8 @@ class MethodStatement(oldContext : Context, private val isTypeDeclaration: Boole
 
     override fun process(): CompilationExceptionsCollection {
         try {
-            if(transmitter.expectMaybe(tokenOf(DO_ID).or(START_BLOCK_ID).removeWhen(WhenRemoveToken.Never)).isEmpty) {
+            val startWithCodeBlock = transmitter.expectMaybe(tokenOf(DO_ID).or(START_BLOCK_ID).removeWhen(WhenRemoveToken.Never))
+            if(startWithCodeBlock.isEmpty) {
                 if(!isTypeDeclaration)
                     transmitter.expect(tokenOf(METHOD_ID))
 
@@ -72,6 +73,7 @@ class MethodStatement(oldContext : Context, private val isTypeDeclaration: Boole
                     exceptions.addAll(returnType!!.process())
                 }
             }
+            else location = startWithCodeBlock.get().location
             //Read body
             if(!isTypeDeclaration)
                 exceptions.addAll(methodBody.process())

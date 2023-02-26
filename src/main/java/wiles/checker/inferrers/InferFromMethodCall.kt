@@ -1,7 +1,8 @@
 package wiles.checker.inferrers
 
-import wiles.checker.statics.CheckerConstants.METHOD_CALL_TYPE
 import wiles.checker.data.InferrerDetails
+import wiles.checker.statics.CheckerConstants.METHOD_CALL_TYPE
+import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.ASSIGN_ID
 
 class InferFromMethodCall(details: InferrerDetails) : InferFromStatement(details) {
@@ -16,7 +17,9 @@ class InferFromMethodCall(details: InferrerDetails) : InferFromStatement(details
             } else expression
             if(isAssignment)
                 expression.components[0]=expression.components[0].components[0]
-            InferFromExpression(InferrerDetails(expressionToInfer,variables, exceptions)).infer()
+            if(expression.components[0].type==SyntaxType.TYPE)
+                continue
+            InferFromExpression(InferrerDetails(expressionToInfer,variables, exceptions, additionalVars)).infer()
         }
         val type = METHOD_CALL_TYPE.copyRemovingLocation()
         type.components.add(statement.copyRemovingLocation())

@@ -1,10 +1,10 @@
 package wiles.checker.inferrers
 
-import wiles.checker.statics.CheckerConstants.NOTHING_TYPE
-import wiles.checker.services.Inferrer
 import wiles.checker.data.InferrerDetails
-import wiles.checker.statics.InferrerUtils.isFormerSuperTypeOfLatter
 import wiles.checker.exceptions.UnusedExpressionException
+import wiles.checker.services.Inferrer
+import wiles.checker.statics.CheckerConstants.NOTHING_TYPE
+import wiles.checker.statics.InferrerUtils.isFormerSuperTypeOfLatter
 import wiles.shared.AbstractCompilationException
 import wiles.shared.SyntaxType
 
@@ -15,7 +15,7 @@ class InferFromCodeBlock(details: InferrerDetails) : InferFromStatement(details)
         {
             try
             {
-                val inferrer = Inferrer(InferrerDetails(part,variables, exceptions))
+                val inferrer = Inferrer(InferrerDetails(part,variables, exceptions, additionalVars))
                 inferrer.infer()
                 if(part.type== SyntaxType.EXPRESSION && !isFormerSuperTypeOfLatter(NOTHING_TYPE, inferrer.getType()))
                     throw UnusedExpressionException(part.getFirstLocation())

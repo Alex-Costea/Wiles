@@ -1,25 +1,28 @@
 package wiles.checker.inferrers
 
+import wiles.checker.data.InferrerDetails
+import wiles.checker.exceptions.CannotModifyException
+import wiles.checker.exceptions.ImportException
+import wiles.checker.exceptions.UnknownIdentifierException
+import wiles.checker.exceptions.WrongOperationException
+import wiles.checker.services.AccessOperationIdentifiers
+import wiles.checker.services.Inferrer
+import wiles.checker.statics.CheckerConstants
 import wiles.checker.statics.CheckerConstants.NOTHING_TOKEN
+import wiles.checker.statics.InferrerUtils
 import wiles.checker.statics.InferrerUtils.inferTypeFromLiteral
 import wiles.checker.statics.InferrerUtils.makeList
 import wiles.checker.statics.InferrerUtils.makeMethod
 import wiles.checker.statics.InferrerUtils.unbox
 import wiles.checker.statics.SimpleTypeGenerator.getSimpleTypes
-import wiles.checker.statics.CheckerConstants
-import wiles.checker.data.InferrerDetails
-import wiles.checker.exceptions.CannotModifyException
-import wiles.checker.exceptions.UnknownIdentifierException
-import wiles.checker.exceptions.WrongOperationException
-import wiles.checker.services.AccessOperationIdentifiers
-import wiles.checker.services.Inferrer
-import wiles.checker.statics.InferrerUtils
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
+import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.APPLY_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
+import wiles.shared.constants.Tokens.IMPORT_ID
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Types.ANYTHING_ID
@@ -143,7 +146,7 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
         {
             val inferrer = Inferrer(
                 InferrerDetails(statement.components[0],
-                variables, CompilationExceptionsCollection())
+                variables, CompilationExceptionsCollection(), additionalVars)
             )
             inferrer.infer()
             when (statement.components[0].type) {
@@ -201,9 +204,9 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
             val rightIsToken = right.type == SyntaxType.TOKEN
 
             if(!leftIsToken)
-                InferFromExpression(InferrerDetails(left, variables, exceptions)).infer()
+                InferFromExpression(InferrerDetails(left, variables, exceptions, additionalVars)).infer()
             if(!rightIsToken)
-                InferFromExpression(InferrerDetails(right, variables, exceptions)).infer()
+                InferFromExpression(InferrerDetails(right, variables, exceptions, additionalVars)).infer()
 
             val leftType = if(leftIsToken) inferTypeFromLiteral(left,variables)
                 else if(left.type == SyntaxType.EXPRESSION) left.components[0]
@@ -236,7 +239,11 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
                 return
             }
 
-            val rightType = if(rightIsToken) inferTypeFromLiteral(right,variables)
+            val middleIsImport = middle.name == IMPORT_ID
+
+            val rightType = if(rightIsToken && !middleIsImport) inferTypeFromLiteral(right,variables)
+                else if(rightIsToken && IS_IDENTIFIER.test(right.name)) inferTypeFromLiteral(right, additionalVars)
+                else if(middleIsImport) throw ImportException(right.getFirstLocation())
                 else if(right.type == SyntaxType.EXPRESSION) right.components[0]
                 else if(right.type == SyntaxType.LIST) makeList(right.components[0])
                 else if(right.type == SyntaxType.METHOD) makeMethod(right)

@@ -1,7 +1,7 @@
 package wiles.checker.inferrers
 
-import wiles.checker.statics.CheckerConstants.NOTHING_TYPE
 import wiles.checker.data.InferrerDetails
+import wiles.checker.statics.CheckerConstants.NOTHING_TYPE
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
@@ -16,7 +16,7 @@ class InferFromType(details: InferrerDetails) : InferFromStatement(details) {
             {
                 if(component.type == SyntaxType.DECLARATION)
                 {
-                    InferFromDeclaration(InferrerDetails(component, variables.copy(), exceptions)).infer()
+                    InferFromDeclaration(InferrerDetails(component, variables.copy(), exceptions, additionalVars)).infer()
                 }
             }
             method.components.add(0,NOTHING_TYPE)
@@ -25,7 +25,7 @@ class InferFromType(details: InferrerDetails) : InferFromStatement(details) {
         {
             for(component in statement.components)
             {
-                InferFromType(InferrerDetails(component,variables,exceptions)).infer()
+                InferFromType(InferrerDetails(component,variables,exceptions, additionalVars)).infer()
             }
         }
     }

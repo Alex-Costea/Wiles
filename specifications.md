@@ -51,6 +51,7 @@
 - `[]` (used in list literals and type definitions)
 - `,` (separator between elements)
 - `?` (syntactic sugar for `type? = either[type,nothing]`)
+- `import` (get a variable from an outside context)
 
 ### Named parameters
 - Function calling with named parameters by default: `my_function(a := 1, b := 10)`

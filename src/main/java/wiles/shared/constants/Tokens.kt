@@ -74,6 +74,7 @@ object Tokens {
     const val CASE_ID = "CASE"
     const val ANON_ARG_ID = "ANON_ARG"
     const val MUTABLE_ID = "MUTABLE"
+    const val IMPORT_ID = "IMPORT"
 
     private val KEYWORDS: HashMap<String, String> = HashMap()
     private val SYMBOLS: HashMap<String, String> = HashMap()
@@ -88,9 +89,9 @@ object Tokens {
         AND_ID, OR_ID, APPLY_ID, ACCESS_ID, ELEM_ACCESS_ID
     )
     @JvmField
-    val PREFIX_OPERATORS = setOf(UNARY_PLUS_ID, UNARY_MINUS_ID, NOT_ID, MUTABLE_ID)
+    val PREFIX_OPERATORS = setOf(UNARY_PLUS_ID, UNARY_MINUS_ID, NOT_ID, MUTABLE_ID, IMPORT_ID)
     @JvmField
-    val STARTING_OPERATORS = setOf(PLUS_ID, MINUS_ID, NOT_ID, MUTABLE_ID)
+    val STARTING_OPERATORS = setOf(PLUS_ID, MINUS_ID, NOT_ID, MUTABLE_ID, IMPORT_ID)
     @JvmField
     val PARENS = setOf(PAREN_START_ID, PAREN_END_ID, BRACKET_START_ID)
     @JvmField
@@ -130,6 +131,7 @@ object Tokens {
         KEYWORDS[if(!ROMANIAN_MODE) "end" else "sfârșit"] = END_BLOCK_ID
         KEYWORDS[if(!ROMANIAN_MODE) "true" else "adevărat"] = TRUE_ID
         KEYWORDS[if(!ROMANIAN_MODE) "false" else "fals"] = FALSE_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "import" else "importă"] = IMPORT_ID
         KEYWORDS["mut"] = MUTABLE_ID
         KEYWORDS["arg"] = ANON_ARG_ID
 
