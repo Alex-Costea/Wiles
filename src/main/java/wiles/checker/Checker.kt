@@ -15,6 +15,7 @@ import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Settings
 import wiles.shared.constants.Tokens
+import wiles.shared.constants.Tokens.NOTHING_ID
 import java.io.File
 
 class Checker(private val jsonCode : String? = null) {
@@ -28,18 +29,24 @@ class Checker(private val jsonCode : String? = null) {
         return ObjectMapper().readValue(jsonCode, JSONStatement::class.java)
     }
 
-    private fun removeTypes(statement : JSONStatement) : JSONStatement
+    private fun createObject(statement : JSONStatement, topLevel : Boolean = true) : JSONStatement
     {
         if(statement.components.isNotEmpty() && statement.components[0].type == SyntaxType.TYPE
             && ! (statement.type == SyntaxType.EXPRESSION && statement.components.size == 2)
             && statement.type != SyntaxType.METHOD_CALL)
             statement.components.removeFirst()
 
+        if(statement.type == SyntaxType.EXPRESSION && statement.components.size == 2)
+        {
+            statement.components.add(0,NOTHING_TOKEN)
+        }
+
         for(component in statement.components)
         {
-            removeTypes(component)
+            createObject(component,false)
         }
-        statement.parsed = inferrer.exceptions.isEmpty()
+        if(topLevel)
+            statement.parsed = inferrer.exceptions.isEmpty()
         return statement
     }
 
@@ -49,7 +56,7 @@ class Checker(private val jsonCode : String? = null) {
             .disable(MapperFeature.AUTO_DETECT_GETTERS).disable(MapperFeature.AUTO_DETECT_IS_GETTERS).build()
 
         val writer = mapper.writer(DefaultPrettyPrinter())
-        writer.writeValue(File(Settings.OBJECT_FILE), removeTypes(code.copyRemovingLocation()))
+        writer.writeValue(File(Settings.OBJECT_FILE), createObject(code.copyRemovingLocation()))
     }
 
     fun check() : CompilationExceptionsCollection
@@ -65,7 +72,7 @@ class Checker(private val jsonCode : String? = null) {
                 hashMapOf(
                     Pair(Tokens.TRUE_ID, VariableDetails(CheckerConstants.BOOLEAN_TYPE)),
                     Pair(Tokens.FALSE_ID, VariableDetails(CheckerConstants.BOOLEAN_TYPE)),
-                    Pair(Tokens.NOTHING_ID, VariableDetails(CheckerConstants.NOTHING_TYPE)),
+                    Pair(NOTHING_ID, VariableDetails(CheckerConstants.NOTHING_TYPE)),
                     Pair("!write", VariableDetails(CheckerConstants.WRITELINE_TYPE)),
                     Pair("!writeline", VariableDetails(CheckerConstants.WRITELINE_TYPE))
                 )
@@ -73,5 +80,7 @@ class Checker(private val jsonCode : String? = null) {
             vars.putAll(AccessOperationIdentifiers.getVariables())
             return vars
         }
+        private val NOTHING_TOKEN = JSONStatement(name = NOTHING_ID, type = SyntaxType.TOKEN)
     }
+
 }
