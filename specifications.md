@@ -26,12 +26,13 @@
 - Value: `let {var} name {: type} {:= value}` (`var` makes it mutable, type can be inferred)
 - Assignment: `name := value`
 - Simple conditional: `if [condition] [block]`
-- Complex conditional: `when [first clause]; {@other clauses;@} [default clause]`
-    - First clause: `{case} [condition] [block]`
-    - Other clauses: `case [condition] [block]`
-    - Default clause: `default [block]`
-      - Default clause with case: `default case [condition] [block]`
-- Conditional type cast: `with [object] as [type] do [block]` (only executed when of correct type)
+- Complex conditional: `if begin; {@clause;@} end`
+    - Normal clause: `[condition] [block]`
+    - Default clause: `default [block]
+- Simple conditional type cast: `when [object] is [type] do [block]`
+- Complex conditional type cast: `when [object] is begin; {@clause;@} end`
+    - Normal clause: `[type] [block]`
+    - Default clause: `default [block]
 - For loop: `for x {in collection} {from a} {to b} [block]`
 - While loop: `while condition [block]`
 - Code block: `do [operation]` or `begin; {@operation;@} end`
