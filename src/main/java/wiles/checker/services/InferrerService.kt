@@ -43,16 +43,16 @@ class InferrerService(details: InferrerDetails)
 
             //others
             RETURN -> inferFromStatement = InferFromReturn(details)
-            WHEN -> throw InternalErrorException("TODO")
+            WHEN -> inferFromStatement = InferFromWhen(details)
             WITH -> inferFromStatement = InferFromWith(details)
             FOR -> inferFromStatement = InferFromFor(details)
             WHILE -> inferFromStatement = InferFromWhile(details)
 
             //should not appear at all
-            null, TOKEN -> throw InternalErrorException("Invalid statement type")
+            null  -> throw InternalErrorException("Invalid statement type")
 
             //nothing to infer
-            BREAK, CONTINUE -> return
+            BREAK, TOKEN, CONTINUE -> return
         }
         inferFromStatement.infer()
     }

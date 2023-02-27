@@ -55,8 +55,9 @@ class MethodStatement(oldContext : Context, private val isTypeDeclaration: Boole
         try {
             val startWithCodeBlock = transmitter.expectMaybe(tokenOf(DO_ID).or(START_BLOCK_ID).removeWhen(WhenRemoveToken.Never))
             if(startWithCodeBlock.isEmpty) {
-                if(!isTypeDeclaration)
-                    transmitter.expect(tokenOf(METHOD_ID))
+                if(!isTypeDeclaration) {
+                    location = transmitter.expect(tokenOf(METHOD_ID)).location
+                }
 
                 //Params
                 if(!isTypeDeclaration) {
