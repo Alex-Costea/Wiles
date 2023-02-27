@@ -61,12 +61,6 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
         assert(middle.type == SyntaxType.TOKEN)
         assert(right.type == SyntaxType.TYPE)
 
-        if(middle == CheckerConstants.IS_OPERATION)
-            if(InferrerUtils.isFormerSuperTypeOfLatter(left, right)) {
-                operationName="ANYTHING|IS|ANYTHING"
-                return CheckerConstants.BOOLEAN_TYPE
-            }
-
         val leftComponents = createComponents(left,middle.name)
 
         val rightComponents = createComponents(right,middle.name)

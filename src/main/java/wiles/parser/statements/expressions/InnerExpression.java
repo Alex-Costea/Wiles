@@ -14,7 +14,6 @@ public class InnerExpression extends AbstractExpression {
     public InnerExpression(@NotNull Context oldContext) {
         super(oldContext.setWithinInnerExpression(true));
     }
-
     {
         isInner = true;
     }

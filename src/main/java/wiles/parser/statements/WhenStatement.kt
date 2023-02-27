@@ -3,7 +3,7 @@ package wiles.parser.statements
 import wiles.parser.builders.Context
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.enums.WhenRemoveToken
-import wiles.parser.statements.expressions.ConditionExpression
+import wiles.parser.statements.expressions.DefaultExpression
 import wiles.shared.AbstractCompilationException
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.SyntaxType
@@ -65,7 +65,7 @@ class WhenStatement(context: Context) : AbstractStatement(context) {
                     else transmitter.expectMaybe(tokenOf(CASE_ID))
                 }
 
-                condition = ConditionExpression(context)
+                condition = DefaultExpression(context)
                 body = CodeBlockStatement(context)
                 exceptions.addAll(condition.process())
                 exceptions.addAll(body.process())

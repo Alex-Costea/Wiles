@@ -27,7 +27,6 @@
 - Assignment: `name := value`
 - Simple conditional: `if [condition] [block]`
 - Complex conditional: `when [first clause]; {@other clauses;@} [default clause]`
-    - Type casting: `cast value is type [block]`
     - First clause: `{case} [condition] [block]`
     - Other clauses: `case [condition] [block]`
     - Default clause: `default [block]`
