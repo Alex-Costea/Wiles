@@ -13,22 +13,16 @@ import static wiles.shared.constants.Tokens.IS_ID;
 
 public class ConditionExpression extends AbstractExpression{
 
-    protected boolean isAssignment=false;
+    protected boolean isTypeCheck = false;
 
     public ConditionExpression(@NotNull Context oldContext) {
         super(oldContext);
     }
 
     protected void setComponents(@NotNull PrecedenceProcessor precedenceProcessor) {
-        if(isAssignment)
+        if(isTypeCheck)
             this.left = precedenceProcessor.getResult();
         else super.setComponents(precedenceProcessor);
-    }
-
-    @Override
-    protected void checkValid() throws AbstractCompilationException {
-        if(isAssignment)
-            checkLeftIsOneIdentifier();
     }
 
     @Override
@@ -40,7 +34,7 @@ public class ConditionExpression extends AbstractExpression{
             var new_right = new TypeDefinitionStatement(getContext());
             exceptions.addAll(new_right.process());
             right = new_right;
-            isAssignment = true;
+            isTypeCheck = true;
             return true;
         }
         return super.handleToken(token);

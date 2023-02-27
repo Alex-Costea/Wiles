@@ -347,7 +347,7 @@ class CheckerTests {
     @Test
     fun inferFromExpression()
     {
-        checkResult(createExceptions(ImportException(NULL_LOCATION)),"""{
+        checkResult(createExceptions(ExpectedIdentifierException(NULL_LOCATION)),"""{
   "parsed" : true,
   "type" : "CODE_BLOCK",
   "components" : [ {

@@ -9,7 +9,6 @@ import wiles.parser.enums.ExpectNext;
 import wiles.parser.enums.StatementFactoryTypes;
 import wiles.shared.SyntaxType;
 import wiles.shared.AbstractCompilationException;
-import wiles.parser.exceptions.InvalidStatementException;
 import wiles.parser.exceptions.UnexpectedEndException;
 import wiles.parser.services.PrecedenceProcessor;
 import wiles.parser.statements.*;
@@ -82,18 +81,6 @@ public abstract class AbstractExpression extends AbstractStatement {
         } catch (AbstractCompilationException e) {
             return Optional.empty();
         }
-    }
-
-    protected void checkValid() throws AbstractCompilationException {
-        //Nothing to check by default
-    }
-
-    protected final void checkLeftIsOneIdentifier() throws InvalidStatementException {
-        if (left.getComponents().size() != 1)
-            throw new InvalidStatementException(IDENTIFIER_TOO_LONG_ERROR, getFirstLocation());
-        AbstractStatement first = left.getComponents().get(0);
-        if (!(first instanceof TokenStatement) || !IS_IDENTIFIER.test(first.getName()))
-            throw new InvalidStatementException(IDENTIFIER_TOO_LONG_ERROR, getFirstLocation());
     }
 
     @Override
@@ -184,7 +171,6 @@ public abstract class AbstractExpression extends AbstractStatement {
             if (this instanceof InnerExpression && !mainCurrentToken.getContent().equals(PAREN_END_ID))
                 throw new UnexpectedEndException(UNEXPECTED_OPENING_BRACKET_ERROR, transmitter.getLastLocation());
             setComponents(precedenceProcessor);
-            checkValid();
         } catch (AbstractCompilationException ex) {
             exceptions.add(ex);
         }

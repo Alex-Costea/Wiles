@@ -2,29 +2,21 @@ package wiles.parser.statements.expressions;
 
 import org.jetbrains.annotations.NotNull;
 import wiles.parser.builders.Context;
-import wiles.shared.Token;
-import wiles.parser.enums.WhenRemoveToken;
-import wiles.shared.AbstractCompilationException;
 import wiles.parser.services.PrecedenceProcessor;
 import wiles.parser.statements.TokenStatement;
+import wiles.shared.AbstractCompilationException;
+import wiles.shared.Token;
 
 import static wiles.parser.builders.ExpectParamsBuilder.tokenOf;
 import static wiles.shared.constants.Tokens.ASSIGN_ID;
-import static wiles.shared.constants.Tokens.PAREN_END_ID;
 
 public class InsideMethodCallExpression extends AbstractExpression{
 
     protected boolean isAssignment=false;
-    private boolean lastExpression=false;
-
-    public boolean isLastExpression() {
-        return lastExpression;
-    }
 
     public InsideMethodCallExpression(@NotNull Context oldContext) {
         super(oldContext.setWithinInnerExpression(true));
     }
-
     {
         isInner = true;
     }
@@ -33,13 +25,6 @@ public class InsideMethodCallExpression extends AbstractExpression{
         if(isAssignment)
             this.left = precedenceProcessor.getResult();
         else super.setComponents(precedenceProcessor);
-    }
-
-    @Override
-    protected void checkValid() throws AbstractCompilationException {
-        lastExpression = transmitter.expectMaybe(tokenOf(PAREN_END_ID).removeWhen(WhenRemoveToken.Never)).isPresent();
-        if(isAssignment)
-            checkLeftIsOneIdentifier();
     }
 
     @Override

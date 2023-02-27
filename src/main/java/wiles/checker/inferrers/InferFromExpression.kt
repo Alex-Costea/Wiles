@@ -2,7 +2,7 @@ package wiles.checker.inferrers
 
 import wiles.checker.data.InferrerDetails
 import wiles.checker.exceptions.CannotModifyException
-import wiles.checker.exceptions.ImportException
+import wiles.checker.exceptions.ExpectedIdentifierException
 import wiles.checker.exceptions.UnknownIdentifierException
 import wiles.checker.exceptions.WrongOperationException
 import wiles.checker.services.AccessOperationIdentifiers
@@ -243,7 +243,7 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
 
             val rightType = if(rightIsToken && !middleIsImport) inferTypeFromLiteral(right,variables)
                 else if(rightIsToken && IS_IDENTIFIER.test(right.name)) inferTypeFromLiteral(right, additionalVars)
-                else if(middleIsImport) throw ImportException(right.getFirstLocation())
+                else if(middleIsImport) throw ExpectedIdentifierException(right.getFirstLocation())
                 else if(right.type == SyntaxType.EXPRESSION) right.components[0]
                 else if(right.type == SyntaxType.LIST) makeList(right.components[0])
                 else if(right.type == SyntaxType.METHOD) makeMethod(right)

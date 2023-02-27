@@ -1,8 +1,10 @@
 package wiles.checker.inferrers
 
 import wiles.checker.data.InferrerDetails
+import wiles.checker.exceptions.ExpectedIdentifierException
 import wiles.checker.statics.CheckerConstants.METHOD_CALL_TYPE
 import wiles.shared.SyntaxType
+import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.ASSIGN_ID
 
 class InferFromMethodCall(details: InferrerDetails) : InferFromStatement(details) {
@@ -15,8 +17,12 @@ class InferFromMethodCall(details: InferrerDetails) : InferFromStatement(details
                     isAssignment = true
                     expression.components[2]
             } else expression
-            if(isAssignment)
-                expression.components[0]=expression.components[0].components[0]
+            if(isAssignment) {
+                val identifierExpression = expression.components[0].components[0]
+                if (expression.components[0].components.size != 1 || !IS_IDENTIFIER.test(identifierExpression.name))
+                    throw ExpectedIdentifierException(identifierExpression.getFirstLocation())
+                expression.components[0] = identifierExpression
+            }
             if(expression.components[0].type==SyntaxType.TYPE)
                 continue
             InferFromExpression(InferrerDetails(expressionToInfer,variables, exceptions, additionalVars)).infer()

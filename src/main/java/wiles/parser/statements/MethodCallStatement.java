@@ -42,9 +42,7 @@ public class MethodCallStatement extends AbstractStatement{
                 InsideMethodCallExpression newComp = new InsideMethodCallExpression(getContext());
                 exceptions.addAll(newComp.process());
                 components.add(newComp);
-                if (!newComp.isLastExpression())
-                    transmitter.expect(tokenOf(SEPARATOR_ID));
-                else break;
+                if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty()) break;
             }
             transmitter.expect(tokenOf(PAREN_END_ID));
         }
