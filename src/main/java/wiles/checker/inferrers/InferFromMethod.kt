@@ -11,6 +11,7 @@ import wiles.checker.statics.CheckerConstants.NOTHING_TYPE
 import wiles.checker.statics.InferrerUtils
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
+import wiles.shared.constants.Tokens.ELSE_ID
 
 class InferFromMethod(details: InferrerDetails) : InferFromStatement(
     InferrerDetails(details.statement,
@@ -54,13 +55,16 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
             if(component.type==SyntaxType.WHEN || component.type == SyntaxType.WITH)
             {
                 var alwaysReturns = true
+                var hasLast = false
                 for(whenComponent in component.components)
                 {
+                    if(whenComponent.type == SyntaxType.TOKEN && whenComponent.name == ELSE_ID)
+                        hasLast = true
                     if(whenComponent.type!=SyntaxType.CODE_BLOCK)
                         continue
                     alwaysReturns = alwaysReturns && checkAlwaysReturns(whenComponent)
                 }
-                if(alwaysReturns)
+                if(hasLast && alwaysReturns)
                     return true
             }
         }
