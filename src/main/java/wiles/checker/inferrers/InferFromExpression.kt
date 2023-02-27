@@ -191,13 +191,13 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
             if(middle.name == ASSIGN_ID)
             {
                 //Change value of variable
-                if(left.components.size == 1) {
+                if(left.components.size == 1 && IS_IDENTIFIER.test(left.components[0].name)) {
                     val variableName = left.components[0].name
                     if(variables[variableName]?.modifiable != true && variables[variableName]?.initialized != false)
                         throw CannotModifyException(left.getFirstLocation())
                     variables[variableName]?.initialized  = true
                 }
-                else throw CannotModifyException(left.getFirstLocation())
+                else throw ExpectedIdentifierException(left.getFirstLocation())
             }
 
             val leftIsToken = left.type == SyntaxType.TOKEN
