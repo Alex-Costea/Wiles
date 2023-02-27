@@ -25,13 +25,13 @@
 ### Statements
 - Value: `let {var} name {: type} {:= value}` (`var` makes it mutable, type can be inferred)
 - Assignment: `name := value`
-- Simple conditional: `if [condition] {then} [block]`
+- Simple conditional: `if [condition] [block]`
 - Complex conditional: `when [first clause]; {@other clauses;@} [default clause]`
-    - Type casting: `case value is type {then} [block]`
-    - First clause: `{case} [condition] {then} [block]`
-    - Other clauses: `case [condition] {then} [block]`
+    - Type casting: `cast value is type [block]`
+    - First clause: `{case} [condition] [block]`
+    - Other clauses: `case [condition] [block]`
     - Default clause: `default [block]`
-      - Default clause with case: `default case [condition] {then} [block]`
+      - Default clause with case: `default case [condition] [block]`
 - For loop: `for x {in collection} {from a} {to b} [block]`
 - While loop: `while condition [block]`
 - Code block: `do [operation]` or `begin; {@operation;@} end`
