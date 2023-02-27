@@ -34,7 +34,7 @@ import wiles.shared.constants.Types.LIST_ID
 import wiles.shared.constants.Types.METHOD_CALL_ID
 import wiles.shared.constants.Types.STRING_ID
 
-class InferFromExpression(private val details: InferrerDetails) : InferFromStatement(details) {
+class InferFromExpression(details: InferrerDetails) : InferFromStatement(details) {
 
     private lateinit var operationName : String
 
@@ -132,7 +132,8 @@ class InferFromExpression(private val details: InferrerDetails) : InferFromState
 
         if(statement.type in typesList)
         {
-            val inferrer = InferrerService(details)
+            val inferrer = InferrerService(InferrerDetails(
+                statement,variables, CompilationExceptionsCollection(),additionalVars))
             inferrer.infer()
             exceptions.addAll(inferrer.exceptions)
         }

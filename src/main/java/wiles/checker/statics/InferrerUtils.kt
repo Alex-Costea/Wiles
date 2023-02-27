@@ -224,7 +224,8 @@ object InferrerUtils {
             if( variables[name]?.initialized==false)
                 throw UsedBeforeInitializationException(token.location!!)
             return JSONStatement(
-                name = variables[name]?.type?.name ?: throw UnknownIdentifierException(token.location!!),
+                name = variables[name]?.type?.name ?:
+                throw UnknownIdentifierException(token.location!!),
                 type = SyntaxType.TYPE,
                 components = variables[name]!!.type.components.map { it.copyRemovingLocation() }.toMutableList())
         }

@@ -32,6 +32,7 @@ object Main {
         val checker = Checker()
         exceptions.addAll(checker.check())
         printExceptions(exceptions,parser.input)
+        print("After checking: ")
         println(checker.code)
     }
 }
