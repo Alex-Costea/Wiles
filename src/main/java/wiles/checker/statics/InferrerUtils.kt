@@ -378,4 +378,16 @@ object InferrerUtils {
 
         throw InternalErrorException("Couldn't get list's element type")
     }
+
+    fun containsStopStatement( statement: JSONStatement) : Boolean {
+        for (component in statement.components) {
+            if (component.type !in arrayListOf(SyntaxType.WHEN, SyntaxType.FOR, SyntaxType.WITH)) {
+                if (containsStopStatement(component))
+                    return true
+            }
+            if (component.type in arrayListOf(SyntaxType.BREAK, SyntaxType.CONTINUE, SyntaxType.RETURN))
+                return true
+        }
+        return false
+    }
 }

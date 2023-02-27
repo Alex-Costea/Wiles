@@ -7,11 +7,13 @@ import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.services.InferrerService
 import wiles.checker.statics.CheckerConstants.BOOLEAN_TYPE
 import wiles.checker.statics.InferrerUtils
+import wiles.shared.JSONStatement
 
 class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
     override fun infer() {
         val components = statement.components.toMutableList()
         val listOfVariableMaps = mutableListOf<VariableMap>()
+        val codeBlockLists = mutableListOf<JSONStatement>()
         while(components.isNotEmpty())
         {
             val condition = components.removeFirst()
@@ -28,6 +30,7 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
             val newVars = variables.copy()
             InferFromCodeBlock(InferrerDetails(block, newVars, exceptions, additionalVars)).infer()
             listOfVariableMaps.add(newVars)
+            codeBlockLists.add(block)
         }
 
         for(variable in variables.entries)
@@ -37,9 +40,10 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
                 var isInitialized = true
                 for(map in listOfVariableMaps)
                 {
-                    if(!map[variable.key]!!.initialized)
-                    {
-                        isInitialized = false
+                    if(!InferrerUtils.containsStopStatement(codeBlockLists.removeFirst())) {
+                        if (!map[variable.key]!!.initialized) {
+                            isInitialized = false
+                        }
                     }
                 }
                 variables[variable.key]= VariableDetails(variable.value.type,isInitialized,variable.value.modifiable)

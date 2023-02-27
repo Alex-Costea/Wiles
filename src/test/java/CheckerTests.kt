@@ -2919,6 +2919,177 @@ class CheckerTests {
     @Test
     fun methodsTest()
     {
+        /*
+        let func := begin
+            when true do yield 1
+            default do yield 2
+        end
+         */
+        checkResult(null,"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "!func",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "type" : "METHOD",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 13
+        },
+        "components" : [ {
+          "type" : "CODE_BLOCK",
+          "components" : [ {
+            "type" : "WHEN",
+            "components" : [ {
+              "type" : "EXPRESSION",
+              "components" : [ {
+                "name" : "TRUE",
+                "type" : "TOKEN",
+                "location" : {
+                  "line" : 2,
+                  "lineIndex" : 10
+                }
+              } ]
+            }, {
+              "type" : "CODE_BLOCK",
+              "components" : [ {
+                "type" : "RETURN",
+                "components" : [ {
+                  "type" : "EXPRESSION",
+                  "components" : [ {
+                    "name" : "#1",
+                    "type" : "TOKEN",
+                    "location" : {
+                      "line" : 2,
+                      "lineIndex" : 24
+                    }
+                  } ]
+                } ]
+              } ]
+            }, {
+              "name" : "ELSE",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 3,
+                "lineIndex" : 5
+              }
+            }, {
+              "type" : "CODE_BLOCK",
+              "components" : [ {
+                "type" : "RETURN",
+                "components" : [ {
+                  "type" : "EXPRESSION",
+                  "components" : [ {
+                    "name" : "#2",
+                    "type" : "TOKEN",
+                    "location" : {
+                      "line" : 3,
+                      "lineIndex" : 22
+                    }
+                  } ]
+                } ]
+              } ]
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE INT64)); !func; EXPRESSION(TYPE METHOD; (METHOD(TYPE INT64)); METHOD(TYPE INT64; CODE_BLOCK(WHEN(EXPRESSION(TYPE BOOLEAN; TRUE); CODE_BLOCK(RETURN(EXPRESSION(TYPE INT64; #1))); ELSE; CODE_BLOCK(RETURN(EXPRESSION(TYPE INT64; #2)))))))))")
+
+        /*
+        let func := begin
+            when true do yield 1
+            default do nothing
+        end
+         */
+        checkResult(createExceptions(ReturnNotGuaranteedException(NULL_LOCATION)),"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "!func",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "type" : "METHOD",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 13
+        },
+        "components" : [ {
+          "type" : "CODE_BLOCK",
+          "components" : [ {
+            "type" : "WHEN",
+            "components" : [ {
+              "type" : "EXPRESSION",
+              "components" : [ {
+                "name" : "TRUE",
+                "type" : "TOKEN",
+                "location" : {
+                  "line" : 2,
+                  "lineIndex" : 10
+                }
+              } ]
+            }, {
+              "type" : "CODE_BLOCK",
+              "components" : [ {
+                "type" : "RETURN",
+                "components" : [ {
+                  "type" : "EXPRESSION",
+                  "components" : [ {
+                    "name" : "#1",
+                    "type" : "TOKEN",
+                    "location" : {
+                      "line" : 2,
+                      "lineIndex" : 24
+                    }
+                  } ]
+                } ]
+              } ]
+            }, {
+              "name" : "ELSE",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 3,
+                "lineIndex" : 5
+              }
+            }, {
+              "type" : "CODE_BLOCK",
+              "components" : [ {
+                "type" : "EXPRESSION",
+                "components" : [ {
+                  "name" : "NOTHING",
+                  "type" : "TOKEN",
+                  "location" : {
+                    "line" : 3,
+                    "lineIndex" : 16
+                  }
+                } ]
+              } ]
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(DECLARATION(!func; EXPRESSION(METHOD(TYPE INT64; CODE_BLOCK(WHEN(EXPRESSION(TYPE BOOLEAN; TRUE); CODE_BLOCK(RETURN(EXPRESSION(TYPE INT64; #1))); ELSE; CODE_BLOCK(EXPRESSION(TYPE NOTHING; NOTHING))))))))")
+
         checkResult(null,"""{
   "parsed" : true,
   "type" : "CODE_BLOCK",
@@ -3958,6 +4129,301 @@ class CheckerTests {
     } ]
   } ]
 }""","CODE_BLOCK(WHILE(EXPRESSION(TYPE INT64; #1); CODE_BLOCK(EXPRESSION(NOTHING))))")
+    }
+
+    @Test
+    fun whenTests()
+    {
+        /*
+        let func := begin
+            let a : int
+            when 1 > 2 do a := 1
+            default do yield nothing
+            ignore(a)
+            yield nothing
+        end
+         */
+        checkResult(null,"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "!func",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "type" : "METHOD",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 13
+        },
+        "components" : [ {
+          "type" : "CODE_BLOCK",
+          "components" : [ {
+            "type" : "DECLARATION",
+            "components" : [ {
+              "name" : "INT64",
+              "type" : "TYPE",
+              "location" : {
+                "line" : 2,
+                "lineIndex" : 13
+              }
+            }, {
+              "name" : "!a",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 2,
+                "lineIndex" : 9
+              }
+            } ]
+          }, {
+            "type" : "WHEN",
+            "components" : [ {
+              "type" : "EXPRESSION",
+              "components" : [ {
+                "name" : "#1",
+                "type" : "TOKEN",
+                "location" : {
+                  "line" : 3,
+                  "lineIndex" : 10
+                }
+              }, {
+                "name" : "LARGER",
+                "type" : "TOKEN",
+                "location" : {
+                  "line" : 3,
+                  "lineIndex" : 12
+                }
+              }, {
+                "name" : "#2",
+                "type" : "TOKEN",
+                "location" : {
+                  "line" : 3,
+                  "lineIndex" : 14
+                }
+              } ]
+            }, {
+              "type" : "CODE_BLOCK",
+              "components" : [ {
+                "type" : "EXPRESSION",
+                "components" : [ {
+                  "type" : "EXPRESSION",
+                  "components" : [ {
+                    "name" : "!a",
+                    "type" : "TOKEN",
+                    "location" : {
+                      "line" : 3,
+                      "lineIndex" : 19
+                    }
+                  } ]
+                }, {
+                  "name" : "ASSIGN",
+                  "type" : "TOKEN",
+                  "location" : {
+                    "line" : 3,
+                    "lineIndex" : 21
+                  }
+                }, {
+                  "type" : "EXPRESSION",
+                  "components" : [ {
+                    "name" : "#1",
+                    "type" : "TOKEN",
+                    "location" : {
+                      "line" : 3,
+                      "lineIndex" : 24
+                    }
+                  } ]
+                } ]
+              } ]
+            }, {
+              "name" : "ELSE",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 4,
+                "lineIndex" : 5
+              }
+            }, {
+              "type" : "CODE_BLOCK",
+              "components" : [ {
+                "type" : "RETURN",
+                "components" : [ {
+                  "type" : "EXPRESSION",
+                  "components" : [ {
+                    "name" : "NOTHING",
+                    "type" : "TOKEN",
+                    "location" : {
+                      "line" : 4,
+                      "lineIndex" : 22
+                    }
+                  } ]
+                } ]
+              } ]
+            } ]
+          }, {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "!ignore",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 5,
+                "lineIndex" : 5
+              }
+            }, {
+              "name" : "APPLY",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 5,
+                "lineIndex" : 11
+              }
+            }, {
+              "type" : "METHOD_CALL",
+              "components" : [ {
+                "type" : "EXPRESSION",
+                "components" : [ {
+                  "name" : "!a",
+                  "type" : "TOKEN",
+                  "location" : {
+                    "line" : 5,
+                    "lineIndex" : 12
+                  }
+                } ]
+              } ]
+            } ]
+          }, {
+            "type" : "RETURN",
+            "components" : [ {
+              "type" : "EXPRESSION",
+              "components" : [ {
+                "name" : "NOTHING",
+                "type" : "TOKEN",
+                "location" : {
+                  "line" : 6,
+                  "lineIndex" : 11
+                }
+              } ]
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}""", "CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE NOTHING)); !func; EXPRESSION(TYPE METHOD; (METHOD(TYPE NOTHING)); METHOD(TYPE NOTHING; CODE_BLOCK(DECLARATION(TYPE INT64; !a); WHEN(EXPRESSION(TYPE BOOLEAN; #1; INT64|LARGER|INT64; #2); CODE_BLOCK(EXPRESSION(TYPE NOTHING; EXPRESSION(TYPE INT64; !a); INT64|ASSIGN|INT64; EXPRESSION(TYPE INT64; #1))); ELSE; CODE_BLOCK(RETURN(EXPRESSION(TYPE NOTHING; NOTHING)))); EXPRESSION(TYPE NOTHING; !ignore; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE INT64; !a)))); RETURN(EXPRESSION(TYPE NOTHING; NOTHING)))))))")
+    }
+
+    @Test
+    fun withStatementTests()
+    {
+        /*
+        let a : either[text, int] := 2
+        with a as int do
+            ignore(a)
+         */
+        checkResult(null,"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "EITHER",
+      "type" : "TYPE",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 9
+      },
+      "components" : [ {
+        "name" : "STRING",
+        "type" : "TYPE",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 16
+        }
+      }, {
+        "name" : "INT64",
+        "type" : "TYPE",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 22
+        }
+      } ]
+    }, {
+      "name" : "!a",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "#2",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 30
+        }
+      } ]
+    } ]
+  }, {
+    "type" : "WITH",
+    "components" : [ {
+      "name" : "INT64",
+      "type" : "TYPE",
+      "location" : {
+        "line" : 2,
+        "lineIndex" : 11
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!a",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 6
+        }
+      } ]
+    }, {
+      "type" : "CODE_BLOCK",
+      "components" : [ {
+        "type" : "EXPRESSION",
+        "components" : [ {
+          "name" : "!ignore",
+          "type" : "TOKEN",
+          "location" : {
+            "line" : 3,
+            "lineIndex" : 5
+          }
+        }, {
+          "name" : "APPLY",
+          "type" : "TOKEN",
+          "location" : {
+            "line" : 3,
+            "lineIndex" : 11
+          }
+        }, {
+          "type" : "METHOD_CALL",
+          "components" : [ {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "!a",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 3,
+                "lineIndex" : 12
+              }
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE STRING; TYPE INT64); !a; EXPRESSION(TYPE INT64; #2)); WITH(TYPE INT64; EXPRESSION(!a); CODE_BLOCK(EXPRESSION(TYPE NOTHING; !ignore; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE INT64; !a)))))))")
     }
 
     companion object {
