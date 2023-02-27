@@ -80,4 +80,24 @@ object CheckerConstants {
                 ))
         ))
     )
+
+    val MODULO_TYPE = JSONStatement(name = Tokens.METHOD_ID, type = SyntaxType.TYPE,
+        components = mutableListOf(JSONStatement(name = Tokens.METHOD_ID, type = SyntaxType.METHOD,
+            components = mutableListOf(
+                INT64_TYPE,
+                JSONStatement(name = Tokens.ANON_ARG_ID, type = SyntaxType.DECLARATION,
+                    components = mutableListOf(
+                        INT64_TYPE,
+                        JSONStatement(name = "!x", type = SyntaxType.TOKEN)
+                    )
+                ),
+                JSONStatement(name = Tokens.ANON_ARG_ID, type = SyntaxType.DECLARATION,
+                    components = mutableListOf(
+                        INT64_TYPE,
+                        JSONStatement(name = "!y", type = SyntaxType.TOKEN)
+                    )
+                )
+            )
+        ))
+    )
 }
