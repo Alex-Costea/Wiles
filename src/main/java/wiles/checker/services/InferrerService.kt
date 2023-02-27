@@ -44,7 +44,7 @@ class InferrerService(details: InferrerDetails)
             //others
             RETURN -> inferFromStatement = InferFromReturn(details)
             WHEN -> throw InternalErrorException("TODO")
-            WITH -> throw InternalErrorException("TODO")
+            WITH -> inferFromStatement = InferFromWith(details)
             FOR -> inferFromStatement = InferFromFor(details)
             WHILE -> inferFromStatement = InferFromWhile(details)
 

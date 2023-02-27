@@ -51,7 +51,7 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
                 continue
             if(component.type==SyntaxType.RETURN)
                 return true
-            if(component.type==SyntaxType.WHEN)
+            if(component.type==SyntaxType.WHEN || component.type == SyntaxType.WITH)
             {
                 var alwaysReturns = true
                 for(whenComponent in component.components)
