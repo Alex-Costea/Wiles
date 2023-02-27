@@ -28,11 +28,11 @@
 - Simple conditional: `if [condition] [block]`
 - Complex conditional: `if begin; {@clause;@} end`
     - Normal clause: `[condition] [block]`
-    - Default clause: `default [block]
+    - Default clause: `default [block]`
 - Simple conditional type cast: `when [object] is [type] do [block]`
 - Complex conditional type cast: `when [object] is begin; {@clause;@} end`
     - Normal clause: `[type] [block]`
-    - Default clause: `default [block]
+    - Default clause: `default [block]`
 - For loop: `for x {in collection} {from a} {to b} [block]`
 - While loop: `while condition [block]`
 - Code block: `do [operation]` or `begin; {@operation;@} end`
