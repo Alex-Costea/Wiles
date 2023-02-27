@@ -10,8 +10,15 @@ import wiles.shared.constants.ErrorMessages.STRING_UNFINISHED_ERROR
 import wiles.shared.constants.Settings.DEBUG
 import wiles.shared.constants.Settings.MAX_SYMBOL_LENGTH
 import wiles.shared.constants.Tokens.ACCESS_ID
+import wiles.shared.constants.Tokens.BREAK_ID
 import wiles.shared.constants.Tokens.DO_ID
 import wiles.shared.constants.Tokens.ELEM_ACCESS_ID
+import wiles.shared.constants.Tokens.END_BLOCK_ID
+import wiles.shared.constants.Tokens.NEWLINE_ID
+import wiles.shared.constants.Tokens.NOT_ID
+import wiles.shared.constants.Tokens.PAREN_END_ID
+import wiles.shared.constants.Tokens.TRUE_ID
+import wiles.shared.constants.Tokens.WHILE_ID
 import wiles.shared.constants.Utils.NULL_LOCATION
 import java.util.*
 
@@ -99,6 +106,16 @@ class TokenConverterTests {
         tokenConverterEquals("2ab", arrayOf("#2", "!ab"))
         tokenConverterEquals("français", arrayOf("!français"))
         tokenConverterEquals("日本語", arrayOf("!日本語"))
-        tokenConverterEquals("i do not stop the end", arrayOf("!i", DO_ID, "NOT", "BREAK", "!the", "END_BLOCK"))
+        tokenConverterEquals("i do not stop the end", arrayOf("!i", DO_ID, NOT_ID, BREAK_ID, "!the", END_BLOCK_ID))
+    }
+
+    @Test
+    fun whitespaceTest()
+    {
+        tokenConverterEquals("while\ttrue do\n" +
+                "\t\twriteline(\t\"\thi!\\\n" +
+                "what's up?\") #this is a multi line \\\n" +
+                "comment", arrayOf(WHILE_ID, TRUE_ID, DO_ID, NEWLINE_ID, "!writeline", "PAREN_START", "@\thi!\n" +
+                "what's up?", PAREN_END_ID))
     }
 }

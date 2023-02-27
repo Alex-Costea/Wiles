@@ -63,7 +63,7 @@ public class InputToTokensConverter {
                         addNewLine();
                         continue; // backslash followed by newline is ignored
                     }
-                    if (!id.equals(Tokens.SPACE_ID))
+                    if (!id.isBlank())
                         tokens.add(createToken(id));
                     if (id.equals(Tokens.NEWLINE_ID))
                         addNewLine();
@@ -91,7 +91,7 @@ public class InputToTokensConverter {
                         currentIndex--;
                     break;
                 }
-            } else if (arrayChars[currentIndex] != ' ') {
+            } else if (!Character.isWhitespace(arrayChars[currentIndex])) {
                 lastNonSpaceCharacterIndex = currentIndex;
                 lastNonSpaceCharacter = arrayChars[currentIndex];
             }
@@ -167,14 +167,15 @@ public class InputToTokensConverter {
                 operatorFoundIndex = currentIndex;
             }
             currentIndex++;
-            if (currentIndex == arrayChars.length || arrayChars[currentIndex] == ' ' || arrayChars[currentIndex] == '\n')
+            if (Character.isWhitespace(arrayChars[currentIndex-1]) ||
+                    currentIndex == arrayChars.length ||
+                    arrayChars[currentIndex] == '\n')
                 break;
         }
         index = operatorFoundIndex;
         if (token == null) {
             index = currentIndex - 1;
             token = sb.toString();
-            //throw new UnknownTokenException(sb.toString(), line, getIndexOnCurrentLine());
         }
         return token;
     }

@@ -15,7 +15,6 @@ object Tokens {
     const val ERROR_TOKEN = "ERROR_TOKEN"
     const val START_BLOCK_ID = "START_BLOCK"
     const val END_BLOCK_ID = "END_BLOCK"
-    const val SPACE_ID = "SPACE"
     const val NEWLINE_ID = "NEWLINE"
     const val PAREN_START_ID = "PAREN_START"
     const val PAREN_END_ID = "PAREN_END"
@@ -159,7 +158,6 @@ object Tokens {
         SYMBOLS[";"] = TERMINATOR_ID
         SYMBOLS["->"] = RIGHT_ARROW_ID
         SYMBOLS["?"] = MAYBE_ID
-        SYMBOLS[" "] = SPACE_ID
         SYMBOLS["" + CONTINUE_LINE] = CONTINUE_LINE_ID
         SYMBOLS["\n"] = NEWLINE_ID
         if (DEBUG) {
