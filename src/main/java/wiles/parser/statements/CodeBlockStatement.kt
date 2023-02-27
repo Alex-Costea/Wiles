@@ -5,18 +5,18 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import wiles.parser.builders.Context
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.builders.StatementFactory
+import wiles.parser.enums.StatementFactoryTypes
+import wiles.parser.enums.WhenRemoveToken
+import wiles.parser.exceptions.UnexpectedEndException
+import wiles.shared.AbstractCompilationException
+import wiles.shared.CompilationExceptionsCollection
+import wiles.shared.SyntaxType
 import wiles.shared.constants.Predicates.EXPECT_TERMINATOR
 import wiles.shared.constants.Predicates.EXPECT_TERMINATOR_DONT_REMOVE
 import wiles.shared.constants.Predicates.READ_REST_OF_LINE
 import wiles.shared.constants.Tokens.DO_ID
 import wiles.shared.constants.Tokens.END_BLOCK_ID
 import wiles.shared.constants.Tokens.START_BLOCK_ID
-import wiles.shared.CompilationExceptionsCollection
-import wiles.parser.enums.StatementFactoryTypes
-import wiles.shared.SyntaxType
-import wiles.parser.enums.WhenRemoveToken
-import wiles.shared.AbstractCompilationException
-import wiles.parser.exceptions.UnexpectedEndException
 
 class CodeBlockStatement(context: Context) : AbstractStatement(context) {
     companion object{
@@ -29,6 +29,7 @@ class CodeBlockStatement(context: Context) : AbstractStatement(context) {
             .addType(StatementFactoryTypes.BREAK_STATEMENT)
             .addType(StatementFactoryTypes.RETURN_STATEMENT)
             .addType(StatementFactoryTypes.CONTINUE_STATEMENT)
+            .addType(StatementFactoryTypes.WITH_STATEMENT)
     }
 
     private val components: MutableList<AbstractStatement> = ArrayList()

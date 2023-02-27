@@ -73,6 +73,8 @@ object Tokens {
     const val ANON_ARG_ID = "ANON_ARG"
     const val MUTABLE_ID = "MUTABLE"
     const val IMPORT_ID = "IMPORT"
+    const val WITH_ID = "WITH"
+    const val AS_ID = "AS"
 
     private val KEYWORDS: HashMap<String, String> = HashMap()
     private val SYMBOLS: HashMap<String, String> = HashMap()
@@ -98,7 +100,7 @@ object Tokens {
 
     @JvmField
     val NEW_STATEMENT_START_KEYWORDS = setOf(
-        NOTHING_ID, DECLARE_ID, WHEN_ID, CASE_ID, ELSE_ID, CONTINUE_ID, MODIFY_ID,
+        NOTHING_ID, DECLARE_ID, WHEN_ID, CASE_ID, ELSE_ID, CONTINUE_ID, MODIFY_ID, AS_ID, WITH_ID,
         RETURN_ID, WHILE_ID, BREAK_ID, FOR_ID, DO_ID, START_BLOCK_ID, END_BLOCK_ID, BRACKET_END_ID, PAREN_END_ID,
         SEPARATOR_ID, IN_ID, FROM_ID, TO_ID, ASSIGN_ID, TERMINATOR_ID, NEWLINE_ID, IF_ID
     )
@@ -129,6 +131,8 @@ object Tokens {
         KEYWORDS[if(!ROMANIAN_MODE) "true" else "adevărat"] = TRUE_ID
         KEYWORDS[if(!ROMANIAN_MODE) "false" else "fals"] = FALSE_ID
         KEYWORDS[if(!ROMANIAN_MODE) "import" else "importă"] = IMPORT_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "with" else "cu"] = WITH_ID
+        KEYWORDS[if(!ROMANIAN_MODE) "as" else "drept"] = AS_ID
         KEYWORDS["mut"] = MUTABLE_ID
         KEYWORDS["arg"] = ANON_ARG_ID
 

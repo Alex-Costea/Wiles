@@ -31,6 +31,7 @@
     - Other clauses: `case [condition] [block]`
     - Default clause: `default [block]`
       - Default clause with case: `default case [condition] [block]`
+- Conditional type cast: `with [object] as [type] do [block]` (only executed when of correct type)
 - For loop: `for x {in collection} {from a} {to b} [block]`
 - While loop: `while condition [block]`
 - Code block: `do [operation]` or `begin; {@operation;@} end`
