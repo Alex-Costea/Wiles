@@ -1,12 +1,12 @@
 package wiles.checker.inferrers
 
 import wiles.checker.data.InferrerDetails
-import wiles.checker.data.VariableDetails
 import wiles.checker.data.VariableMap
 import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.services.InferrerService
 import wiles.checker.statics.CheckerConstants.BOOLEAN_TYPE
 import wiles.checker.statics.InferrerUtils
+import wiles.checker.statics.InferrerUtils.checkIsInitialized
 import wiles.shared.JSONStatement
 
 class InferFromIf(details: InferrerDetails) : InferFromStatement(details) {
@@ -33,25 +33,6 @@ class InferFromIf(details: InferrerDetails) : InferFromStatement(details) {
             codeBlockLists.add(block)
         }
 
-        for(variable in variables.entries)
-        {
-            if(!variable.value.initialized)
-            {
-                var isInitialized : Boolean? = null
-                for(map in listOfVariableMaps)
-                {
-                    if(!InferrerUtils.containsStopStatement(codeBlockLists.removeFirst())) {
-                        isInitialized = true
-                        if (!map[variable.key]!!.initialized) {
-                            isInitialized = false
-                            break
-                        }
-                    }
-                }
-                variables[variable.key]= VariableDetails(variable.value.type,
-                    isInitialized?:false,
-                    variable.value.modifiable)
-            }
-        }
+        checkIsInitialized(variables, listOfVariableMaps, codeBlockLists)
     }
 }

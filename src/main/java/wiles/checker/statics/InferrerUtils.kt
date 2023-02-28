@@ -1,6 +1,7 @@
 package wiles.checker.statics
 
 import wiles.checker.data.VariableDetails
+import wiles.checker.data.VariableMap
 import wiles.checker.exceptions.*
 import wiles.checker.statics.CheckerConstants.NOTHING_TYPE
 import wiles.shared.InternalErrorException
@@ -384,7 +385,7 @@ object InferrerUtils {
         throw InternalErrorException("Couldn't get list's element type")
     }
 
-    fun containsStopStatement(statement: JSONStatement) : Boolean {
+    private fun containsStopStatement(statement: JSONStatement) : Boolean {
         for (component in statement.components) {
             if (component.type !in arrayListOf(SyntaxType.IF, SyntaxType.FOR, SyntaxType.WHEN)) {
                 if (containsStopStatement(component))
@@ -419,5 +420,34 @@ object InferrerUtils {
             }
         }
         return newComponents
+    }
+
+    fun checkIsInitialized(
+        variables: HashMap<String, VariableDetails>,
+        listOfVariableMaps: MutableList<VariableMap>,
+        codeBlockLists: MutableList<JSONStatement>,
+        hasDefault : Boolean = true
+    )
+    {
+        for(variable in variables.entries)
+        {
+            if(!variable.value.initialized)
+            {
+                var isInitialized = true
+                var atLeastOne = false
+                for(map in listOfVariableMaps)
+                {
+                    if(containsStopStatement(codeBlockLists.removeFirst())) continue
+                    atLeastOne = true
+                    if (!map[variable.key]!!.initialized) {
+                        isInitialized = false
+                        break
+                    }
+                }
+                variables[variable.key]= VariableDetails(variable.value.type,
+                    isInitialized && atLeastOne,
+                    variable.value.modifiable)
+            }
+        }
     }
 }

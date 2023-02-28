@@ -2,37 +2,32 @@ package wiles.checker.inferrers
 
 import wiles.checker.data.InferrerDetails
 import wiles.checker.data.VariableDetails
+import wiles.checker.data.VariableMap
 import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.exceptions.ExpectedIdentifierException
 import wiles.checker.exceptions.TypesExhaustedException
 import wiles.checker.exceptions.UnknownIdentifierException
 import wiles.checker.statics.InferrerUtils
+import wiles.checker.statics.InferrerUtils.checkIsInitialized
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
-import wiles.shared.constants.Types
+import wiles.shared.constants.Types.EITHER_ID
 
-class InferFromWhen(details: InferrerDetails) : InferFromStatement(
-    InferrerDetails(
-        statement = details.statement,
-        variables = details.variables.copy(),
-        exceptions = details.exceptions,
-        additionalVars = details.additionalVars
-)
-) {
+class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
 
     private fun getFormerTypeMinusLatterType(former: JSONStatement, latter : JSONStatement) : JSONStatement?
     {
         assert(InferrerUtils.isFormerSuperTypeOfLatter(former, latter))
         val unboxedFormer = InferrerUtils.unbox(former)
 
-        if(unboxedFormer.name == Types.EITHER_ID && unboxedFormer.components.size==0)
+        if(unboxedFormer.name == EITHER_ID && unboxedFormer.components.size==0)
             return null
 
         if(InferrerUtils.isFormerSuperTypeOfLatter(latter, unboxedFormer))
-            return JSONStatement(name = Types.EITHER_ID, type = SyntaxType.TYPE)
+            return JSONStatement(name = EITHER_ID, type = SyntaxType.TYPE)
 
-        if(unboxedFormer.name == Types.EITHER_ID)
+        if(unboxedFormer.name == EITHER_ID)
         {
             val components = InferrerUtils.createComponents(unboxedFormer).toMutableList()
             var i = 0
@@ -46,9 +41,9 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(
             }
 
             return when (components.size) {
-                0 -> JSONStatement(name = Types.EITHER_ID, type = SyntaxType.TYPE)
+                0 -> JSONStatement(name = EITHER_ID, type = SyntaxType.TYPE)
                 1 -> components[0].copyRemovingLocation()
-                else -> JSONStatement(name = Types.EITHER_ID, type = SyntaxType.TYPE, components = components)
+                else -> JSONStatement(name = EITHER_ID, type = SyntaxType.TYPE, components = components)
             }
         }
         return unboxedFormer.copyRemovingLocation()
@@ -56,6 +51,8 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(
 
     override fun infer() {
         val expression = statement.components.first()
+        val listOfVariableMaps = mutableListOf<VariableMap>()
+        val codeBlockLists = mutableListOf<JSONStatement>()
         val location = expression.getFirstLocation()
         val name = expression.components[0].name
         if(expression.components.size != 1 || !IS_IDENTIFIER.test(name))
@@ -98,8 +95,14 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(
                 modifiable = variableDetails.modifiable
             )
 
-            InferFromCodeBlock(InferrerDetails(components.removeFirst(), newVariables,
+            val block = components.removeFirst()
+            InferFromCodeBlock(InferrerDetails(block, newVariables,
                 exceptions, additionalVars)).infer()
+            listOfVariableMaps.add(newVariables)
+            codeBlockLists.add(block)
         }
+
+
+        checkIsInitialized(variables, listOfVariableMaps, codeBlockLists)
     }
 }
