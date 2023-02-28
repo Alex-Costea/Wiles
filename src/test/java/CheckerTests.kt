@@ -2921,7 +2921,7 @@ class CheckerTests {
     {
         /*
         let func := begin
-            when true do yield 1
+            if true do yield 1
             default do yield 2
         end
          */
@@ -2948,7 +2948,7 @@ class CheckerTests {
         "components" : [ {
           "type" : "CODE_BLOCK",
           "components" : [ {
-            "type" : "WHEN",
+            "type" : "IF",
             "components" : [ {
               "type" : "EXPRESSION",
               "components" : [ {
@@ -3004,13 +3004,14 @@ class CheckerTests {
       } ]
     } ]
   } ]
-}""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE INT64)); !func; EXPRESSION(TYPE METHOD; (METHOD(TYPE INT64)); METHOD(TYPE INT64; CODE_BLOCK(WHEN(EXPRESSION(TYPE BOOLEAN; TRUE); CODE_BLOCK(RETURN(EXPRESSION(TYPE INT64; #1))); ELSE; CODE_BLOCK(RETURN(EXPRESSION(TYPE INT64; #2)))))))))")
+}""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE INT64)); !func; EXPRESSION(TYPE METHOD; (METHOD(TYPE INT64)); METHOD(TYPE INT64; CODE_BLOCK(IF(EXPRESSION(TYPE BOOLEAN; TRUE); CODE_BLOCK(RETURN(EXPRESSION(TYPE INT64; #1))); ELSE; CODE_BLOCK(RETURN(EXPRESSION(TYPE INT64; #2)))))))))")
 
         /*
-        let func := begin
-            when true do yield 1
-            default do nothing
-        end
+        let func := do
+            if begin
+                true do yield 1
+                default do nothing
+            end
          */
         checkResult(createExceptions(ReturnNotGuaranteedException(NULL_LOCATION)),"""{
   "parsed" : true,
@@ -3035,7 +3036,7 @@ class CheckerTests {
         "components" : [ {
           "type" : "CODE_BLOCK",
           "components" : [ {
-            "type" : "WHEN",
+            "type" : "IF",
             "components" : [ {
               "type" : "EXPRESSION",
               "components" : [ {
@@ -3088,7 +3089,7 @@ class CheckerTests {
       } ]
     } ]
   } ]
-}""","CODE_BLOCK(DECLARATION(!func; EXPRESSION(METHOD(TYPE INT64; CODE_BLOCK(WHEN(EXPRESSION(TYPE BOOLEAN; TRUE); CODE_BLOCK(RETURN(EXPRESSION(TYPE INT64; #1))); ELSE; CODE_BLOCK(EXPRESSION(TYPE NOTHING; NOTHING))))))))")
+}""","CODE_BLOCK(DECLARATION(!func; EXPRESSION(METHOD(TYPE INT64; CODE_BLOCK(IF(EXPRESSION(TYPE BOOLEAN; TRUE); CODE_BLOCK(RETURN(EXPRESSION(TYPE INT64; #1))); ELSE; CODE_BLOCK(EXPRESSION(TYPE NOTHING; NOTHING))))))))")
 
         checkResult(null,"""{
   "parsed" : true,
@@ -4132,13 +4133,15 @@ class CheckerTests {
     }
 
     @Test
-    fun whenTests()
+    fun ifTests()
     {
         /*
         let func := begin
             let a : int
-            when 1 > 2 do a := 1
-            default do yield nothing
+            if begin
+                1 > 2 do a := 1
+                default do yield nothing
+            end
             ignore(a)
             yield nothing
         end
@@ -4183,7 +4186,7 @@ class CheckerTests {
               }
             } ]
           }, {
-            "type" : "WHEN",
+            "type" : "IF",
             "components" : [ {
               "type" : "EXPRESSION",
               "components" : [ {
@@ -4313,7 +4316,7 @@ class CheckerTests {
       } ]
     } ]
   } ]
-}""", "CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE NOTHING)); !func; EXPRESSION(TYPE METHOD; (METHOD(TYPE NOTHING)); METHOD(TYPE NOTHING; CODE_BLOCK(DECLARATION(TYPE INT64; !a); WHEN(EXPRESSION(TYPE BOOLEAN; #1; INT64|LARGER|INT64; #2); CODE_BLOCK(EXPRESSION(TYPE NOTHING; EXPRESSION(TYPE INT64; !a); INT64|ASSIGN|INT64; EXPRESSION(TYPE INT64; #1))); ELSE; CODE_BLOCK(RETURN(EXPRESSION(TYPE NOTHING; NOTHING)))); EXPRESSION(TYPE NOTHING; !ignore; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE INT64; !a)))); RETURN(EXPRESSION(TYPE NOTHING; NOTHING)))))))")
+}""", "CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE NOTHING)); !func; EXPRESSION(TYPE METHOD; (METHOD(TYPE NOTHING)); METHOD(TYPE NOTHING; CODE_BLOCK(DECLARATION(TYPE INT64; !a); IF(EXPRESSION(TYPE BOOLEAN; #1; INT64|LARGER|INT64; #2); CODE_BLOCK(EXPRESSION(TYPE NOTHING; EXPRESSION(TYPE INT64; !a); INT64|ASSIGN|INT64; EXPRESSION(TYPE INT64; #1))); ELSE; CODE_BLOCK(RETURN(EXPRESSION(TYPE NOTHING; NOTHING)))); EXPRESSION(TYPE NOTHING; !ignore; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE INT64; !a)))); RETURN(EXPRESSION(TYPE NOTHING; NOTHING)))))))")
     }
 
     @Test

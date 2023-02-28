@@ -1,12 +1,14 @@
 package wiles.shared.constants
 
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
+import wiles.parser.enums.WhenRemoveToken
 import wiles.shared.constants.ErrorMessages.EXPRESSION_EXPECTED_ERROR
 import wiles.shared.constants.ErrorMessages.INTERNAL_ERROR
 import wiles.shared.constants.ErrorMessages.INVALID_EXPRESSION_ERROR
 import wiles.shared.constants.Tokens.BRACKET_START_ID
 import wiles.shared.constants.Tokens.DO_ID
 import wiles.shared.constants.Tokens.INFIX_OPERATORS
+import wiles.shared.constants.Tokens.KEYWORD_LITERALS
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.Tokens.NEWLINE_ID
 import wiles.shared.constants.Tokens.NEW_STATEMENT_START_KEYWORDS
@@ -15,9 +17,6 @@ import wiles.shared.constants.Tokens.PAREN_START_ID
 import wiles.shared.constants.Tokens.STARTING_OPERATORS
 import wiles.shared.constants.Tokens.START_BLOCK_ID
 import wiles.shared.constants.Tokens.TERMINATORS
-import wiles.shared.constants.Tokens.WHEN_ID
-import wiles.parser.enums.WhenRemoveToken
-import wiles.shared.constants.Tokens.KEYWORD_LITERALS
 import java.util.function.Predicate
 
 object Predicates {
@@ -34,7 +33,7 @@ object Predicates {
 
     @JvmField
     val STARTS_AS_TOKEN = Predicate { content : String ->
-        IS_LITERAL.test(content) || PARENS.contains(content) || content == DO_ID || content == WHEN_ID
+        IS_LITERAL.test(content) || PARENS.contains(content) || content == DO_ID
                 || content == START_BLOCK_ID || STARTING_OPERATORS.contains(content) || content == METHOD_ID }
 
     @JvmField
@@ -63,13 +62,7 @@ object Predicates {
         .withErrorMessage(INTERNAL_ERROR).removeWhen(WhenRemoveToken.WhenFound).freeze()
 
     @JvmField
-    val START_OF_EXPRESSION = tokenOf(IS_CONTAINED_IN(STARTING_OPERATORS)).or(IS_LITERAL).or(WHEN_ID)
-        .or(PAREN_START_ID).or(BRACKET_START_ID).or(METHOD_ID).or(DO_ID).or(START_BLOCK_ID)
-        .withErrorMessage(EXPRESSION_EXPECTED_ERROR).removeWhen(WhenRemoveToken.Never).freeze()
-
-
-    @JvmField
-    val START_OF_TOP_LEVEL_EXPRESSION = tokenOf(IS_CONTAINED_IN(STARTING_OPERATORS)).or(IS_LITERAL)
+    val START_OF_EXPRESSION = tokenOf(IS_CONTAINED_IN(STARTING_OPERATORS)).or(IS_LITERAL)
         .or(PAREN_START_ID).or(BRACKET_START_ID).or(METHOD_ID).or(DO_ID).or(START_BLOCK_ID)
         .withErrorMessage(EXPRESSION_EXPECTED_ERROR).removeWhen(WhenRemoveToken.Never).freeze()
 

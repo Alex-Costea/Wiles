@@ -14,7 +14,7 @@ import wiles.shared.constants.ErrorMessages.INTERNAL_ERROR
 import wiles.shared.constants.ErrorMessages.INVALID_STATEMENT_ERROR
 import wiles.shared.constants.ErrorMessages.NOT_YET_IMPLEMENTED_ERROR
 import wiles.shared.constants.Predicates.ANYTHING
-import wiles.shared.constants.Predicates.START_OF_TOP_LEVEL_EXPRESSION
+import wiles.shared.constants.Predicates.START_OF_EXPRESSION
 import wiles.shared.constants.Tokens.BRACKET_START_ID
 import wiles.shared.constants.Tokens.BREAK_ID
 import wiles.shared.constants.Tokens.CONTINUE_ID
@@ -25,7 +25,6 @@ import wiles.shared.constants.Tokens.IF_ID
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.Tokens.RETURN_ID
 import wiles.shared.constants.Tokens.START_BLOCK_ID
-import wiles.shared.constants.Tokens.WHEN_ID
 import wiles.shared.constants.Tokens.WHILE_ID
 import wiles.shared.constants.Tokens.WITH_ID
 import java.util.function.Function
@@ -71,12 +70,12 @@ class StatementFactory {
         private val createObject = LinkedHashMap<StatementFactoryTypes, Function<Context, AbstractStatement>>()
 
         init {
-            params[StatementFactoryTypes.TOP_LEVEL_EXPRESSION] = START_OF_TOP_LEVEL_EXPRESSION
+            params[StatementFactoryTypes.TOP_LEVEL_EXPRESSION] = START_OF_EXPRESSION
             params[StatementFactoryTypes.DECLARATION_STATEMENT] = tokenOf(DECLARE_ID)
             params[StatementFactoryTypes.METHOD_STATEMENT] = tokenOf(METHOD_ID).or(DO_ID).or(START_BLOCK_ID)
                 .removeWhen(WhenRemoveToken.Never)
             params[StatementFactoryTypes.RETURN_STATEMENT] = tokenOf(RETURN_ID)
-            params[StatementFactoryTypes.WHEN_STATEMENT] = tokenOf(WHEN_ID).or(IF_ID).removeWhen(WhenRemoveToken.Never)
+            params[StatementFactoryTypes.IF_STATEMENT] = tokenOf(IF_ID).removeWhen(WhenRemoveToken.Never)
             params[StatementFactoryTypes.WHILE_STATEMENT] = tokenOf(WHILE_ID)
             params[StatementFactoryTypes.BREAK_STATEMENT] = tokenOf(BREAK_ID)
             params[StatementFactoryTypes.CONTINUE_STATEMENT] = tokenOf(CONTINUE_ID)
@@ -93,7 +92,7 @@ class StatementFactory {
                 Function { context: Context -> MethodStatement(context) }
             createObject[StatementFactoryTypes.RETURN_STATEMENT] =
                 Function { context: Context -> ReturnStatement(context) }
-            createObject[StatementFactoryTypes.WHEN_STATEMENT] =
+            createObject[StatementFactoryTypes.IF_STATEMENT] =
                 Function { context: Context -> WhenStatement(context) }
             createObject[StatementFactoryTypes.WHILE_STATEMENT] =
                 Function { context: Context -> WhileStatement(context) }

@@ -58,7 +58,6 @@ object Tokens {
     const val RETURN_ID = "RETURN"
     const val TRUE_ID = "TRUE"
     const val FALSE_ID = "FALSE"
-    const val WHEN_ID = "WHEN"
     const val IF_ID = "IF"
     const val ELSE_ID = "ELSE"
     const val BREAK_ID = "BREAK"
@@ -69,7 +68,6 @@ object Tokens {
     const val TO_ID = "TO"
     const val WHILE_ID = "WHILE"
     const val ELEM_ACCESS_ID = "ELEM_ACCESS"
-    const val CASE_ID = "CASE"
     const val ANON_ARG_ID = "ANON_ARG"
     const val MUTABLE_ID = "MUTABLE"
     const val IMPORT_ID = "IMPORT"
@@ -100,7 +98,7 @@ object Tokens {
 
     @JvmField
     val NEW_STATEMENT_START_KEYWORDS = setOf(
-        NOTHING_ID, DECLARE_ID, WHEN_ID, CASE_ID, ELSE_ID, CONTINUE_ID, MODIFY_ID, AS_ID, WITH_ID,
+        NOTHING_ID, DECLARE_ID, ELSE_ID, CONTINUE_ID, MODIFY_ID, AS_ID, WITH_ID,
         RETURN_ID, WHILE_ID, BREAK_ID, FOR_ID, DO_ID, START_BLOCK_ID, END_BLOCK_ID, BRACKET_END_ID, PAREN_END_ID,
         SEPARATOR_ID, IN_ID, FROM_ID, TO_ID, ASSIGN_ID, TERMINATOR_ID, NEWLINE_ID, IF_ID
     )
@@ -111,8 +109,6 @@ object Tokens {
         KEYWORDS[if(!ROMANIAN_MODE) "let" else "fie"] = DECLARE_ID
         KEYWORDS["var"] = VARIABLE_ID
         KEYWORDS[if(!ROMANIAN_MODE) "if" else "dacă"] = IF_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "when" else "când"] = WHEN_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "case" else "caz"] = CASE_ID
         KEYWORDS[if(!ROMANIAN_MODE) "default" else "altfel"] = ELSE_ID
         KEYWORDS[if(!ROMANIAN_MODE) "for" else "pentru"] = FOR_ID
         KEYWORDS[if(!ROMANIAN_MODE) "in" else "în"] = IN_ID

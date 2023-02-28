@@ -9,7 +9,7 @@ import wiles.checker.statics.CheckerConstants.BOOLEAN_TYPE
 import wiles.checker.statics.InferrerUtils
 import wiles.shared.JSONStatement
 
-class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
+class InferFromIf(details: InferrerDetails) : InferFromStatement(details) {
     override fun infer() {
         val components = statement.components.toMutableList()
         val listOfVariableMaps = mutableListOf<VariableMap>()

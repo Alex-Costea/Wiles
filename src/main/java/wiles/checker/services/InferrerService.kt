@@ -43,7 +43,7 @@ class InferrerService(details: InferrerDetails)
 
             //others
             RETURN -> inferFromStatement = InferFromReturn(details)
-            WHEN -> inferFromStatement = InferFromWhen(details)
+            IF -> inferFromStatement = InferFromIf(details)
             WITH -> inferFromStatement = InferFromWith(details)
             FOR -> inferFromStatement = InferFromFor(details)
             WHILE -> inferFromStatement = InferFromWhile(details)

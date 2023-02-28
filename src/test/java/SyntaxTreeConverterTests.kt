@@ -19,7 +19,6 @@ import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.BRACKET_END_ID
 import wiles.shared.constants.Tokens.BRACKET_START_ID
 import wiles.shared.constants.Tokens.BREAK_ID
-import wiles.shared.constants.Tokens.CASE_ID
 import wiles.shared.constants.Tokens.CONTINUE_ID
 import wiles.shared.constants.Tokens.DECLARE_ID
 import wiles.shared.constants.Tokens.DO_ID
@@ -51,7 +50,6 @@ import wiles.shared.constants.Tokens.TIMES_ID
 import wiles.shared.constants.Tokens.TO_ID
 import wiles.shared.constants.Tokens.TRUE_ID
 import wiles.shared.constants.Tokens.TYPEDEF_ID
-import wiles.shared.constants.Tokens.WHEN_ID
 import wiles.shared.constants.Tokens.WHILE_ID
 import wiles.shared.constants.Utils.NULL_LOCATION
 
@@ -235,25 +233,29 @@ class SyntaxTreeConverterTests {
     }
 
     @Test
-    fun whenTest()
+    fun ifTest()
     {
-        assertResults(null,"CODE_BLOCK(DECLARATION(!a; EXPRESSION(METHOD(CODE_BLOCK(WHEN(EXPRESSION(TRUE); CODE_BLOCK(RETURN(EXPRESSION(!a))); ELSE; CODE_BLOCK(RETURN(EXPRESSION(!b)))))))); WHEN(EXPRESSION(TRUE); CODE_BLOCK(EXPRESSION(!c))); EXPRESSION(!d))",
+        assertResults(null, "CODE_BLOCK(IF(EXPRESSION(TRUE); CODE_BLOCK(EXPRESSION(NOTHING))); EXPRESSION(NOTHING))",
+            IF_ID, TRUE_ID, DO_ID, NOTHING_ID, NEWLINE_ID, NOTHING_ID)
+
+        assertResults(null, "CODE_BLOCK(DECLARATION(!a; EXPRESSION(METHOD(CODE_BLOCK(IF(EXPRESSION(TRUE); CODE_BLOCK(RETURN(EXPRESSION(#1))); ELSE; CODE_BLOCK(RETURN(EXPRESSION(#2)))))))); IF(EXPRESSION(TRUE); CODE_BLOCK(EXPRESSION(NOTHING))); EXPRESSION(NOTHING))",
             DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, DO_ID, NEWLINE_ID,
-            WHEN_ID, CASE_ID,TRUE_ID, DO_ID, RETURN_ID, "!a", TERMINATOR_ID, ELSE_ID, DO_ID, RETURN_ID, "!b",
-            NEWLINE_ID, IF_ID, TRUE_ID, DO_ID, "!c", NEWLINE_ID, "!d")
+            IF_ID, START_BLOCK_ID, TRUE_ID, DO_ID, RETURN_ID, "#1", NEWLINE_ID,
+            ELSE_ID, DO_ID, RETURN_ID, "#2", NEWLINE_ID, END_BLOCK_ID, NEWLINE_ID,
+            IF_ID, TRUE_ID, DO_ID, NOTHING_ID, NEWLINE_ID, NOTHING_ID)
 
-        assertResults(null,"CODE_BLOCK(WHEN(EXPRESSION(!a; LARGER; #10); CODE_BLOCK(EXPRESSION(NOTHING)); EXPRESSION(!a; LARGER; #0); CODE_BLOCK(EXPRESSION(NOTHING)); ELSE; CODE_BLOCK(EXPRESSION(NOTHING))))",
-            WHEN_ID, CASE_ID, "!a", LARGER_ID, "#10", DO_ID, NOTHING_ID, NEWLINE_ID, CASE_ID, "!a", LARGER_ID, "#0",
-            DO_ID, NOTHING_ID, NEWLINE_ID, ELSE_ID, DO_ID, NOTHING_ID)
+        assertResults(null,"CODE_BLOCK(IF(EXPRESSION(!a; LARGER; #10); CODE_BLOCK(EXPRESSION(NOTHING)); EXPRESSION(!a; LARGER; #0); CODE_BLOCK(EXPRESSION(NOTHING)); ELSE; CODE_BLOCK(EXPRESSION(NOTHING))))",
+            IF_ID, START_BLOCK_ID, NEWLINE_ID, "!a", LARGER_ID, "#10", DO_ID, NOTHING_ID, NEWLINE_ID, "!a", LARGER_ID, "#0",
+            DO_ID, NOTHING_ID, NEWLINE_ID, ELSE_ID, DO_ID, NOTHING_ID, NEWLINE_ID, END_BLOCK_ID)
 
-        assertResults(null,"CODE_BLOCK(WHEN(EXPRESSION(!a; LARGER; #0); CODE_BLOCK(EXPRESSION(NOTHING)); ELSE; CODE_BLOCK(WHEN(EXPRESSION(!a; LARGER; #10); CODE_BLOCK(EXPRESSION(NOTHING))))); EXPRESSION(EXPRESSION(!a); ASSIGN; EXPRESSION(!b)))",
-            WHEN_ID, CASE_ID, "!a", LARGER_ID, "#0", DO_ID, NOTHING_ID, NEWLINE_ID,
-            ELSE_ID, DO_ID, IF_ID, "!a", LARGER_ID, "#10", DO_ID, NOTHING_ID, NEWLINE_ID,
-            "!a", ASSIGN_ID, "!b" )
+        assertResults(null,"CODE_BLOCK(IF(EXPRESSION(!a; LARGER; #0); CODE_BLOCK(EXPRESSION(NOTHING)); ELSE; CODE_BLOCK(IF(EXPRESSION(!a; LARGER; #10); CODE_BLOCK(EXPRESSION(NOTHING))))); EXPRESSION(EXPRESSION(!a); ASSIGN; EXPRESSION(!b)))",
+            IF_ID, START_BLOCK_ID, NEWLINE_ID, "!a", LARGER_ID, "#0", DO_ID, NOTHING_ID, NEWLINE_ID,
+            ELSE_ID, DO_ID, IF_ID, "!a", LARGER_ID, "#10", DO_ID, NOTHING_ID,NEWLINE_ID, END_BLOCK_ID,
+            NEWLINE_ID, "!a", ASSIGN_ID, "!b")
 
-        assertResults(null,"CODE_BLOCK(WHEN(EXPRESSION(!a; LARGER; #10); CODE_BLOCK(EXPRESSION(NOTHING)); EXPRESSION(!a; LARGER; #0); CODE_BLOCK(EXPRESSION(NOTHING))))",
-            WHEN_ID, "!a", LARGER_ID, "#10", DO_ID, NOTHING_ID, NEWLINE_ID, ELSE_ID, CASE_ID, "!a", LARGER_ID,
-            "#0", DO_ID, NOTHING_ID)
+        assertResults(null,"CODE_BLOCK(IF(EXPRESSION(!a; LARGER; #10); CODE_BLOCK(EXPRESSION(NOTHING)); EXPRESSION(!a; LARGER; #0); CODE_BLOCK(EXPRESSION(NOTHING))))",
+            IF_ID, START_BLOCK_ID, NEWLINE_ID, "!a", LARGER_ID, "#10", DO_ID, NOTHING_ID, NEWLINE_ID,
+            "!a", LARGER_ID, "#0", DO_ID, NOTHING_ID, NEWLINE_ID,NEWLINE_ID, END_BLOCK_ID)
     }
 
     @Test

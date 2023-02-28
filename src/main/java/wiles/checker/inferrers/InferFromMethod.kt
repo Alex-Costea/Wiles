@@ -52,17 +52,17 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
                 continue
             if(component.type==SyntaxType.RETURN)
                 return true
-            if(component.type==SyntaxType.WHEN || component.type == SyntaxType.WITH)
+            if(component.type==SyntaxType.IF || component.type == SyntaxType.WITH)
             {
                 var alwaysReturns = true
                 var hasLast = false
-                for(whenComponent in component.components)
+                for(ifComponent in component.components)
                 {
-                    if(whenComponent.type == SyntaxType.TOKEN && whenComponent.name == ELSE_ID)
+                    if(ifComponent.type == SyntaxType.TOKEN && ifComponent.name == ELSE_ID)
                         hasLast = true
-                    if(whenComponent.type!=SyntaxType.CODE_BLOCK)
+                    if(ifComponent.type!=SyntaxType.CODE_BLOCK)
                         continue
-                    alwaysReturns = alwaysReturns && checkAlwaysReturns(whenComponent)
+                    alwaysReturns = alwaysReturns && checkAlwaysReturns(ifComponent)
                 }
                 if(hasLast && alwaysReturns)
                     return true
