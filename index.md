@@ -50,6 +50,6 @@ end
 let result := min(list := [10, 3, 55, 8])
 when result is begin
     int do writeline("Min found: " + result)
-    default do writeline("Error: no min found!")
+    default do panic("Error: no min found!")
 end
 ```
