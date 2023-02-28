@@ -12,6 +12,7 @@ import wiles.checker.statics.InferrerUtils.checkIsInitialized
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
+import wiles.shared.constants.Tokens
 import wiles.shared.constants.Types.EITHER_ID
 
 class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
@@ -20,24 +21,29 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
     {
         assert(InferrerUtils.isFormerSuperTypeOfLatter(former, latter))
         val unboxedFormer = InferrerUtils.unbox(former)
+        val unboxedLatter = InferrerUtils.unbox(latter)
 
         if(unboxedFormer.name == EITHER_ID && unboxedFormer.components.size==0)
             return null
 
-        if(InferrerUtils.isFormerSuperTypeOfLatter(latter, unboxedFormer))
+        if(InferrerUtils.areTypesEquivalent(latter, unboxedFormer))
             return JSONStatement(name = EITHER_ID, type = SyntaxType.TYPE)
 
         if(unboxedFormer.name == EITHER_ID)
         {
+            val latterComponents = if(unboxedLatter.name == EITHER_ID) {
+                unboxedLatter.components.toList()
+            } else listOf(latter)
             val components = InferrerUtils.createComponents(unboxedFormer).toMutableList()
-            var i = 0
-            while(i < components.size)
-            {
-                if(InferrerUtils.isFormerSuperTypeOfLatter(components[i], latter)) {
-                    components.removeAt(i)
-                    i--
+            for(latterComponent in latterComponents) {
+                var i = 0
+                while (i < components.size) {
+                    if (InferrerUtils.isFormerSuperTypeOfLatter(components[i], latterComponent)) {
+                        components.removeAt(i)
+                        i--
+                    }
+                    i++
                 }
-                i++
             }
 
             return when (components.size) {
@@ -46,7 +52,7 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
                 else -> JSONStatement(name = EITHER_ID, type = SyntaxType.TYPE, components = components)
             }
         }
-        return unboxedFormer.copyRemovingLocation()
+        return former.copyRemovingLocation()
     }
 
     override fun infer() {
@@ -103,6 +109,8 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
         }
 
 
-        checkIsInitialized(variables, listOfVariableMaps, codeBlockLists)
+        checkIsInitialized(variables, listOfVariableMaps, codeBlockLists,
+            statement.components.any{it.name == Tokens.ELSE_ID } ||
+                    (inferredType.name == EITHER_ID && inferredType.components.isEmpty()))
     }
 }

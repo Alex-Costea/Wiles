@@ -24,6 +24,11 @@ import wiles.shared.constants.Types.LIST_ID
 import wiles.shared.constants.Types.STRING_ID
 
 object InferrerUtils {
+    fun areTypesEquivalent(type1: JSONStatement,type2 : JSONStatement) : Boolean
+    {
+        return isFormerSuperTypeOfLatter(type1, type2) && isFormerSuperTypeOfLatter(type2, type1)
+    }
+
     fun isFormerSuperTypeOfLatter(supertype : JSONStatement, subtype : JSONStatement) : Boolean
     {
         assert(supertype.type == SyntaxType.TYPE)
@@ -426,9 +431,10 @@ object InferrerUtils {
         variables: HashMap<String, VariableDetails>,
         listOfVariableMaps: MutableList<VariableMap>,
         codeBlockLists: MutableList<JSONStatement>,
-        hasDefault : Boolean = true
+        hasDefault : Boolean
     )
     {
+        if(!hasDefault) return
         for(variable in variables.entries)
         {
             if(!variable.value.initialized)
