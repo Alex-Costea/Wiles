@@ -37,16 +37,20 @@ class InferFromIf(details: InferrerDetails) : InferFromStatement(details) {
         {
             if(!variable.value.initialized)
             {
-                var isInitialized = true
+                var isInitialized : Boolean? = null
                 for(map in listOfVariableMaps)
                 {
                     if(!InferrerUtils.containsStopStatement(codeBlockLists.removeFirst())) {
+                        isInitialized = true
                         if (!map[variable.key]!!.initialized) {
                             isInitialized = false
+                            break
                         }
                     }
                 }
-                variables[variable.key]= VariableDetails(variable.value.type,isInitialized,variable.value.modifiable)
+                variables[variable.key]= VariableDetails(variable.value.type,
+                    isInitialized?:false,
+                    variable.value.modifiable)
             }
         }
     }
