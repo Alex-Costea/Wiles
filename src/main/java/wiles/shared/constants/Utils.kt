@@ -17,7 +17,7 @@ object Utils {
 
     @JvmStatic
     fun isDigit(c: Char): Boolean {
-        return Character.isDigit(c)
+        return Character.isDigit(c) || c == DIGIT_SEPARATOR
     }
 
     val NULL_LOCATION = TokenLocation(-1,-1)

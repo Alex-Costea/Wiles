@@ -8,6 +8,7 @@ import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.TokenLocation
 import wiles.shared.constants.Chars
+import wiles.shared.constants.Chars.DIGIT_SEPARATOR
 import wiles.shared.constants.Predicates
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.ANON_ARG_ID
@@ -216,7 +217,8 @@ object InferrerUtils {
             if(name.contains(Chars.DECIMAL_DELIMITER))
                 return JSONStatement(DOUBLE_ID, type = SyntaxType.TYPE)
             try {
-                name.substring(1).toLong()
+                token.name = name.replace(DIGIT_SEPARATOR.toString(),"")
+                token.name.substring(1).toLong()
             } catch (e: NumberFormatException) {
                 throw InvalidLiteralException(token.getFirstLocation())
             }
