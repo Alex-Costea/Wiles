@@ -380,7 +380,7 @@ object InferrerUtils {
         throw InternalErrorException("Couldn't get list's element type")
     }
 
-    fun containsStopStatement( statement: JSONStatement) : Boolean {
+    fun containsStopStatement(statement: JSONStatement) : Boolean {
         for (component in statement.components) {
             if (component.type !in arrayListOf(SyntaxType.IF, SyntaxType.FOR, SyntaxType.WHEN)) {
                 if (containsStopStatement(component))
@@ -390,5 +390,30 @@ object InferrerUtils {
                 return true
         }
         return false
+    }
+
+    fun addIfNecessary(typeList: MutableList<JSONStatement>, type: JSONStatement) {
+        var alreadyExists = false
+        for(alreadyExistingType in typeList)
+            if(isFormerSuperTypeOfLatter(alreadyExistingType,type))
+                alreadyExists = true
+        if(!alreadyExists)
+            typeList.add(type)
+    }
+
+    fun createComponents(statement : JSONStatement, middleName : String = ""): List<JSONStatement> {
+        var newComponents = listOf(statement)
+        if(middleName != ASSIGN_ID) {
+            if(statement.name == EITHER_ID) {
+                newComponents = mutableListOf()
+                for (component in statement.components) {
+                    if(component.name !in EITHER_ID)
+                        addIfNecessary(newComponents, component)
+                    else for(subComponents in createComponents(component,middleName))
+                        addIfNecessary(newComponents, subComponents)
+                }
+            }
+        }
+        return newComponents
     }
 }

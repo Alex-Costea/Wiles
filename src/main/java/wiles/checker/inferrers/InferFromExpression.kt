@@ -10,6 +10,8 @@ import wiles.checker.services.InferrerService
 import wiles.checker.statics.CheckerConstants
 import wiles.checker.statics.CheckerConstants.NOTHING_TOKEN
 import wiles.checker.statics.InferrerUtils
+import wiles.checker.statics.InferrerUtils.addIfNecessary
+import wiles.checker.statics.InferrerUtils.createComponents
 import wiles.checker.statics.InferrerUtils.inferTypeFromLiteral
 import wiles.checker.statics.InferrerUtils.makeList
 import wiles.checker.statics.InferrerUtils.makeMethod
@@ -38,22 +40,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
 
     private lateinit var operationName : String
 
-    private fun createComponents(statement : JSONStatement, middleName : String): List<JSONStatement> {
-        var newComponents = listOf(statement)
-        val flattenTypes = listOf(EITHER_ID)
-        if(middleName != ASSIGN_ID) {
-            if(statement.name in flattenTypes) {
-                newComponents = mutableListOf()
-                for (component in statement.components) {
-                    if(component.name !in flattenTypes)
-                        addIfNecessary(newComponents, component)
-                    else for(subComponents in createComponents(component,middleName))
-                        addIfNecessary(newComponents, subComponents)
-                }
-            }
-        }
-        return newComponents
-    }
+
 
     private fun getTypeOfExpression(left : JSONStatement, middle : JSONStatement, right: JSONStatement) : JSONStatement
     {
@@ -116,15 +103,6 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
             else JSONStatement(name = EITHER_ID, type = SyntaxType.TYPE, components = resultingTypes)
         }
         throw WrongOperationException(middle.location!!,left.toString(),right.toString())
-    }
-
-    private fun addIfNecessary(typeList: MutableList<JSONStatement>, type: JSONStatement) {
-        var alreadyExists = false
-        for(alreadyExistingType in typeList)
-            if(InferrerUtils.isFormerSuperTypeOfLatter(alreadyExistingType,type))
-                alreadyExists = true
-        if(!alreadyExists)
-            typeList.add(type)
     }
 
     override fun infer() {
