@@ -75,6 +75,7 @@ class Checker(private val jsonCode : String? = null) {
                     Pair(NOTHING_ID, VariableDetails(CheckerConstants.NOTHING_TYPE)),
                     Pair("!write", VariableDetails(CheckerConstants.WRITELINE_TYPE)),
                     Pair("!writeline", VariableDetails(CheckerConstants.WRITELINE_TYPE)),
+                    Pair("!panic", VariableDetails(CheckerConstants.WRITELINE_TYPE)),
                     Pair("!ignore", VariableDetails(CheckerConstants.IGNORE_TYPE)),
                     Pair("!modulo", VariableDetails(CheckerConstants.MODULO_TYPE)),
                 )

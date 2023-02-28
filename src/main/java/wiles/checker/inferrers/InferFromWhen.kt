@@ -85,7 +85,8 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(
         {
             components.first().getFirstLocation()
             val newLocation = components.first().getFirstLocation()
-            val statedType = if(components.first().type == SyntaxType.TYPE) components.removeFirst() else inferredType
+            val statedType = if(components.first().type == SyntaxType.TYPE) components.first() else inferredType
+            components.removeFirst()
 
             inferredType = getFormerTypeMinusLatterType(inferredType, statedType)
                 ?: throw TypesExhaustedException(newLocation)
