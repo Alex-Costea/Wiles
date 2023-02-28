@@ -12,6 +12,7 @@ import wiles.shared.constants.Chars
 import wiles.shared.constants.Chars.DIGIT_SEPARATOR
 import wiles.shared.constants.Predicates
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
+import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.ANON_ARG_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.METHOD_ID
@@ -431,10 +432,10 @@ object InferrerUtils {
         variables: HashMap<String, VariableDetails>,
         listOfVariableMaps: MutableList<VariableMap>,
         codeBlockLists: MutableList<JSONStatement>,
-        hasDefault : Boolean
+        originalComponents : List<JSONStatement>
     )
     {
-        if(!hasDefault) return
+        if(originalComponents.none{it.name == Tokens.ELSE_ID }) return
         for(variable in variables.entries)
         {
             if(!variable.value.initialized)

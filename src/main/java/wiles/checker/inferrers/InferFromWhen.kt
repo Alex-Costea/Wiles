@@ -12,7 +12,7 @@ import wiles.checker.statics.InferrerUtils.checkIsInitialized
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
-import wiles.shared.constants.Tokens
+import wiles.shared.constants.Tokens.ELSE_ID
 import wiles.shared.constants.Types.EITHER_ID
 
 class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
@@ -108,9 +108,13 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
             codeBlockLists.add(block)
         }
 
+        if(inferredType.name == EITHER_ID && inferredType.components.isEmpty()) {
+            val lastType = statement.components.last { it.name == ELSE_ID || it.type == SyntaxType.TYPE }
+            lastType.name = ELSE_ID
+            lastType.components.clear()
+            lastType.type = SyntaxType.TOKEN
+        }
 
-        checkIsInitialized(variables, listOfVariableMaps, codeBlockLists,
-            statement.components.any{it.name == Tokens.ELSE_ID } ||
-                    (inferredType.name == EITHER_ID && inferredType.components.isEmpty()))
+        checkIsInitialized(variables, listOfVariableMaps, codeBlockLists, statement.components)
     }
 }

@@ -8,7 +8,6 @@ import wiles.checker.statics.CheckerConstants.BOOLEAN_TYPE
 import wiles.checker.statics.InferrerUtils
 import wiles.checker.statics.InferrerUtils.checkIsInitialized
 import wiles.shared.JSONStatement
-import wiles.shared.constants.Tokens.ELSE_ID
 
 class InferFromIf(details: InferrerDetails) : InferFromStatement(details) {
     override fun infer() {
@@ -34,7 +33,6 @@ class InferFromIf(details: InferrerDetails) : InferFromStatement(details) {
             codeBlockLists.add(block)
         }
 
-        checkIsInitialized(variables, listOfVariableMaps, codeBlockLists,
-            statement.components.any{it.name == ELSE_ID})
+        checkIsInitialized(variables, listOfVariableMaps, codeBlockLists, statement.components)
     }
 }
