@@ -25,8 +25,8 @@ import wiles.shared.constants.Tokens.IF_ID
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.Tokens.RETURN_ID
 import wiles.shared.constants.Tokens.START_BLOCK_ID
+import wiles.shared.constants.Tokens.WHEN_ID
 import wiles.shared.constants.Tokens.WHILE_ID
-import wiles.shared.constants.Tokens.WITH_ID
 import java.util.function.Function
 
 class StatementFactory {
@@ -81,7 +81,7 @@ class StatementFactory {
             params[StatementFactoryTypes.CONTINUE_STATEMENT] = tokenOf(CONTINUE_ID)
             params[StatementFactoryTypes.LIST_STATEMENT] = tokenOf(BRACKET_START_ID)
             params[StatementFactoryTypes.FOR_STATEMENT] = tokenOf(FOR_ID)
-            params[StatementFactoryTypes.WITH_STATEMENT] = tokenOf(WITH_ID)
+            params[StatementFactoryTypes.WHEN_STATEMENT] = tokenOf(WHEN_ID)
             createObject[StatementFactoryTypes.TOP_LEVEL_EXPRESSION] =
                 Function { context: Context -> TopLevelExpression(context) }
             createObject[StatementFactoryTypes.DEFAULT_EXPRESSION_NO_CODE_BLOCK] =
@@ -93,7 +93,7 @@ class StatementFactory {
             createObject[StatementFactoryTypes.RETURN_STATEMENT] =
                 Function { context: Context -> ReturnStatement(context) }
             createObject[StatementFactoryTypes.IF_STATEMENT] =
-                Function { context: Context -> WhenStatement(context) }
+                Function { context: Context -> IfStatement(context) }
             createObject[StatementFactoryTypes.WHILE_STATEMENT] =
                 Function { context: Context -> WhileStatement(context) }
             createObject[StatementFactoryTypes.BREAK_STATEMENT] =
@@ -104,8 +104,8 @@ class StatementFactory {
                 Function { context : Context -> ListStatement(context) }
             createObject[StatementFactoryTypes.FOR_STATEMENT] =
                 Function { context : Context -> ForStatement(context) }
-            createObject[StatementFactoryTypes.WITH_STATEMENT] =
-                Function { context : Context -> WithStatement(context) }
+            createObject[StatementFactoryTypes.WHEN_STATEMENT] =
+                Function { context : Context -> WhenStatement(context) }
         }
     }
 }

@@ -382,7 +382,7 @@ object InferrerUtils {
 
     fun containsStopStatement( statement: JSONStatement) : Boolean {
         for (component in statement.components) {
-            if (component.type !in arrayListOf(SyntaxType.IF, SyntaxType.FOR, SyntaxType.WITH)) {
+            if (component.type !in arrayListOf(SyntaxType.IF, SyntaxType.FOR, SyntaxType.WHEN)) {
                 if (containsStopStatement(component))
                     return true
             }

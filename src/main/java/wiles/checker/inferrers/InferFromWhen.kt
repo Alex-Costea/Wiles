@@ -6,9 +6,10 @@ import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.exceptions.ExpectedIdentifierException
 import wiles.checker.exceptions.UnknownIdentifierException
 import wiles.checker.statics.InferrerUtils
+import wiles.shared.InternalErrorException
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 
-class InferFromWith(details: InferrerDetails) : InferFromStatement(
+class InferFromWhen(details: InferrerDetails) : InferFromStatement(
     InferrerDetails(
         statement = details.statement,
         variables = details.variables.copy(),
@@ -17,11 +18,13 @@ class InferFromWith(details: InferrerDetails) : InferFromStatement(
 )
 ) {
     override fun infer() {
-        val statedType = statement.components[0]
-        val expression = statement.components[1].components[0]
-        val location = statement.components[1].getFirstLocation()
+        if(statement.components.size != 3)
+            throw InternalErrorException("TODO")
+        val statedType = statement.components[1]
+        val expression = statement.components[0].components[0]
+        val location = statement.components[0].getFirstLocation()
         val name = expression.name
-        if(statement.components[1].components.size != 1 || !IS_IDENTIFIER.test(name))
+        if(statement.components[0].components.size != 1 || !IS_IDENTIFIER.test(name))
             throw ExpectedIdentifierException(location)
 
         val variableDetails = variables[name] ?: throw UnknownIdentifierException(location)

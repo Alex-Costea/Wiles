@@ -52,7 +52,7 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
                 continue
             if(component.type==SyntaxType.RETURN)
                 return true
-            if(component.type==SyntaxType.IF || component.type == SyntaxType.WITH)
+            if(component.type==SyntaxType.IF || component.type == SyntaxType.WHEN)
             {
                 var alwaysReturns = true
                 var hasLast = false

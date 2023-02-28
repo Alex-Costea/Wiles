@@ -7,43 +7,43 @@ import wiles.shared.AbstractCompilationException
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens
-import wiles.shared.constants.Tokens.IS_ID
+import wiles.shared.constants.Tokens.ELSE_ID
+import wiles.shared.constants.Tokens.END_BLOCK_ID
+import wiles.shared.constants.Tokens.IF_ID
 
-class WhenStatement(context: Context) : AbstractStatement(context) {
-    private val expression = DefaultExpression(context)
+class IfStatement(context: Context) : AbstractStatement(context) {
+
     private val branches : MutableList<Pair<AbstractStatement,AbstractStatement>> = mutableListOf()
 
     override val type: SyntaxType
-        get() = SyntaxType.WHEN
+        get() = SyntaxType.IF
 
     override fun getComponents(): MutableList<AbstractStatement> {
-        val list = mutableListOf<AbstractStatement>(expression)
-        list.addAll(branches.flatMap { (x, y) -> listOf(x, y) })
-        return list
+        return branches.flatMap { (x, y) -> listOf(x, y) }.toMutableList()
     }
+
     override fun process(): CompilationExceptionsCollection {
         val exceptions = CompilationExceptionsCollection()
         try
         {
-            exceptions.addAll(expression.process())
-            transmitter.expect(tokenOf(IS_ID))
+            transmitter.expect(tokenOf(IF_ID))
             val isOnlyOne = transmitter.expectMaybe(tokenOf(Tokens.START_BLOCK_ID)).isEmpty
             while(true)
             {
-                val type : AbstractStatement
+                val condition : AbstractStatement
                 val body : AbstractStatement
-                if(!isOnlyOne && transmitter.expectMaybe(tokenOf(Tokens.END_BLOCK_ID)).isPresent)
+                if(!isOnlyOne && transmitter.expectMaybe(tokenOf(END_BLOCK_ID)).isPresent)
                     break
-                val expectMaybeElse = transmitter.expectMaybe(tokenOf(Tokens.ELSE_ID))
+                val expectMaybeElse = transmitter.expectMaybe(tokenOf(ELSE_ID))
                 val isDefaultCondition = expectMaybeElse.isPresent
-                type = if(!isDefaultCondition) TypeDefinitionStatement(context)
-                else TokenStatement(expectMaybeElse.get(),context)
+                condition = if(!isDefaultCondition) DefaultExpression(context)
+                            else TokenStatement(expectMaybeElse.get(),context)
                 body = CodeBlockStatement(context)
-                exceptions.addAll(type.process())
+                exceptions.addAll(condition.process())
                 exceptions.addAll(body.process())
-                branches.add(Pair(type, body))
+                branches.add(Pair(condition, body))
                 if(isOnlyOne || isDefaultCondition) {
-                    if(isDefaultCondition) transmitter.expect(tokenOf(Tokens.END_BLOCK_ID))
+                    if(isDefaultCondition) transmitter.expect(tokenOf(END_BLOCK_ID))
                     break
                 }
             }

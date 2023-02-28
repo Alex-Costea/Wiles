@@ -4320,11 +4320,11 @@ class CheckerTests {
     }
 
     @Test
-    fun withStatementTests()
+    fun whenStatementTests()
     {
         /*
         let a : either[text, int] := 2
-        with a as int do
+        when a is int do
             ignore(a)
          */
         checkResult(null,"""{
@@ -4373,15 +4373,8 @@ class CheckerTests {
       } ]
     } ]
   }, {
-    "type" : "WITH",
+    "type" : "WHEN",
     "components" : [ {
-      "name" : "INT64",
-      "type" : "TYPE",
-      "location" : {
-        "line" : 2,
-        "lineIndex" : 11
-      }
-    }, {
       "type" : "EXPRESSION",
       "components" : [ {
         "name" : "!a",
@@ -4391,6 +4384,13 @@ class CheckerTests {
           "lineIndex" : 6
         }
       } ]
+    }, {
+      "name" : "INT64",
+      "type" : "TYPE",
+      "location" : {
+        "line" : 2,
+        "lineIndex" : 11
+      }
     }, {
       "type" : "CODE_BLOCK",
       "components" : [ {
@@ -4426,7 +4426,7 @@ class CheckerTests {
       } ]
     } ]
   } ]
-}""","CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE STRING; TYPE INT64); !a; EXPRESSION(TYPE INT64; #2)); WITH(TYPE INT64; EXPRESSION(!a); CODE_BLOCK(EXPRESSION(TYPE NOTHING; !ignore; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE INT64; !a)))))))")
+}""","CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE STRING; TYPE INT64); !a; EXPRESSION(TYPE INT64; #2)); WHEN(EXPRESSION(!a); TYPE INT64; CODE_BLOCK(EXPRESSION(TYPE NOTHING; !ignore; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE INT64; !a)))))))")
     }
 
     companion object {
