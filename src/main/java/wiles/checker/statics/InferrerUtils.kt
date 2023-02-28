@@ -1,10 +1,7 @@
 package wiles.checker.statics
 
 import wiles.checker.data.VariableDetails
-import wiles.checker.exceptions.CannotCallMethodException
-import wiles.checker.exceptions.UnknownIdentifierException
-import wiles.checker.exceptions.UnknownTypeException
-import wiles.checker.exceptions.UsedBeforeInitializationException
+import wiles.checker.exceptions.*
 import wiles.checker.statics.CheckerConstants.NOTHING_TYPE
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
@@ -218,6 +215,11 @@ object InferrerUtils {
         {
             if(name.contains(Chars.DECIMAL_DELIMITER))
                 return JSONStatement(DOUBLE_ID, type = SyntaxType.TYPE)
+            try {
+                name.substring(1).toLong()
+            } catch (e: NumberFormatException) {
+                throw InvalidLiteralException(token.getFirstLocation())
+            }
             return JSONStatement(INT64_ID, type = SyntaxType.TYPE)
         }
         if(IS_IDENTIFIER.test(name)) {
