@@ -29,6 +29,7 @@ import wiles.shared.constants.Tokens.FOR_ID
 import wiles.shared.constants.Tokens.FROM_ID
 import wiles.shared.constants.Tokens.IF_ID
 import wiles.shared.constants.Tokens.IN_ID
+import wiles.shared.constants.Tokens.IS_ID
 import wiles.shared.constants.Tokens.LARGER_ID
 import wiles.shared.constants.Tokens.MAYBE_ID
 import wiles.shared.constants.Tokens.METHOD_ID
@@ -50,6 +51,7 @@ import wiles.shared.constants.Tokens.TIMES_ID
 import wiles.shared.constants.Tokens.TO_ID
 import wiles.shared.constants.Tokens.TRUE_ID
 import wiles.shared.constants.Tokens.TYPEDEF_ID
+import wiles.shared.constants.Tokens.WHEN_ID
 import wiles.shared.constants.Tokens.WHILE_ID
 import wiles.shared.constants.Utils.NULL_LOCATION
 
@@ -277,6 +279,8 @@ class SyntaxTreeConverterTests {
     @Test
     fun breakContinueErrorTest()
     {
+        assertResults(null,"CODE_BLOCK(WHILE(EXPRESSION(TRUE); CODE_BLOCK(BREAK)))",
+            WHILE_ID, TRUE_ID, DO_ID, BREAK_ID)
         assertResults(createExceptions(TokenExpectedException(INVALID_STATEMENT_ERROR, NULL_LOCATION)),
             "CODE_BLOCK", BREAK_ID)
         assertResults(createExceptions(TokenExpectedException(INVALID_STATEMENT_ERROR, NULL_LOCATION)),
@@ -310,6 +314,25 @@ class SyntaxTreeConverterTests {
         assertResults(null,"CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE INT64; TYPE NOTHING); !a); DECLARATION(TYPE EITHER; (TYPE INT64; TYPE NOTHING); !b))",
             DECLARE_ID, "!a", TYPEDEF_ID, "!int", MAYBE_ID, NEWLINE_ID,
             DECLARE_ID, "!b", TYPEDEF_ID, "!either", BRACKET_START_ID, "!int", SEPARATOR_ID, NOTHING_ID, BRACKET_END_ID)
+    }
+
+    @Test
+    fun whenTests()
+    {
+        assertResults(null,"CODE_BLOCK(WHEN(EXPRESSION(!a); TYPE INT64; CODE_BLOCK(EXPRESSION(NOTHING)); TYPE STRING; CODE_BLOCK(EXPRESSION(NOTHING)); ELSE; CODE_BLOCK(EXPRESSION(NOTHING))))",
+            WHEN_ID, "!a", IS_ID, START_BLOCK_ID, NEWLINE_ID,
+            "!int", DO_ID, NOTHING_ID, NEWLINE_ID,
+            "!text", DO_ID, NOTHING_ID, NEWLINE_ID,
+            ELSE_ID, DO_ID, NOTHING_ID, NEWLINE_ID, END_BLOCK_ID)
+    }
+
+    @Test
+    fun listTest()
+    {
+        assertResults(null,"CODE_BLOCK(DECLARATION(!a; EXPRESSION(LIST(TYPE INT64; EXPRESSION(#1); EXPRESSION(#2); EXPRESSION(#3)))))",
+            DECLARE_ID, "!a", ASSIGN_ID, BRACKET_START_ID,
+            "#1", SEPARATOR_ID, "#2", SEPARATOR_ID, "#3", SEPARATOR_ID,
+            BRACKET_END_ID, TYPEDEF_ID, "!int")
     }
 
     private class CreateConverter(tokens: List<String>) {

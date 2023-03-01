@@ -71,8 +71,8 @@ object Tokens {
     const val ANON_ARG_ID = "ANON_ARG"
     const val MUTABLE_ID = "MUTABLE"
     const val IMPORT_ID = "IMPORT"
-    const val WHEN_ID = "WITH"
-    const val IS_ID = "AS"
+    const val WHEN_ID = "WHEN"
+    const val IS_ID = "IS"
 
     private val KEYWORDS: HashMap<String, String> = HashMap()
     private val SYMBOLS: HashMap<String, String> = HashMap()

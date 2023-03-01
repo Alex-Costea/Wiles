@@ -347,6 +347,32 @@ class CheckerTests {
     @Test
     fun inferFromExpression()
     {
+        checkResult(createExceptions(InvalidLiteralException(NULL_LOCATION)),"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "!a",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "#999999999999999999999999999999",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 10
+        }
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(DECLARATION(!a; EXPRESSION(#999999999999999999999999999999)))")
+
         checkResult(createExceptions(ExpectedIdentifierException(NULL_LOCATION)),"""{
   "parsed" : true,
   "type" : "CODE_BLOCK",
@@ -4427,6 +4453,338 @@ class CheckerTests {
     } ]
   } ]
 }""","CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE STRING; TYPE INT64); !a; EXPRESSION(TYPE INT64; #2)); WHEN(EXPRESSION(!a); TYPE INT64; CODE_BLOCK(EXPRESSION(TYPE NOTHING; !ignore; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE INT64; !a)))))))")
+
+    checkResult(null,"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "!func",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "type" : "METHOD",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 13
+        },
+        "components" : [ {
+          "type" : "CODE_BLOCK",
+          "components" : [ {
+            "type" : "DECLARATION",
+            "components" : [ {
+              "name" : "EITHER",
+              "type" : "TYPE",
+              "location" : {
+                "line" : 2,
+                "lineIndex" : 13
+              },
+              "components" : [ {
+                "name" : "INT64",
+                "type" : "TYPE",
+                "location" : {
+                  "line" : 2,
+                  "lineIndex" : 20
+                }
+              }, {
+                "name" : "STRING",
+                "type" : "TYPE",
+                "location" : {
+                  "line" : 2,
+                  "lineIndex" : 24
+                }
+              } ]
+            }, {
+              "name" : "!a",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 2,
+                "lineIndex" : 9
+              }
+            }, {
+              "type" : "EXPRESSION",
+              "components" : [ {
+                "name" : "#1",
+                "type" : "TOKEN",
+                "location" : {
+                  "line" : 2,
+                  "lineIndex" : 33
+                }
+              } ]
+            } ]
+          }, {
+            "type" : "DECLARATION",
+            "components" : [ {
+              "name" : "INT64",
+              "type" : "TYPE",
+              "location" : {
+                "line" : 3,
+                "lineIndex" : 13
+              }
+            }, {
+              "name" : "!b",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 3,
+                "lineIndex" : 9
+              }
+            } ]
+          }, {
+            "type" : "WHEN",
+            "components" : [ {
+              "type" : "EXPRESSION",
+              "components" : [ {
+                "name" : "!a",
+                "type" : "TOKEN",
+                "location" : {
+                  "line" : 4,
+                  "lineIndex" : 10
+                }
+              } ]
+            }, {
+              "name" : "INT64",
+              "type" : "TYPE",
+              "location" : {
+                "line" : 5,
+                "lineIndex" : 9
+              }
+            }, {
+              "type" : "CODE_BLOCK",
+              "components" : [ {
+                "type" : "EXPRESSION",
+                "components" : [ {
+                  "type" : "EXPRESSION",
+                  "components" : [ {
+                    "name" : "!b",
+                    "type" : "TOKEN",
+                    "location" : {
+                      "line" : 5,
+                      "lineIndex" : 16
+                    }
+                  } ]
+                }, {
+                  "name" : "ASSIGN",
+                  "type" : "TOKEN",
+                  "location" : {
+                    "line" : 5,
+                    "lineIndex" : 18
+                  }
+                }, {
+                  "type" : "EXPRESSION",
+                  "components" : [ {
+                    "name" : "#1",
+                    "type" : "TOKEN",
+                    "location" : {
+                      "line" : 5,
+                      "lineIndex" : 21
+                    }
+                  } ]
+                } ]
+              } ]
+            }, {
+              "name" : "STRING",
+              "type" : "TYPE",
+              "location" : {
+                "line" : 6,
+                "lineIndex" : 9
+              }
+            }, {
+              "type" : "CODE_BLOCK",
+              "components" : [ {
+                "type" : "EXPRESSION",
+                "components" : [ {
+                  "type" : "EXPRESSION",
+                  "components" : [ {
+                    "name" : "!b",
+                    "type" : "TOKEN",
+                    "location" : {
+                      "line" : 6,
+                      "lineIndex" : 17
+                    }
+                  } ]
+                }, {
+                  "name" : "ASSIGN",
+                  "type" : "TOKEN",
+                  "location" : {
+                    "line" : 6,
+                    "lineIndex" : 19
+                  }
+                }, {
+                  "type" : "EXPRESSION",
+                  "components" : [ {
+                    "name" : "#2",
+                    "type" : "TOKEN",
+                    "location" : {
+                      "line" : 6,
+                      "lineIndex" : 22
+                    }
+                  } ]
+                } ]
+              } ]
+            } ]
+          }, {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "!ignore",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 8,
+                "lineIndex" : 5
+              }
+            }, {
+              "name" : "APPLY",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 8,
+                "lineIndex" : 11
+              }
+            }, {
+              "type" : "METHOD_CALL",
+              "components" : [ {
+                "type" : "EXPRESSION",
+                "components" : [ {
+                  "name" : "!b",
+                  "type" : "TOKEN",
+                  "location" : {
+                    "line" : 8,
+                    "lineIndex" : 12
+                  }
+                } ]
+              } ]
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE NOTHING)); !func; EXPRESSION(TYPE METHOD; (METHOD(TYPE NOTHING)); METHOD(TYPE NOTHING; CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE INT64; TYPE STRING); !a; EXPRESSION(TYPE INT64; #1)); DECLARATION(TYPE INT64; !b); WHEN(EXPRESSION(!a); TYPE INT64; CODE_BLOCK(EXPRESSION(TYPE NOTHING; EXPRESSION(TYPE INT64; !b); INT64|ASSIGN|INT64; EXPRESSION(TYPE INT64; #1))); ELSE; CODE_BLOCK(EXPRESSION(TYPE NOTHING; EXPRESSION(TYPE INT64; !b); INT64|ASSIGN|INT64; EXPRESSION(TYPE INT64; #2)))); EXPRESSION(TYPE NOTHING; !ignore; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE INT64; !b)))))))))")
+
+        checkResult(createExceptions(TypesExhaustedException(NULL_LOCATION)),"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "EITHER",
+      "type" : "TYPE",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 9
+      },
+      "components" : [ {
+        "name" : "INT64",
+        "type" : "TYPE",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 16
+        }
+      }, {
+        "name" : "STRING",
+        "type" : "TYPE",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 20
+        }
+      } ]
+    }, {
+      "name" : "!a",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "#1",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 29
+        }
+      } ]
+    } ]
+  }, {
+    "type" : "WHEN",
+    "components" : [ {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!a",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 6
+        }
+      } ]
+    }, {
+      "name" : "INT64",
+      "type" : "TYPE",
+      "location" : {
+        "line" : 3,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "CODE_BLOCK",
+      "components" : [ {
+        "type" : "EXPRESSION",
+        "components" : [ {
+          "name" : "NOTHING",
+          "type" : "TOKEN",
+          "location" : {
+            "line" : 3,
+            "lineIndex" : 12
+          }
+        } ]
+      } ]
+    }, {
+      "name" : "STRING",
+      "type" : "TYPE",
+      "location" : {
+        "line" : 4,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "CODE_BLOCK",
+      "components" : [ {
+        "type" : "EXPRESSION",
+        "components" : [ {
+          "name" : "NOTHING",
+          "type" : "TOKEN",
+          "location" : {
+            "line" : 4,
+            "lineIndex" : 13
+          }
+        } ]
+      } ]
+    }, {
+      "name" : "ELSE",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 5,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "CODE_BLOCK",
+      "components" : [ {
+        "type" : "EXPRESSION",
+        "components" : [ {
+          "name" : "NOTHING",
+          "type" : "TOKEN",
+          "location" : {
+            "line" : 5,
+            "lineIndex" : 16
+          }
+        } ]
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE INT64; TYPE STRING); !a; EXPRESSION(TYPE INT64; #1)); WHEN(EXPRESSION(!a); TYPE INT64; CODE_BLOCK(EXPRESSION(TYPE NOTHING; NOTHING)); TYPE STRING; CODE_BLOCK(EXPRESSION(TYPE NOTHING; NOTHING)); ELSE; CODE_BLOCK(EXPRESSION(NOTHING))))")
     }
 
     companion object {

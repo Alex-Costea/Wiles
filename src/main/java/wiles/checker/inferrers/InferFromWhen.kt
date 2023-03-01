@@ -20,7 +20,8 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
     //TODO: handle unboxing
     private fun getFormerTypeMinusLatterType(former: JSONStatement, latter : JSONStatement) : JSONStatement?
     {
-        assert(InferrerUtils.isFormerSuperTypeOfLatter(former, latter))
+        if(!InferrerUtils.isFormerSuperTypeOfLatter(former, latter))
+            throw ConflictingTypeDefinitionException(latter.getFirstLocation(),latter.toString(),former.toString())
 
         if(former.name == EITHER_ID && former.components.size==0)
             return null
@@ -74,11 +75,8 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
             if(component.type == SyntaxType.TYPE)
             {
                 if (!InferrerUtils.isFormerSuperTypeOfLatter(inferredType, component)) {
-                    throw ConflictingTypeDefinitionException(
-                        component.getFirstLocation(),
-                        inferredType.toString(),
-                        component.toString()
-                    )
+                    throw ConflictingTypeDefinitionException(component.getFirstLocation(),
+                        inferredType.toString(), component.toString())
                 }
             }
         }
