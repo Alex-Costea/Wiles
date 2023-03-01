@@ -13,11 +13,7 @@ import wiles.shared.Token
 import wiles.shared.TokenLocation
 import wiles.shared.constants.ErrorMessages.IO_ERROR
 import wiles.shared.constants.Settings.SYNTAX_TREE_FILE
-import java.io.BufferedReader
-import java.io.File
-import java.io.IOException
-import java.io.InputStreamReader
-import java.util.*
+import java.io.*
 import java.util.stream.Collectors
 
 class Parser(filename : String) {
@@ -67,15 +63,14 @@ class Parser(filename : String) {
         val classloader = Thread.currentThread().contextClassLoader
         val input: String
         try {
-            classloader.getResourceAsStream(filename).use { inputStream ->
-                Objects.requireNonNull(inputStream)
-                input = BufferedReader(InputStreamReader(inputStream!!))
+            var resource : InputStream? = classloader.getResourceAsStream(filename)
+            resource = resource?:File(filename).inputStream()
+            resource.use { input = BufferedReader(InputStreamReader(it))
                     .lines().collect(Collectors.joining("\n"))
                 return input
             }
-        } catch (ex: NullPointerException) {
-            throw InternalErrorException(IO_ERROR)
-        } catch (ex: IOException) {
+        }
+        catch (ex: IOException) {
             throw InternalErrorException(IO_ERROR)
         }
     }

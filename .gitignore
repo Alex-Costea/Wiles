@@ -83,3 +83,6 @@ input.wiles
 syntaxTree.json
 /object.json
 /target/classes/example1.wiles
+/example1.wiles_compiled
+/src/main/resources/META-INF/MANIFEST.MF
+/target/classes/META-INF/MANIFEST.MF

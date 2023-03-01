@@ -10,11 +10,12 @@ object Main {
 
     lateinit var finalCode : String
     var DEBUG = false
+    lateinit var filename : String
 
     private fun printExceptions(exceptions : CompilationExceptionsCollection, input : String)
     {
         if (exceptions.size > 0)
-            System.err.println(exceptions.getExceptionsString(input))
+            System.err.println("\u001B[31m"+exceptions.getExceptionsString(input)+"\u001B[0m")
     }
 
     @Throws(IOException::class)
@@ -22,7 +23,8 @@ object Main {
     fun main(args: Array<String>) {
         DEBUG = args.contains("-debug")
         val exceptions = CompilationExceptionsCollection()
-        val parser = Parser(args.getOrNull(0)?:throw InternalErrorException("Filename expected!"))
+        filename = args.getOrNull(0)?:throw InternalErrorException("Filename expected!")
+        val parser = Parser(filename)
         exceptions.addAll(parser.getExceptions())
         val result = parser.getResults()
 
@@ -43,10 +45,9 @@ object Main {
         if(DEBUG) {
             print("After checking: ")
             println(checker.code)
-            printExceptions(exceptions, parser.input)
         }
 
+        printExceptions(exceptions, parser.input)
         finalCode = checker.code.toString()
-
     }
 }
