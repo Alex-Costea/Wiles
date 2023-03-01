@@ -3,11 +3,13 @@ package wiles
 import wiles.checker.Checker
 import wiles.parser.Parser
 import wiles.shared.CompilationExceptionsCollection
+import wiles.shared.InternalErrorException
 import java.io.IOException
 
 object Main {
 
     lateinit var finalCode : String
+    var DEBUG = false
 
     private fun printExceptions(exceptions : CompilationExceptionsCollection, input : String)
     {
@@ -18,12 +20,16 @@ object Main {
     @Throws(IOException::class)
     @JvmStatic
     fun main(args: Array<String>) {
+        DEBUG = args.contains("-debug")
         val exceptions = CompilationExceptionsCollection()
-        val parser = Parser(args[0])
+        val parser = Parser(args.getOrNull(0)?:throw InternalErrorException("Filename expected!"))
         exceptions.addAll(parser.getExceptions())
         val result = parser.getResults()
-        print("Syntax tree: ")
-        println(result)
+
+        if(DEBUG) {
+            print("Syntax tree: ")
+            println(result)
+        }
 
         if(exceptions.isNotEmpty())
         {
@@ -31,11 +37,16 @@ object Main {
             return
         }
 
-        val checker = Checker()
+        val checker = Checker(if(DEBUG) null else parser.json)
         exceptions.addAll(checker.check())
-        printExceptions(exceptions,parser.input)
-        print("After checking: ")
+
+        if(DEBUG) {
+            print("After checking: ")
+            println(checker.code)
+            printExceptions(exceptions, parser.input)
+        }
+
         finalCode = checker.code.toString()
-        println(checker.code)
+
     }
 }

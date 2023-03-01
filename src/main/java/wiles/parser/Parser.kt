@@ -4,13 +4,14 @@ import com.fasterxml.jackson.core.util.DefaultPrettyPrinter
 import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.google.common.base.CharMatcher
-import wiles.shared.constants.ErrorMessages.IO_ERROR
+import wiles.Main.DEBUG
 import wiles.parser.converters.TokensToSyntaxTreeConverter
+import wiles.parser.statements.CodeBlockStatement
 import wiles.shared.CompilationExceptionsCollection
+import wiles.shared.InternalErrorException
 import wiles.shared.Token
 import wiles.shared.TokenLocation
-import wiles.parser.statements.CodeBlockStatement
-import wiles.shared.InternalErrorException
+import wiles.shared.constants.ErrorMessages.IO_ERROR
 import wiles.shared.constants.Settings.SYNTAX_TREE_FILE
 import java.io.BufferedReader
 import java.io.File
@@ -23,11 +24,14 @@ class Parser(filename : String) {
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
     private var results : CodeBlockStatement
     val input = loadFile(filename)
+    lateinit var json : String
 
     init{
         val tokens = sourceToTokens(input)
-        print("Tokens: ")
-        println(tokens.stream().map(Token::content).toList())
+        if(DEBUG) {
+            print("Tokens: ")
+            println(tokens.stream().map(Token::content).toList())
+        }
 
         val ast = tokensToAST(tokens, lastLocation(input))
         val mapper =
@@ -36,7 +40,9 @@ class Parser(filename : String) {
         results = ast
 
         val writer = mapper.writer(DefaultPrettyPrinter())
-        writer.writeValue(File(SYNTAX_TREE_FILE), ast)
+        if(DEBUG)
+            writer.writeValue(File(SYNTAX_TREE_FILE), ast)
+        else json = writer.writeValueAsString(ast)
     }
 
     fun getExceptions() : CompilationExceptionsCollection

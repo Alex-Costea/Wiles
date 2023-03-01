@@ -5,7 +5,6 @@ import com.google.common.collect.HashBiMap
 import wiles.shared.InternalErrorException
 import wiles.shared.constants.Chars.CONTINUE_LINE
 import wiles.shared.constants.ErrorMessages.MAX_SYMBOL_TOO_LARGE_ERROR
-import wiles.shared.constants.Settings.DEBUG
 import wiles.shared.constants.Settings.MAX_SYMBOL_LENGTH
 import wiles.shared.constants.Settings.ROMANIAN_MODE
 import java.util.*
@@ -158,10 +157,6 @@ object Tokens {
         SYMBOLS["?"] = MAYBE_ID
         SYMBOLS["" + CONTINUE_LINE] = CONTINUE_LINE_ID
         SYMBOLS["\n"] = NEWLINE_ID
-        if (DEBUG) {
-            SYMBOLS["$="] = "TEMP"
-            SYMBOLS["=$="] = "TEMP2"
-        }
         TOKENS = HashBiMap.create(KEYWORDS)
         TOKENS.putAll(SYMBOLS)
         TOKENS_INVERSE = TOKENS.inverse()

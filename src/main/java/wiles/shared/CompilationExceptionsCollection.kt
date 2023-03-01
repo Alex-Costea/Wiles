@@ -1,8 +1,8 @@
 package wiles.shared
 
+import wiles.Main.DEBUG
 import wiles.shared.constants.ErrorMessages.COMPILATION_FAILED_ERROR
 import wiles.shared.constants.ErrorMessages.LINE_SYMBOL
-import wiles.shared.constants.Settings.DEBUG
 
 class CompilationExceptionsCollection : ArrayList<AbstractCompilationException>() {
     fun getExceptionsString(input: String): String {

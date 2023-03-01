@@ -7,7 +7,6 @@ import wiles.parser.exceptions.StringInvalidException
 import wiles.shared.AbstractCompilationException
 import wiles.shared.Token
 import wiles.shared.constants.ErrorMessages.STRING_UNFINISHED_ERROR
-import wiles.shared.constants.Settings.DEBUG
 import wiles.shared.constants.Settings.MAX_SYMBOL_LENGTH
 import wiles.shared.constants.Tokens.ACCESS_ID
 import wiles.shared.constants.Tokens.BREAK_ID
@@ -58,6 +57,7 @@ class TokenConverterTests {
         tokenConverterEquals("abc#a b c d e f break end continue", arrayOf("!abc"))
     }
 
+    @Suppress("KotlinConstantConditions")
     @Test
     fun symbolsTest() {
         tokenConverterEquals("=/=", arrayOf("NOT_EQUAL"))
@@ -66,10 +66,6 @@ class TokenConverterTests {
         val invalidProgram = "\${}{}{}{}{}"
         Assumptions.assumingThat(invalidProgram.length >= 2 * MAX_SYMBOL_LENGTH + 1) {
             tokenConverterEquals( invalidProgram, arrayOf("\${}","{}{","}{}","{}"))
-        }
-        if (DEBUG) {
-            tokenConverterEquals("$=", arrayOf("TEMP"))
-            tokenConverterEquals("=$=", arrayOf("TEMP2"))
         }
         tokenConverterEquals( "$\n@", arrayOf("$","NEWLINE", ELEM_ACCESS_ID))
     }
