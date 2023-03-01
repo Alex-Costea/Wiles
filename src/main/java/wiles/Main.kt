@@ -22,9 +22,12 @@ object Main {
     @JvmStatic
     fun main(args: Array<String>) {
         DEBUG = args.contains("-debug")
+        val noFile = args.getOrNull(0)=="-nofile"
         val exceptions = CompilationExceptionsCollection()
         filename = args.getOrNull(0)?:throw InternalErrorException("Filename expected!")
-        val parser = Parser(filename)
+        if(noFile)
+            filename = "code.wiles"
+        val parser = Parser(if(noFile) args[1] else null)
         exceptions.addAll(parser.getExceptions())
         val result = parser.getResults()
 

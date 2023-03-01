@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.google.common.base.CharMatcher
 import wiles.Main.DEBUG
+import wiles.Main.filename
 import wiles.parser.converters.TokensToSyntaxTreeConverter
 import wiles.parser.statements.CodeBlockStatement
 import wiles.shared.CompilationExceptionsCollection
@@ -16,10 +17,10 @@ import wiles.shared.constants.Settings.SYNTAX_TREE_FILE
 import java.io.*
 import java.util.stream.Collectors
 
-class Parser(filename : String) {
+class Parser(content : String?) {
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
     private var results : CodeBlockStatement
-    val input = loadFile(filename)
+    val input = content?:loadFile(filename)
     lateinit var json : String
 
     init{
