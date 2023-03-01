@@ -21,7 +21,6 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
     {
         assert(InferrerUtils.isFormerSuperTypeOfLatter(former, latter))
         val unboxedFormer = InferrerUtils.unbox(former)
-        val unboxedLatter = InferrerUtils.unbox(latter)
 
         if(unboxedFormer.name == EITHER_ID && unboxedFormer.components.size==0)
             return null
@@ -31,8 +30,8 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
 
         if(unboxedFormer.name == EITHER_ID)
         {
-            val latterComponents = if(unboxedLatter.name == EITHER_ID) {
-                unboxedLatter.components.toList()
+            val latterComponents = if(latter.name == EITHER_ID) {
+                latter.components.toList()
             } else listOf(latter)
             val components = InferrerUtils.createComponents(unboxedFormer).toMutableList()
             for(latterComponent in latterComponents) {
