@@ -17,23 +17,23 @@ import wiles.shared.constants.Types.EITHER_ID
 
 class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
 
+    //TODO: handle unboxing
     private fun getFormerTypeMinusLatterType(former: JSONStatement, latter : JSONStatement) : JSONStatement?
     {
         assert(InferrerUtils.isFormerSuperTypeOfLatter(former, latter))
-        val unboxedFormer = InferrerUtils.unbox(former)
 
-        if(unboxedFormer.name == EITHER_ID && unboxedFormer.components.size==0)
+        if(former.name == EITHER_ID && former.components.size==0)
             return null
 
-        if(InferrerUtils.areTypesEquivalent(latter, unboxedFormer))
+        if(InferrerUtils.areTypesEquivalent(latter, former))
             return JSONStatement(name = EITHER_ID, type = SyntaxType.TYPE)
 
-        if(unboxedFormer.name == EITHER_ID)
+        if(former.name == EITHER_ID)
         {
             val latterComponents = if(latter.name == EITHER_ID) {
-                latter.components.toList()
+                InferrerUtils.createComponents(latter).toList()
             } else listOf(latter)
-            val components = InferrerUtils.createComponents(unboxedFormer).toMutableList()
+            val components = InferrerUtils.createComponents(former).toMutableList()
             for(latterComponent in latterComponents) {
                 var i = 0
                 while (i < components.size) {
