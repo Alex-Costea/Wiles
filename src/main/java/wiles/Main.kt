@@ -7,6 +7,8 @@ import java.io.IOException
 
 object Main {
 
+    lateinit var finalCode : String
+
     private fun printExceptions(exceptions : CompilationExceptionsCollection, input : String)
     {
         if (exceptions.size > 0)
@@ -33,6 +35,7 @@ object Main {
         exceptions.addAll(checker.check())
         printExceptions(exceptions,parser.input)
         print("After checking: ")
+        finalCode = checker.code.toString()
         println(checker.code)
     }
 }
