@@ -82,3 +82,4 @@ target/classes/input.wiles
 input.wiles
 syntaxTree.json
 /object.json
+/target/classes/example1.wiles

@@ -3,10 +3,7 @@ package wiles.checker.inferrers
 import wiles.checker.data.InferrerDetails
 import wiles.checker.data.VariableDetails
 import wiles.checker.data.VariableMap
-import wiles.checker.exceptions.ConflictingTypeDefinitionException
-import wiles.checker.exceptions.ExpectedIdentifierException
-import wiles.checker.exceptions.TypesExhaustedException
-import wiles.checker.exceptions.UnknownIdentifierException
+import wiles.checker.exceptions.*
 import wiles.checker.statics.InferrerUtils
 import wiles.checker.statics.InferrerUtils.checkIsInitialized
 import wiles.shared.JSONStatement
@@ -68,6 +65,7 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
         components.removeFirst()
 
         val variableDetails = variables[name] ?: throw UnknownIdentifierException(location)
+        if(!variableDetails.initialized) throw UsedBeforeInitializationException(location)
         var inferredType = variableDetails.type
 
         for(component in components)
