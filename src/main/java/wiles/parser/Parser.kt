@@ -61,11 +61,9 @@ class Parser(content : String?) {
     }
 
     private fun loadFile(filename: String): String {
-        val classloader = Thread.currentThread().contextClassLoader
         val input: String
         try {
-            var resource : InputStream? = classloader.getResourceAsStream(filename)
-            resource = resource?:File(filename).inputStream()
+            val resource : InputStream = File(filename).inputStream()
             resource.use { input = BufferedReader(InputStreamReader(it))
                     .lines().collect(Collectors.joining("\n"))
                 return input
