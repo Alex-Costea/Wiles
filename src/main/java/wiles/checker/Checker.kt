@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.util.DefaultPrettyPrinter
 import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.json.JsonMapper
-import wiles.Main.filename
 import wiles.checker.data.InferrerDetails
 import wiles.checker.data.VariableDetails
 import wiles.checker.data.VariableMap
@@ -22,7 +21,7 @@ import java.io.File
 class Checker(private val jsonCode : String? = null) {
     val code: JSONStatement = parseSyntaxTreeJson()
     private val inferrer = InferrerService(InferrerDetails(code, getVariables(), CompilationExceptionsCollection(), VariableMap()))
-
+    lateinit var codeAsJSONString : String
 
     private fun parseSyntaxTreeJson(): JSONStatement {
         if(jsonCode==null)
@@ -57,7 +56,7 @@ class Checker(private val jsonCode : String? = null) {
             .disable(MapperFeature.AUTO_DETECT_GETTERS).disable(MapperFeature.AUTO_DETECT_IS_GETTERS).build()
 
         val writer = mapper.writer(DefaultPrettyPrinter())
-        writer.writeValue(File(filename + Settings.OBJECT_FILE), createObject(code.copyRemovingLocation()))
+        codeAsJSONString = writer.writeValueAsString(createObject(code.copyRemovingLocation()))
     }
 
     fun check() : CompilationExceptionsCollection

@@ -4,7 +4,13 @@ import wiles.checker.Checker
 import wiles.parser.Parser
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.InternalErrorException
+import wiles.shared.constants.CommandLineArguments.COMPILE_FILE_COMMAND
+import wiles.shared.constants.CommandLineArguments.DEBUG_COMMAND
+import wiles.shared.constants.CommandLineArguments.NO_INPUT_FILE_COMMAND
+import wiles.shared.constants.Settings.OBJECT_FILE
+import java.io.FileWriter
 import java.io.IOException
+
 
 object Main {
 
@@ -21,9 +27,12 @@ object Main {
     @Throws(IOException::class)
     @JvmStatic
     fun main(args: Array<String>) {
-        DEBUG = args.contains("-debug")
-        val noFile = args.getOrNull(0)=="-nofile"
+        //args
+        DEBUG = args.contains(DEBUG_COMMAND)
+        val noFile = args.getOrNull(0)==NO_INPUT_FILE_COMMAND
+        val writeCompileFile = args.contains(COMPILE_FILE_COMMAND)
         val exceptions = CompilationExceptionsCollection()
+
         filename = args.getOrNull(0)?:throw InternalErrorException("Filename expected!")
         if(noFile)
             filename = "code.wiles"
@@ -48,6 +57,13 @@ object Main {
         if(DEBUG) {
             print("After checking: ")
             println(checker.code)
+        }
+
+        if(writeCompileFile)
+        {
+            val writer = FileWriter(filename + OBJECT_FILE)
+            writer.write(checker.codeAsJSONString)
+            writer.close()
         }
 
         printExceptions(exceptions, parser.input)
