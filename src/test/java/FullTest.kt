@@ -1,5 +1,6 @@
 import org.junit.jupiter.api.Test
 import wiles.Main
+import wiles.shared.constants.CommandLineArguments.COMPILE_COMMAND
 import wiles.shared.constants.CommandLineArguments.NO_INPUT_FILE_COMMAND
 import kotlin.test.assertEquals
 
@@ -7,7 +8,7 @@ class FullTest {
     @Test
     fun fullTests()
     {
-        Main.main(arrayOf(NO_INPUT_FILE_COMMAND,"""
+        Main.main(arrayOf(COMPILE_COMMAND,NO_INPUT_FILE_COMMAND,"""
 let min := fun(list : list[int]) -> int?
 begin
     let var min_value := list @ 0
