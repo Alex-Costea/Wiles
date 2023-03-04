@@ -20,6 +20,10 @@ Unless this project blows up, probably not. Languages much bigger and widely use
 ```
 writeline("Hello, world!")
 ```
+or
+```
+"Hello, world!".writeline
+```
 ### FizzBuzz
 ```
 for i from 1 to 100

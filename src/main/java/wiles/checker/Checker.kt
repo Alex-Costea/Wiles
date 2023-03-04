@@ -15,6 +15,7 @@ import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Settings
 import wiles.shared.constants.Tokens
+import wiles.shared.constants.Tokens.ELSE_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import java.io.File
 
@@ -32,9 +33,19 @@ class Checker(private val jsonCode : String? = null) {
     private fun createObject(statement : JSONStatement, topLevel : Boolean = true) : JSONStatement
     {
         if(statement.components.isNotEmpty() && statement.components[0].type == SyntaxType.TYPE
-            && ! (statement.type == SyntaxType.EXPRESSION && statement.components.size == 2)
-            && statement.type != SyntaxType.METHOD_CALL)
+            //type is necessary when declaring new variables
+            && statement.type != SyntaxType.FOR && statement.type != SyntaxType.DECLARATION
+            //don't remove components of other types
+            && statement.type != SyntaxType.TYPE)
             statement.components.removeFirst()
+
+        if(statement.name == ELSE_ID && statement.type == SyntaxType.TYPE)
+        {
+            assert(statement.components.size == 1)
+            val component = statement.components[0]
+            statement.name = component.name
+            statement.components = component.components
+        }
 
         if(statement.type == SyntaxType.EXPRESSION
             && statement.components[0].type != SyntaxType.TYPE

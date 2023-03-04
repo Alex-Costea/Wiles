@@ -58,7 +58,7 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
                 var hasLast = false
                 for(ifComponent in component.components)
                 {
-                    if(ifComponent.type == SyntaxType.TOKEN && ifComponent.name == ELSE_ID)
+                    if(ifComponent.name == ELSE_ID)
                         hasLast = true
                     if(ifComponent.type!=SyntaxType.CODE_BLOCK)
                         continue

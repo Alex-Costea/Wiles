@@ -83,7 +83,11 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
         {
             components.first().getFirstLocation()
             val newLocation = components.first().getFirstLocation()
-            val statedType = if(components.first().type == SyntaxType.TYPE) components.first() else inferredType
+            val statedType = if(components.first().type == SyntaxType.TYPE) components.first() else {
+                components.first().components.add(inferredType)
+                components.first().type = SyntaxType.TYPE
+                inferredType
+            }
             components.removeFirst()
 
             inferredType = getFormerTypeMinusLatterType(inferredType, statedType)
@@ -104,10 +108,14 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
         }
 
         if(inferredType.name == EITHER_ID && inferredType.components.isEmpty()) {
-            val lastType = statement.components.last { it.name == ELSE_ID || it.type == SyntaxType.TYPE }
-            lastType.name = ELSE_ID
-            lastType.components.clear()
-            lastType.type = SyntaxType.TOKEN
+            val lastType = statement.components.last { it.type == SyntaxType.TYPE }
+            if(lastType.components.isEmpty()) {
+                val lastTypeBefore = lastType.copyRemovingLocation()
+                lastType.name = ELSE_ID
+                lastType.components.clear()
+                lastType.components.add(lastTypeBefore)
+                lastType.type = SyntaxType.TYPE
+            }
         }
 
         checkIsInitialized(variables, listOfVariableMaps, codeBlockLists, statement.components)
