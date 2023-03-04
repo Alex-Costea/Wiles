@@ -79,7 +79,7 @@ object Main {
             interpreterCode = checker.codeAsJSONString
         }
 
-        if(!writeCompileFile)
+        if(!writeCompileFile && exceptions.isEmpty())
         {
             val interpreter = Interpreter(interpreterCode)
             interpreter.interpret()
