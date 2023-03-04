@@ -21,17 +21,20 @@ import wiles.shared.constants.Utils.createFunctionType
 object InterpreterConstants {
     val defaultVariableMap = VariableMap()
     val objectsMap = ObjectsMap()
+    private var maxReference = Long.MIN_VALUE
 
-    private const val NOTHING_REF = Long.MIN_VALUE
-    private const val FALSE_REF = NOTHING_REF + 1
-    private const val TRUE_REF = FALSE_REF +1
-    private const val WRITE_REF = TRUE_REF + 1
-    private const val WRITELINE_REF = WRITE_REF + 1
-    private const val PANIC_REF = WRITELINE_REF + 1
-    private const val IGNORE_REF = PANIC_REF + 1
-    private const val MODULO_REF = IGNORE_REF + 1
-    private const val SIZE_REF = MODULO_REF + 1
-    private const val AS_TEXT_REF = SIZE_REF + 1
+    fun newReference() = maxReference++
+
+    private val NOTHING_REF = newReference()
+    private val FALSE_REF = newReference()
+    private val TRUE_REF = newReference()
+    private val WRITE_REF = newReference()
+    private val WRITELINE_REF = newReference()
+    private val PANIC_REF = newReference()
+    private val IGNORE_REF = newReference()
+    private val MODULO_REF = newReference()
+    private val SIZE_REF = newReference()
+    private val AS_TEXT_REF = newReference()
 
     private val SIZE_TYPE = createFunctionType(Pair(LIST_OF_ANYTHING_TYPE, INT64_TYPE))
     private val AS_TEXT_TYPE = createFunctionType(Pair(ANYTHING_TYPE, STRING_TYPE))
@@ -60,5 +63,4 @@ object InterpreterConstants {
         objectsMap[AS_TEXT_REF] = ObjectDetails({ x : Any? -> "" + (x?:"nothing")}, AS_TEXT_TYPE)
     }
 
-    var maxReference = objectsMap.maxOf { it.key }
 }
