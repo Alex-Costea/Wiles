@@ -6,6 +6,7 @@ import wiles.Main.DEBUG
 import wiles.interpreter.data.VariableMap
 import wiles.interpreter.services.InterpretFrom
 import wiles.interpreter.statics.InterpreterConstants.defaultVariableMap
+import wiles.interpreter.statics.InterpreterConstants.objectsMap
 import wiles.shared.JSONStatement
 import java.io.File
 
@@ -28,5 +29,13 @@ class Interpreter(private val code : String?) {
         val variableMap = VariableMap()
         variableMap.putAll(defaultVariableMap)
         InterpretFrom(input, variableMap, VariableMap()).interpret()
+
+        if(DEBUG)
+        {
+            print("Variables: ")
+            println(variableMap
+                .filter{it.key !in defaultVariableMap}
+                .map { it.key + " -> " + objectsMap[it.value.reference]})
+        }
     }
 }
