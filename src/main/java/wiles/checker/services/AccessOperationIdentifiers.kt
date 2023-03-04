@@ -4,7 +4,6 @@ import wiles.checker.data.VariableDetails
 import wiles.checker.statics.CheckerConstants.ANYTHING_TYPE
 import wiles.checker.statics.CheckerConstants.INT64_TYPE
 import wiles.checker.statics.CheckerConstants.LIST_OF_ANYTHING_TYPE
-import wiles.checker.statics.CheckerConstants.NOTHING_TYPE
 import wiles.checker.statics.CheckerConstants.STRING_TYPE
 import wiles.checker.statics.InferrerUtils
 import wiles.shared.JSONStatement
@@ -15,8 +14,6 @@ object AccessOperationIdentifiers {
     private val access : HashMap<String,List<Pair<JSONStatement,JSONStatement>>> = hashMapOf(
         Pair("!as_text", listOf(Pair(ANYTHING_TYPE, STRING_TYPE))),
         Pair("!size", listOf(Pair(LIST_OF_ANYTHING_TYPE, INT64_TYPE))),
-        Pair("!write", listOf(Pair(STRING_TYPE, NOTHING_TYPE))),
-        Pair("!writeline", listOf(Pair(STRING_TYPE, NOTHING_TYPE))),
     )
 
     private fun createFunctionType(variableType: Pair<JSONStatement, JSONStatement>): JSONStatement

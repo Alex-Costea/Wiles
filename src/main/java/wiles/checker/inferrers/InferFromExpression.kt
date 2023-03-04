@@ -190,9 +190,10 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
             if(middle == CheckerConstants.ACCESS_OPERATION)
             {
                 if(right.type!=SyntaxType.TOKEN)
-                    throw UnknownIdentifierException(right.getFirstLocation())
-                right.name= AccessOperationIdentifiers.get(right.name,leftType) ?:
-                    throw UnknownIdentifierException(right.getFirstLocation())
+                    throw ExpectedIdentifierException(right.getFirstLocation())
+                right.name = AccessOperationIdentifiers.get(right.name,leftType) ?:
+                    if(variables[right.name]!=null) right.name
+                    else throw UnknownIdentifierException(right.getFirstLocation())
 
                 //create correct components
                 assert(isThree)
