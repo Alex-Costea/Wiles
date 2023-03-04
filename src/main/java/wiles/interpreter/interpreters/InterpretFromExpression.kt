@@ -5,6 +5,7 @@ import wiles.interpreter.data.VariableMap
 import wiles.interpreter.services.DoOperation
 import wiles.interpreter.statics.InterpreterConstants.newReference
 import wiles.interpreter.statics.InterpreterConstants.objectsMap
+import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.CheckerConstants.INT64_TYPE
@@ -36,36 +37,31 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
         return ref
     }
 
+    private fun getReference(component : JSONStatement) : Long
+    {
+        return if(component.type != SyntaxType.EXPRESSION) {
+            getFromValue(component.name)
+        } else {
+            val expressionRun = InterpretFromExpression(component, variables, additionalVars)
+            expressionRun.interpret()
+            expressionRun.reference
+        }
+    }
+
     override fun interpret() {
         assert(statement.components.size == 1 || statement.components.size == 3)
-        if(statement.components.size == 1)
-        {
-            val name = statement.components[0].name
-            reference = getFromValue(name)
-        }
-        else if(statement.components.size == 3)
-        {
-            val leftComp = statement.components[0]
-            val middle = statement.components[1].name
-            val rightComp = statement.components[2]
-
-            val leftRef = if(leftComp.type != SyntaxType.EXPRESSION) {
-                getFromValue(leftComp.name)
-            } else {
-                val expressionRun = InterpretFromExpression(leftComp, variables, additionalVars)
-                expressionRun.interpret()
-                expressionRun.reference
+        reference = when (statement.components.size) {
+            1 -> {
+                getFromValue(statement.components[0].name)
             }
+            3 -> {
+                val leftRef = getReference(statement.components[0])
+                val middle = statement.components[1].name
+                val rightRef = getReference(statement.components[2])
 
-            val rightRef = if(rightComp.type != SyntaxType.EXPRESSION) {
-                getFromValue(rightComp.name)
-            } else {
-                val expressionRun = InterpretFromExpression(rightComp, variables, additionalVars)
-                expressionRun.interpret()
-                expressionRun.reference
+                DoOperation.get(leftRef, middle, rightRef)
             }
-
-            reference = DoOperation.get(leftRef, middle, rightRef)
+            else -> throw InternalErrorException()
         }
     }
 }
