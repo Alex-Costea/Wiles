@@ -1,9 +1,12 @@
 package wiles.interpreter.interpreters
 
+import wiles.interpreter.data.ObjectDetails
+import wiles.interpreter.data.VariableMap
 import wiles.interpreter.statics.InterpreterConstants.maxReference
 import wiles.interpreter.statics.InterpreterConstants.objectsMap
-import wiles.interpreter.data.VariableMap
 import wiles.shared.JSONStatement
+import wiles.shared.constants.CheckerConstants.INT64_TYPE
+import wiles.shared.constants.CheckerConstants.STRING_TYPE
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Predicates.IS_NUMBER_LITERAL
 import wiles.shared.constants.Predicates.IS_TEXT_LITERAL
@@ -18,13 +21,13 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
             val name = statement.components[0].name
             if(IS_NUMBER_LITERAL.test(name)) {
                 maxReference++
-                objectsMap[maxReference] = name.substring(1).toLong()
+                objectsMap[maxReference] = ObjectDetails(name.substring(1).toLong(), INT64_TYPE)
                 reference = maxReference
             }
 
             else if(IS_TEXT_LITERAL.test(name)) {
                 maxReference++
-                objectsMap[maxReference] = name.substring(1)
+                objectsMap[maxReference] = ObjectDetails(name.substring(1), STRING_TYPE)
                 reference = maxReference
             }
 
