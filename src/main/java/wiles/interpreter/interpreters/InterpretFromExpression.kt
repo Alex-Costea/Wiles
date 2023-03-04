@@ -19,6 +19,8 @@ import wiles.shared.constants.CheckerConstants.STRING_TYPE
 import wiles.shared.constants.Predicates
 import wiles.shared.constants.Tokens.AND_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
+import wiles.shared.constants.Tokens.MODIFY_ID
+import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Tokens.OR_ID
 
 class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, additionalVars: VariableMap)
@@ -73,16 +75,33 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
             1 -> {
                 getFromValue(leftStatement.name)
             }
-            //TODO: apply, elem access, mutable, import, modify
+            //TODO: apply, elem access, import
             3 -> {
                 val rightStatement = statement.components[2]
                 when(val middle = statement.components[1].name)
                 {
-                    ASSIGN_ID->
+                    ASSIGN_ID ->
                     {
                         val leftName = leftStatement.components[0].name
                         val rightRef = getReference(rightStatement)
                         variables[leftName] = VariableDetails(rightRef, objectsMap[rightRef]!!.type)
+                        NOTHING_REF
+                    }
+                    MUTABLE_ID ->
+                    {
+                        val ref = if(rightStatement.type == SyntaxType.EXPRESSION) {
+                            val interpreter =InterpretFromExpression(rightStatement, variables, additionalVars)
+                            interpreter.interpret()
+                            interpreter.reference
+                        }
+                        else getFromValue(rightStatement.name)
+                        ref
+                    }
+                    MODIFY_ID ->
+                    {
+                        val leftRef = getReference(leftStatement)
+                        val rightRef = getReference(rightStatement)
+                        objectsMap[leftRef] = objectsMap[rightRef]!!
                         NOTHING_REF
                     }
                     OR_ID ->
