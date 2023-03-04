@@ -1,5 +1,6 @@
-package wiles.interpreter
+package wiles.interpreter.services
 
+import wiles.interpreter.data.VariableMap
 import wiles.interpreter.interpreters.InterpretFromCodeBlock
 import wiles.interpreter.interpreters.InterpretFromDeclaration
 import wiles.interpreter.interpreters.InterpretFromStatement
@@ -9,7 +10,8 @@ import wiles.shared.SyntaxType
 
 class InterpretFrom(val statement : JSONStatement,
                     val variables : VariableMap,
-                    val additionalVars : VariableMap) {
+                    val additionalVars : VariableMap
+) {
     fun interpret()
     {
         val interpreter : InterpretFromStatement

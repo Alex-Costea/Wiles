@@ -1,6 +1,6 @@
 package wiles.interpreter.interpreters
 
-import wiles.interpreter.VariableMap
+import wiles.interpreter.data.VariableMap
 import wiles.shared.JSONStatement
 
 abstract class InterpretFromStatement(val statement : JSONStatement,

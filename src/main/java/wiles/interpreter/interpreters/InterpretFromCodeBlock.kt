@@ -1,7 +1,7 @@
 package wiles.interpreter.interpreters
 
-import wiles.interpreter.InterpretFrom
-import wiles.interpreter.VariableMap
+import wiles.interpreter.services.InterpretFrom
+import wiles.interpreter.data.VariableMap
 import wiles.shared.JSONStatement
 
 class InterpretFromCodeBlock(statement: JSONStatement, variables: VariableMap, additionalVars: VariableMap) :

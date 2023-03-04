@@ -1,3 +1,3 @@
-package wiles.interpreter
+package wiles.interpreter.data
 
 class ObjectsMap : HashMap<Long, Any?>()

@@ -1,7 +1,7 @@
 package wiles.interpreter.interpreters
 
-import wiles.interpreter.VariableDetails
-import wiles.interpreter.VariableMap
+import wiles.interpreter.data.VariableDetails
+import wiles.interpreter.data.VariableMap
 import wiles.shared.JSONStatement
 
 class InterpretFromDeclaration(statement: JSONStatement, variables: VariableMap, additionalVars: VariableMap) :

@@ -1,8 +1,8 @@
 package wiles.interpreter.interpreters
 
-import wiles.interpreter.InterpreterConstants.maxReference
-import wiles.interpreter.InterpreterConstants.objectsMap
-import wiles.interpreter.VariableMap
+import wiles.interpreter.statics.InterpreterConstants.maxReference
+import wiles.interpreter.statics.InterpreterConstants.objectsMap
+import wiles.interpreter.data.VariableMap
 import wiles.shared.JSONStatement
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Predicates.IS_NUMBER_LITERAL
