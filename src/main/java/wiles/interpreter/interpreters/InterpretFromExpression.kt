@@ -113,14 +113,8 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
                     }
                     else -> {
                         val leftRef = getReference(leftStatement)
-                        if (middle.contains("|${OR_ID}|") && objectsMap[leftRef]!!.value == true) {
-                            TRUE_REF
-                        } else if (middle.contains("|${AND_ID}|") && objectsMap[leftRef]!!.value == false) {
-                            FALSE_REF
-                        } else {
-                            val rightRef = getReference(rightStatement)
-                            DoOperation.get(leftRef, middle, rightRef)
-                        }
+                        val rightRef = getReference(rightStatement)
+                        DoOperation.get(leftRef, middle, rightRef)
                     }
                 }
             }
