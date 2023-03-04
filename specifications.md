@@ -45,7 +45,7 @@
 - `and`, `or`, `not` (not bitwise!)
 - `=`, `>`, `>=`, `<`, `<=`, `=/=`
 - `:=` (assign, declare or name parameters)
-- `.` (function / field access)
+- `.` (`b.a` is `a(b)`, also used for field access)
 - `:` (type annotation)
 - `@` (access element in collection. returns nullable type)
 - `()` (order of operations, function access)
