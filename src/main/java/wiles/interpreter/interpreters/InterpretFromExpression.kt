@@ -1,9 +1,11 @@
 package wiles.interpreter.interpreters
 
 import wiles.interpreter.data.ObjectDetails
+import wiles.interpreter.data.VariableDetails
 import wiles.interpreter.data.VariableMap
 import wiles.interpreter.services.DoOperation
 import wiles.interpreter.statics.InterpreterConstants.FALSE_REF
+import wiles.interpreter.statics.InterpreterConstants.NOTHING_REF
 import wiles.interpreter.statics.InterpreterConstants.TRUE_REF
 import wiles.interpreter.statics.InterpreterConstants.newReference
 import wiles.interpreter.statics.InterpreterConstants.objectsMap
@@ -15,6 +17,7 @@ import wiles.shared.constants.CheckerConstants.DOUBLE_TYPE
 import wiles.shared.constants.CheckerConstants.INT64_TYPE
 import wiles.shared.constants.CheckerConstants.STRING_TYPE
 import wiles.shared.constants.Predicates
+import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.AND_ID
 import wiles.shared.constants.Tokens.OR_ID
 
@@ -65,23 +68,32 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
 
     override fun interpret() {
         assert(statement.components.size == 1 || statement.components.size == 3)
+        val leftStatement = statement.components[0]
         reference = when (statement.components.size) {
             1 -> {
-                getFromValue(statement.components[0].name)
+                getFromValue(leftStatement.name)
             }
+            //TODO: apply, elem access, mutable, import, modify
             3 -> {
-                val leftRef = getReference(statement.components[0])
+                val rightStatement = statement.components[2]
                 val middle = statement.components[1].name
-                if(middle.contains("|${OR_ID}|") && objectsMap[leftRef]!!.value == true) {
-                    TRUE_REF
-                }
-                else if(middle.contains("|${AND_ID}|") && objectsMap[leftRef]!!.value == false) {
-                    FALSE_REF
+                if(middle.contains("|${Tokens.ASSIGN_ID}|"))
+                {
+                    val leftName = leftStatement.components[0].name
+                    val rightRef = getReference(rightStatement)
+                    variables[leftName] = VariableDetails(rightRef, objectsMap[rightRef]!!.type)
+                    NOTHING_REF
                 }
                 else {
-                    //TODO: assign, apply, elem access, mutable, import, modify
-                    val rightRef = getReference(statement.components[2])
-                    DoOperation.get(leftRef, middle, rightRef)
+                    val leftRef = getReference(leftStatement)
+                    if (middle.contains("|${OR_ID}|") && objectsMap[leftRef]!!.value == true) {
+                        TRUE_REF
+                    } else if (middle.contains("|${AND_ID}|") && objectsMap[leftRef]!!.value == false) {
+                        FALSE_REF
+                    } else {
+                        val rightRef = getReference(rightStatement)
+                        DoOperation.get(leftRef, middle, rightRef)
+                    }
                 }
             }
             else -> throw InternalErrorException()

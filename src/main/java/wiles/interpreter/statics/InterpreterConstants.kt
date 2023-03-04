@@ -25,7 +25,7 @@ object InterpreterConstants {
 
     fun newReference() = maxReference++
 
-    private val NOTHING_REF = newReference()
+    val NOTHING_REF = newReference()
     val FALSE_REF = newReference()
     val TRUE_REF = newReference()
     private val WRITE_REF = newReference()
