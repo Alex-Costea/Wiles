@@ -26,8 +26,8 @@ object InterpreterConstants {
     fun newReference() = maxReference++
 
     private val NOTHING_REF = newReference()
-    private val FALSE_REF = newReference()
-    private val TRUE_REF = newReference()
+    val FALSE_REF = newReference()
+    val TRUE_REF = newReference()
     private val WRITE_REF = newReference()
     private val WRITELINE_REF = newReference()
     private val PANIC_REF = newReference()
