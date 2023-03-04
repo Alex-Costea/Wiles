@@ -49,7 +49,7 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
             val middle = statement.components[1].name
             val rightComp = statement.components[2]
 
-            val leftRef = if(leftComp.type == SyntaxType.TOKEN) {
+            val leftRef = if(leftComp.type != SyntaxType.EXPRESSION) {
                 getFromValue(leftComp.name)
             } else {
                 val expressionRun = InterpretFromExpression(leftComp, variables, additionalVars)
@@ -57,7 +57,7 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
                 expressionRun.reference
             }
 
-            val rightRef = if(rightComp.type == SyntaxType.TOKEN) {
+            val rightRef = if(rightComp.type != SyntaxType.EXPRESSION) {
                 getFromValue(rightComp.name)
             } else {
                 val expressionRun = InterpretFromExpression(rightComp, variables, additionalVars)
