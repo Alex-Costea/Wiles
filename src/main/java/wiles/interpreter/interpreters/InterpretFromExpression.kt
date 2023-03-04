@@ -50,12 +50,16 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
 
     private fun getReference(component : JSONStatement) : Long
     {
-        return if(component.type != SyntaxType.EXPRESSION) {
-            getFromValue(component.name)
-        } else {
-            val expressionRun = InterpretFromExpression(component, variables, additionalVars)
-            expressionRun.interpret()
-            expressionRun.reference
+        return when (component.type) {
+            SyntaxType.TOKEN -> {
+                getFromValue(component.name)
+            }
+            SyntaxType.EXPRESSION -> {
+                val expressionRun = InterpretFromExpression(component, variables, additionalVars)
+                expressionRun.interpret()
+                expressionRun.reference
+            }
+            else -> TODO()
         }
     }
 
@@ -75,6 +79,7 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
                     FALSE_REF
                 }
                 else {
+                    //TODO: assign, apply, elem access, mutable, import, modify
                     val rightRef = getReference(statement.components[2])
                     DoOperation.get(leftRef, middle, rightRef)
                 }

@@ -157,6 +157,7 @@ object Tokens {
         SYMBOLS["?"] = MAYBE_ID
         SYMBOLS["" + CONTINUE_LINE] = CONTINUE_LINE_ID
         SYMBOLS["\n"] = NEWLINE_ID
+
         TOKENS = HashBiMap.create(KEYWORDS)
         TOKENS.putAll(SYMBOLS)
         TOKENS_INVERSE = TOKENS.inverse()
