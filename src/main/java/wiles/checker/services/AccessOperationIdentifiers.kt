@@ -1,13 +1,13 @@
 package wiles.checker.services
 
 import wiles.checker.data.VariableDetails
-import wiles.checker.statics.CheckerConstants.ANYTHING_TYPE
-import wiles.checker.statics.CheckerConstants.INT64_TYPE
-import wiles.checker.statics.CheckerConstants.LIST_OF_ANYTHING_TYPE
-import wiles.checker.statics.CheckerConstants.STRING_TYPE
 import wiles.checker.statics.InferrerUtils
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
+import wiles.shared.constants.CheckerConstants.ANYTHING_TYPE
+import wiles.shared.constants.CheckerConstants.INT64_TYPE
+import wiles.shared.constants.CheckerConstants.LIST_OF_ANYTHING_TYPE
+import wiles.shared.constants.CheckerConstants.STRING_TYPE
 import wiles.shared.constants.Tokens
 
 object AccessOperationIdentifiers {

@@ -1,16 +1,35 @@
-package wiles.checker.statics
+package wiles.shared.constants
 
-import wiles.checker.statics.InferrerUtils.makeList
-import wiles.checker.statics.InferrerUtils.makeMutable
 import wiles.checker.statics.InferrerUtils.makeNullable
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
-import wiles.shared.constants.Tokens
-import wiles.shared.constants.Types
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.METHOD_CALL_ID
 
 object CheckerConstants {
+
+    fun makeMutable(type : JSONStatement) : JSONStatement
+    {
+        return JSONStatement(name = Tokens.MUTABLE_ID,
+            type = SyntaxType.TYPE,
+            components = mutableListOf(type.copyRemovingLocation()))
+    }
+
+    fun makeList(type : JSONStatement) : JSONStatement
+    {
+        return JSONStatement(name = Types.LIST_ID,
+            type = SyntaxType.TYPE,
+            components = mutableListOf(type.copyRemovingLocation()))
+    }
+
+    fun makeMethod(type : JSONStatement) : JSONStatement
+    {
+        val newType = type.copyRemovingLocation()
+        newType.components.removeLast()
+        return JSONStatement(name = Tokens.METHOD_ID,
+            type = SyntaxType.TYPE,
+            components = mutableListOf(newType))
+    }
 
     val NOTHING_TYPE = JSONStatement(type = SyntaxType.TYPE, name = Tokens.NOTHING_ID)
     val BOOLEAN_TYPE = JSONStatement(type = SyntaxType.TYPE, name = Types.BOOLEAN_ID)

@@ -3,13 +3,13 @@ package wiles.checker.statics
 import wiles.checker.data.VariableDetails
 import wiles.checker.data.VariableMap
 import wiles.checker.exceptions.*
-import wiles.checker.statics.CheckerConstants.NOTHING_TYPE
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.TokenLocation
 import wiles.shared.constants.Chars
 import wiles.shared.constants.Chars.DIGIT_SEPARATOR
+import wiles.shared.constants.CheckerConstants.NOTHING_TYPE
 import wiles.shared.constants.Predicates
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens
@@ -268,29 +268,6 @@ object InferrerUtils {
         return JSONStatement(name = EITHER_ID,
             type = SyntaxType.TYPE,
             components = types.map { it.copyRemovingLocation() }.toMutableList())
-    }
-
-    fun makeMutable(type : JSONStatement) : JSONStatement
-    {
-        return JSONStatement(name = MUTABLE_ID,
-            type = SyntaxType.TYPE,
-            components = mutableListOf(type.copyRemovingLocation()))
-    }
-
-    fun makeList(type : JSONStatement) : JSONStatement
-    {
-        return JSONStatement(name = LIST_ID,
-            type = SyntaxType.TYPE,
-            components = mutableListOf(type.copyRemovingLocation()))
-    }
-
-    fun makeMethod(type : JSONStatement) : JSONStatement
-    {
-        val newType = type.copyRemovingLocation()
-        newType.components.removeLast()
-        return JSONStatement(name = METHOD_ID,
-            type = SyntaxType.TYPE,
-            components = mutableListOf(newType))
     }
 
     fun getFunctionArguments(methodType : JSONStatement, methodCallType : JSONStatement, location: TokenLocation)

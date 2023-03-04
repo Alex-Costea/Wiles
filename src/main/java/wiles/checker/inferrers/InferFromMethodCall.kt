@@ -2,7 +2,7 @@ package wiles.checker.inferrers
 
 import wiles.checker.data.InferrerDetails
 import wiles.checker.exceptions.ExpectedIdentifierException
-import wiles.checker.statics.CheckerConstants.METHOD_CALL_TYPE
+import wiles.shared.constants.CheckerConstants.METHOD_CALL_TYPE
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.ASSIGN_ID

@@ -4,8 +4,8 @@ import wiles.checker.data.InferrerDetails
 import wiles.checker.data.VariableDetails
 import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.exceptions.VariableAlreadyDeclaredException
-import wiles.checker.statics.CheckerConstants.INT64_TYPE
-import wiles.checker.statics.CheckerConstants.LIST_OF_NULLABLE_ANYTHING_TYPE
+import wiles.shared.constants.CheckerConstants.INT64_TYPE
+import wiles.shared.constants.CheckerConstants.LIST_OF_NULLABLE_ANYTHING_TYPE
 import wiles.checker.statics.InferrerUtils
 import wiles.checker.statics.InferrerUtils.getElementTypeFromListType
 import wiles.shared.JSONStatement

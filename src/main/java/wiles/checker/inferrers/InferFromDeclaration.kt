@@ -6,8 +6,8 @@ import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.exceptions.InferenceFailException
 import wiles.checker.exceptions.VariableAlreadyDeclaredException
 import wiles.checker.services.InferrerService
-import wiles.checker.statics.CheckerConstants.ERROR_TYPE
-import wiles.checker.statics.CheckerConstants.NOTHING_TYPE
+import wiles.shared.constants.CheckerConstants.ERROR_TYPE
+import wiles.shared.constants.CheckerConstants.NOTHING_TYPE
 import wiles.checker.statics.InferrerUtils.checkTypeIsDefined
 import wiles.checker.statics.InferrerUtils.isFormerSuperTypeOfLatter
 import wiles.shared.AbstractCompilationException

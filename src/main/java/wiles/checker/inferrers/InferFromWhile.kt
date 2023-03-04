@@ -2,7 +2,7 @@ package wiles.checker.inferrers
 
 import wiles.checker.data.InferrerDetails
 import wiles.checker.exceptions.ConflictingTypeDefinitionException
-import wiles.checker.statics.CheckerConstants.BOOLEAN_TYPE
+import wiles.shared.constants.CheckerConstants.BOOLEAN_TYPE
 import wiles.checker.statics.InferrerUtils
 
 class InferFromWhile(details: InferrerDetails) : InferFromStatement(

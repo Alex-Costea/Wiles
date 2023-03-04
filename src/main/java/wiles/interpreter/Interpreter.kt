@@ -3,6 +3,7 @@ package wiles.interpreter
 import com.fasterxml.jackson.databind.ObjectMapper
 import wiles.Main
 import wiles.Main.DEBUG
+import wiles.interpreter.InterpreterConstants.defaultVariableMap
 import wiles.shared.JSONStatement
 import java.io.File
 
@@ -22,6 +23,6 @@ class Interpreter(private val code : String?) {
             println(input)
         }
 
-        InterpreterService(input).run()
+        InterpreterService(input, defaultVariableMap, VariableMap()).run()
     }
 }

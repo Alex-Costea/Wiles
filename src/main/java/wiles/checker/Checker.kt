@@ -9,10 +9,10 @@ import wiles.checker.data.VariableDetails
 import wiles.checker.data.VariableMap
 import wiles.checker.services.AccessOperationIdentifiers
 import wiles.checker.services.InferrerService
-import wiles.checker.statics.CheckerConstants
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
+import wiles.shared.constants.CheckerConstants
 import wiles.shared.constants.Settings
 import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.NOTHING_ID
