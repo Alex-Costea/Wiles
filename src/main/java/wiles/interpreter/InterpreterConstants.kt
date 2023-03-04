@@ -35,9 +35,9 @@ object InterpreterConstants {
             ))
     }
 
-    private const val NOTHING_REF = -1L
-    private const val FALSE_REF = 0L
-    private const val TRUE_REF = 1L
+    const val NOTHING_REF = -1L
+    const val FALSE_REF = 0L
+    const val TRUE_REF = 1L
     private const val WRITE_REF = 2L
     private const val WRITELINE_REF = 3L
     private const val PANIC_REF = 4L
@@ -71,4 +71,6 @@ object InterpreterConstants {
         objectsMap[SIZE_REF] = { x : List<Any> -> x.size}
         objectsMap[AS_TEXT_REF] = { x : Any? -> "" + (x?:"nothing")}
     }
+
+    var maxReference = objectsMap.maxOf { it.key }
 }

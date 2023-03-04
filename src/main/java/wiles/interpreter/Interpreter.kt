@@ -23,6 +23,6 @@ class Interpreter(private val code : String?) {
             println(input)
         }
 
-        InterpreterService(input, defaultVariableMap, VariableMap()).run()
+        InterpretFrom(input, defaultVariableMap, VariableMap()).interpret()
     }
 }

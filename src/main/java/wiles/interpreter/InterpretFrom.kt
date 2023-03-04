@@ -1,15 +1,16 @@
 package wiles.interpreter
 
 import wiles.interpreter.interpreters.InterpretFromCodeBlock
+import wiles.interpreter.interpreters.InterpretFromDeclaration
 import wiles.interpreter.interpreters.InterpretFromStatement
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 
-class InterpreterService(val statement : JSONStatement,
-                         val variables : VariableMap,
-                         val additionalVars : VariableMap) {
-    fun run()
+class InterpretFrom(val statement : JSONStatement,
+                    val variables : VariableMap,
+                    val additionalVars : VariableMap) {
+    fun interpret()
     {
         val interpreter : InterpretFromStatement
         when(statement.type)
@@ -21,7 +22,7 @@ class InterpreterService(val statement : JSONStatement,
             SyntaxType.TYPE -> TODO()
             SyntaxType.IF -> TODO()
             SyntaxType.WHEN -> TODO()
-            SyntaxType.DECLARATION -> TODO()
+            SyntaxType.DECLARATION -> interpreter = InterpretFromDeclaration(statement, variables, additionalVars)
             SyntaxType.RETURN -> TODO()
             SyntaxType.WHILE -> TODO()
             SyntaxType.BREAK -> TODO()

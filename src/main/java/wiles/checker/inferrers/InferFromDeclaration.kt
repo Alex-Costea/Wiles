@@ -6,13 +6,14 @@ import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.exceptions.InferenceFailException
 import wiles.checker.exceptions.VariableAlreadyDeclaredException
 import wiles.checker.services.InferrerService
-import wiles.shared.constants.CheckerConstants.ERROR_TYPE
-import wiles.shared.constants.CheckerConstants.NOTHING_TYPE
 import wiles.checker.statics.InferrerUtils.checkTypeIsDefined
 import wiles.checker.statics.InferrerUtils.isFormerSuperTypeOfLatter
 import wiles.shared.AbstractCompilationException
 import wiles.shared.JSONStatement
-import wiles.shared.SyntaxType.TYPE
+import wiles.shared.SyntaxType.*
+import wiles.shared.constants.CheckerConstants.ERROR_TYPE
+import wiles.shared.constants.CheckerConstants.NOTHING_TYPE
+import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.VARIABLE_ID
 
 class InferFromDeclaration(details: InferrerDetails,
@@ -49,9 +50,21 @@ class InferFromDeclaration(details: InferrerDetails,
 
         val newType = type?:inferredType!!
 
+        val isNothing =  (if(type!=null) isFormerSuperTypeOfLatter(NOTHING_TYPE, type) else false)
+
+        if(isNothing)
+            statement.components.add(
+                JSONStatement(
+                    type = EXPRESSION,
+                    components = mutableListOf(JSONStatement(
+                        name = NOTHING_ID,
+                        type = TOKEN
+                    ))
+                ))
+
         //type nothing is auto-initialized with nothing
         variables[name.name] = VariableDetails(newType,
-            initialized = alwaysInit || default != null || (if(type!=null) isFormerSuperTypeOfLatter(NOTHING_TYPE, type) else false),
+            initialized = alwaysInit || default != null || isNothing,
             modifiable = statement.name.contains(VARIABLE_ID)
         )
 
