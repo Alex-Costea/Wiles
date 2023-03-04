@@ -9,7 +9,6 @@ import wiles.shared.constants.CheckerConstants.BOOLEAN_TYPE
 import wiles.shared.constants.CheckerConstants.DOUBLE_TYPE
 import wiles.shared.constants.CheckerConstants.INT64_TYPE
 import wiles.shared.constants.CheckerConstants.STRING_TYPE
-import wiles.shared.constants.Tokens.AND_ID
 import wiles.shared.constants.Tokens.DIVIDE_ID
 import wiles.shared.constants.Tokens.EQUALS_ID
 import wiles.shared.constants.Tokens.LARGER_EQUALS_ID
@@ -18,7 +17,6 @@ import wiles.shared.constants.Tokens.MINUS_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.NOT_EQUAL_ID
 import wiles.shared.constants.Tokens.NOT_ID
-import wiles.shared.constants.Tokens.OR_ID
 import wiles.shared.constants.Tokens.PLUS_ID
 import wiles.shared.constants.Tokens.POWER_ID
 import wiles.shared.constants.Tokens.SMALLER_EQUALS_ID
@@ -106,11 +104,7 @@ object DoOperation {
         Pair("${NOTHING_ID}|${UNARY_MINUS_ID}|${DOUBLE_ID}",createFunction({ _: Any?, y: Any? ->
             -(y as Double)}, DOUBLE_TYPE)),
 
-        //Boolean operations.
-        Pair("${BOOLEAN_ID}|${AND_ID}|${BOOLEAN_ID}", createFunction({ x : Any?, y : Any? ->
-            (x as Boolean) && (y as Boolean)}, BOOLEAN_TYPE)),
-        Pair("${BOOLEAN_ID}|${OR_ID}|${BOOLEAN_ID}", createFunction({ x : Any?, y : Any? ->
-            (x as Boolean) || (y as Boolean)}, BOOLEAN_TYPE)),
+        //Not operation (other ones are handled seriously
         Pair("${NOTHING_ID}|${NOT_ID}|${BOOLEAN_ID}", createFunction({ _ : Any?, y : Any? ->
             !(y as Boolean)}, BOOLEAN_TYPE)),
 

@@ -17,8 +17,8 @@ import wiles.shared.constants.CheckerConstants.DOUBLE_TYPE
 import wiles.shared.constants.CheckerConstants.INT64_TYPE
 import wiles.shared.constants.CheckerConstants.STRING_TYPE
 import wiles.shared.constants.Predicates
-import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.AND_ID
+import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.OR_ID
 
 class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, additionalVars: VariableMap)
@@ -76,23 +76,51 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
             //TODO: apply, elem access, mutable, import, modify
             3 -> {
                 val rightStatement = statement.components[2]
-                val middle = statement.components[1].name
-                if(middle.contains("|${Tokens.ASSIGN_ID}|"))
+                when(val middle = statement.components[1].name)
                 {
-                    val leftName = leftStatement.components[0].name
-                    val rightRef = getReference(rightStatement)
-                    variables[leftName] = VariableDetails(rightRef, objectsMap[rightRef]!!.type)
-                    NOTHING_REF
-                }
-                else {
-                    val leftRef = getReference(leftStatement)
-                    if (middle.contains("|${OR_ID}|") && objectsMap[leftRef]!!.value == true) {
-                        TRUE_REF
-                    } else if (middle.contains("|${AND_ID}|") && objectsMap[leftRef]!!.value == false) {
-                        FALSE_REF
-                    } else {
+                    ASSIGN_ID->
+                    {
+                        val leftName = leftStatement.components[0].name
                         val rightRef = getReference(rightStatement)
-                        DoOperation.get(leftRef, middle, rightRef)
+                        variables[leftName] = VariableDetails(rightRef, objectsMap[rightRef]!!.type)
+                        NOTHING_REF
+                    }
+                    OR_ID ->
+                    {
+                        val leftRef = getReference(leftStatement)
+                        val ref = if(objectsMap[leftRef]!!.value == true)
+                            TRUE_REF
+                        else {
+                            val rightRef = getReference(rightStatement)
+                            if ((objectsMap[rightRef]!!.value == true))
+                                TRUE_REF
+                            else FALSE_REF
+                        }
+                        ref
+                    }
+                    AND_ID ->
+                    {
+                        val leftRef = getReference(leftStatement)
+                        val ref = if(objectsMap[leftRef]!!.value == false)
+                            FALSE_REF
+                        else {
+                            val rightRef = getReference(rightStatement)
+                            if ((objectsMap[rightRef]!!.value == false))
+                                FALSE_REF
+                            else TRUE_REF
+                        }
+                        ref
+                    }
+                    else -> {
+                        val leftRef = getReference(leftStatement)
+                        if (middle.contains("|${OR_ID}|") && objectsMap[leftRef]!!.value == true) {
+                            TRUE_REF
+                        } else if (middle.contains("|${AND_ID}|") && objectsMap[leftRef]!!.value == false) {
+                            FALSE_REF
+                        } else {
+                            val rightRef = getReference(rightStatement)
+                            DoOperation.get(leftRef, middle, rightRef)
+                        }
                     }
                 }
             }

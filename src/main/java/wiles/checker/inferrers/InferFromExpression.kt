@@ -7,10 +7,6 @@ import wiles.checker.exceptions.UnknownIdentifierException
 import wiles.checker.exceptions.WrongOperationException
 import wiles.checker.services.AccessOperationIdentifiers
 import wiles.checker.services.InferrerService
-import wiles.shared.constants.CheckerConstants
-import wiles.shared.constants.CheckerConstants.NOTHING_TOKEN
-import wiles.shared.constants.CheckerConstants.makeList
-import wiles.shared.constants.CheckerConstants.makeMethod
 import wiles.checker.statics.InferrerUtils
 import wiles.checker.statics.InferrerUtils.addIfNecessary
 import wiles.checker.statics.InferrerUtils.createComponents
@@ -21,12 +17,21 @@ import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
+import wiles.shared.constants.CheckerConstants
+import wiles.shared.constants.CheckerConstants.NOTHING_TOKEN
+import wiles.shared.constants.CheckerConstants.makeList
+import wiles.shared.constants.CheckerConstants.makeMethod
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
+import wiles.shared.constants.Tokens.AND_ID
 import wiles.shared.constants.Tokens.APPLY_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
+import wiles.shared.constants.Tokens.ELEM_ACCESS_ID
 import wiles.shared.constants.Tokens.IMPORT_ID
 import wiles.shared.constants.Tokens.METHOD_ID
+import wiles.shared.constants.Tokens.MODIFY_ID
+import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
+import wiles.shared.constants.Tokens.OR_ID
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.BOOLEAN_ID
 import wiles.shared.constants.Types.DOUBLE_ID
@@ -97,7 +102,9 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
             if(leftText !in VALID_NAMED) leftText = ANYTHING_ID
             var rightText : String = if(rightComponents.size == 1) unbox(rightComponents[0]).name else ANYTHING_ID
             if(rightText !in VALID_NAMED) rightText = ANYTHING_ID
-            operationName = "${leftText}|${middle.name}|${rightText}"
+            operationName = if(middle.name in listOf(ASSIGN_ID, ELEM_ACCESS_ID, MUTABLE_ID,
+                    IMPORT_ID, MODIFY_ID, AND_ID, OR_ID)) middle.name
+                else "${leftText}|${middle.name}|${rightText}"
             return if(resultingTypes.size == 1)
                 resultingTypes[0]
             else JSONStatement(name = EITHER_ID, type = SyntaxType.TYPE, components = resultingTypes)
