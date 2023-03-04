@@ -35,16 +35,16 @@ object InterpreterConstants {
             ))
     }
 
-    const val NOTHING_REF = -1L
-    const val FALSE_REF = 0L
-    const val TRUE_REF = 1L
-    private const val WRITE_REF = 2L
-    private const val WRITELINE_REF = 3L
-    private const val PANIC_REF = 4L
-    private const val IGNORE_REF = 5L
-    private const val MODULO_REF = 6L
-    private const val SIZE_REF = 7L
-    private const val AS_TEXT_REF = 8L
+    private const val NOTHING_REF = Long.MIN_VALUE
+    private const val FALSE_REF = NOTHING_REF + 1
+    private const val TRUE_REF = FALSE_REF +1
+    private const val WRITE_REF = TRUE_REF + 1
+    private const val WRITELINE_REF = WRITE_REF + 1
+    private const val PANIC_REF = WRITELINE_REF + 1
+    private const val IGNORE_REF = PANIC_REF + 1
+    private const val MODULO_REF = IGNORE_REF + 1
+    private const val SIZE_REF = MODULO_REF + 1
+    private const val AS_TEXT_REF = SIZE_REF + 1
 
     init{
         defaultVariableMap[NOTHING_ID] = VariableDetails(NOTHING_REF, NOTHING_TYPE)

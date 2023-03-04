@@ -1,17 +1,12 @@
 package wiles.interpreter.interpreters
 
-import wiles.interpreter.InterpreterConstants.FALSE_REF
-import wiles.interpreter.InterpreterConstants.NOTHING_REF
-import wiles.interpreter.InterpreterConstants.TRUE_REF
 import wiles.interpreter.InterpreterConstants.maxReference
 import wiles.interpreter.InterpreterConstants.objectsMap
 import wiles.interpreter.VariableMap
 import wiles.shared.JSONStatement
+import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Predicates.IS_NUMBER_LITERAL
 import wiles.shared.constants.Predicates.IS_TEXT_LITERAL
-import wiles.shared.constants.Tokens.FALSE_ID
-import wiles.shared.constants.Tokens.NOTHING_ID
-import wiles.shared.constants.Tokens.TRUE_ID
 
 class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, additionalVars: VariableMap)
     : InterpretFromStatement(statement, variables, additionalVars) {
@@ -33,14 +28,9 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
                 reference = maxReference
             }
 
-            else if(name == NOTHING_ID)
-                reference = NOTHING_REF
-
-            else if(name == TRUE_ID)
-                reference = TRUE_REF
-
-            else if(name == FALSE_ID)
-                reference = FALSE_REF
+            else if(IS_IDENTIFIER.test(name)) {
+                reference = variables[name]!!.reference
+            }
 
             else TODO()
         }
