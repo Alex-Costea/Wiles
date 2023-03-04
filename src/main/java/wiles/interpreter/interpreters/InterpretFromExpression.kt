@@ -101,7 +101,7 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
                     {
                         val leftRef = getReference(leftStatement)
                         val rightRef = getReference(rightStatement)
-                        objectsMap[leftRef] = objectsMap[rightRef]!!
+                        objectsMap[leftRef] = objectsMap[rightRef]!!.clone()
                         NOTHING_REF
                     }
                     OR_ID ->
