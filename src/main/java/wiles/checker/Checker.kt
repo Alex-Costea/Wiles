@@ -36,7 +36,9 @@ class Checker(private val jsonCode : String? = null) {
             && statement.type != SyntaxType.METHOD_CALL)
             statement.components.removeFirst()
 
-        if(statement.type == SyntaxType.EXPRESSION && statement.components.size == 2)
+        if(statement.type == SyntaxType.EXPRESSION
+            && statement.components[0].type != SyntaxType.TYPE
+            && statement.components.size == 2)
         {
             statement.components.add(0,NOTHING_TOKEN)
         }
