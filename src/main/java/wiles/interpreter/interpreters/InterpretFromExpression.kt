@@ -93,13 +93,16 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
                     }
                     MUTABLE_ID ->
                     {
-                        val ref = if(rightStatement.type == SyntaxType.EXPRESSION) {
+                        val oldRef = if(rightStatement.type == SyntaxType.EXPRESSION) {
                             val interpreter =InterpretFromExpression(rightStatement, variables, additionalVars)
                             interpreter.interpret()
                             interpreter.reference
                         }
                         else getFromValue(rightStatement.name)
-                        ref
+
+                        val newRef = newReference()
+                        objectsMap[newRef] = objectsMap[oldRef]!!.clone()
+                        newRef
                     }
                     MODIFY_ID ->
                     {
