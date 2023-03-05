@@ -4,6 +4,7 @@ import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.data.ObjectsMap
 import wiles.interpreter.data.VariableDetails
 import wiles.interpreter.data.VariableMap
+import wiles.interpreter.exceptions.PanicException
 import wiles.shared.constants.CheckerConstants.BOOLEAN_TYPE
 import wiles.shared.constants.CheckerConstants.IGNORE_TYPE
 import wiles.shared.constants.CheckerConstants.INT64_TYPE
@@ -67,9 +68,8 @@ object InterpreterConstants {
             NOTHING_REF
         }, WRITELINE_TYPE)
         objectsMap[PANIC_REF] =  ObjectDetails(Function<VariableMap, Long>{
-            val value = objectsMap[it["!text"]!!.reference]!!.value
-            System.err.println(value)
-            NOTHING_REF
+            val value = objectsMap[it["!text"]!!.reference]!!.value as String
+            throw PanicException(value)
         }, WRITELINE_TYPE)
         objectsMap[IGNORE_REF] = ObjectDetails(Function<VariableMap, Long>{NOTHING_REF}, IGNORE_TYPE)
         objectsMap[MODULO_REF] = ObjectDetails(Function<VariableMap, Long>{
