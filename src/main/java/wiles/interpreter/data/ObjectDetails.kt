@@ -2,6 +2,7 @@ package wiles.interpreter.data
 
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
+import wiles.shared.constants.TypeConstants.makeMutable
 
 data class ObjectDetails(val value : Any?, val type : JSONStatement)
 {
@@ -18,8 +19,8 @@ data class ObjectDetails(val value : Any?, val type : JSONStatement)
         return newValue
     }
 
-    fun clone() : ObjectDetails
+    fun makeMutable() : ObjectDetails
     {
-        return ObjectDetails(cloneValue(value), type.copyRemovingLocation())
+        return ObjectDetails(cloneValue(value), makeMutable(type.copyRemovingLocation()))
     }
 }
