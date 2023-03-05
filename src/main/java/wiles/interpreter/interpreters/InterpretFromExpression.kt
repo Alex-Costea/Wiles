@@ -1,7 +1,6 @@
 package wiles.interpreter.interpreters
 
 import wiles.interpreter.data.ObjectDetails
-import wiles.interpreter.data.VariableDetails
 import wiles.interpreter.data.VariableMap
 import wiles.interpreter.services.DoOperation
 import wiles.interpreter.statics.InterpreterConstants.FALSE_REF
@@ -13,9 +12,6 @@ import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Chars.DECIMAL_DELIMITER
-import wiles.shared.constants.CheckerConstants.DOUBLE_TYPE
-import wiles.shared.constants.CheckerConstants.INT64_TYPE
-import wiles.shared.constants.CheckerConstants.STRING_TYPE
 import wiles.shared.constants.Predicates
 import wiles.shared.constants.Tokens.AND_ID
 import wiles.shared.constants.Tokens.APPLY_ID
@@ -24,6 +20,9 @@ import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.Tokens.MODIFY_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Tokens.OR_ID
+import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
+import wiles.shared.constants.TypeConstants.INT64_TYPE
+import wiles.shared.constants.TypeConstants.STRING_TYPE
 import wiles.shared.constants.Types.METHOD_CALL_ID
 import java.util.function.Function
 
@@ -50,7 +49,7 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
         }
 
         else if(Predicates.IS_IDENTIFIER.test(name)) {
-            ref = variables[name]!!.reference
+            ref = variables[name]!!
         }
 
         else TODO()
@@ -89,7 +88,7 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
                     {
                         val leftName = leftStatement.components[0].name
                         val rightRef = getReference(rightStatement)
-                        variables[leftName] = VariableDetails(rightRef, objectsMap[rightRef]!!.type)
+                        variables[leftName] = rightRef
                         NOTHING_REF
                     }
                     MUTABLE_ID ->
@@ -144,8 +143,7 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
                         {
                             val name = component.components[0].name
                             val expressionRef = getReference(component.components[2])
-                            newVarMap[name] = VariableDetails(expressionRef,
-                                objectsMap[expressionRef]!!.type.copyRemovingLocation())
+                            newVarMap[name] = expressionRef
                         }
                         function.apply(newVarMap)
                     }

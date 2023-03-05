@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import wiles.Main
 import wiles.Main.DEBUG
 import wiles.interpreter.data.VariableMap
+import wiles.interpreter.exceptions.PanicException
 import wiles.interpreter.services.InterpretFrom
 import wiles.interpreter.statics.InterpreterConstants.defaultVariableMap
 import wiles.interpreter.statics.InterpreterConstants.objectsMap
@@ -28,14 +29,20 @@ class Interpreter(private val code : String?) {
 
         val variableMap = VariableMap()
         variableMap.putAll(defaultVariableMap)
-        InterpretFrom(input, variableMap, VariableMap()).interpret()
+        try {
+            InterpretFrom(input, variableMap, VariableMap()).interpret()
+        }
+        catch (ex : PanicException)
+        {
+            System.err.println("\u001B[31m${ex.message?:"A runtime error occurred!"}\u001B[0m")
+        }
 
         if(DEBUG)
         {
             print("Variables: ")
             println(variableMap
                 .filter{it.key !in defaultVariableMap}
-                .map { it.key + " -> " + objectsMap[it.value.reference]})
+                .map { it.key + " -> " + objectsMap[it.value]})
         }
     }
 }

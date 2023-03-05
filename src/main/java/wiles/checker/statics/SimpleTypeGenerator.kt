@@ -3,35 +3,35 @@ package wiles.checker.statics
 import wiles.checker.statics.InferrerUtils.isFormerSuperTypeOfLatter
 import wiles.checker.statics.InferrerUtils.unbox
 import wiles.shared.JSONStatement
-import wiles.shared.constants.CheckerConstants
-import wiles.shared.constants.CheckerConstants.AND_OPERATION
-import wiles.shared.constants.CheckerConstants.ASSIGN_OPERATION
-import wiles.shared.constants.CheckerConstants.BOOLEAN_TYPE
-import wiles.shared.constants.CheckerConstants.DIVIDE_OPERATION
-import wiles.shared.constants.CheckerConstants.DOUBLE_TYPE
-import wiles.shared.constants.CheckerConstants.EQUALS_OPERATION
-import wiles.shared.constants.CheckerConstants.IMPORT_OPERATION
-import wiles.shared.constants.CheckerConstants.INT64_TYPE
-import wiles.shared.constants.CheckerConstants.LARGER_EQUALS_OPERATION
-import wiles.shared.constants.CheckerConstants.LARGER_OPERATION
-import wiles.shared.constants.CheckerConstants.LIST_OF_NULLABLE_ANYTHING_TYPE
-import wiles.shared.constants.CheckerConstants.MINUS_OPERATION
-import wiles.shared.constants.CheckerConstants.MODIFY_OPERATION
-import wiles.shared.constants.CheckerConstants.MUTABLE_ANYTHING_INCLUDING_NOTHING_TYPE
-import wiles.shared.constants.CheckerConstants.MUTABLE_OPERATION
-import wiles.shared.constants.CheckerConstants.NOTHING_TYPE
-import wiles.shared.constants.CheckerConstants.NOT_EQUAL_OPERATION
-import wiles.shared.constants.CheckerConstants.NOT_OPERATION
-import wiles.shared.constants.CheckerConstants.OR_OPERATION
-import wiles.shared.constants.CheckerConstants.PLUS_OPERATION
-import wiles.shared.constants.CheckerConstants.POWER_OPERATION
-import wiles.shared.constants.CheckerConstants.SMALLER_EQUALS_OPERATION
-import wiles.shared.constants.CheckerConstants.SMALLER_OPERATION
-import wiles.shared.constants.CheckerConstants.STRING_TYPE
-import wiles.shared.constants.CheckerConstants.TIMES_OPERATION
-import wiles.shared.constants.CheckerConstants.UNARY_MINUS_OPERATION
-import wiles.shared.constants.CheckerConstants.UNARY_PLUS_OPERATION
-import wiles.shared.constants.CheckerConstants.makeMutable
+import wiles.shared.constants.TypeConstants
+import wiles.shared.constants.TypeConstants.AND_OPERATION
+import wiles.shared.constants.TypeConstants.ASSIGN_OPERATION
+import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
+import wiles.shared.constants.TypeConstants.DIVIDE_OPERATION
+import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
+import wiles.shared.constants.TypeConstants.EQUALS_OPERATION
+import wiles.shared.constants.TypeConstants.IMPORT_OPERATION
+import wiles.shared.constants.TypeConstants.INT64_TYPE
+import wiles.shared.constants.TypeConstants.LARGER_EQUALS_OPERATION
+import wiles.shared.constants.TypeConstants.LARGER_OPERATION
+import wiles.shared.constants.TypeConstants.LIST_OF_NULLABLE_ANYTHING_TYPE
+import wiles.shared.constants.TypeConstants.MINUS_OPERATION
+import wiles.shared.constants.TypeConstants.MODIFY_OPERATION
+import wiles.shared.constants.TypeConstants.MUTABLE_ANYTHING_INCLUDING_NOTHING_TYPE
+import wiles.shared.constants.TypeConstants.MUTABLE_OPERATION
+import wiles.shared.constants.TypeConstants.NOTHING_TYPE
+import wiles.shared.constants.TypeConstants.NOT_EQUAL_OPERATION
+import wiles.shared.constants.TypeConstants.NOT_OPERATION
+import wiles.shared.constants.TypeConstants.OR_OPERATION
+import wiles.shared.constants.TypeConstants.PLUS_OPERATION
+import wiles.shared.constants.TypeConstants.POWER_OPERATION
+import wiles.shared.constants.TypeConstants.SMALLER_EQUALS_OPERATION
+import wiles.shared.constants.TypeConstants.SMALLER_OPERATION
+import wiles.shared.constants.TypeConstants.STRING_TYPE
+import wiles.shared.constants.TypeConstants.TIMES_OPERATION
+import wiles.shared.constants.TypeConstants.UNARY_MINUS_OPERATION
+import wiles.shared.constants.TypeConstants.UNARY_PLUS_OPERATION
+import wiles.shared.constants.TypeConstants.makeMutable
 
 object SimpleTypeGenerator {
 
@@ -134,7 +134,7 @@ object SimpleTypeGenerator {
         if(unboxedTriple.second == IMPORT_OPERATION)
             return unboxedTriple.third.copyRemovingLocation()
 
-        if(unboxedTriple.second == CheckerConstants.ELEM_ACCESS_OPERATION)
+        if(unboxedTriple.second == TypeConstants.ELEM_ACCESS_OPERATION)
         {
             if(isFormerSuperTypeOfLatter(LIST_OF_NULLABLE_ANYTHING_TYPE,unboxedTriple.first)
                 && isFormerSuperTypeOfLatter(INT64_TYPE,unboxedTriple.third))

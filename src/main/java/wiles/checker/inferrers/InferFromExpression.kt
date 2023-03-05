@@ -17,10 +17,6 @@ import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
-import wiles.shared.constants.CheckerConstants
-import wiles.shared.constants.CheckerConstants.NOTHING_TOKEN
-import wiles.shared.constants.CheckerConstants.makeList
-import wiles.shared.constants.CheckerConstants.makeMethod
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.AND_ID
 import wiles.shared.constants.Tokens.APPLY_ID
@@ -32,6 +28,10 @@ import wiles.shared.constants.Tokens.MODIFY_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.OR_ID
+import wiles.shared.constants.TypeConstants
+import wiles.shared.constants.TypeConstants.NOTHING_TOKEN
+import wiles.shared.constants.TypeConstants.makeList
+import wiles.shared.constants.TypeConstants.makeMethod
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.BOOLEAN_ID
 import wiles.shared.constants.Types.DOUBLE_ID
@@ -66,7 +66,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
                 val unboxedNewLeft = unbox(newLeft)
                 val type = getSimpleTypes(Triple(newLeft, middle, newRight)) ?:
                     if(unboxedNewLeft.name == METHOD_ID &&
-                            middle == CheckerConstants.APPLY_OPERATION &&
+                            middle == TypeConstants.APPLY_OPERATION &&
                             newRight.name == METHOD_CALL_ID) {
                         val result = InferrerUtils.getFunctionArguments(unboxedNewLeft, newRight, middle.location!!)
                         val newResult = result.map {
@@ -194,7 +194,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
                 else throw InternalErrorException()
 
             //Transform access operation into apply operation
-            if(middle == CheckerConstants.ACCESS_OPERATION)
+            if(middle == TypeConstants.ACCESS_OPERATION)
             {
                 if(right.type!=SyntaxType.TOKEN)
                     throw ExpectedIdentifierException(right.getFirstLocation())

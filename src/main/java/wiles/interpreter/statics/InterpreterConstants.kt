@@ -2,21 +2,21 @@ package wiles.interpreter.statics
 
 import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.data.ObjectsMap
-import wiles.interpreter.data.VariableDetails
 import wiles.interpreter.data.VariableMap
 import wiles.interpreter.exceptions.PanicException
-import wiles.shared.constants.CheckerConstants.BOOLEAN_TYPE
-import wiles.shared.constants.CheckerConstants.IGNORE_TYPE
-import wiles.shared.constants.CheckerConstants.INT64_TYPE
-import wiles.shared.constants.CheckerConstants.LIST_OF_ANYTHING_TYPE
-import wiles.shared.constants.CheckerConstants.MODULO_TYPE
-import wiles.shared.constants.CheckerConstants.NOTHING_TYPE
-import wiles.shared.constants.CheckerConstants.NULLABLE_ANYTHING_TYPE
-import wiles.shared.constants.CheckerConstants.STRING_TYPE
-import wiles.shared.constants.CheckerConstants.WRITELINE_TYPE
 import wiles.shared.constants.Tokens.FALSE_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.TRUE_ID
+import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
+import wiles.shared.constants.TypeConstants.IGNORE_TYPE
+import wiles.shared.constants.TypeConstants.INT64_TYPE
+import wiles.shared.constants.TypeConstants.LIST_OF_ANYTHING_TYPE
+import wiles.shared.constants.TypeConstants.MODULO_TYPE
+import wiles.shared.constants.TypeConstants.NOTHING_TYPE
+import wiles.shared.constants.TypeConstants.NULLABLE_ANYTHING_TYPE
+import wiles.shared.constants.TypeConstants.PANIC_TYPE
+import wiles.shared.constants.TypeConstants.STRING_TYPE
+import wiles.shared.constants.TypeConstants.WRITELINE_TYPE
 import wiles.shared.constants.Utils.createFunctionType
 import java.util.function.Function
 
@@ -42,51 +42,51 @@ object InterpreterConstants {
     private val AS_TEXT_TYPE = createFunctionType(Pair(NULLABLE_ANYTHING_TYPE, STRING_TYPE))
 
     init{
-        defaultVariableMap[NOTHING_ID] = VariableDetails(NOTHING_REF, NOTHING_TYPE)
-        defaultVariableMap[FALSE_ID] = VariableDetails(FALSE_REF, BOOLEAN_TYPE)
-        defaultVariableMap[TRUE_ID] = VariableDetails(TRUE_REF, BOOLEAN_TYPE)
-        defaultVariableMap["!write"] = VariableDetails(WRITE_REF, WRITELINE_TYPE)
-        defaultVariableMap["!writeline"] = VariableDetails(WRITELINE_REF, WRITELINE_TYPE)
-        defaultVariableMap["!panic"] = VariableDetails(PANIC_REF, WRITELINE_TYPE)
-        defaultVariableMap["!ignore"] = VariableDetails(IGNORE_REF,IGNORE_TYPE)
-        defaultVariableMap["!modulo"] = VariableDetails(MODULO_REF,MODULO_TYPE)
-        defaultVariableMap["!TYPE LIST; (TYPE ANYTHING)!size"] = VariableDetails(SIZE_REF, SIZE_TYPE)
-        defaultVariableMap["!TYPE EITHER; (TYPE ANYTHING; TYPE NOTHING)!as_text"] =
-            VariableDetails(AS_TEXT_REF, AS_TEXT_TYPE)
+        defaultVariableMap[NOTHING_ID] = NOTHING_REF
+        defaultVariableMap[FALSE_ID] = FALSE_REF
+        defaultVariableMap[TRUE_ID] = TRUE_REF
+        defaultVariableMap["!write"] = WRITE_REF
+        defaultVariableMap["!writeline"] = WRITELINE_REF
+        defaultVariableMap["!panic"] = PANIC_REF
+        defaultVariableMap["!ignore"] = IGNORE_REF
+        defaultVariableMap["!modulo"] = MODULO_REF
+        defaultVariableMap["!TYPE LIST; (TYPE ANYTHING)!size"] = SIZE_REF
+        defaultVariableMap["!TYPE EITHER; (TYPE ANYTHING; TYPE NOTHING)!as_text"] = AS_TEXT_REF
 
         objectsMap[NOTHING_REF] = ObjectDetails(null, NOTHING_TYPE)
         objectsMap[FALSE_REF] = ObjectDetails(false, BOOLEAN_TYPE)
         objectsMap[TRUE_REF] = ObjectDetails(true, BOOLEAN_TYPE)
         objectsMap[WRITE_REF] = ObjectDetails(Function<VariableMap, Long>{
-            val value = objectsMap[it["!text"]!!.reference]!!.value
+            val value = objectsMap[it["!text"]!!]!!.value
             print(value)
             NOTHING_REF
         }, WRITELINE_TYPE)
         objectsMap[WRITELINE_REF] = ObjectDetails(Function<VariableMap, Long>{
-            val value = objectsMap[it["!text"]!!.reference]!!.value
+            val value = objectsMap[it["!text"]!!]!!.value
             println(value)
             NOTHING_REF
         }, WRITELINE_TYPE)
         objectsMap[PANIC_REF] =  ObjectDetails(Function<VariableMap, Long>{
-            val value = objectsMap[it["!text"]!!.reference]!!.value as String
+            val value = objectsMap[it["!text"]]?.value as String?
+            value?:throw PanicException()
             throw PanicException(value)
-        }, WRITELINE_TYPE)
+        }, PANIC_TYPE)
         objectsMap[IGNORE_REF] = ObjectDetails(Function<VariableMap, Long>{NOTHING_REF}, IGNORE_TYPE)
         objectsMap[MODULO_REF] = ObjectDetails(Function<VariableMap, Long>{
-            val x = objectsMap[it["!x"]!!.reference]!!.value as Long
-            val y = objectsMap[it["!y"]!!.reference]!!.value as Long
+            val x = objectsMap[it["!x"]!!]!!.value as Long
+            val y = objectsMap[it["!y"]!!]!!.value as Long
             val ref = newReference()
             objectsMap[ref] = ObjectDetails(x % y, INT64_TYPE)
             ref
         }, MODULO_TYPE)
         objectsMap[SIZE_REF] = ObjectDetails(Function<VariableMap, Long>{
-            val value = objectsMap[it["!elem"]!!.reference]!!.value as MutableList<*>
+            val value = objectsMap[it["!elem"]!!]!!.value as MutableList<*>
             val ref = newReference()
             objectsMap[ref] = ObjectDetails(value.size, INT64_TYPE)
             ref
         }, SIZE_TYPE)
         objectsMap[AS_TEXT_REF] = ObjectDetails(Function<VariableMap, Long>{
-            val value = objectsMap[it["!elem"]!!.reference]!!.value
+            val value = objectsMap[it["!elem"]!!]!!.value
             val ref = newReference()
             objectsMap[ref] = ObjectDetails(""+(value?:"nothing"), STRING_TYPE)
             ref

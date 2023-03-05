@@ -3,10 +3,10 @@ package wiles.checker.services
 import wiles.checker.data.VariableDetails
 import wiles.checker.statics.InferrerUtils
 import wiles.shared.JSONStatement
-import wiles.shared.constants.CheckerConstants.INT64_TYPE
-import wiles.shared.constants.CheckerConstants.LIST_OF_ANYTHING_TYPE
-import wiles.shared.constants.CheckerConstants.NULLABLE_ANYTHING_TYPE
-import wiles.shared.constants.CheckerConstants.STRING_TYPE
+import wiles.shared.constants.TypeConstants.INT64_TYPE
+import wiles.shared.constants.TypeConstants.LIST_OF_ANYTHING_TYPE
+import wiles.shared.constants.TypeConstants.NULLABLE_ANYTHING_TYPE
+import wiles.shared.constants.TypeConstants.STRING_TYPE
 import wiles.shared.constants.Utils.createFunctionType
 
 object AccessOperationIdentifiers {

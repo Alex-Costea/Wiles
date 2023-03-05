@@ -11,8 +11,8 @@ import wiles.checker.statics.InferrerUtils.isFormerSuperTypeOfLatter
 import wiles.shared.AbstractCompilationException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType.*
-import wiles.shared.constants.CheckerConstants.ERROR_TYPE
-import wiles.shared.constants.CheckerConstants.NOTHING_TYPE
+import wiles.shared.constants.TypeConstants.ERROR_TYPE
+import wiles.shared.constants.TypeConstants.NOTHING_TYPE
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.VARIABLE_ID
 

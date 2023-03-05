@@ -3,10 +3,12 @@ package wiles.shared.constants
 import wiles.checker.statics.InferrerUtils.makeNullable
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
+import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.METHOD_CALL_ID
+import wiles.shared.constants.Types.STRING_ID
 
-object CheckerConstants {
+object TypeConstants {
 
     fun makeMutable(type : JSONStatement) : JSONStatement
     {
@@ -31,13 +33,13 @@ object CheckerConstants {
             components = mutableListOf(newType))
     }
 
-    val NOTHING_TYPE = JSONStatement(type = SyntaxType.TYPE, name = Tokens.NOTHING_ID)
+    val NOTHING_TYPE = JSONStatement(type = SyntaxType.TYPE, name = NOTHING_ID)
     val BOOLEAN_TYPE = JSONStatement(type = SyntaxType.TYPE, name = Types.BOOLEAN_ID)
     val INT64_TYPE = JSONStatement(type = SyntaxType.TYPE, name = Types.INT64_ID)
-    val STRING_TYPE = JSONStatement(type = SyntaxType.TYPE, name = Types.STRING_ID)
+    val STRING_TYPE = JSONStatement(type = SyntaxType.TYPE, name = STRING_ID)
     val DOUBLE_TYPE = JSONStatement(type = SyntaxType.TYPE, name = Types.DOUBLE_ID)
     val ERROR_TYPE = JSONStatement(type = SyntaxType.TYPE, name = Tokens.ERROR_TOKEN)
-    val ANYTHING_TYPE = JSONStatement(type = SyntaxType.TYPE, name = ANYTHING_ID)
+    private val ANYTHING_TYPE = JSONStatement(type = SyntaxType.TYPE, name = ANYTHING_ID)
     val METHOD_CALL_TYPE = JSONStatement(type = SyntaxType.TYPE, name = METHOD_CALL_ID)
     val NULLABLE_ANYTHING_TYPE = makeNullable(ANYTHING_TYPE)
 
@@ -47,7 +49,7 @@ object CheckerConstants {
 
     val MUTABLE_ANYTHING_INCLUDING_NOTHING_TYPE = makeMutable(makeNullable(ANYTHING_TYPE))
 
-    val NOTHING_TOKEN = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.NOTHING_ID)
+    val NOTHING_TOKEN = JSONStatement(type = SyntaxType.TOKEN, name = NOTHING_ID)
 
     val PLUS_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.PLUS_ID)
     val MINUS_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.MINUS_ID)
@@ -76,21 +78,43 @@ object CheckerConstants {
     val WRITELINE_TYPE = JSONStatement(name = Tokens.METHOD_ID, type = SyntaxType.TYPE,
         components = mutableListOf(JSONStatement(name = Tokens.METHOD_ID, type = SyntaxType.METHOD,
             components = mutableListOf(
-                JSONStatement(name = Tokens.NOTHING_ID, type = SyntaxType.TYPE),
+                JSONStatement(name = NOTHING_ID, type = SyntaxType.TYPE),
                 JSONStatement(name = Tokens.ANON_ARG_ID, type = SyntaxType.DECLARATION,
                     components = mutableListOf(
-                        JSONStatement(name = Types.STRING_ID, type = SyntaxType.TYPE),
+                        JSONStatement(name = STRING_ID, type = SyntaxType.TYPE),
                         JSONStatement(name = "!text", type = SyntaxType.TOKEN)
                     )
                 ))
         ))
     )
 
+    val PANIC_TYPE = JSONStatement(name = Tokens.METHOD_ID, type = SyntaxType.TYPE,
+        components = mutableListOf(JSONStatement(name = Tokens.METHOD_ID, type = SyntaxType.METHOD,
+            components = mutableListOf(
+                JSONStatement(name = NOTHING_ID, type = SyntaxType.TYPE),
+                JSONStatement(name = Tokens.ANON_ARG_ID, type = SyntaxType.DECLARATION,
+                    components = mutableListOf(
+                        JSONStatement(name = Types.EITHER_ID, type = SyntaxType.TYPE,
+                            components = mutableListOf(
+                                JSONStatement(name = STRING_ID, type = SyntaxType.TYPE),
+                                JSONStatement(name = NOTHING_ID, type = SyntaxType.TYPE),
+                            )),
+                        JSONStatement(name = "!text", type = SyntaxType.TOKEN),
+                        JSONStatement(type = SyntaxType.EXPRESSION, components = mutableListOf(
+                            JSONStatement(name = NOTHING_ID, type =  SyntaxType.TYPE),
+                            JSONStatement(name = NOTHING_ID, type =  SyntaxType.TOKEN),
+                        )
+                    )
+                )
+                )
+            )
+        ))
+    )
 
     val IGNORE_TYPE = JSONStatement(name = Tokens.METHOD_ID, type = SyntaxType.TYPE,
         components = mutableListOf(JSONStatement(name = Tokens.METHOD_ID, type = SyntaxType.METHOD,
             components = mutableListOf(
-                JSONStatement(name = Tokens.NOTHING_ID, type = SyntaxType.TYPE),
+                JSONStatement(name = NOTHING_ID, type = SyntaxType.TYPE),
                 JSONStatement(name = Tokens.ANON_ARG_ID, type = SyntaxType.DECLARATION,
                     components = mutableListOf(
                         NULLABLE_ANYTHING_TYPE,

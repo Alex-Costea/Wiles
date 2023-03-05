@@ -4,7 +4,7 @@ import wiles.checker.data.InferrerDetails
 import wiles.checker.data.VariableMap
 import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.services.InferrerService
-import wiles.shared.constants.CheckerConstants.BOOLEAN_TYPE
+import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
 import wiles.checker.statics.InferrerUtils
 import wiles.checker.statics.InferrerUtils.checkIsInitialized
 import wiles.shared.JSONStatement

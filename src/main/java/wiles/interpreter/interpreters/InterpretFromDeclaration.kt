@@ -1,6 +1,5 @@
 package wiles.interpreter.interpreters
 
-import wiles.interpreter.data.VariableDetails
 import wiles.interpreter.data.VariableMap
 import wiles.shared.JSONStatement
 
@@ -12,9 +11,6 @@ class InterpretFromDeclaration(statement: JSONStatement, variables: VariableMap,
 
         assert(interpretFromExpression.reference != Long.MAX_VALUE)
 
-        variables[statement.components[1].name] = VariableDetails(
-            reference = interpretFromExpression.reference,
-            type = statement.components[0].copyRemovingLocation()
-        )
+        variables[statement.components[1].name] = interpretFromExpression.reference
     }
 }

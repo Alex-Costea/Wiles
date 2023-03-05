@@ -1,11 +1,11 @@
 package wiles.interpreter.data
 
-class VariableMap : HashMap<String, VariableDetails>()
+class VariableMap : HashMap<String, Long>()
 {
     override fun clone() : VariableMap
     {
         val newMap = VariableMap()
-        newMap.putAll(this.map { Pair(it.key, it.value.clone()) })
+        newMap.putAll(this)
         return newMap
     }
 }

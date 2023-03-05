@@ -5,10 +5,10 @@ import wiles.interpreter.statics.InterpreterConstants.newReference
 import wiles.interpreter.statics.InterpreterConstants.objectsMap
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
-import wiles.shared.constants.CheckerConstants.BOOLEAN_TYPE
-import wiles.shared.constants.CheckerConstants.DOUBLE_TYPE
-import wiles.shared.constants.CheckerConstants.INT64_TYPE
-import wiles.shared.constants.CheckerConstants.STRING_TYPE
+import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
+import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
+import wiles.shared.constants.TypeConstants.INT64_TYPE
+import wiles.shared.constants.TypeConstants.STRING_TYPE
 import wiles.shared.constants.Tokens.DIVIDE_ID
 import wiles.shared.constants.Tokens.EQUALS_ID
 import wiles.shared.constants.Tokens.LARGER_EQUALS_ID

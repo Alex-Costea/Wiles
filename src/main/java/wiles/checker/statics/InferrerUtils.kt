@@ -9,7 +9,6 @@ import wiles.shared.SyntaxType
 import wiles.shared.TokenLocation
 import wiles.shared.constants.Chars
 import wiles.shared.constants.Chars.DIGIT_SEPARATOR
-import wiles.shared.constants.CheckerConstants.NOTHING_TYPE
 import wiles.shared.constants.Predicates
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens
@@ -17,6 +16,7 @@ import wiles.shared.constants.Tokens.ANON_ARG_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
+import wiles.shared.constants.TypeConstants.NOTHING_TYPE
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.DOUBLE_ID
 import wiles.shared.constants.Types.EITHER_ID

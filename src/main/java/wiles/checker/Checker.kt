@@ -12,10 +12,10 @@ import wiles.checker.services.InferrerService
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
-import wiles.shared.constants.CheckerConstants
 import wiles.shared.constants.Settings
 import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.NOTHING_ID
+import wiles.shared.constants.TypeConstants
 import java.io.File
 
 class Checker(private val jsonCode : String? = null) {
@@ -74,14 +74,14 @@ class Checker(private val jsonCode : String? = null) {
         fun getVariables(): VariableMap {
             val vars = VariableMap(
                 hashMapOf(
-                    Pair(Tokens.TRUE_ID, VariableDetails(CheckerConstants.BOOLEAN_TYPE)),
-                    Pair(Tokens.FALSE_ID, VariableDetails(CheckerConstants.BOOLEAN_TYPE)),
-                    Pair(NOTHING_ID, VariableDetails(CheckerConstants.NOTHING_TYPE)),
-                    Pair("!write", VariableDetails(CheckerConstants.WRITELINE_TYPE)),
-                    Pair("!writeline", VariableDetails(CheckerConstants.WRITELINE_TYPE)),
-                    Pair("!panic", VariableDetails(CheckerConstants.WRITELINE_TYPE)),
-                    Pair("!ignore", VariableDetails(CheckerConstants.IGNORE_TYPE)),
-                    Pair("!modulo", VariableDetails(CheckerConstants.MODULO_TYPE)),
+                    Pair(Tokens.TRUE_ID, VariableDetails(TypeConstants.BOOLEAN_TYPE)),
+                    Pair(Tokens.FALSE_ID, VariableDetails(TypeConstants.BOOLEAN_TYPE)),
+                    Pair(NOTHING_ID, VariableDetails(TypeConstants.NOTHING_TYPE)),
+                    Pair("!write", VariableDetails(TypeConstants.WRITELINE_TYPE)),
+                    Pair("!writeline", VariableDetails(TypeConstants.WRITELINE_TYPE)),
+                    Pair("!panic", VariableDetails(TypeConstants.PANIC_TYPE)),
+                    Pair("!ignore", VariableDetails(TypeConstants.IGNORE_TYPE)),
+                    Pair("!modulo", VariableDetails(TypeConstants.MODULO_TYPE)),
                 )
             ).copy()
             vars.putAll(AccessOperationIdentifiers.getVariables())
