@@ -13,6 +13,7 @@ import java.io.File
 
 class Interpreter(private val code : String?) {
     private val input = parseJson()
+    var newVars = VariableMap()
 
     private fun parseJson(): JSONStatement {
         if(code==null)
@@ -40,9 +41,8 @@ class Interpreter(private val code : String?) {
         if(DEBUG)
         {
             print("Variables: ")
-            println(variableMap
-                .filter{it.key !in defaultVariableMap}
-                .map { it.key + " -> " + objectsMap[it.value]})
+            newVars.putAll(variableMap.filter{it.key !in defaultVariableMap})
+            println(newVars.map { it.key + " -> " + objectsMap[it.value]})
         }
     }
 }
