@@ -76,7 +76,7 @@ object TypeConstants {
     val IMPORT_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.IMPORT_ID)
 
     val WRITELINE_TYPE = JSONStatement(name = Tokens.METHOD_ID, type = SyntaxType.TYPE,
-        components = mutableListOf(JSONStatement(name = Tokens.METHOD_ID, type = SyntaxType.METHOD,
+        components = mutableListOf(JSONStatement(type = SyntaxType.METHOD,
             components = mutableListOf(
                 JSONStatement(name = NOTHING_ID, type = SyntaxType.TYPE),
                 JSONStatement(name = Tokens.ANON_ARG_ID, type = SyntaxType.DECLARATION,
@@ -89,7 +89,7 @@ object TypeConstants {
     )
 
     val PANIC_TYPE = JSONStatement(name = Tokens.METHOD_ID, type = SyntaxType.TYPE,
-        components = mutableListOf(JSONStatement(name = Tokens.METHOD_ID, type = SyntaxType.METHOD,
+        components = mutableListOf(JSONStatement(type = SyntaxType.METHOD,
             components = mutableListOf(
                 JSONStatement(name = NOTHING_ID, type = SyntaxType.TYPE),
                 JSONStatement(name = Tokens.ANON_ARG_ID, type = SyntaxType.DECLARATION,
@@ -112,7 +112,7 @@ object TypeConstants {
     )
 
     val IGNORE_TYPE = JSONStatement(name = Tokens.METHOD_ID, type = SyntaxType.TYPE,
-        components = mutableListOf(JSONStatement(name = Tokens.METHOD_ID, type = SyntaxType.METHOD,
+        components = mutableListOf(JSONStatement(type = SyntaxType.METHOD,
             components = mutableListOf(
                 JSONStatement(name = NOTHING_ID, type = SyntaxType.TYPE),
                 JSONStatement(name = Tokens.ANON_ARG_ID, type = SyntaxType.DECLARATION,
@@ -125,7 +125,7 @@ object TypeConstants {
     )
 
     val MODULO_TYPE = JSONStatement(name = Tokens.METHOD_ID, type = SyntaxType.TYPE,
-        components = mutableListOf(JSONStatement(name = Tokens.METHOD_ID, type = SyntaxType.METHOD,
+        components = mutableListOf(JSONStatement(type = SyntaxType.METHOD,
             components = mutableListOf(
                 INT64_TYPE,
                 JSONStatement(name = Tokens.ANON_ARG_ID, type = SyntaxType.DECLARATION,

@@ -88,7 +88,13 @@ object InterpreterConstants {
         objectsMap[AS_TEXT_REF] = ObjectDetails(Function<VariableMap, Long>{
             val value = objectsMap[it["!elem"]!!]!!.value
             val ref = newReference()
-            objectsMap[ref] = ObjectDetails(""+(value?:"nothing"), STRING_TYPE)
+            objectsMap[ref] = ObjectDetails(
+                when(value)
+                {
+                    null -> "nothing"
+                    is Function<*, *> -> objectsMap[it["!elem"]!!]!!.type.components[0].toString()
+                    else -> value.toString()
+                }, STRING_TYPE)
             ref
         }, AS_TEXT_TYPE)
     }
