@@ -30,10 +30,9 @@ class InterpretFrom(val statement : JSONStatement,
             SyntaxType.WHILE -> TODO()
             SyntaxType.BREAK -> TODO()
             SyntaxType.CONTINUE -> TODO()
-            SyntaxType.METHOD_CALL -> TODO()
             SyntaxType.LIST -> TODO()
             SyntaxType.FOR -> TODO()
-            null -> throw InternalErrorException()
+            SyntaxType.METHOD_CALL, null -> throw InternalErrorException()
         }
         interpreter.interpret()
     }

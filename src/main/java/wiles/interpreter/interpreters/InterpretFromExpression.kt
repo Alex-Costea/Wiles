@@ -18,10 +18,14 @@ import wiles.shared.constants.CheckerConstants.INT64_TYPE
 import wiles.shared.constants.CheckerConstants.STRING_TYPE
 import wiles.shared.constants.Predicates
 import wiles.shared.constants.Tokens.AND_ID
+import wiles.shared.constants.Tokens.APPLY_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
+import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.Tokens.MODIFY_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Tokens.OR_ID
+import wiles.shared.constants.Types.METHOD_CALL_ID
+import java.util.function.Function
 
 class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, additionalVars: VariableMap)
     : InterpretFromStatement(statement, variables, additionalVars) {
@@ -68,6 +72,7 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun interpret() {
         assert(statement.components.size == 1 || statement.components.size == 3)
         val leftStatement = statement.components[0]
@@ -75,7 +80,7 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
             1 -> {
                 getFromValue(leftStatement.name)
             }
-            //TODO: apply, elem access, import
+            //TODO: elem access, import
             3 -> {
                 val rightStatement = statement.components[2]
                 when(val middle = statement.components[1].name)
@@ -129,6 +134,20 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
                             else TRUE_REF
                         }
                         ref
+                    }
+                    "${METHOD_ID}|${APPLY_ID}|${METHOD_CALL_ID}" ->
+                    {
+                        val leftRef = getReference(leftStatement)
+                        val function = objectsMap[leftRef]!!.value as Function<VariableMap, Long>
+                        val newVarMap = VariableMap()
+                        for(component in rightStatement.components)
+                        {
+                            val name = component.components[0].name
+                            val expressionRef = getReference(component.components[2])
+                            newVarMap[name] = VariableDetails(expressionRef,
+                                objectsMap[expressionRef]!!.type.copyRemovingLocation())
+                        }
+                        function.apply(newVarMap)
                     }
                     else -> {
                         val leftRef = getReference(leftStatement)

@@ -12,7 +12,7 @@ data class ObjectDetails(val value : Any?, val type : JSONStatement)
         {
             is Double, is Long, is String, is Boolean, null -> value
             is MutableList<*> -> value.map{cloneValue(it)}.toMutableList()
-            is JSONStatement -> value.copyRemovingLocation()
+            is java.util.function.Function<*, *> -> value
             else -> throw InternalErrorException()
         }
         return newValue

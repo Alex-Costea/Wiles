@@ -39,7 +39,7 @@ object CheckerConstants {
     val ERROR_TYPE = JSONStatement(type = SyntaxType.TYPE, name = Tokens.ERROR_TOKEN)
     val ANYTHING_TYPE = JSONStatement(type = SyntaxType.TYPE, name = ANYTHING_ID)
     val METHOD_CALL_TYPE = JSONStatement(type = SyntaxType.TYPE, name = METHOD_CALL_ID)
-    private val NULLABLE_ANYTHING_TYPE = makeNullable(ANYTHING_TYPE)
+    val NULLABLE_ANYTHING_TYPE = makeNullable(ANYTHING_TYPE)
 
     val LIST_OF_ANYTHING_TYPE = makeList(ANYTHING_TYPE)
 
