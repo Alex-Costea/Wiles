@@ -21,8 +21,6 @@ class InterpretFrom(val statement : JSONStatement,
             SyntaxType.METHOD -> TODO()
             SyntaxType.EXPRESSION -> interpreter = InterpretFromExpression(statement, variables, additionalVars)
             SyntaxType.CODE_BLOCK -> interpreter = InterpretFromCodeBlock(statement, variables, additionalVars)
-            SyntaxType.TOKEN -> TODO()
-            SyntaxType.TYPE -> TODO()
             SyntaxType.IF -> TODO()
             SyntaxType.WHEN -> TODO()
             SyntaxType.DECLARATION -> interpreter = InterpretFromDeclaration(statement, variables, additionalVars)
@@ -32,7 +30,7 @@ class InterpretFrom(val statement : JSONStatement,
             SyntaxType.CONTINUE -> TODO()
             SyntaxType.LIST -> TODO()
             SyntaxType.FOR -> TODO()
-            SyntaxType.METHOD_CALL, null -> throw InternalErrorException()
+            SyntaxType.TOKEN, SyntaxType.TYPE, SyntaxType.METHOD_CALL, null -> throw InternalErrorException()
         }
         interpreter.interpret()
     }
