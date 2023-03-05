@@ -35,9 +35,12 @@ class InferFromList(details: InferrerDetails) : InferFromStatement(details) {
             else{
                 if(statedType!=null)
                 {
-                    if(InferrerUtils.isFormerSuperTypeOfLatter(statedType,newType))
-                        inferredType=statedType
-                    continue
+                    if(InferrerUtils.isFormerSuperTypeOfLatter(statedType,newType)) {
+                        inferredType = statedType
+                        continue
+                    }
+                    throw ConflictingTypeDefinitionException(component.getFirstLocation(),
+                        statedType.toString(),newType.toString())
                 }
                 throw InferenceFailException(component.getFirstLocation())
             }

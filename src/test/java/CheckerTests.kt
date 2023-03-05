@@ -1321,6 +1321,60 @@ class CheckerTests {
     @Test
     fun inferFromList()
     {
+        // let a := [4, nothing] : anything
+        checkResult(createExceptions(ConflictingTypeDefinitionException(NULL_LOCATION,"TYPE ANYTHING","TYPE NOTHING")),"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "!a",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "type" : "LIST",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 21
+        },
+        "components" : [ {
+          "name" : "ANYTHING",
+          "type" : "TYPE",
+          "location" : {
+            "line" : 1,
+            "lineIndex" : 25
+          }
+        }, {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "#4",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 11
+            }
+          } ]
+        }, {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "NOTHING",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 14
+            }
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(DECLARATION(!a; EXPRESSION(LIST(TYPE ANYTHING; EXPRESSION(TYPE INT64; #4); EXPRESSION(TYPE NOTHING; NOTHING)))))")
+
         checkResult(null,"""{
   "parsed" : true,
   "type" : "CODE_BLOCK",
