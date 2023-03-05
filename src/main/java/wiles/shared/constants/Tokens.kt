@@ -6,7 +6,6 @@ import wiles.shared.InternalErrorException
 import wiles.shared.constants.Chars.CONTINUE_LINE
 import wiles.shared.constants.ErrorMessages.MAX_SYMBOL_TOO_LARGE_ERROR
 import wiles.shared.constants.Settings.MAX_SYMBOL_LENGTH
-import wiles.shared.constants.Settings.ROMANIAN_MODE
 import java.util.*
 import kotlin.streams.toList
 
@@ -103,31 +102,31 @@ object Tokens {
     )
 
     init {
-        KEYWORDS[if(!ROMANIAN_MODE) "nothing" else "nimic"] = NOTHING_ID
+        KEYWORDS["nothing"] = NOTHING_ID
         KEYWORDS["fun"] = METHOD_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "let" else "fie"] = DECLARE_ID
+        KEYWORDS["let"] = DECLARE_ID
         KEYWORDS["var"] = VARIABLE_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "if" else "dacă"] = IF_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "default" else "altfel"] = ELSE_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "for" else "pentru"] = FOR_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "in" else "în"] = IN_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "from" else "de_la"] = FROM_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "to" else "la"] = TO_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "while" else "cât_timp"] = WHILE_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "and" else "și"] = AND_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "or" else "sau"] = OR_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "not" else "nu"] = NOT_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "stop" else "oprește"] = BREAK_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "skip" else "sari_peste"] = CONTINUE_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "yield" else "produce"] = RETURN_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "do" else "fă"] = DO_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "begin" else "început"] = START_BLOCK_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "end" else "sfârșit"] = END_BLOCK_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "true" else "adevărat"] = TRUE_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "false" else "fals"] = FALSE_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "import" else "importă"] = IMPORT_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "when" else "când"] = WHEN_ID
-        KEYWORDS[if(!ROMANIAN_MODE) "is" else "este"] = IS_ID
+        KEYWORDS["if"] = IF_ID
+        KEYWORDS["default"] = ELSE_ID
+        KEYWORDS["for"] = FOR_ID
+        KEYWORDS["in"] = IN_ID
+        KEYWORDS["from"] = FROM_ID
+        KEYWORDS["to"] = TO_ID
+        KEYWORDS["while"] = WHILE_ID
+        KEYWORDS["and"] = AND_ID
+        KEYWORDS["or"] = OR_ID
+        KEYWORDS["not"] = NOT_ID
+        KEYWORDS["stop"] = BREAK_ID
+        KEYWORDS["skip"] = CONTINUE_ID
+        KEYWORDS["yield"] = RETURN_ID
+        KEYWORDS["do"] = DO_ID
+        KEYWORDS["begin"] = START_BLOCK_ID
+        KEYWORDS["end"] = END_BLOCK_ID
+        KEYWORDS["true"] = TRUE_ID
+        KEYWORDS["false"] = FALSE_ID
+        KEYWORDS["import"] = IMPORT_ID
+        KEYWORDS["when"] = WHEN_ID
+        KEYWORDS["is"] = IS_ID
         KEYWORDS["mut"] = MUTABLE_ID
         KEYWORDS["arg"] = ANON_ARG_ID
 
