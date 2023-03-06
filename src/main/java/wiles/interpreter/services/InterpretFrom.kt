@@ -22,7 +22,7 @@ class InterpretFrom(val statement : JSONStatement,
             SyntaxType.WHEN -> TODO()
             SyntaxType.DECLARATION -> interpreter = InterpretFromDeclaration(statement, variables, additionalVars)
             SyntaxType.RETURN -> TODO()
-            SyntaxType.WHILE -> TODO()
+            SyntaxType.WHILE -> interpreter = InterpretFromWhile(statement, variables, additionalVars)
             SyntaxType.BREAK -> interpreter = InterpretFromBreak(statement, variables, additionalVars)
             SyntaxType.CONTINUE -> interpreter = InterpretFromContinue(statement, variables, additionalVars)
             SyntaxType.LIST -> TODO()
