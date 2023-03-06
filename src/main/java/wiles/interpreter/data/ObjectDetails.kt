@@ -4,7 +4,7 @@ import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.constants.TypeConstants.makeMutable
 
-data class ObjectDetails(val value : Any?, val type : JSONStatement)
+data class ObjectDetails(var value : Any?, var type : JSONStatement)
 {
 
     private fun cloneValue(value : Any?) : Any?

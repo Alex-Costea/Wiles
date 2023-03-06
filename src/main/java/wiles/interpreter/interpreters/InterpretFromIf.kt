@@ -1,7 +1,6 @@
 package wiles.interpreter.interpreters
 
 import wiles.interpreter.data.VariableMap
-import wiles.interpreter.statics.InterpreterConstants.objectsMap
 import wiles.shared.JSONStatement
 import wiles.shared.constants.Tokens.ELSE_ID
 
@@ -21,7 +20,7 @@ class InterpretFromIf(statement: JSONStatement, variables: VariableMap, addition
             {
                 val expressionInterpreter = InterpretFromExpression(expression, variables, additionalVars)
                 expressionInterpreter.interpret()
-                if(objectsMap[expressionInterpreter.reference]!!.value == true)
+                if(expressionInterpreter.reference.value == true)
                 {
                     InterpretFromCodeBlock(codeBlock, variables, additionalVars).interpret()
                     break

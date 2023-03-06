@@ -6,8 +6,6 @@ import wiles.interpreter.exceptions.BreakSignal
 import wiles.interpreter.exceptions.ContinueSignal
 import wiles.interpreter.statics.InterpreterConstants.MAXINT64_REF
 import wiles.interpreter.statics.InterpreterConstants.ZERO_REF
-import wiles.interpreter.statics.InterpreterConstants.newReference
-import wiles.interpreter.statics.InterpreterConstants.objectsMap
 import wiles.shared.JSONStatement
 import wiles.shared.constants.Tokens.FROM_ID
 import wiles.shared.constants.Tokens.IN_ID
@@ -59,16 +57,14 @@ class InterpretFromFor(statement: JSONStatement, variables: VariableMap, additio
             interpreter.reference
         }
 
-        val newRef = newReference()
-        variables[name] = newRef
 
-        val range = if(objectsMap[fromValue]!!.value as Long > objectsMap[toValue]!!.value as Long)
-            ((objectsMap[fromValue]!!.value as Long) downTo (objectsMap[toValue]!!.value as Long))
-            else objectsMap[fromValue]!!.value as Long .. objectsMap[toValue]!!.value as Long
+        val range = if(fromValue.value as Long > toValue.value as Long)
+            ((fromValue.value as Long) downTo (toValue.value as Long))
+            else fromValue.value as Long .. toValue.value as Long
 
         for(i in range)
         {
-            objectsMap[newRef] = ObjectDetails(i, INT64_TYPE)
+            variables[name] = ObjectDetails(i, INT64_TYPE)
             val inferrer = InterpretFromCodeBlock(statement.components[compIndex], variables, additionalVars)
             try
             {

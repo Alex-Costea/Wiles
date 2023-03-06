@@ -7,7 +7,6 @@ import wiles.interpreter.data.VariableMap
 import wiles.interpreter.exceptions.PanicException
 import wiles.interpreter.services.InterpretFrom
 import wiles.interpreter.statics.InterpreterConstants.defaultVariableMap
-import wiles.interpreter.statics.InterpreterConstants.objectsMap
 import wiles.shared.JSONStatement
 import java.io.File
 
@@ -42,7 +41,7 @@ class Interpreter(private val code : String?) {
         {
             print("Variables: ")
             newVars.putAll(variableMap.filter{it.key !in defaultVariableMap})
-            println(newVars.map { it.key + " -> " + objectsMap[it.value]})
+            println(newVars)
         }
     }
 }

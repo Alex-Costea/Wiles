@@ -1,14 +1,8 @@
 package wiles.interpreter.services
 
 import wiles.interpreter.data.ObjectDetails
-import wiles.interpreter.statics.InterpreterConstants.newReference
-import wiles.interpreter.statics.InterpreterConstants.objectsMap
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
-import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
-import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
-import wiles.shared.constants.TypeConstants.INT64_TYPE
-import wiles.shared.constants.TypeConstants.STRING_TYPE
 import wiles.shared.constants.Tokens.DIVIDE_ID
 import wiles.shared.constants.Tokens.EQUALS_ID
 import wiles.shared.constants.Tokens.LARGER_EQUALS_ID
@@ -24,22 +18,24 @@ import wiles.shared.constants.Tokens.SMALLER_ID
 import wiles.shared.constants.Tokens.TIMES_ID
 import wiles.shared.constants.Tokens.UNARY_MINUS_ID
 import wiles.shared.constants.Tokens.UNARY_PLUS_ID
+import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
+import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
+import wiles.shared.constants.TypeConstants.INT64_TYPE
+import wiles.shared.constants.TypeConstants.STRING_TYPE
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.BOOLEAN_ID
 import wiles.shared.constants.Types.DOUBLE_ID
 import wiles.shared.constants.Types.INT64_ID
 import wiles.shared.constants.Types.STRING_ID
 import java.util.function.BiFunction
-import java.util.function.ToLongBiFunction
 import kotlin.math.pow
 
 object DoOperation {
-    private fun createFunction(func : BiFunction<Any?, Any?, Any?>, type : JSONStatement) : ToLongBiFunction<Any?,Any?>
+    private fun createFunction(func : BiFunction<Any?, Any?, Any?>, type : JSONStatement)
+    : BiFunction<Any?, Any?, ObjectDetails>
     {
-        return ToLongBiFunction{ x: Any?, y: Any? ->
-            val ref = newReference()
-            objectsMap[ref] = ObjectDetails(func.apply(x,y), type)
-            return@ToLongBiFunction ref
+        return BiFunction<Any?, Any?, ObjectDetails>{ x: Any?, y: Any? ->
+            return@BiFunction ObjectDetails(func.apply(x,y), type)
         }
     }
 
@@ -187,21 +183,21 @@ object DoOperation {
             (x as Double) <= (y as Double)}, BOOLEAN_TYPE)),
     )
 
-    fun get(left : Long, middle : String, right : Long) : Long
+    fun get(left : ObjectDetails, middle : String, right : ObjectDetails) : ObjectDetails
     {
-        val leftValue = objectsMap[left]!!.value
-        val rightValue = objectsMap[right]!!.value
+        val leftValue = left.value
+        val rightValue = right.value
 
         return if(middle.contains(ANYTHING_ID)) {
             val operationNameSplit = middle.split("|").toMutableList()
             if (operationNameSplit[0] == ANYTHING_ID)
-                operationNameSplit[0] = objectsMap[left]!!.type.name
+                operationNameSplit[0] = left.type.name
             if (operationNameSplit[2] == ANYTHING_ID)
-                operationNameSplit[2] = objectsMap[right]!!.type.name
+                operationNameSplit[2] = right.type.name
 
             val operation = operationNameSplit[0] + "|" + operationNameSplit[1] + "|" + operationNameSplit[2]
-            operationMap[operation]?.applyAsLong(leftValue, rightValue) ?: throw InternalErrorException()
+            operationMap[operation]?.apply(leftValue, rightValue) ?: throw InternalErrorException()
         }
-        else operationMap[middle]!!.applyAsLong(leftValue, rightValue)
+        else operationMap[middle]!!.apply(leftValue, rightValue)
     }
 }

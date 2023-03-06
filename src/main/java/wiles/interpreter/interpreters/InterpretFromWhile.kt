@@ -3,7 +3,6 @@ package wiles.interpreter.interpreters
 import wiles.interpreter.data.VariableMap
 import wiles.interpreter.exceptions.BreakSignal
 import wiles.interpreter.exceptions.ContinueSignal
-import wiles.interpreter.statics.InterpreterConstants.objectsMap
 import wiles.shared.JSONStatement
 
 class InterpretFromWhile(statement: JSONStatement, variables: VariableMap, additionalVars: VariableMap)
@@ -17,7 +16,7 @@ class InterpretFromWhile(statement: JSONStatement, variables: VariableMap, addit
         {
             conditionInterpreter.interpret()
 
-            if(objectsMap[conditionInterpreter.reference]!!.value == false)
+            if(conditionInterpreter.reference.value == false)
                 break
             try
             {

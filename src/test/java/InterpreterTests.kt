@@ -4,13 +4,11 @@ import org.junit.jupiter.api.Test
 import wiles.Main
 import wiles.interpreter.Interpreter
 import wiles.interpreter.data.VariableMap
-import wiles.interpreter.statics.InterpreterConstants.objectsMap
 
 class InterpreterTests {
     private fun assertVar(vars : VariableMap, name : String, value : Any?)
     {
-        assert(vars[name] in objectsMap.keys)
-        assert(objectsMap[vars[name]]!!.value == value)
+        assert(vars[name]?.value == value)
     }
 
     private fun getVars(code : String) : VariableMap
