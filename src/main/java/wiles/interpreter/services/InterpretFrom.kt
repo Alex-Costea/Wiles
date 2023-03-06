@@ -23,10 +23,10 @@ class InterpretFrom(val statement : JSONStatement,
             SyntaxType.DECLARATION -> interpreter = InterpretFromDeclaration(statement, variables, additionalVars)
             SyntaxType.RETURN -> TODO()
             SyntaxType.WHILE -> TODO()
-            SyntaxType.BREAK -> TODO()
-            SyntaxType.CONTINUE -> TODO()
+            SyntaxType.BREAK -> interpreter = InterpretFromBreak(statement, variables, additionalVars)
+            SyntaxType.CONTINUE -> interpreter = InterpretFromContinue(statement, variables, additionalVars)
             SyntaxType.LIST -> TODO()
-            SyntaxType.FOR -> TODO()
+            SyntaxType.FOR -> interpreter = InterpretFromFor(statement, variables, additionalVars)
             SyntaxType.TOKEN, SyntaxType.TYPE, SyntaxType.METHOD_CALL, null -> throw InternalErrorException()
         }
         interpreter.interpret()
