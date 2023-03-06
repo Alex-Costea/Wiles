@@ -371,6 +371,206 @@ class InterpreterTests {
         assertVar(var6,"!b",false)
     }
 
+    @Test
+    fun ifTests()
+    {
+        val vars = getVars("""{
+  "type" : "CODE_BLOCK",
+  "parsed" : true,
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "STRING",
+      "type" : "TYPE"
+    }, {
+      "name" : "!a",
+      "type" : "TOKEN"
+    } ]
+  }, {
+    "type" : "IF",
+    "components" : [ {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "#1",
+        "type" : "TOKEN"
+      }, {
+        "name" : "INT64|LARGER|INT64",
+        "type" : "TOKEN"
+      }, {
+        "name" : "#10",
+        "type" : "TOKEN"
+      } ]
+    }, {
+      "type" : "CODE_BLOCK",
+      "components" : [ {
+        "type" : "EXPRESSION",
+        "components" : [ {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "!a",
+            "type" : "TOKEN"
+          } ]
+        }, {
+          "name" : "ASSIGN",
+          "type" : "TOKEN"
+        }, {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "@branch 1",
+            "type" : "TOKEN"
+          } ]
+        } ]
+      } ]
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "NOTHING",
+        "type" : "TOKEN"
+      }, {
+        "name" : "NOTHING|NOT|BOOLEAN",
+        "type" : "TOKEN"
+      }, {
+        "type" : "EXPRESSION",
+        "components" : [ {
+          "name" : "#10",
+          "type" : "TOKEN"
+        }, {
+          "name" : "INT64|LARGER_EQUALS|INT64",
+          "type" : "TOKEN"
+        }, {
+          "name" : "#10",
+          "type" : "TOKEN"
+        } ]
+      } ]
+    }, {
+      "type" : "CODE_BLOCK",
+      "components" : [ {
+        "type" : "EXPRESSION",
+        "components" : [ {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "!a",
+            "type" : "TOKEN"
+          } ]
+        }, {
+          "name" : "ASSIGN",
+          "type" : "TOKEN"
+        }, {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "@branch 2",
+            "type" : "TOKEN"
+          } ]
+        } ]
+      } ]
+    }, {
+      "name" : "ELSE",
+      "type" : "TOKEN"
+    }, {
+      "type" : "CODE_BLOCK",
+      "components" : [ {
+        "type" : "IF",
+        "components" : [ {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "#2",
+              "type" : "TOKEN"
+            }, {
+              "name" : "INT64|PLUS|INT64",
+              "type" : "TOKEN"
+            }, {
+              "name" : "#4",
+              "type" : "TOKEN"
+            } ]
+          }, {
+            "name" : "INT64|EQUALS|INT64",
+            "type" : "TOKEN"
+          }, {
+            "name" : "#6",
+            "type" : "TOKEN"
+          } ]
+        }, {
+          "type" : "CODE_BLOCK",
+          "components" : [ {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "type" : "EXPRESSION",
+              "components" : [ {
+                "name" : "!a",
+                "type" : "TOKEN"
+              } ]
+            }, {
+              "name" : "ASSIGN",
+              "type" : "TOKEN"
+            }, {
+              "type" : "EXPRESSION",
+              "components" : [ {
+                "name" : "@branch 3",
+                "type" : "TOKEN"
+              } ]
+            } ]
+          } ]
+        }, {
+          "name" : "ELSE",
+          "type" : "TOKEN"
+        }, {
+          "type" : "CODE_BLOCK",
+          "components" : [ {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "type" : "EXPRESSION",
+              "components" : [ {
+                "name" : "!a",
+                "type" : "TOKEN"
+              } ]
+            }, {
+              "name" : "ASSIGN",
+              "type" : "TOKEN"
+            }, {
+              "type" : "EXPRESSION",
+              "components" : [ {
+                "name" : "@branch 4",
+                "type" : "TOKEN"
+              } ]
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "type" : "EXPRESSION",
+    "components" : [ {
+      "name" : "!writeline",
+      "type" : "TOKEN"
+    }, {
+      "name" : "METHOD|APPLY|METHOD_CALL",
+      "type" : "TOKEN"
+    }, {
+      "type" : "METHOD_CALL",
+      "components" : [ {
+        "type" : "EXPRESSION",
+        "components" : [ {
+          "name" : "!text",
+          "type" : "TOKEN"
+        }, {
+          "name" : "ASSIGN",
+          "type" : "TOKEN"
+        }, {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "!a",
+            "type" : "TOKEN"
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}""")
+        assertVar(vars,"!a","branch 3")
+    }
+
     companion object {
         @JvmStatic
         @BeforeAll

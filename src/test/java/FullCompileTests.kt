@@ -4,7 +4,7 @@ import wiles.shared.constants.CommandLineArguments.COMPILE_COMMAND
 import wiles.shared.constants.CommandLineArguments.NO_INPUT_FILE_COMMAND
 import kotlin.test.assertEquals
 
-class FullTest {
+class FullCompileTests {
     @Test
     fun fullTests()
     {

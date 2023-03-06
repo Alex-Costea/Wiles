@@ -1,10 +1,7 @@
 package wiles.interpreter.services
 
 import wiles.interpreter.data.VariableMap
-import wiles.interpreter.interpreters.InterpretFromCodeBlock
-import wiles.interpreter.interpreters.InterpretFromDeclaration
-import wiles.interpreter.interpreters.InterpretFromExpression
-import wiles.interpreter.interpreters.InterpretFromStatement
+import wiles.interpreter.interpreters.*
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
@@ -21,7 +18,7 @@ class InterpretFrom(val statement : JSONStatement,
             SyntaxType.METHOD -> TODO()
             SyntaxType.EXPRESSION -> interpreter = InterpretFromExpression(statement, variables, additionalVars)
             SyntaxType.CODE_BLOCK -> interpreter = InterpretFromCodeBlock(statement, variables, additionalVars)
-            SyntaxType.IF -> TODO()
+            SyntaxType.IF -> interpreter = InterpretFromIf(statement, variables, additionalVars)
             SyntaxType.WHEN -> TODO()
             SyntaxType.DECLARATION -> interpreter = InterpretFromDeclaration(statement, variables, additionalVars)
             SyntaxType.RETURN -> TODO()
