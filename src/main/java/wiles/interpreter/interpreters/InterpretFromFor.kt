@@ -4,6 +4,8 @@ import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.data.VariableMap
 import wiles.interpreter.exceptions.BreakSignal
 import wiles.interpreter.exceptions.ContinueSignal
+import wiles.interpreter.statics.InterpreterConstants.MAXINT64_REF
+import wiles.interpreter.statics.InterpreterConstants.ZERO_REF
 import wiles.interpreter.statics.InterpreterConstants.newReference
 import wiles.interpreter.statics.InterpreterConstants.objectsMap
 import wiles.shared.JSONStatement
@@ -43,14 +45,14 @@ class InterpretFromFor(statement: JSONStatement, variables: VariableMap, additio
 
         if(inCollection != null) TODO()
 
-        val fromValue = if(fromExpression == null) 0L else
+        val fromValue = if(fromExpression == null) ZERO_REF else
         {
             val interpreter = InterpretFromExpression(fromExpression ,variables, additionalVars)
             interpreter.interpret()
             interpreter.reference
         }
 
-        val toValue = if(toExpression == null) Long.MAX_VALUE else
+        val toValue = if(toExpression == null) MAXINT64_REF else
         {
             val interpreter = InterpretFromExpression(toExpression ,variables, additionalVars)
             interpreter.interpret()

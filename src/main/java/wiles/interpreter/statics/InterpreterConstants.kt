@@ -37,6 +37,8 @@ object InterpreterConstants {
     private val MODULO_REF = newReference()
     private val SIZE_REF = newReference()
     private val AS_TEXT_REF = newReference()
+    val ZERO_REF = newReference()
+    val MAXINT64_REF = newReference()
 
     private val SIZE_TYPE = createFunctionType(Pair(LIST_OF_ANYTHING_TYPE, INT64_TYPE))
     private val AS_TEXT_TYPE = createFunctionType(Pair(NULLABLE_ANYTHING_TYPE, STRING_TYPE))
@@ -97,6 +99,8 @@ object InterpreterConstants {
                 }, STRING_TYPE)
             ref
         }, AS_TEXT_TYPE)
+        objectsMap[ZERO_REF] = ObjectDetails(0L, INT64_TYPE)
+        objectsMap[MAXINT64_REF] = ObjectDetails(Long.MAX_VALUE, INT64_TYPE)
     }
 
 }
