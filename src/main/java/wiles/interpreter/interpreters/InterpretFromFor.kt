@@ -62,7 +62,11 @@ class InterpretFromFor(statement: JSONStatement, variables: VariableMap, additio
         val newRef = newReference()
         variables[name] = newRef
 
-        for(i in objectsMap[fromValue]!!.value as Long .. objectsMap[toValue]!!.value as Long)
+        val range = if(objectsMap[fromValue]!!.value as Long > objectsMap[toValue]!!.value as Long)
+            ((objectsMap[fromValue]!!.value as Long) downTo (objectsMap[toValue]!!.value as Long))
+            else objectsMap[fromValue]!!.value as Long .. objectsMap[toValue]!!.value as Long
+
+        for(i in range)
         {
             objectsMap[newRef] = ObjectDetails(i, INT64_TYPE)
             val inferrer = InterpretFromCodeBlock(statement.components[compIndex], variables, additionalVars)
