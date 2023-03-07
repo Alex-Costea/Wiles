@@ -8,6 +8,7 @@ import wiles.checker.statics.InferrerUtils
 import wiles.checker.statics.InferrerUtils.checkIsInitialized
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
+import wiles.shared.TokenLocation
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.ELSE_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
@@ -17,14 +18,15 @@ import wiles.shared.constants.Types.LIST_ID
 
 class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
 
-    private fun getFormerTypeMinusLatterType(former: JSONStatement, latter : JSONStatement) : JSONStatement?
+    private fun getFormerTypeMinusLatterType(former: JSONStatement, latter : JSONStatement,
+                                             newLocation : TokenLocation) : JSONStatement
     {
         // use sub-components
         for(typeName in arrayOf(MUTABLE_ID, LIST_ID)) {
             if (former.name == typeName && latter.name == typeName) {
                 return JSONStatement(
                     name = typeName, type = SyntaxType.TYPE, components = mutableListOf(
-                        getFormerTypeMinusLatterType(former.components[0], latter.components[0]) ?: return null))
+                        getFormerTypeMinusLatterType(former.components[0], latter.components[0], newLocation)))
             }
         }
 
@@ -32,7 +34,7 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
             throw ConflictingTypeDefinitionException(latter.getFirstLocation(),latter.toString(),former.toString())
 
         if(former.name == EITHER_ID && former.components.size==0)
-            return null
+            throw TypesExhaustedException(newLocation)
 
         if(InferrerUtils.areTypesEquivalent(latter, former))
             return JSONStatement(name = EITHER_ID, type = SyntaxType.TYPE)
@@ -42,16 +44,16 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
             val latterComponents = if(latter.name == EITHER_ID) {
                 InferrerUtils.createComponents(latter).toList()
             } else listOf(latter)
-            val components = InferrerUtils.createComponents(former).toMutableList()
+            var components = InferrerUtils.createComponents(former).toMutableList()
             for(latterComponent in latterComponents) {
-                var i = 0
-                while (i < components.size) {
-                    if (isFormerSuperTypeOfLatter(components[i], latterComponent)) {
-                        components.removeAt(i)
-                        i--
+                for (formerComponent in components.withIndex()) {
+                    if (isFormerSuperTypeOfLatter(formerComponent.value, latterComponent)) {
+                        components[formerComponent.index] = getFormerTypeMinusLatterType(formerComponent.value,
+                            latterComponent, newLocation)
+
                     }
-                    i++
                 }
+                components = components.filterNot { it.name == EITHER_ID && it.components.isEmpty()}.toMutableList()
             }
 
             return when (components.size) {
@@ -101,8 +103,7 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
             }
             components.removeFirst()
 
-            inferredType = getFormerTypeMinusLatterType(inferredType, statedType)
-                ?: throw TypesExhaustedException(newLocation)
+            inferredType = getFormerTypeMinusLatterType(inferredType, statedType, newLocation)
 
             val newVariables = variables.copy()
             newVariables[name] = VariableDetails(
