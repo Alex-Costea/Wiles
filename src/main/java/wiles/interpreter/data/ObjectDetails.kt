@@ -2,9 +2,10 @@ package wiles.interpreter.data
 
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
+import wiles.shared.constants.TypeConstants
 import java.util.function.Function
 
-data class ObjectDetails(var value : Any?, var type : JSONStatement)
+class ObjectDetails(var value : Any?, var type : JSONStatement)
 {
 
     private fun cloneValue(value : Any?) : Any?
@@ -20,9 +21,16 @@ data class ObjectDetails(var value : Any?, var type : JSONStatement)
         return newValue
     }
 
-    fun makeMutable() : ObjectDetails
+    fun clone() : ObjectDetails
     {
         return cloneValue(this) as ObjectDetails
+    }
+
+    fun makeMutable() : ObjectDetails
+    {
+        val newObject = this.clone()
+        newObject.type = TypeConstants.makeMutable(newObject.type)
+        return newObject
     }
 
     override fun toString(): String {
@@ -33,6 +41,4 @@ data class ObjectDetails(var value : Any?, var type : JSONStatement)
             else -> value.toString()
         }
     }
-
-
 }

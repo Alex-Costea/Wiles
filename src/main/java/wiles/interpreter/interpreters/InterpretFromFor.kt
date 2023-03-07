@@ -66,10 +66,12 @@ class InterpretFromFor(statement: JSONStatement, variables: VariableMap, additio
             ((fromValue.value as Long) downTo (toValue.value as Long))
             else fromValue.value as Long .. toValue.value as Long
 
+        val newCollection = collection?.clone()
+
         for(i in range)
         {
-            variables[name] = if(collection == null) ObjectDetails(i, INT64_TYPE)
-            else (collection.value as MutableList<ObjectDetails>).getOrNull(i.toInt()) ?: break
+            variables[name] = if(newCollection == null) ObjectDetails(i, INT64_TYPE)
+            else (newCollection.value as MutableList<ObjectDetails>).getOrNull(i.toInt()) ?: break
 
             val inferrer = InterpretFromCodeBlock(statement.components[compIndex], variables, additionalVars)
             try
