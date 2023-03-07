@@ -4,14 +4,14 @@ import wiles.checker.data.InferrerDetails
 import wiles.checker.data.VariableDetails
 import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.exceptions.VariableAlreadyDeclaredException
-import wiles.shared.constants.TypeConstants.INT64_TYPE
-import wiles.shared.constants.TypeConstants.LIST_OF_NULLABLE_ANYTHING_TYPE
-import wiles.checker.statics.InferrerUtils
 import wiles.checker.statics.InferrerUtils.getElementTypeFromListType
 import wiles.shared.JSONStatement
 import wiles.shared.constants.Tokens.FROM_ID
 import wiles.shared.constants.Tokens.IN_ID
 import wiles.shared.constants.Tokens.TO_ID
+import wiles.shared.constants.TypeConstants.INT64_TYPE
+import wiles.shared.constants.TypeConstants.LIST_OF_NULLABLE_ANYTHING_TYPE
+import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
 
 class InferFromFor(details: InferrerDetails) : InferFromStatement(
     InferrerDetails(details.statement,
@@ -27,7 +27,7 @@ class InferFromFor(details: InferrerDetails) : InferFromStatement(
         InferFromExpression(InferrerDetails(expression, variables, exceptions, additionalVars)).infer()
         val expressionType = components[0].components[0]
 
-        if(!InferrerUtils.isFormerSuperTypeOfLatter(superType, expressionType))
+        if(!isFormerSuperTypeOfLatter(superType, expressionType))
             throw ConflictingTypeDefinitionException(expression.getFirstLocation(),
                 superType.toString(), expressionType.toString())
         components.removeFirst()

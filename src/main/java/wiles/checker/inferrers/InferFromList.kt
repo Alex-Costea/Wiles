@@ -3,10 +3,10 @@ package wiles.checker.inferrers
 import wiles.checker.data.InferrerDetails
 import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.exceptions.InferenceFailException
-import wiles.checker.statics.InferrerUtils
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
+import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
 
 class InferFromList(details: InferrerDetails) : InferFromStatement(details) {
     override fun infer() {
@@ -26,16 +26,16 @@ class InferFromList(details: InferrerDetails) : InferFromStatement(details) {
             val newType = component.components[0]
             exceptions.addAll(inferrer.exceptions)
 
-            inferredType = if(inferredType==null || InferrerUtils.isFormerSuperTypeOfLatter(newType,inferredType))
+            inferredType = if(inferredType==null || isFormerSuperTypeOfLatter(newType,inferredType))
                 newType
-            else if(InferrerUtils.isFormerSuperTypeOfLatter(inferredType,newType))
+            else if(isFormerSuperTypeOfLatter(inferredType,newType))
             {
                 continue
             }
             else{
                 if(statedType!=null)
                 {
-                    if(InferrerUtils.isFormerSuperTypeOfLatter(statedType,newType)) {
+                    if(isFormerSuperTypeOfLatter(statedType,newType)) {
                         inferredType = statedType
                         continue
                     }
@@ -47,7 +47,7 @@ class InferFromList(details: InferrerDetails) : InferFromStatement(details) {
         }
         if(statedType!=null) {
             if(inferredType!=null) {
-                if (!InferrerUtils.isFormerSuperTypeOfLatter(statedType, inferredType))
+                if (!isFormerSuperTypeOfLatter(statedType, inferredType))
                     throw ConflictingTypeDefinitionException(statement.components[0].getFirstLocation(),
                         statedType.toString(),inferredType.toString())
             }

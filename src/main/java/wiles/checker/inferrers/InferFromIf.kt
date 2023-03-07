@@ -4,10 +4,10 @@ import wiles.checker.data.InferrerDetails
 import wiles.checker.data.VariableMap
 import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.services.InferrerService
-import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
-import wiles.checker.statics.InferrerUtils
 import wiles.checker.statics.InferrerUtils.checkIsInitialized
 import wiles.shared.JSONStatement
+import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
+import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
 
 class InferFromIf(details: InferrerDetails) : InferFromStatement(details) {
     override fun infer() {
@@ -20,7 +20,7 @@ class InferFromIf(details: InferrerDetails) : InferFromStatement(details) {
             InferrerService(InferrerDetails(condition, variables.copy(), exceptions, additionalVars)).infer()
 
             if(condition.components.isNotEmpty() &&
-                !InferrerUtils.isFormerSuperTypeOfLatter(BOOLEAN_TYPE,condition.components[0]))
+                !isFormerSuperTypeOfLatter(BOOLEAN_TYPE,condition.components[0]))
             {
                 throw ConflictingTypeDefinitionException(condition.getFirstLocation(),
                     BOOLEAN_TYPE.toString(),condition.components[0].toString())

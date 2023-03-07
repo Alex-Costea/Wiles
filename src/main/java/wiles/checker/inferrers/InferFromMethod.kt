@@ -7,11 +7,11 @@ import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.exceptions.InferenceFailException
 import wiles.checker.exceptions.ReturnNotGuaranteedException
 import wiles.checker.services.InferrerService
-import wiles.shared.constants.TypeConstants.NOTHING_TYPE
-import wiles.checker.statics.InferrerUtils
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.ELSE_ID
+import wiles.shared.constants.TypeConstants.NOTHING_TYPE
+import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
 
 class InferFromMethod(details: InferrerDetails) : InferFromStatement(
     InferrerDetails(details.statement,
@@ -31,12 +31,12 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
         val newType = statement.components[0]
         val inferredType = inferredType
 
-        this.inferredType = if (inferredType == null || InferrerUtils.isFormerSuperTypeOfLatter(newType, inferredType))
+        this.inferredType = if (inferredType == null || isFormerSuperTypeOfLatter(newType, inferredType))
             newType
-        else if (InferrerUtils.isFormerSuperTypeOfLatter(inferredType, newType))
+        else if (isFormerSuperTypeOfLatter(inferredType, newType))
             return
         else if (statedType != null) {
-            if (InferrerUtils.isFormerSuperTypeOfLatter(statedType, newType))
+            if (isFormerSuperTypeOfLatter(statedType, newType))
                 statedType
             else throw ConflictingTypeDefinitionException(statement.getFirstLocation(),
                 statedType.toString(),newType.toString())
@@ -107,7 +107,7 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
         val inferredType = inferredType
         if(statedType!=null) {
             if(inferredType!=null) {
-                if (!InferrerUtils.isFormerSuperTypeOfLatter(statedType, inferredType))
+                if (!isFormerSuperTypeOfLatter(statedType, inferredType))
                     throw ConflictingTypeDefinitionException(statement.components[0].getFirstLocation(),
                         statedType.toString(),inferredType.toString())
             }

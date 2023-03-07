@@ -10,6 +10,7 @@ import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.ELSE_ID
+import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
 import wiles.shared.constants.Types.EITHER_ID
 
 class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
@@ -17,7 +18,7 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
     //TODO: handle unboxing
     private fun getFormerTypeMinusLatterType(former: JSONStatement, latter : JSONStatement) : JSONStatement?
     {
-        if(!InferrerUtils.isFormerSuperTypeOfLatter(former, latter))
+        if(!isFormerSuperTypeOfLatter(former, latter))
             throw ConflictingTypeDefinitionException(latter.getFirstLocation(),latter.toString(),former.toString())
 
         if(former.name == EITHER_ID && former.components.size==0)
@@ -35,7 +36,7 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
             for(latterComponent in latterComponents) {
                 var i = 0
                 while (i < components.size) {
-                    if (InferrerUtils.isFormerSuperTypeOfLatter(components[i], latterComponent)) {
+                    if (isFormerSuperTypeOfLatter(components[i], latterComponent)) {
                         components.removeAt(i)
                         i--
                     }
@@ -72,7 +73,7 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
         {
             if(component.type == SyntaxType.TYPE)
             {
-                if (!InferrerUtils.isFormerSuperTypeOfLatter(inferredType, component)) {
+                if (!isFormerSuperTypeOfLatter(inferredType, component)) {
                     throw ConflictingTypeDefinitionException(component.getFirstLocation(),
                         inferredType.toString(), component.toString())
                 }

@@ -3,7 +3,7 @@ package wiles.checker.inferrers
 import wiles.checker.data.InferrerDetails
 import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
-import wiles.checker.statics.InferrerUtils
+import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
 
 class InferFromWhile(details: InferrerDetails) : InferFromStatement(
     InferrerDetails(details.statement,
@@ -18,7 +18,7 @@ class InferFromWhile(details: InferrerDetails) : InferFromStatement(
         inferFromExpression.infer()
 
         val expressionType = statement.components[0].components[0]
-        if(!InferrerUtils.isFormerSuperTypeOfLatter(BOOLEAN_TYPE,expressionType))
+        if(!isFormerSuperTypeOfLatter(BOOLEAN_TYPE,expressionType))
             throw ConflictingTypeDefinitionException(expression.getFirstLocation(),
                 BOOLEAN_TYPE.toString(), expressionType.toString())
 

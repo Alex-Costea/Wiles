@@ -12,22 +12,20 @@ class InterpretFrom(val statement : JSONStatement,
 ) {
     fun interpret()
     {
-        val interpreter : InterpretFromStatement
-        when(statement.type)
-        {
-            SyntaxType.METHOD -> TODO()
-            SyntaxType.EXPRESSION -> interpreter = InterpretFromExpression(statement, variables, additionalVars)
-            SyntaxType.CODE_BLOCK -> interpreter = InterpretFromCodeBlock(statement, variables, additionalVars)
-            SyntaxType.IF -> interpreter = InterpretFromIf(statement, variables, additionalVars)
+        val interpreter = when(statement.type) {
+            SyntaxType.EXPRESSION -> InterpretFromExpression(statement, variables, additionalVars)
+            SyntaxType.CODE_BLOCK -> InterpretFromCodeBlock(statement, variables, additionalVars)
+            SyntaxType.IF -> InterpretFromIf(statement, variables, additionalVars)
             SyntaxType.WHEN -> TODO()
-            SyntaxType.DECLARATION -> interpreter = InterpretFromDeclaration(statement, variables, additionalVars)
+            SyntaxType.DECLARATION -> InterpretFromDeclaration(statement, variables, additionalVars)
             SyntaxType.RETURN -> TODO()
-            SyntaxType.WHILE -> interpreter = InterpretFromWhile(statement, variables, additionalVars)
-            SyntaxType.BREAK -> interpreter = InterpretFromBreak(statement, variables, additionalVars)
-            SyntaxType.CONTINUE -> interpreter = InterpretFromContinue(statement, variables, additionalVars)
-            SyntaxType.LIST -> TODO()
-            SyntaxType.FOR -> interpreter = InterpretFromFor(statement, variables, additionalVars)
-            SyntaxType.TOKEN, SyntaxType.TYPE, SyntaxType.METHOD_CALL, null -> throw InternalErrorException()
+            SyntaxType.WHILE -> InterpretFromWhile(statement, variables, additionalVars)
+            SyntaxType.BREAK -> InterpretFromBreak(statement, variables, additionalVars)
+            SyntaxType.CONTINUE -> InterpretFromContinue(statement, variables, additionalVars)
+            SyntaxType.FOR -> InterpretFromFor(statement, variables, additionalVars)
+
+            SyntaxType.METHOD, SyntaxType.LIST, SyntaxType.TOKEN,
+                SyntaxType.TYPE, SyntaxType.METHOD_CALL, null -> throw InternalErrorException()
         }
         interpreter.interpret()
     }

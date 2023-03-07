@@ -41,7 +41,7 @@ class Interpreter(private val code : String?) {
         {
             print("Variables: ")
             newVars.putAll(variableMap.filter{it.key !in defaultVariableMap})
-            println(newVars)
+            println(newVars.map { it.key + " -> " + it.value})
         }
     }
 }

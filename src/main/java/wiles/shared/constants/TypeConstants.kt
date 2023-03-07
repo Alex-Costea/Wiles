@@ -10,6 +10,189 @@ import wiles.shared.constants.Types.STRING_ID
 
 object TypeConstants {
 
+    fun isFormerSuperTypeOfLatter(supertype : JSONStatement, subtype : JSONStatement) : Boolean
+    {
+        assert(supertype.type == SyntaxType.TYPE)
+        assert(subtype.type == SyntaxType.TYPE)
+        if(supertype.toString() == subtype.toString())
+            return true
+
+        if(supertype.name == ANYTHING_ID)
+        {
+            if(subtype.name != Types.EITHER_ID)
+            {
+                if (isFormerSuperTypeOfLatter(NOTHING_TYPE, subtype))
+                    return false
+                return true
+            }
+            else
+            {
+                for (component in subtype.components)
+                {
+                    if(isFormerSuperTypeOfLatter(NOTHING_TYPE,component))
+                        return false
+                    return true
+                }
+            }
+        }
+
+        else if(supertype.name == Types.EITHER_ID)
+        {
+            if(subtype.name != Types.EITHER_ID)
+            {
+                for (component in supertype.components)
+                {
+                    if (isFormerSuperTypeOfLatter(component,subtype))
+                    {
+                        return true
+                    }
+                }
+            }
+            else
+            {
+                for(subtypeComponent in subtype.components)
+                {
+                    if(isFormerSuperTypeOfLatter(supertype,subtypeComponent))
+                    {
+                        continue
+                    }
+                    var hasMatch = false
+                    for(supertypeComponent in supertype.components)
+                    {
+                        if(isFormerSuperTypeOfLatter(supertypeComponent,subtypeComponent))
+                        {
+                            hasMatch = true
+                            break
+                        }
+                    }
+                    if(!hasMatch)
+                        return false
+                }
+                return true
+            }
+        }
+
+        else if(subtype.name == Types.EITHER_ID)
+        {
+            for(component in subtype.components)
+            {
+                if(!isFormerSuperTypeOfLatter(supertype, component)) {
+                    return false
+                }
+            }
+            return true
+        }
+
+        else if (supertype.name == Types.LIST_ID && subtype.name == Types.LIST_ID)
+            return isFormerSuperTypeOfLatter(supertype.components[0],subtype.components[0])
+
+        else if (supertype.name == Tokens.MUTABLE_ID && subtype.name == Tokens.MUTABLE_ID)
+            return isFormerSuperTypeOfLatter(supertype.components[0], subtype.components[0])
+
+        else if (subtype.name == Tokens.MUTABLE_ID)
+            return isFormerSuperTypeOfLatter(supertype, subtype.components[0])
+
+        else if(supertype.name == Tokens.METHOD_ID && subtype.name == Tokens.METHOD_ID)
+            return checkMethodIsSubtype(supertype, subtype)
+
+        return false
+    }
+
+    private fun checkMethodIsSubtype(supertype : JSONStatement, subtype: JSONStatement) : Boolean
+    {
+        val supertypeComponents = supertype.components[0].components.toMutableList()
+        val subtypeComponents = subtype.components[0].components.toMutableList()
+
+        val supertypeReturnType = if(supertypeComponents[0].type == SyntaxType.TYPE)
+            supertypeComponents[0]
+        else NOTHING_TYPE
+
+        val subtypeReturnType = if(subtypeComponents[0].type == SyntaxType.TYPE)
+            subtypeComponents[0]
+        else NOTHING_TYPE
+
+        if(!isFormerSuperTypeOfLatter(supertypeReturnType,subtypeReturnType))
+            return false
+
+        if(matchMethodComponentList(subtypeComponents,supertypeComponents,false) &&
+            matchMethodComponentList(supertypeComponents,subtypeComponents,true)
+            && checkUnnamedArgsInSameOrder(supertypeComponents,subtypeComponents))
+            return true
+
+        return false
+    }
+
+    private fun checkUnnamedArgsInSameOrder(list1: MutableList<JSONStatement>,
+                                            list2: MutableList<JSONStatement>) : Boolean
+    {
+        while(list1.isNotEmpty() && list2.isNotEmpty())
+        {
+            val elem1 = list1[0]
+            if(elem1.type == SyntaxType.TYPE || !elem1.name.contains(Tokens.ANON_ARG_ID)) {
+                list1.removeFirst()
+                continue
+            }
+
+            val elem2 = list2[0]
+            if(elem2.type == SyntaxType.TYPE || !elem2.name.contains(Tokens.ANON_ARG_ID)) {
+                list2.removeFirst()
+                continue
+            }
+
+            if(elem1.components[1].name !=elem2.components[1].name)
+                return false
+
+            list1.removeFirst()
+            list2.removeFirst()
+        }
+
+        while(list1.isNotEmpty()) {
+            if (list1[0].type == SyntaxType.TYPE || !list1[0].name.contains(Tokens.ANON_ARG_ID))
+                list1.removeFirst()
+            else break
+        }
+
+        while(list2.isNotEmpty()) {
+            if (list2[0].type == SyntaxType.TYPE || !list2[0].name.contains(Tokens.ANON_ARG_ID))
+                list2.removeFirst()
+            else break
+        }
+
+        if(list1.isNotEmpty() || list2.isNotEmpty())
+            return false
+        return true
+    }
+
+    private fun matchMethodComponentList(list1 : List<JSONStatement>, list2 : List<JSONStatement>,
+                                         isSuperType : Boolean) : Boolean
+    {
+        for (component1 in list1) {
+            if (component1.type == SyntaxType.TYPE)
+                continue
+            var matchFound = false
+            for (component2 in list2) {
+                if (component2.type == SyntaxType.TYPE)
+                    continue
+
+                val nameMatches = component1.components[1].name == component2.components[1].name
+                if(nameMatches) {
+                    val defaultValueMatches = !isSuperType || (component1.components.size <= component2.components.size)
+                    if(defaultValueMatches) {
+                        if(isSuperType) {
+                            if (isFormerSuperTypeOfLatter(component1.components[0], component2.components[0]))
+                                matchFound = true
+                        }
+                        else if(isFormerSuperTypeOfLatter(component2.components[0], component1.components[0]))
+                            matchFound = true
+                    }
+                }
+            }
+            if (!matchFound)
+                return false
+        }
+        return true
+    }
+
     fun makeMutable(type : JSONStatement) : JSONStatement
     {
         return JSONStatement(name = Tokens.MUTABLE_ID,

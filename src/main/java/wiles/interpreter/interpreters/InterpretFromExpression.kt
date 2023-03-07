@@ -28,9 +28,11 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
     : InterpretFromStatement(statement, variables, additionalVars) {
     lateinit var reference : ObjectDetails
 
-    private fun getFromValue(name : String) : ObjectDetails
+    private fun getFromValue(component : JSONStatement) : ObjectDetails
     {
         val ref : ObjectDetails
+        val name = component.name
+        val type = component.type
         if(Predicates.IS_NUMBER_LITERAL.test(name) && !name.contains(DECIMAL_DELIMITER)) {
             ref = ObjectDetails(name.substring(1).toLong(), INT64_TYPE)
         }
@@ -47,7 +49,16 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
             ref = variables[name]!!
         }
 
-        else TODO()
+        else when(type)
+        {
+            SyntaxType.LIST -> {
+                val interpreter = InterpretFromList(component, variables, additionalVars)
+                interpreter.interpret()
+                ref = interpreter.reference
+            }
+            SyntaxType.METHOD -> TODO()
+            else -> throw InternalErrorException()
+        }
         return ref
     }
 
@@ -55,7 +66,7 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
     {
         return when (component.type) {
             SyntaxType.TOKEN -> {
-                getFromValue(component.name)
+                getFromValue(component)
             }
             SyntaxType.EXPRESSION -> {
                 val expressionRun = InterpretFromExpression(component, variables, additionalVars)
@@ -72,7 +83,7 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
         val leftStatement = statement.components[0]
         reference = when (statement.components.size) {
             1 -> {
-                getFromValue(leftStatement.name)
+                getFromValue(leftStatement)
             }
             //TODO: elem access, import
             3 -> {

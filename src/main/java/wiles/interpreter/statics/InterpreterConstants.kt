@@ -54,14 +54,7 @@ object InterpreterConstants {
         ObjectDetails(value.size, INT64_TYPE)
     }, SIZE_TYPE)
     private val AS_TEXT_REF = ObjectDetails(Function<VariableMap, ObjectDetails>{
-        val value = it["!elem"]!!.value
-        ObjectDetails(
-            when(value)
-            {
-                null -> "nothing"
-                is Function<*, *> -> it["!elem"]!!.type.components[0].toString()
-                else -> value.toString()
-            }, STRING_TYPE)
+        ObjectDetails(it["!elem"]!!.toString(), STRING_TYPE)
     }, AS_TEXT_TYPE)
     val ZERO_REF = ObjectDetails(0L, INT64_TYPE)
     val MAXINT64_REF = ObjectDetails(Long.MAX_VALUE, INT64_TYPE)

@@ -1,12 +1,12 @@
 package wiles.checker.services
 
 import wiles.checker.data.VariableDetails
-import wiles.checker.statics.InferrerUtils
 import wiles.shared.JSONStatement
 import wiles.shared.constants.TypeConstants.INT64_TYPE
 import wiles.shared.constants.TypeConstants.LIST_OF_ANYTHING_TYPE
 import wiles.shared.constants.TypeConstants.NULLABLE_ANYTHING_TYPE
 import wiles.shared.constants.TypeConstants.STRING_TYPE
+import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
 import wiles.shared.constants.Utils.createFunctionType
 
 object AccessOperationIdentifiers {
@@ -32,7 +32,7 @@ object AccessOperationIdentifiers {
     {
         val list = access[name] ?: return null
         for(validType in list)
-            if(InferrerUtils.isFormerSuperTypeOfLatter(validType.first, type))
+            if(isFormerSuperTypeOfLatter(validType.first, type))
                 return "!${validType.first}$name"
         return null
     }

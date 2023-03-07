@@ -7,14 +7,14 @@ import wiles.checker.exceptions.InferenceFailException
 import wiles.checker.exceptions.VariableAlreadyDeclaredException
 import wiles.checker.services.InferrerService
 import wiles.checker.statics.InferrerUtils.checkTypeIsDefined
-import wiles.checker.statics.InferrerUtils.isFormerSuperTypeOfLatter
 import wiles.shared.AbstractCompilationException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType.*
-import wiles.shared.constants.TypeConstants.ERROR_TYPE
-import wiles.shared.constants.TypeConstants.NOTHING_TYPE
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.VARIABLE_ID
+import wiles.shared.constants.TypeConstants.ERROR_TYPE
+import wiles.shared.constants.TypeConstants.NOTHING_TYPE
+import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
 
 class InferFromDeclaration(details: InferrerDetails,
                            private val alwaysInit: Boolean = false)
