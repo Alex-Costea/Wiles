@@ -1508,6 +1508,11 @@ class InterpreterTests {
         assertVar(vars, "!text1", "231")
         assertVar(vars, "!text2", "1nothing3")
 
+        /*
+        let a := mut [1, "hi", nothing] : anything?
+        let b := (a @ 2).as_text
+        b.writeline
+         */
         val vars2 = getVars("""{
   "type" : "CODE_BLOCK",
   "parsed" : true,
