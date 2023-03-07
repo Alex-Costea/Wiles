@@ -55,7 +55,7 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
                 {
                     if(isFormerSuperTypeOfLatter(formerComponent,latterComponent))
                     {
-                        val newComp = getFormerTypeMinusLatterType(latterComponent,formerComponent,newLocation)
+                        val newComp = getFormerTypeMinusLatterType(formerComponent,latterComponent,newLocation)
                         val newCompUnbox = unbox(newComp)
                         if(!(newCompUnbox.name == EITHER_ID && newCompUnbox.components.isEmpty()))
                             finalComponents.add(newComp)

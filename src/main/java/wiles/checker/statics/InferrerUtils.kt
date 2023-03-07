@@ -17,6 +17,7 @@ import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
 import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
+import wiles.shared.constants.TypeConstants.makeMutable
 import wiles.shared.constants.Types.DOUBLE_ID
 import wiles.shared.constants.Types.EITHER_ID
 import wiles.shared.constants.Types.INT64_ID
@@ -210,8 +211,17 @@ object InferrerUtils {
         if(middleName != ASSIGN_ID) {
             if(statement.name == EITHER_ID) {
                 newComponents = mutableListOf()
-                for (component in statement.components) {
-                    if(component.name !in EITHER_ID)
+                val componentsList = statement.copyRemovingLocation().components
+                for (component in componentsList) {
+                    if(component.name == MUTABLE_ID && component.components[0].name == EITHER_ID)
+                    {
+                        val newNewComp = component.components[0].components.map { makeMutable(it) }
+                        for(comp in newNewComp)
+                        {
+                            addIfNecessary(newComponents, comp)
+                        }
+                    }
+                    else if(component.name != EITHER_ID)
                         addIfNecessary(newComponents, component)
                     else for(subComponents in createComponents(component,middleName))
                         addIfNecessary(newComponents, subComponents)
