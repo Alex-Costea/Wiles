@@ -44,22 +44,27 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
             val latterComponents = if(latter.name == EITHER_ID) {
                 InferrerUtils.createComponents(latter).toList()
             } else listOf(latter)
-            var components = InferrerUtils.createComponents(former).toMutableList()
-            for(latterComponent in latterComponents) {
-                for (formerComponent in components.withIndex()) {
-                    if (isFormerSuperTypeOfLatter(formerComponent.value, latterComponent)) {
-                        components[formerComponent.index] = getFormerTypeMinusLatterType(formerComponent.value,
-                            latterComponent, newLocation)
+            val formerComponents = InferrerUtils.createComponents(former).toMutableList()
+            val finalComponents = mutableListOf<JSONStatement>()
 
+            for(latterComponent in latterComponents)
+            {
+                for(formerComponent in formerComponents)
+                {
+                    if(isFormerSuperTypeOfLatter(formerComponent,latterComponent))
+                    {
+                        val newComp = getFormerTypeMinusLatterType(latterComponent,formerComponent,newLocation)
+                        if(!(newComp.name == EITHER_ID && newComp.components.isEmpty()))
+                            finalComponents.add(newComp)
                     }
+                    else finalComponents.add(formerComponent)
                 }
-                components = components.filterNot { it.name == EITHER_ID && it.components.isEmpty()}.toMutableList()
             }
 
-            return when (components.size) {
+            return when (finalComponents.size) {
                 0 -> JSONStatement(name = EITHER_ID, type = SyntaxType.TYPE)
-                1 -> components[0].copyRemovingLocation()
-                else -> JSONStatement(name = EITHER_ID, type = SyntaxType.TYPE, components = components)
+                1 -> finalComponents[0].copyRemovingLocation()
+                else -> JSONStatement(name = EITHER_ID, type = SyntaxType.TYPE, components = finalComponents)
             }
         }
         return former.copyRemovingLocation()
