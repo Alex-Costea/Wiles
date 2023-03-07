@@ -6,6 +6,7 @@ import wiles.checker.data.VariableMap
 import wiles.checker.exceptions.*
 import wiles.checker.statics.InferrerUtils
 import wiles.checker.statics.InferrerUtils.checkIsInitialized
+import wiles.checker.statics.InferrerUtils.unbox
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.TokenLocation
@@ -47,6 +48,7 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
             val formerComponents = InferrerUtils.createComponents(former).toMutableList()
             val finalComponents = mutableListOf<JSONStatement>()
 
+            //TODO: check for bug fixes
             for(latterComponent in latterComponents)
             {
                 for(formerComponent in formerComponents)
@@ -54,10 +56,12 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
                     if(isFormerSuperTypeOfLatter(formerComponent,latterComponent))
                     {
                         val newComp = getFormerTypeMinusLatterType(latterComponent,formerComponent,newLocation)
-                        if(!(newComp.name == EITHER_ID && newComp.components.isEmpty()))
+                        val newCompUnbox = unbox(newComp)
+                        if(!(newCompUnbox.name == EITHER_ID && newCompUnbox.components.isEmpty()))
                             finalComponents.add(newComp)
                     }
-                    else finalComponents.add(formerComponent)
+                    else if(!isFormerSuperTypeOfLatter(latterComponent,formerComponent))
+                        finalComponents.add(formerComponent)
                 }
             }
 
