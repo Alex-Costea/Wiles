@@ -2,7 +2,6 @@ package wiles.interpreter.data
 
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
-import wiles.shared.constants.TypeConstants.makeMutable
 import java.util.function.Function
 
 data class ObjectDetails(var value : Any?, var type : JSONStatement)
@@ -15,6 +14,7 @@ data class ObjectDetails(var value : Any?, var type : JSONStatement)
             is Double, is Long, is String, is Boolean, null -> value
             is MutableList<*> -> value.map{cloneValue(it)}.toMutableList()
             is Function<*, *> -> value
+            is ObjectDetails -> ObjectDetails(cloneValue(value.value),type.copyRemovingLocation())
             else -> throw InternalErrorException()
         }
         return newValue
@@ -22,7 +22,7 @@ data class ObjectDetails(var value : Any?, var type : JSONStatement)
 
     fun makeMutable() : ObjectDetails
     {
-        return ObjectDetails(cloneValue(value), makeMutable(type.copyRemovingLocation()))
+        return cloneValue(this) as ObjectDetails
     }
 
     override fun toString(): String {

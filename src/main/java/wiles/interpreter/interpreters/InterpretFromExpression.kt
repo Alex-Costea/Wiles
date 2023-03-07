@@ -67,15 +67,14 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
     private fun getReference(component : JSONStatement) : ObjectDetails
     {
         return when (component.type) {
-            SyntaxType.TOKEN -> {
-                getFromValue(component)
-            }
             SyntaxType.EXPRESSION -> {
                 val expressionRun = InterpretFromExpression(component, variables, additionalVars)
                 expressionRun.interpret()
                 expressionRun.reference
             }
-            else -> TODO()
+            else -> {
+                getFromValue(component)
+            }
         }
     }
 
