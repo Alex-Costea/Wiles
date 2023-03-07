@@ -15,6 +15,7 @@ import wiles.shared.constants.TypeConstants.INT64_TYPE
 class InterpretFromFor(statement: JSONStatement, variables: VariableMap, additionalVars: VariableMap)
     : InterpretFromStatement(statement, variables, additionalVars)
 {
+    @Suppress("UNCHECKED_CAST")
     override fun interpret() {
         val name = statement.components[1].name
 
@@ -41,7 +42,11 @@ class InterpretFromFor(statement: JSONStatement, variables: VariableMap, additio
         }
         else null
 
-        if(inCollection != null) TODO()
+        val collection = if(inCollection != null) {
+            val inferFromCollection = InterpretFromExpression(inCollection, variables, additionalVars)
+            inferFromCollection.interpret()
+            inferFromCollection.reference
+        } else null
 
         val fromValue = if(fromExpression == null) ZERO_REF else
         {
@@ -57,14 +62,15 @@ class InterpretFromFor(statement: JSONStatement, variables: VariableMap, additio
             interpreter.reference
         }
 
-
         val range = if(fromValue.value as Long > toValue.value as Long)
             ((fromValue.value as Long) downTo (toValue.value as Long))
             else fromValue.value as Long .. toValue.value as Long
 
         for(i in range)
         {
-            variables[name] = ObjectDetails(i, INT64_TYPE)
+            variables[name] = if(collection == null) ObjectDetails(i, INT64_TYPE)
+            else (collection.value as MutableList<ObjectDetails>).getOrNull(i.toInt()) ?: break
+
             val inferrer = InterpretFromCodeBlock(statement.components[compIndex], variables, additionalVars)
             try
             {
