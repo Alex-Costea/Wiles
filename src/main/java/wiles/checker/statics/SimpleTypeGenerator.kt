@@ -2,6 +2,8 @@ package wiles.checker.statics
 
 import wiles.checker.statics.InferrerUtils.unbox
 import wiles.shared.JSONStatement
+import wiles.shared.constants.Tokens.IMPORT_ID
+import wiles.shared.constants.Tokens.NEW_ID
 import wiles.shared.constants.TypeConstants
 import wiles.shared.constants.TypeConstants.AND_OPERATION
 import wiles.shared.constants.TypeConstants.ASSIGN_OPERATION
@@ -9,7 +11,6 @@ import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
 import wiles.shared.constants.TypeConstants.DIVIDE_OPERATION
 import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
 import wiles.shared.constants.TypeConstants.EQUALS_OPERATION
-import wiles.shared.constants.TypeConstants.IMPORT_OPERATION
 import wiles.shared.constants.TypeConstants.INT64_TYPE
 import wiles.shared.constants.TypeConstants.LARGER_EQUALS_OPERATION
 import wiles.shared.constants.TypeConstants.LARGER_OPERATION
@@ -131,7 +132,7 @@ object SimpleTypeGenerator {
     {
         val unboxedTriple = Triple(unbox(triple.first), triple.second, unbox(triple.third))
 
-        if(unboxedTriple.second == IMPORT_OPERATION)
+        if(unboxedTriple.second.name in arrayOf(IMPORT_ID, NEW_ID))
             return unboxedTriple.third.copyRemovingLocation()
 
         if(unboxedTriple.second == TypeConstants.ELEM_ACCESS_OPERATION)

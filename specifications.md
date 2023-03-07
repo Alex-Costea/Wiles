@@ -53,6 +53,7 @@
 - `,` (separator between elements)
 - `?` (syntactic sugar for `type? = either[type,nothing]`)
 - `import` (get a variable from an outside context)
+- `new` (make deep clone of object)
 
 ### Named parameters
 - Function calling with named parameters by default: `my_function(a := 1, b := 10)`
