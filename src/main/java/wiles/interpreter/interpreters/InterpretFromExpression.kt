@@ -14,6 +14,8 @@ import wiles.shared.constants.Predicates
 import wiles.shared.constants.Tokens.AND_ID
 import wiles.shared.constants.Tokens.APPLY_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
+import wiles.shared.constants.Tokens.ELEM_ACCESS_ID
+import wiles.shared.constants.Tokens.IMPORT_ID
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.Tokens.MODIFY_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
@@ -85,7 +87,6 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
             1 -> {
                 getFromValue(leftStatement)
             }
-            //TODO: elem access, import
             3 -> {
                 val rightStatement = statement.components[2]
                 when(val middle = statement.components[1].name)
@@ -149,6 +150,16 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
                         }
                         function.apply(newVarMap)
                     }
+                    ELEM_ACCESS_ID -> {
+                        val leftRef = getReference(leftStatement)
+                        val rightRef = getReference(rightStatement)
+                        val valueLong = (rightRef.value as Long)
+                        val valueInt = if (valueLong >= Int.MIN_VALUE && valueLong <= Int.MAX_VALUE) valueLong.toInt()
+                            else null
+                        if (valueInt == null) NOTHING_REF
+                        else (leftRef.value as MutableList<ObjectDetails>).getOrNull(valueInt) ?: NOTHING_REF
+                    }
+                    IMPORT_ID -> TODO()
                     else -> {
                         val leftRef = getReference(leftStatement)
                         val rightRef = getReference(rightStatement)
