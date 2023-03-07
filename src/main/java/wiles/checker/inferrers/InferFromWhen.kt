@@ -10,14 +10,24 @@ import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.ELSE_ID
+import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
 import wiles.shared.constants.Types.EITHER_ID
+import wiles.shared.constants.Types.LIST_ID
 
 class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
 
-    //TODO: handle unboxing
     private fun getFormerTypeMinusLatterType(former: JSONStatement, latter : JSONStatement) : JSONStatement?
     {
+        // use sub-components
+        for(typeName in arrayOf(MUTABLE_ID, LIST_ID)) {
+            if (former.name == typeName && latter.name == typeName) {
+                return JSONStatement(
+                    name = typeName, type = SyntaxType.TYPE, components = mutableListOf(
+                        getFormerTypeMinusLatterType(former.components[0], latter.components[0]) ?: return null))
+            }
+        }
+
         if(!isFormerSuperTypeOfLatter(former, latter))
             throw ConflictingTypeDefinitionException(latter.getFirstLocation(),latter.toString(),former.toString())
 
