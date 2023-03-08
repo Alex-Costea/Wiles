@@ -4417,16 +4417,15 @@ class CheckerTests {
         let list := mut [] : int?
         let x := list @ 0
         when x is begin
-            nothing do ignore(x)
             mut[nothing] do ignore(x)
+            nothing do ignore(x)
             default do ignore(x)
         end
 
-        let list := mut [] : int?
-        let x := list @ 0
+        let x : either[mut[int],mut[nothing],nothing] := mut 0
         when x is begin
-            mut[nothing] do ignore(x)
             nothing do ignore(x)
+            mut[nothing] do ignore(x)
             default do ignore(x)
         end
          */
