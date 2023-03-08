@@ -4404,8 +4404,7 @@ class CheckerTests {
     @Test
     fun whenStatementTests()
     {
-        /*TODO: implement the following tests
-
+        /*
         let list := mut [] : int?
         let x := list @ 0
         when x is begin
@@ -4413,22 +4412,469 @@ class CheckerTests {
             mut[nothing] do ignore(x)
             default do ignore(x)
         end
+        */
+        checkResult(createExceptions(ConflictingTypeDefinitionException(NULL_LOCATION,"TYPE NOTHING", "TYPE INT64")),
+            """{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "!list",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "MUTABLE",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 13
+        }
+      }, {
+        "type" : "LIST",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 18
+        },
+        "components" : [ {
+          "name" : "EITHER",
+          "type" : "TYPE",
+          "location" : {
+            "line" : 1,
+            "lineIndex" : 22
+          },
+          "components" : [ {
+            "name" : "INT64",
+            "type" : "TYPE",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 22
+            }
+          }, {
+            "name" : "NOTHING",
+            "type" : "TYPE"
+          } ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "!x",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 2,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!list",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 10
+        }
+      }, {
+        "name" : "ELEM_ACCESS",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 15
+        }
+      }, {
+        "name" : "#0",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 17
+        }
+      } ]
+    } ]
+  }, {
+    "type" : "WHEN",
+    "components" : [ {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!x",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 3,
+          "lineIndex" : 6
+        }
+      } ]
+    }, {
+      "name" : "NOTHING",
+      "type" : "TYPE",
+      "location" : {
+        "line" : 4,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "CODE_BLOCK",
+      "components" : [ {
+        "type" : "EXPRESSION",
+        "components" : [ {
+          "name" : "!ignore",
+          "type" : "TOKEN",
+          "location" : {
+            "line" : 4,
+            "lineIndex" : 16
+          }
+        }, {
+          "name" : "APPLY",
+          "type" : "TOKEN",
+          "location" : {
+            "line" : 4,
+            "lineIndex" : 22
+          }
+        }, {
+          "type" : "METHOD_CALL",
+          "components" : [ {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "!x",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 4,
+                "lineIndex" : 23
+              }
+            } ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "name" : "MUTABLE",
+      "type" : "TYPE",
+      "location" : {
+        "line" : 5,
+        "lineIndex" : 5
+      },
+      "components" : [ {
+        "name" : "NOTHING",
+        "type" : "TYPE",
+        "location" : {
+          "line" : 5,
+          "lineIndex" : 9
+        }
+      } ]
+    }, {
+      "type" : "CODE_BLOCK",
+      "components" : [ {
+        "type" : "EXPRESSION",
+        "components" : [ {
+          "name" : "!ignore",
+          "type" : "TOKEN",
+          "location" : {
+            "line" : 5,
+            "lineIndex" : 21
+          }
+        }, {
+          "name" : "APPLY",
+          "type" : "TOKEN",
+          "location" : {
+            "line" : 5,
+            "lineIndex" : 27
+          }
+        }, {
+          "type" : "METHOD_CALL",
+          "components" : [ {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "!x",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 5,
+                "lineIndex" : 28
+              }
+            } ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "name" : "ELSE",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 6,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "CODE_BLOCK",
+      "components" : [ {
+        "type" : "EXPRESSION",
+        "components" : [ {
+          "name" : "!ignore",
+          "type" : "TOKEN",
+          "location" : {
+            "line" : 6,
+            "lineIndex" : 16
+          }
+        }, {
+          "name" : "APPLY",
+          "type" : "TOKEN",
+          "location" : {
+            "line" : 6,
+            "lineIndex" : 22
+          }
+        }, {
+          "type" : "METHOD_CALL",
+          "components" : [ {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "!x",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 6,
+                "lineIndex" : 23
+              }
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(DECLARATION(TYPE MUTABLE; (TYPE LIST; (TYPE MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE NOTHING)))); !list; EXPRESSION(TYPE MUTABLE; (TYPE LIST; (TYPE MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE NOTHING)))); MUTABLE; LIST(TYPE EITHER; (TYPE INT64; TYPE NOTHING)))); DECLARATION(TYPE EITHER; (TYPE MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE NOTHING)); TYPE NOTHING); !x; EXPRESSION(TYPE EITHER; (TYPE MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE NOTHING)); TYPE NOTHING); !list; ELEM_ACCESS; #0)); WHEN(EXPRESSION(!x); TYPE NOTHING; CODE_BLOCK(EXPRESSION(TYPE NOTHING; !ignore; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE NOTHING; !x))))); TYPE MUTABLE; (TYPE NOTHING); CODE_BLOCK(EXPRESSION(!ignore; APPLY; METHOD_CALL(EXPRESSION(!x)))); ELSE; CODE_BLOCK(EXPRESSION(!ignore; APPLY; METHOD_CALL(EXPRESSION(!x))))))")
 
+        /*
         let list := mut [] : int?
         let x := list @ 0
         when x is begin
             mut[nothing] do ignore(x)
             nothing do ignore(x)
-            default do ignore(x)
-        end
-
-        let x : either[mut[int],mut[nothing],nothing] := mut 0
-        when x is begin
-            nothing do ignore(x)
-            mut[nothing] do ignore(x)
             default do ignore(x)
         end
          */
+
+        checkResult(null,"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "!list",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 13
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "MUTABLE",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 21
+        }
+      }, {
+        "type" : "LIST",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 26
+        },
+        "components" : [ {
+          "name" : "EITHER",
+          "type" : "TYPE",
+          "location" : {
+            "line" : 1,
+            "lineIndex" : 30
+          },
+          "components" : [ {
+            "name" : "INT64",
+            "type" : "TYPE",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 30
+            }
+          }, {
+            "name" : "NOTHING",
+            "type" : "TYPE"
+          } ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "!x",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 2,
+        "lineIndex" : 13
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!list",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 18
+        }
+      }, {
+        "name" : "ELEM_ACCESS",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 23
+        }
+      }, {
+        "name" : "#0",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 25
+        }
+      } ]
+    } ]
+  }, {
+    "type" : "WHEN",
+    "components" : [ {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!x",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 3,
+          "lineIndex" : 14
+        }
+      } ]
+    }, {
+      "name" : "MUTABLE",
+      "type" : "TYPE",
+      "location" : {
+        "line" : 4,
+        "lineIndex" : 13
+      },
+      "components" : [ {
+        "name" : "NOTHING",
+        "type" : "TYPE",
+        "location" : {
+          "line" : 4,
+          "lineIndex" : 17
+        }
+      } ]
+    }, {
+      "type" : "CODE_BLOCK",
+      "components" : [ {
+        "type" : "EXPRESSION",
+        "components" : [ {
+          "name" : "!ignore",
+          "type" : "TOKEN",
+          "location" : {
+            "line" : 4,
+            "lineIndex" : 29
+          }
+        }, {
+          "name" : "APPLY",
+          "type" : "TOKEN",
+          "location" : {
+            "line" : 4,
+            "lineIndex" : 35
+          }
+        }, {
+          "type" : "METHOD_CALL",
+          "components" : [ {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "!x",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 4,
+                "lineIndex" : 36
+              }
+            } ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "name" : "NOTHING",
+      "type" : "TYPE",
+      "location" : {
+        "line" : 5,
+        "lineIndex" : 13
+      }
+    }, {
+      "type" : "CODE_BLOCK",
+      "components" : [ {
+        "type" : "EXPRESSION",
+        "components" : [ {
+          "name" : "!ignore",
+          "type" : "TOKEN",
+          "location" : {
+            "line" : 5,
+            "lineIndex" : 24
+          }
+        }, {
+          "name" : "APPLY",
+          "type" : "TOKEN",
+          "location" : {
+            "line" : 5,
+            "lineIndex" : 30
+          }
+        }, {
+          "type" : "METHOD_CALL",
+          "components" : [ {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "!x",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 5,
+                "lineIndex" : 31
+              }
+            } ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "name" : "ELSE",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 6,
+        "lineIndex" : 13
+      }
+    }, {
+      "type" : "CODE_BLOCK",
+      "components" : [ {
+        "type" : "EXPRESSION",
+        "components" : [ {
+          "name" : "!ignore",
+          "type" : "TOKEN",
+          "location" : {
+            "line" : 6,
+            "lineIndex" : 24
+          }
+        }, {
+          "name" : "APPLY",
+          "type" : "TOKEN",
+          "location" : {
+            "line" : 6,
+            "lineIndex" : 30
+          }
+        }, {
+          "type" : "METHOD_CALL",
+          "components" : [ {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "!x",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 6,
+                "lineIndex" : 31
+              }
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(DECLARATION(TYPE MUTABLE; (TYPE LIST; (TYPE MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE NOTHING)))); !list; EXPRESSION(TYPE MUTABLE; (TYPE LIST; (TYPE MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE NOTHING)))); MUTABLE; LIST(TYPE EITHER; (TYPE INT64; TYPE NOTHING)))); DECLARATION(TYPE EITHER; (TYPE MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE NOTHING)); TYPE NOTHING); !x; EXPRESSION(TYPE EITHER; (TYPE MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE NOTHING)); TYPE NOTHING); !list; ELEM_ACCESS; #0)); WHEN(EXPRESSION(!x); TYPE MUTABLE; (TYPE NOTHING); CODE_BLOCK(EXPRESSION(TYPE NOTHING; !ignore; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE MUTABLE; (TYPE NOTHING); !x))))); TYPE NOTHING; CODE_BLOCK(EXPRESSION(TYPE NOTHING; !ignore; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE NOTHING; !x))))); TYPE ELSE; (TYPE MUTABLE; (TYPE INT64)); CODE_BLOCK(EXPRESSION(TYPE NOTHING; !ignore; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE MUTABLE; (TYPE INT64); !x)))))))")
 
         /*
         let a : either[text, int] := 2
