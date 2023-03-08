@@ -147,9 +147,10 @@ object SimpleTypeGenerator {
             }
         }
 
-        if(unboxedTriple.second.name == APPEND_ID
+        if(triple.second.name == APPEND_ID
+            && isFormerSuperTypeOfLatter(makeMutable(LIST_OF_NULLABLE_ANYTHING_TYPE), triple.first)
             && isFormerSuperTypeOfLatter(triple.first, makeMutable(makeList(makeMutable(unboxedTriple.third)))))
-                return unboxedTriple.first.copyRemovingLocation()
+                return NOTHING_TYPE
 
         if(unboxedTriple.second == MUTABLE_OPERATION)
         {

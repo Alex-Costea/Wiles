@@ -24,7 +24,9 @@ import wiles.shared.constants.Tokens.NEW_ID
 import wiles.shared.constants.Tokens.OR_ID
 import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
 import wiles.shared.constants.TypeConstants.INT64_TYPE
+import wiles.shared.constants.TypeConstants.MUTABLE_ANYTHING_INCLUDING_NOTHING_TYPE
 import wiles.shared.constants.TypeConstants.STRING_TYPE
+import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
 import wiles.shared.constants.Types.METHOD_CALL_ID
 import java.util.function.Function
 
@@ -98,9 +100,11 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
                     APPEND_ID ->
                     {
                         val newLeft = getReference(leftStatement)
-                        val rightRef = getReference(rightStatement).makeMutable()
+                        var rightRef = getReference(rightStatement)
+                        if(isFormerSuperTypeOfLatter(MUTABLE_ANYTHING_INCLUDING_NOTHING_TYPE,rightRef.type))
+                                rightRef = rightRef.makeMutable()
                         (newLeft.value as MutableList<ObjectDetails>).add(rightRef)
-                        newLeft
+                        NOTHING_REF
                     }
                     ASSIGN_ID ->
                     {

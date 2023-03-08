@@ -18,7 +18,6 @@ import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
-import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.AND_ID
 import wiles.shared.constants.Tokens.APPEND_ID
 import wiles.shared.constants.Tokens.APPLY_ID
@@ -32,12 +31,9 @@ import wiles.shared.constants.Tokens.NEW_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.OR_ID
 import wiles.shared.constants.TypeConstants
-import wiles.shared.constants.TypeConstants.LIST_OF_NULLABLE_ANYTHING_TYPE
 import wiles.shared.constants.TypeConstants.NOTHING_TOKEN
-import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
 import wiles.shared.constants.TypeConstants.makeList
 import wiles.shared.constants.TypeConstants.makeMethod
-import wiles.shared.constants.TypeConstants.makeMutable
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.BOOLEAN_ID
 import wiles.shared.constants.Types.DOUBLE_ID
@@ -63,9 +59,6 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
 
         val rightComponents = createComponents(right,middle.name)
 
-        if(middle.name == Tokens.PLUS_ID
-            && isFormerSuperTypeOfLatter(makeMutable(LIST_OF_NULLABLE_ANYTHING_TYPE), left))
-            middle.name = APPEND_ID
 
         val resultingTypes : MutableList<JSONStatement> = mutableListOf()
         var isValid = true

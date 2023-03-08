@@ -49,7 +49,7 @@
 - `.` (`b.a` is `a(b)`, also used for field access)
 - `:` (type annotation)
 - `@` (access element in collection. returns nullable type)
-- `+` (append to end of mutable list)
+- `+=` (append to end of mutable list)
 - `()` (order of operations, function access)
 - `[]` (used in list literals and type definitions)
 - `,` (separator between elements)

@@ -2,6 +2,7 @@ package wiles.shared.constants
 
 import wiles.shared.constants.Tokens.ACCESS_ID
 import wiles.shared.constants.Tokens.AND_ID
+import wiles.shared.constants.Tokens.APPEND_ID
 import wiles.shared.constants.Tokens.APPLY_ID
 import wiles.shared.constants.Tokens.DIVIDE_ID
 import wiles.shared.constants.Tokens.ELEM_ACCESS_ID
@@ -30,6 +31,7 @@ object Precedence {
 
     init {
         PRECEDENCE[NEW_ID] = -6
+        PRECEDENCE[APPEND_ID] = -6
         PRECEDENCE[OR_ID] = -5
         PRECEDENCE[AND_ID] = -4
         PRECEDENCE[NOT_ID] = -3
