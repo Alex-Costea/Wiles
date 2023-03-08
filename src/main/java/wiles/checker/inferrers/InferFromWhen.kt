@@ -48,7 +48,6 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
             val formerComponents = InferrerUtils.createComponents(former).toMutableList()
             val finalComponents = mutableListOf<JSONStatement>()
 
-            //TODO: check for bug fixes
             for(latterComponent in latterComponents)
             {
                 for(formerComponent in formerComponents)
