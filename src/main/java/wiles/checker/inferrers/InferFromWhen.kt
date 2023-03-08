@@ -103,7 +103,6 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
 
         while(components.isNotEmpty())
         {
-            components.first().getFirstLocation()
             val newLocation = components.first().getFirstLocation()
             val statedType = if(components.first().type == SyntaxType.TYPE) components.first() else {
                 components.first().components.add(inferredType)
