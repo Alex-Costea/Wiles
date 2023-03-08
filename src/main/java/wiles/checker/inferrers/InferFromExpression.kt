@@ -18,7 +18,9 @@ import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
+import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.AND_ID
+import wiles.shared.constants.Tokens.APPEND_ID
 import wiles.shared.constants.Tokens.APPLY_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.ELEM_ACCESS_ID
@@ -30,9 +32,12 @@ import wiles.shared.constants.Tokens.NEW_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.OR_ID
 import wiles.shared.constants.TypeConstants
+import wiles.shared.constants.TypeConstants.LIST_OF_NULLABLE_ANYTHING_TYPE
 import wiles.shared.constants.TypeConstants.NOTHING_TOKEN
+import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
 import wiles.shared.constants.TypeConstants.makeList
 import wiles.shared.constants.TypeConstants.makeMethod
+import wiles.shared.constants.TypeConstants.makeMutable
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.BOOLEAN_ID
 import wiles.shared.constants.Types.DOUBLE_ID
@@ -57,6 +62,10 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
         val leftComponents = createComponents(left,middle.name)
 
         val rightComponents = createComponents(right,middle.name)
+
+        if(middle.name == Tokens.PLUS_ID
+            && isFormerSuperTypeOfLatter(makeMutable(LIST_OF_NULLABLE_ANYTHING_TYPE), left))
+            middle.name = APPEND_ID
 
         val resultingTypes : MutableList<JSONStatement> = mutableListOf()
         var isValid = true
@@ -104,7 +113,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
             var rightText : String = if(rightComponents.size == 1) unbox(rightComponents[0]).name else ANYTHING_ID
             if(rightText !in VALID_NAMED) rightText = ANYTHING_ID
             operationName = if(middle.name in listOf(ASSIGN_ID, ELEM_ACCESS_ID, MUTABLE_ID, NEW_ID,
-                    IMPORT_ID, MODIFY_ID, AND_ID, OR_ID)) middle.name
+                    IMPORT_ID, MODIFY_ID, AND_ID, OR_ID, APPEND_ID)) middle.name
                 else "${leftText}|${middle.name}|${rightText}"
             return if(resultingTypes.size == 1)
                 resultingTypes[0]

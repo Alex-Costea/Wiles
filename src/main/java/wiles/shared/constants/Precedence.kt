@@ -29,7 +29,6 @@ object Precedence {
     val RIGHT_TO_LEFT : Set<Byte>
 
     init {
-        PRECEDENCE[MUTABLE_ID] = -6
         PRECEDENCE[NEW_ID] = -6
         PRECEDENCE[OR_ID] = -5
         PRECEDENCE[AND_ID] = -4
@@ -46,6 +45,7 @@ object Precedence {
         PRECEDENCE[UNARY_MINUS_ID] = 1
         PRECEDENCE[TIMES_ID] = 2
         PRECEDENCE[DIVIDE_ID] = 2
+        PRECEDENCE[MUTABLE_ID] = 2
         PRECEDENCE[POWER_ID] = 3
         PRECEDENCE[ELEM_ACCESS_ID] = 4
         PRECEDENCE[ACCESS_ID] = 5

@@ -12,6 +12,7 @@ import wiles.shared.SyntaxType
 import wiles.shared.constants.Chars.DECIMAL_DELIMITER
 import wiles.shared.constants.Predicates
 import wiles.shared.constants.Tokens.AND_ID
+import wiles.shared.constants.Tokens.APPEND_ID
 import wiles.shared.constants.Tokens.APPLY_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.ELEM_ACCESS_ID
@@ -94,6 +95,13 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
                 val rightStatement = statement.components[2]
                 when(val middle = statement.components[1].name)
                 {
+                    APPEND_ID ->
+                    {
+                        val newLeft = getReference(leftStatement)
+                        val rightRef = getReference(rightStatement).makeMutable()
+                        (newLeft.value as MutableList<ObjectDetails>).add(rightRef)
+                        newLeft
+                    }
                     ASSIGN_ID ->
                     {
                         val leftName = leftStatement.components[0].name

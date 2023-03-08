@@ -72,6 +72,7 @@ object Tokens {
     const val WHEN_ID = "WHEN"
     const val IS_ID = "IS"
     const val NEW_ID = "NEW"
+    const val APPEND_ID = "APPEND"
 
     private val KEYWORDS: HashMap<String, String> = HashMap()
     private val SYMBOLS: HashMap<String, String> = HashMap()

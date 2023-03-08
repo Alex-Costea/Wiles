@@ -2,6 +2,7 @@ package wiles.checker.statics
 
 import wiles.checker.statics.InferrerUtils.unbox
 import wiles.shared.JSONStatement
+import wiles.shared.constants.Tokens.APPEND_ID
 import wiles.shared.constants.Tokens.IMPORT_ID
 import wiles.shared.constants.Tokens.NEW_ID
 import wiles.shared.constants.TypeConstants
@@ -32,6 +33,7 @@ import wiles.shared.constants.TypeConstants.TIMES_OPERATION
 import wiles.shared.constants.TypeConstants.UNARY_MINUS_OPERATION
 import wiles.shared.constants.TypeConstants.UNARY_PLUS_OPERATION
 import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
+import wiles.shared.constants.TypeConstants.makeList
 import wiles.shared.constants.TypeConstants.makeMutable
 
 object SimpleTypeGenerator {
@@ -130,6 +132,7 @@ object SimpleTypeGenerator {
 
     fun getSimpleTypes(triple : Triple<JSONStatement, JSONStatement, JSONStatement>) : JSONStatement?
     {
+        //TODO: possible bug?
         val unboxedTriple = Triple(unbox(triple.first), triple.second, unbox(triple.third))
 
         if(unboxedTriple.second.name in arrayOf(IMPORT_ID, NEW_ID))
@@ -143,6 +146,10 @@ object SimpleTypeGenerator {
                 return InferrerUtils.makeNullable(unboxedTriple.first.components[0])
             }
         }
+
+        if(unboxedTriple.second.name == APPEND_ID
+            && isFormerSuperTypeOfLatter(triple.first, makeMutable(makeList(makeMutable(unboxedTriple.third)))))
+                return unboxedTriple.first.copyRemovingLocation()
 
         if(unboxedTriple.second == MUTABLE_OPERATION)
         {
