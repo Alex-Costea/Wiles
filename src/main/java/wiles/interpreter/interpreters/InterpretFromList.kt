@@ -5,6 +5,7 @@ import wiles.interpreter.data.VariableMap
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
+import wiles.shared.constants.TypeConstants.makeList
 import wiles.shared.constants.Types.EITHER_ID
 
 class InterpretFromList(statement: JSONStatement, variables: VariableMap, additionalVars: VariableMap)
@@ -23,7 +24,7 @@ class InterpretFromList(statement: JSONStatement, variables: VariableMap, additi
                 interpreter.reference.type
             else addType(newType, interpreter.reference.type)
         }
-        reference = ObjectDetails(list, newType?:statement.components[0])
+        reference = ObjectDetails(list, makeList((newType?:statement.components[0].copyRemovingLocation())))
     }
 
     private fun addType(resultingType: JSONStatement, addedType: JSONStatement): JSONStatement {

@@ -16,7 +16,7 @@ class InterpretFrom(val statement : JSONStatement,
             SyntaxType.EXPRESSION -> InterpretFromExpression(statement, variables, additionalVars)
             SyntaxType.CODE_BLOCK -> InterpretFromCodeBlock(statement, variables, additionalVars)
             SyntaxType.IF -> InterpretFromIf(statement, variables, additionalVars)
-            SyntaxType.WHEN -> TODO()
+            SyntaxType.WHEN -> InterpretFromWhen(statement, variables, additionalVars)
             SyntaxType.DECLARATION -> InterpretFromDeclaration(statement, variables, additionalVars)
             SyntaxType.RETURN -> TODO()
             SyntaxType.WHILE -> InterpretFromWhile(statement, variables, additionalVars)

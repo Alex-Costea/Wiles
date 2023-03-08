@@ -2064,6 +2064,288 @@ class InterpreterTests {
         assertVar(vars4, "!b_text", "[1, 2, 3]")
     }
 
+    @Test
+    fun whenTests()
+    {
+        /*
+        let list := mut [1, nothing] : int?
+        let var text := ""
+        for i from 0 to 2
+        begin
+            let x := list @ i
+            when x is begin
+                mut[nothing] do text := text + "mut[nothing],"
+                nothing do text := text + "nothing,"
+                default do text := text + "default,"
+            end
+        end
+         */
+        val vars = getVars("""{
+  "type" : "CODE_BLOCK",
+  "parsed" : true,
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "MUTABLE",
+      "type" : "TYPE",
+      "components" : [ {
+        "name" : "LIST",
+        "type" : "TYPE",
+        "components" : [ {
+          "name" : "MUTABLE",
+          "type" : "TYPE",
+          "components" : [ {
+            "name" : "EITHER",
+            "type" : "TYPE",
+            "components" : [ {
+              "name" : "INT64",
+              "type" : "TYPE"
+            }, {
+              "name" : "NOTHING",
+              "type" : "TYPE"
+            } ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "name" : "!list",
+      "type" : "TOKEN"
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "NOTHING",
+        "type" : "TOKEN"
+      }, {
+        "name" : "MUTABLE",
+        "type" : "TOKEN"
+      }, {
+        "type" : "LIST",
+        "components" : [ {
+          "name" : "EITHER",
+          "type" : "TYPE",
+          "components" : [ {
+            "name" : "INT64",
+            "type" : "TYPE"
+          }, {
+            "name" : "NOTHING",
+            "type" : "TYPE"
+          } ]
+        }, {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "#1",
+            "type" : "TOKEN"
+          } ]
+        }, {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "NOTHING",
+            "type" : "TOKEN"
+          } ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "name" : "VARIABLE",
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "STRING",
+      "type" : "TYPE"
+    }, {
+      "name" : "!text",
+      "type" : "TOKEN"
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "@",
+        "type" : "TOKEN"
+      } ]
+    } ]
+  }, {
+    "type" : "FOR",
+    "components" : [ {
+      "name" : "INT64",
+      "type" : "TYPE"
+    }, {
+      "name" : "!i",
+      "type" : "TOKEN"
+    }, {
+      "name" : "FROM",
+      "type" : "TOKEN"
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "#0",
+        "type" : "TOKEN"
+      } ]
+    }, {
+      "name" : "TO",
+      "type" : "TOKEN"
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "#2",
+        "type" : "TOKEN"
+      } ]
+    }, {
+      "type" : "CODE_BLOCK",
+      "components" : [ {
+        "type" : "DECLARATION",
+        "components" : [ {
+          "name" : "EITHER",
+          "type" : "TYPE",
+          "components" : [ {
+            "name" : "MUTABLE",
+            "type" : "TYPE",
+            "components" : [ {
+              "name" : "EITHER",
+              "type" : "TYPE",
+              "components" : [ {
+                "name" : "INT64",
+                "type" : "TYPE"
+              }, {
+                "name" : "NOTHING",
+                "type" : "TYPE"
+              } ]
+            } ]
+          }, {
+            "name" : "NOTHING",
+            "type" : "TYPE"
+          } ]
+        }, {
+          "name" : "!x",
+          "type" : "TOKEN"
+        }, {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "!list",
+            "type" : "TOKEN"
+          }, {
+            "name" : "ELEM_ACCESS",
+            "type" : "TOKEN"
+          }, {
+            "name" : "!i",
+            "type" : "TOKEN"
+          } ]
+        } ]
+      }, {
+        "type" : "WHEN",
+        "components" : [ {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "!x",
+            "type" : "TOKEN"
+          } ]
+        }, {
+          "name" : "MUTABLE",
+          "type" : "TYPE",
+          "components" : [ {
+            "name" : "NOTHING",
+            "type" : "TYPE"
+          } ]
+        }, {
+          "type" : "CODE_BLOCK",
+          "components" : [ {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "type" : "EXPRESSION",
+              "components" : [ {
+                "name" : "!text",
+                "type" : "TOKEN"
+              } ]
+            }, {
+              "name" : "ASSIGN",
+              "type" : "TOKEN"
+            }, {
+              "type" : "EXPRESSION",
+              "components" : [ {
+                "name" : "!text",
+                "type" : "TOKEN"
+              }, {
+                "name" : "STRING|PLUS|STRING",
+                "type" : "TOKEN"
+              }, {
+                "name" : "@mut[nothing],",
+                "type" : "TOKEN"
+              } ]
+            } ]
+          } ]
+        }, {
+          "name" : "NOTHING",
+          "type" : "TYPE"
+        }, {
+          "type" : "CODE_BLOCK",
+          "components" : [ {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "type" : "EXPRESSION",
+              "components" : [ {
+                "name" : "!text",
+                "type" : "TOKEN"
+              } ]
+            }, {
+              "name" : "ASSIGN",
+              "type" : "TOKEN"
+            }, {
+              "type" : "EXPRESSION",
+              "components" : [ {
+                "name" : "!text",
+                "type" : "TOKEN"
+              }, {
+                "name" : "STRING|PLUS|STRING",
+                "type" : "TOKEN"
+              }, {
+                "name" : "@nothing,",
+                "type" : "TOKEN"
+              } ]
+            } ]
+          } ]
+        }, {
+          "name" : "ELSE",
+          "type" : "TYPE",
+          "components" : [ {
+            "name" : "MUTABLE",
+            "type" : "TYPE",
+            "components" : [ {
+              "name" : "INT64",
+              "type" : "TYPE"
+            } ]
+          } ]
+        }, {
+          "type" : "CODE_BLOCK",
+          "components" : [ {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "type" : "EXPRESSION",
+              "components" : [ {
+                "name" : "!text",
+                "type" : "TOKEN"
+              } ]
+            }, {
+              "name" : "ASSIGN",
+              "type" : "TOKEN"
+            }, {
+              "type" : "EXPRESSION",
+              "components" : [ {
+                "name" : "!text",
+                "type" : "TOKEN"
+              }, {
+                "name" : "STRING|PLUS|STRING",
+                "type" : "TOKEN"
+              }, {
+                "name" : "@default,",
+                "type" : "TOKEN"
+              } ]
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}""")
+        assertVar(vars, "!text", "default,mut[nothing],nothing,")
+    }
+
     companion object {
         @JvmStatic
         @BeforeAll
