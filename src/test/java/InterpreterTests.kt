@@ -2346,6 +2346,195 @@ class InterpreterTests {
         assertVar(vars, "!text", "default,mut[nothing],nothing,")
     }
 
+    @Test
+    fun methodLiteralTest()
+    {
+        /*
+        let func := fun(a := 1, b : int) do yield a + b
+        let a := func(a := 10, b := 20)
+        let b := func(b := 20)
+         */
+        val vars = getVars("""{
+  "type" : "CODE_BLOCK",
+  "parsed" : true,
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "METHOD",
+      "type" : "TYPE",
+      "components" : [ {
+        "type" : "METHOD",
+        "components" : [ {
+          "type" : "DECLARATION",
+          "components" : [ {
+            "name" : "INT64",
+            "type" : "TYPE"
+          }, {
+            "name" : "!a",
+            "type" : "TOKEN"
+          }, {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "#1",
+              "type" : "TOKEN"
+            } ]
+          } ]
+        }, {
+          "type" : "DECLARATION",
+          "components" : [ {
+            "name" : "INT64",
+            "type" : "TYPE"
+          }, {
+            "name" : "!b",
+            "type" : "TOKEN"
+          } ]
+        } ]
+      } ]
+    }, {
+      "name" : "!func",
+      "type" : "TOKEN"
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "type" : "METHOD",
+        "components" : [ {
+          "type" : "DECLARATION",
+          "components" : [ {
+            "name" : "INT64",
+            "type" : "TYPE"
+          }, {
+            "name" : "!a",
+            "type" : "TOKEN"
+          }, {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "#1",
+              "type" : "TOKEN"
+            } ]
+          } ]
+        }, {
+          "type" : "DECLARATION",
+          "components" : [ {
+            "name" : "INT64",
+            "type" : "TYPE"
+          }, {
+            "name" : "!b",
+            "type" : "TOKEN"
+          } ]
+        }, {
+          "type" : "CODE_BLOCK",
+          "components" : [ {
+            "type" : "RETURN",
+            "components" : [ {
+              "type" : "EXPRESSION",
+              "components" : [ {
+                "name" : "!a",
+                "type" : "TOKEN"
+              }, {
+                "name" : "INT64|PLUS|INT64",
+                "type" : "TOKEN"
+              }, {
+                "name" : "!b",
+                "type" : "TOKEN"
+              } ]
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "INT64",
+      "type" : "TYPE"
+    }, {
+      "name" : "!a",
+      "type" : "TOKEN"
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!func",
+        "type" : "TOKEN"
+      }, {
+        "name" : "METHOD|APPLY|METHOD_CALL",
+        "type" : "TOKEN"
+      }, {
+        "type" : "METHOD_CALL",
+        "components" : [ {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "!a",
+            "type" : "TOKEN"
+          }, {
+            "name" : "ASSIGN",
+            "type" : "TOKEN"
+          }, {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "#10",
+              "type" : "TOKEN"
+            } ]
+          } ]
+        }, {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "!b",
+            "type" : "TOKEN"
+          }, {
+            "name" : "ASSIGN",
+            "type" : "TOKEN"
+          }, {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "#20",
+              "type" : "TOKEN"
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "INT64",
+      "type" : "TYPE"
+    }, {
+      "name" : "!b",
+      "type" : "TOKEN"
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!func",
+        "type" : "TOKEN"
+      }, {
+        "name" : "METHOD|APPLY|METHOD_CALL",
+        "type" : "TOKEN"
+      }, {
+        "type" : "METHOD_CALL",
+        "components" : [ {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "!b",
+            "type" : "TOKEN"
+          }, {
+            "name" : "ASSIGN",
+            "type" : "TOKEN"
+          }, {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "#20",
+              "type" : "TOKEN"
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}""")
+        assertVar(vars, "!a", 30L)
+        assertVar(vars, "!b", 21L)
+    }
+
     companion object {
         @JvmStatic
         @BeforeAll

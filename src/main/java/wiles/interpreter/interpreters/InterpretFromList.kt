@@ -9,9 +9,9 @@ import wiles.shared.constants.TypeConstants.makeList
 import wiles.shared.constants.Types.EITHER_ID
 
 class InterpretFromList(statement: JSONStatement, variables: VariableMap, additionalVars: VariableMap)
-    : InterpretFromStatement(statement, variables, additionalVars)
+    : InterpreterWithRef(statement, variables, additionalVars)
 {
-    lateinit var reference : ObjectDetails
+    override lateinit var reference : ObjectDetails
     override fun interpret() {
         val list = mutableListOf<ObjectDetails>()
         var newType : JSONStatement? = null

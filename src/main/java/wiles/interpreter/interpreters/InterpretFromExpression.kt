@@ -28,41 +28,44 @@ import wiles.shared.constants.Types.METHOD_CALL_ID
 import java.util.function.Function
 
 class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, additionalVars: VariableMap)
-    : InterpretFromStatement(statement, variables, additionalVars) {
-    lateinit var reference : ObjectDetails
+    : InterpreterWithRef(statement, variables, additionalVars)
+{
+    override lateinit var reference : ObjectDetails
 
     private fun getFromValue(component : JSONStatement) : ObjectDetails
     {
-        val ref : ObjectDetails
         val name = component.name
         val type = component.type
-        if(Predicates.IS_NUMBER_LITERAL.test(name) && !name.contains(DECIMAL_DELIMITER)) {
-            ref = ObjectDetails(name.substring(1).toLong(), INT64_TYPE)
+
+        return if(Predicates.IS_NUMBER_LITERAL.test(name) && !name.contains(DECIMAL_DELIMITER)) {
+            ObjectDetails(name.substring(1).toLong(), INT64_TYPE)
         }
 
         else if(Predicates.IS_NUMBER_LITERAL.test(name)) {
-            ref = ObjectDetails(name.substring(1).toDouble(), DOUBLE_TYPE)
+            ObjectDetails(name.substring(1).toDouble(), DOUBLE_TYPE)
         }
 
         else if(Predicates.IS_TEXT_LITERAL.test(name)) {
-            ref = ObjectDetails(name.substring(1), STRING_TYPE)
+            ObjectDetails(name.substring(1), STRING_TYPE)
         }
 
         else if(Predicates.IS_IDENTIFIER.test(name)) {
-            ref = variables[name]!!
+            variables[name]!!
         }
 
-        else when(type)
-        {
-            SyntaxType.LIST -> {
-                val interpreter = InterpretFromList(component, variables, additionalVars)
-                interpreter.interpret()
-                ref = interpreter.reference
+        else {
+            val interpreter : InterpreterWithRef = when (type) {
+                SyntaxType.LIST -> {
+                    InterpretFromList(component, variables, additionalVars)
+                }
+                SyntaxType.METHOD -> {
+                    InterpretFromMethod(component, variables, additionalVars)
+                }
+                else -> throw InternalErrorException()
             }
-            SyntaxType.METHOD -> TODO()
-            else -> throw InternalErrorException()
+            interpreter.interpret()
+            interpreter.reference
         }
-        return ref
     }
 
     private fun getReference(component : JSONStatement) : ObjectDetails
