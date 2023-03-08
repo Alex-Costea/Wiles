@@ -163,7 +163,15 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
                         else (leftRef.value as MutableList<ObjectDetails>).getOrNull(valueInt) ?: NOTHING_REF
                     }
                     NEW_ID -> getReference(rightStatement).clone()
-                    IMPORT_ID -> TODO()
+                    IMPORT_ID -> {
+                        val newVars = variables.copy()
+                        newVars.putAll(additionalVars.filter { it.key == rightStatement.name })
+                        val interpreter = InterpretFromExpression(
+                            JSONStatement(type =  SyntaxType.EXPRESSION, components = mutableListOf(rightStatement)),
+                            newVars, additionalVars)
+                        interpreter.interpret()
+                        interpreter.reference
+                    }
                     else -> {
                         val leftRef = getReference(leftStatement)
                         val rightRef = getReference(rightStatement)
