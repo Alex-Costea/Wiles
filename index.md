@@ -1,4 +1,4 @@
-**Wiles** is a programming language inspired by Kotlin, Pascal and Python. It is designed with readability and type safety as main priorities. 
+**Wiles** is a programming language inspired by Kotlin, Pascal and Python. It is designed with readability and type safety as main priorities. This project contains a fully-functional interpreter written in Kotlin and Java for the language.
 
 Wiles supports features such as:
 - `if`, `for` (including foreach functionality), `while`
