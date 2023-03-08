@@ -1,5 +1,5 @@
 ## Language specification
-### NOTE: WORK IN PROGRESS, SUBJECT TO CHANGE
+### NOTE: BREAKING CHANGES CAN STILL BE MADE
 #### Note: [] means required, {} means optional, {@ @} means repeating
 
 ### Literals
@@ -8,6 +8,7 @@
 - Integer: `12345`
 - Floating: `12345.6`
 - String: `"abc"`
+  - Escape characters HTML-style
 - Boolean: `true` and `false`
 - List literal: `[{@value,@}] : type`
 - Functions literals: `{fun ({@param1 {: type} {:= default_value},@})} {-> return_type}} [block]`

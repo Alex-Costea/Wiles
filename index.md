@@ -1,19 +1,40 @@
-This is a WIP programming language interpreter for my own language. The goal is to make a simple, C-style language with clean syntax inspired by Python and Pascal, that is also easier to understand for beginners. However, even more so, the goal is to learn how to make simple interpreters 😄
+**Wiles** is a programming language inspired by Kotlin, Pascal and Python. It is designed with readability and type safety as main priorities. 
+
+Wiles supports features such as:
+- `if`, `for` (including foreach functionality), `while`
+- Basic operators for arithmetics, boolean logic and comparisons
+- Functions as first-class objects using the `fun` keyword, including support for closures
+- Sum types using the `either` keyword
+- Support for types such as: integers (`int`), floating point numbers (`rational`), strings (`text`), booleans (`truth`), lists (`list`)
+- Conditional type casting using `when` statements
+- Opt-in nullability using the `?` symbol
+- Opt-out named arguments as mandatory in function calls
+- Newline as statement terminators, but no significant indentation
+- Type inference
 
 The informal specifications can be found [here](specifications.md).
 
+## How to use
+
+Run the function `main` within `wiles.Main`, with the input file as an argument. For instance, after compiling to `Wiles.jar`, you would run the command:
+
+```
+java -jar Wiles.jar example.wiles
+```
+You can also compile the source code by adding `--compile` as an argument, and run a compiled file using `--run`.  
+
 ## FAQ
 ### What is the state of the project right now?
-The parser is functional and includes the features found in the specifications, however it's not fully tested and cannot be relied upon just yet. The interpreter hasn't been started yet.
+The interpreter is functional and includes the features found in the specifications. While the code is thoroughly tested automatically, there is no guarantee that bugs won't occur in edge cases.
 
 ### Why is the language called Wiles?
 As it is inspired by Pascal, I decided to also name my language after a mathematician, but unlike Pascal, one that is contemporary. As such, it's named after Andrew Wiles, who proved Fermat's Last Theorem.
 
-### Are there plans to make the language object-oriented? What about other cool features?
-This is a one-man project mostly meant for myself to try out making a parser and interpreter, so honestly, it depends on my time and motivation. I would like to first finish a functional draft of the language and interpreter before looking into any advanced features.
+### Are there plans to make the language object-oriented? What about generics, first-class types or other cool features?
+This is a one-man project mostly meant for myself to try out making an interpreter, so honestly, it depends on my time and motivation. However, I'd like to implement both features.
 
 ### Will there be a formal specification?
-Unless this project blows up, probably not. Languages much bigger and widely used don't have a formal specification, so it doesn't seem like a priority.
+Unless this project blows up, probably not. Languages much bigger and widely used don't have a formal specification, so it doesn't seem like a priority. However, I am working on more thorough specifications.
 
 ## Examples
 ### Hello World
