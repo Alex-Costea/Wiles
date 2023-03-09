@@ -16,7 +16,9 @@ The informal specifications can be found [here](specifications.md).
 
 ## How to use
 
-Run the function `main` within `wiles.Main`, with the input file as an argument. For instance, after compiling to `Wiles.jar`, you would run the command:
+Download from one of the [releases](https://github.com/Alex-Costea/Wiles/releases/), or compile the code yourself.
+
+Run the function `main` within `wiles.Main`, with the input file as an argument. For instance, when using the JAR file `Wiles.jar`, run the command:
 
 ```
 java -jar Wiles.jar example.wiles

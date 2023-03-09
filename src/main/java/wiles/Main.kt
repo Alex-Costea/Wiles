@@ -16,7 +16,7 @@ import java.io.IOException
 
 object Main {
 
-    lateinit var finalCode : String
+    private lateinit var finalCode : String
     var DEBUG = false
     lateinit var filename : String
 

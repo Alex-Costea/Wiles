@@ -68,6 +68,15 @@
 - Change the value of a mutable object with `<-` infix operator
 - `mut [collection]` also makes its elements mutable
 
+### Standard library
+- `write`, `writeline`: write to the command line
+- `panic`: print an error message and exit
+- `ignore`: ignore the value
+- `modulo(x,y)`: calculate the modulo
+- `[list].size`: size of lists
+- `[object].as_text`: convert object to text
+- `read_line`, `read_truth`, `read_int`, `read_rational`: read an object from the command line
+
 ### Miscellaneous
 - `;` can be specified or inferred from newline
 - Language is statically, strongly typed with some type inference
