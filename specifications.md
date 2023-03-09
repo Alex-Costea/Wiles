@@ -7,8 +7,7 @@
 - `nothing`
 - Integer: `12345`
 - Floating: `12345.6`
-- String: `"abc"`
-  - Escape characters HTML-style
+- String: `"abc"` (escape characters HTML-style)
 - Boolean: `true` and `false`
 - List literal: `[{@value,@}] : type`
 - Functions literals: `{fun ({@param1 {: type} {:= default_value},@})} {-> return_type}} [block]`
@@ -19,12 +18,12 @@
 - Boolean: `truth`
 - String: `text`
 - Floating point: `rational` (equivalent to `double` in other languages)
-- Function type: like function literals, but no function body
-- Sum types: `either[type1,type2,type3]`
+- Function type: like function literals, but no function body and put between square brackets (ex: `fun[x : int, -> int]`)
+- Sum types: `either[{@type,@}]`
 - List: `list[type]`
 
 ### Statements
-- Value: `let {var} name {: type} {:= value}` (`var` makes it mutable, type can be inferred)
+- Value: `let {var} name {: type} {:= value}` (`var` makes it a variable, type can be inferred)
 - Assignment: `name := value`
 - Simple conditional: `if [condition] [block]`
 - Complex conditional: `if begin; {@clause;@} end`
@@ -51,16 +50,16 @@
 - `@` (access element in collection. returns nullable type)
 - `+=` (append to end of mutable list)
 - `()` (order of operations, function access)
-- `[]` (used in list literals and type definitions)
+- `[]` (list literals, subcomponents in type definitions)
 - `,` (separator between elements)
 - `?` (syntactic sugar for `type? = either[type,nothing]`)
-- `import` (get a variable from an outside context)
+- `import` (get a variable from the outside scope)
 - `new` (make deep clone of object)
 
 ### Named parameters
 - Function calling with named parameters by default: `my_function(a := 1, b := 10)`
 - Parameter can be made unnamed using the `arg` keyword: `fun(arg a : int)`
-- You can always specify unnamed parameters by name
+- You always have the ability to specify unnamed parameters by name
 - Named parameters can be in any order. Unnamed parameters are matched in order of appearance.
 
 ### Mutable types
@@ -77,6 +76,6 @@
 - Types are not reserved keywords and can be used as variable names
 - Top level expressions must be of type `nothing`
 - Trailing commas are valid but not necessary
-- Pass by reference to object, immutable by default 
+- Pass by reference to object
 
 ### [Potential future additions](future.md)
