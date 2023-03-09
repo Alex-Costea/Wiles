@@ -64,7 +64,7 @@ class InterpretFromFor(statement: JSONStatement, variables: VariableMap, additio
 
         val range = if(fromValue.value as Long > toValue.value as Long)
             ((fromValue.value as Long) downTo (toValue.value as Long))
-            else fromValue.value as Long .. toValue.value as Long
+            else (fromValue.value as Long until toValue.value as Long)
 
         val newCollection = collection?.clone()
 

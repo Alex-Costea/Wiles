@@ -2070,7 +2070,7 @@ class InterpreterTests {
         /*
         let list := mut [1, nothing] : int?
         let var text := ""
-        for i from 0 to 2
+        for i from 0 to 3
         begin
             let x := list @ i
             when x is begin
@@ -2184,7 +2184,7 @@ class InterpreterTests {
     }, {
       "type" : "EXPRESSION",
       "components" : [ {
-        "name" : "#2",
+        "name" : "#3",
         "type" : "TOKEN"
       } ]
     }, {

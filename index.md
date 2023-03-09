@@ -72,7 +72,15 @@ begin
     yield min_value
 end
 
-let result := min(list := [10, 3, 55, 8])
+let read_list := begin
+    let list := mut [] : int
+    let list_size := read_int()
+    for i from 0 to list_size do
+        list += read_int()
+    yield list
+end
+
+let result := min(list := read_list())
 when result is begin
     int do writeline("Min found: " + result)
     default do panic("Error: no min found!")
