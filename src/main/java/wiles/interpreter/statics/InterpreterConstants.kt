@@ -1,5 +1,6 @@
 package wiles.interpreter.statics
 
+import wiles.checker.Checker.Companion.scanner
 import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.data.VariableMap
 import wiles.interpreter.exceptions.PanicException
@@ -7,6 +8,7 @@ import wiles.shared.constants.Tokens.FALSE_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.TRUE_ID
 import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
+import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
 import wiles.shared.constants.TypeConstants.IGNORE_TYPE
 import wiles.shared.constants.TypeConstants.INT64_TYPE
 import wiles.shared.constants.TypeConstants.LIST_OF_ANYTHING_TYPE
@@ -14,6 +16,10 @@ import wiles.shared.constants.TypeConstants.MODULO_TYPE
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
 import wiles.shared.constants.TypeConstants.NULLABLE_ANYTHING_TYPE
 import wiles.shared.constants.TypeConstants.PANIC_TYPE
+import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_BOOL_TYPE
+import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_DOUBLE_TYPE
+import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_INT_TYPE
+import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_STRING_TYPE
 import wiles.shared.constants.TypeConstants.STRING_TYPE
 import wiles.shared.constants.TypeConstants.WRITELINE_TYPE
 import wiles.shared.constants.Utils.createFunctionType
@@ -59,6 +65,19 @@ object InterpreterConstants {
     val ZERO_REF = ObjectDetails(0L, INT64_TYPE)
     val MAXINT64_REF = ObjectDetails(Long.MAX_VALUE, INT64_TYPE)
 
+    private val READ_INT_REF = ObjectDetails(Function<VariableMap, ObjectDetails>{
+        ObjectDetails(scanner.nextLong(), INT64_TYPE)
+    }, READ_NOTHING_RETURN_INT_TYPE)
+    private val READ_LINE_REF = ObjectDetails(Function<VariableMap, ObjectDetails>{
+        ObjectDetails(scanner.nextLine(), STRING_TYPE)
+    }, READ_NOTHING_RETURN_STRING_TYPE)
+    private val READ_RATIONAL_REF = ObjectDetails(Function<VariableMap, ObjectDetails>{
+        ObjectDetails(scanner.nextDouble(), DOUBLE_TYPE)
+    }, READ_NOTHING_RETURN_DOUBLE_TYPE)
+    private val READ_TRUTH_REF = ObjectDetails(Function<VariableMap, ObjectDetails>{
+        ObjectDetails(scanner.nextBoolean(), BOOLEAN_TYPE)
+    }, READ_NOTHING_RETURN_BOOL_TYPE)
+
     init{
         defaultVariableMap[NOTHING_ID] = NOTHING_REF
         defaultVariableMap[FALSE_ID] = FALSE_REF
@@ -70,6 +89,10 @@ object InterpreterConstants {
         defaultVariableMap["!modulo"] = MODULO_REF
         defaultVariableMap["!TYPE LIST; (TYPE ANYTHING)!size"] = SIZE_REF
         defaultVariableMap["!TYPE EITHER; (TYPE ANYTHING; TYPE NOTHING)!as_text"] = AS_TEXT_REF
+        defaultVariableMap["!read_int"] = READ_INT_REF
+        defaultVariableMap["!read_truth"] = READ_TRUTH_REF
+        defaultVariableMap["!read_rational"] = READ_RATIONAL_REF
+        defaultVariableMap["!read_line"] = READ_LINE_REF
     }
 
 }

@@ -17,6 +17,7 @@ import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.TypeConstants
 import java.io.File
+import java.util.*
 
 class Checker(private val jsonCode : String? = null) {
     val code: JSONStatement = parseSyntaxTreeJson()
@@ -80,12 +81,17 @@ class Checker(private val jsonCode : String? = null) {
                     Pair("!panic", VariableDetails(TypeConstants.PANIC_TYPE)),
                     Pair("!ignore", VariableDetails(TypeConstants.IGNORE_TYPE)),
                     Pair("!modulo", VariableDetails(TypeConstants.MODULO_TYPE)),
+                    Pair("!read_int", VariableDetails(TypeConstants.READ_NOTHING_RETURN_INT_TYPE)),
+                    Pair("!read_line", VariableDetails(TypeConstants.READ_NOTHING_RETURN_STRING_TYPE)),
+                    Pair("!read_rational", VariableDetails(TypeConstants.READ_NOTHING_RETURN_DOUBLE_TYPE)),
+                    Pair("!read_truth", VariableDetails(TypeConstants.READ_NOTHING_RETURN_BOOL_TYPE)),
                 )
             ).copy()
             vars.putAll(AccessOperationIdentifiers.getVariables())
             return vars
         }
         private val NOTHING_TOKEN = JSONStatement(name = NOTHING_ID, type = SyntaxType.TOKEN)
+        val scanner = Scanner(System.`in`)
     }
 
 }
