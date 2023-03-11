@@ -19,7 +19,6 @@ import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.AND_ID
-import wiles.shared.constants.Tokens.APPEND_ID
 import wiles.shared.constants.Tokens.APPLY_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.ELEM_ACCESS_ID
@@ -106,7 +105,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
             var rightText : String = if(rightComponents.size == 1) unbox(rightComponents[0]).name else ANYTHING_ID
             if(rightText !in VALID_NAMED) rightText = ANYTHING_ID
             operationName = if(middle.name in listOf(ASSIGN_ID, ELEM_ACCESS_ID, MUTABLE_ID, NEW_ID,
-                    IMPORT_ID, MODIFY_ID, AND_ID, OR_ID, APPEND_ID)) middle.name
+                    IMPORT_ID, MODIFY_ID, AND_ID, OR_ID)) middle.name
                 else "${leftText}|${middle.name}|${rightText}"
             return if(resultingTypes.size == 1)
                 resultingTypes[0]

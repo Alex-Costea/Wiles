@@ -65,6 +65,7 @@ object InterpreterConstants {
     val ZERO_REF = ObjectDetails(0L, INT64_TYPE)
     val MAXINT64_REF = ObjectDetails(Long.MAX_VALUE, INT64_TYPE)
 
+    //TODO: handle errors
     private val READ_INT_REF = ObjectDetails(Function<VariableMap, ObjectDetails>{
         ObjectDetails(scanner.nextLong(), INT64_TYPE)
     }, READ_NOTHING_RETURN_INT_TYPE)

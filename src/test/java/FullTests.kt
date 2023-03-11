@@ -42,10 +42,10 @@ begin
 end
 
 let read_list := begin
-    let list := mut [] : int
+    let var list := [] : int
     let list_size := read_int()
     for i from 0 to list_size do
-        list += read_int()
+        list := list + [read_int()]
     yield list
 end
 

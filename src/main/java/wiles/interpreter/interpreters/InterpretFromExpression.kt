@@ -11,8 +11,8 @@ import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Chars.DECIMAL_DELIMITER
 import wiles.shared.constants.Predicates
+import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.AND_ID
-import wiles.shared.constants.Tokens.APPEND_ID
 import wiles.shared.constants.Tokens.APPLY_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.ELEM_ACCESS_ID
@@ -24,9 +24,8 @@ import wiles.shared.constants.Tokens.NEW_ID
 import wiles.shared.constants.Tokens.OR_ID
 import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
 import wiles.shared.constants.TypeConstants.INT64_TYPE
-import wiles.shared.constants.TypeConstants.MUTABLE_ANYTHING_INCLUDING_NOTHING_TYPE
 import wiles.shared.constants.TypeConstants.STRING_TYPE
-import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
+import wiles.shared.constants.Types
 import wiles.shared.constants.Types.METHOD_CALL_ID
 import java.util.function.Function
 
@@ -97,15 +96,6 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
                 val rightStatement = statement.components[2]
                 when(val middle = statement.components[1].name)
                 {
-                    APPEND_ID ->
-                    {
-                        val newLeft = getReference(leftStatement)
-                        var rightRef = getReference(rightStatement)
-                        if(isFormerSuperTypeOfLatter(MUTABLE_ANYTHING_INCLUDING_NOTHING_TYPE,rightRef.type))
-                                rightRef = rightRef.makeMutable()
-                        (newLeft.value as MutableList<ObjectDetails>).add(rightRef)
-                        NOTHING_REF
-                    }
                     ASSIGN_ID ->
                     {
                         val leftName = leftStatement.components[0].name
@@ -183,6 +173,14 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
                             newVars, additionalVars)
                         interpreter.interpret()
                         interpreter.reference
+                    }
+                    "${Types.LIST_ID}|${Tokens.PLUS_ID}|${Types.LIST_ID}" ->
+                    {
+                        val leftRef = getReference(leftStatement).clone()
+                        val rightRef = getReference(rightStatement)
+                        (leftRef.value as MutableList<ObjectDetails>)
+                            .addAll(rightRef.value as MutableList<ObjectDetails>)
+                        leftRef
                     }
                     else -> {
                         val leftRef = getReference(leftStatement)

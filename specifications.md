@@ -42,6 +42,7 @@
 
 ### Symbols
 - `+`, `-`, `*`, `/`, `^` (power)
+- `+` (string and list concatenation)
 - `and`, `or`, `not` (not bitwise!)
 - `=`, `>`, `>=`, `<`, `<=`, `=/=`
 - `:=` (assign, declare or name parameters)

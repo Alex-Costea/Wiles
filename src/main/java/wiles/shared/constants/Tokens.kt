@@ -72,7 +72,6 @@ object Tokens {
     const val WHEN_ID = "WHEN"
     const val IS_ID = "IS"
     const val NEW_ID = "NEW"
-    const val APPEND_ID = "APPEND"
 
     private val KEYWORDS: HashMap<String, String> = HashMap()
     private val SYMBOLS: HashMap<String, String> = HashMap()
@@ -82,7 +81,7 @@ object Tokens {
     val TOKENS_INVERSE: BiMap<String, String>
     @JvmField
     val INFIX_OPERATORS = setOf(
-        PLUS_ID, MINUS_ID, TIMES_ID, DIVIDE_ID, POWER_ID, APPEND_ID,
+        PLUS_ID, MINUS_ID, TIMES_ID, DIVIDE_ID, POWER_ID,
         EQUALS_ID, LARGER_ID, SMALLER_ID, LARGER_EQUALS_ID, SMALLER_EQUALS_ID, NOT_EQUAL_ID,
         AND_ID, OR_ID, APPLY_ID, ACCESS_ID, ELEM_ACCESS_ID
     )
@@ -157,7 +156,6 @@ object Tokens {
         SYMBOLS[";"] = TERMINATOR_ID
         SYMBOLS["->"] = RIGHT_ARROW_ID
         SYMBOLS["?"] = MAYBE_ID
-        SYMBOLS["+="] = APPEND_ID
         SYMBOLS["" + CONTINUE_LINE] = CONTINUE_LINE_ID
         SYMBOLS["\n"] = NEWLINE_ID
 

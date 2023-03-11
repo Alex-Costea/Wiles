@@ -2,9 +2,9 @@ package wiles.checker.statics
 
 import wiles.checker.statics.InferrerUtils.unbox
 import wiles.shared.JSONStatement
-import wiles.shared.constants.Tokens.APPEND_ID
 import wiles.shared.constants.Tokens.IMPORT_ID
 import wiles.shared.constants.Tokens.NEW_ID
+import wiles.shared.constants.Tokens.PLUS_ID
 import wiles.shared.constants.TypeConstants
 import wiles.shared.constants.TypeConstants.AND_OPERATION
 import wiles.shared.constants.TypeConstants.ASSIGN_OPERATION
@@ -33,7 +33,6 @@ import wiles.shared.constants.TypeConstants.TIMES_OPERATION
 import wiles.shared.constants.TypeConstants.UNARY_MINUS_OPERATION
 import wiles.shared.constants.TypeConstants.UNARY_PLUS_OPERATION
 import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
-import wiles.shared.constants.TypeConstants.makeList
 import wiles.shared.constants.TypeConstants.makeMutable
 
 object SimpleTypeGenerator {
@@ -147,10 +146,10 @@ object SimpleTypeGenerator {
             }
         }
 
-        if(triple.second.name == APPEND_ID
-            && isFormerSuperTypeOfLatter(makeMutable(LIST_OF_NULLABLE_ANYTHING_TYPE), triple.first)
-            && isFormerSuperTypeOfLatter(triple.first, makeMutable(makeList(makeMutable(unboxedTriple.third)))))
-                return NOTHING_TYPE
+        if(triple.second.name == PLUS_ID
+            && isFormerSuperTypeOfLatter(LIST_OF_NULLABLE_ANYTHING_TYPE, triple.first)
+            && isFormerSuperTypeOfLatter(triple.first, unboxedTriple.third))
+                return triple.first.copyRemovingLocation()
 
         if(unboxedTriple.second == MUTABLE_OPERATION)
         {
