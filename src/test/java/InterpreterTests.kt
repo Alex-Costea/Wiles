@@ -37,7 +37,7 @@ class InterpreterTests {
     }, {
       "type" : "EXPRESSION",
       "components" : [ {
-        "name" : "!TYPE EITHER; (TYPE ANYTHING; TYPE NOTHING)!as_text",
+        "name" : "!as_text",
         "type" : "TOKEN"
       }, {
         "name" : "METHOD|APPLY|METHOD_CALL",
@@ -293,7 +293,7 @@ class InterpreterTests {
     }, {
       "type" : "EXPRESSION",
       "components" : [ {
-        "name" : "!TYPE EITHER; (TYPE ANYTHING; TYPE NOTHING)!as_text",
+        "name" : "!as_text",
         "type" : "TOKEN"
       }, {
         "name" : "METHOD|APPLY|METHOD_CALL",
@@ -1052,7 +1052,7 @@ class InterpreterTests {
           }, {
             "type" : "EXPRESSION",
             "components" : [ {
-              "name" : "!TYPE EITHER; (TYPE ANYTHING; TYPE NOTHING)!as_text",
+              "name" : "!as_text",
               "type" : "TOKEN"
             }, {
               "name" : "METHOD|APPLY|METHOD_CALL",
@@ -1280,7 +1280,7 @@ class InterpreterTests {
           }, {
             "type" : "EXPRESSION",
             "components" : [ {
-              "name" : "!TYPE EITHER; (TYPE ANYTHING; TYPE NOTHING)!as_text",
+              "name" : "!as_text",
               "type" : "TOKEN"
             }, {
               "name" : "METHOD|APPLY|METHOD_CALL",
@@ -1465,7 +1465,7 @@ class InterpreterTests {
           }, {
             "type" : "EXPRESSION",
             "components" : [ {
-              "name" : "!TYPE EITHER; (TYPE ANYTHING; TYPE NOTHING)!as_text",
+              "name" : "!as_text",
               "type" : "TOKEN"
             }, {
               "name" : "METHOD|APPLY|METHOD_CALL",
@@ -1513,7 +1513,7 @@ class InterpreterTests {
           }, {
             "type" : "EXPRESSION",
             "components" : [ {
-              "name" : "!TYPE EITHER; (TYPE ANYTHING; TYPE NOTHING)!as_text",
+              "name" : "!as_text",
               "type" : "TOKEN"
             }, {
               "name" : "METHOD|APPLY|METHOD_CALL",
@@ -1639,7 +1639,7 @@ class InterpreterTests {
     }, {
       "type" : "EXPRESSION",
       "components" : [ {
-        "name" : "!TYPE EITHER; (TYPE ANYTHING; TYPE NOTHING)!as_text",
+        "name" : "!as_text",
         "type" : "TOKEN"
       }, {
         "name" : "METHOD|APPLY|METHOD_CALL",
@@ -2051,7 +2051,7 @@ class InterpreterTests {
     }, {
       "type" : "EXPRESSION",
       "components" : [ {
-        "name" : "!TYPE EITHER; (TYPE ANYTHING; TYPE NOTHING)!as_text",
+        "name" : "!as_text",
         "type" : "TOKEN"
       }, {
         "name" : "METHOD|APPLY|METHOD_CALL",

@@ -16,6 +16,7 @@ import wiles.shared.constants.Settings
 import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.TypeConstants
+import wiles.shared.constants.TypeConstants.AS_TEXT_TYPE
 import java.io.File
 import java.util.*
 
@@ -86,6 +87,7 @@ class Checker(private val jsonCode : String? = null) {
                     Pair("!read_line", VariableDetails(TypeConstants.READ_NOTHING_RETURN_STRING_TYPE)),
                     Pair("!read_rational", VariableDetails(TypeConstants.READ_NOTHING_RETURN_DOUBLE_TYPE)),
                     Pair("!read_truth", VariableDetails(TypeConstants.READ_NOTHING_RETURN_BOOL_TYPE)),
+                    Pair("!as_text", VariableDetails(AS_TEXT_TYPE)),
                 )
             ).copy()
             vars.putAll(AccessOperationIdentifiers.getVariables())

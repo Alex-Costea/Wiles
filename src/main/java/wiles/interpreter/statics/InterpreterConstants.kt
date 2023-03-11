@@ -7,6 +7,7 @@ import wiles.interpreter.exceptions.PanicException
 import wiles.shared.constants.Tokens.FALSE_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.TRUE_ID
+import wiles.shared.constants.TypeConstants.AS_TEXT_TYPE
 import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
 import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
 import wiles.shared.constants.TypeConstants.IGNORE_TYPE
@@ -14,7 +15,6 @@ import wiles.shared.constants.TypeConstants.INT64_TYPE
 import wiles.shared.constants.TypeConstants.LIST_OF_ANYTHING_TYPE
 import wiles.shared.constants.TypeConstants.MODULO_TYPE
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
-import wiles.shared.constants.TypeConstants.NULLABLE_ANYTHING_TYPE
 import wiles.shared.constants.TypeConstants.PANIC_TYPE
 import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_BOOL_TYPE
 import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_DOUBLE_TYPE
@@ -29,7 +29,6 @@ object InterpreterConstants {
     val defaultVariableMap = VariableMap()
 
     private val SIZE_TYPE = createFunctionType(Pair(LIST_OF_ANYTHING_TYPE, INT64_TYPE))
-    private val AS_TEXT_TYPE = createFunctionType(Pair(NULLABLE_ANYTHING_TYPE, STRING_TYPE))
 
     val NOTHING_REF = ObjectDetails(null, NOTHING_TYPE)
     val FALSE_REF = ObjectDetails(false, BOOLEAN_TYPE)
@@ -55,17 +54,20 @@ object InterpreterConstants {
         val y =it["!y"]!!.value as Long
         ObjectDetails(x % y, INT64_TYPE)
     }, MODULO_TYPE)
-    private val SIZE_REF = ObjectDetails(Function<VariableMap, ObjectDetails>{
+    private val LIST_SIZE_REF = ObjectDetails(Function<VariableMap, ObjectDetails>{
         val value = it["!elem"]!!.value as MutableList<*>
         ObjectDetails(value.size, INT64_TYPE)
+    }, SIZE_TYPE)
+    private val TEXT_SIZE_REF = ObjectDetails(Function<VariableMap, ObjectDetails>{
+        val value = it["!elem"]!!.value as String
+        ObjectDetails(value.length, INT64_TYPE)
     }, SIZE_TYPE)
     private val AS_TEXT_REF = ObjectDetails(Function<VariableMap, ObjectDetails>{
         ObjectDetails(it["!elem"]!!.toString(), STRING_TYPE)
     }, AS_TEXT_TYPE)
     val ZERO_REF = ObjectDetails(0L, INT64_TYPE)
-    val MAXINT64_REF = ObjectDetails(Long.MAX_VALUE, INT64_TYPE)
+    val MAX_INT64_REF = ObjectDetails(Long.MAX_VALUE, INT64_TYPE)
 
-    //TODO: handle errors
     private val READ_INT_REF = ObjectDetails(Function<VariableMap, ObjectDetails>{
         if(!scanner.hasNextLong())
             throw PanicException("Cannot read int value!")
@@ -96,8 +98,9 @@ object InterpreterConstants {
         defaultVariableMap["!panic"] = PANIC_REF
         defaultVariableMap["!ignore"] = IGNORE_REF
         defaultVariableMap["!modulo"] = MODULO_REF
-        defaultVariableMap["!TYPE LIST; (TYPE ANYTHING)!size"] = SIZE_REF
-        defaultVariableMap["!TYPE EITHER; (TYPE ANYTHING; TYPE NOTHING)!as_text"] = AS_TEXT_REF
+        defaultVariableMap["!TYPE LIST; (TYPE ANYTHING)!size"] = LIST_SIZE_REF
+        defaultVariableMap["!TYPE STRING!size"] = TEXT_SIZE_REF
+        defaultVariableMap["!as_text"] = AS_TEXT_REF
         defaultVariableMap["!read_int"] = READ_INT_REF
         defaultVariableMap["!read_truth"] = READ_TRUTH_REF
         defaultVariableMap["!read_rational"] = READ_RATIONAL_REF

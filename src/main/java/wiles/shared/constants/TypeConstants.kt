@@ -225,7 +225,7 @@ object TypeConstants {
     val ERROR_TYPE = JSONStatement(type = SyntaxType.TYPE, name = Tokens.ERROR_TOKEN)
     private val ANYTHING_TYPE = JSONStatement(type = SyntaxType.TYPE, name = ANYTHING_ID)
     val METHOD_CALL_TYPE = JSONStatement(type = SyntaxType.TYPE, name = METHOD_CALL_ID)
-    val NULLABLE_ANYTHING_TYPE = makeNullable(ANYTHING_TYPE)
+    private val NULLABLE_ANYTHING_TYPE = makeNullable(ANYTHING_TYPE)
 
     val LIST_OF_ANYTHING_TYPE = makeList(ANYTHING_TYPE)
 
@@ -350,4 +350,6 @@ object TypeConstants {
             components = mutableListOf(DOUBLE_TYPE)
         ))
     )
+
+    val AS_TEXT_TYPE = Utils.createFunctionType(Pair(NULLABLE_ANYTHING_TYPE, STRING_TYPE))
 }
