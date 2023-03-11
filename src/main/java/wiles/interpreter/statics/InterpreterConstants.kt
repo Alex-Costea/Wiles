@@ -67,15 +67,23 @@ object InterpreterConstants {
 
     //TODO: handle errors
     private val READ_INT_REF = ObjectDetails(Function<VariableMap, ObjectDetails>{
+        if(!scanner.hasNextLong())
+            throw PanicException("Cannot read int value!")
         ObjectDetails(scanner.nextLong(), INT64_TYPE)
     }, READ_NOTHING_RETURN_INT_TYPE)
     private val READ_LINE_REF = ObjectDetails(Function<VariableMap, ObjectDetails>{
+        if(!scanner.hasNextLine())
+            throw PanicException("Cannot read text value!")
         ObjectDetails(scanner.nextLine(), STRING_TYPE)
     }, READ_NOTHING_RETURN_STRING_TYPE)
     private val READ_RATIONAL_REF = ObjectDetails(Function<VariableMap, ObjectDetails>{
+        if(!scanner.hasNextDouble())
+            throw PanicException("Cannot read rational value!")
         ObjectDetails(scanner.nextDouble(), DOUBLE_TYPE)
     }, READ_NOTHING_RETURN_DOUBLE_TYPE)
     private val READ_TRUTH_REF = ObjectDetails(Function<VariableMap, ObjectDetails>{
+        if(!scanner.hasNextBoolean())
+            throw PanicException("Cannot read truth value!")
         ObjectDetails(scanner.nextBoolean(), BOOLEAN_TYPE)
     }, READ_NOTHING_RETURN_BOOL_TYPE)
 
