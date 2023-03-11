@@ -148,7 +148,7 @@ object SimpleTypeGenerator {
 
         if(triple.second.name == PLUS_ID
             && isFormerSuperTypeOfLatter(LIST_OF_NULLABLE_ANYTHING_TYPE, triple.first)
-            && isFormerSuperTypeOfLatter(triple.first, unboxedTriple.third))
+            && isFormerSuperTypeOfLatter(triple.first, triple.third))
                 return triple.first.copyRemovingLocation()
 
         if(unboxedTriple.second == MUTABLE_OPERATION)
