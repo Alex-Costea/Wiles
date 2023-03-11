@@ -30,7 +30,14 @@ class Interpreter(private val code : String?) {
         val variableMap = VariableMap()
         variableMap.putAll(defaultVariableMap)
         try {
-            InterpretFrom(input, variableMap, VariableMap()).interpret()
+            try
+            {
+                InterpretFrom(input, variableMap, VariableMap()).interpret()
+            }
+            catch (ex : StackOverflowError)
+            {
+                throw PanicException("Stack overflow error occurred!")
+            }
         }
         catch (ex : PanicException)
         {
