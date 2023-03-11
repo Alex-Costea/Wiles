@@ -349,6 +349,80 @@ class CheckerTests {
     @Test
     fun inferFromExpression()
     {
+        checkResult(createExceptions(CannotCallMethodException(NULL_LOCATION)),"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "EITHER",
+      "type" : "TYPE",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 9
+      },
+      "components" : [ {
+        "name" : "INT64",
+        "type" : "TYPE",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 9
+        }
+      }, {
+        "name" : "NOTHING",
+        "type" : "TYPE"
+      } ]
+    }, {
+      "name" : "!a",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "#2",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 17
+        }
+      } ]
+    } ]
+  }, {
+    "type" : "EXPRESSION",
+    "components" : [ {
+      "name" : "!writeline",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 2,
+        "lineIndex" : 1
+      }
+    }, {
+      "name" : "APPLY",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 2,
+        "lineIndex" : 10
+      }
+    }, {
+      "type" : "METHOD_CALL",
+      "components" : [ {
+        "type" : "EXPRESSION",
+        "components" : [ {
+          "name" : "!a",
+          "type" : "TOKEN",
+          "location" : {
+            "line" : 2,
+            "lineIndex" : 11
+          }
+        } ]
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE INT64; TYPE NOTHING); !a; EXPRESSION(TYPE INT64; #2)); EXPRESSION(!writeline; APPLY; METHOD_CALL(TYPE METHOD_CALL; (METHOD_CALL(EXPRESSION(TYPE EITHER; (TYPE INT64; TYPE NOTHING); !a))))))")
+
         checkResult(createExceptions(InvalidLiteralException(NULL_LOCATION)),"""{
   "parsed" : true,
   "type" : "CODE_BLOCK",
