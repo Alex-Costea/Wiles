@@ -77,7 +77,7 @@ end
 let read_list := begin
     let var list := [] : int
     let list_size := read_int()
-    for i from 0 to list_size do
+    for i to list_size do
         list := list + [read_int()]
     yield list
 end
