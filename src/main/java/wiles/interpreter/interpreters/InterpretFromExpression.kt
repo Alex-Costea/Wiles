@@ -2,6 +2,7 @@ package wiles.interpreter.interpreters
 
 import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.data.VariableMap
+import wiles.interpreter.exceptions.PanicException
 import wiles.interpreter.services.DoOperation
 import wiles.interpreter.statics.InterpreterConstants.FALSE_REF
 import wiles.interpreter.statics.InterpreterConstants.NOTHING_REF
@@ -185,7 +186,16 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
                     else -> {
                         val leftRef = getReference(leftStatement)
                         val rightRef = getReference(rightStatement)
-                        DoOperation.get(leftRef, middle, rightRef)
+                        try
+                        {
+                            DoOperation.get(leftRef, middle, rightRef)
+                        }
+                        catch (ex : ArithmeticException)
+                        {
+                            throw PanicException("Cannot perform the operation " +
+                                        "${leftRef.value} ${middle.split("|")[1]} ${rightRef.value}!")
+
+                        }
                     }
                 }
             }
