@@ -22,6 +22,50 @@ class InterpreterTests {
     fun expressionTests()
     {
 
+        //let a := modulo.as_text
+        val vars = getVars("""{
+  "type" : "CODE_BLOCK",
+  "parsed" : true,
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "STRING",
+      "type" : "TYPE"
+    }, {
+      "name" : "!a",
+      "type" : "TOKEN"
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!TYPE EITHER; (TYPE ANYTHING; TYPE NOTHING)!as_text",
+        "type" : "TOKEN"
+      }, {
+        "name" : "METHOD|APPLY|METHOD_CALL",
+        "type" : "TOKEN"
+      }, {
+        "type" : "METHOD_CALL",
+        "components" : [ {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "!elem",
+            "type" : "TOKEN"
+          }, {
+            "name" : "ASSIGN",
+            "type" : "TOKEN"
+          }, {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "!modulo",
+              "type" : "TOKEN"
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}""")
+        assertVar(vars, "!a", "METHOD(TYPE INT64; DECLARATION ANON_ARG; (TYPE INT64; !x); DECLARATION ANON_ARG; (TYPE INT64; !y))")
+
         // let result := 10
         val vars1 = getVars("""{
   "type" : "CODE_BLOCK",
@@ -2365,6 +2409,9 @@ class InterpreterTests {
       "components" : [ {
         "type" : "METHOD",
         "components" : [ {
+          "name" : "INT64",
+          "type" : "TYPE"
+        }, {
           "type" : "DECLARATION",
           "components" : [ {
             "name" : "INT64",
@@ -2398,6 +2445,9 @@ class InterpreterTests {
       "components" : [ {
         "type" : "METHOD",
         "components" : [ {
+          "name" : "INT64",
+          "type" : "TYPE"
+        }, {
           "type" : "DECLARATION",
           "components" : [ {
             "name" : "INT64",
@@ -2554,6 +2604,26 @@ class InterpreterTests {
       "components" : [ {
         "type" : "METHOD",
         "components" : [ {
+          "name" : "METHOD",
+          "type" : "TYPE",
+          "components" : [ {
+            "type" : "METHOD",
+            "components" : [ {
+              "name" : "INT64",
+              "type" : "TYPE"
+            }, {
+              "name" : "ANON_ARG",
+              "type" : "DECLARATION",
+              "components" : [ {
+                "name" : "INT64",
+                "type" : "TYPE"
+              }, {
+                "name" : "!y",
+                "type" : "TOKEN"
+              } ]
+            } ]
+          } ]
+        }, {
           "name" : "ANON_ARG",
           "type" : "DECLARATION",
           "components" : [ {
@@ -2573,6 +2643,26 @@ class InterpreterTests {
       "components" : [ {
         "type" : "METHOD",
         "components" : [ {
+          "name" : "METHOD",
+          "type" : "TYPE",
+          "components" : [ {
+            "type" : "METHOD",
+            "components" : [ {
+              "name" : "INT64",
+              "type" : "TYPE"
+            }, {
+              "name" : "ANON_ARG",
+              "type" : "DECLARATION",
+              "components" : [ {
+                "name" : "INT64",
+                "type" : "TYPE"
+              }, {
+                "name" : "!y",
+                "type" : "TOKEN"
+              } ]
+            } ]
+          } ]
+        }, {
           "name" : "ANON_ARG",
           "type" : "DECLARATION",
           "components" : [ {
@@ -2591,6 +2681,9 @@ class InterpreterTests {
               "components" : [ {
                 "type" : "METHOD",
                 "components" : [ {
+                  "name" : "INT64",
+                  "type" : "TYPE"
+                }, {
                   "name" : "ANON_ARG",
                   "type" : "DECLARATION",
                   "components" : [ {
@@ -2642,6 +2735,9 @@ class InterpreterTests {
       "components" : [ {
         "type" : "METHOD",
         "components" : [ {
+          "name" : "INT64",
+          "type" : "TYPE"
+        }, {
           "name" : "ANON_ARG",
           "type" : "DECLARATION",
           "components" : [ {
@@ -2692,6 +2788,9 @@ class InterpreterTests {
       "components" : [ {
         "type" : "METHOD",
         "components" : [ {
+          "name" : "INT64",
+          "type" : "TYPE"
+        }, {
           "name" : "ANON_ARG",
           "type" : "DECLARATION",
           "components" : [ {

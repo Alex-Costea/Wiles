@@ -8,7 +8,6 @@ import wiles.interpreter.statics.InterpreterConstants.NOTHING_REF
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.METHOD_ID
-import wiles.shared.constants.TypeConstants.NOTHING_TYPE
 import java.util.function.Function
 
 class InterpretFromMethod(statement: JSONStatement, variables: VariableMap, additionalVars: VariableMap)
@@ -20,7 +19,7 @@ class InterpretFromMethod(statement: JSONStatement, variables: VariableMap, addi
         type.components.removeLast()
         val newVars = variables.copy()
         val codeBlock = statement.components.last()
-        for(component in statement.components.dropLast(1))
+        for(component in statement.components.dropLast(1).drop(1))
         {
             val interpreter = InterpretFromDeclaration(component, newVars, additionalVars)
             interpreter.interpret()
@@ -28,8 +27,6 @@ class InterpretFromMethod(statement: JSONStatement, variables: VariableMap, addi
         val defaultVars = VariableMap()
         defaultVars.putAll(newVars.filter { it.key !in variables })
         val functionType = JSONStatement(name = METHOD_ID, type = SyntaxType.TYPE, components = mutableListOf(type))
-        if(type.components.isEmpty())
-            functionType.components[0].components.add(NOTHING_TYPE)
         reference = ObjectDetails(Function<VariableMap, ObjectDetails>{ givenVars ->
             val funcVars = VariableMap()
             funcVars.putAll(defaultVars.filter { it.key !in givenVars })

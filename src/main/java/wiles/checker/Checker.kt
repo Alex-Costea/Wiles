@@ -34,7 +34,8 @@ class Checker(private val jsonCode : String? = null) {
     {
         if(statement.components.isNotEmpty() && statement.components[0].type == SyntaxType.TYPE
             //type is necessary when declaring new variables
-            && statement.type !in arrayOf(SyntaxType.FOR,SyntaxType.DECLARATION, SyntaxType.TYPE, SyntaxType.LIST))
+            && statement.type !in arrayOf(SyntaxType.FOR,SyntaxType.DECLARATION, SyntaxType.TYPE,
+                SyntaxType.LIST, SyntaxType.METHOD))
             statement.components.removeFirst()
 
         if(statement.type == SyntaxType.EXPRESSION
