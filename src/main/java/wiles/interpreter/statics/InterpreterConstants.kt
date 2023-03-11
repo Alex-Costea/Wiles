@@ -35,12 +35,12 @@ object InterpreterConstants {
     val FALSE_REF = ObjectDetails(false, BOOLEAN_TYPE)
     val TRUE_REF = ObjectDetails(true, BOOLEAN_TYPE)
     private val WRITE_REF = ObjectDetails(Function<VariableMap, ObjectDetails>{
-        val value = it["!text"]!!.value
+        val value = it["!text"]!!
         print(value)
         NOTHING_REF
     }, WRITELINE_TYPE)
     private val WRITELINE_REF = ObjectDetails(Function<VariableMap, ObjectDetails>{
-        val value = it["!text"]!!.value
+        val value = it["!text"]!!
         println(value)
         NOTHING_REF
     }, WRITELINE_TYPE)

@@ -27,12 +27,13 @@ object TypeConstants {
             }
             else
             {
+                var isValid = true
                 for (component in subtype.components)
                 {
                     if(isFormerSuperTypeOfLatter(NOTHING_TYPE,component))
-                        return false
-                    return true
+                        isValid = false
                 }
+                return isValid
             }
         }
 
@@ -263,7 +264,7 @@ object TypeConstants {
                 JSONStatement(name = NOTHING_ID, type = SyntaxType.TYPE),
                 JSONStatement(name = Tokens.ANON_ARG_ID, type = SyntaxType.DECLARATION,
                     components = mutableListOf(
-                        JSONStatement(name = STRING_ID, type = SyntaxType.TYPE),
+                        JSONStatement(name = ANYTHING_ID, type = SyntaxType.TYPE),
                         JSONStatement(name = "!text", type = SyntaxType.TOKEN)
                     )
                 ))
