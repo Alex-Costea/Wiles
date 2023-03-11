@@ -76,9 +76,13 @@ end
 
 let read_list := begin
     let var list := [] : int
+    write("list size: ")
     let list_size := read_int()
-    for i to list_size do
+    for i from 0 to list_size
+    begin
+        write("element " + i + ": ")
         list := list + [read_int()]
+    end
     yield list
 end
 
