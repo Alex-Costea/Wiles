@@ -114,7 +114,7 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
         }
         else statement.components.add(0, inferredType?:NOTHING_TYPE)
 
-        if(inferredType!=null || statedType!=null)
+        if(inferredType!=null || (statedType!=null && !isFormerSuperTypeOfLatter(NOTHING_TYPE, statedType)))
             if(!checkAlwaysReturns(statement.components.last()))
                 throw ReturnNotGuaranteedException(statement.getFirstLocation())
     }
