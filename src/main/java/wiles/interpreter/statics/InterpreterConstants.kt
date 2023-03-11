@@ -98,7 +98,7 @@ object InterpreterConstants {
         defaultVariableMap["!panic"] = PANIC_REF
         defaultVariableMap["!ignore"] = IGNORE_REF
         defaultVariableMap["!modulo"] = MODULO_REF
-        defaultVariableMap["!TYPE LIST; (TYPE ANYTHING)!size"] = LIST_SIZE_REF
+        defaultVariableMap["!TYPE LIST; (TYPE EITHER; (TYPE ANYTHING; TYPE NOTHING))!size"] = LIST_SIZE_REF
         defaultVariableMap["!TYPE STRING!size"] = TEXT_SIZE_REF
         defaultVariableMap["!as_text"] = AS_TEXT_REF
         defaultVariableMap["!read_int"] = READ_INT_REF
