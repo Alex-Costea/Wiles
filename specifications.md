@@ -70,12 +70,13 @@
 - `mut [collection]` also makes its elements mutable
 
 ### Standard library
-- `write`, `writeline`: write to the command line
+- `write`, `writeline`: write object to the command line
 - `panic`: print an error message and exit
 - `ignore`: ignore the value
 - `modulo(x,y)`: calculate the modulo
 - `[list].size`: size of lists
-- `[object].as_text`: convert object to text
+- `[text].size`: size of text
+- `as_text`: convert object to text
 - `read_line`, `read_truth`, `read_int`, `read_rational`: read an object from the command line
 
 ### Miscellaneous
