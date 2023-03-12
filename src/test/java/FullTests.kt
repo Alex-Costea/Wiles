@@ -27,7 +27,7 @@ class FullTests {
     }
 
     @Test
-    fun minTest()
+    fun fullTest()
     {
         val code = """let min := fun(list : list[int]) -> int?
 begin
@@ -55,8 +55,16 @@ when result is begin
     default do writeline("Error: no min found!")
 end"""
         //TODO: refactor
-        setUpIO("4\n10\n8\n20\n-1\n"+ "0\n")
+        setUpIO("4\n10\n8\n20\n-1\n" + "0\n")
+
         assertEquals(getOutput(code),"Min found: -1\n")
         assertEquals(getOutput(code),"Error: no min found!\n")
+
+        val code2 = """
+            let list := [1,2,3]
+            let text := "[1,2,3]"
+            writeline(list.size + text.size)
+"""
+        assertEquals(getOutput(code2),"10\n")
     }
 }

@@ -16,6 +16,7 @@ import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
 import wiles.shared.constants.TypeConstants.IGNORE_TYPE
 import wiles.shared.constants.TypeConstants.INT64_TYPE
 import wiles.shared.constants.TypeConstants.LIST_OF_STRING
+import wiles.shared.constants.TypeConstants.LIST_SIZE_TYPE
 import wiles.shared.constants.TypeConstants.MODULO_TYPE
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
 import wiles.shared.constants.TypeConstants.PANIC_TYPE
@@ -23,7 +24,7 @@ import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_BOOL_TYPE
 import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_DOUBLE_TYPE
 import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_INT_TYPE
 import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_STRING_TYPE
-import wiles.shared.constants.TypeConstants.SIZE_TYPE
+import wiles.shared.constants.TypeConstants.STRING_SIZE_TYPE
 import wiles.shared.constants.TypeConstants.STRING_TYPE
 import wiles.shared.constants.TypeConstants.WRITELINE_TYPE
 import java.util.function.Function
@@ -36,7 +37,7 @@ object StandardLibrary {
     private const val PANIC = "!panic"
     private const val IGNORE = "!ignore"
     private const val MODULO = "!modulo"
-    private const val LIST_SIZE = "!TYPE LIST; (TYPE EITHER; (TYPE ANYTHING; TYPE NOTHING))!size"
+    private const val LIST_SIZE = "!TYPE LIST; (TYPE EITHER; (TYPE ANYTHING; TYPE !nothing))!size"
     private const val TEXT_SIZE = "!TYPE STRING!size"
     private const val READ_INT = "!read_int"
     private const val READ_LINE = "!read_line"
@@ -57,8 +58,8 @@ object StandardLibrary {
             Pair(PANIC, VariableDetails(PANIC_TYPE)),
             Pair(IGNORE, VariableDetails(IGNORE_TYPE)),
             Pair(MODULO, VariableDetails(MODULO_TYPE)),
-            Pair(LIST_SIZE, VariableDetails(SIZE_TYPE)),
-            Pair(TEXT_SIZE, VariableDetails(SIZE_TYPE)),
+            Pair(LIST_SIZE, VariableDetails(LIST_SIZE_TYPE)),
+            Pair(TEXT_SIZE, VariableDetails(STRING_SIZE_TYPE)),
             Pair(READ_INT, VariableDetails(READ_NOTHING_RETURN_INT_TYPE)),
             Pair(READ_LINE, VariableDetails(READ_NOTHING_RETURN_STRING_TYPE)),
             Pair(READ_RATIONAL, VariableDetails(READ_NOTHING_RETURN_DOUBLE_TYPE)),
@@ -105,12 +106,12 @@ object StandardLibrary {
 
     private val LIST_SIZE_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
         val value = it["!elem"]!!.value as MutableList<*>
-        ObjectDetails(value.size, INT64_TYPE)
+        ObjectDetails(value.size.toLong(), INT64_TYPE)
     }, defaultCheckerVars[LIST_SIZE]!!.type)
 
     private val TEXT_SIZE_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
         val value = it["!elem"]!!.value as String
-        ObjectDetails(value.length, INT64_TYPE)
+        ObjectDetails(value.length.toLong(), INT64_TYPE)
     }, defaultCheckerVars[TEXT_SIZE]!!.type)
 
     private val AS_TEXT_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
