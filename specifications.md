@@ -79,7 +79,7 @@
 - `[text].size`: size of text
 - `as_list` : convert text into list
 - `as_text`: convert object to text
- `read_line`, `read_truth`, `read_int`, `read_rational`: read an object from the command line
+- `read_line`, `read_truth`, `read_int`, `read_rational`: read an object from the command line
 
 ### Miscellaneous
 - `;` can be specified or inferred from newline
