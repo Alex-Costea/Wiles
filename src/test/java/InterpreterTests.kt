@@ -251,7 +251,7 @@ class InterpreterTests {
         "name" : "STRING",
         "type" : "TYPE"
       }, {
-        "name" : "NOTHING",
+        "name" : "!nothing",
         "type" : "TYPE"
       } ]
     }, {
@@ -364,7 +364,7 @@ class InterpreterTests {
     }, {
       "type" : "EXPRESSION",
       "components" : [ {
-        "name" : "NOTHING",
+        "name" : "!nothing",
         "type" : "TOKEN"
       }, {
         "name" : "MUTABLE",
@@ -439,10 +439,10 @@ class InterpreterTests {
       }, {
         "type" : "EXPRESSION",
         "components" : [ {
-          "name" : "NOTHING",
+          "name" : "!nothing",
           "type" : "TOKEN"
         }, {
-          "name" : "NOTHING|UNARY_MINUS|INT64",
+          "name" : "!nothing|UNARY_MINUS|INT64",
           "type" : "TOKEN"
         }, {
           "name" : "#1",
@@ -474,7 +474,7 @@ class InterpreterTests {
     }, {
       "type" : "EXPRESSION",
       "components" : [ {
-        "name" : "TRUE",
+        "name" : "!true",
         "type" : "TOKEN"
       } ]
     } ]
@@ -498,7 +498,7 @@ class InterpreterTests {
         "name" : "OR",
         "type" : "TOKEN"
       }, {
-        "name" : "FALSE",
+        "name" : "!false",
         "type" : "TOKEN"
       } ]
     } ]
@@ -522,7 +522,7 @@ class InterpreterTests {
         "name" : "AND",
         "type" : "TOKEN"
       }, {
-        "name" : "TRUE",
+        "name" : "!true",
         "type" : "TOKEN"
       } ]
     } ]
@@ -597,7 +597,7 @@ class InterpreterTests {
     }, {
       "type" : "EXPRESSION",
       "components" : [ {
-        "name" : "NOTHING",
+        "name" : "!nothing",
         "type" : "TOKEN"
       }, {
         "name" : "MUTABLE",
@@ -605,13 +605,13 @@ class InterpreterTests {
       }, {
         "type" : "EXPRESSION",
         "components" : [ {
-          "name" : "FALSE",
+          "name" : "!false",
           "type" : "TOKEN"
         }, {
           "name" : "OR",
           "type" : "TOKEN"
         }, {
-          "name" : "TRUE",
+          "name" : "!true",
           "type" : "TOKEN"
         } ]
       } ]
@@ -631,7 +631,7 @@ class InterpreterTests {
     }, {
       "type" : "EXPRESSION",
       "components" : [ {
-        "name" : "NOTHING",
+        "name" : "!nothing",
         "type" : "TOKEN"
       }, {
         "name" : "MUTABLE",
@@ -655,7 +655,7 @@ class InterpreterTests {
     }, {
       "type" : "EXPRESSION",
       "components" : [ {
-        "name" : "FALSE",
+        "name" : "!false",
         "type" : "TOKEN"
       } ]
     } ]
@@ -718,10 +718,10 @@ class InterpreterTests {
     }, {
       "type" : "EXPRESSION",
       "components" : [ {
-        "name" : "NOTHING",
+        "name" : "!nothing",
         "type" : "TOKEN"
       }, {
-        "name" : "NOTHING|NOT|BOOLEAN",
+        "name" : "!nothing|NOT|BOOLEAN",
         "type" : "TOKEN"
       }, {
         "type" : "EXPRESSION",
@@ -897,7 +897,7 @@ class InterpreterTests {
     }, {
       "type" : "EXPRESSION",
       "components" : [ {
-        "name" : "FALSE",
+        "name" : "!false",
         "type" : "TOKEN"
       } ]
     } ]
@@ -913,7 +913,7 @@ class InterpreterTests {
     }, {
       "type" : "EXPRESSION",
       "components" : [ {
-        "name" : "FALSE",
+        "name" : "!false",
         "type" : "TOKEN"
       } ]
     } ]
@@ -929,7 +929,7 @@ class InterpreterTests {
     }, {
       "type" : "EXPRESSION",
       "components" : [ {
-        "name" : "FALSE",
+        "name" : "!false",
         "type" : "TOKEN"
       } ]
     } ]
@@ -1011,7 +1011,7 @@ class InterpreterTests {
             }, {
               "type" : "EXPRESSION",
               "components" : [ {
-                "name" : "TRUE",
+                "name" : "!true",
                 "type" : "TOKEN"
               } ]
             } ]
@@ -1047,7 +1047,7 @@ class InterpreterTests {
             }, {
               "type" : "EXPRESSION",
               "components" : [ {
-                "name" : "TRUE",
+                "name" : "!true",
                 "type" : "TOKEN"
               } ]
             } ]
@@ -1103,7 +1103,7 @@ class InterpreterTests {
             }, {
               "type" : "EXPRESSION",
               "components" : [ {
-                "name" : "TRUE",
+                "name" : "!true",
                 "type" : "TOKEN"
               } ]
             } ]
@@ -1620,7 +1620,7 @@ class InterpreterTests {
         }, {
           "type" : "EXPRESSION",
           "components" : [ {
-            "name" : "NOTHING",
+            "name" : "!nothing",
             "type" : "TOKEN"
           }, {
             "name" : "MUTABLE",
@@ -1830,7 +1830,7 @@ class InterpreterTests {
               "name" : "ANYTHING",
               "type" : "TYPE"
             }, {
-              "name" : "NOTHING",
+              "name" : "!nothing",
               "type" : "TYPE"
             } ]
           } ]
@@ -1842,7 +1842,7 @@ class InterpreterTests {
     }, {
       "type" : "EXPRESSION",
       "components" : [ {
-        "name" : "NOTHING",
+        "name" : "!nothing",
         "type" : "TOKEN"
       }, {
         "name" : "MUTABLE",
@@ -1856,7 +1856,7 @@ class InterpreterTests {
             "name" : "ANYTHING",
             "type" : "TYPE"
           }, {
-            "name" : "NOTHING",
+            "name" : "!nothing",
             "type" : "TYPE"
           } ]
         }, {
@@ -1874,7 +1874,7 @@ class InterpreterTests {
         }, {
           "type" : "EXPRESSION",
           "components" : [ {
-            "name" : "NOTHING",
+            "name" : "!nothing",
             "type" : "TOKEN"
           } ]
         } ]
@@ -1989,7 +1989,7 @@ class InterpreterTests {
     }, {
       "type" : "EXPRESSION",
       "components" : [ {
-        "name" : "NOTHING",
+        "name" : "!nothing",
         "type" : "TOKEN"
       }, {
         "name" : "MUTABLE",
@@ -2073,7 +2073,7 @@ class InterpreterTests {
         }, {
           "type" : "EXPRESSION",
           "components" : [ {
-            "name" : "NOTHING",
+            "name" : "!nothing",
             "type" : "TOKEN"
           }, {
             "name" : "MUTABLE",
@@ -2187,7 +2187,7 @@ class InterpreterTests {
     }, {
       "type" : "EXPRESSION",
       "components" : [ {
-        "name" : "NOTHING",
+        "name" : "!nothing",
         "type" : "TOKEN"
       }, {
         "name" : "MUTABLE",
@@ -2237,7 +2237,7 @@ class InterpreterTests {
     }, {
       "type" : "EXPRESSION",
       "components" : [ {
-        "name" : "NOTHING",
+        "name" : "!nothing",
         "type" : "TOKEN"
       }, {
         "name" : "NEW",
@@ -2261,7 +2261,7 @@ class InterpreterTests {
     }, {
       "type" : "EXPRESSION",
       "components" : [ {
-        "name" : "NOTHING",
+        "name" : "!nothing",
         "type" : "TOKEN"
       }, {
         "name" : "MUTABLE",
@@ -2397,7 +2397,7 @@ class InterpreterTests {
               "name" : "INT64",
               "type" : "TYPE"
             }, {
-              "name" : "NOTHING",
+              "name" : "!nothing",
               "type" : "TYPE"
             } ]
           } ]
@@ -2409,7 +2409,7 @@ class InterpreterTests {
     }, {
       "type" : "EXPRESSION",
       "components" : [ {
-        "name" : "NOTHING",
+        "name" : "!nothing",
         "type" : "TOKEN"
       }, {
         "name" : "MUTABLE",
@@ -2423,7 +2423,7 @@ class InterpreterTests {
             "name" : "INT64",
             "type" : "TYPE"
           }, {
-            "name" : "NOTHING",
+            "name" : "!nothing",
             "type" : "TYPE"
           } ]
         }, {
@@ -2435,7 +2435,7 @@ class InterpreterTests {
         }, {
           "type" : "EXPRESSION",
           "components" : [ {
-            "name" : "NOTHING",
+            "name" : "!nothing",
             "type" : "TOKEN"
           } ]
         } ]
@@ -2500,12 +2500,12 @@ class InterpreterTests {
                 "name" : "INT64",
                 "type" : "TYPE"
               }, {
-                "name" : "NOTHING",
+                "name" : "!nothing",
                 "type" : "TYPE"
               } ]
             } ]
           }, {
-            "name" : "NOTHING",
+            "name" : "!nothing",
             "type" : "TYPE"
           } ]
         }, {
@@ -2536,7 +2536,7 @@ class InterpreterTests {
           "name" : "MUTABLE",
           "type" : "TYPE",
           "components" : [ {
-            "name" : "NOTHING",
+            "name" : "!nothing",
             "type" : "TYPE"
           } ]
         }, {
@@ -2567,7 +2567,7 @@ class InterpreterTests {
             } ]
           } ]
         }, {
-          "name" : "NOTHING",
+          "name" : "!nothing",
           "type" : "TYPE"
         }, {
           "type" : "CODE_BLOCK",
@@ -2954,7 +2954,7 @@ class InterpreterTests {
                       "components" : [ {
                         "type" : "EXPRESSION",
                         "components" : [ {
-                          "name" : "NOTHING",
+                          "name" : "!nothing",
                           "type" : "TOKEN"
                         }, {
                           "name" : "IMPORT",

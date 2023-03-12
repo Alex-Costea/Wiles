@@ -8,7 +8,6 @@ import wiles.shared.constants.ErrorMessages.INVALID_EXPRESSION_ERROR
 import wiles.shared.constants.Tokens.BRACKET_START_ID
 import wiles.shared.constants.Tokens.DO_ID
 import wiles.shared.constants.Tokens.INFIX_OPERATORS
-import wiles.shared.constants.Tokens.KEYWORD_LITERALS
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.Tokens.NEWLINE_ID
 import wiles.shared.constants.Tokens.NEW_STATEMENT_START_KEYWORDS
@@ -21,7 +20,7 @@ import java.util.function.Predicate
 
 object Predicates {
     @JvmField
-    val IS_IDENTIFIER = Predicate { x: String -> x.startsWith(Tokens.IDENTIFIER_START) || KEYWORD_LITERALS.contains(x) }
+    val IS_IDENTIFIER = Predicate { x: String -> x.startsWith(Tokens.IDENTIFIER_START)}
     val IS_TEXT_LITERAL = Predicate { x: String -> x.startsWith(Tokens.STRING_START) }
     val IS_NUMBER_LITERAL = Predicate { x: String -> x.startsWith(Tokens.NUM_START) }
     @JvmField

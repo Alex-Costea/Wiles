@@ -35,7 +35,7 @@ object Tokens {
     const val STRING_START = "@"
     const val NUM_START = "#"
     const val TYPEDEF_ID = "TYPEDEF"
-    const val NOTHING_ID = "NOTHING"
+    const val NOTHING_ID = "!nothing"
     const val SEPARATOR_ID = "SEPARATOR"
     const val DO_ID = "DO"
     const val RIGHT_ARROW_ID = "RIGHT_ARROW"
@@ -54,8 +54,8 @@ object Tokens {
     const val NOT_ID = "NOT"
     const val MAYBE_ID = "MAYBE"
     const val RETURN_ID = "RETURN"
-    const val TRUE_ID = "TRUE"
-    const val FALSE_ID = "FALSE"
+    const val TRUE_ID = "!true"
+    const val FALSE_ID = "!false"
     const val IF_ID = "IF"
     const val ELSE_ID = "ELSE"
     const val BREAK_ID = "BREAK"
@@ -93,17 +93,15 @@ object Tokens {
     val PARENS = setOf(PAREN_START_ID, PAREN_END_ID, BRACKET_START_ID)
     @JvmField
     val TERMINATORS = setOf(NEWLINE_ID, TERMINATOR_ID)
-    val KEYWORD_LITERALS = setOf(TRUE_ID, FALSE_ID, NOTHING_ID)
 
     @JvmField
     val NEW_STATEMENT_START_KEYWORDS = setOf(
-        NOTHING_ID, DECLARE_ID, ELSE_ID, CONTINUE_ID, MODIFY_ID, IS_ID, WHEN_ID,
-        RETURN_ID, WHILE_ID, BREAK_ID, FOR_ID, DO_ID, START_BLOCK_ID, END_BLOCK_ID, BRACKET_END_ID, PAREN_END_ID,
+        DECLARE_ID, ELSE_ID, CONTINUE_ID, MODIFY_ID, IS_ID, WHEN_ID, RETURN_ID, WHILE_ID,
+        BREAK_ID, FOR_ID, DO_ID, START_BLOCK_ID, END_BLOCK_ID, BRACKET_END_ID, PAREN_END_ID,
         SEPARATOR_ID, IN_ID, FROM_ID, TO_ID, ASSIGN_ID, TERMINATOR_ID, NEWLINE_ID, IF_ID
     )
 
     init {
-        KEYWORDS["nothing"] = NOTHING_ID
         KEYWORDS["fun"] = METHOD_ID
         KEYWORDS["let"] = DECLARE_ID
         KEYWORDS["var"] = VARIABLE_ID
@@ -123,8 +121,6 @@ object Tokens {
         KEYWORDS["do"] = DO_ID
         KEYWORDS["begin"] = START_BLOCK_ID
         KEYWORDS["end"] = END_BLOCK_ID
-        KEYWORDS["true"] = TRUE_ID
-        KEYWORDS["false"] = FALSE_ID
         KEYWORDS["import"] = IMPORT_ID
         KEYWORDS["when"] = WHEN_ID
         KEYWORDS["is"] = IS_ID
