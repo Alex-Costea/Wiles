@@ -131,6 +131,10 @@ object SimpleTypeGenerator {
 
         //String elem access
         Pair(Triple(STRING_TYPE, ELEM_ACCESS_OPERATION, INT64_TYPE), NULLABLE_STRING),
+
+        //Repeat string
+        Pair(Triple(STRING_TYPE, TIMES_OPERATION, INT64_TYPE), STRING_TYPE),
+        Pair(Triple(INT64_TYPE, TIMES_OPERATION, STRING_TYPE), STRING_TYPE),
         )
 
     fun getSimpleTypes(triple : Triple<JSONStatement, JSONStatement, JSONStatement>) : JSONStatement?

@@ -22,6 +22,83 @@ class InterpreterTests {
     fun expressionTests()
     {
 
+        /*
+        let a := 10 * "hi! "
+        let b := "hi! " * 10
+        let c := a = b
+         */
+        val vars5 = getVars("""{
+  "type" : "CODE_BLOCK",
+  "parsed" : true,
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "STRING",
+      "type" : "TYPE"
+    }, {
+      "name" : "!a",
+      "type" : "TOKEN"
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "#10",
+        "type" : "TOKEN"
+      }, {
+        "name" : "INT64|TIMES|STRING",
+        "type" : "TOKEN"
+      }, {
+        "name" : "@hi! ",
+        "type" : "TOKEN"
+      } ]
+    } ]
+  }, {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "STRING",
+      "type" : "TYPE"
+    }, {
+      "name" : "!b",
+      "type" : "TOKEN"
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "@hi! ",
+        "type" : "TOKEN"
+      }, {
+        "name" : "STRING|TIMES|INT64",
+        "type" : "TOKEN"
+      }, {
+        "name" : "#10",
+        "type" : "TOKEN"
+      } ]
+    } ]
+  }, {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "BOOLEAN",
+      "type" : "TYPE"
+    }, {
+      "name" : "!c",
+      "type" : "TOKEN"
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!a",
+        "type" : "TOKEN"
+      }, {
+        "name" : "STRING|EQUALS|STRING",
+        "type" : "TOKEN"
+      }, {
+        "name" : "!b",
+        "type" : "TOKEN"
+      } ]
+    } ]
+  } ]
+}""")
+        assertVar(vars5, "!a", "hi! hi! hi! hi! hi! hi! hi! hi! hi! hi! ")
+        assertVar(vars5, "!b", "hi! hi! hi! hi! hi! hi! hi! hi! hi! hi! ")
+        assertVar(vars5, "!c", true)
+
         // let a := "123" @ 1
         val vars0 = getVars("""{
   "type" : "CODE_BLOCK",

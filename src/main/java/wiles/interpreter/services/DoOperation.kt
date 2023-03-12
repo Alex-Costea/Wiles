@@ -1,6 +1,8 @@
 package wiles.interpreter.services
 
 import wiles.interpreter.data.ObjectDetails
+import wiles.interpreter.exceptions.PanicException
+import wiles.interpreter.statics.InterpreterConstants.toIntOrNull
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.constants.Tokens.DIVIDE_ID
@@ -186,8 +188,20 @@ object DoOperation {
 
         //String elem access
         Pair("${STRING_ID}|${ELEM_ACCESS_ID}|${INT64_ID}", createFunction({ x : Any?, y : Any? ->
-            (x as String).getOrNull((y as Long).toInt()).toString()}, NULLABLE_STRING)),
+            (x as String).getOrNull((y as Long).toIntOrNull()?:-1).toString()}, NULLABLE_STRING)),
+
+        //Repeat string
+        Pair("${STRING_ID}|${TIMES_ID}|${INT64_ID}", createFunction({ x : Any?, y : Any? ->
+            repeatString(x,y)}, STRING_TYPE)),
+        Pair("${INT64_ID}|${TIMES_ID}|${STRING_ID}", createFunction({ x : Any?, y : Any? ->
+            repeatString(y,x)}, STRING_TYPE)),
     )
+
+    private fun repeatString(x : Any?, y : Any?) : Any
+    {
+        return (x as String).repeat((y as Long).toIntOrNull()
+            ?: throw PanicException("Integer value too large for repeat!"))
+    }
 
     fun get(left : ObjectDetails, middle : String, right : ObjectDetails) : ObjectDetails
     {

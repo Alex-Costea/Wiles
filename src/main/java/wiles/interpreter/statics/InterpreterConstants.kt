@@ -107,4 +107,9 @@ object InterpreterConstants {
         defaultVariableMap["!read_line"] = READ_LINE_REF
     }
 
+    fun Long.toIntOrNull(): Int? {
+        return if (this >= Int.MIN_VALUE && this <= Int.MAX_VALUE) this.toInt()
+        else null
+    }
+
 }

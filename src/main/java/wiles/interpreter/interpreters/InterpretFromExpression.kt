@@ -7,6 +7,7 @@ import wiles.interpreter.services.DoOperation
 import wiles.interpreter.statics.InterpreterConstants.FALSE_REF
 import wiles.interpreter.statics.InterpreterConstants.NOTHING_REF
 import wiles.interpreter.statics.InterpreterConstants.TRUE_REF
+import wiles.interpreter.statics.InterpreterConstants.toIntOrNull
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
@@ -160,11 +161,9 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
                     "$LIST_ID|$ELEM_ACCESS_ID|$INT64_ID" -> {
                         val leftRef = getReference(leftStatement)
                         val rightRef = getReference(rightStatement)
-                        val valueLong = (rightRef.value as Long)
-                        val valueInt = if (valueLong >= Int.MIN_VALUE && valueLong <= Int.MAX_VALUE) valueLong.toInt()
-                            else null
-                        if (valueInt == null) NOTHING_REF
-                        else (leftRef.value as MutableList<ObjectDetails>).getOrNull(valueInt) ?: NOTHING_REF
+                        val value = (rightRef.value as Long).toIntOrNull()
+                        if (value == null) NOTHING_REF
+                        else (leftRef.value as MutableList<ObjectDetails>).getOrNull(value) ?: NOTHING_REF
                     }
                     NEW_ID -> getReference(rightStatement).clone()
                     IMPORT_ID -> {
