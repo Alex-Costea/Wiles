@@ -90,8 +90,10 @@ object InterpreterConstants {
             throw PanicException("Cannot read truth value!")
         ObjectDetails(scanner.nextBoolean(), BOOLEAN_TYPE)
     }, READ_NOTHING_RETURN_BOOL_TYPE)
-    private val AS_LIST_REF = ObjectDetails(Function<VariableMap, ObjectDetails>{
-        ObjectDetails((it["!elem"]!!.value as String).toMutableList(), LIST_OF_STRING)
+    private val AS_LIST_REF = ObjectDetails(Function<VariableMap, ObjectDetails>{ map ->
+        val elem = (map["!elem"]!!.value as String)
+        ObjectDetails(elem.toMutableList().map {
+            ObjectDetails(it.toString(), STRING_TYPE) }, LIST_OF_STRING)
     }, AS_LIST_TYPE)
 
     init{
