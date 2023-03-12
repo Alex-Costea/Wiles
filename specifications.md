@@ -42,13 +42,14 @@
 
 ### Symbols
 - `+`, `-`, `*`, `/`, `^` (power)
-- `+` (string and list concatenation)
+- `+` (text and list concatenation)
+- `*` (repeat text)
 - `and`, `or`, `not` (not bitwise!)
 - `=`, `>`, `>=`, `<`, `<=`, `=/=`
 - `:=` (assign, declare or name parameters)
 - `.` (`b.a` is `a(b)`, also used for field access)
 - `:` (type annotation)
-- `@` (access element in collection. returns nullable type)
+- `@` (access element in collection or text. returns nullable type)
 - `+=` (append to end of mutable list)
 - `()` (order of operations, function access)
 - `[]` (list literals, subcomponents in type definitions)
@@ -76,8 +77,9 @@
 - `modulo(x,y)`: calculate the modulo
 - `[list].size`: size of lists
 - `[text].size`: size of text
+- `as_list` : convert text into list
 - `as_text`: convert object to text
-- `read_line`, `read_truth`, `read_int`, `read_rational`: read an object from the command line
+ `read_line`, `read_truth`, `read_int`, `read_rational`: read an object from the command line
 
 ### Miscellaneous
 - `;` can be specified or inferred from newline
