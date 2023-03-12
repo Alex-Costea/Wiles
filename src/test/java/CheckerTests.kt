@@ -2086,6 +2086,70 @@ class CheckerTests {
     @Test
     fun methodCallTest()
     {
+        //let a := 10.modulo(3)
+        checkResult(null,"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "!a",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "#10",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 10
+        }
+      }, {
+        "name" : "ACCESS",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 12
+        }
+      }, {
+        "type" : "EXPRESSION",
+        "components" : [ {
+          "name" : "!modulo",
+          "type" : "TOKEN",
+          "location" : {
+            "line" : 1,
+            "lineIndex" : 13
+          }
+        }, {
+          "name" : "APPLY",
+          "type" : "TOKEN",
+          "location" : {
+            "line" : 1,
+            "lineIndex" : 19
+          }
+        }, {
+          "type" : "METHOD_CALL",
+          "components" : [ {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "#3",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 1,
+                "lineIndex" : 20
+              }
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(DECLARATION(TYPE INT64; !a; EXPRESSION(TYPE INT64; !modulo; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!x; ASSIGN; EXPRESSION(TYPE INT64; #10)); EXPRESSION(!y; ASSIGN; EXPRESSION(TYPE INT64; #3))))))")
+
         //2.as_text.write
         checkResult(null,"""{
   "parsed" : true,

@@ -186,8 +186,6 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
 
             if(!leftIsToken)
                 InferFromExpression(InferrerDetails(left, variables, exceptions, additionalVars)).infer()
-            if(!rightIsToken)
-                InferFromExpression(InferrerDetails(right, variables, exceptions, additionalVars)).infer()
 
             val leftType = if(leftIsToken) inferTypeFromLiteral(left,variables)
                 else if(left.type == SyntaxType.EXPRESSION) left.components[0]
@@ -197,8 +195,16 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
             //Transform access operation into apply operation
             if(middle == TypeConstants.ACCESS_OPERATION)
             {
-                if(right.type!=SyntaxType.TOKEN)
-                    throw ExpectedIdentifierException(right.getFirstLocation())
+                var methodCallComponents = mutableListOf<JSONStatement>()
+                if(right.type!=SyntaxType.TOKEN) {
+                    if(right.type == SyntaxType.EXPRESSION && right.components.getOrNull(1)?.name == APPLY_ID) {
+                        methodCallComponents = right.components[2].components
+                        right.name = right.components[0].name
+                        right.type = right.components[0].type
+                        right.components = right.components[0].components
+                    }
+                    else throw ExpectedIdentifierException(right.getFirstLocation())
+                }
                 right.name = AccessOperationIdentifiers.get(right.name,leftType) ?:
                     if(variables[right.name]!=null) right.name
                     else throw UnknownIdentifierException(right.getFirstLocation())
@@ -211,13 +217,17 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
                 else JSONStatement(type = SyntaxType.EXPRESSION,
                     components = mutableListOf(statement.components[0]))
                 statement.components[0] = statement.components[2]
+                methodCallComponents.add(0,oldLeft)
                 statement.components[2] = JSONStatement(type = SyntaxType.METHOD_CALL,
-                    components = mutableListOf(oldLeft))
+                    components = methodCallComponents)
 
                 //redo infer
                 infer()
                 return
             }
+
+            if(!rightIsToken)
+                InferFromExpression(InferrerDetails(right, variables, exceptions, additionalVars)).infer()
 
             val middleIsImport = middle.name == IMPORT_ID
 
