@@ -1,18 +1,18 @@
 package wiles.interpreter.interpreters
 
+import wiles.interpreter.data.InterpreterVariableMap
 import wiles.interpreter.data.ObjectDetails
-import wiles.interpreter.data.VariableMap
 import wiles.interpreter.exceptions.PanicException
 import wiles.interpreter.services.DoOperation
-import wiles.interpreter.statics.InterpreterConstants.FALSE_REF
-import wiles.interpreter.statics.InterpreterConstants.NOTHING_REF
-import wiles.interpreter.statics.InterpreterConstants.TRUE_REF
 import wiles.interpreter.statics.InterpreterConstants.toIntOrNull
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Chars.DECIMAL_DELIMITER
 import wiles.shared.constants.Predicates
+import wiles.shared.constants.StandardLibrary.FALSE_REF
+import wiles.shared.constants.StandardLibrary.NOTHING_REF
+import wiles.shared.constants.StandardLibrary.TRUE_REF
 import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.AND_ID
 import wiles.shared.constants.Tokens.APPLY_ID
@@ -32,7 +32,7 @@ import wiles.shared.constants.Types.LIST_ID
 import wiles.shared.constants.Types.METHOD_CALL_ID
 import java.util.function.Function
 
-class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, additionalVars: VariableMap)
+class InterpretFromExpression(statement: JSONStatement, variables: InterpreterVariableMap, additionalVars: InterpreterVariableMap)
     : InterpreterWithRef(statement, variables, additionalVars)
 {
     override lateinit var reference : ObjectDetails
@@ -148,8 +148,8 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
                     "${METHOD_ID}|${APPLY_ID}|${METHOD_CALL_ID}" ->
                     {
                         val leftRef = getReference(leftStatement)
-                        val function = leftRef.value as Function<VariableMap, ObjectDetails>
-                        val newVarMap = VariableMap()
+                        val function = leftRef.value as Function<InterpreterVariableMap, ObjectDetails>
+                        val newVarMap = InterpreterVariableMap()
                         for(component in rightStatement.components)
                         {
                             val name = component.components[0].name

@@ -1,21 +1,21 @@
 package wiles.checker.inferrers
 
-import wiles.checker.Checker
+import wiles.checker.data.CheckerVariableMap
 import wiles.checker.data.InferrerDetails
-import wiles.checker.data.VariableMap
 import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.exceptions.InferenceFailException
 import wiles.checker.exceptions.ReturnNotGuaranteedException
 import wiles.checker.services.InferrerService
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
+import wiles.shared.constants.StandardLibrary.getVariables
 import wiles.shared.constants.Tokens.ELSE_ID
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
 import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
 
 class InferFromMethod(details: InferrerDetails) : InferFromStatement(
     InferrerDetails(details.statement,
-        Checker.getVariables(),
+        getVariables(),
         details.exceptions,
         additionalVars = details.variables.copy())
 )
@@ -93,7 +93,7 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
                 break
             assert(component.type == SyntaxType.DECLARATION)
 
-            val inferrer = InferFromDeclaration(InferrerDetails(component, declarationVariables, exceptions, VariableMap()), alwaysInit = true)
+            val inferrer = InferFromDeclaration(InferrerDetails(component, declarationVariables, exceptions, CheckerVariableMap()), alwaysInit = true)
             inferrer.infer()
         }
 

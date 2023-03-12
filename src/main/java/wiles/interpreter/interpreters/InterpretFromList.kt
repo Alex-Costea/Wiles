@@ -1,14 +1,14 @@
 package wiles.interpreter.interpreters
 
 import wiles.interpreter.data.ObjectDetails
-import wiles.interpreter.data.VariableMap
+import wiles.interpreter.data.InterpreterVariableMap
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
 import wiles.shared.constants.TypeConstants.makeList
 import wiles.shared.constants.Types.EITHER_ID
 
-class InterpretFromList(statement: JSONStatement, variables: VariableMap, additionalVars: VariableMap)
+class InterpretFromList(statement: JSONStatement, variables: InterpreterVariableMap, additionalVars: InterpreterVariableMap)
     : InterpreterWithRef(statement, variables, additionalVars)
 {
     override lateinit var reference : ObjectDetails

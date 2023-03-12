@@ -3,16 +3,16 @@ package wiles.interpreter
 import com.fasterxml.jackson.databind.ObjectMapper
 import wiles.Main
 import wiles.Main.DEBUG
-import wiles.interpreter.data.VariableMap
+import wiles.interpreter.data.InterpreterVariableMap
 import wiles.interpreter.exceptions.PanicException
 import wiles.interpreter.services.InterpretFrom
-import wiles.interpreter.statics.InterpreterConstants.defaultVariableMap
 import wiles.shared.JSONStatement
+import wiles.shared.constants.StandardLibrary.defaultVariableMap
 import java.io.File
 
 class Interpreter(private val code : String?) {
     private val input = parseJson()
-    var newVars = VariableMap()
+    var newVars = InterpreterVariableMap()
 
     private fun parseJson(): JSONStatement {
         if(code==null)
@@ -27,12 +27,12 @@ class Interpreter(private val code : String?) {
             println(input)
         }
 
-        val variableMap = VariableMap()
+        val variableMap = InterpreterVariableMap()
         variableMap.putAll(defaultVariableMap)
         try {
             try
             {
-                InterpretFrom(input, variableMap, VariableMap()).interpret()
+                InterpretFrom(input, variableMap, InterpreterVariableMap()).interpret()
             }
             catch (ex : StackOverflowError)
             {

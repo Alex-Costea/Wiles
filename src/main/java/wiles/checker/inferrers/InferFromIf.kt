@@ -1,7 +1,7 @@
 package wiles.checker.inferrers
 
 import wiles.checker.data.InferrerDetails
-import wiles.checker.data.VariableMap
+import wiles.checker.data.CheckerVariableMap
 import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.services.InferrerService
 import wiles.checker.statics.InferrerUtils.checkIsInitialized
@@ -12,7 +12,7 @@ import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
 class InferFromIf(details: InferrerDetails) : InferFromStatement(details) {
     override fun infer() {
         val components = statement.components.toMutableList()
-        val listOfVariableMaps = mutableListOf<VariableMap>()
+        val listOfVariableMaps = mutableListOf<CheckerVariableMap>()
         val codeBlockLists = mutableListOf<JSONStatement>()
         while(components.isNotEmpty())
         {

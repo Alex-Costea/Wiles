@@ -1,9 +1,9 @@
 package wiles.interpreter.interpreters
 
-import wiles.interpreter.data.VariableMap
+import wiles.interpreter.data.InterpreterVariableMap
 import wiles.shared.JSONStatement
 
-class InterpretFromDeclaration(statement: JSONStatement, variables: VariableMap, additionalVars: VariableMap) :
+class InterpretFromDeclaration(statement: JSONStatement, variables: InterpreterVariableMap, additionalVars: InterpreterVariableMap) :
     InterpretFromStatement(statement, variables, additionalVars) {
     override fun interpret() {
         if(statement.components.size==3) {

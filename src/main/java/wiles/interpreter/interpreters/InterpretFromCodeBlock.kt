@@ -1,10 +1,10 @@
 package wiles.interpreter.interpreters
 
 import wiles.interpreter.services.InterpretFrom
-import wiles.interpreter.data.VariableMap
+import wiles.interpreter.data.InterpreterVariableMap
 import wiles.shared.JSONStatement
 
-class InterpretFromCodeBlock(statement: JSONStatement, variables: VariableMap, additionalVars: VariableMap) :
+class InterpretFromCodeBlock(statement: JSONStatement, variables: InterpreterVariableMap, additionalVars: InterpreterVariableMap) :
     InterpretFromStatement(statement, variables, additionalVars)
 {
     override fun interpret() {

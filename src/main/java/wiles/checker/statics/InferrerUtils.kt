@@ -1,7 +1,7 @@
 package wiles.checker.statics
 
 import wiles.checker.data.VariableDetails
-import wiles.checker.data.VariableMap
+import wiles.checker.data.CheckerVariableMap
 import wiles.checker.exceptions.*
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
@@ -234,7 +234,7 @@ object InferrerUtils {
 
     fun checkIsInitialized(
         variables: HashMap<String, VariableDetails>,
-        listOfVariableMaps: MutableList<VariableMap>,
+        listOfVariableMaps: MutableList<CheckerVariableMap>,
         codeBlockLists: MutableList<JSONStatement>,
         originalComponents : List<JSONStatement>
     )

@@ -3,15 +3,15 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import wiles.Main
 import wiles.interpreter.Interpreter
-import wiles.interpreter.data.VariableMap
+import wiles.interpreter.data.InterpreterVariableMap
 
 class InterpreterTests {
-    private fun assertVar(vars : VariableMap, name : String, value : Any?)
+    private fun assertVar(vars : InterpreterVariableMap, name : String, value : Any?)
     {
         assert(vars[name]?.value == value)
     }
 
-    private fun getVars(code : String) : VariableMap
+    private fun getVars(code : String) : InterpreterVariableMap
     {
         val interpreter = Interpreter(code)
         interpreter.interpret()

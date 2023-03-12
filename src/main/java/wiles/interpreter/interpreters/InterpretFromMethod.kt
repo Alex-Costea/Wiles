@@ -1,16 +1,16 @@
 package wiles.interpreter.interpreters
 
+import wiles.interpreter.data.InterpreterVariableMap
 import wiles.interpreter.data.ObjectDetails
-import wiles.interpreter.data.VariableMap
 import wiles.interpreter.exceptions.ReturnSignal
-import wiles.interpreter.statics.InterpreterConstants
-import wiles.interpreter.statics.InterpreterConstants.NOTHING_REF
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
+import wiles.shared.constants.StandardLibrary.NOTHING_REF
+import wiles.shared.constants.StandardLibrary.defaultVariableMap
 import wiles.shared.constants.Tokens.METHOD_ID
 import java.util.function.Function
 
-class InterpretFromMethod(statement: JSONStatement, variables: VariableMap, additionalVars: VariableMap)
+class InterpretFromMethod(statement: JSONStatement, variables: InterpreterVariableMap, additionalVars: InterpreterVariableMap)
     : InterpreterWithRef(statement, variables, additionalVars)
 {
     override lateinit var reference : ObjectDetails
@@ -24,14 +24,14 @@ class InterpretFromMethod(statement: JSONStatement, variables: VariableMap, addi
             val interpreter = InterpretFromDeclaration(component, newVars, additionalVars)
             interpreter.interpret()
         }
-        val defaultVars = VariableMap()
+        val defaultVars = InterpreterVariableMap()
         defaultVars.putAll(newVars.filter { it.key !in variables })
         val functionType = JSONStatement(name = METHOD_ID, type = SyntaxType.TYPE, components = mutableListOf(type))
-        reference = ObjectDetails(Function<VariableMap, ObjectDetails>{ givenVars ->
-            val funcVars = VariableMap()
+        reference = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ givenVars ->
+            val funcVars = InterpreterVariableMap()
             funcVars.putAll(defaultVars.filter { it.key !in givenVars })
             funcVars.putAll(givenVars)
-            funcVars.putAll(InterpreterConstants.defaultVariableMap)
+            funcVars.putAll(defaultVariableMap)
             try
             {
                 val interpreter = InterpretFromCodeBlock(codeBlock,funcVars, variables)

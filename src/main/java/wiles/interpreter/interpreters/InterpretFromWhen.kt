@@ -1,12 +1,12 @@
 package wiles.interpreter.interpreters
 
 import wiles.interpreter.data.ObjectDetails
-import wiles.interpreter.data.VariableMap
+import wiles.interpreter.data.InterpreterVariableMap
 import wiles.shared.JSONStatement
 import wiles.shared.constants.Tokens.ELSE_ID
 import wiles.shared.constants.TypeConstants
 
-class InterpretFromWhen(statement: JSONStatement, variables: VariableMap, additionalVars: VariableMap)
+class InterpretFromWhen(statement: JSONStatement, variables: InterpreterVariableMap, additionalVars: InterpreterVariableMap)
     : InterpretFromStatement(statement, variables, additionalVars)
 {
     override fun interpret() {

@@ -1,10 +1,10 @@
 package wiles.interpreter.interpreters
 
-import wiles.interpreter.data.VariableMap
+import wiles.interpreter.data.InterpreterVariableMap
 import wiles.interpreter.exceptions.ReturnSignal
 import wiles.shared.JSONStatement
 
-class InterpretFromReturn(statement: JSONStatement, variables: VariableMap, additionalVars: VariableMap)
+class InterpretFromReturn(statement: JSONStatement, variables: InterpreterVariableMap, additionalVars: InterpreterVariableMap)
     : InterpretFromStatement(statement, variables, additionalVars)
 {
     override fun interpret() {

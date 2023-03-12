@@ -2,7 +2,7 @@ package wiles.checker.inferrers
 
 import wiles.checker.data.InferrerDetails
 import wiles.checker.data.VariableDetails
-import wiles.checker.data.VariableMap
+import wiles.checker.data.CheckerVariableMap
 import wiles.checker.exceptions.*
 import wiles.checker.statics.InferrerUtils
 import wiles.checker.statics.InferrerUtils.checkIsInitialized
@@ -75,7 +75,7 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
 
     override fun infer() {
         val expression = statement.components.first()
-        val listOfVariableMaps = mutableListOf<VariableMap>()
+        val listOfVariableMaps = mutableListOf<CheckerVariableMap>()
         val codeBlockLists = mutableListOf<JSONStatement>()
         val location = expression.getFirstLocation()
         val name = expression.components[0].name
