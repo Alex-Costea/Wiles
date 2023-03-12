@@ -23,6 +23,145 @@ class InterpreterTests {
     {
 
         /*
+        let a := "hello"
+        let b := a.as_list
+        let var c := ""
+        for elem in b do
+            c := c + elem + ", "
+         */
+        val vars6 = getVars("""{
+  "type" : "CODE_BLOCK",
+  "parsed" : true,
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "STRING",
+      "type" : "TYPE"
+    }, {
+      "name" : "!a",
+      "type" : "TOKEN"
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "@hello",
+        "type" : "TOKEN"
+      } ]
+    } ]
+  }, {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "LIST",
+      "type" : "TYPE",
+      "components" : [ {
+        "name" : "STRING",
+        "type" : "TYPE"
+      } ]
+    }, {
+      "name" : "!b",
+      "type" : "TOKEN"
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!as_list",
+        "type" : "TOKEN"
+      }, {
+        "name" : "METHOD|APPLY|METHOD_CALL",
+        "type" : "TOKEN"
+      }, {
+        "type" : "METHOD_CALL",
+        "components" : [ {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "!elem",
+            "type" : "TOKEN"
+          }, {
+            "name" : "ASSIGN",
+            "type" : "TOKEN"
+          }, {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "!a",
+              "type" : "TOKEN"
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "name" : "VARIABLE",
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "STRING",
+      "type" : "TYPE"
+    }, {
+      "name" : "!c",
+      "type" : "TOKEN"
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "@",
+        "type" : "TOKEN"
+      } ]
+    } ]
+  }, {
+    "type" : "FOR",
+    "components" : [ {
+      "name" : "STRING",
+      "type" : "TYPE"
+    }, {
+      "name" : "!elem",
+      "type" : "TOKEN"
+    }, {
+      "name" : "IN",
+      "type" : "TOKEN"
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!b",
+        "type" : "TOKEN"
+      } ]
+    }, {
+      "type" : "CODE_BLOCK",
+      "components" : [ {
+        "type" : "EXPRESSION",
+        "components" : [ {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "!c",
+            "type" : "TOKEN"
+          } ]
+        }, {
+          "name" : "ASSIGN",
+          "type" : "TOKEN"
+        }, {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "!c",
+              "type" : "TOKEN"
+            }, {
+              "name" : "STRING|PLUS|STRING",
+              "type" : "TOKEN"
+            }, {
+              "name" : "!elem",
+              "type" : "TOKEN"
+            } ]
+          }, {
+            "name" : "STRING|PLUS|STRING",
+            "type" : "TOKEN"
+          }, {
+            "name" : "@, ",
+            "type" : "TOKEN"
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}""")
+        assertVar(vars6, "!c","h, e, l, l, o, ")
+
+        /*
         let a := 10 * "hi! "
         let b := "hi! " * 10
         let c := a = b
