@@ -227,7 +227,7 @@ object TypeConstants {
     val METHOD_CALL_TYPE = JSONStatement(type = SyntaxType.TYPE, name = METHOD_CALL_ID)
     private val NULLABLE_ANYTHING_TYPE = makeNullable(ANYTHING_TYPE)
 
-    val LIST_OF_ANYTHING_TYPE = makeList(ANYTHING_TYPE)
+    private val LIST_OF_ANYTHING_TYPE = makeList(ANYTHING_TYPE)
 
     val LIST_OF_NULLABLE_ANYTHING_TYPE = makeList(NULLABLE_ANYTHING_TYPE)
 
@@ -357,4 +357,5 @@ object TypeConstants {
 
     val AS_TEXT_TYPE = Utils.createFunctionType(Pair(NULLABLE_ANYTHING_TYPE, STRING_TYPE))
     val AS_LIST_TYPE = Utils.createFunctionType(Pair(STRING_TYPE, LIST_OF_STRING))
+    val SIZE_TYPE = Utils.createFunctionType(Pair(LIST_OF_ANYTHING_TYPE, INT64_TYPE))
 }

@@ -4,9 +4,9 @@ import wiles.interpreter.data.InterpreterVariableMap
 import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.exceptions.BreakSignal
 import wiles.interpreter.exceptions.ContinueSignal
+import wiles.interpreter.statics.InterpreterConstants.MAX_INT64_REF
+import wiles.interpreter.statics.InterpreterConstants.ZERO_REF
 import wiles.shared.JSONStatement
-import wiles.shared.constants.StandardLibrary.MAX_INT64_REF
-import wiles.shared.constants.StandardLibrary.ZERO_REF
 import wiles.shared.constants.Tokens.FROM_ID
 import wiles.shared.constants.Tokens.IN_ID
 import wiles.shared.constants.Tokens.TO_ID

@@ -11,14 +11,17 @@ import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Settings
-import wiles.shared.constants.StandardLibrary.getVariables
+import wiles.shared.constants.StandardLibrary.defaultCheckerVars
 import wiles.shared.constants.Tokens.NOTHING_ID
 import java.io.File
 import java.util.*
 
 class Checker(private val jsonCode : String? = null) {
     val code: JSONStatement = parseSyntaxTreeJson()
-    private val inferrer = InferrerService(InferrerDetails(code, getVariables(), CompilationExceptionsCollection(), CheckerVariableMap()))
+    private val inferrer = InferrerService(InferrerDetails(code,
+        defaultCheckerVars.copy(),
+        CompilationExceptionsCollection(),
+        CheckerVariableMap()))
     lateinit var codeAsJSONString : String
 
     private fun parseSyntaxTreeJson(): JSONStatement {

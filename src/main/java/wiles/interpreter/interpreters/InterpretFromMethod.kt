@@ -6,7 +6,7 @@ import wiles.interpreter.exceptions.ReturnSignal
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.StandardLibrary.NOTHING_REF
-import wiles.shared.constants.StandardLibrary.defaultVariableMap
+import wiles.shared.constants.StandardLibrary.defaultInterpreterVars
 import wiles.shared.constants.Tokens.METHOD_ID
 import java.util.function.Function
 
@@ -31,7 +31,7 @@ class InterpretFromMethod(statement: JSONStatement, variables: InterpreterVariab
             val funcVars = InterpreterVariableMap()
             funcVars.putAll(defaultVars.filter { it.key !in givenVars })
             funcVars.putAll(givenVars)
-            funcVars.putAll(defaultVariableMap)
+            funcVars.putAll(defaultInterpreterVars)
             try
             {
                 val interpreter = InterpretFromCodeBlock(codeBlock,funcVars, variables)

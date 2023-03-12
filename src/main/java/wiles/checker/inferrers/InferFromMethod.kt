@@ -8,14 +8,14 @@ import wiles.checker.exceptions.ReturnNotGuaranteedException
 import wiles.checker.services.InferrerService
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
-import wiles.shared.constants.StandardLibrary.getVariables
+import wiles.shared.constants.StandardLibrary
 import wiles.shared.constants.Tokens.ELSE_ID
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
 import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
 
 class InferFromMethod(details: InferrerDetails) : InferFromStatement(
     InferrerDetails(details.statement,
-        getVariables(),
+        StandardLibrary.defaultCheckerVars.copy(),
         details.exceptions,
         additionalVars = details.variables.copy())
 )
