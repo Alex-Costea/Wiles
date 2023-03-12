@@ -7,12 +7,14 @@ import wiles.interpreter.exceptions.PanicException
 import wiles.shared.constants.Tokens.FALSE_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.TRUE_ID
+import wiles.shared.constants.TypeConstants.AS_LIST_TYPE
 import wiles.shared.constants.TypeConstants.AS_TEXT_TYPE
 import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
 import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
 import wiles.shared.constants.TypeConstants.IGNORE_TYPE
 import wiles.shared.constants.TypeConstants.INT64_TYPE
 import wiles.shared.constants.TypeConstants.LIST_OF_ANYTHING_TYPE
+import wiles.shared.constants.TypeConstants.LIST_OF_STRING
 import wiles.shared.constants.TypeConstants.MODULO_TYPE
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
 import wiles.shared.constants.TypeConstants.PANIC_TYPE
@@ -88,6 +90,9 @@ object InterpreterConstants {
             throw PanicException("Cannot read truth value!")
         ObjectDetails(scanner.nextBoolean(), BOOLEAN_TYPE)
     }, READ_NOTHING_RETURN_BOOL_TYPE)
+    private val AS_LIST_REF = ObjectDetails(Function<VariableMap, ObjectDetails>{
+        ObjectDetails((it["!elem"]!!.value as String).toMutableList(), LIST_OF_STRING)
+    }, AS_LIST_TYPE)
 
     init{
         defaultVariableMap[NOTHING_ID] = NOTHING_REF
@@ -105,6 +110,7 @@ object InterpreterConstants {
         defaultVariableMap["!read_truth"] = READ_TRUTH_REF
         defaultVariableMap["!read_rational"] = READ_RATIONAL_REF
         defaultVariableMap["!read_line"] = READ_LINE_REF
+        defaultVariableMap["!as_list"] = AS_LIST_REF
     }
 
     fun Long.toIntOrNull(): Int? {

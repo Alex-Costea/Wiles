@@ -353,5 +353,8 @@ object TypeConstants {
         ))
     )
 
+    val LIST_OF_STRING = makeList(STRING_TYPE)
+
     val AS_TEXT_TYPE = Utils.createFunctionType(Pair(NULLABLE_ANYTHING_TYPE, STRING_TYPE))
+    val AS_LIST_TYPE = Utils.createFunctionType(Pair(STRING_TYPE, LIST_OF_STRING))
 }
