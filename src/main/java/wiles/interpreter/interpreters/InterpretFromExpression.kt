@@ -26,7 +26,8 @@ import wiles.shared.constants.Tokens.OR_ID
 import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
 import wiles.shared.constants.TypeConstants.INT64_TYPE
 import wiles.shared.constants.TypeConstants.STRING_TYPE
-import wiles.shared.constants.Types
+import wiles.shared.constants.Types.INT64_ID
+import wiles.shared.constants.Types.LIST_ID
 import wiles.shared.constants.Types.METHOD_CALL_ID
 import java.util.function.Function
 
@@ -156,7 +157,7 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
                         }
                         function.apply(newVarMap)
                     }
-                    ELEM_ACCESS_ID -> {
+                    "$LIST_ID|$ELEM_ACCESS_ID|$INT64_ID" -> {
                         val leftRef = getReference(leftStatement)
                         val rightRef = getReference(rightStatement)
                         val valueLong = (rightRef.value as Long)
@@ -175,7 +176,7 @@ class InterpretFromExpression(statement: JSONStatement, variables: VariableMap, 
                         interpreter.interpret()
                         interpreter.reference
                     }
-                    "${Types.LIST_ID}|${Tokens.PLUS_ID}|${Types.LIST_ID}" ->
+                    "$LIST_ID|${Tokens.PLUS_ID}|$LIST_ID" ->
                     {
                         val leftRef = getReference(leftStatement).clone()
                         val rightRef = getReference(rightStatement)

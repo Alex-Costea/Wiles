@@ -22,6 +22,42 @@ class InterpreterTests {
     fun expressionTests()
     {
 
+        // let a := "123" @ 1
+        val vars0 = getVars("""{
+  "type" : "CODE_BLOCK",
+  "parsed" : true,
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "EITHER",
+      "type" : "TYPE",
+      "components" : [ {
+        "name" : "STRING",
+        "type" : "TYPE"
+      }, {
+        "name" : "NOTHING",
+        "type" : "TYPE"
+      } ]
+    }, {
+      "name" : "!a",
+      "type" : "TOKEN"
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "@123",
+        "type" : "TOKEN"
+      }, {
+        "name" : "STRING|ELEM_ACCESS|INT64",
+        "type" : "TOKEN"
+      }, {
+        "name" : "#1",
+        "type" : "TOKEN"
+      } ]
+    } ]
+  } ]
+}""")
+        assertVar(vars0, "!a", "2")
+
         //let a := modulo.as_text
         val vars = getVars("""{
   "type" : "CODE_BLOCK",
@@ -1534,7 +1570,7 @@ class InterpreterTests {
                     "name" : "!list",
                     "type" : "TOKEN"
                   }, {
-                    "name" : "ELEM_ACCESS",
+                    "name" : "LIST|ELEM_ACCESS|INT64",
                     "type" : "TOKEN"
                   }, {
                     "name" : "!elem",
@@ -1660,7 +1696,7 @@ class InterpreterTests {
               "name" : "!a",
               "type" : "TOKEN"
             }, {
-              "name" : "ELEM_ACCESS",
+              "name" : "LIST|ELEM_ACCESS|INT64",
               "type" : "TOKEN"
             }, {
               "name" : "#2",
@@ -2265,7 +2301,7 @@ class InterpreterTests {
             "name" : "!list",
             "type" : "TOKEN"
           }, {
-            "name" : "ELEM_ACCESS",
+            "name" : "LIST|ELEM_ACCESS|INT64",
             "type" : "TOKEN"
           }, {
             "name" : "!i",

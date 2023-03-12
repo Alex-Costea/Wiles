@@ -5,12 +5,12 @@ import wiles.shared.JSONStatement
 import wiles.shared.constants.Tokens.IMPORT_ID
 import wiles.shared.constants.Tokens.NEW_ID
 import wiles.shared.constants.Tokens.PLUS_ID
-import wiles.shared.constants.TypeConstants
 import wiles.shared.constants.TypeConstants.AND_OPERATION
 import wiles.shared.constants.TypeConstants.ASSIGN_OPERATION
 import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
 import wiles.shared.constants.TypeConstants.DIVIDE_OPERATION
 import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
+import wiles.shared.constants.TypeConstants.ELEM_ACCESS_OPERATION
 import wiles.shared.constants.TypeConstants.EQUALS_OPERATION
 import wiles.shared.constants.TypeConstants.INT64_TYPE
 import wiles.shared.constants.TypeConstants.LARGER_EQUALS_OPERATION
@@ -23,6 +23,7 @@ import wiles.shared.constants.TypeConstants.MUTABLE_OPERATION
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
 import wiles.shared.constants.TypeConstants.NOT_EQUAL_OPERATION
 import wiles.shared.constants.TypeConstants.NOT_OPERATION
+import wiles.shared.constants.TypeConstants.NULLABLE_STRING
 import wiles.shared.constants.TypeConstants.OR_OPERATION
 import wiles.shared.constants.TypeConstants.PLUS_OPERATION
 import wiles.shared.constants.TypeConstants.POWER_OPERATION
@@ -127,17 +128,19 @@ object SimpleTypeGenerator {
         Pair(Triple(INT64_TYPE, SMALLER_EQUALS_OPERATION, DOUBLE_TYPE), BOOLEAN_TYPE),
         Pair(Triple(DOUBLE_TYPE, SMALLER_EQUALS_OPERATION, INT64_TYPE), BOOLEAN_TYPE),
         Pair(Triple(DOUBLE_TYPE, SMALLER_EQUALS_OPERATION, DOUBLE_TYPE), BOOLEAN_TYPE),
+
+        //String elem access
+        Pair(Triple(STRING_TYPE, ELEM_ACCESS_OPERATION, INT64_TYPE), NULLABLE_STRING),
         )
 
     fun getSimpleTypes(triple : Triple<JSONStatement, JSONStatement, JSONStatement>) : JSONStatement?
     {
-        //TODO: possible bug?
         val unboxedTriple = Triple(unbox(triple.first), triple.second, unbox(triple.third))
 
         if(unboxedTriple.second.name in arrayOf(IMPORT_ID, NEW_ID))
             return unboxedTriple.third.copyRemovingLocation()
 
-        if(unboxedTriple.second == TypeConstants.ELEM_ACCESS_OPERATION)
+        if(unboxedTriple.second == ELEM_ACCESS_OPERATION)
         {
             if(isFormerSuperTypeOfLatter(LIST_OF_NULLABLE_ANYTHING_TYPE,unboxedTriple.first)
                 && isFormerSuperTypeOfLatter(INT64_TYPE,unboxedTriple.third))

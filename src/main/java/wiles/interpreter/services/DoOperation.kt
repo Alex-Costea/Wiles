@@ -4,6 +4,7 @@ import wiles.interpreter.data.ObjectDetails
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.constants.Tokens.DIVIDE_ID
+import wiles.shared.constants.Tokens.ELEM_ACCESS_ID
 import wiles.shared.constants.Tokens.EQUALS_ID
 import wiles.shared.constants.Tokens.LARGER_EQUALS_ID
 import wiles.shared.constants.Tokens.LARGER_ID
@@ -21,6 +22,7 @@ import wiles.shared.constants.Tokens.UNARY_PLUS_ID
 import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
 import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
 import wiles.shared.constants.TypeConstants.INT64_TYPE
+import wiles.shared.constants.TypeConstants.NULLABLE_STRING
 import wiles.shared.constants.TypeConstants.STRING_TYPE
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.BOOLEAN_ID
@@ -181,6 +183,10 @@ object DoOperation {
             (x as Double) <= (y as Long)}, BOOLEAN_TYPE)),
         Pair("${DOUBLE_ID}|${SMALLER_EQUALS_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
             (x as Double) <= (y as Double)}, BOOLEAN_TYPE)),
+
+        //String elem access
+        Pair("${STRING_ID}|${ELEM_ACCESS_ID}|${INT64_ID}", createFunction({ x : Any?, y : Any? ->
+            (x as String).getOrNull((y as Long).toInt()).toString()}, NULLABLE_STRING)),
     )
 
     fun get(left : ObjectDetails, middle : String, right : ObjectDetails) : ObjectDetails
@@ -198,6 +204,7 @@ object DoOperation {
             val operation = operationNameSplit[0] + "|" + operationNameSplit[1] + "|" + operationNameSplit[2]
             operationMap[operation]?.apply(leftValue, rightValue) ?: throw InternalErrorException()
         }
-        else operationMap[middle]!!.apply(leftValue, rightValue)
+        else (operationMap[middle]?:throw InternalErrorException("Cannot perform operation with $left $middle $right"))
+            .apply(leftValue, rightValue)
     }
 }
