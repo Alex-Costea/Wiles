@@ -47,7 +47,7 @@
 - `and`, `or`, `not` (not bitwise!)
 - `=`, `>`, `>=`, `<`, `<=`, `=/=`
 - `:=` (assign, declare or name parameters)
-- `.` (`b.a` is `a(b)`, also used for field access)
+- `.` (`b.a{ ( {@ param @} ) }` is `a(b,{ {@ param @}} )`, also used for field access)
 - `:` (type annotation)
 - `@` (access element in collection or text. returns nullable type)
 - `+=` (append to end of mutable list)
