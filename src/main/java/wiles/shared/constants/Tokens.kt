@@ -35,7 +35,6 @@ object Tokens {
     const val STRING_START = "@"
     const val NUM_START = "#"
     const val TYPEDEF_ID = "TYPEDEF"
-    const val NOTHING_ID = "!nothing"
     const val SEPARATOR_ID = "SEPARATOR"
     const val DO_ID = "DO"
     const val RIGHT_ARROW_ID = "RIGHT_ARROW"
@@ -54,8 +53,6 @@ object Tokens {
     const val NOT_ID = "NOT"
     const val MAYBE_ID = "MAYBE"
     const val RETURN_ID = "RETURN"
-    const val TRUE_ID = "!true"
-    const val FALSE_ID = "!false"
     const val IF_ID = "IF"
     const val ELSE_ID = "ELSE"
     const val BREAK_ID = "BREAK"
@@ -72,6 +69,10 @@ object Tokens {
     const val WHEN_ID = "WHEN"
     const val IS_ID = "IS"
     const val NEW_ID = "NEW"
+
+    const val TRUE_ID = "!true"
+    const val FALSE_ID = "!false"
+    const val NOTHING_ID = "!nothing"
 
     private val KEYWORDS: HashMap<String, String> = HashMap()
     private val SYMBOLS: HashMap<String, String> = HashMap()

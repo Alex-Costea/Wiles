@@ -15,6 +15,7 @@ import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.ANON_ARG_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
+import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
 import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
 import wiles.shared.constants.TypeConstants.makeMutable
@@ -62,7 +63,7 @@ object InferrerUtils {
 
     fun checkTypeIsDefined(type : JSONStatement)
     {
-        if(type.type == SyntaxType.TYPE && type.name.startsWith("!"))
+        if(type.type == SyntaxType.TYPE && IS_IDENTIFIER.test(type.name) && type.name != NOTHING_ID)
             throw UnknownTypeException(type.getFirstLocation())
         if(type.components.isNotEmpty())
         {

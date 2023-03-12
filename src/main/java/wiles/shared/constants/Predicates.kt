@@ -26,7 +26,6 @@ object Predicates {
     @JvmField
     val IS_LITERAL: Predicate<String> = IS_IDENTIFIER.or(IS_TEXT_LITERAL).or(IS_NUMBER_LITERAL)
 
-
     @JvmField
     val IS_CONTAINED_IN = {set: Collection<String> -> Predicate { o: String -> set.contains(o) }}
 
