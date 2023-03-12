@@ -35,6 +35,8 @@ object InterpreterConstants {
     val NOTHING_REF = ObjectDetails(null, NOTHING_TYPE)
     val FALSE_REF = ObjectDetails(false, BOOLEAN_TYPE)
     val TRUE_REF = ObjectDetails(true, BOOLEAN_TYPE)
+    private val INFINITY_REF = ObjectDetails(Double.POSITIVE_INFINITY, DOUBLE_TYPE)
+    private val NAN_REF = ObjectDetails(Double.NaN, DOUBLE_TYPE)
     private val WRITE_REF = ObjectDetails(Function<VariableMap, ObjectDetails>{
         val value = it["!text"]!!
         print(value)
@@ -113,6 +115,8 @@ object InterpreterConstants {
         defaultVariableMap["!read_rational"] = READ_RATIONAL_REF
         defaultVariableMap["!read_line"] = READ_LINE_REF
         defaultVariableMap["!as_list"] = AS_LIST_REF
+        defaultVariableMap["!Infinity"] = INFINITY_REF
+        defaultVariableMap["!NaN"] = NAN_REF
     }
 
     fun Long.toIntOrNull(): Int? {
