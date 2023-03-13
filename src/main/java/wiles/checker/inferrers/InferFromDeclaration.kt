@@ -32,7 +32,7 @@ class InferFromDeclaration(details: InferrerDetails,
             checkTypeIsDefined(type)
 
         if(variables.containsKey(name.name))
-            throw VariableAlreadyDeclaredException(name.location!!)
+            throw VariableAlreadyDeclaredException(name.getFirstLocation())
 
         try
         {
@@ -75,7 +75,8 @@ class InferFromDeclaration(details: InferrerDetails,
         {
             InferFromType(InferrerDetails(type, variables, exceptions, additionalVars)).infer()
             if(inferredType!=null && !isFormerSuperTypeOfLatter(type, inferredType))
-                throw ConflictingTypeDefinitionException(type.location!!,type.toString(),inferredType.toString())
+                throw ConflictingTypeDefinitionException(type.getFirstLocation(),
+                    type.toString(),inferredType.toString())
         }
         else
         {

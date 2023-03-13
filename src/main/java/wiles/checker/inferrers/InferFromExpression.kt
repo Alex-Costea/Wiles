@@ -69,7 +69,8 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
                     if(unboxedNewLeft.name == METHOD_ID &&
                             middle == TypeConstants.APPLY_OPERATION &&
                             newRight.name == METHOD_CALL_ID) {
-                        val result = InferrerUtils.getFunctionArguments(unboxedNewLeft, newRight, middle.location!!)
+                        val result = InferrerUtils.getFunctionArguments(unboxedNewLeft, newRight,
+                            middle.getFirstLocation())
                         val newResult = result.map {
                             if(it.value.second)
                                 JSONStatement(type = SyntaxType.EXPRESSION,
@@ -96,7 +97,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
             }
         }
         if(!isValid)
-            throw WrongOperationException(middle.location!!,left.toString(),right.toString())
+            throw WrongOperationException(middle.getFirstLocation(),left.toString(),right.toString())
         if(resultingTypes.isNotEmpty())
         {
             var leftText : String = if(leftComponents.size == 1) unbox(leftComponents[0]).name else ANYTHING_ID
@@ -110,7 +111,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
                 resultingTypes[0]
             else JSONStatement(name = EITHER_ID, type = SyntaxType.TYPE, components = resultingTypes)
         }
-        throw WrongOperationException(middle.location!!,left.toString(),right.toString())
+        throw WrongOperationException(middle.getFirstLocation(),left.toString(),right.toString())
     }
 
     override fun infer() {
@@ -156,6 +157,8 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
         }
         else if (statement.components.size == 2 || statement.components.size == 3)
         {
+            if(statement.components.first().type == SyntaxType.TYPE)
+                return
             assert(statement.type == SyntaxType.EXPRESSION)
 
             val isThree = statement.components.size == 3

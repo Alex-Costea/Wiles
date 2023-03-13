@@ -1,7 +1,7 @@
 package wiles.checker.statics
 
-import wiles.checker.data.VariableDetails
 import wiles.checker.data.CheckerVariableMap
+import wiles.checker.data.VariableDetails
 import wiles.checker.exceptions.*
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
@@ -51,10 +51,10 @@ object InferrerUtils {
         }
         if(IS_IDENTIFIER.test(name)) {
             if( variables[name]?.initialized==false)
-                throw UsedBeforeInitializationException(token.location!!)
+                throw UsedBeforeInitializationException(token.getFirstLocation())
             return JSONStatement(
                 name = variables[name]?.type?.name ?:
-                throw UnknownIdentifierException(token.location!!),
+                throw UnknownIdentifierException(token.getFirstLocation()),
                 type = SyntaxType.TYPE,
                 components = variables[name]!!.type.components.map { it.copyRemovingLocation() }.toMutableList())
         }
