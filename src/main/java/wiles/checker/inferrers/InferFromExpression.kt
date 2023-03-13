@@ -3,7 +3,6 @@ package wiles.checker.inferrers
 import wiles.checker.data.InferrerDetails
 import wiles.checker.exceptions.CannotModifyException
 import wiles.checker.exceptions.ExpectedIdentifierException
-import wiles.checker.exceptions.UnknownIdentifierException
 import wiles.checker.exceptions.WrongOperationException
 import wiles.checker.services.AccessOperationIdentifiers
 import wiles.checker.services.InferrerService
@@ -202,15 +201,13 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
                 if(right.type!=SyntaxType.TOKEN) {
                     if(right.type == SyntaxType.EXPRESSION && right.components.getOrNull(1)?.name == APPLY_ID) {
                         methodCallComponents = right.components[2].components
-                        right.name = right.components[0].name
+                        right.name = AccessOperationIdentifiers.get(right.components[0].name,leftType)
+                            ?: right.components[0].name
                         right.type = right.components[0].type
                         right.components = right.components[0].components
                     }
-                    else throw ExpectedIdentifierException(right.getFirstLocation())
                 }
-                right.name = AccessOperationIdentifiers.get(right.name,leftType) ?:
-                    if(variables[right.name]!=null) right.name
-                    else throw UnknownIdentifierException(right.getFirstLocation())
+                else right.name = AccessOperationIdentifiers.get(right.name,leftType) ?: right.name
 
                 //create correct components
                 assert(isThree)

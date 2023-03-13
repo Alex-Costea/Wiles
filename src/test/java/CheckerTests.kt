@@ -2086,6 +2086,133 @@ class CheckerTests {
     @Test
     fun methodCallTest()
     {
+        //writeline([1,2,3].(fun(arg list: list[int]) do yield 10))
+        checkResult(null,"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "EXPRESSION",
+    "components" : [ {
+      "name" : "!writeline",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 1
+      }
+    }, {
+      "name" : "APPLY",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 10
+      }
+    }, {
+      "type" : "METHOD_CALL",
+      "components" : [ {
+        "type" : "EXPRESSION",
+        "components" : [ {
+          "type" : "LIST",
+          "location" : {
+            "line" : 1,
+            "lineIndex" : 17
+          },
+          "components" : [ {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "#1",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 1,
+                "lineIndex" : 12
+              }
+            } ]
+          }, {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "#2",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 1,
+                "lineIndex" : 14
+              }
+            } ]
+          }, {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "#3",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 1,
+                "lineIndex" : 16
+              }
+            } ]
+          } ]
+        }, {
+          "name" : "ACCESS",
+          "type" : "TOKEN",
+          "location" : {
+            "line" : 1,
+            "lineIndex" : 18
+          }
+        }, {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "type" : "METHOD",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 20
+            },
+            "components" : [ {
+              "name" : "ANON_ARG",
+              "type" : "DECLARATION",
+              "components" : [ {
+                "name" : "LIST",
+                "type" : "TYPE",
+                "location" : {
+                  "line" : 1,
+                  "lineIndex" : 34
+                },
+                "components" : [ {
+                  "name" : "INT64",
+                  "type" : "TYPE",
+                  "location" : {
+                    "line" : 1,
+                    "lineIndex" : 39
+                  }
+                } ]
+              }, {
+                "name" : "!list",
+                "type" : "TOKEN",
+                "location" : {
+                  "line" : 1,
+                  "lineIndex" : 28
+                }
+              } ]
+            }, {
+              "type" : "CODE_BLOCK",
+              "components" : [ {
+                "type" : "RETURN",
+                "components" : [ {
+                  "type" : "EXPRESSION",
+                  "components" : [ {
+                    "name" : "#10",
+                    "type" : "TOKEN",
+                    "location" : {
+                      "line" : 1,
+                      "lineIndex" : 54
+                    }
+                  } ]
+                } ]
+              } ]
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(EXPRESSION(TYPE !nothing; !writeline; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!text; ASSIGN; EXPRESSION(TYPE INT64; EXPRESSION(TYPE METHOD; (METHOD(TYPE INT64; DECLARATION ANON_ARG; (TYPE LIST; (TYPE INT64); !list))); METHOD(TYPE INT64; DECLARATION ANON_ARG; (TYPE LIST; (TYPE INT64); !list); CODE_BLOCK(RETURN(EXPRESSION(TYPE INT64; #10))))); METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!list; ASSIGN; EXPRESSION(TYPE LIST; (TYPE INT64); LIST(TYPE INT64; EXPRESSION(TYPE INT64; #1); EXPRESSION(TYPE INT64; #2); EXPRESSION(TYPE INT64; #3))))))))))")
+
+
         //writeline([1,2,3].size)
         checkResult(null,"""{
   "parsed" : true,
