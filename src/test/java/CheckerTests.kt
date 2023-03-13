@@ -2086,7 +2086,7 @@ class CheckerTests {
     @Test
     fun methodCallTest()
     {
-        //writeline([1,2,3].(fun(arg list: list[int]) do yield 10))
+        //writeline([1,2,3].fun(arg list: list[int]) do yield 10)
         checkResult(null,"""{
   "parsed" : true,
   "type" : "CODE_BLOCK",
@@ -2155,53 +2155,50 @@ class CheckerTests {
             "lineIndex" : 18
           }
         }, {
-          "type" : "EXPRESSION",
+          "type" : "METHOD",
+          "location" : {
+            "line" : 1,
+            "lineIndex" : 19
+          },
           "components" : [ {
-            "type" : "METHOD",
-            "location" : {
-              "line" : 1,
-              "lineIndex" : 20
-            },
+            "name" : "ANON_ARG",
+            "type" : "DECLARATION",
             "components" : [ {
-              "name" : "ANON_ARG",
-              "type" : "DECLARATION",
+              "name" : "LIST",
+              "type" : "TYPE",
+              "location" : {
+                "line" : 1,
+                "lineIndex" : 33
+              },
               "components" : [ {
-                "name" : "LIST",
+                "name" : "INT64",
                 "type" : "TYPE",
                 "location" : {
                   "line" : 1,
-                  "lineIndex" : 34
-                },
-                "components" : [ {
-                  "name" : "INT64",
-                  "type" : "TYPE",
-                  "location" : {
-                    "line" : 1,
-                    "lineIndex" : 39
-                  }
-                } ]
-              }, {
-                "name" : "!list",
-                "type" : "TOKEN",
-                "location" : {
-                  "line" : 1,
-                  "lineIndex" : 28
+                  "lineIndex" : 38
                 }
               } ]
             }, {
-              "type" : "CODE_BLOCK",
+              "name" : "!list",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 1,
+                "lineIndex" : 27
+              }
+            } ]
+          }, {
+            "type" : "CODE_BLOCK",
+            "components" : [ {
+              "type" : "RETURN",
               "components" : [ {
-                "type" : "RETURN",
+                "type" : "EXPRESSION",
                 "components" : [ {
-                  "type" : "EXPRESSION",
-                  "components" : [ {
-                    "name" : "#10",
-                    "type" : "TOKEN",
-                    "location" : {
-                      "line" : 1,
-                      "lineIndex" : 54
-                    }
-                  } ]
+                  "name" : "#10",
+                  "type" : "TOKEN",
+                  "location" : {
+                    "line" : 1,
+                    "lineIndex" : 53
+                  }
                 } ]
               } ]
             } ]
@@ -2210,7 +2207,7 @@ class CheckerTests {
       } ]
     } ]
   } ]
-}""","CODE_BLOCK(EXPRESSION(TYPE !nothing; !writeline; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!text; ASSIGN; EXPRESSION(TYPE INT64; EXPRESSION(TYPE METHOD; (METHOD(TYPE INT64; DECLARATION ANON_ARG; (TYPE LIST; (TYPE INT64); !list))); METHOD(TYPE INT64; DECLARATION ANON_ARG; (TYPE LIST; (TYPE INT64); !list); CODE_BLOCK(RETURN(EXPRESSION(TYPE INT64; #10))))); METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!list; ASSIGN; EXPRESSION(TYPE LIST; (TYPE INT64); LIST(TYPE INT64; EXPRESSION(TYPE INT64; #1); EXPRESSION(TYPE INT64; #2); EXPRESSION(TYPE INT64; #3))))))))))")
+}""","CODE_BLOCK(EXPRESSION(TYPE !nothing; !writeline; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!text; ASSIGN; EXPRESSION(TYPE INT64; METHOD(TYPE INT64; DECLARATION ANON_ARG; (TYPE LIST; (TYPE INT64); !list); CODE_BLOCK(RETURN(EXPRESSION(TYPE INT64; #10)))); METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!list; ASSIGN; EXPRESSION(TYPE LIST; (TYPE INT64); LIST(TYPE INT64; EXPRESSION(TYPE INT64; #1); EXPRESSION(TYPE INT64; #2); EXPRESSION(TYPE INT64; #3))))))))))")
 
 
         //writeline([1,2,3].size)

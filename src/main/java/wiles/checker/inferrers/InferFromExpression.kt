@@ -192,6 +192,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
             val leftType = if(leftIsToken) inferTypeFromLiteral(left,variables)
                 else if(left.type == SyntaxType.EXPRESSION) left.components[0]
                 else if(left.type == SyntaxType.LIST) makeList(left.components[0])
+                else if(left.type == SyntaxType.METHOD) makeMethod(left)
                 else throw InternalErrorException()
 
             //Transform access operation into apply operation
