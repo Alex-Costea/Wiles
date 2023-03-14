@@ -199,8 +199,9 @@ object DoOperation {
 
     private fun repeatString(x : Any?, y : Any?) : Any
     {
-        return (x as String).repeat((y as Long).toIntOrNull()
-            ?: throw PanicException("Integer value too large for repeat!"))
+        val times = (y as Long).toIntOrNull() ?: throw PanicException("Integer value too large for repeat!")
+        if(times < 0) throw PanicException("Cannot repeat a text a negative number of times!")
+        return (x as String).repeat(times)
     }
 
     fun get(left : ObjectDetails, middle : String, right : ObjectDetails) : ObjectDetails
