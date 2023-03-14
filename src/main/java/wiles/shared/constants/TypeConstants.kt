@@ -3,6 +3,7 @@ package wiles.shared.constants
 import wiles.checker.statics.InferrerUtils.makeNullable
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
+import wiles.shared.constants.Tokens.ANON_ARG_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.METHOD_CALL_ID
@@ -129,18 +130,18 @@ object TypeConstants {
         while(list1.isNotEmpty() && list2.isNotEmpty())
         {
             val elem1 = list1[0]
-            if(elem1.type == SyntaxType.TYPE || !elem1.name.contains(Tokens.ANON_ARG_ID)) {
+            if(elem1.type == SyntaxType.TYPE || !elem1.name.contains(ANON_ARG_ID)) {
                 list1.removeFirst()
                 continue
             }
 
             val elem2 = list2[0]
-            if(elem2.type == SyntaxType.TYPE || !elem2.name.contains(Tokens.ANON_ARG_ID)) {
+            if(elem2.type == SyntaxType.TYPE || !elem2.name.contains(ANON_ARG_ID)) {
                 list2.removeFirst()
                 continue
             }
 
-            if(elem1.components[1].name !=elem2.components[1].name)
+            if(elem1.components[1].name != elem2.components[1].name)
                 return false
 
             list1.removeFirst()
@@ -148,18 +149,19 @@ object TypeConstants {
         }
 
         while(list1.isNotEmpty()) {
-            if (list1[0].type == SyntaxType.TYPE || !list1[0].name.contains(Tokens.ANON_ARG_ID))
+            if (list1[0].type == SyntaxType.TYPE || !list1[0].name.contains(ANON_ARG_ID))
                 list1.removeFirst()
             else break
         }
 
         while(list2.isNotEmpty()) {
-            if (list2[0].type == SyntaxType.TYPE || !list2[0].name.contains(Tokens.ANON_ARG_ID))
+            if (list2[0].type == SyntaxType.TYPE || !list2[0].name.contains(ANON_ARG_ID))
                 list2.removeFirst()
             else break
         }
 
-        if(list1.isNotEmpty() || list2.isNotEmpty())
+        // allow subtype component with default value
+        if(list1.isNotEmpty() || list2.any{it.components.size != 3})
             return false
         return true
     }
@@ -168,7 +170,9 @@ object TypeConstants {
                                          isSuperType : Boolean) : Boolean
     {
         for (component1 in list1) {
-            if (component1.type == SyntaxType.TYPE)
+            if (component1.type == SyntaxType.TYPE || component1.name == ANON_ARG_ID
+                // allow subtype component with default value
+                || (!isSuperType && component1.components.size == 3))
                 continue
             var matchFound = false
             for (component2 in list2) {
@@ -264,7 +268,7 @@ object TypeConstants {
         components = mutableListOf(JSONStatement(type = SyntaxType.METHOD,
             components = mutableListOf(
                 JSONStatement(name = NOTHING_ID, type = SyntaxType.TYPE),
-                JSONStatement(name = Tokens.ANON_ARG_ID, type = SyntaxType.DECLARATION,
+                JSONStatement(name = ANON_ARG_ID, type = SyntaxType.DECLARATION,
                     components = mutableListOf(
                         JSONStatement(name = ANYTHING_ID, type = SyntaxType.TYPE),
                         JSONStatement(name = "!text", type = SyntaxType.TOKEN)
@@ -277,7 +281,7 @@ object TypeConstants {
         components = mutableListOf(JSONStatement(type = SyntaxType.METHOD,
             components = mutableListOf(
                 JSONStatement(name = NOTHING_ID, type = SyntaxType.TYPE),
-                JSONStatement(name = Tokens.ANON_ARG_ID, type = SyntaxType.DECLARATION,
+                JSONStatement(name = ANON_ARG_ID, type = SyntaxType.DECLARATION,
                     components = mutableListOf(
                         JSONStatement(name = Types.EITHER_ID, type = SyntaxType.TYPE,
                             components = mutableListOf(
@@ -300,7 +304,7 @@ object TypeConstants {
         components = mutableListOf(JSONStatement(type = SyntaxType.METHOD,
             components = mutableListOf(
                 JSONStatement(name = NOTHING_ID, type = SyntaxType.TYPE),
-                JSONStatement(name = Tokens.ANON_ARG_ID, type = SyntaxType.DECLARATION,
+                JSONStatement(name = ANON_ARG_ID, type = SyntaxType.DECLARATION,
                     components = mutableListOf(
                         NULLABLE_ANYTHING_TYPE,
                         JSONStatement(name = "!elem", type = SyntaxType.TOKEN)
@@ -313,13 +317,13 @@ object TypeConstants {
         components = mutableListOf(JSONStatement(type = SyntaxType.METHOD,
             components = mutableListOf(
                 INT64_TYPE,
-                JSONStatement(name = Tokens.ANON_ARG_ID, type = SyntaxType.DECLARATION,
+                JSONStatement(name = ANON_ARG_ID, type = SyntaxType.DECLARATION,
                     components = mutableListOf(
                         INT64_TYPE,
                         JSONStatement(name = "!x", type = SyntaxType.TOKEN)
                     )
                 ),
-                JSONStatement(name = Tokens.ANON_ARG_ID, type = SyntaxType.DECLARATION,
+                JSONStatement(name = ANON_ARG_ID, type = SyntaxType.DECLARATION,
                     components = mutableListOf(
                         INT64_TYPE,
                         JSONStatement(name = "!y", type = SyntaxType.TOKEN)

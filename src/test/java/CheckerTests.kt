@@ -29,6 +29,165 @@ class CheckerTests {
     @Test
     fun inferFromDeclaration()
     {
+        // let func : fun[] := fun(x := 10, arg y := 10) do nothing
+        checkResult(null, """{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "METHOD",
+      "type" : "TYPE",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 12
+      },
+      "components" : [ {
+        "type" : "METHOD"
+      } ]
+    }, {
+      "name" : "!func",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "type" : "METHOD",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 21
+        },
+        "components" : [ {
+          "type" : "DECLARATION",
+          "components" : [ {
+            "name" : "!x",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 25
+            }
+          }, {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "#10",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 1,
+                "lineIndex" : 30
+              }
+            } ]
+          } ]
+        }, {
+          "name" : "ANON_ARG",
+          "type" : "DECLARATION",
+          "components" : [ {
+            "name" : "!y",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 38
+            }
+          }, {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "#10",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 1,
+                "lineIndex" : 43
+              }
+            } ]
+          } ]
+        }, {
+          "type" : "CODE_BLOCK",
+          "components" : [ {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "!nothing",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 1,
+                "lineIndex" : 50
+              }
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}""", "CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE !nothing)); !func; EXPRESSION(TYPE METHOD; (METHOD(TYPE !nothing; DECLARATION(TYPE INT64; !x; EXPRESSION(TYPE INT64; #10)); DECLARATION ANON_ARG; (TYPE INT64; !y; EXPRESSION(TYPE INT64; #10)))); METHOD(TYPE !nothing; DECLARATION(TYPE INT64; !x; EXPRESSION(TYPE INT64; #10)); DECLARATION ANON_ARG; (TYPE INT64; !y; EXPRESSION(TYPE INT64; #10)); CODE_BLOCK(EXPRESSION(TYPE !nothing; !nothing))))))")
+
+        // let func : fun[] := fun(x : int) do nothing
+        checkResult(createExceptions(ConflictingTypeDefinitionException(NULL_LOCATION,"TYPE METHOD; (METHOD(TYPE !nothing))","TYPE METHOD; (METHOD(TYPE !nothing; DECLARATION(TYPE INT64; !x)))")),
+            """{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "METHOD",
+      "type" : "TYPE",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 12
+      },
+      "components" : [ {
+        "type" : "METHOD"
+      } ]
+    }, {
+      "name" : "!func",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "type" : "METHOD",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 21
+        },
+        "components" : [ {
+          "type" : "DECLARATION",
+          "components" : [ {
+            "name" : "INT64",
+            "type" : "TYPE",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 29
+            }
+          }, {
+            "name" : "!x",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 25
+            }
+          } ]
+        }, {
+          "type" : "CODE_BLOCK",
+          "components" : [ {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "!nothing",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 1,
+                "lineIndex" : 37
+              }
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE !nothing)); !func; EXPRESSION(TYPE METHOD; (METHOD(TYPE !nothing; DECLARATION(TYPE INT64; !x))); METHOD(TYPE !nothing; DECLARATION(TYPE INT64; !x); CODE_BLOCK(EXPRESSION(TYPE !nothing; !nothing))))))")
+
         checkResult(null, """{
   "parsed" : true,
   "type" : "CODE_BLOCK",
