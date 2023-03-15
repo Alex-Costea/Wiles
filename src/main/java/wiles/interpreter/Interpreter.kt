@@ -46,6 +46,7 @@ class Interpreter(private val code : String?) {
 
         if(DEBUG)
         {
+            println()
             print("Variables: ")
             newVars.putAll(variableMap.filter{it.key !in defaultInterpreterVars})
             println(newVars.map { it.key + " -> " + it.value})
