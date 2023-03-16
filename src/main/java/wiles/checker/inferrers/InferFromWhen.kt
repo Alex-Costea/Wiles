@@ -1,8 +1,8 @@
 package wiles.checker.inferrers
 
+import wiles.checker.data.CheckerVariableMap
 import wiles.checker.data.InferrerDetails
 import wiles.checker.data.VariableDetails
-import wiles.checker.data.CheckerVariableMap
 import wiles.checker.exceptions.*
 import wiles.checker.statics.InferrerUtils
 import wiles.checker.statics.InferrerUtils.checkIsInitialized
@@ -22,6 +22,9 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
     private fun getFormerTypeMinusLatterType(former: JSONStatement, latter : JSONStatement,
                                              newLocation : TokenLocation) : JSONStatement
     {
+        if(former.name == EITHER_ID && former.components.size==0)
+            throw TypesExhaustedException(newLocation)
+
         // use sub-components
         for(typeName in arrayOf(MUTABLE_ID, LIST_ID)) {
             if (former.name == typeName && latter.name == typeName) {
@@ -33,9 +36,6 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
 
         if(!isFormerSuperTypeOfLatter(former, latter))
             throw ConflictingTypeDefinitionException(latter.getFirstLocation(),latter.toString(),former.toString())
-
-        if(former.name == EITHER_ID && former.components.size==0)
-            throw TypesExhaustedException(newLocation)
 
         if(InferrerUtils.areTypesEquivalent(latter, former))
             return JSONStatement(name = EITHER_ID, type = SyntaxType.TYPE)

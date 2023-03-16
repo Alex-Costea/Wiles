@@ -2,6 +2,7 @@ package wiles.checker.exceptions
 
 import wiles.shared.AbstractCompilationException
 import wiles.shared.TokenLocation
+import wiles.shared.constants.ErrorMessages.UNUSED_EXPRESSION_ERROR
 
 class UnusedExpressionException(location : TokenLocation)
-    : AbstractCompilationException("The result of this expression is never used! Use the \"ignore\" function to ignore it.", location)
+    : AbstractCompilationException(UNUSED_EXPRESSION_ERROR, location)

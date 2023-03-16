@@ -5,6 +5,9 @@ import wiles.interpreter.exceptions.PanicException
 import wiles.interpreter.statics.InterpreterConstants.toIntOrNull
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
+import wiles.shared.constants.ErrorMessages.CANNOT_PERFORM_OPERATION_ERROR
+import wiles.shared.constants.ErrorMessages.CANNOT_REPEAT_NEGATIVE_ERROR
+import wiles.shared.constants.ErrorMessages.INTEGER_TOO_LARGE_FOR_REPEAT_ERROR
 import wiles.shared.constants.Tokens.DIVIDE_ID
 import wiles.shared.constants.Tokens.ELEM_ACCESS_ID
 import wiles.shared.constants.Tokens.EQUALS_ID
@@ -199,8 +202,8 @@ object DoOperation {
 
     private fun repeatString(x : Any?, y : Any?) : Any
     {
-        val times = (y as Long).toIntOrNull() ?: throw PanicException("Integer value too large for repeat!")
-        if(times < 0) throw PanicException("Cannot repeat a text a negative number of times!")
+        val times = (y as Long).toIntOrNull() ?: throw PanicException(INTEGER_TOO_LARGE_FOR_REPEAT_ERROR)
+        if(times < 0) throw PanicException(CANNOT_REPEAT_NEGATIVE_ERROR)
         return (x as String).repeat(times)
     }
 
@@ -219,7 +222,7 @@ object DoOperation {
             val operation = operationNameSplit[0] + "|" + operationNameSplit[1] + "|" + operationNameSplit[2]
             operationMap[operation]?.apply(leftValue, rightValue) ?: throw InternalErrorException()
         }
-        else (operationMap[middle]?:throw InternalErrorException("Cannot perform operation with $left $middle $right"))
-            .apply(leftValue, rightValue)
+        else (operationMap[middle]?:throw InternalErrorException(CANNOT_PERFORM_OPERATION_ERROR
+            .format(left, middle, right))).apply(leftValue, rightValue)
     }
 }

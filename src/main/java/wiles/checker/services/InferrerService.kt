@@ -5,6 +5,8 @@ import wiles.checker.inferrers.*
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType.*
+import wiles.shared.constants.ErrorMessages.IRREGULAR_STATEMENT_ERROR
+import wiles.shared.constants.ErrorMessages.UNKNOWN_SYNTAX_TYPE_ERROR
 
 // Adds inferred type definitions and return types
 // Checks correct declarations/initializations
@@ -21,7 +23,7 @@ class InferrerService(details: InferrerDetails)
     fun getType(): JSONStatement {
         if(statement.components.getOrNull(0)?.type == TYPE)
             return statement.components[0]
-        throw InternalErrorException("Unknown type!")
+        throw InternalErrorException(UNKNOWN_SYNTAX_TYPE_ERROR)
     }
 
 
@@ -49,7 +51,7 @@ class InferrerService(details: InferrerDetails)
             WHILE -> inferFromStatement = InferFromWhile(details)
 
             //should not appear at all
-            null  -> throw InternalErrorException("Invalid statement type")
+            null  -> throw InternalErrorException(IRREGULAR_STATEMENT_ERROR)
 
             //nothing to infer
             BREAK, TOKEN, CONTINUE -> return

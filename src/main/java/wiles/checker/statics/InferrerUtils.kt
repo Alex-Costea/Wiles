@@ -9,6 +9,8 @@ import wiles.shared.SyntaxType
 import wiles.shared.TokenLocation
 import wiles.shared.constants.Chars
 import wiles.shared.constants.Chars.DIGIT_SEPARATOR
+import wiles.shared.constants.ErrorMessages.CANNOT_GET_LIST_ELEMENT_TYPE_ERROR
+import wiles.shared.constants.ErrorMessages.NOT_ONE_TOKEN_ERROR
 import wiles.shared.constants.Predicates
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens
@@ -58,7 +60,7 @@ object InferrerUtils {
                 type = SyntaxType.TYPE,
                 components = variables[name]!!.type.components.map { it.copyRemovingLocation() }.toMutableList())
         }
-        throw InternalErrorException("Not one token!")
+        throw InternalErrorException(NOT_ONE_TOKEN_ERROR)
     }
 
     fun checkTypeIsDefined(type : JSONStatement)
@@ -183,7 +185,7 @@ object InferrerUtils {
             return makeEither(typesList)
         }
 
-        throw InternalErrorException("Couldn't get list's element type")
+        throw InternalErrorException(CANNOT_GET_LIST_ELEMENT_TYPE_ERROR)
     }
 
     private fun containsStopStatement(statement: JSONStatement) : Boolean {

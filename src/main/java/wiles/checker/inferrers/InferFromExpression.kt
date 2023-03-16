@@ -16,6 +16,8 @@ import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
+import wiles.shared.constants.ErrorMessages.IRREGULAR_STATEMENT_ERROR
+import wiles.shared.constants.ErrorMessages.UNKNOWN_SYNTAX_TYPE_ERROR
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.AND_ID
 import wiles.shared.constants.Tokens.APPLY_ID
@@ -145,7 +147,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
                         name = METHOD_ID,
                         components = mutableListOf(newType)))
                 }
-                else -> throw InternalErrorException("Unknown type")
+                else -> throw InternalErrorException(UNKNOWN_SYNTAX_TYPE_ERROR)
             }
             exceptions.addAll(inferrer.exceptions)
         }
@@ -253,7 +255,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
         }
         else if(statement.components.size==4)
             return
-        else throw InternalErrorException("Irregular statement found.")
+        else throw InternalErrorException(IRREGULAR_STATEMENT_ERROR)
     }
 
     companion object {

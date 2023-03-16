@@ -7,7 +7,7 @@ import wiles.parser.exceptions.TokenExpectedException
 import wiles.shared.AbstractCompilationException
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.SyntaxType
-import wiles.shared.constants.ErrorMessages.NOT_ENOUGH_TYPES_EXCEPTION
+import wiles.shared.constants.ErrorMessages.NOT_ENOUGH_TYPES_ERROR
 import wiles.shared.constants.ErrorMessages.TYPE_EXPECTED_ERROR
 import wiles.shared.constants.Predicates.IS_CONTAINED_IN
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
@@ -52,7 +52,7 @@ class TypeDefinitionStatement(context: Context) : AbstractStatement(context) {
                     if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break
                 }
                 if(subtypes.size < (MIN_NR_TYPES[name] ?: Int.MAX_VALUE))
-                    throw TokenExpectedException(NOT_ENOUGH_TYPES_EXCEPTION,location)
+                    throw TokenExpectedException(NOT_ENOUGH_TYPES_ERROR,location)
                 transmitter.expect(tokenOf(BRACKET_END_ID))
             }
             if(name == METHOD_ID) {

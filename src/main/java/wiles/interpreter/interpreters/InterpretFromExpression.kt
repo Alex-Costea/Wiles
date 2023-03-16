@@ -9,6 +9,7 @@ import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Chars.DECIMAL_DELIMITER
+import wiles.shared.constants.ErrorMessages.CANNOT_PERFORM_OPERATION_ERROR
 import wiles.shared.constants.Predicates
 import wiles.shared.constants.StandardLibrary.FALSE_REF
 import wiles.shared.constants.StandardLibrary.NOTHING_REF
@@ -192,8 +193,8 @@ class InterpretFromExpression(statement: JSONStatement, variables: InterpreterVa
                         }
                         catch (ex : ArithmeticException)
                         {
-                            throw PanicException("Cannot perform the operation " +
-                                        "${leftRef.value} ${middle.split("|")[1]} ${rightRef.value}!")
+                            throw PanicException(CANNOT_PERFORM_OPERATION_ERROR.format(
+                                "${leftRef.value}", middle.split("|")[1], "${rightRef.value}"))
 
                         }
                     }

@@ -1,11 +1,8 @@
 package wiles.shared.constants
 
-import wiles.shared.constants.Tokens.TERMINATOR_ID
-import wiles.shared.constants.Tokens.TOKENS_INVERSE
-
 object ErrorMessages {
     const val LINE_SYMBOL = "\n>>> "
-    const val COMPILATION_FAILED_ERROR ="${LINE_SYMBOL}COMPILATION FAILED$LINE_SYMBOL"
+    const val COMPILATION_FAILED_ERROR = "${LINE_SYMBOL}COMPILATION FAILED$LINE_SYMBOL"
     const val TOKEN_EXPECTED_ERROR = "Token is incorrect or missing. Did you mean: \"%s\"?"
     const val IDENTIFIER_EXPECTED_ERROR = "Invalid or missing identifier name."
     const val IDENTIFIER_TOO_LONG_ERROR = "Simple identifier name expected."
@@ -18,9 +15,34 @@ object ErrorMessages {
     const val INVALID_STATEMENT_ERROR = "Invalid statement."
     const val STRING_UNFINISHED_ERROR = "Text unfinished."
     const val STRING_ESCAPE_INVALID_ERROR = "Text is escaped incorrectly."
-    const val NOT_ENOUGH_TYPES_EXCEPTION = "Not enough types have been specified."
-    val END_OF_STATEMENT_EXPECTED_ERROR = "End of statement expected. " +
-            "Please use the ${TOKENS_INVERSE[TERMINATOR_ID]!!} symbol or start a new line."
+    const val NOT_ENOUGH_TYPES_ERROR = "Not enough types have been specified."
+    const val END_OF_STATEMENT_EXPECTED_ERROR = "End of statement expected. " +
+            "Please use the ; symbol or start a new line."
+    const val WRONG_ARGUMENTS_ERROR = "Function cannot be called with these arguments."
+    const val CANNOT_MODIFY_IMMUTABLE_ERROR = "Cannot modify immutable value."
+    const val CONFLICTING_TYPES_ERROR = "Type definition %s is in conflict with inferred type %s."
+    const val TYPE_INFERENCE_FAIL_ERROR = "Type inference failed, due to not enough information being present." +
+            " Please specify the type manually."
+    const val INVALID_LITERAL_ERROR = "This literal is invalid."
+    const val RETURN_NOT_GUARANTEED_ERROR = "Function is not guaranteed to yield a value"
+    const val TYPES_EXHAUSTED_ERROR = "There is no type possible here."
+    const val UNKNOWN_IDENTIFIER_ERROR = "Unknown identifier."
+    const val UNKNOWN_TYPE_ERROR = "Unknown type."
+    const val UNUSED_EXPRESSION_ERROR = "The result of this expression is never used." +
+            " Use the \"ignore\" function to ignore it."
+    const val USED_BEFORE_INITIALIZED_ERROR = "Variable used before being initialized."
+    const val VARIABLE_ALREADY_DECLARED_ERROR = "Variable already declared."
+    const val WRONG_OPERATION_ERROR = "Operation cannot be executed between types %s and %s."
+
+    //Runtime exceptions
+    const val STACK_OVERFLOW_ERROR = "Stack overflow error occurred."
+    const val CANNOT_PERFORM_OPERATION_ERROR = "Cannot perform the operation %s %s %s."
+    const val INTEGER_TOO_LARGE_FOR_REPEAT_ERROR = "Integer value too large for repeat."
+    const val CANNOT_REPEAT_NEGATIVE_ERROR = "Cannot repeat a text a negative number of times."
+    const val CANNOT_READ_INT_ERROR = "Cannot read int value."
+    const val CANNOT_READ_TEXT_ERROR = "Cannot read text value."
+    const val CANNOT_READ_RATIONAL_ERROR = "Cannot read rational value."
+    const val CANNOT_READ_TRUTH_ERROR = "Cannot read truth value."
 
     //Internal errors
     const val INTERNAL_ERROR = "An internal error occurred. "
@@ -31,4 +53,10 @@ object ErrorMessages {
     const val FROZEN_ERROR = "Object state cannot be edited after being frozen."
     const val ERROR_MESSAGE_EXPECTED_ERROR = "An error message is expected."
     const val WHEN_REMOVE_EXPECTED_ERROR = "When to remove token parameter expected."
+    const val NOT_ONE_TOKEN_ERROR = "Not one token."
+    const val UNKNOWN_SYNTAX_TYPE_ERROR = "Unknown syntax type."
+    const val IRREGULAR_STATEMENT_ERROR = "Irregular statement found."
+    const val CANNOT_GET_LIST_ELEMENT_TYPE_ERROR = "Couldn't get list's element type."
+    const val RED_TEXT_START_ERROR = "\u001B[31m"
+    const val RED_TEXT_END_ERROR = "\u001B[0m"
 }

@@ -6,6 +6,10 @@ import wiles.checker.data.VariableDetails
 import wiles.interpreter.data.InterpreterVariableMap
 import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.exceptions.PanicException
+import wiles.shared.constants.ErrorMessages.CANNOT_READ_INT_ERROR
+import wiles.shared.constants.ErrorMessages.CANNOT_READ_RATIONAL_ERROR
+import wiles.shared.constants.ErrorMessages.CANNOT_READ_TEXT_ERROR
+import wiles.shared.constants.ErrorMessages.CANNOT_READ_TRUTH_ERROR
 import wiles.shared.constants.Tokens.FALSE_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.TRUE_ID
@@ -120,25 +124,25 @@ object StandardLibrary {
 
     private val READ_INT_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
         if(!Checker.scanner.hasNextLong())
-            throw PanicException("Cannot read int value!")
+            throw PanicException(CANNOT_READ_INT_ERROR)
         ObjectDetails(Checker.scanner.nextLong(), INT64_TYPE)
     }, defaultCheckerVars[READ_INT]!!.type)
 
     private val READ_LINE_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
         if(!Checker.scanner.hasNextLine())
-            throw PanicException("Cannot read text value!")
+            throw PanicException(CANNOT_READ_TEXT_ERROR)
         ObjectDetails(Checker.scanner.nextLine(), STRING_TYPE)
     }, defaultCheckerVars[READ_LINE]!!.type)
 
     private val READ_RATIONAL_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
         if(!Checker.scanner.hasNextDouble())
-            throw PanicException("Cannot read rational value!")
+            throw PanicException(CANNOT_READ_RATIONAL_ERROR)
         ObjectDetails(Checker.scanner.nextDouble(), DOUBLE_TYPE)
     }, defaultCheckerVars[READ_RATIONAL]!!.type)
 
     private val READ_TRUTH_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
         if(!Checker.scanner.hasNextBoolean())
-            throw PanicException("Cannot read truth value!")
+            throw PanicException(CANNOT_READ_TRUTH_ERROR)
         ObjectDetails(Checker.scanner.nextBoolean(), BOOLEAN_TYPE)
     }, defaultCheckerVars[READ_TRUTH]!!.type)
 

@@ -9,6 +9,8 @@ import wiles.shared.constants.CommandLineArguments.COMPILE_COMMAND
 import wiles.shared.constants.CommandLineArguments.DEBUG_COMMAND
 import wiles.shared.constants.CommandLineArguments.NO_INPUT_FILE_COMMAND
 import wiles.shared.constants.CommandLineArguments.RUN_COMMAND
+import wiles.shared.constants.ErrorMessages.RED_TEXT_END_ERROR
+import wiles.shared.constants.ErrorMessages.RED_TEXT_START_ERROR
 import wiles.shared.constants.Settings.OBJECT_FILE
 import java.io.FileWriter
 import java.io.IOException
@@ -23,7 +25,7 @@ object Main {
     private fun printExceptions(exceptions : CompilationExceptionsCollection, input : String)
     {
         if (exceptions.size > 0)
-            System.err.println("\u001B[31m"+exceptions.getExceptionsString(input)+"\u001B[0m")
+            System.err.println(RED_TEXT_START_ERROR+exceptions.getExceptionsString(input)+RED_TEXT_END_ERROR)
     }
 
     @Throws(IOException::class)
