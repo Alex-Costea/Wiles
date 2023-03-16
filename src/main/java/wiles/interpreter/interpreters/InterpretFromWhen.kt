@@ -1,6 +1,5 @@
 package wiles.interpreter.interpreters
 
-import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.data.InterpreterVariableMap
 import wiles.shared.JSONStatement
 import wiles.shared.constants.Tokens.ELSE_ID
@@ -19,11 +18,11 @@ class InterpretFromWhen(statement: JSONStatement, variables: InterpreterVariable
             val expression = components.removeFirst()
             if(type.name == ELSE_ID)
             {
-                variables[name] = ObjectDetails(objectDetails!!.value,type.components[0])
+                objectDetails!!.type = type.components[0]
             }
             else if(TypeConstants.isFormerSuperTypeOfLatter(type,objectDetails!!.type))
             {
-                variables[name] = ObjectDetails(objectDetails.value,type)
+                objectDetails.type = type
             }
             else continue
 
