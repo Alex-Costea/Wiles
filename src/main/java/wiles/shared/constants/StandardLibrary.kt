@@ -31,6 +31,7 @@ import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_STRING_TYPE
 import wiles.shared.constants.TypeConstants.STRING_SIZE_TYPE
 import wiles.shared.constants.TypeConstants.STRING_TYPE
 import wiles.shared.constants.TypeConstants.WRITELINE_TYPE
+import wiles.shared.constants.TypeConstants.WRITE_TYPE
 import java.util.function.Function
 
 object StandardLibrary {
@@ -57,7 +58,7 @@ object StandardLibrary {
             Pair(TRUE_ID, VariableDetails(BOOLEAN_TYPE)),
             Pair(FALSE_ID, VariableDetails(BOOLEAN_TYPE)),
             Pair(NOTHING_ID, VariableDetails(NOTHING_TYPE)),
-            Pair(WRITE, VariableDetails(WRITELINE_TYPE)),
+            Pair(WRITE, VariableDetails(WRITE_TYPE)),
             Pair(WRITELINE, VariableDetails(WRITELINE_TYPE)),
             Pair(PANIC, VariableDetails(PANIC_TYPE)),
             Pair(IGNORE, VariableDetails(IGNORE_TYPE)),
@@ -82,13 +83,13 @@ object StandardLibrary {
     private val NAN_REF = ObjectDetails(Double.NaN, defaultCheckerVars[NAN]!!.type)
 
     private val WRITE_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
-        val value = it["!text"]!!
+        val value = it["!text"]?:return@Function NOTHING_REF
         print(value)
         NOTHING_REF
     }, defaultCheckerVars[WRITE]!!.type)
 
     private val WRITELINE_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
-        val value = it["!text"]!!
+        val value = it["!text"]?:""
         println(value)
         NOTHING_REF
     }, defaultCheckerVars[WRITELINE]!!.type)

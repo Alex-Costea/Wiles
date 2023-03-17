@@ -5,6 +5,7 @@ import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.ANON_ARG_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
+import wiles.shared.constants.Tokens.STRING_START
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.METHOD_CALL_ID
 import wiles.shared.constants.Types.STRING_ID
@@ -264,6 +265,19 @@ object TypeConstants {
     val MODIFY_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.MODIFY_ID)
     val MUTABLE_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.MUTABLE_ID)
 
+    val WRITE_TYPE = JSONStatement(name = Tokens.METHOD_ID, type = SyntaxType.TYPE,
+        components = mutableListOf(JSONStatement(type = SyntaxType.METHOD,
+            components = mutableListOf(
+                JSONStatement(name = NOTHING_ID, type = SyntaxType.TYPE),
+                JSONStatement(name = ANON_ARG_ID, type = SyntaxType.DECLARATION,
+                    components = mutableListOf(
+                        JSONStatement(name = ANYTHING_ID, type = SyntaxType.TYPE),
+                        JSONStatement(name = "!text", type = SyntaxType.TOKEN),
+                    )
+                ))
+        ))
+    )
+
     val WRITELINE_TYPE = JSONStatement(name = Tokens.METHOD_ID, type = SyntaxType.TYPE,
         components = mutableListOf(JSONStatement(type = SyntaxType.METHOD,
             components = mutableListOf(
@@ -271,7 +285,11 @@ object TypeConstants {
                 JSONStatement(name = ANON_ARG_ID, type = SyntaxType.DECLARATION,
                     components = mutableListOf(
                         JSONStatement(name = ANYTHING_ID, type = SyntaxType.TYPE),
-                        JSONStatement(name = "!text", type = SyntaxType.TOKEN)
+                        JSONStatement(name = "!text", type = SyntaxType.TOKEN),
+                        JSONStatement(type = SyntaxType.EXPRESSION, components = mutableListOf(
+                            JSONStatement(name = STRING_ID, type =  SyntaxType.TYPE),
+                            JSONStatement(name = STRING_START, type =  SyntaxType.TOKEN),
+                        ))
                     )
                 ))
         ))
