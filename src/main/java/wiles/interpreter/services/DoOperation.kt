@@ -167,6 +167,22 @@ object DoOperation {
         Pair("${STRING_ID}|${NOT_EQUAL_ID}|${STRING_ID}", createFunction({ x : Any?, y : Any? ->
             x != y}, BOOLEAN_TYPE)),
 
+        //Not equals nothing
+        Pair("${NOTHING_ID}|${NOT_EQUAL_ID}|${NOTHING_ID}", createFunction({ _: Any?, _: Any? ->
+            FALSE_REF}, BOOLEAN_TYPE)),
+        Pair("${INT64_ID}|${NOT_EQUAL_ID}|${NOTHING_ID}", createFunction({ _: Any?, _: Any? ->
+            TRUE_REF}, BOOLEAN_TYPE)),
+        Pair("${NOTHING_ID}|${NOT_EQUAL_ID}|${INT64_ID}", createFunction({ _: Any?, _: Any? ->
+            TRUE_REF}, BOOLEAN_TYPE)),
+        Pair("${BOOLEAN_ID}|${NOT_EQUAL_ID}|${NOTHING_ID}", createFunction({ _: Any?, _: Any? ->
+            TRUE_REF}, BOOLEAN_TYPE)),
+        Pair("${NOTHING_ID}|${NOT_EQUAL_ID}|${BOOLEAN_ID}", createFunction({ _: Any?, _: Any? ->
+            TRUE_REF}, BOOLEAN_TYPE)),
+        Pair("${STRING_ID}|${NOT_EQUAL_ID}|${NOTHING_ID}", createFunction({ _: Any?, _: Any? ->
+            TRUE_REF}, BOOLEAN_TYPE)),
+        Pair("${NOTHING_ID}|${NOT_EQUAL_ID}|${STRING_ID}", createFunction({ _: Any?, _: Any? ->
+            TRUE_REF}, BOOLEAN_TYPE)),
+
         //Larger
         Pair("${INT64_ID}|${LARGER_ID}|${INT64_ID}", createFunction({ x : Any?, y : Any? ->
             (x as Long) > (y as Long)}, BOOLEAN_TYPE)),
