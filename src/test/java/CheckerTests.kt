@@ -748,7 +748,7 @@ class CheckerTests {
           "lineIndex" : 10
         }
       }, {
-        "name" : "EQUALS",
+        "name" : "PLUS",
         "type" : "TOKEN",
         "location" : {
           "line" : 2,
@@ -764,7 +764,7 @@ class CheckerTests {
       } ]
     } ]
   } ]
-}""", "CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE INT64; TYPE !nothing); !a; EXPRESSION(TYPE INT64; #2)); DECLARATION(!b; EXPRESSION(!a; EQUALS; #3)))")
+}""", "CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE INT64; TYPE !nothing); !a; EXPRESSION(TYPE INT64; #2)); DECLARATION(!b; EXPRESSION(!a; PLUS; #3)))")
 
     checkResult(null,
         """{

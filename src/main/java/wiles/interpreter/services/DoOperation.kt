@@ -8,6 +8,8 @@ import wiles.shared.JSONStatement
 import wiles.shared.constants.ErrorMessages.CANNOT_PERFORM_OPERATION_ERROR
 import wiles.shared.constants.ErrorMessages.CANNOT_REPEAT_NEGATIVE_ERROR
 import wiles.shared.constants.ErrorMessages.INTEGER_TOO_LARGE_FOR_REPEAT_ERROR
+import wiles.shared.constants.StandardLibrary.FALSE_REF
+import wiles.shared.constants.StandardLibrary.TRUE_REF
 import wiles.shared.constants.Tokens.DIVIDE_ID
 import wiles.shared.constants.Tokens.ELEM_ACCESS_ID
 import wiles.shared.constants.Tokens.EQUALS_ID
@@ -135,19 +137,51 @@ object DoOperation {
 
         //Equals
         Pair("${INT64_ID}|${EQUALS_ID}|${INT64_ID}", createFunction({ x : Any?, y : Any? ->
-            x == y}, INT64_TYPE)),
+            x == y}, BOOLEAN_TYPE)),
         Pair("${BOOLEAN_ID}|${EQUALS_ID}|${BOOLEAN_ID}", createFunction({ x : Any?, y : Any? ->
             x == y}, BOOLEAN_TYPE)),
         Pair("${STRING_ID}|${EQUALS_ID}|${STRING_ID}", createFunction({ x : Any?, y : Any? ->
-            x == y}, STRING_TYPE)),
+            x == y}, BOOLEAN_TYPE)),
+
+        //Equals nothing
+        Pair("${NOTHING_ID}|${EQUALS_ID}|${NOTHING_ID}", createFunction({ _: Any?, _: Any? ->
+            TRUE_REF}, BOOLEAN_TYPE)),
+        Pair("${INT64_ID}|${EQUALS_ID}|${NOTHING_ID}", createFunction({ _: Any?, _: Any? ->
+            FALSE_REF}, BOOLEAN_TYPE)),
+        Pair("${NOTHING_ID}|${EQUALS_ID}|${INT64_ID}", createFunction({ _: Any?, _: Any? ->
+            FALSE_REF}, BOOLEAN_TYPE)),
+        Pair("${BOOLEAN_ID}|${EQUALS_ID}|${NOTHING_ID}", createFunction({ _: Any?, _: Any? ->
+            FALSE_REF}, BOOLEAN_TYPE)),
+        Pair("${NOTHING_ID}|${EQUALS_ID}|${BOOLEAN_ID}", createFunction({ _: Any?, _: Any? ->
+            FALSE_REF}, BOOLEAN_TYPE)),
+        Pair("${STRING_ID}|${EQUALS_ID}|${NOTHING_ID}", createFunction({ _: Any?, _: Any? ->
+            FALSE_REF}, BOOLEAN_TYPE)),
+        Pair("${NOTHING_ID}|${EQUALS_ID}|${STRING_ID}", createFunction({ _: Any?, _: Any? ->
+            FALSE_REF}, BOOLEAN_TYPE)),
 
         //Not equals
         Pair("${INT64_ID}|${NOT_EQUAL_ID}|${INT64_ID}", createFunction({ x : Any?, y : Any? ->
-            x != y}, INT64_TYPE)),
+            x != y}, BOOLEAN_TYPE)),
         Pair("${BOOLEAN_ID}|${NOT_EQUAL_ID}|${BOOLEAN_ID}", createFunction({ x : Any?, y : Any? ->
             x != y}, BOOLEAN_TYPE)),
         Pair("${STRING_ID}|${NOT_EQUAL_ID}|${STRING_ID}", createFunction({ x : Any?, y : Any? ->
-            x != y}, STRING_TYPE)),
+            x != y}, BOOLEAN_TYPE)),
+
+        //Not equals nothing
+        Pair("${NOTHING_ID}|${NOT_EQUAL_ID}|${NOTHING_ID}", createFunction({ _: Any?, _: Any? ->
+            FALSE_REF}, BOOLEAN_TYPE)),
+        Pair("${INT64_ID}|${NOT_EQUAL_ID}|${NOTHING_ID}", createFunction({ _: Any?, _: Any? ->
+            TRUE_REF}, BOOLEAN_TYPE)),
+        Pair("${NOTHING_ID}|${NOT_EQUAL_ID}|${INT64_ID}", createFunction({ _: Any?, _: Any? ->
+            TRUE_REF}, BOOLEAN_TYPE)),
+        Pair("${BOOLEAN_ID}|${NOT_EQUAL_ID}|${NOTHING_ID}", createFunction({ _: Any?, _: Any? ->
+            TRUE_REF}, BOOLEAN_TYPE)),
+        Pair("${NOTHING_ID}|${NOT_EQUAL_ID}|${BOOLEAN_ID}", createFunction({ _: Any?, _: Any? ->
+            TRUE_REF}, BOOLEAN_TYPE)),
+        Pair("${STRING_ID}|${NOT_EQUAL_ID}|${NOTHING_ID}", createFunction({ _: Any?, _: Any? ->
+            TRUE_REF}, BOOLEAN_TYPE)),
+        Pair("${NOTHING_ID}|${NOT_EQUAL_ID}|${STRING_ID}", createFunction({ _: Any?, _: Any? ->
+            TRUE_REF}, BOOLEAN_TYPE)),
 
         //Larger
         Pair("${INT64_ID}|${LARGER_ID}|${INT64_ID}", createFunction({ x : Any?, y : Any? ->
