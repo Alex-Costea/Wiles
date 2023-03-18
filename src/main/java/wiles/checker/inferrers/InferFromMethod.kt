@@ -108,7 +108,6 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
         }
 
         createGenericType(statement, genericTypes)
-        //TODO: add T to variables
 
         variables.putAll(declarationVariables.filter { it.key !in additionalVars })
 

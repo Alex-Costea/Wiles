@@ -13,7 +13,7 @@ import wiles.shared.constants.Types.LIST_ID
 
 class InferFromType(details: InferrerDetails,
                     private val genericTypes : MutableMap<String,JSONStatement> = mutableMapOf(),
-                    private val isTopMostType : Boolean = true)
+                    private val isTopMostType : Boolean = false)
     : InferFromStatement(details) {
     override fun infer() {
         if(statement.name == GENERIC_ID)
@@ -46,6 +46,5 @@ class InferFromType(details: InferrerDetails,
         }
         if(isTopMostType)
             createGenericType(statement,genericTypes)
-        //TODO: add T to variables
     }
 }

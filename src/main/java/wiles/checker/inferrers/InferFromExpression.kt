@@ -10,6 +10,7 @@ import wiles.checker.statics.InferrerUtils
 import wiles.checker.statics.InferrerUtils.addIfNecessary
 import wiles.checker.statics.InferrerUtils.createComponents
 import wiles.checker.statics.InferrerUtils.inferTypeFromLiteral
+import wiles.checker.statics.InferrerUtils.specifyGenericTypesForFunction
 import wiles.checker.statics.InferrerUtils.unbox
 import wiles.checker.statics.SimpleTypeGenerator.getSimpleTypes
 import wiles.shared.CompilationExceptionsCollection
@@ -65,13 +66,16 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
         {
             for(newRight in rightComponents)
             {
-                val unboxedNewLeft = unbox(newLeft)
+                var unboxedNewLeft = unbox(newLeft)
                 val type = getSimpleTypes(Triple(newLeft, middle, newRight)) ?:
                     if(unboxedNewLeft.name == METHOD_ID &&
                             middle == TypeConstants.APPLY_OPERATION &&
                             newRight.name == METHOD_CALL_ID) {
+                        val genericTypes = mutableMapOf<String, JSONStatement>()
                         val result = InferrerUtils.getFunctionArguments(unboxedNewLeft, newRight,
-                            middle.getFirstLocation())
+                            middle.getFirstLocation(), genericTypes)
+                        unboxedNewLeft = unboxedNewLeft.copy()
+                        specifyGenericTypesForFunction(unboxedNewLeft, genericTypes)
                         val newResult = result.map {
                             if(it.value.second)
                                 JSONStatement(type = SyntaxType.EXPRESSION,

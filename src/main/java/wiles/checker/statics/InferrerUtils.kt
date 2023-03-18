@@ -104,7 +104,23 @@ object InferrerUtils {
             components = types.map { it.copyRemovingLocation() }.toMutableList())
     }
 
-    fun getFunctionArguments(methodType : JSONStatement, methodCallType : JSONStatement, location: TokenLocation)
+    fun specifyGenericTypesForFunction(statement : JSONStatement, genericTypes : MutableMap<String, JSONStatement>)
+    {
+        if(statement.type == SyntaxType.TYPE && statement.name == GENERIC_ID)
+        {
+            val name = statement.components[0].name
+            if(genericTypes.containsKey(name))
+            {
+                statement.components[1] = genericTypes[name]!!
+            }
+            return
+        }
+        for(component in statement.components)
+            specifyGenericTypesForFunction(component, genericTypes)
+    }
+
+    fun getFunctionArguments(methodType : JSONStatement, methodCallType : JSONStatement,
+                             location: TokenLocation, genericTypes : MutableMap<String, JSONStatement>)
         : Map<String,Pair<JSONStatement,Boolean>>
     {
         // statement, does it need name addition
@@ -147,6 +163,10 @@ object InferrerUtils {
             if(isFormerSuperTypeOfLatter(supertype = superType, subtype = subType)) {
                 namedArgsInMethod.remove(name)
                 unnamedArgsInMethod.remove(name)
+                if(superType.name == GENERIC_ID)
+                {
+                    genericTypes[superType.components[0].name] = subType
+                }
             }
             else throw CannotCallMethodException(location)
         }
@@ -168,6 +188,13 @@ object InferrerUtils {
 
             if(!isFormerSuperTypeOfLatter(superType,subType))
                 throw CannotCallMethodException(location)
+            else
+            {
+                if(superType.name == GENERIC_ID)
+                {
+                    genericTypes[superType.components[0].name] = subType
+                }
+            }
         }
 
         if(unnamedArgsInMethodList.any { !it.component2().second })

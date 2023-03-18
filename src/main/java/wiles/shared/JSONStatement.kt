@@ -45,4 +45,10 @@ class JSONStatement(
         return JSONStatement(name = name,type = type, parsed = parsed,
             components = components.map { it.copyRemovingLocation() }.toMutableList())
     }
+
+    fun copy() : JSONStatement
+    {
+        return JSONStatement(name = name,type = type, parsed = parsed, location = location,
+            components = components.map { it.copy() }.toMutableList())
+    }
 }
