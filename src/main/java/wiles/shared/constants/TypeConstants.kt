@@ -26,10 +26,11 @@ object TypeConstants {
             && isFormerSuperTypeOfLatter(supertype.components[1],subtype.components[1]))
             return true
 
-        else if(supertype.name == GENERIC_ID && isFormerSuperTypeOfLatter(supertype.components[1],subtype)){
+        if(supertype.name == GENERIC_ID && isFormerSuperTypeOfLatter(supertype.components[1],subtype)){
             val genName = supertype.components[0].name
             genericTypes[genName] = subtype
-            return !unboxGenerics
+            if(unboxGenerics)
+                return true
         }
 
         else if(supertype.name == ANYTHING_ID)
