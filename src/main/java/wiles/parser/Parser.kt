@@ -23,7 +23,7 @@ class Parser(content : String?) {
     private var results : CodeBlockStatement
     val input = content?:loadFile(filename)
     lateinit var json : String
-    var resourceLineLength = 0
+    var additionalLines = 0
 
     init{
         val tokens = sourceToTokens(input)
@@ -80,11 +80,11 @@ class Parser(content : String?) {
         val classloader = Thread.currentThread().contextClassLoader
         val input: String
         try {
-            classloader.getResourceAsStream("StandardLibrary.wiles").use { inputStream ->
+            classloader.getResourceAsStream("additional_code.wiles").use { inputStream ->
                 Objects.requireNonNull(inputStream)
                 input = BufferedReader(InputStreamReader(inputStream!!))
                     .lines().collect(Collectors.joining("\n"))
-                resourceLineLength=input.count { it == '\n' }
+                additionalLines=input.count { it == '\n' }
                 return input
             }
         } catch (ex: NullPointerException) {
@@ -95,7 +95,7 @@ class Parser(content : String?) {
     }
 
     private fun sourceToTokens(input: String): List<Token> {
-        val converter = wiles.parser.converters.InputToTokensConverter(input,resourceLineLength)
+        val converter = wiles.parser.converters.InputToTokensConverter(input,additionalLines)
         val tokens = converter.convert()
         exceptions.addAll(converter.exceptions)
         return tokens

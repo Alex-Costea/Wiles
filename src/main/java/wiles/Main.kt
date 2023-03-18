@@ -22,10 +22,11 @@ object Main {
     var DEBUG = false
     lateinit var filename : String
 
-    private fun printExceptions(exceptions: CompilationExceptionsCollection, input: String, resourceLineLength: Int)
+    private fun printExceptions(exceptions: CompilationExceptionsCollection, input: String, additionalLines: Int)
     {
         if (exceptions.size > 0)
-            System.err.println(RED_TEXT_START_ERROR+exceptions.getExceptionsString(input,resourceLineLength)+RED_TEXT_END_ERROR)
+            System.err.println(RED_TEXT_START_ERROR+exceptions.getExceptionsString(input,additionalLines)
+                    +RED_TEXT_END_ERROR)
     }
 
     @Throws(IOException::class)
@@ -57,7 +58,7 @@ object Main {
             }
 
             if (exceptions.isNotEmpty()) {
-                printExceptions(exceptions, parser.input, parser.resourceLineLength)
+                printExceptions(exceptions, parser.input, parser.additionalLines)
                 return
             }
 
@@ -75,7 +76,7 @@ object Main {
                 writer.close()
             }
 
-            printExceptions(exceptions, parser.input, parser.resourceLineLength)
+            printExceptions(exceptions, parser.input, parser.additionalLines)
             finalCode = checker.code.toString()
 
             interpreterCode = checker.codeAsJSONString

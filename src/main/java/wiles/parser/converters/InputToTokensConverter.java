@@ -30,9 +30,9 @@ public class InputToTokensConverter {
         arrayChars = input.toCharArray();
     }
 
-    public InputToTokensConverter(@NotNull String input, int standardLibLine) {
+    public InputToTokensConverter(@NotNull String input, int additionalLines) {
         arrayChars = input.toCharArray();
-        line -= standardLibLine;
+        line -= additionalLines;
     }
 
     @NotNull
