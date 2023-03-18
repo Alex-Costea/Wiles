@@ -102,6 +102,9 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
         val inferrer = InferrerService(InferrerDetails(statement.components.last(), variables, exceptions, additionalVars))
         inferrer.infer()
 
+        if(exceptions.isNotEmpty())
+            return
+
         findReturnPoints(statement.components.last())
 
         val inferredType = inferredType
