@@ -70,6 +70,10 @@ object InferrerUtils {
         {
             return
         }
+        else if(type.type == SyntaxType.CODE_BLOCK)
+        {
+            return
+        }
         else if(typeNames.containsKey(type.name))
         {
             val newType = typeNames[type.name]!!
