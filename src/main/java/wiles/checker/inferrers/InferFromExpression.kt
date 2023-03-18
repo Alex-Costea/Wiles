@@ -11,6 +11,7 @@ import wiles.checker.statics.InferrerUtils.addIfNecessary
 import wiles.checker.statics.InferrerUtils.createComponents
 import wiles.checker.statics.InferrerUtils.inferTypeFromLiteral
 import wiles.checker.statics.InferrerUtils.specifyGenericTypesForFunction
+import wiles.checker.statics.InferrerUtils.unGenerify
 import wiles.checker.statics.InferrerUtils.unbox
 import wiles.checker.statics.SimpleTypeGenerator.getSimpleTypes
 import wiles.shared.CompilationExceptionsCollection
@@ -86,13 +87,11 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
                                     ))
                             else it.value.first
                         }.toMutableList()
-
                         //set parameters in method call
                         newRight.components[0].components = newResult
 
                         //return
-                        unboxedNewLeft.components[0].components[0]
-
+                        unGenerify(unboxedNewLeft.components[0].components[0])
                     } else null
 
                 if(type != null) {

@@ -123,6 +123,19 @@ object InferrerUtils {
             specifyGenericTypesForFunction(component, genericTypes)
     }
 
+    fun unGenerify(statement : JSONStatement) : JSONStatement
+    {
+        if(statement.type == SyntaxType.TYPE && statement.name == GENERIC_ID)
+        {
+            statement.name = statement.components[1].name
+            statement.location = statement.components[1].location
+            statement.components = statement.components[1].components
+        }
+        for(component in statement.components)
+            unGenerify(component)
+        return statement
+    }
+
     fun getFunctionArguments(methodType : JSONStatement, methodCallType : JSONStatement,
                              location: TokenLocation, genericTypes : MutableMap<String, JSONStatement>)
         : Map<String,Pair<JSONStatement,Boolean>>

@@ -7,6 +7,7 @@ import wiles.checker.exceptions.InferenceFailException
 import wiles.checker.exceptions.ReturnNotGuaranteedException
 import wiles.checker.services.InferrerService
 import wiles.checker.statics.InferrerUtils.createGenericType
+import wiles.checker.statics.InferrerUtils.unGenerify
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.StandardLibrary
@@ -108,6 +109,14 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
         }
 
         createGenericType(statement, genericTypes)
+
+        for(component in declarationVariables) {
+            if(component.key !in variables) {
+                val cloneValue = component.value.type.copy()
+                component.value.type = cloneValue
+                unGenerify(component.value.type)
+            }
+        }
 
         variables.putAll(declarationVariables.filter { it.key !in additionalVars })
 
