@@ -156,7 +156,7 @@ object InferrerUtils {
 
         //Create method arguments
         val namedArgsInMethod = hashMapOf<String,Pair<JSONStatement,Boolean>>()
-        val unnamedArgsInMethod = hashMapOf<String,Pair<JSONStatement,Boolean>>()
+        val unnamedArgsInMethod = linkedMapOf<String,Pair<JSONStatement,Boolean>>()
         for(component in methodComponents)
         {
             if(!component.name.contains( ANON_ARG_ID))
