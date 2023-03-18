@@ -19,7 +19,9 @@ object TypeConstants {
         if(supertype.toString() == subtype.toString())
             return true
 
-        if(supertype.name == GENERIC_ID && isFormerSuperTypeOfLatter(supertype.components[1],subtype))
+        if(supertype.name == GENERIC_ID && subtype.name == GENERIC_ID
+            && supertype.components[0].name == subtype.components[0].name
+            && isFormerSuperTypeOfLatter(supertype.components[1],subtype.components[1]))
             return true
 
         if(supertype.name == ANYTHING_ID)
