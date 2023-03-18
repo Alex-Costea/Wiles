@@ -13,9 +13,12 @@ import wiles.shared.constants.Types.STRING_ID
 
 object TypeConstants {
 
-    fun isFormerSuperTypeOfLatter(supertype : JSONStatement, subtype : JSONStatement,
-        unboxGenerics : Boolean = true, genericTypes : MutableMap<String, JSONStatement> = mutableMapOf()) : Boolean
-    {
+    fun isFormerSuperTypeOfLatter(
+        supertype : JSONStatement, subtype : JSONStatement,
+        unboxGenerics : Boolean = true, //should generics match?
+        genericTypes : MutableMap<String, JSONStatement> = mutableMapOf(),
+        matchGenerics : Boolean = false //used when generics are matched with types
+    ): Boolean {
         assert(supertype.type == SyntaxType.TYPE)
         assert(subtype.type == SyntaxType.TYPE)
         if(supertype.toString() == subtype.toString())
@@ -111,13 +114,16 @@ object TypeConstants {
 
         //TODO: generics support
         else if(supertype.name == Tokens.METHOD_ID && subtype.name == Tokens.METHOD_ID)
-            return checkMethodIsSubtype(supertype, subtype, genericTypes)
+            return checkMethodIsSubtype(supertype, subtype, genericTypes, matchGenerics)
 
         return false
     }
 
-    private fun checkMethodIsSubtype(supertype : JSONStatement, subtype: JSONStatement,
-                                     genericTypes : MutableMap<String, JSONStatement>) : Boolean
+    private fun checkMethodIsSubtype(
+        supertype: JSONStatement, subtype: JSONStatement,
+        genericTypes: MutableMap<String, JSONStatement>,
+        matchGenerics: Boolean
+    ) : Boolean
     {
         val supertypeComponents = supertype.components[0].components.toMutableList()
         val subtypeComponents = subtype.components[0].components.toMutableList()
@@ -130,11 +136,13 @@ object TypeConstants {
             subtypeComponents[0]
         else NOTHING_TYPE
 
-        if(!isFormerSuperTypeOfLatter(supertypeReturnType,subtypeReturnType, unboxGenerics = false, genericTypes))
+        if(!isFormerSuperTypeOfLatter(supertypeReturnType,subtypeReturnType,
+                unboxGenerics = matchGenerics, genericTypes))
             return false
 
-        if(matchMethodComponentList(subtypeComponents,supertypeComponents,false, genericTypes) &&
-            matchMethodComponentList(supertypeComponents,subtypeComponents,true, genericTypes)
+        if(matchMethodComponentList(subtypeComponents,supertypeComponents,false, genericTypes, matchGenerics)
+            && matchMethodComponentList(supertypeComponents,subtypeComponents,true, genericTypes,
+                matchGenerics)
             && checkUnnamedArgsInSameOrder(supertypeComponents,subtypeComponents))
             return true
 
@@ -186,7 +194,8 @@ object TypeConstants {
     private fun matchMethodComponentList(
         list1: List<JSONStatement>, list2: List<JSONStatement>,
         isSuperType: Boolean,
-        genericTypes: MutableMap<String, JSONStatement>
+        genericTypes: MutableMap<String, JSONStatement>,
+        matchGenerics: Boolean
     ) : Boolean
     {
         for (component1 in list1) {
@@ -205,11 +214,11 @@ object TypeConstants {
                     if(defaultValueMatches) {
                         if(isSuperType) {
                             if (isFormerSuperTypeOfLatter(component1.components[0], component2.components[0],
-                                    unboxGenerics = false, genericTypes))
+                                    unboxGenerics = matchGenerics, genericTypes))
                                 matchFound = true
                         }
                         else if(isFormerSuperTypeOfLatter(component2.components[0], component1.components[0],
-                                unboxGenerics = false, genericTypes))
+                                unboxGenerics = matchGenerics, genericTypes))
                             matchFound = true
                     }
                 }

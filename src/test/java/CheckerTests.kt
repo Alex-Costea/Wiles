@@ -6063,6 +6063,202 @@ class CheckerTests {
     } ]
   } ]
 }""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing))); DECLARATION ANON_ARG; (TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing))); !list); DECLARATION ANON_ARG; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem))); !add_func; EXPRESSION(TYPE METHOD; (METHOD(TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing))); DECLARATION ANON_ARG; (TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing))); !list); DECLARATION ANON_ARG; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem))); METHOD(TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing))); DECLARATION ANON_ARG; (TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing))); !list); DECLARATION ANON_ARG; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem); CODE_BLOCK(RETURN(EXPRESSION(TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing))); !list; LIST|PLUS|LIST; LIST(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); EXPRESSION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem)))))))); EXPRESSION(TYPE !nothing; !writeline; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!text; ASSIGN; EXPRESSION(TYPE LIST; (TYPE GENERIC; (!T|1; TYPE INT64)); !add_func; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE INT64; #3)); EXPRESSION(!list; ASSIGN; EXPRESSION(TYPE LIST; (TYPE INT64); LIST(TYPE INT64; EXPRESSION(TYPE INT64; #1); EXPRESSION(TYPE INT64; #2))))))))))")
+
+    checkResult(null,"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "!run_func",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "type" : "METHOD",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 17
+        },
+        "components" : [ {
+          "name" : "!T",
+          "type" : "TYPE",
+          "location" : {
+            "line" : 1,
+            "lineIndex" : 58
+          }
+        }, {
+          "name" : "ANON_ARG",
+          "type" : "DECLARATION",
+          "components" : [ {
+            "name" : "METHOD",
+            "type" : "TYPE",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 32
+            },
+            "components" : [ {
+              "type" : "METHOD",
+              "components" : [ {
+                "name" : "GENERIC",
+                "type" : "TYPE",
+                "location" : {
+                  "line" : 1,
+                  "lineIndex" : 38
+                },
+                "components" : [ {
+                  "name" : "!T",
+                  "type" : "TOKEN",
+                  "location" : {
+                    "line" : 1,
+                    "lineIndex" : 51
+                  }
+                }, {
+                  "name" : "EITHER",
+                  "type" : "TYPE",
+                  "location" : {
+                    "line" : 1,
+                    "lineIndex" : 38
+                  },
+                  "components" : [ {
+                    "name" : "ANYTHING",
+                    "type" : "TYPE",
+                    "location" : {
+                      "line" : 1,
+                      "lineIndex" : 38
+                    }
+                  }, {
+                    "name" : "!nothing",
+                    "type" : "TYPE"
+                  } ]
+                } ]
+              } ]
+            } ]
+          }, {
+            "name" : "!func",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 25
+            }
+          } ]
+        }, {
+          "type" : "CODE_BLOCK",
+          "components" : [ {
+            "type" : "RETURN",
+            "components" : [ {
+              "type" : "EXPRESSION",
+              "components" : [ {
+                "name" : "!func",
+                "type" : "TOKEN",
+                "location" : {
+                  "line" : 2,
+                  "lineIndex" : 14
+                }
+              }, {
+                "name" : "APPLY",
+                "type" : "TOKEN",
+                "location" : {
+                  "line" : 2,
+                  "lineIndex" : 18
+                }
+              }, {
+                "type" : "METHOD_CALL"
+              } ]
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "type" : "EXPRESSION",
+    "components" : [ {
+      "name" : "!writeline",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 3,
+        "lineIndex" : 1
+      }
+    }, {
+      "name" : "APPLY",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 3,
+        "lineIndex" : 10
+      }
+    }, {
+      "type" : "METHOD_CALL",
+      "components" : [ {
+        "type" : "EXPRESSION",
+        "components" : [ {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "!run_func",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 3,
+              "lineIndex" : 11
+            }
+          }, {
+            "name" : "APPLY",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 3,
+              "lineIndex" : 19
+            }
+          }, {
+            "type" : "METHOD_CALL",
+            "components" : [ {
+              "type" : "EXPRESSION",
+              "components" : [ {
+                "type" : "METHOD",
+                "location" : {
+                  "line" : 3,
+                  "lineIndex" : 20
+                },
+                "components" : [ {
+                  "type" : "CODE_BLOCK",
+                  "components" : [ {
+                    "type" : "RETURN",
+                    "components" : [ {
+                      "type" : "EXPRESSION",
+                      "components" : [ {
+                        "name" : "#10",
+                        "type" : "TOKEN",
+                        "location" : {
+                          "line" : 3,
+                          "lineIndex" : 29
+                        }
+                      } ]
+                    } ]
+                  } ]
+                } ]
+              } ]
+            } ]
+          } ]
+        }, {
+          "name" : "PLUS",
+          "type" : "TOKEN",
+          "location" : {
+            "line" : 3,
+            "lineIndex" : 32
+          }
+        }, {
+          "name" : "#20",
+          "type" : "TOKEN",
+          "location" : {
+            "line" : 3,
+            "lineIndex" : 33
+          }
+        } ]
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE GENERIC; (!T|2; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); DECLARATION ANON_ARG; (TYPE METHOD; (METHOD(TYPE GENERIC; (!T|2; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)))); !func))); !run_func; EXPRESSION(TYPE METHOD; (METHOD(TYPE GENERIC; (!T|2; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); DECLARATION ANON_ARG; (TYPE METHOD; (METHOD(TYPE GENERIC; (!T|2; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)))); !func))); METHOD(TYPE GENERIC; (!T|2; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); DECLARATION ANON_ARG; (TYPE METHOD; (METHOD(TYPE GENERIC; (!T|2; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)))); !func); CODE_BLOCK(RETURN(EXPRESSION(TYPE GENERIC; (!T|2; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !func; METHOD|APPLY|METHOD_CALL; METHOD_CALL)))))); EXPRESSION(TYPE !nothing; !writeline; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!text; ASSIGN; EXPRESSION(TYPE INT64; EXPRESSION(TYPE GENERIC; (!T|2; TYPE INT64); !run_func; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!func; ASSIGN; EXPRESSION(TYPE METHOD; (METHOD(TYPE INT64)); METHOD(TYPE INT64; CODE_BLOCK(RETURN(EXPRESSION(TYPE INT64; #10)))))))); INT64|PLUS|INT64; #20)))))")
     }
 
     companion object {

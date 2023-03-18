@@ -174,7 +174,7 @@ object InferrerUtils {
                 unnamedArgsInMethod[name]?.first ?:
                 throw CannotCallMethodException(location)
             val subType = component.component2()
-            if(isFormerSuperTypeOfLatter(superType, subType, genericTypes = genericTypes)) {
+            if(isFormerSuperTypeOfLatter(superType, subType, genericTypes = genericTypes, matchGenerics = true)) {
                 namedArgsInMethod.remove(name)
                 unnamedArgsInMethod.remove(name)
             }
@@ -196,7 +196,7 @@ object InferrerUtils {
 
             finalCallArgumentsMap[name] = Pair(component.value,true)
 
-            if(!isFormerSuperTypeOfLatter(superType, subType, genericTypes = genericTypes))
+            if(!isFormerSuperTypeOfLatter(superType, subType, genericTypes = genericTypes, matchGenerics = true))
                 throw CannotCallMethodException(location)
 
         }
