@@ -1,4 +1,2 @@
 let maybe := fun(arg elem : anything as T) -> T
     do yield elem
-let run_func := fun(arg func : fun[->anything? as T]) -> T
-    do yield func()
