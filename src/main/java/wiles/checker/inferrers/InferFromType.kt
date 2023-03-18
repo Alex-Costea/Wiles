@@ -1,7 +1,7 @@
 package wiles.checker.inferrers
 
 import wiles.checker.data.InferrerDetails
-import wiles.checker.statics.InferrerUtils.eraseGenericTypes
+import wiles.checker.statics.InferrerUtils.createGenericType
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.METHOD_ID
@@ -45,6 +45,7 @@ class InferFromType(details: InferrerDetails,
             }
         }
         if(isTopMostType)
-            eraseGenericTypes(statement,genericTypes)
+            createGenericType(statement,genericTypes)
+        //TODO: add T to variables
     }
 }

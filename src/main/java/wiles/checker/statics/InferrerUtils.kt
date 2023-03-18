@@ -64,28 +64,28 @@ object InferrerUtils {
         throw InternalErrorException(NOT_ONE_TOKEN_ERROR)
     }
 
-    fun eraseGenericTypes(type: JSONStatement, typeNames: MutableMap<String, JSONStatement>)
+    fun createGenericType(type: JSONStatement, typeNames: MutableMap<String, JSONStatement>)
     {
         if(type.name == GENERIC_ID)
         {
-            type.name = type.components[1].name
-            type.components = type.components[1].components
+            return
         }
         else if(typeNames.containsKey(type.name))
         {
             val newType = typeNames[type.name]!!
-            type.name = newType.name
-            type.components = newType.components.toMutableList()
+            assert(type.components.isEmpty())
+            type.components.add(JSONStatement(name = type.name, type = SyntaxType.TOKEN))
+            type.components.add(newType)
+            type.name = GENERIC_ID
+            return
         }
         else if(type.type == SyntaxType.TYPE && IS_IDENTIFIER.test(type.name) && type.name != NOTHING_ID)
             throw UnknownTypeException(type.getFirstLocation())
-        else if(type.type == SyntaxType.CODE_BLOCK)
-            return
         if(type.components.isNotEmpty())
         {
             for(component in type.components)
             {
-                eraseGenericTypes(component, typeNames)
+                createGenericType(component, typeNames)
             }
         }
     }
@@ -178,8 +178,11 @@ object InferrerUtils {
 
     fun unbox(statement: JSONStatement) : JSONStatement
     {
+        assert(statement.type == SyntaxType.TYPE)
         if(statement.name == MUTABLE_ID)
             return unbox(statement.components[0])
+        if(statement.name == GENERIC_ID)
+            return unbox(statement.components[1])
         return statement
     }
 

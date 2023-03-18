@@ -6,6 +6,7 @@ import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.ANON_ARG_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Types.ANYTHING_ID
+import wiles.shared.constants.Types.GENERIC_ID
 import wiles.shared.constants.Types.METHOD_CALL_ID
 import wiles.shared.constants.Types.STRING_ID
 
@@ -16,6 +17,9 @@ object TypeConstants {
         assert(supertype.type == SyntaxType.TYPE)
         assert(subtype.type == SyntaxType.TYPE)
         if(supertype.toString() == subtype.toString())
+            return true
+
+        if(supertype.name == GENERIC_ID && isFormerSuperTypeOfLatter(supertype.components[1],subtype))
             return true
 
         if(supertype.name == ANYTHING_ID)
@@ -94,6 +98,7 @@ object TypeConstants {
         else if (subtype.name == Tokens.MUTABLE_ID)
             return isFormerSuperTypeOfLatter(supertype, subtype.components[0])
 
+        //TODO: generics support
         else if(supertype.name == Tokens.METHOD_ID && subtype.name == Tokens.METHOD_ID)
             return checkMethodIsSubtype(supertype, subtype)
 
