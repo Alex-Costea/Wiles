@@ -6,6 +6,7 @@ import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.exceptions.InferenceFailException
 import wiles.checker.exceptions.ReturnNotGuaranteedException
 import wiles.checker.services.InferrerService
+import wiles.checker.statics.InferrerUtils.eraseGenericTypes
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.StandardLibrary
@@ -85,17 +86,28 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
 
     override fun infer() {
         val declarationVariables = additionalVars.copy()
+        val genericTypes = hashMapOf<String, JSONStatement>()
         for(component in statement.components)
         {
-            if(component.type==SyntaxType.TYPE)
+            if(component.type==SyntaxType.TYPE) {
+                InferFromType(
+                    InferrerDetails(component, declarationVariables, exceptions, CheckerVariableMap()),
+                    isTopMostType = false, genericTypes = genericTypes
+                ).infer()
                 continue
+            }
             if(component.type==SyntaxType.CODE_BLOCK)
                 break
             assert(component.type == SyntaxType.DECLARATION)
 
-            val inferrer = InferFromDeclaration(InferrerDetails(component, declarationVariables, exceptions, CheckerVariableMap()), alwaysInit = true)
+            val inferrer = InferFromDeclaration(
+                InferrerDetails(component, declarationVariables, exceptions, CheckerVariableMap()),
+                alwaysInit = true, isTopMostType = false, genericTypes = genericTypes
+            )
             inferrer.infer()
         }
+
+        eraseGenericTypes(statement, genericTypes)
 
         variables.putAll(declarationVariables.filter { it.key !in additionalVars })
 

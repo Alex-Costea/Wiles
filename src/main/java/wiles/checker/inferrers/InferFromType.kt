@@ -1,7 +1,7 @@
 package wiles.checker.inferrers
 
 import wiles.checker.data.InferrerDetails
-import wiles.checker.statics.InferrerUtils.checkTypeIsDefined
+import wiles.checker.statics.InferrerUtils.eraseGenericTypes
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.METHOD_ID
@@ -19,7 +19,7 @@ class InferFromType(details: InferrerDetails,
         if(statement.name == GENERIC_ID)
         {
             InferFromType(InferrerDetails(statement.components[1],variables,exceptions, additionalVars),
-                genericTypes).infer()
+                genericTypes,false).infer()
             genericTypes[statement.components[0].name] = statement.components[1]
         }
 
@@ -34,7 +34,8 @@ class InferFromType(details: InferrerDetails,
                         genericTypes = genericTypes, isTopMostType = false).infer()
                 }
             }
-            method.components.add(0,NOTHING_TYPE)
+            if(method.components.getOrNull(0)?.type != SyntaxType.TYPE)
+                method.components.add(0,NOTHING_TYPE)
         }
         else if(statement.name == EITHER_ID || statement.name == MUTABLE_ID || statement.name == LIST_ID)
         {
@@ -44,6 +45,6 @@ class InferFromType(details: InferrerDetails,
             }
         }
         if(isTopMostType)
-            checkTypeIsDefined(statement,genericTypes)
+            eraseGenericTypes(statement,genericTypes)
     }
 }

@@ -23,6 +23,7 @@ import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
 import wiles.shared.constants.TypeConstants.makeMutable
 import wiles.shared.constants.Types.DOUBLE_ID
 import wiles.shared.constants.Types.EITHER_ID
+import wiles.shared.constants.Types.GENERIC_ID
 import wiles.shared.constants.Types.INT64_ID
 import wiles.shared.constants.Types.LIST_ID
 import wiles.shared.constants.Types.STRING_ID
@@ -63,19 +64,28 @@ object InferrerUtils {
         throw InternalErrorException(NOT_ONE_TOKEN_ERROR)
     }
 
-    fun checkTypeIsDefined(type: JSONStatement, typeNames: MutableMap<String, JSONStatement>)
+    fun eraseGenericTypes(type: JSONStatement, typeNames: MutableMap<String, JSONStatement>)
     {
-        if(typeNames.containsKey(type.name))
+        if(type.name == GENERIC_ID)
         {
-            Unit
+            type.name = type.components[1].name
+            type.components = type.components[1].components
+        }
+        else if(typeNames.containsKey(type.name))
+        {
+            val newType = typeNames[type.name]!!
+            type.name = newType.name
+            type.components = newType.components.toMutableList()
         }
         else if(type.type == SyntaxType.TYPE && IS_IDENTIFIER.test(type.name) && type.name != NOTHING_ID)
             throw UnknownTypeException(type.getFirstLocation())
+        else if(type.type == SyntaxType.CODE_BLOCK)
+            return
         if(type.components.isNotEmpty())
         {
             for(component in type.components)
             {
-                checkTypeIsDefined(component, typeNames)
+                eraseGenericTypes(component, typeNames)
             }
         }
     }
