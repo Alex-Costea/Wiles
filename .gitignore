@@ -88,3 +88,4 @@ syntaxTree.json
 /code.wiles_compiled.json
 /input.wiles_compiled.json
 /target/classes/StandardLibrary.wiles
+/target/classes/additional_code.wiles

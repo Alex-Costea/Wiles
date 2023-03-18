@@ -1,5 +1,6 @@
 package wiles.checker.inferrers
 
+import wiles.checker.Checker
 import wiles.checker.data.InferrerDetails
 import wiles.checker.exceptions.GenericAlreadyDefinedException
 import wiles.checker.statics.InferrerUtils.createGenericType
@@ -30,6 +31,8 @@ class InferFromType(details: InferrerDetails,
 
         if(statement.name==METHOD_ID)
         {
+            if(isTopMostType)
+                Checker.currentFunctionNumber++
             val method = statement.components[0]
             for(component in method.components)
             {
