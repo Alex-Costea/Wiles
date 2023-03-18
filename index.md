@@ -11,6 +11,7 @@ Wiles supports features such as:
 - Opt-out named arguments as mandatory in function calls
 - Newline as statement terminators, but no significant indentation
 - Type inference
+- Generics
 
 The informal specifications can be found [here](specifications.md).
 

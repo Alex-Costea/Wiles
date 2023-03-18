@@ -70,6 +70,10 @@
 - Change the value of a mutable object with `<-` infix operator
 - `mut [collection]` also makes its elements mutable
 
+### Generics in functions
+- Example: `fun(x : list[anything as T]) -> T`, will return the same type as the list's components type
+- Declare using the `as` keyword
+
 ### Standard library
 - `write`, `writeline`: write object to the command line
 - `panic`: print an error message and exit
