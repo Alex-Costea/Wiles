@@ -6,7 +6,6 @@ import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.exceptions.InferenceFailException
 import wiles.checker.exceptions.VariableAlreadyDeclaredException
 import wiles.checker.services.InferrerService
-import wiles.checker.statics.InferrerUtils.checkTypeIsDefined
 import wiles.shared.AbstractCompilationException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType.*
@@ -17,7 +16,9 @@ import wiles.shared.constants.TypeConstants.NOTHING_TYPE
 import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
 
 class InferFromDeclaration(details: InferrerDetails,
-                           private val alwaysInit: Boolean = false)
+                           private val alwaysInit: Boolean = false,
+                           private val genericTypes : MutableMap<String,JSONStatement> = mutableMapOf(),
+                           private val isTopMostType : Boolean = true)
     : InferFromStatement(details)
 {
     override fun infer() {
@@ -27,9 +28,6 @@ class InferFromDeclaration(details: InferrerDetails,
         val type = if(statement.components[0].type== TYPE) statement.components[0] else null
         val default = statement.components.getOrNull(if(type==null) 1 else 2)
         var inferredType : JSONStatement? = null
-
-        if(type!=null)
-            checkTypeIsDefined(type)
 
         if(variables.containsKey(name.name))
             throw VariableAlreadyDeclaredException(name.getFirstLocation())
@@ -73,7 +71,8 @@ class InferFromDeclaration(details: InferrerDetails,
 
         if(type != null)
         {
-            InferFromType(InferrerDetails(type, variables, exceptions, additionalVars)).infer()
+            InferFromType(InferrerDetails(type, variables, exceptions, additionalVars),
+                genericTypes, isTopMostType).infer()
             if(inferredType!=null && !isFormerSuperTypeOfLatter(type, inferredType))
                 throw ConflictingTypeDefinitionException(type.getFirstLocation(),
                     type.toString(),inferredType.toString())

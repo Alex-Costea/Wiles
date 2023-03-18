@@ -63,15 +63,19 @@ object InferrerUtils {
         throw InternalErrorException(NOT_ONE_TOKEN_ERROR)
     }
 
-    fun checkTypeIsDefined(type : JSONStatement)
+    fun checkTypeIsDefined(type: JSONStatement, typeNames: MutableMap<String, JSONStatement>)
     {
-        if(type.type == SyntaxType.TYPE && IS_IDENTIFIER.test(type.name) && type.name != NOTHING_ID)
+        if(typeNames.containsKey(type.name))
+        {
+            Unit
+        }
+        else if(type.type == SyntaxType.TYPE && IS_IDENTIFIER.test(type.name) && type.name != NOTHING_ID)
             throw UnknownTypeException(type.getFirstLocation())
         if(type.components.isNotEmpty())
         {
             for(component in type.components)
             {
-                checkTypeIsDefined(component)
+                checkTypeIsDefined(component, typeNames)
             }
         }
     }
