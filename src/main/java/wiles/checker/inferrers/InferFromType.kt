@@ -38,6 +38,8 @@ class InferFromType(details: InferrerDetails,
                     InferFromDeclaration(InferrerDetails(component, variables.copy(), exceptions, additionalVars),
                         genericTypes = genericTypes, isTopMostType = false).infer()
                 }
+                else if(component.type == SyntaxType.TYPE)
+                    InferFromType(InferrerDetails(component,variables,exceptions, additionalVars), genericTypes).infer()
             }
             if(method.components.getOrNull(0)?.type != SyntaxType.TYPE)
                 method.components.add(0,NOTHING_TYPE)
