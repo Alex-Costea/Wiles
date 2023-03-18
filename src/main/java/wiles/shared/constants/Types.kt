@@ -19,8 +19,10 @@ object Types {
     const val EITHER_ID = "EITHER"
     const val ANYTHING_ID = "ANYTHING"
     const val METHOD_CALL_ID = "METHOD_CALL"
+    const val GENERIC_ID = "GENERIC"
 
     val REQUIRES_SUBTYPE = setOf(LIST_ID, EITHER_ID, MUTABLE_ID)
+    val ALLOWS_GENERICS = hashMapOf(Pair(LIST_ID,true), Pair(EITHER_ID,false), Pair(MUTABLE_ID,true))
     val MAX_NR_TYPES = hashMapOf(Pair(LIST_ID,1),Pair(MUTABLE_ID,1))
     val MIN_NR_TYPES = hashMapOf(Pair(LIST_ID,1),Pair(MUTABLE_ID,1),Pair(EITHER_ID,2))
 

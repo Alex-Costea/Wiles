@@ -42,7 +42,7 @@ class MethodStatement(oldContext : Context, private val isTypeDeclaration: Boole
     {
         while(transmitter.expectMaybe(tokenOf(IS_IDENTIFIER).or(ANON_ARG_ID)
                 .removeWhen(WhenRemoveToken.Never)).isPresent) {
-            val parameterStatement = DeclarationStatement(context,true)
+            val parameterStatement = DeclarationStatement(context,isParam = true, allowGenerics = true)
             exceptions.addAll(parameterStatement.process())
             parameters.add(parameterStatement)
             if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break
@@ -70,7 +70,7 @@ class MethodStatement(oldContext : Context, private val isTypeDeclaration: Boole
 
                 //Return type
                 if (transmitter.expectMaybe(tokenOf(RIGHT_ARROW_ID).dontIgnoreNewLine()).isPresent) {
-                    returnType = TypeDefinitionStatement(context)
+                    returnType = TypeDefinitionStatement(context,allowGenerics = true)
                     exceptions.addAll(returnType!!.process())
                 }
             }

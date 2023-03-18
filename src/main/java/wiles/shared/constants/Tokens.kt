@@ -69,6 +69,7 @@ object Tokens {
     const val WHEN_ID = "WHEN"
     const val IS_ID = "IS"
     const val NEW_ID = "NEW"
+    const val AS_ID = "AS"
 
     const val TRUE_ID = "!true"
     const val FALSE_ID = "!false"
@@ -128,6 +129,7 @@ object Tokens {
         KEYWORDS["mut"] = MUTABLE_ID
         KEYWORDS["arg"] = ANON_ARG_ID
         KEYWORDS["new"] = NEW_ID
+        KEYWORDS["as"] = AS_ID
 
         SYMBOLS["+"] = PLUS_ID
         SYMBOLS["-"] = MINUS_ID

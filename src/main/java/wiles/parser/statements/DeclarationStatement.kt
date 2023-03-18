@@ -13,7 +13,10 @@ import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.TYPEDEF_ID
 import wiles.shared.constants.Tokens.VARIABLE_ID
 
-class DeclarationStatement(context: Context, private val isParam: Boolean = false) : AbstractStatement(context) {
+class DeclarationStatement(context: Context,
+                           private val isParam: Boolean = false,
+                           private val allowGenerics : Boolean = false)
+    : AbstractStatement(context) {
     private var left: TokenStatement? = null
     private var typeStatement : TypeDefinitionStatement? = null
     private var right: DefaultExpression? = null
@@ -48,7 +51,7 @@ class DeclarationStatement(context: Context, private val isParam: Boolean = fals
                 .withErrorMessage(IDENTIFIER_EXPECTED_ERROR)),context)
 
             if(transmitter.expectMaybe(tokenOf(TYPEDEF_ID)).isPresent) {
-                typeStatement = TypeDefinitionStatement(context)
+                typeStatement = TypeDefinitionStatement(context,allowGenerics)
                 typeStatement!!.process().throwFirstIfExists()
                 if(transmitter.expectMaybe(tokenOf(ASSIGN_ID).dontIgnoreNewLine()).isPresent)
                     readRight()
