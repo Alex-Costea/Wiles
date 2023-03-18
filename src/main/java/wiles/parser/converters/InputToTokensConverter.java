@@ -30,6 +30,11 @@ public class InputToTokensConverter {
         arrayChars = input.toCharArray();
     }
 
+    public InputToTokensConverter(@NotNull String input, int standardLibLine) {
+        arrayChars = input.toCharArray();
+        line -= standardLibLine;
+    }
+
     @NotNull
     public List<Token> convert() {
         @NotNull

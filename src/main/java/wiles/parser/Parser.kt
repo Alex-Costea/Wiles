@@ -15,6 +15,7 @@ import wiles.shared.TokenLocation
 import wiles.shared.constants.ErrorMessages.IO_ERROR
 import wiles.shared.constants.Settings.SYNTAX_TREE_FILE
 import java.io.*
+import java.util.*
 import java.util.stream.Collectors
 
 class Parser(content : String?) {
@@ -22,6 +23,7 @@ class Parser(content : String?) {
     private var results : CodeBlockStatement
     val input = content?:loadFile(filename)
     lateinit var json : String
+    var resourceLineLength = 0
 
     init{
         val tokens = sourceToTokens(input)
@@ -66,7 +68,7 @@ class Parser(content : String?) {
             val resource : InputStream = File(filename).inputStream()
             resource.use { input = BufferedReader(InputStreamReader(it))
                     .lines().collect(Collectors.joining("\n"))
-                return input
+                return readStandardLibrary() + input
             }
         }
         catch (ex: IOException) {
@@ -74,8 +76,26 @@ class Parser(content : String?) {
         }
     }
 
+    private fun readStandardLibrary(): String {
+        val classloader = Thread.currentThread().contextClassLoader
+        val input: String
+        try {
+            classloader.getResourceAsStream("StandardLibrary.wiles").use { inputStream ->
+                Objects.requireNonNull(inputStream)
+                input = BufferedReader(InputStreamReader(inputStream!!))
+                    .lines().collect(Collectors.joining("\n"))
+                resourceLineLength=input.count { it == '\n' }
+                return input
+            }
+        } catch (ex: NullPointerException) {
+            throw InternalErrorException(IO_ERROR)
+        } catch (ex: IOException) {
+            throw InternalErrorException(IO_ERROR)
+        }
+    }
+
     private fun sourceToTokens(input: String): List<Token> {
-        val converter = wiles.parser.converters.InputToTokensConverter(input)
+        val converter = wiles.parser.converters.InputToTokensConverter(input,resourceLineLength)
         val tokens = converter.convert()
         exceptions.addAll(converter.exceptions)
         return tokens

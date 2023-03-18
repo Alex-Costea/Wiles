@@ -20,9 +20,9 @@ class TokenLocation(line: Int, lineIndex: Int) {
         return false
     }
 
-    fun displayLocation(input : String): String
+    fun displayLocation(input: String, resourceLineLength: Int): String
     {
-        return  LINE_SYMBOL + input.split("\n")[line-1] +
+        return  LINE_SYMBOL + input.split("\n")[line+resourceLineLength-1] +
                 LINE_SYMBOL + " ".repeat(lineIndex-1) + "^"+ LINE_SYMBOL
     }
 
