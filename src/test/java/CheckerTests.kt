@@ -5817,6 +5817,254 @@ class CheckerTests {
 }""","CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE INT64; TYPE STRING); !a; EXPRESSION(TYPE INT64; #1)); WHEN(EXPRESSION(!a); TYPE INT64; CODE_BLOCK(EXPRESSION(TYPE !nothing; !nothing)); TYPE STRING; CODE_BLOCK(EXPRESSION(TYPE !nothing; !nothing)); TYPE ELSE; (TYPE EITHER); CODE_BLOCK(EXPRESSION(!nothing))))")
     }
 
+    @Test
+    fun genericsTest()
+    {
+        /*
+        let add_func := fun(arg list : list[anything? as T], arg elem : T) -> list[T] do
+            yield list + [elem]
+        writeline([1,2].add_func(3))
+         */
+        Checker.currentFunctionNumber = 0
+        checkResult(null,"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "!add_func",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "type" : "METHOD",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 17
+        },
+        "components" : [ {
+          "name" : "LIST",
+          "type" : "TYPE",
+          "location" : {
+            "line" : 1,
+            "lineIndex" : 71
+          },
+          "components" : [ {
+            "name" : "!T",
+            "type" : "TYPE",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 76
+            }
+          } ]
+        }, {
+          "name" : "ANON_ARG",
+          "type" : "DECLARATION",
+          "components" : [ {
+            "name" : "LIST",
+            "type" : "TYPE",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 32
+            },
+            "components" : [ {
+              "name" : "GENERIC",
+              "type" : "TYPE",
+              "location" : {
+                "line" : 1,
+                "lineIndex" : 37
+              },
+              "components" : [ {
+                "name" : "!T",
+                "type" : "TOKEN",
+                "location" : {
+                  "line" : 1,
+                  "lineIndex" : 50
+                }
+              }, {
+                "name" : "EITHER",
+                "type" : "TYPE",
+                "location" : {
+                  "line" : 1,
+                  "lineIndex" : 37
+                },
+                "components" : [ {
+                  "name" : "ANYTHING",
+                  "type" : "TYPE",
+                  "location" : {
+                    "line" : 1,
+                    "lineIndex" : 37
+                  }
+                }, {
+                  "name" : "!nothing",
+                  "type" : "TYPE"
+                } ]
+              } ]
+            } ]
+          }, {
+            "name" : "!list",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 25
+            }
+          } ]
+        }, {
+          "name" : "ANON_ARG",
+          "type" : "DECLARATION",
+          "components" : [ {
+            "name" : "!T",
+            "type" : "TYPE",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 65
+            }
+          }, {
+            "name" : "!elem",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 58
+            }
+          } ]
+        }, {
+          "type" : "CODE_BLOCK",
+          "components" : [ {
+            "type" : "RETURN",
+            "components" : [ {
+              "type" : "EXPRESSION",
+              "components" : [ {
+                "name" : "!list",
+                "type" : "TOKEN",
+                "location" : {
+                  "line" : 2,
+                  "lineIndex" : 11
+                }
+              }, {
+                "name" : "PLUS",
+                "type" : "TOKEN",
+                "location" : {
+                  "line" : 2,
+                  "lineIndex" : 16
+                }
+              }, {
+                "type" : "LIST",
+                "location" : {
+                  "line" : 2,
+                  "lineIndex" : 23
+                },
+                "components" : [ {
+                  "type" : "EXPRESSION",
+                  "components" : [ {
+                    "name" : "!elem",
+                    "type" : "TOKEN",
+                    "location" : {
+                      "line" : 2,
+                      "lineIndex" : 19
+                    }
+                  } ]
+                } ]
+              } ]
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "type" : "EXPRESSION",
+    "components" : [ {
+      "name" : "!writeline",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 3,
+        "lineIndex" : 1
+      }
+    }, {
+      "name" : "APPLY",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 3,
+        "lineIndex" : 10
+      }
+    }, {
+      "type" : "METHOD_CALL",
+      "components" : [ {
+        "type" : "EXPRESSION",
+        "components" : [ {
+          "type" : "LIST",
+          "location" : {
+            "line" : 3,
+            "lineIndex" : 15
+          },
+          "components" : [ {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "#1",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 3,
+                "lineIndex" : 12
+              }
+            } ]
+          }, {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "#2",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 3,
+                "lineIndex" : 14
+              }
+            } ]
+          } ]
+        }, {
+          "name" : "ACCESS",
+          "type" : "TOKEN",
+          "location" : {
+            "line" : 3,
+            "lineIndex" : 16
+          }
+        }, {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "!add_func",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 3,
+              "lineIndex" : 17
+            }
+          }, {
+            "name" : "APPLY",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 3,
+              "lineIndex" : 25
+            }
+          }, {
+            "type" : "METHOD_CALL",
+            "components" : [ {
+              "type" : "EXPRESSION",
+              "components" : [ {
+                "name" : "#3",
+                "type" : "TOKEN",
+                "location" : {
+                  "line" : 3,
+                  "lineIndex" : 26
+                }
+              } ]
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing))); DECLARATION ANON_ARG; (TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing))); !list); DECLARATION ANON_ARG; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem))); !add_func; EXPRESSION(TYPE METHOD; (METHOD(TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing))); DECLARATION ANON_ARG; (TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing))); !list); DECLARATION ANON_ARG; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem))); METHOD(TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing))); DECLARATION ANON_ARG; (TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing))); !list); DECLARATION ANON_ARG; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem); CODE_BLOCK(RETURN(EXPRESSION(TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing))); !list; LIST|PLUS|LIST; LIST(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); EXPRESSION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem)))))))); EXPRESSION(TYPE !nothing; !writeline; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!text; ASSIGN; EXPRESSION(TYPE LIST; (TYPE INT64); !add_func; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE INT64; #3)); EXPRESSION(!list; ASSIGN; EXPRESSION(TYPE LIST; (TYPE INT64); LIST(TYPE INT64; EXPRESSION(TYPE INT64; #1); EXPRESSION(TYPE INT64; #2))))))))))")
+    }
+
     companion object {
         private const val TYPE = "TYPE "
 
