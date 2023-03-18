@@ -1,5 +1,6 @@
 package wiles.checker.statics
 
+import wiles.checker.Checker.Companion.currentFunctionNumber
 import wiles.checker.data.CheckerVariableMap
 import wiles.checker.data.VariableDetails
 import wiles.checker.exceptions.*
@@ -66,19 +67,21 @@ object InferrerUtils {
 
     fun createGenericType(type: JSONStatement, typeNames: MutableMap<String, JSONStatement>)
     {
+        val name = getTypeNumber(type.name)
         if(type.name == GENERIC_ID)
         {
+            type.components[0].name=getTypeNumber(type.components[0].name)
             return
         }
         else if(type.type == SyntaxType.CODE_BLOCK)
         {
             return
         }
-        else if(typeNames.containsKey(type.name))
+        else if(typeNames.containsKey(name))
         {
-            val newType = typeNames[type.name]!!
+            val newType = typeNames[name]!!
             assert(type.components.isEmpty())
-            type.components.add(JSONStatement(name = type.name, type = SyntaxType.TOKEN))
+            type.components.add(JSONStatement(name = name, type = SyntaxType.TOKEN))
             type.components.add(newType)
             type.name = GENERIC_ID
             return
@@ -92,6 +95,11 @@ object InferrerUtils {
                 createGenericType(component, typeNames)
             }
         }
+    }
+
+    fun getTypeNumber(name : String) : String
+    {
+        return "$name|$currentFunctionNumber"
     }
 
     fun makeNullable(type: JSONStatement) : JSONStatement
@@ -112,7 +120,7 @@ object InferrerUtils {
     {
         if(statement.type == SyntaxType.TYPE && statement.name == GENERIC_ID)
         {
-            val name = statement.components[0].name
+            val name = getTypeNumber(statement.components[0].name)
             if(genericTypes.containsKey(name))
             {
                 statement.components[1] = genericTypes[name]!!
@@ -182,7 +190,8 @@ object InferrerUtils {
                 unnamedArgsInMethod.remove(name)
                 if(superType.name == GENERIC_ID)
                 {
-                    genericTypes[superType.components[0].name] = subType
+                    val genName = getTypeNumber(superType.components[0].name)
+                    genericTypes[genName] = subType
                 }
             }
             else throw CannotCallMethodException(location)
@@ -209,7 +218,8 @@ object InferrerUtils {
             {
                 if(superType.name == GENERIC_ID)
                 {
-                    genericTypes[superType.components[0].name] = subType
+                    val genName = getTypeNumber(superType.components[0].name)
+                    genericTypes[genName] = subType
                 }
             }
         }

@@ -3,6 +3,7 @@ package wiles.checker.inferrers
 import wiles.checker.data.InferrerDetails
 import wiles.checker.exceptions.GenericAlreadyDefinedException
 import wiles.checker.statics.InferrerUtils.createGenericType
+import wiles.checker.statics.InferrerUtils.getTypeNumber
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.METHOD_ID
@@ -21,9 +22,10 @@ class InferFromType(details: InferrerDetails,
         {
             InferFromType(InferrerDetails(statement.components[1],variables,exceptions, additionalVars),
                 genericTypes,false).infer()
-            if(genericTypes.containsKey(statement.components[0].name))
+            val name = getTypeNumber(statement.components[0].name)
+            if(genericTypes.containsKey(name))
                 throw GenericAlreadyDefinedException(statement.getFirstLocation())
-            genericTypes[statement.components[0].name] = statement.components[1]
+            genericTypes[name] = statement.components[1]
         }
 
         if(statement.name==METHOD_ID)

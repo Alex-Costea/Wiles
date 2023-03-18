@@ -73,6 +73,7 @@ class Checker(private val jsonCode : String? = null) {
     companion object {
         private val NOTHING_TOKEN = JSONStatement(name = NOTHING_ID, type = SyntaxType.TOKEN)
         val scanner = Scanner(System.`in`)
+        var currentFunctionNumber : Long = 0
     }
 
 }

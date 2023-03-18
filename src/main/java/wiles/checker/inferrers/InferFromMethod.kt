@@ -1,5 +1,6 @@
 package wiles.checker.inferrers
 
+import wiles.checker.Checker
 import wiles.checker.data.CheckerVariableMap
 import wiles.checker.data.InferrerDetails
 import wiles.checker.exceptions.ConflictingTypeDefinitionException
@@ -87,6 +88,7 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
     override fun infer() {
         val declarationVariables = additionalVars.copy()
         val genericTypes = hashMapOf<String, JSONStatement>()
+        Checker.currentFunctionNumber++
         for(component in statement.components)
         {
             if(component.type==SyntaxType.TYPE) {
