@@ -6,6 +6,7 @@ object ErrorMessages {
     const val TOKEN_EXPECTED_ERROR = "The token is missing or incorrect. Did you mean \"%s\"?"
     const val IDENTIFIER_EXPECTED_ERROR = "The identifier name is invalid or missing."
     const val IDENTIFIER_TOO_LONG_ERROR = "A simple identifier name is expected."
+    const val GENERIC_ALREADY_DEFINED_ERROR = "This generic value was already defined."
     const val TYPE_EXPECTED_ERROR = "The type definition is unknown."
     const val EXPRESSION_EXPECTED_ERROR = "The expression is invalid or missing."
     const val UNEXPECTED_OPENING_BRACKET_ERROR = "Expected a closing bracket here."

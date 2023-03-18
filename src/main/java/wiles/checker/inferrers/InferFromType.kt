@@ -1,6 +1,7 @@
 package wiles.checker.inferrers
 
 import wiles.checker.data.InferrerDetails
+import wiles.checker.exceptions.GenericAlreadyDefinedException
 import wiles.checker.statics.InferrerUtils.createGenericType
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
@@ -20,6 +21,8 @@ class InferFromType(details: InferrerDetails,
         {
             InferFromType(InferrerDetails(statement.components[1],variables,exceptions, additionalVars),
                 genericTypes,false).infer()
+            if(genericTypes.containsKey(statement.components[0].name))
+                throw GenericAlreadyDefinedException(statement.getFirstLocation())
             genericTypes[statement.components[0].name] = statement.components[1]
         }
 
