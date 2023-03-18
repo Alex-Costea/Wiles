@@ -99,6 +99,8 @@ object InferrerUtils {
 
     fun getTypeNumber(name : String) : String
     {
+        if(name.contains("|"))
+            return name
         return "$name|$currentFunctionNumber"
     }
 
@@ -185,14 +187,9 @@ object InferrerUtils {
                 unnamedArgsInMethod[name]?.first ?:
                 throw CannotCallMethodException(location)
             val subType = component.component2()
-            if(isFormerSuperTypeOfLatter(supertype = unGenerify(superType.copy()), subtype = subType)) {
+            if(isFormerSuperTypeOfLatter(superType, subType, genericTypes = genericTypes)) {
                 namedArgsInMethod.remove(name)
                 unnamedArgsInMethod.remove(name)
-                if(superType.name == GENERIC_ID)
-                {
-                    val genName = getTypeNumber(superType.components[0].name)
-                    genericTypes[genName] = subType
-                }
             }
             else throw CannotCallMethodException(location)
         }
@@ -212,16 +209,9 @@ object InferrerUtils {
 
             finalCallArgumentsMap[name] = Pair(component.value,true)
 
-            if(!isFormerSuperTypeOfLatter(unGenerify(superType.copy()),subType))
+            if(!isFormerSuperTypeOfLatter(superType,subType, genericTypes = genericTypes))
                 throw CannotCallMethodException(location)
-            else
-            {
-                if(superType.name == GENERIC_ID)
-                {
-                    val genName = getTypeNumber(superType.components[0].name)
-                    genericTypes[genName] = subType
-                }
-            }
+
         }
 
         if(unnamedArgsInMethodList.any { !it.component2().second })

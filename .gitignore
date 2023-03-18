@@ -87,3 +87,4 @@ syntaxTree.json
 /target/classes/META-INF/MANIFEST.MF
 /code.wiles_compiled.json
 /input.wiles_compiled.json
+/target/classes/StandardLibrary.wiles
