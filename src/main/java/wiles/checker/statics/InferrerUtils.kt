@@ -235,6 +235,8 @@ object InferrerUtils {
         assert(statement.type == SyntaxType.TYPE)
         if(statement.name == MUTABLE_ID)
             return unbox(statement.components[0])
+        if(statement.name == GENERIC_ID)
+            return unbox(statement.components[1])
         return statement
     }
 

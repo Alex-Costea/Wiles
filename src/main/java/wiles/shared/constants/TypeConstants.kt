@@ -13,7 +13,8 @@ import wiles.shared.constants.Types.STRING_ID
 
 object TypeConstants {
 
-    fun isFormerSuperTypeOfLatter(supertype : JSONStatement, subtype : JSONStatement) : Boolean
+    fun isFormerSuperTypeOfLatter(supertype : JSONStatement, subtype : JSONStatement,
+                                  unboxGenerics : Boolean = true) : Boolean
     {
         assert(supertype.type == SyntaxType.TYPE)
         assert(subtype.type == SyntaxType.TYPE)
@@ -23,6 +24,9 @@ object TypeConstants {
         if(supertype.name == GENERIC_ID && subtype.name == GENERIC_ID
             && supertype.components[0].name == subtype.components[0].name
             && isFormerSuperTypeOfLatter(supertype.components[1],subtype.components[1]))
+            return true
+
+        if(unboxGenerics && supertype.name == GENERIC_ID && isFormerSuperTypeOfLatter(supertype.components[1],subtype))
             return true
 
         if(supertype.name == ANYTHING_ID)
@@ -121,7 +125,7 @@ object TypeConstants {
             subtypeComponents[0]
         else NOTHING_TYPE
 
-        if(!isFormerSuperTypeOfLatter(supertypeReturnType,subtypeReturnType))
+        if(!isFormerSuperTypeOfLatter(supertypeReturnType,subtypeReturnType, unboxGenerics = false))
             return false
 
         if(matchMethodComponentList(subtypeComponents,supertypeComponents,false) &&
@@ -192,10 +196,12 @@ object TypeConstants {
                     val defaultValueMatches = !isSuperType || (component1.components.size <= component2.components.size)
                     if(defaultValueMatches) {
                         if(isSuperType) {
-                            if (isFormerSuperTypeOfLatter(component1.components[0], component2.components[0]))
+                            if (isFormerSuperTypeOfLatter(component1.components[0], component2.components[0],
+                                    unboxGenerics = false))
                                 matchFound = true
                         }
-                        else if(isFormerSuperTypeOfLatter(component2.components[0], component1.components[0]))
+                        else if(isFormerSuperTypeOfLatter(component2.components[0], component1.components[0],
+                                unboxGenerics = false))
                             matchFound = true
                     }
                 }
