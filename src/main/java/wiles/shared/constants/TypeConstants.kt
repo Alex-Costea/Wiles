@@ -139,14 +139,16 @@ object TypeConstants {
 
         if(matchMethodComponentList(subtypeComponents,supertypeComponents,false, genericTypes)
             && matchMethodComponentList(supertypeComponents,subtypeComponents,true, genericTypes)
-            && checkUnnamedArgsInSameOrder(supertypeComponents,subtypeComponents))
+            && checkUnnamedArgsInSameOrder(supertypeComponents, subtypeComponents))
             return true
 
         return false
     }
 
-    private fun checkUnnamedArgsInSameOrder(list1: MutableList<JSONStatement>,
-                                            list2: MutableList<JSONStatement>) : Boolean
+    private fun checkUnnamedArgsInSameOrder(
+        list1: MutableList<JSONStatement>,
+        list2: MutableList<JSONStatement>
+    ) : Boolean
     {
         while(list1.isNotEmpty() && list2.isNotEmpty())
         {
@@ -194,7 +196,7 @@ object TypeConstants {
     ) : Boolean
     {
         for (component1 in list1) {
-            if (component1.type == SyntaxType.TYPE || component1.name == ANON_ARG_ID
+            if (component1.type == SyntaxType.TYPE
                 // allow subtype component with default value
                 || (!isSuperType && component1.components.size == 3))
                 continue
