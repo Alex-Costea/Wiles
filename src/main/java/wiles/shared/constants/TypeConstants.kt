@@ -17,7 +17,6 @@ object TypeConstants {
         supertype : JSONStatement, subtype : JSONStatement,
         unboxGenerics : Boolean = true, //should generics match?
         genericTypes : MutableMap<String, JSONStatement> = mutableMapOf(),
-        matchGenerics : Boolean = false //used when generics are matched with types
     ): Boolean {
         assert(supertype.type == SyntaxType.TYPE)
         assert(subtype.type == SyntaxType.TYPE)
@@ -114,16 +113,14 @@ object TypeConstants {
 
         //TODO: generics support
         else if(supertype.name == Tokens.METHOD_ID && subtype.name == Tokens.METHOD_ID)
-            return checkMethodIsSubtype(supertype, subtype, genericTypes, matchGenerics)
+            return checkMethodIsSubtype(supertype, subtype, genericTypes)
 
         return false
     }
 
     private fun checkMethodIsSubtype(
         supertype: JSONStatement, subtype: JSONStatement,
-        genericTypes: MutableMap<String, JSONStatement>,
-        matchGenerics: Boolean
-    ) : Boolean
+        genericTypes: MutableMap<String, JSONStatement>) : Boolean
     {
         val supertypeComponents = supertype.components[0].components.toMutableList()
         val subtypeComponents = subtype.components[0].components.toMutableList()
@@ -137,12 +134,11 @@ object TypeConstants {
         else NOTHING_TYPE
 
         if(!isFormerSuperTypeOfLatter(supertypeReturnType,subtypeReturnType,
-                unboxGenerics = matchGenerics, genericTypes))
+                unboxGenerics = false, genericTypes))
             return false
 
-        if(matchMethodComponentList(subtypeComponents,supertypeComponents,false, genericTypes, matchGenerics)
-            && matchMethodComponentList(supertypeComponents,subtypeComponents,true, genericTypes,
-                matchGenerics)
+        if(matchMethodComponentList(subtypeComponents,supertypeComponents,false, genericTypes)
+            && matchMethodComponentList(supertypeComponents,subtypeComponents,true, genericTypes)
             && checkUnnamedArgsInSameOrder(supertypeComponents,subtypeComponents))
             return true
 
@@ -195,7 +191,6 @@ object TypeConstants {
         list1: List<JSONStatement>, list2: List<JSONStatement>,
         isSuperType: Boolean,
         genericTypes: MutableMap<String, JSONStatement>,
-        matchGenerics: Boolean
     ) : Boolean
     {
         for (component1 in list1) {
@@ -214,11 +209,11 @@ object TypeConstants {
                     if(defaultValueMatches) {
                         if(isSuperType) {
                             if (isFormerSuperTypeOfLatter(component1.components[0], component2.components[0],
-                                    unboxGenerics = matchGenerics, genericTypes))
+                                    unboxGenerics = false, genericTypes))
                                 matchFound = true
                         }
                         else if(isFormerSuperTypeOfLatter(component2.components[0], component1.components[0],
-                                unboxGenerics = matchGenerics, genericTypes))
+                                unboxGenerics = false, genericTypes))
                             matchFound = true
                     }
                 }
