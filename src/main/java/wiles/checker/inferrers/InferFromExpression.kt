@@ -26,7 +26,6 @@ import wiles.shared.constants.Tokens.APPLY_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.IMPORT_ID
 import wiles.shared.constants.Tokens.METHOD_ID
-import wiles.shared.constants.Tokens.MODIFY_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Tokens.NEW_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
@@ -109,7 +108,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
             var rightText : String = if(rightComponents.size == 1) unbox(rightComponents[0]).name else ANYTHING_ID
             if(rightText !in VALID_NAMED) rightText = ANYTHING_ID
             operationName = if(middle.name in listOf(ASSIGN_ID, MUTABLE_ID, NEW_ID,
-                    IMPORT_ID, MODIFY_ID, AND_ID, OR_ID)) middle.name
+                    IMPORT_ID, AND_ID, OR_ID)) middle.name
                 else "${leftText}|${middle.name}|${rightText}"
             return if(resultingTypes.size == 1)
                 resultingTypes[0]

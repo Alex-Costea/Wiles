@@ -21,7 +21,6 @@ import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.ELEM_ACCESS_ID
 import wiles.shared.constants.Tokens.IMPORT_ID
 import wiles.shared.constants.Tokens.METHOD_ID
-import wiles.shared.constants.Tokens.MODIFY_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Tokens.NEW_ID
 import wiles.shared.constants.Tokens.OR_ID
@@ -111,14 +110,6 @@ class InterpretFromExpression(statement: JSONStatement, variables: InterpreterVa
                     {
                         val oldRef = getReference(rightStatement)
                         oldRef.makeMutable()
-                    }
-                    MODIFY_ID ->
-                    {
-                        val leftRef = getReference(leftStatement)
-                        val mutableObj = getReference(rightStatement).makeMutable()
-                        leftRef.type = mutableObj.type
-                        leftRef.value = mutableObj.value
-                        NOTHING_REF
                     }
                     OR_ID ->
                     {

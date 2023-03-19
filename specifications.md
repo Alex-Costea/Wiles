@@ -67,7 +67,7 @@
 ### Mutable types
 - Type: `mut[type]`, always subtype of `type`
 - Make an immutable type into a mutable type with `mut` prefix operator
-- Change the value of a mutable object with `<-` infix operator
+- Change the value of a mutable object with `object.set(new_val)`
 - `mut [collection]` also makes its elements mutable
 
 ### Generics in functions

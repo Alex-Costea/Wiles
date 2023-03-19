@@ -125,7 +125,7 @@ object TypeConstants {
             return isFormerSuperTypeOfLatter(supertype, subtype.components[0])
 
         else if(supertype.name == Tokens.METHOD_ID && subtype.name == Tokens.METHOD_ID)
-            return checkMethodIsSubtype(supertype, subtype, genericTypes?:GenericTypesMap())
+            return checkMethodIsSubtype(supertype, subtype, genericTypes?: GenericTypesMap())
 
         return false
     }
@@ -302,8 +302,6 @@ object TypeConstants {
 
     val LIST_OF_NULLABLE_ANYTHING_TYPE = makeList(NULLABLE_ANYTHING_TYPE)
 
-    val MUTABLE_ANYTHING_INCLUDING_NOTHING_TYPE = makeMutable(makeNullable(ANYTHING_TYPE))
-
     val NOTHING_TOKEN = JSONStatement(type = SyntaxType.TOKEN, name = NOTHING_ID)
 
     val NULLABLE_STRING = makeNullable(STRING_TYPE)
@@ -328,7 +326,6 @@ object TypeConstants {
     val ELEM_ACCESS_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.ELEM_ACCESS_ID)
     val APPLY_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.APPLY_ID)
     val ASSIGN_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.ASSIGN_ID)
-    val MODIFY_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.MODIFY_ID)
     val MUTABLE_OPERATION = JSONStatement(type = SyntaxType.TOKEN, name = Tokens.MUTABLE_ID)
 
     val WRITE_TYPE = JSONStatement(name = Tokens.METHOD_ID, type = SyntaxType.TYPE,

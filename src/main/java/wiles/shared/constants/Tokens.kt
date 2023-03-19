@@ -30,7 +30,6 @@ object Tokens {
     const val DIVIDE_ID = "DIVIDE"
     const val POWER_ID = "POWER"
     const val ASSIGN_ID = "ASSIGN"
-    const val MODIFY_ID = "MODIFY"
     const val IDENTIFIER_START = "!"
     const val STRING_START = "@"
     const val NUM_START = "#"
@@ -98,7 +97,7 @@ object Tokens {
 
     @JvmField
     val NEW_STATEMENT_START_KEYWORDS = setOf(
-        DECLARE_ID, ELSE_ID, CONTINUE_ID, MODIFY_ID, IS_ID, WHEN_ID, RETURN_ID, WHILE_ID,
+        DECLARE_ID, ELSE_ID, CONTINUE_ID, IS_ID, WHEN_ID, RETURN_ID, WHILE_ID,
         BREAK_ID, FOR_ID, DO_ID, START_BLOCK_ID, END_BLOCK_ID, BRACKET_END_ID, PAREN_END_ID,
         SEPARATOR_ID, IN_ID, FROM_ID, TO_ID, ASSIGN_ID, TERMINATOR_ID, NEWLINE_ID, IF_ID
     )
@@ -137,7 +136,6 @@ object Tokens {
         SYMBOLS["/"] = DIVIDE_ID
         SYMBOLS["^"] = POWER_ID
         SYMBOLS[":="] = ASSIGN_ID
-        SYMBOLS["<-"] = MODIFY_ID
         SYMBOLS["="] = EQUALS_ID
         SYMBOLS[">"] = LARGER_ID
         SYMBOLS["<"] = SMALLER_ID

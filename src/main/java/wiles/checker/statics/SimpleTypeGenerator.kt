@@ -17,8 +17,6 @@ import wiles.shared.constants.TypeConstants.LARGER_EQUALS_OPERATION
 import wiles.shared.constants.TypeConstants.LARGER_OPERATION
 import wiles.shared.constants.TypeConstants.LIST_OF_NULLABLE_ANYTHING_TYPE
 import wiles.shared.constants.TypeConstants.MINUS_OPERATION
-import wiles.shared.constants.TypeConstants.MODIFY_OPERATION
-import wiles.shared.constants.TypeConstants.MUTABLE_ANYTHING_INCLUDING_NOTHING_TYPE
 import wiles.shared.constants.TypeConstants.MUTABLE_OPERATION
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
 import wiles.shared.constants.TypeConstants.NOT_EQUAL_OPERATION
@@ -186,13 +184,6 @@ object SimpleTypeGenerator {
         }
 
         if(unboxedTriple.second == ASSIGN_OPERATION && isFormerSuperTypeOfLatter(unboxedTriple.first,unboxedTriple.third))
-        {
-            return NOTHING_TYPE
-        }
-
-        if(unboxedTriple.second == MODIFY_OPERATION
-            && isFormerSuperTypeOfLatter(MUTABLE_ANYTHING_INCLUDING_NOTHING_TYPE,triple.first)
-            && isFormerSuperTypeOfLatter(unboxedTriple.first,unboxedTriple.third))
         {
             return NOTHING_TYPE
         }
