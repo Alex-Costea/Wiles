@@ -31,8 +31,222 @@ class InterpreterTests {
         end
         let text := list.as_text
          */
-        //TODO: rewrite
-        //assertVar(vars7,"!text","[1, 10, 3]")
+        val vars7 = getVars("""{
+  "type" : "CODE_BLOCK",
+  "parsed" : true,
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "MUTABLE",
+      "type" : "TYPE",
+      "components" : [ {
+        "name" : "LIST",
+        "type" : "TYPE",
+        "components" : [ {
+          "name" : "MUTABLE",
+          "type" : "TYPE",
+          "components" : [ {
+            "name" : "INT64",
+            "type" : "TYPE"
+          } ]
+        } ]
+      } ]
+    }, {
+      "name" : "!list",
+      "type" : "TOKEN"
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!nothing",
+        "type" : "TOKEN"
+      }, {
+        "name" : "MUTABLE",
+        "type" : "TOKEN"
+      }, {
+        "type" : "LIST",
+        "components" : [ {
+          "name" : "INT64",
+          "type" : "TYPE"
+        }, {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "#1",
+            "type" : "TOKEN"
+          } ]
+        }, {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "#2",
+            "type" : "TOKEN"
+          } ]
+        }, {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "#3",
+            "type" : "TOKEN"
+          } ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "EITHER",
+      "type" : "TYPE",
+      "components" : [ {
+        "name" : "MUTABLE",
+        "type" : "TYPE",
+        "components" : [ {
+          "name" : "INT64",
+          "type" : "TYPE"
+        } ]
+      }, {
+        "name" : "!nothing",
+        "type" : "TYPE"
+      } ]
+    }, {
+      "name" : "!elem",
+      "type" : "TOKEN"
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!list",
+        "type" : "TOKEN"
+      }, {
+        "name" : "LIST|ELEM_ACCESS|INT64",
+        "type" : "TOKEN"
+      }, {
+        "name" : "#1",
+        "type" : "TOKEN"
+      } ]
+    } ]
+  }, {
+    "type" : "WHEN",
+    "components" : [ {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!elem",
+        "type" : "TOKEN"
+      } ]
+    }, {
+      "name" : "MUTABLE",
+      "type" : "TYPE",
+      "components" : [ {
+        "name" : "INT64",
+        "type" : "TYPE"
+      } ]
+    }, {
+      "type" : "CODE_BLOCK",
+      "components" : [ {
+        "type" : "EXPRESSION",
+        "components" : [ {
+          "name" : "!writeline",
+          "type" : "TOKEN"
+        }, {
+          "name" : "METHOD|APPLY|METHOD_CALL",
+          "type" : "TOKEN"
+        }, {
+          "type" : "METHOD_CALL",
+          "components" : [ {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "!text",
+              "type" : "TOKEN"
+            }, {
+              "name" : "ASSIGN",
+              "type" : "TOKEN"
+            }, {
+              "type" : "EXPRESSION",
+              "components" : [ {
+                "name" : "@mut[int]",
+                "type" : "TOKEN"
+              } ]
+            } ]
+          } ]
+        } ]
+      }, {
+        "type" : "EXPRESSION",
+        "components" : [ {
+          "name" : "!set",
+          "type" : "TOKEN"
+        }, {
+          "name" : "METHOD|APPLY|METHOD_CALL",
+          "type" : "TOKEN"
+        }, {
+          "type" : "METHOD_CALL",
+          "components" : [ {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "!elem",
+              "type" : "TOKEN"
+            }, {
+              "name" : "ASSIGN",
+              "type" : "TOKEN"
+            }, {
+              "type" : "EXPRESSION",
+              "components" : [ {
+                "name" : "!elem",
+                "type" : "TOKEN"
+              } ]
+            } ]
+          }, {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "!value",
+              "type" : "TOKEN"
+            }, {
+              "name" : "ASSIGN",
+              "type" : "TOKEN"
+            }, {
+              "type" : "EXPRESSION",
+              "components" : [ {
+                "name" : "#10",
+                "type" : "TOKEN"
+              } ]
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "STRING",
+      "type" : "TYPE"
+    }, {
+      "name" : "!text",
+      "type" : "TOKEN"
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!as_text",
+        "type" : "TOKEN"
+      }, {
+        "name" : "METHOD|APPLY|METHOD_CALL",
+        "type" : "TOKEN"
+      }, {
+        "type" : "METHOD_CALL",
+        "components" : [ {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "!elem",
+            "type" : "TOKEN"
+          }, {
+            "name" : "ASSIGN",
+            "type" : "TOKEN"
+          }, {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "!list",
+              "type" : "TOKEN"
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}""")
+        assertVar(vars7,"!text","[1, 10, 3]")
 
         /*
         let a := "hello"
@@ -1822,13 +2036,226 @@ class InterpreterTests {
         let var b := ""
         for elem in list
         begin
-            list.set(mut [4, 5, 6])
+            list.set([4, 5, 6])
             b := b + elem
         end
         writeline(b)
          */
-        //TODO:reimplement
-        //assertVar(vars3, "!b", "123")
+        val vars3 = getVars("""{
+  "type" : "CODE_BLOCK",
+  "parsed" : true,
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "MUTABLE",
+      "type" : "TYPE",
+      "components" : [ {
+        "name" : "LIST",
+        "type" : "TYPE",
+        "components" : [ {
+          "name" : "MUTABLE",
+          "type" : "TYPE",
+          "components" : [ {
+            "name" : "INT64",
+            "type" : "TYPE"
+          } ]
+        } ]
+      } ]
+    }, {
+      "name" : "!list",
+      "type" : "TOKEN"
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!nothing",
+        "type" : "TOKEN"
+      }, {
+        "name" : "MUTABLE",
+        "type" : "TOKEN"
+      }, {
+        "type" : "LIST",
+        "components" : [ {
+          "name" : "INT64",
+          "type" : "TYPE"
+        }, {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "#1",
+            "type" : "TOKEN"
+          } ]
+        }, {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "#2",
+            "type" : "TOKEN"
+          } ]
+        }, {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "#3",
+            "type" : "TOKEN"
+          } ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "name" : "VARIABLE",
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "STRING",
+      "type" : "TYPE"
+    }, {
+      "name" : "!b",
+      "type" : "TOKEN"
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "@",
+        "type" : "TOKEN"
+      } ]
+    } ]
+  }, {
+    "type" : "FOR",
+    "components" : [ {
+      "name" : "MUTABLE",
+      "type" : "TYPE",
+      "components" : [ {
+        "name" : "INT64",
+        "type" : "TYPE"
+      } ]
+    }, {
+      "name" : "!elem",
+      "type" : "TOKEN"
+    }, {
+      "name" : "IN",
+      "type" : "TOKEN"
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!list",
+        "type" : "TOKEN"
+      } ]
+    }, {
+      "type" : "CODE_BLOCK",
+      "components" : [ {
+        "type" : "EXPRESSION",
+        "components" : [ {
+          "name" : "!set",
+          "type" : "TOKEN"
+        }, {
+          "name" : "METHOD|APPLY|METHOD_CALL",
+          "type" : "TOKEN"
+        }, {
+          "type" : "METHOD_CALL",
+          "components" : [ {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "!elem",
+              "type" : "TOKEN"
+            }, {
+              "name" : "ASSIGN",
+              "type" : "TOKEN"
+            }, {
+              "type" : "EXPRESSION",
+              "components" : [ {
+                "name" : "!list",
+                "type" : "TOKEN"
+              } ]
+            } ]
+          }, {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "!value",
+              "type" : "TOKEN"
+            }, {
+              "name" : "ASSIGN",
+              "type" : "TOKEN"
+            }, {
+              "type" : "EXPRESSION",
+              "components" : [ {
+                "type" : "LIST",
+                "components" : [ {
+                  "name" : "INT64",
+                  "type" : "TYPE"
+                }, {
+                  "type" : "EXPRESSION",
+                  "components" : [ {
+                    "name" : "#4",
+                    "type" : "TOKEN"
+                  } ]
+                }, {
+                  "type" : "EXPRESSION",
+                  "components" : [ {
+                    "name" : "#5",
+                    "type" : "TOKEN"
+                  } ]
+                }, {
+                  "type" : "EXPRESSION",
+                  "components" : [ {
+                    "name" : "#6",
+                    "type" : "TOKEN"
+                  } ]
+                } ]
+              } ]
+            } ]
+          } ]
+        } ]
+      }, {
+        "type" : "EXPRESSION",
+        "components" : [ {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "!b",
+            "type" : "TOKEN"
+          } ]
+        }, {
+          "name" : "ASSIGN",
+          "type" : "TOKEN"
+        }, {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "!b",
+            "type" : "TOKEN"
+          }, {
+            "name" : "STRING|PLUS|INT64",
+            "type" : "TOKEN"
+          }, {
+            "name" : "!elem",
+            "type" : "TOKEN"
+          } ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "type" : "EXPRESSION",
+    "components" : [ {
+      "name" : "!writeline",
+      "type" : "TOKEN"
+    }, {
+      "name" : "METHOD|APPLY|METHOD_CALL",
+      "type" : "TOKEN"
+    }, {
+      "type" : "METHOD_CALL",
+      "components" : [ {
+        "type" : "EXPRESSION",
+        "components" : [ {
+          "name" : "!text",
+          "type" : "TOKEN"
+        }, {
+          "name" : "ASSIGN",
+          "type" : "TOKEN"
+        }, {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "!b",
+            "type" : "TOKEN"
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}""")
+        assertVar(vars3, "!b", "123")
 
         /*
         let list := mut [1,2,3]

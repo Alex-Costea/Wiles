@@ -28,6 +28,7 @@ import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_BOOL_TYPE
 import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_DOUBLE_TYPE
 import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_INT_TYPE
 import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_STRING_TYPE
+import wiles.shared.constants.TypeConstants.SET_VALUE_TYPE
 import wiles.shared.constants.TypeConstants.STRING_SIZE_TYPE
 import wiles.shared.constants.TypeConstants.STRING_TYPE
 import wiles.shared.constants.TypeConstants.WRITELINE_TYPE
@@ -52,6 +53,7 @@ object StandardLibrary {
     private const val AS_LIST = "!as_list"
     private const val INFINITY = "!Infinity"
     private const val NAN = "!NaN"
+    private const val SET_VALUE = "!set"
 
     val defaultCheckerVars = CheckerVariableMap(
         hashMapOf(
@@ -73,6 +75,7 @@ object StandardLibrary {
             Pair(AS_LIST, VariableDetails(AS_LIST_TYPE)),
             Pair(INFINITY, VariableDetails(DOUBLE_TYPE)),
             Pair(NAN, VariableDetails(DOUBLE_TYPE)),
+            Pair(SET_VALUE, VariableDetails(SET_VALUE_TYPE)),
         )
     )
 
@@ -153,6 +156,14 @@ object StandardLibrary {
             ObjectDetails(it.toString(), STRING_TYPE) }, LIST_OF_STRING)
     }, defaultCheckerVars[READ_LINE]!!.type)
 
+    private val SET_VALUE_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
+        val leftRef = map["!elem"]!!
+        val mutableObj = map["!value"]!!.makeMutable()
+        leftRef.type = mutableObj.type
+        leftRef.value = mutableObj.value
+        NOTHING_REF
+    }, defaultCheckerVars[SET_VALUE]!!.type)
+
     init{
         defaultInterpreterVars[NOTHING_ID] = NOTHING_REF
         defaultInterpreterVars[FALSE_ID] = FALSE_REF
@@ -172,5 +183,6 @@ object StandardLibrary {
         defaultInterpreterVars[AS_LIST] = AS_LIST_REF
         defaultInterpreterVars[INFINITY] = INFINITY_REF
         defaultInterpreterVars[NAN] = NAN_REF
+        defaultInterpreterVars[SET_VALUE] = SET_VALUE_REF
     }
 }

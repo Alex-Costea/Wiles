@@ -1457,11 +1457,119 @@ class CheckerTests {
   } ]
 }""","CODE_BLOCK(DECLARATION(TYPE INT64; !temp; EXPRESSION(TYPE INT64; #2; INT64|PLUS|INT64; EXPRESSION(TYPE MUTABLE; (TYPE INT64); MUTABLE; #3))))")
 
-    //TODO
     /*
-        let a := mut "2"
+        let a : either[int,text] := mut "2"
         a.set(10)
      */
+        checkResult(null,"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "MUTABLE",
+      "type" : "TYPE",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 9
+      },
+      "components" : [ {
+        "name" : "EITHER",
+        "type" : "TYPE",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 13
+        },
+        "components" : [ {
+          "name" : "INT64",
+          "type" : "TYPE",
+          "location" : {
+            "line" : 1,
+            "lineIndex" : 20
+          }
+        }, {
+          "name" : "STRING",
+          "type" : "TYPE",
+          "location" : {
+            "line" : 1,
+            "lineIndex" : 24
+          }
+        } ]
+      } ]
+    }, {
+      "name" : "!a",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "MUTABLE",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 34
+        }
+      }, {
+        "name" : "@2",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 38
+        }
+      } ]
+    } ]
+  }, {
+    "type" : "EXPRESSION",
+    "components" : [ {
+      "name" : "!a",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 2,
+        "lineIndex" : 1
+      }
+    }, {
+      "name" : "ACCESS",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 2,
+        "lineIndex" : 2
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!set",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 3
+        }
+      }, {
+        "name" : "APPLY",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 6
+        }
+      }, {
+        "type" : "METHOD_CALL",
+        "components" : [ {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "#10",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 2,
+              "lineIndex" : 7
+            }
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(DECLARATION(TYPE MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE STRING)); !a; EXPRESSION(TYPE MUTABLE; (TYPE STRING); MUTABLE; @2)); EXPRESSION(TYPE !nothing; !set; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE STRING)); !a)); EXPRESSION(!value; ASSIGN; EXPRESSION(TYPE INT64; #10)))))")
     }
 
     @Test

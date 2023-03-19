@@ -112,6 +112,15 @@ object InferrerUtils {
             components = mutableListOf(type.copyRemovingLocation(), NOTHING_TYPE))
     }
 
+    fun makeGeneric(type: JSONStatement, name : String) : JSONStatement
+    {
+        return JSONStatement(name = GENERIC_ID,
+            type = SyntaxType.TYPE,
+            components = mutableListOf(
+                JSONStatement(type = SyntaxType.TOKEN, name = name),
+                type.copyRemovingLocation()))
+    }
+
     private fun makeEither(types: MutableList<JSONStatement>) : JSONStatement
     {
         return JSONStatement(name = EITHER_ID,

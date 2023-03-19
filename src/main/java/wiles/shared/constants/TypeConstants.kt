@@ -1,6 +1,7 @@
 package wiles.shared.constants
 
 import wiles.checker.data.GenericTypesMap
+import wiles.checker.statics.InferrerUtils.makeGeneric
 import wiles.checker.statics.InferrerUtils.makeNullable
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
@@ -439,6 +440,26 @@ object TypeConstants {
     )
 
     val LIST_OF_STRING = makeList(STRING_TYPE)
+
+    private val SET_VALUE_GENERIC_TYPE = makeGeneric(makeNullable(ANYTHING_TYPE), "!T|set")
+    val SET_VALUE_TYPE = JSONStatement(name = Tokens.METHOD_ID, type = SyntaxType.TYPE,
+        components = mutableListOf(JSONStatement(type = SyntaxType.METHOD,
+            components = mutableListOf(NOTHING_TYPE,
+                JSONStatement(name = ANON_ARG_ID, type = SyntaxType.DECLARATION,
+                    components = mutableListOf(
+                        makeMutable(SET_VALUE_GENERIC_TYPE),
+                        JSONStatement(name = "!elem", type = SyntaxType.TOKEN)
+                    )
+                ),
+                JSONStatement(name = ANON_ARG_ID, type = SyntaxType.DECLARATION,
+                    components = mutableListOf(
+                        SET_VALUE_GENERIC_TYPE,
+                        JSONStatement(name = "!value", type = SyntaxType.TOKEN)
+                    )
+                ),
+                )
+        ))
+    )
 
     val AS_TEXT_TYPE = Utils.createFunctionType(Pair(NULLABLE_ANYTHING_TYPE, STRING_TYPE))
     val AS_LIST_TYPE = Utils.createFunctionType(Pair(STRING_TYPE, LIST_OF_STRING))
