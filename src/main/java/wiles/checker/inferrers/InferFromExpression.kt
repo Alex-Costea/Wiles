@@ -209,6 +209,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
                         right.name = AccessOperationIdentifiers.get(right.components[0].name,leftType)
                             ?: right.components[0].name
                         right.type = right.components[0].type
+                        right.location = right.components[0].location
                         right.components = right.components[0].components
                     }
                 }
