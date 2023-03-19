@@ -223,15 +223,20 @@ object InferrerUtils {
         if(statement.name == MUTABLE_ID)
             return unbox(statement.components[0])
         if(statement.name == GENERIC_ID)
-            return unbox(statement.components[1])
+            return unbox(unGenerify(statement.components[1]))
         return statement
     }
 
-    fun unGenerify(statement: JSONStatement) : JSONStatement
+    fun unGenerify(statement : JSONStatement) : JSONStatement
     {
-        assert(statement.type == SyntaxType.TYPE)
-        if(statement.name == GENERIC_ID)
-            return unbox(statement.components[1])
+        if(statement.type == SyntaxType.TYPE && statement.name == GENERIC_ID)
+        {
+            statement.name = statement.components[1].name
+            statement.location = statement.components[1].location
+            statement.components = statement.components[1].components
+        }
+        for(component in statement.components)
+            unGenerify(component)
         return statement
     }
 
