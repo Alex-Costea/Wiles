@@ -1,5 +1,6 @@
 package wiles.checker.inferrers
 
+import wiles.checker.data.GenericTypesMap
 import wiles.checker.data.InferrerDetails
 import wiles.checker.exceptions.CannotModifyException
 import wiles.checker.exceptions.ExpectedIdentifierException
@@ -71,7 +72,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
                     if(unboxedNewLeft.name == METHOD_ID &&
                             middle == TypeConstants.APPLY_OPERATION &&
                             newRight.name == METHOD_CALL_ID) {
-                        val genericTypes = mutableMapOf<String, JSONStatement>()
+                        val genericTypes = GenericTypesMap()
                         val result = InferrerUtils.getFunctionArguments(unboxedNewLeft, newRight,
                             middle.getFirstLocation(), genericTypes)
                         unboxedNewLeft = unboxedNewLeft.copy()

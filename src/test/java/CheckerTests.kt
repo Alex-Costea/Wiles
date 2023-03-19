@@ -6265,6 +6265,150 @@ class CheckerTests {
     } ]
   } ]
 }""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE GENERIC; (!T|2; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); DECLARATION ANON_ARG; (TYPE METHOD; (METHOD(TYPE GENERIC; (!T|2; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)))); !func))); !run_func; EXPRESSION(TYPE METHOD; (METHOD(TYPE GENERIC; (!T|2; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); DECLARATION ANON_ARG; (TYPE METHOD; (METHOD(TYPE GENERIC; (!T|2; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)))); !func))); METHOD(TYPE GENERIC; (!T|2; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); DECLARATION ANON_ARG; (TYPE METHOD; (METHOD(TYPE GENERIC; (!T|2; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)))); !func); CODE_BLOCK(RETURN(EXPRESSION(TYPE GENERIC; (!T|2; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !func; METHOD|APPLY|METHOD_CALL; METHOD_CALL)))))); EXPRESSION(TYPE !nothing; !writeline; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!text; ASSIGN; EXPRESSION(TYPE INT64; EXPRESSION(TYPE GENERIC; (!T|2; TYPE INT64); !run_func; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!func; ASSIGN; EXPRESSION(TYPE METHOD; (METHOD(TYPE INT64)); METHOD(TYPE INT64; CODE_BLOCK(RETURN(EXPRESSION(TYPE INT64; #10)))))))); INT64|PLUS|INT64; #20)))))")
+
+        /*
+        let func : fun[arg x : anything as T -> T]
+        func := fun(arg x : int) -> int do yield x
+         */
+        Checker.currentFunctionNumber=0
+        checkResult(createExceptions(WrongOperationException(NULL_LOCATION,"TYPE METHOD; (METHOD(TYPE GENERIC; (!T|1; TYPE ANYTHING); DECLARATION ANON_ARG; (TYPE GENERIC; (!T|1; TYPE ANYTHING); !x)))","TYPE METHOD; (METHOD(TYPE INT64; DECLARATION ANON_ARG; (TYPE INT64; !x)))")),
+            """{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "METHOD",
+      "type" : "TYPE",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 12
+      },
+      "components" : [ {
+        "type" : "METHOD",
+        "components" : [ {
+          "name" : "!T",
+          "type" : "TYPE",
+          "location" : {
+            "line" : 1,
+            "lineIndex" : 41
+          }
+        }, {
+          "name" : "ANON_ARG",
+          "type" : "DECLARATION",
+          "components" : [ {
+            "name" : "GENERIC",
+            "type" : "TYPE",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 24
+            },
+            "components" : [ {
+              "name" : "!T",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 1,
+                "lineIndex" : 36
+              }
+            }, {
+              "name" : "ANYTHING",
+              "type" : "TYPE",
+              "location" : {
+                "line" : 1,
+                "lineIndex" : 24
+              }
+            } ]
+          }, {
+            "name" : "!x",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 20
+            }
+          } ]
+        } ]
+      } ]
+    }, {
+      "name" : "!func",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    } ]
+  }, {
+    "type" : "EXPRESSION",
+    "components" : [ {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!func",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 1
+        }
+      } ]
+    }, {
+      "name" : "ASSIGN",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 2,
+        "lineIndex" : 6
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "type" : "METHOD",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 9
+        },
+        "components" : [ {
+          "name" : "INT64",
+          "type" : "TYPE",
+          "location" : {
+            "line" : 2,
+            "lineIndex" : 29
+          }
+        }, {
+          "name" : "ANON_ARG",
+          "type" : "DECLARATION",
+          "components" : [ {
+            "name" : "INT64",
+            "type" : "TYPE",
+            "location" : {
+              "line" : 2,
+              "lineIndex" : 21
+            }
+          }, {
+            "name" : "!x",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 2,
+              "lineIndex" : 17
+            }
+          } ]
+        }, {
+          "type" : "CODE_BLOCK",
+          "components" : [ {
+            "type" : "RETURN",
+            "components" : [ {
+              "type" : "EXPRESSION",
+              "components" : [ {
+                "name" : "!x",
+                "type" : "TOKEN",
+                "location" : {
+                  "line" : 2,
+                  "lineIndex" : 42
+                }
+              } ]
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE GENERIC; (!T|1; TYPE ANYTHING); DECLARATION ANON_ARG; (TYPE GENERIC; (!T|1; TYPE ANYTHING); !x))); !func); EXPRESSION(EXPRESSION(TYPE METHOD; (METHOD(TYPE GENERIC; (!T|1; TYPE ANYTHING); DECLARATION ANON_ARG; (TYPE GENERIC; (!T|1; TYPE ANYTHING); !x))); !func); ASSIGN; EXPRESSION(TYPE METHOD; (METHOD(TYPE INT64; DECLARATION ANON_ARG; (TYPE INT64; !x))); METHOD(TYPE INT64; DECLARATION ANON_ARG; (TYPE INT64; !x); CODE_BLOCK(RETURN(EXPRESSION(TYPE INT64; !x)))))))")
     }
 
     companion object {

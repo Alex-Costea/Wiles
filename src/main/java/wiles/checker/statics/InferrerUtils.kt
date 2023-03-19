@@ -2,6 +2,7 @@ package wiles.checker.statics
 
 import wiles.checker.Checker.Companion.currentFunctionNumber
 import wiles.checker.data.CheckerVariableMap
+import wiles.checker.data.GenericTypesMap
 import wiles.checker.data.VariableDetails
 import wiles.checker.exceptions.*
 import wiles.shared.InternalErrorException
@@ -118,14 +119,14 @@ object InferrerUtils {
             components = types.map { it.copyRemovingLocation() }.toMutableList())
     }
 
-    fun specifyGenericTypesForFunction(statement : JSONStatement, genericTypes : MutableMap<String, JSONStatement>)
+    fun specifyGenericTypesForFunction(statement : JSONStatement, genericTypes : GenericTypesMap)
     {
         if(statement.type == SyntaxType.TYPE && statement.name == GENERIC_ID)
         {
             val name = getTypeNumber(statement.components[0].name)
             if(genericTypes.containsKey(name))
             {
-                statement.components[1] = genericTypes[name]!!
+                statement.components[1] = genericTypes[name]!!.first
             }
             return
         }
@@ -134,7 +135,7 @@ object InferrerUtils {
     }
 
     fun getFunctionArguments(methodType : JSONStatement, methodCallType : JSONStatement,
-                             location: TokenLocation, genericTypes : MutableMap<String, JSONStatement>)
+                             location: TokenLocation, genericTypes : GenericTypesMap)
         : Map<String,Pair<JSONStatement,Boolean>>
     {
         // statement, does it need name addition

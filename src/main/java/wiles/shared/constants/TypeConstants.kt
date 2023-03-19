@@ -1,5 +1,6 @@
 package wiles.shared.constants
 
+import wiles.checker.data.GenericTypesMap
 import wiles.checker.statics.InferrerUtils.makeNullable
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
@@ -16,7 +17,7 @@ object TypeConstants {
     fun isFormerSuperTypeOfLatter(
         supertype : JSONStatement, subtype : JSONStatement,
         unboxGenerics : Boolean = true, //should generics match?
-        genericTypes : MutableMap<String, JSONStatement> = mutableMapOf(),
+        genericTypes : GenericTypesMap? = null,
     ): Boolean {
         assert(supertype.type == SyntaxType.TYPE)
         assert(subtype.type == SyntaxType.TYPE)
@@ -30,7 +31,19 @@ object TypeConstants {
 
         if(supertype.name == GENERIC_ID && isFormerSuperTypeOfLatter(supertype.components[1],subtype)){
             val genName = supertype.components[0].name
-            genericTypes[genName] = subtype
+            if(genericTypes?.containsKey(genName) == true)
+            {
+                return if(isFormerSuperTypeOfLatter(genericTypes[genName]!!.first, subtype, unboxGenerics = false)) {
+                    genericTypes[genName] = Pair(genericTypes[genName]!!.first,true)
+                    true
+                }
+                else if(isFormerSuperTypeOfLatter(subtype, genericTypes[genName]!!.first, unboxGenerics = false)) {
+                    genericTypes[genName] = Pair(subtype,true)
+                    true
+                } else false
+            }
+            if (genericTypes!=null)
+                genericTypes[genName] = Pair(subtype,false)
             if(unboxGenerics)
                 return true
         }
@@ -111,16 +124,15 @@ object TypeConstants {
         else if (subtype.name == Tokens.MUTABLE_ID)
             return isFormerSuperTypeOfLatter(supertype, subtype.components[0])
 
-        //TODO: generics support
         else if(supertype.name == Tokens.METHOD_ID && subtype.name == Tokens.METHOD_ID)
-            return checkMethodIsSubtype(supertype, subtype, genericTypes)
+            return checkMethodIsSubtype(supertype, subtype, genericTypes?:GenericTypesMap())
 
         return false
     }
 
     private fun checkMethodIsSubtype(
         supertype: JSONStatement, subtype: JSONStatement,
-        genericTypes: MutableMap<String, JSONStatement>) : Boolean
+        genericTypes: GenericTypesMap) : Boolean
     {
         val supertypeComponents = supertype.components[0].components.toMutableList()
         val subtypeComponents = subtype.components[0].components.toMutableList()
@@ -132,17 +144,44 @@ object TypeConstants {
         val subtypeReturnType = if(subtypeComponents[0].type == SyntaxType.TYPE)
             subtypeComponents[0]
         else NOTHING_TYPE
-
-        if(!isFormerSuperTypeOfLatter(supertypeReturnType,subtypeReturnType,
-                unboxGenerics = false, genericTypes))
+        if(!isFormerSuperTypeOfLatter(supertypeReturnType, subtypeReturnType, genericTypes = genericTypes))
             return false
 
         if(matchMethodComponentList(subtypeComponents,supertypeComponents,false, genericTypes)
             && matchMethodComponentList(supertypeComponents,subtypeComponents,true, genericTypes)
-            && checkUnnamedArgsInSameOrder(supertypeComponents, subtypeComponents))
+            && checkUnnamedArgsInSameOrder(supertypeComponents, subtypeComponents)
+            && checkValidReturnTypeForGenerics(supertypeReturnType, genericTypes)
+        )
             return true
 
         return false
+    }
+
+    private fun checkValidReturnTypeForGenerics(
+        supertypeReturnType: JSONStatement,
+        genericTypes: GenericTypesMap
+    ): Boolean {
+        val genericComponents = getGenericComponents(supertypeReturnType)
+        for(component in genericComponents)
+        {
+            assert(genericTypes.containsKey(component))
+            val value = genericTypes[component]!!
+            if(value.first.name != GENERIC_ID && value.second)
+                return false
+        }
+        return true
+    }
+
+    private fun getGenericComponents(statement : JSONStatement) : List<String>
+    {
+        if(statement.name == GENERIC_ID)
+            return listOf(statement.components[0].name)
+        val list = mutableListOf<String>()
+        for(component in statement.components)
+        {
+            list.addAll(getGenericComponents(statement))
+        }
+        return list
     }
 
     private fun checkUnnamedArgsInSameOrder(
@@ -192,7 +231,7 @@ object TypeConstants {
     private fun matchMethodComponentList(
         list1: List<JSONStatement>, list2: List<JSONStatement>,
         isSuperType: Boolean,
-        genericTypes: MutableMap<String, JSONStatement>,
+        genericTypes: GenericTypesMap?,
     ) : Boolean
     {
         for (component1 in list1) {
@@ -211,11 +250,11 @@ object TypeConstants {
                     if(defaultValueMatches) {
                         if(isSuperType) {
                             if (isFormerSuperTypeOfLatter(component1.components[0], component2.components[0],
-                                    unboxGenerics = false, genericTypes))
+                                    genericTypes = genericTypes))
                                 matchFound = true
                         }
                         else if(isFormerSuperTypeOfLatter(component2.components[0], component1.components[0],
-                                unboxGenerics = false, genericTypes))
+                                genericTypes = genericTypes))
                             matchFound = true
                     }
                 }
