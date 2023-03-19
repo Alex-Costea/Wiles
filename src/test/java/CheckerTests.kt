@@ -3755,6 +3755,7 @@ class CheckerTests {
   } ]
 }""", "CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE !nothing)); !func; EXPRESSION(TYPE METHOD; (METHOD(TYPE !nothing)); METHOD(TYPE !nothing; CODE_BLOCK(EXPRESSION(TYPE !nothing; !nothing))))))")
 
+        //let func : fun[a : mut[int], b := mut 30] := fun(b := 30, a := 20) do nothing
         checkResult(null,"""{
   "parsed" : true,
   "type" : "CODE_BLOCK",
@@ -3772,12 +3773,20 @@ class CheckerTests {
         "components" : [ {
           "type" : "DECLARATION",
           "components" : [ {
-            "name" : "INT64",
+            "name" : "MUTABLE",
             "type" : "TYPE",
             "location" : {
               "line" : 1,
               "lineIndex" : 20
-            }
+            },
+            "components" : [ {
+              "name" : "INT64",
+              "type" : "TYPE",
+              "location" : {
+                "line" : 1,
+                "lineIndex" : 24
+              }
+            } ]
           }, {
             "name" : "!a",
             "type" : "TOKEN",
@@ -3793,16 +3802,23 @@ class CheckerTests {
             "type" : "TOKEN",
             "location" : {
               "line" : 1,
-              "lineIndex" : 25
+              "lineIndex" : 30
             }
           }, {
             "type" : "EXPRESSION",
             "components" : [ {
+              "name" : "MUTABLE",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 1,
+                "lineIndex" : 35
+              }
+            }, {
               "name" : "#30",
               "type" : "TOKEN",
               "location" : {
                 "line" : 1,
-                "lineIndex" : 30
+                "lineIndex" : 39
               }
             } ]
           } ]
@@ -3819,6 +3835,10 @@ class CheckerTests {
       "type" : "EXPRESSION",
       "components" : [ {
         "type" : "METHOD",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 46
+        },
         "components" : [ {
           "type" : "DECLARATION",
           "components" : [ {
@@ -3826,23 +3846,16 @@ class CheckerTests {
             "type" : "TOKEN",
             "location" : {
               "line" : 1,
-              "lineIndex" : 41
+              "lineIndex" : 50
             }
           }, {
             "type" : "EXPRESSION",
             "components" : [ {
-              "name" : "MUTABLE",
-              "type" : "TOKEN",
-              "location" : {
-                "line" : 1,
-                "lineIndex" : 46
-              }
-            }, {
               "name" : "#30",
               "type" : "TOKEN",
               "location" : {
                 "line" : 1,
-                "lineIndex" : 50
+                "lineIndex" : 55
               }
             } ]
           } ]
@@ -3853,7 +3866,7 @@ class CheckerTests {
             "type" : "TOKEN",
             "location" : {
               "line" : 1,
-              "lineIndex" : 54
+              "lineIndex" : 59
             }
           }, {
             "type" : "EXPRESSION",
@@ -3862,7 +3875,7 @@ class CheckerTests {
               "type" : "TOKEN",
               "location" : {
                 "line" : 1,
-                "lineIndex" : 59
+                "lineIndex" : 64
               }
             } ]
           } ]
@@ -3875,7 +3888,7 @@ class CheckerTests {
               "type" : "TOKEN",
               "location" : {
                 "line" : 1,
-                "lineIndex" : 66
+                "lineIndex" : 71
               }
             } ]
           } ]
@@ -3883,7 +3896,7 @@ class CheckerTests {
       } ]
     } ]
   } ]
-}""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE !nothing; DECLARATION(TYPE INT64; !a); DECLARATION(TYPE INT64; !b; EXPRESSION(TYPE INT64; #30)))); !func; EXPRESSION(TYPE METHOD; (METHOD(TYPE !nothing; DECLARATION(TYPE MUTABLE; (TYPE INT64); !b; EXPRESSION(TYPE MUTABLE; (TYPE INT64); MUTABLE; #30)); DECLARATION(TYPE INT64; !a; EXPRESSION(TYPE INT64; #20)))); METHOD(TYPE !nothing; DECLARATION(TYPE MUTABLE; (TYPE INT64); !b; EXPRESSION(TYPE MUTABLE; (TYPE INT64); MUTABLE; #30)); DECLARATION(TYPE INT64; !a; EXPRESSION(TYPE INT64; #20)); CODE_BLOCK(EXPRESSION(TYPE !nothing; !nothing))))))")
+}""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE !nothing; DECLARATION(TYPE MUTABLE; (TYPE INT64); !a); DECLARATION(TYPE MUTABLE; (TYPE INT64); !b; EXPRESSION(TYPE MUTABLE; (TYPE INT64); MUTABLE; #30)))); !func; EXPRESSION(TYPE METHOD; (METHOD(TYPE !nothing; DECLARATION(TYPE INT64; !b; EXPRESSION(TYPE INT64; #30)); DECLARATION(TYPE INT64; !a; EXPRESSION(TYPE INT64; #20)))); METHOD(TYPE !nothing; DECLARATION(TYPE INT64; !b; EXPRESSION(TYPE INT64; #30)); DECLARATION(TYPE INT64; !a; EXPRESSION(TYPE INT64; #20)); CODE_BLOCK(EXPRESSION(TYPE !nothing; !nothing))))))")
 
     checkResult(null,"""{
   "parsed" : true,

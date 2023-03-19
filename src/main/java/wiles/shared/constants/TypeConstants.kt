@@ -248,7 +248,7 @@ object TypeConstants {
                 if(nameMatches) {
                     val defaultValueMatches = !isSuperType || (component1.components.size <= component2.components.size)
                     if(defaultValueMatches) {
-                        if(isSuperType) {
+                        if(!isSuperType) {
                             if (isFormerSuperTypeOfLatter(component1.components[0], component2.components[0],
                                     genericTypes = genericTypes))
                                 matchFound = true
