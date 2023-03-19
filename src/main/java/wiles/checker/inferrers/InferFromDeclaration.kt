@@ -40,7 +40,7 @@ class InferFromDeclaration(details: InferrerDetails,
                 inferrer.infer()
                 inferredType = inferrer.getType()
                 if(inFunction)
-                    inferredType = unGenerify(inferredType)
+                    inferredType = unGenerify(inferredType.copy())
             }
         }
         catch (ex : AbstractCompilationException)
