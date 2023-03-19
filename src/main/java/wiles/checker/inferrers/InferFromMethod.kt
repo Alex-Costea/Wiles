@@ -104,7 +104,7 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
 
             val inferrer = InferFromDeclaration(
                 InferrerDetails(component, declarationVariables, exceptions, CheckerVariableMap()),
-                alwaysInit = true, isTopMostType = false, genericTypes = genericTypes
+                inFunction = true, isTopMostType = false, genericTypes = genericTypes
             )
             inferrer.infer()
         }

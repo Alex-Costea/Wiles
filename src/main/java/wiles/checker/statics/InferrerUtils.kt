@@ -227,6 +227,14 @@ object InferrerUtils {
         return statement
     }
 
+    fun unGenerify(statement: JSONStatement) : JSONStatement
+    {
+        assert(statement.type == SyntaxType.TYPE)
+        if(statement.name == GENERIC_ID)
+            return unbox(statement.components[1])
+        return statement
+    }
+
     fun getElementTypeFromListType(statement: JSONStatement) : JSONStatement
     {
         val newStatement = unbox(statement)

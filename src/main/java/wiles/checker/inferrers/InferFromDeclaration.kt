@@ -6,6 +6,7 @@ import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.exceptions.InferenceFailException
 import wiles.checker.exceptions.VariableAlreadyDeclaredException
 import wiles.checker.services.InferrerService
+import wiles.checker.statics.InferrerUtils.unGenerify
 import wiles.shared.AbstractCompilationException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType.*
@@ -16,7 +17,7 @@ import wiles.shared.constants.TypeConstants.NOTHING_TYPE
 import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
 
 class InferFromDeclaration(details: InferrerDetails,
-                           private val alwaysInit: Boolean = false,
+                           private val inFunction: Boolean = false,
                            private val genericTypes : MutableMap<String,JSONStatement> = mutableMapOf(),
                            private val isTopMostType : Boolean = true)
     : InferFromStatement(details)
@@ -38,6 +39,8 @@ class InferFromDeclaration(details: InferrerDetails,
                 val inferrer = InferrerService(InferrerDetails(default, variables, exceptions, additionalVars))
                 inferrer.infer()
                 inferredType = inferrer.getType()
+                if(inFunction)
+                    inferredType = unGenerify(inferredType)
             }
         }
         catch (ex : AbstractCompilationException)
@@ -62,7 +65,7 @@ class InferFromDeclaration(details: InferrerDetails,
 
         //type nothing is auto-initialized with nothing
         variables[name.name] = VariableDetails(newType,
-            initialized = alwaysInit || default != null || isNothing,
+            initialized = inFunction || default != null || isNothing,
             modifiable = statement.name.contains(VARIABLE_ID)
         )
 
