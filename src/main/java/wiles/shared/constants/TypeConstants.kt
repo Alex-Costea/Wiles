@@ -49,6 +49,11 @@ object TypeConstants {
                 return true
         }
 
+        else if(subtype.name == GENERIC_ID)
+        {
+            return isFormerSuperTypeOfLatter(supertype,subtype.components[1])
+        }
+
         else if(supertype.name == ANYTHING_ID)
         {
             if(subtype.name != Types.EITHER_ID)
@@ -460,6 +465,7 @@ object TypeConstants {
                 )
         ))
     )
+
     private val MAYBE_GENERIC_TYPE = makeGeneric(ANYTHING_TYPE, "!T|maybe")
     val MAYBE_TYPE = JSONStatement(name = Tokens.METHOD_ID, type = SyntaxType.TYPE,
         components = mutableListOf(JSONStatement(type = SyntaxType.METHOD,
@@ -470,6 +476,25 @@ object TypeConstants {
                         JSONStatement(name = "!elem", type = SyntaxType.TOKEN)
                     )
                 ),
+            )
+        ))
+    )
+
+    private val RUN_GENERIC_TYPE = makeGeneric(makeNullable(ANYTHING_TYPE), "!T|run")
+    private val RUN_SUBTYPE = JSONStatement(name = Tokens.METHOD_ID, type = SyntaxType.TYPE,
+        components = mutableListOf(JSONStatement(type = SyntaxType.METHOD,
+            components = mutableListOf(RUN_GENERIC_TYPE)
+        ))
+    )
+    val RUN_TYPE = JSONStatement(name = Tokens.METHOD_ID, type = SyntaxType.TYPE,
+        components = mutableListOf(JSONStatement(type = SyntaxType.METHOD,
+            components = mutableListOf(RUN_GENERIC_TYPE,
+                JSONStatement(name = ANON_ARG_ID, type = SyntaxType.DECLARATION,
+                    components = mutableListOf(
+                        RUN_SUBTYPE,
+                        JSONStatement(name = "!func", type = SyntaxType.TOKEN)
+                    )
+                )
             )
         ))
     )

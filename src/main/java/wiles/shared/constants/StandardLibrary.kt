@@ -29,6 +29,7 @@ import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_BOOL_TYPE
 import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_DOUBLE_TYPE
 import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_INT_TYPE
 import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_STRING_TYPE
+import wiles.shared.constants.TypeConstants.RUN_TYPE
 import wiles.shared.constants.TypeConstants.SET_VALUE_TYPE
 import wiles.shared.constants.TypeConstants.STRING_SIZE_TYPE
 import wiles.shared.constants.TypeConstants.STRING_TYPE
@@ -56,6 +57,7 @@ object StandardLibrary {
     private const val NAN = "!NaN"
     private const val SET_VALUE = "!set"
     private const val MAYBE = "!maybe"
+    private const val RUN = "!run"
 
     val defaultCheckerVars = CheckerVariableMap(
         hashMapOf(
@@ -79,6 +81,7 @@ object StandardLibrary {
             Pair(NAN, VariableDetails(DOUBLE_TYPE)),
             Pair(SET_VALUE, VariableDetails(SET_VALUE_TYPE)),
             Pair(MAYBE, VariableDetails(MAYBE_TYPE)),
+            Pair(RUN, VariableDetails(RUN_TYPE)),
         )
     )
 
@@ -171,6 +174,12 @@ object StandardLibrary {
         map["!elem"]!!
     }, defaultCheckerVars[MAYBE]!!.type)
 
+    @Suppress("UNCHECKED_CAST")
+    private val RUN_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
+        val func = map["!func"]!!.value as Function<InterpreterVariableMap, ObjectDetails>
+        func.apply(map)
+    }, defaultCheckerVars[RUN]!!.type)
+
     init{
         defaultInterpreterVars[NOTHING_ID] = NOTHING_REF
         defaultInterpreterVars[FALSE_ID] = FALSE_REF
@@ -192,5 +201,6 @@ object StandardLibrary {
         defaultInterpreterVars[NAN] = NAN_REF
         defaultInterpreterVars[SET_VALUE] = SET_VALUE_REF
         defaultInterpreterVars[MAYBE] = MAYBE_REF
+        defaultInterpreterVars[RUN] = RUN_REF
     }
 }
