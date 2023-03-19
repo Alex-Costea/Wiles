@@ -84,6 +84,8 @@
 - `as_list` : convert text into list
 - `as_text`: convert object to text
 - `read_line`, `read_truth`, `read_int`, `read_rational`: read an object from the command line
+- `run`: runs the function given as argument
+- `maybe` : makes a nullable type out of non-nullable object
 
 ### Miscellaneous
 - `;` can be specified or inferred from newline
