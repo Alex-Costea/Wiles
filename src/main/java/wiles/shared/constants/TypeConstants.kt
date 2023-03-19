@@ -460,6 +460,19 @@ object TypeConstants {
                 )
         ))
     )
+    private val MAYBE_GENERIC_TYPE = makeGeneric(ANYTHING_TYPE, "!T|maybe")
+    val MAYBE_TYPE = JSONStatement(name = Tokens.METHOD_ID, type = SyntaxType.TYPE,
+        components = mutableListOf(JSONStatement(type = SyntaxType.METHOD,
+            components = mutableListOf(makeNullable(MAYBE_GENERIC_TYPE),
+                JSONStatement(name = ANON_ARG_ID, type = SyntaxType.DECLARATION,
+                    components = mutableListOf(
+                        MAYBE_GENERIC_TYPE,
+                        JSONStatement(name = "!elem", type = SyntaxType.TOKEN)
+                    )
+                ),
+            )
+        ))
+    )
 
     val AS_TEXT_TYPE = Utils.createFunctionType(Pair(NULLABLE_ANYTHING_TYPE, STRING_TYPE))
     val AS_LIST_TYPE = Utils.createFunctionType(Pair(STRING_TYPE, LIST_OF_STRING))

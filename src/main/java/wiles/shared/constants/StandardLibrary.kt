@@ -21,6 +21,7 @@ import wiles.shared.constants.TypeConstants.IGNORE_TYPE
 import wiles.shared.constants.TypeConstants.INT64_TYPE
 import wiles.shared.constants.TypeConstants.LIST_OF_STRING
 import wiles.shared.constants.TypeConstants.LIST_SIZE_TYPE
+import wiles.shared.constants.TypeConstants.MAYBE_TYPE
 import wiles.shared.constants.TypeConstants.MODULO_TYPE
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
 import wiles.shared.constants.TypeConstants.PANIC_TYPE
@@ -54,6 +55,7 @@ object StandardLibrary {
     private const val INFINITY = "!Infinity"
     private const val NAN = "!NaN"
     private const val SET_VALUE = "!set"
+    private const val MAYBE = "!maybe"
 
     val defaultCheckerVars = CheckerVariableMap(
         hashMapOf(
@@ -76,6 +78,7 @@ object StandardLibrary {
             Pair(INFINITY, VariableDetails(DOUBLE_TYPE)),
             Pair(NAN, VariableDetails(DOUBLE_TYPE)),
             Pair(SET_VALUE, VariableDetails(SET_VALUE_TYPE)),
+            Pair(MAYBE, VariableDetails(MAYBE_TYPE)),
         )
     )
 
@@ -164,6 +167,10 @@ object StandardLibrary {
         NOTHING_REF
     }, defaultCheckerVars[SET_VALUE]!!.type)
 
+    private val MAYBE_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
+        map["!elem"]!!
+    }, defaultCheckerVars[MAYBE]!!.type)
+
     init{
         defaultInterpreterVars[NOTHING_ID] = NOTHING_REF
         defaultInterpreterVars[FALSE_ID] = FALSE_REF
@@ -184,5 +191,6 @@ object StandardLibrary {
         defaultInterpreterVars[INFINITY] = INFINITY_REF
         defaultInterpreterVars[NAN] = NAN_REF
         defaultInterpreterVars[SET_VALUE] = SET_VALUE_REF
+        defaultInterpreterVars[MAYBE] = MAYBE_REF
     }
 }
