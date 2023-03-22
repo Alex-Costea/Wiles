@@ -111,6 +111,7 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
 
         createGenericType(statement, genericTypes)
 
+        declarationVariables.forEach { it.value.initialized = true }
         variables.putAll(declarationVariables.filter { it.key !in additionalVars })
 
         val inferrer = InferrerService(InferrerDetails(statement.components.last(), variables, exceptions, additionalVars))

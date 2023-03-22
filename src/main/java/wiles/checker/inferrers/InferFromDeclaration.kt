@@ -65,7 +65,7 @@ class InferFromDeclaration(details: InferrerDetails,
 
         //type nothing is auto-initialized with nothing
         variables[name.name] = VariableDetails(newType,
-            initialized = inFunction || default != null || isNothing,
+            initialized = (default != null || isNothing) && !inFunction,
             modifiable = statement.name.contains(VARIABLE_ID)
         )
 
