@@ -9,6 +9,7 @@ import wiles.shared.constants.Tokens.ANON_ARG_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.STRING_START
 import wiles.shared.constants.Types.ANYTHING_ID
+import wiles.shared.constants.Types.EITHER_ID
 import wiles.shared.constants.Types.GENERIC_ID
 import wiles.shared.constants.Types.METHOD_CALL_ID
 import wiles.shared.constants.Types.STRING_ID
@@ -19,18 +20,26 @@ object TypeConstants {
         supertype : JSONStatement, subtype : JSONStatement,
         unboxGenerics : Boolean = true, //should generics match?
         genericTypes : GenericTypesMap? = null,
+        getMinus : Boolean = false,
     ): Boolean {
         assert(supertype.type == SyntaxType.TYPE)
         assert(subtype.type == SyntaxType.TYPE)
-        if(supertype.toString() == subtype.toString())
+
+        if(supertype.toString() == subtype.toString()) {
+            if(getMinus) {
+                subtype.name = EITHER_ID
+                subtype.components.clear()
+            }
             return true
+        }
 
         else if(supertype.name == GENERIC_ID && subtype.name == GENERIC_ID
             && supertype.components[0].name == subtype.components[0].name
-            && isFormerSuperTypeOfLatter(supertype.components[1],subtype.components[1]))
+            && isFormerSuperTypeOfLatter(supertype.components[1], subtype.components[1], getMinus = getMinus))
             return true
 
-        if(supertype.name == GENERIC_ID && isFormerSuperTypeOfLatter(supertype.components[1],subtype)){
+        if(supertype.name == GENERIC_ID && isFormerSuperTypeOfLatter(supertype.components[1], subtype,
+                getMinus = getMinus && unboxGenerics)){
             val genName = supertype.components[0].name
             if(genericTypes?.containsKey(genName) == true)
             {
@@ -51,84 +60,82 @@ object TypeConstants {
 
         else if(subtype.name == GENERIC_ID)
         {
-            return isFormerSuperTypeOfLatter(supertype,subtype.components[1])
+            return isFormerSuperTypeOfLatter(supertype,subtype.components[1], getMinus = getMinus)
         }
 
         else if(supertype.name == ANYTHING_ID)
         {
-            if(subtype.name != Types.EITHER_ID)
+            return if(subtype.name != EITHER_ID) {
+                !isFormerSuperTypeOfLatter(NOTHING_TYPE, subtype)
+            } else {
+                var isValid = true
+                for (component in subtype.components) {
+                    if(isFormerSuperTypeOfLatter(NOTHING_TYPE,component))
+                        isValid = false
+                }
+                isValid
+            }
+        }
+
+        else if(supertype.name == EITHER_ID)
+        {
+            if(subtype.name != EITHER_ID)
             {
-                if (isFormerSuperTypeOfLatter(NOTHING_TYPE, subtype))
-                    return false
-                return true
+                var isValid = false
+                for (component in supertype.components)
+                {
+                    if (isFormerSuperTypeOfLatter(component,subtype, getMinus = getMinus))
+                    {
+                        isValid = true
+                    }
+                }
+                return isValid
             }
             else
             {
                 var isValid = true
-                for (component in subtype.components)
-                {
-                    if(isFormerSuperTypeOfLatter(NOTHING_TYPE,component))
-                        isValid = false
-                }
-                return isValid
-            }
-        }
-
-        else if(supertype.name == Types.EITHER_ID)
-        {
-            if(subtype.name != Types.EITHER_ID)
-            {
-                for (component in supertype.components)
-                {
-                    if (isFormerSuperTypeOfLatter(component,subtype))
-                    {
-                        return true
-                    }
-                }
-            }
-            else
-            {
                 for(subtypeComponent in subtype.components)
                 {
-                    if(isFormerSuperTypeOfLatter(supertype,subtypeComponent))
+                    if(isFormerSuperTypeOfLatter(supertype,subtypeComponent, getMinus = getMinus))
                     {
                         continue
                     }
                     var hasMatch = false
                     for(supertypeComponent in supertype.components)
                     {
-                        if(isFormerSuperTypeOfLatter(supertypeComponent,subtypeComponent))
+                        if(isFormerSuperTypeOfLatter(supertypeComponent,subtypeComponent, getMinus = getMinus))
                         {
                             hasMatch = true
                             break
                         }
                     }
                     if(!hasMatch)
-                        return false
+                        isValid = false
                 }
-                return true
+                return isValid
             }
         }
 
-        else if(subtype.name == Types.EITHER_ID)
+        else if(subtype.name == EITHER_ID)
         {
+            var isValid = true
             for(component in subtype.components)
             {
-                if(!isFormerSuperTypeOfLatter(supertype, component)) {
-                    return false
+                if(!isFormerSuperTypeOfLatter(supertype, component, getMinus = getMinus)) {
+                    isValid = false
                 }
             }
-            return true
+            return isValid
         }
 
         else if (supertype.name == Types.LIST_ID && subtype.name == Types.LIST_ID)
-            return isFormerSuperTypeOfLatter(supertype.components[0],subtype.components[0])
+            return isFormerSuperTypeOfLatter(supertype.components[0],subtype.components[0], getMinus = getMinus)
 
         else if (supertype.name == Tokens.MUTABLE_ID && subtype.name == Tokens.MUTABLE_ID)
-            return isFormerSuperTypeOfLatter(supertype.components[0], subtype.components[0])
+            return isFormerSuperTypeOfLatter(supertype.components[0], subtype.components[0], getMinus = getMinus)
 
         else if (subtype.name == Tokens.MUTABLE_ID)
-            return isFormerSuperTypeOfLatter(supertype, subtype.components[0])
+            return isFormerSuperTypeOfLatter(supertype, subtype.components[0], getMinus = getMinus)
 
         else if(supertype.name == Tokens.METHOD_ID && subtype.name == Tokens.METHOD_ID)
             return checkMethodIsSubtype(supertype, subtype, genericTypes?: GenericTypesMap())
@@ -370,7 +377,7 @@ object TypeConstants {
                 JSONStatement(name = NOTHING_ID, type = SyntaxType.TYPE),
                 JSONStatement(name = ANON_ARG_ID, type = SyntaxType.DECLARATION,
                     components = mutableListOf(
-                        JSONStatement(name = Types.EITHER_ID, type = SyntaxType.TYPE,
+                        JSONStatement(name = EITHER_ID, type = SyntaxType.TYPE,
                             components = mutableListOf(
                                 JSONStatement(name = STRING_ID, type = SyntaxType.TYPE),
                                 JSONStatement(name = NOTHING_ID, type = SyntaxType.TYPE),

@@ -4949,7 +4949,7 @@ class CheckerTests {
             default do ignore(x)
         end
         */
-        checkResult(createExceptions(ConflictingTypeDefinitionException(NULL_LOCATION,"TYPE !nothing", "TYPE INT64")),
+        checkResult(createExceptions(ConflictingTypeDefinitionException(NULL_LOCATION,"TYPE MUTABLE; (TYPE !nothing)", "TYPE MUTABLE; (TYPE INT64)")),
             """{
   "parsed" : true,
   "type" : "CODE_BLOCK",

@@ -4,73 +4,47 @@ import wiles.checker.data.CheckerVariableMap
 import wiles.checker.data.InferrerDetails
 import wiles.checker.data.VariableDetails
 import wiles.checker.exceptions.*
-import wiles.checker.statics.InferrerUtils
 import wiles.checker.statics.InferrerUtils.checkIsInitialized
-import wiles.checker.statics.InferrerUtils.unbox
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.TokenLocation
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.ELSE_ID
-import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
 import wiles.shared.constants.Types.EITHER_ID
-import wiles.shared.constants.Types.LIST_ID
 
 class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
 
-    private fun getFormerTypeMinusLatterType(former: JSONStatement, latter : JSONStatement,
-                                             newLocation : TokenLocation) : JSONStatement
-    {
-        if(former.name == EITHER_ID && former.components.size==0)
+    private fun getFormerTypeMinusLatterType(
+        former: JSONStatement, latter: JSONStatement,
+        newLocation: TokenLocation
+    ): JSONStatement {
+        if (!isFormerSuperTypeOfLatter(former, latter))
+            throw ConflictingTypeDefinitionException(latter.getFirstLocation(), latter.toString(), former.toString())
+        if (former.name == EITHER_ID && former.components.size == 0)
             throw TypesExhaustedException(newLocation)
+        val result = former.copyRemovingLocation()
+        isFormerSuperTypeOfLatter(latter, result, getMinus = true)
+        return removeEmptyEither(result)
+    }
 
-        // use sub-components
-        for(typeName in arrayOf(MUTABLE_ID, LIST_ID)) {
-            if (former.name == typeName && latter.name == typeName) {
-                return JSONStatement(
-                    name = typeName, type = SyntaxType.TYPE, components = mutableListOf(
-                        getFormerTypeMinusLatterType(former.components[0], latter.components[0], newLocation)))
-            }
-        }
-
-        if(!isFormerSuperTypeOfLatter(former, latter))
-            throw ConflictingTypeDefinitionException(latter.getFirstLocation(),latter.toString(),former.toString())
-
-        if(InferrerUtils.areTypesEquivalent(latter, former))
-            return JSONStatement(name = EITHER_ID, type = SyntaxType.TYPE)
-
-        if(former.name == EITHER_ID)
-        {
-            val latterComponents = if(latter.name == EITHER_ID) {
-                InferrerUtils.createComponents(latter).toList()
-            } else listOf(latter)
-            val formerComponents = InferrerUtils.createComponents(former).toMutableList()
-            val finalComponents = mutableListOf<JSONStatement>()
-
-            for(latterComponent in latterComponents)
+    private fun removeEmptyEither(statement : JSONStatement) : JSONStatement
+    {
+        var i = 0
+        while(i < statement.components.size) {
+            val component = statement.components[i]
+            if(component.name == EITHER_ID && component.components.isEmpty())
             {
-                for(formerComponent in formerComponents)
-                {
-                    if(isFormerSuperTypeOfLatter(formerComponent,latterComponent))
-                    {
-                        val newComp = getFormerTypeMinusLatterType(formerComponent,latterComponent,newLocation)
-                        val newCompUnbox = unbox(newComp)
-                        if(!(newCompUnbox.name == EITHER_ID && newCompUnbox.components.isEmpty()))
-                            finalComponents.add(newComp)
-                    }
-                    else if(!isFormerSuperTypeOfLatter(latterComponent,formerComponent))
-                        finalComponents.add(formerComponent)
-                }
+                statement.components.removeAt(i)
             }
-
-            return when (finalComponents.size) {
-                0 -> JSONStatement(name = EITHER_ID, type = SyntaxType.TYPE)
-                1 -> finalComponents[0].copyRemovingLocation()
-                else -> JSONStatement(name = EITHER_ID, type = SyntaxType.TYPE, components = finalComponents)
+            else {
+                statement.components[i] = removeEmptyEither(component)
+                i++
             }
         }
-        return former.copyRemovingLocation()
+        if(statement.name == EITHER_ID && statement.components.size == 1)
+            return statement.components[0]
+        return statement
     }
 
     override fun infer() {
