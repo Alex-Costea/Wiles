@@ -12,6 +12,7 @@ import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Settings
 import wiles.shared.constants.StandardLibrary.defaultCheckerVars
+import wiles.shared.constants.Tokens.ELSE_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import java.io.File
 import java.util.*
@@ -33,9 +34,10 @@ class Checker(private val jsonCode : String? = null) {
     private fun createObject(statement : JSONStatement, topLevel : Boolean = true) : JSONStatement
     {
         if(statement.components.isNotEmpty() && statement.components[0].type == SyntaxType.TYPE
-            //type is necessary when declaring new variables
-            && statement.type !in arrayOf(SyntaxType.FOR,SyntaxType.DECLARATION, SyntaxType.TYPE,
-                SyntaxType.LIST, SyntaxType.METHOD))
+                //type is necessary when declaring new variables
+                && ((statement.type !in KEEP_TYPE)
+                //remove else type details
+                || (statement.type == SyntaxType.TYPE && statement.name == ELSE_ID)))
             statement.components.removeFirst()
 
         if(statement.type == SyntaxType.EXPRESSION
@@ -74,6 +76,8 @@ class Checker(private val jsonCode : String? = null) {
         private val NOTHING_TOKEN = JSONStatement(name = NOTHING_ID, type = SyntaxType.TOKEN)
         val scanner = Scanner(System.`in`)
         var currentFunctionNumber : Long = 0
+        val KEEP_TYPE =
+            arrayOf(SyntaxType.FOR, SyntaxType.DECLARATION, SyntaxType.TYPE, SyntaxType.LIST, SyntaxType.METHOD)
     }
 
 }
