@@ -14,7 +14,7 @@ import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.VARIABLE_ID
 import wiles.shared.constants.TypeConstants.ERROR_TYPE
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
-import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
+import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 
 class InferFromDeclaration(details: InferrerDetails,
                            private val inFunction: Boolean = false,

@@ -10,7 +10,7 @@ import wiles.shared.SyntaxType
 import wiles.shared.TokenLocation
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.ELSE_ID
-import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
+import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 import wiles.shared.constants.Types.EITHER_ID
 
 class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {

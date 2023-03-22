@@ -1,13 +1,13 @@
 package wiles.checker.inferrers
 
-import wiles.checker.data.InferrerDetails
 import wiles.checker.data.CheckerVariableMap
+import wiles.checker.data.InferrerDetails
 import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.services.InferrerService
 import wiles.checker.statics.InferrerUtils.checkIsInitialized
 import wiles.shared.JSONStatement
 import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
-import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
+import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 
 class InferFromIf(details: InferrerDetails) : InferFromStatement(details) {
     override fun infer() {

@@ -3,7 +3,7 @@ package wiles.interpreter.interpreters
 import wiles.interpreter.data.InterpreterVariableMap
 import wiles.shared.JSONStatement
 import wiles.shared.constants.Tokens.ELSE_ID
-import wiles.shared.constants.TypeConstants
+import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 
 class InterpretFromWhen(statement: JSONStatement, variables: InterpreterVariableMap, additionalVars: InterpreterVariableMap)
     : InterpretFromStatement(statement, variables, additionalVars)
@@ -16,7 +16,7 @@ class InterpretFromWhen(statement: JSONStatement, variables: InterpreterVariable
         {
             val type = components.removeFirst()
             val expression = components.removeFirst()
-            if(type.name != ELSE_ID && !TypeConstants.isFormerSuperTypeOfLatter(type,objectDetails!!.type))
+            if(type.name != ELSE_ID && !isFormerSuperTypeOfLatter(type,objectDetails!!.type))
                 continue
 
             val interpreter = InterpretFromCodeBlock(expression, variables, additionalVars)

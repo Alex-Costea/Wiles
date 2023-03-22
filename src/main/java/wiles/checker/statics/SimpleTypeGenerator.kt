@@ -31,8 +31,8 @@ import wiles.shared.constants.TypeConstants.STRING_TYPE
 import wiles.shared.constants.TypeConstants.TIMES_OPERATION
 import wiles.shared.constants.TypeConstants.UNARY_MINUS_OPERATION
 import wiles.shared.constants.TypeConstants.UNARY_PLUS_OPERATION
-import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
-import wiles.shared.constants.TypeConstants.makeMutable
+import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
+import wiles.shared.constants.TypeUtils.makeMutable
 
 object SimpleTypeGenerator {
 

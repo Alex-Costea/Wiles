@@ -2,8 +2,9 @@ package wiles.interpreter.data
 
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
-import wiles.shared.constants.TypeConstants
 import wiles.shared.constants.TypeConstants.LIST_OF_NULLABLE_ANYTHING_TYPE
+import wiles.shared.constants.TypeUtils
+import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 import java.util.function.Function
 
 class ObjectDetails(var value : Any?, var type : JSONStatement)
@@ -30,10 +31,10 @@ class ObjectDetails(var value : Any?, var type : JSONStatement)
     @Suppress("UNCHECKED_CAST")
     private fun makeTypeMutable(newObject : ObjectDetails)
     {
-        val isList = TypeConstants.isFormerSuperTypeOfLatter(LIST_OF_NULLABLE_ANYTHING_TYPE,newObject.type)
+        val isList = isFormerSuperTypeOfLatter(LIST_OF_NULLABLE_ANYTHING_TYPE,newObject.type)
         if(isList)
-            newObject.type.components[0] = TypeConstants.makeMutable(newObject.type.components[0])
-        newObject.type = TypeConstants.makeMutable(newObject.type)
+            newObject.type.components[0] = TypeUtils.makeMutable(newObject.type.components[0])
+        newObject.type = TypeUtils.makeMutable(newObject.type)
         if(isList)
         {
             for(component in newObject.value as MutableList<ObjectDetails>)

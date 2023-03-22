@@ -21,8 +21,8 @@ import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
-import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
-import wiles.shared.constants.TypeConstants.makeMutable
+import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
+import wiles.shared.constants.TypeUtils.makeMutable
 import wiles.shared.constants.Types.DOUBLE_ID
 import wiles.shared.constants.Types.EITHER_ID
 import wiles.shared.constants.Types.GENERIC_ID
@@ -31,11 +31,6 @@ import wiles.shared.constants.Types.LIST_ID
 import wiles.shared.constants.Types.STRING_ID
 
 object InferrerUtils {
-    fun areTypesEquivalent(type1: JSONStatement,type2 : JSONStatement) : Boolean
-    {
-        return isFormerSuperTypeOfLatter(type1, type2) && isFormerSuperTypeOfLatter(type2, type1)
-    }
-
     fun inferTypeFromLiteral(token : JSONStatement, variables : HashMap<String, VariableDetails>) : JSONStatement
     {
         assert(token.type == SyntaxType.TOKEN)

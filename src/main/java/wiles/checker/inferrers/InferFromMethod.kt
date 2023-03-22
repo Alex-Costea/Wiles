@@ -13,7 +13,7 @@ import wiles.shared.SyntaxType
 import wiles.shared.constants.StandardLibrary
 import wiles.shared.constants.Tokens.ELSE_ID
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
-import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
+import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 
 class InferFromMethod(details: InferrerDetails) : InferFromStatement(
     InferrerDetails(details.statement,

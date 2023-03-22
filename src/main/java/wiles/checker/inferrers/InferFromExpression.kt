@@ -32,8 +32,8 @@ import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.OR_ID
 import wiles.shared.constants.TypeConstants
 import wiles.shared.constants.TypeConstants.NOTHING_TOKEN
-import wiles.shared.constants.TypeConstants.makeList
-import wiles.shared.constants.TypeConstants.makeMethod
+import wiles.shared.constants.TypeUtils.makeList
+import wiles.shared.constants.TypeUtils.makeMethod
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.BOOLEAN_ID
 import wiles.shared.constants.Types.DOUBLE_ID

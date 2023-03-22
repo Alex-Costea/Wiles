@@ -11,7 +11,7 @@ import wiles.shared.constants.Tokens.IN_ID
 import wiles.shared.constants.Tokens.TO_ID
 import wiles.shared.constants.TypeConstants.INT64_TYPE
 import wiles.shared.constants.TypeConstants.LIST_OF_NULLABLE_ANYTHING_TYPE
-import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
+import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 
 class InferFromFor(details: InferrerDetails) : InferFromStatement(
     InferrerDetails(details.statement,

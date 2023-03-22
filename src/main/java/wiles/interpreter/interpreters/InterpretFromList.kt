@@ -1,11 +1,11 @@
 package wiles.interpreter.interpreters
 
-import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.data.InterpreterVariableMap
+import wiles.interpreter.data.ObjectDetails
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
-import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
-import wiles.shared.constants.TypeConstants.makeList
+import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
+import wiles.shared.constants.TypeUtils.makeList
 import wiles.shared.constants.Types.EITHER_ID
 
 class InterpretFromList(statement: JSONStatement, variables: InterpreterVariableMap, additionalVars: InterpreterVariableMap)

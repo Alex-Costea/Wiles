@@ -6,7 +6,7 @@ import wiles.checker.exceptions.InferenceFailException
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
-import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
+import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 
 class InferFromList(details: InferrerDetails) : InferFromStatement(details) {
     override fun infer() {

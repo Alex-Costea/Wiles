@@ -6,7 +6,7 @@ import wiles.checker.services.InferrerService
 import wiles.shared.AbstractCompilationException
 import wiles.shared.SyntaxType
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
-import wiles.shared.constants.TypeConstants.isFormerSuperTypeOfLatter
+import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 
 class InferFromCodeBlock(details: InferrerDetails) : InferFromStatement(details) {
     override fun infer()
