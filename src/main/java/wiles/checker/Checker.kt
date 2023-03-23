@@ -67,6 +67,7 @@ class Checker(private val jsonCode : String? = null) {
 
     fun check() : CompilationExceptionsCollection
     {
+        currentFunctionNumber = 0
         inferrer.infer()
         writeObjectFile()
         return inferrer.exceptions
