@@ -222,9 +222,10 @@ object InferrerUtils {
         return statement
     }
 
-    fun unGenerify(statement : JSONStatement) : JSONStatement
+    fun unGenerify(statement : JSONStatement, variableMap: CheckerVariableMap? = null) : JSONStatement
     {
-        if(statement.type == SyntaxType.TYPE && statement.name == GENERIC_ID)
+        if(statement.type == SyntaxType.TYPE && statement.name == GENERIC_ID &&
+            (variableMap == null || !variableMap.containsKey(statement.components[0].name)))
         {
             statement.name = statement.components[1].name
             statement.location = statement.components[1].location
