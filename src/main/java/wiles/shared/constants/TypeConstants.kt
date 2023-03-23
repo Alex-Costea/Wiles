@@ -13,6 +13,7 @@ import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.EITHER_ID
 import wiles.shared.constants.Types.METHOD_CALL_ID
 import wiles.shared.constants.Types.STRING_ID
+import wiles.shared.constants.Types.TYPE_TYPE_ID
 
 object TypeConstants {
 
@@ -22,6 +23,7 @@ object TypeConstants {
     val STRING_TYPE = JSONStatement(type = SyntaxType.TYPE, name = STRING_ID)
     val DOUBLE_TYPE = JSONStatement(type = SyntaxType.TYPE, name = Types.DOUBLE_ID)
     val ERROR_TYPE = JSONStatement(type = SyntaxType.TYPE, name = Tokens.ERROR_TOKEN)
+    val TYPE_TYPE = JSONStatement(type = SyntaxType.TYPE, name = TYPE_TYPE_ID)
     private val ANYTHING_TYPE = JSONStatement(type = SyntaxType.TYPE, name = ANYTHING_ID)
     val METHOD_CALL_TYPE = JSONStatement(type = SyntaxType.TYPE, name = METHOD_CALL_ID)
     private val NULLABLE_ANYTHING_TYPE = makeNullable(ANYTHING_TYPE)
