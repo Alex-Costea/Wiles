@@ -36,15 +36,15 @@ class InferFromType(details: InferrerDetails,
             val method = statement.components[0]
             for(component in method.components)
             {
-                if(component.type == SyntaxType.DECLARATION)
+                if(component.syntaxType == SyntaxType.DECLARATION)
                 {
                     InferFromDeclaration(InferrerDetails(component, variables.copy(), exceptions, additionalVars),
                         genericTypes = genericTypes, isTopMostType = false).infer()
                 }
-                else if(component.type == SyntaxType.TYPE)
+                else if(component.syntaxType == SyntaxType.TYPE)
                     InferFromType(InferrerDetails(component,variables,exceptions, additionalVars), genericTypes).infer()
             }
-            if(method.components.getOrNull(0)?.type != SyntaxType.TYPE)
+            if(method.components.getOrNull(0)?.syntaxType != SyntaxType.TYPE)
                 method.components.add(0,NOTHING_TYPE)
         }
         else if(statement.name == EITHER_ID || statement.name == MUTABLE_ID || statement.name == LIST_ID)

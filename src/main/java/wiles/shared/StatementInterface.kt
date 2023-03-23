@@ -16,8 +16,8 @@ interface StatementInterface {
     @get:JsonInclude(JsonInclude.Include.NON_EMPTY)
     var name: String
 
-    @get:JsonProperty
-    val type: SyntaxType?
+    @get:JsonProperty("type")
+    val syntaxType: SyntaxType?
 
     fun getFirstLocation() : TokenLocation
     {

@@ -12,8 +12,8 @@ object TypeUtils {
         genericTypes : GenericTypesMap? = null,
         getMinus : Boolean = false,
     ): Boolean {
-        assert(supertype.type == SyntaxType.TYPE)
-        assert(subtype.type == SyntaxType.TYPE)
+        assert(supertype.syntaxType == SyntaxType.TYPE)
+        assert(subtype.syntaxType == SyntaxType.TYPE)
 
         if(supertype.toString() == subtype.toString()) {
             if(getMinus) {
@@ -141,11 +141,11 @@ object TypeUtils {
         val supertypeComponents = supertype.components[0].components.toMutableList()
         val subtypeComponents = subtype.components[0].components.toMutableList()
 
-        val supertypeReturnType = if(supertypeComponents[0].type == SyntaxType.TYPE)
+        val supertypeReturnType = if(supertypeComponents[0].syntaxType == SyntaxType.TYPE)
             supertypeComponents[0]
         else TypeConstants.NOTHING_TYPE
 
-        val subtypeReturnType = if(subtypeComponents[0].type == SyntaxType.TYPE)
+        val subtypeReturnType = if(subtypeComponents[0].syntaxType == SyntaxType.TYPE)
             subtypeComponents[0]
         else TypeConstants.NOTHING_TYPE
         if(!isFormerSuperTypeOfLatter(supertypeReturnType, subtypeReturnType, genericTypes = genericTypes))
@@ -196,13 +196,13 @@ object TypeUtils {
         while(list1.isNotEmpty() && list2.isNotEmpty())
         {
             val elem1 = list1[0]
-            if(elem1.type == SyntaxType.TYPE || !elem1.name.contains(Tokens.ANON_ARG_ID)) {
+            if(elem1.syntaxType == SyntaxType.TYPE || !elem1.name.contains(Tokens.ANON_ARG_ID)) {
                 list1.removeFirst()
                 continue
             }
 
             val elem2 = list2[0]
-            if(elem2.type == SyntaxType.TYPE || !elem2.name.contains(Tokens.ANON_ARG_ID)) {
+            if(elem2.syntaxType == SyntaxType.TYPE || !elem2.name.contains(Tokens.ANON_ARG_ID)) {
                 list2.removeFirst()
                 continue
             }
@@ -215,13 +215,13 @@ object TypeUtils {
         }
 
         while(list1.isNotEmpty()) {
-            if (list1[0].type == SyntaxType.TYPE || !list1[0].name.contains(Tokens.ANON_ARG_ID))
+            if (list1[0].syntaxType == SyntaxType.TYPE || !list1[0].name.contains(Tokens.ANON_ARG_ID))
                 list1.removeFirst()
             else break
         }
 
         while(list2.isNotEmpty()) {
-            if (list2[0].type == SyntaxType.TYPE || !list2[0].name.contains(Tokens.ANON_ARG_ID))
+            if (list2[0].syntaxType == SyntaxType.TYPE || !list2[0].name.contains(Tokens.ANON_ARG_ID))
                 list2.removeFirst()
             else break
         }
@@ -239,13 +239,13 @@ object TypeUtils {
     ) : Boolean
     {
         for (component1 in list1) {
-            if (component1.type == SyntaxType.TYPE
+            if (component1.syntaxType == SyntaxType.TYPE
                 // allow subtype component with default value
                 || (!isSuperType && component1.components.size == 3))
                 continue
             var matchFound = false
             for (component2 in list2) {
-                if (component2.type == SyntaxType.TYPE)
+                if (component2.syntaxType == SyntaxType.TYPE)
                     continue
 
                 val nameMatches = component1.components[1].name == component2.components[1].name
@@ -272,14 +272,14 @@ object TypeUtils {
     fun makeMutable(type : JSONStatement) : JSONStatement
     {
         return JSONStatement(name = Tokens.MUTABLE_ID,
-            type = SyntaxType.TYPE,
+            syntaxType = SyntaxType.TYPE,
             components = mutableListOf(type.copyRemovingLocation()))
     }
 
     fun makeList(type : JSONStatement) : JSONStatement
     {
         return JSONStatement(name = Types.LIST_ID,
-            type = SyntaxType.TYPE,
+            syntaxType = SyntaxType.TYPE,
             components = mutableListOf(type.copyRemovingLocation()))
     }
 
@@ -288,7 +288,7 @@ object TypeUtils {
         val newType = type.copyRemovingLocation()
         newType.components.removeLast()
         return JSONStatement(name = Tokens.METHOD_ID,
-            type = SyntaxType.TYPE,
+            syntaxType = SyntaxType.TYPE,
             components = mutableListOf(newType))
     }
 }

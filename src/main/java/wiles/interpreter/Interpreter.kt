@@ -5,7 +5,7 @@ import wiles.Main
 import wiles.Main.DEBUG
 import wiles.interpreter.data.InterpreterVariableMap
 import wiles.interpreter.exceptions.PanicException
-import wiles.interpreter.services.InterpretFrom
+import wiles.interpreter.services.InterpreterService
 import wiles.shared.JSONStatement
 import wiles.shared.constants.ErrorMessages.RED_TEXT_END_ERROR
 import wiles.shared.constants.ErrorMessages.RED_TEXT_START_ERROR
@@ -35,7 +35,7 @@ class Interpreter(private val code : String?) {
         try {
             try
             {
-                InterpretFrom(input, variableMap, InterpreterVariableMap()).interpret()
+                InterpreterService(input, variableMap, InterpreterVariableMap()).interpret()
             }
             catch (ex : StackOverflowError)
             {

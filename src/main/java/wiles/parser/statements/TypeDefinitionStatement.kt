@@ -31,7 +31,7 @@ class TypeDefinitionStatement(context: Context, private val allowGenerics : Bool
     : AbstractStatement(context) {
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
     private val subtypes : ArrayList<AbstractStatement> = ArrayList()
-    override val type: SyntaxType
+    override val syntaxType: SyntaxType
         get() = SyntaxType.TYPE
 
     override fun getComponents(): MutableList<AbstractStatement> {

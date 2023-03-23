@@ -33,21 +33,21 @@ import wiles.shared.constants.Types.STRING_ID
 object InferrerUtils {
     fun inferTypeFromLiteral(token : JSONStatement, variables : HashMap<String, VariableDetails>) : JSONStatement
     {
-        assert(token.type == SyntaxType.TOKEN)
+        assert(token.syntaxType == SyntaxType.TOKEN)
         val name = token.name
         if (Predicates.IS_TEXT_LITERAL.test(name))
-            return JSONStatement(STRING_ID, type = SyntaxType.TYPE)
+            return JSONStatement(STRING_ID, syntaxType = SyntaxType.TYPE)
         if (Predicates.IS_NUMBER_LITERAL.test(name))
         {
             if(name.contains(Chars.DECIMAL_DELIMITER))
-                return JSONStatement(DOUBLE_ID, type = SyntaxType.TYPE)
+                return JSONStatement(DOUBLE_ID, syntaxType = SyntaxType.TYPE)
             try {
                 token.name = name.replace(DIGIT_SEPARATOR.toString(),"")
                 token.name.substring(1).toLong()
             } catch (e: NumberFormatException) {
                 throw InvalidLiteralException(token.getFirstLocation())
             }
-            return JSONStatement(INT64_ID, type = SyntaxType.TYPE)
+            return JSONStatement(INT64_ID, syntaxType = SyntaxType.TYPE)
         }
         if(IS_IDENTIFIER.test(name)) {
             if( variables[name]?.initialized==false)
@@ -55,7 +55,7 @@ object InferrerUtils {
             return JSONStatement(
                 name = variables[name]?.type?.name ?:
                 throw UnknownIdentifierException(token.getFirstLocation()),
-                type = SyntaxType.TYPE,
+                syntaxType = SyntaxType.TYPE,
                 components = variables[name]!!.type.components.map { it.copyRemovingLocation() }.toMutableList())
         }
         throw InternalErrorException(NOT_ONE_TOKEN_ERROR)
@@ -69,7 +69,7 @@ object InferrerUtils {
             type.components[0].name=getTypeNumber(type.components[0].name)
             return
         }
-        else if(type.type == SyntaxType.CODE_BLOCK)
+        else if(type.syntaxType == SyntaxType.CODE_BLOCK)
         {
             return
         }
@@ -77,12 +77,12 @@ object InferrerUtils {
         {
             val newType = typeNames[name]!!
             assert(type.components.isEmpty())
-            type.components.add(JSONStatement(name = name, type = SyntaxType.TOKEN))
+            type.components.add(JSONStatement(name = name, syntaxType = SyntaxType.TOKEN))
             type.components.add(newType)
             type.name = GENERIC_ID
             return
         }
-        else if(type.type == SyntaxType.TYPE && IS_IDENTIFIER.test(type.name) && type.name != NOTHING_ID)
+        else if(type.syntaxType == SyntaxType.TYPE && IS_IDENTIFIER.test(type.name) && type.name != NOTHING_ID)
             throw UnknownTypeException(type.getFirstLocation())
         if(type.components.isNotEmpty())
         {
@@ -103,29 +103,29 @@ object InferrerUtils {
     fun makeNullable(type: JSONStatement) : JSONStatement
     {
         return JSONStatement(name = EITHER_ID,
-            type = SyntaxType.TYPE,
+            syntaxType = SyntaxType.TYPE,
             components = mutableListOf(type.copyRemovingLocation(), NOTHING_TYPE))
     }
 
     fun makeGeneric(type: JSONStatement, name : String) : JSONStatement
     {
         return JSONStatement(name = GENERIC_ID,
-            type = SyntaxType.TYPE,
+            syntaxType = SyntaxType.TYPE,
             components = mutableListOf(
-                JSONStatement(type = SyntaxType.TOKEN, name = name),
+                JSONStatement(syntaxType = SyntaxType.TOKEN, name = name),
                 type.copyRemovingLocation()))
     }
 
     private fun makeEither(types: MutableList<JSONStatement>) : JSONStatement
     {
         return JSONStatement(name = EITHER_ID,
-            type = SyntaxType.TYPE,
+            syntaxType = SyntaxType.TYPE,
             components = types.map { it.copyRemovingLocation() }.toMutableList())
     }
 
     fun specifyGenericTypesForFunction(statement : JSONStatement, genericTypes : GenericTypesMap)
     {
-        if(statement.type == SyntaxType.TYPE && statement.name == GENERIC_ID)
+        if(statement.syntaxType == SyntaxType.TYPE && statement.name == GENERIC_ID)
         {
             val name = getTypeNumber(statement.components[0].name)
             if(genericTypes.containsKey(name))
@@ -145,7 +145,7 @@ object InferrerUtils {
         // statement, does it need name addition
         val finalCallArgumentsMap = hashMapOf<String,Pair<JSONStatement,Boolean>>()
 
-        val methodComponents = methodType.components[0].components.filter{it.type!=SyntaxType.TYPE}
+        val methodComponents = methodType.components[0].components.filter{it.syntaxType!=SyntaxType.TYPE}
         val callComponents = methodCallType.components[0].components
 
         //Create method arguments
@@ -214,7 +214,7 @@ object InferrerUtils {
 
     fun unbox(statement: JSONStatement) : JSONStatement
     {
-        assert(statement.type == SyntaxType.TYPE)
+        assert(statement.syntaxType == SyntaxType.TYPE)
         if(statement.name == MUTABLE_ID)
             return unbox(statement.components[0])
         if(statement.name == GENERIC_ID)
@@ -224,7 +224,7 @@ object InferrerUtils {
 
     fun unGenerify(statement : JSONStatement, variableMap: CheckerVariableMap? = null) : JSONStatement
     {
-        if(statement.type == SyntaxType.TYPE && statement.name == GENERIC_ID &&
+        if(statement.syntaxType == SyntaxType.TYPE && statement.name == GENERIC_ID &&
             (variableMap == null || !variableMap.containsKey(statement.components[0].name)))
         {
             statement.name = statement.components[1].name
@@ -257,11 +257,11 @@ object InferrerUtils {
 
     private fun containsStopStatement(statement: JSONStatement) : Boolean {
         for (component in statement.components) {
-            if (component.type !in arrayListOf(SyntaxType.IF, SyntaxType.FOR, SyntaxType.WHEN)) {
+            if (component.syntaxType !in arrayListOf(SyntaxType.IF, SyntaxType.FOR, SyntaxType.WHEN)) {
                 if (containsStopStatement(component))
                     return true
             }
-            if (component.type in arrayListOf(SyntaxType.BREAK, SyntaxType.CONTINUE, SyntaxType.RETURN))
+            if (component.syntaxType in arrayListOf(SyntaxType.BREAK, SyntaxType.CONTINUE, SyntaxType.RETURN))
                 return true
         }
         return false

@@ -24,7 +24,7 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
         additionalVars = details.variables.copy())
 )
 {
-    private val statedType = if(statement.components.getOrNull(0)?.type == SyntaxType.TYPE)
+    private val statedType = if(statement.components.getOrNull(0)?.syntaxType == SyntaxType.TYPE)
         statement.components[0]
     else null
 
@@ -52,11 +52,11 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
     {
         for(component in statement.components.reversed())
         {
-            if(component.type==SyntaxType.METHOD)
+            if(component.syntaxType==SyntaxType.METHOD)
                 continue
-            if(component.type==SyntaxType.RETURN)
+            if(component.syntaxType==SyntaxType.RETURN)
                 return true
-            if(component.type==SyntaxType.IF || component.type == SyntaxType.WHEN)
+            if(component.syntaxType==SyntaxType.IF || component.syntaxType == SyntaxType.WHEN)
             {
                 var alwaysReturns = true
                 var hasLast = false
@@ -64,7 +64,7 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
                 {
                     if(ifComponent.name == ELSE_ID)
                         hasLast = true
-                    if(ifComponent.type!=SyntaxType.CODE_BLOCK)
+                    if(ifComponent.syntaxType!=SyntaxType.CODE_BLOCK)
                         continue
                     alwaysReturns = alwaysReturns && checkAlwaysReturns(ifComponent)
                 }
@@ -79,9 +79,9 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
     {
         for(component in statement.components)
         {
-            if(component.type==SyntaxType.METHOD)
+            if(component.syntaxType==SyntaxType.METHOD)
                 continue
-            if(component.type == SyntaxType.RETURN)
+            if(component.syntaxType == SyntaxType.RETURN)
                 handleReturnValue(component)
             findReturnPoints(component)
         }
@@ -93,16 +93,16 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
         Checker.currentFunctionNumber++
         for(component in statement.components)
         {
-            if(component.type==SyntaxType.TYPE) {
+            if(component.syntaxType==SyntaxType.TYPE) {
                 InferFromType(
                     InferrerDetails(component, declarationVariables, exceptions, CheckerVariableMap()),
                     isTopMostType = false, genericTypes = genericTypes
                 ).infer()
                 continue
             }
-            if(component.type==SyntaxType.CODE_BLOCK)
+            if(component.syntaxType==SyntaxType.CODE_BLOCK)
                 break
-            assert(component.type == SyntaxType.DECLARATION)
+            assert(component.syntaxType == SyntaxType.DECLARATION)
 
             val inferrer = InferFromDeclaration(
                 InferrerDetails(component, declarationVariables, exceptions, CheckerVariableMap()),

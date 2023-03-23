@@ -10,7 +10,7 @@ class WhileStatement(oldContext: Context) : AbstractStatement(oldContext.setWith
     private val condition = DefaultExpression(context)
     private val codeBlock = CodeBlockStatement(context)
 
-    override val type: SyntaxType
+    override val syntaxType: SyntaxType
         get() = SyntaxType.WHILE
 
     override fun getComponents(): MutableList<AbstractStatement> {

@@ -38,7 +38,7 @@ public abstract class AbstractExpression extends AbstractStatement {
     }
 
     @Override
-    public final @NotNull SyntaxType getType() {
+    public final @NotNull SyntaxType getSyntaxType() {
         return SyntaxType.EXPRESSION;
     }
 

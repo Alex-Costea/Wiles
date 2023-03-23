@@ -33,15 +33,15 @@ class Checker(private val jsonCode : String? = null) {
 
     private fun createObject(statement : JSONStatement, topLevel : Boolean = true) : JSONStatement
     {
-        if(statement.components.isNotEmpty() && statement.components[0].type == SyntaxType.TYPE
+        if(statement.components.isNotEmpty() && statement.components[0].syntaxType == SyntaxType.TYPE
                 //type is necessary when declaring new variables
-                && ((statement.type !in KEEP_TYPE)
+                && ((statement.syntaxType !in KEEP_TYPE)
                 //remove else type details
-                || (statement.type == SyntaxType.TYPE && statement.name == ELSE_ID)))
+                || (statement.syntaxType == SyntaxType.TYPE && statement.name == ELSE_ID)))
             statement.components.removeFirst()
 
-        if(statement.type == SyntaxType.EXPRESSION
-            && statement.components[0].type != SyntaxType.TYPE
+        if(statement.syntaxType == SyntaxType.EXPRESSION
+            && statement.components[0].syntaxType != SyntaxType.TYPE
             && statement.components.size == 2)
         {
             statement.components.add(0,NOTHING_TOKEN)
@@ -74,7 +74,7 @@ class Checker(private val jsonCode : String? = null) {
     }
 
     companion object {
-        private val NOTHING_TOKEN = JSONStatement(name = NOTHING_ID, type = SyntaxType.TOKEN)
+        private val NOTHING_TOKEN = JSONStatement(name = NOTHING_ID, syntaxType = SyntaxType.TOKEN)
         val scanner = Scanner(System.`in`)
         var currentFunctionNumber : Long = 0
         val KEEP_TYPE =

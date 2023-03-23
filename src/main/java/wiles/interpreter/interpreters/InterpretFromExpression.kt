@@ -3,7 +3,7 @@ package wiles.interpreter.interpreters
 import wiles.interpreter.data.InterpreterVariableMap
 import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.exceptions.PanicException
-import wiles.interpreter.services.DoOperation
+import wiles.interpreter.statics.DoOperation
 import wiles.interpreter.statics.InterpreterConstants.toIntOrNull
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
@@ -40,7 +40,7 @@ class InterpretFromExpression(statement: JSONStatement, variables: InterpreterVa
     private fun getFromValue(component : JSONStatement) : ObjectDetails
     {
         val name = component.name
-        val type = component.type
+        val type = component.syntaxType
 
         return if(Predicates.IS_NUMBER_LITERAL.test(name) && !name.contains(DECIMAL_DELIMITER)) {
             ObjectDetails(name.substring(1).toLong(), INT64_TYPE)
@@ -75,7 +75,7 @@ class InterpretFromExpression(statement: JSONStatement, variables: InterpreterVa
 
     private fun getReference(component : JSONStatement) : ObjectDetails
     {
-        return when (component.type) {
+        return when (component.syntaxType) {
             SyntaxType.EXPRESSION -> {
                 val expressionRun = InterpretFromExpression(component, variables, additionalVars)
                 expressionRun.interpret()
@@ -162,7 +162,7 @@ class InterpretFromExpression(statement: JSONStatement, variables: InterpreterVa
                         val newVars = variables.copy()
                         newVars.putAll(additionalVars.filter { it.key == rightStatement.name })
                         val interpreter = InterpretFromExpression(
-                            JSONStatement(type =  SyntaxType.EXPRESSION, components = mutableListOf(rightStatement)),
+                            JSONStatement(syntaxType =  SyntaxType.EXPRESSION, components = mutableListOf(rightStatement)),
                             newVars, additionalVars)
                         interpreter.interpret()
                         interpreter.reference

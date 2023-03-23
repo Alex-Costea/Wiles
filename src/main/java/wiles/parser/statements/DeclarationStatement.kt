@@ -22,7 +22,7 @@ class DeclarationStatement(context: Context,
     private var right: DefaultExpression? = null
     private val exceptions = CompilationExceptionsCollection()
 
-    override val type: SyntaxType
+    override val syntaxType: SyntaxType
         get() = SyntaxType.DECLARATION
 
     override fun getComponents(): MutableList<AbstractStatement> {

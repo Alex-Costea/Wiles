@@ -37,14 +37,14 @@ object Utils {
 
     fun createFunctionType(variableType: Pair<JSONStatement, JSONStatement>): JSONStatement
     {
-        return JSONStatement(type = SyntaxType.TYPE, name = Tokens.METHOD_ID,
+        return JSONStatement(syntaxType = SyntaxType.TYPE, name = Tokens.METHOD_ID,
             components = mutableListOf(
-                JSONStatement(type = SyntaxType.METHOD,
+                JSONStatement(syntaxType = SyntaxType.METHOD,
                     components = mutableListOf(
                         variableType.second,
-                        JSONStatement(type = SyntaxType.DECLARATION, name = Tokens.ANON_ARG_ID,
+                        JSONStatement(syntaxType = SyntaxType.DECLARATION, name = Tokens.ANON_ARG_ID,
                             components = mutableListOf(variableType.first,
-                                JSONStatement(type = SyntaxType.TOKEN, name = "!elem")
+                                JSONStatement(syntaxType = SyntaxType.TOKEN, name = "!elem")
                             )),
                     ))
             ))

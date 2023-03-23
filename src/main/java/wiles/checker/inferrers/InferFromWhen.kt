@@ -65,7 +65,7 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
 
         for(component in components)
         {
-            if(component.type == SyntaxType.TYPE)
+            if(component.syntaxType == SyntaxType.TYPE)
             {
                 if (!isFormerSuperTypeOfLatter(inferredType, component)) {
                     throw ConflictingTypeDefinitionException(component.getFirstLocation(),
@@ -77,9 +77,9 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
         while(components.isNotEmpty())
         {
             val newLocation = components.first().getFirstLocation()
-            val statedType = if(components.first().type == SyntaxType.TYPE) components.first() else {
+            val statedType = if(components.first().syntaxType == SyntaxType.TYPE) components.first() else {
                 components.first().components.add(inferredType)
-                components.first().type = SyntaxType.TYPE
+                components.first().syntaxType = SyntaxType.TYPE
                 inferredType
             }
             components.removeFirst()
@@ -101,13 +101,13 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
         }
 
         if(inferredType.name == EITHER_ID && inferredType.components.isEmpty()) {
-            val lastType = statement.components.last { it.type == SyntaxType.TYPE }
+            val lastType = statement.components.last { it.syntaxType == SyntaxType.TYPE }
             if(lastType.components.isEmpty()) {
                 val lastTypeBefore = lastType.copyRemovingLocation()
                 lastType.name = ELSE_ID
                 lastType.components.clear()
                 lastType.components.add(lastTypeBefore)
-                lastType.type = SyntaxType.TYPE
+                lastType.syntaxType = SyntaxType.TYPE
             }
         }
 

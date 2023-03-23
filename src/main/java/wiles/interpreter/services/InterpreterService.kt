@@ -6,13 +6,13 @@ import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 
-class InterpretFrom(val statement : JSONStatement,
-                    val variables : InterpreterVariableMap,
-                    val additionalVars : InterpreterVariableMap
+class InterpreterService(val statement : JSONStatement,
+                         val variables : InterpreterVariableMap,
+                         val additionalVars : InterpreterVariableMap
 ) {
     fun interpret()
     {
-        val interpreter = when(statement.type) {
+        val interpreter = when(statement.syntaxType) {
             SyntaxType.EXPRESSION -> InterpretFromExpression(statement, variables, additionalVars)
             SyntaxType.CODE_BLOCK -> InterpretFromCodeBlock(statement, variables, additionalVars)
             SyntaxType.IF -> InterpretFromIf(statement, variables, additionalVars)

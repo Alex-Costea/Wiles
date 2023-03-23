@@ -52,9 +52,9 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
 
     private fun getTypeOfExpression(left : JSONStatement, middle : JSONStatement, right: JSONStatement) : JSONStatement
     {
-        assert(left.type == SyntaxType.TYPE)
-        assert(middle.type == SyntaxType.TOKEN)
-        assert(right.type == SyntaxType.TYPE)
+        assert(left.syntaxType == SyntaxType.TYPE)
+        assert(middle.syntaxType == SyntaxType.TOKEN)
+        assert(right.syntaxType == SyntaxType.TYPE)
 
         val leftComponents = createComponents(left,middle.name)
 
@@ -79,10 +79,10 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
                         specifyGenericTypesForFunction(unboxedNewLeft, genericTypes)
                         val newResult = result.map {
                             if(it.value.second)
-                                JSONStatement(type = SyntaxType.EXPRESSION,
+                                JSONStatement(syntaxType = SyntaxType.EXPRESSION,
                                     components = mutableListOf(
-                                        JSONStatement(type = SyntaxType.TOKEN, name = it.key),
-                                        JSONStatement(type = SyntaxType.TOKEN, name = ASSIGN_ID),
+                                        JSONStatement(syntaxType = SyntaxType.TOKEN, name = it.key),
+                                        JSONStatement(syntaxType = SyntaxType.TOKEN, name = ASSIGN_ID),
                                         it.value.first
                                     ))
                             else it.value.first
@@ -113,7 +113,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
                 else "${leftText}|${middle.name}|${rightText}"
             return if(resultingTypes.size == 1)
                 resultingTypes[0]
-            else JSONStatement(name = EITHER_ID, type = SyntaxType.TYPE, components = resultingTypes)
+            else JSONStatement(name = EITHER_ID, syntaxType = SyntaxType.TYPE, components = resultingTypes)
         }
         throw WrongOperationException(middle.getFirstLocation(),left.toString(),right.toString())
     }
@@ -121,24 +121,24 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
     override fun infer() {
         val typesList = listOf(SyntaxType.METHOD, SyntaxType.LIST, SyntaxType.METHOD_CALL, SyntaxType.TYPE)
 
-        if(statement.type in typesList)
+        if(statement.syntaxType in typesList)
         {
             val inferrer = InferrerService(InferrerDetails(
                 statement,variables, CompilationExceptionsCollection(),additionalVars))
             inferrer.infer()
             exceptions.addAll(inferrer.exceptions)
         }
-        else if(statement.components.size==1 && statement.components[0].type in typesList)
+        else if(statement.components.size==1 && statement.components[0].syntaxType in typesList)
         {
             val inferrer = InferrerService(
                 InferrerDetails(statement.components[0],
                 variables, CompilationExceptionsCollection(), additionalVars)
             )
             inferrer.infer()
-            when (statement.components[0].type) {
+            when (statement.components[0].syntaxType) {
                 SyntaxType.LIST -> {
                     //set list type
-                    val newListType = JSONStatement(type = SyntaxType.TYPE,
+                    val newListType = JSONStatement(syntaxType = SyntaxType.TYPE,
                         name = LIST_ID,
                         components = mutableListOf(statement.components[0].components[0]))
                     statement.components.add(0, newListType)
@@ -146,7 +146,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
                 SyntaxType.METHOD -> {
                     val newType = statement.components[0].copyRemovingLocation()
                     newType.components.removeLast()
-                    statement.components.add(0, JSONStatement(type = SyntaxType.TYPE,
+                    statement.components.add(0, JSONStatement(syntaxType = SyntaxType.TYPE,
                         name = METHOD_ID,
                         components = mutableListOf(newType)))
                 }
@@ -154,16 +154,16 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
             }
             exceptions.addAll(inferrer.exceptions)
         }
-        else if(statement.components.size==1 && statement.components[0].type == SyntaxType.TOKEN)
+        else if(statement.components.size==1 && statement.components[0].syntaxType == SyntaxType.TOKEN)
         {
             val type = inferTypeFromLiteral(statement.components[0],variables)
             statement.components.add(0,type)
         }
         else if (statement.components.size == 2 || statement.components.size == 3)
         {
-            if(statement.components.first().type == SyntaxType.TYPE)
+            if(statement.components.first().syntaxType == SyntaxType.TYPE)
                 return
-            assert(statement.type == SyntaxType.EXPRESSION)
+            assert(statement.syntaxType == SyntaxType.EXPRESSION)
 
             val isThree = statement.components.size == 3
 
@@ -172,8 +172,8 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
             val right = if(isThree) statement.components[2] else statement.components[1]
 
             val validWithZeroComponentsTypesList = listOf(SyntaxType.TYPE, SyntaxType.TOKEN, SyntaxType.METHOD_CALL)
-            assert(left.components.size > 0 || left.type in validWithZeroComponentsTypesList)
-            assert(right.components.size > 0 || right.type in validWithZeroComponentsTypesList)
+            assert(left.components.size > 0 || left.syntaxType in validWithZeroComponentsTypesList)
+            assert(right.components.size > 0 || right.syntaxType in validWithZeroComponentsTypesList)
 
             //Check if value can be assigned to
             if(middle.name == ASSIGN_ID)
@@ -188,28 +188,28 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
                 else throw ExpectedIdentifierException(left.getFirstLocation())
             }
 
-            val leftIsToken = left.type == SyntaxType.TOKEN
-            val rightIsToken = right.type == SyntaxType.TOKEN
+            val leftIsToken = left.syntaxType == SyntaxType.TOKEN
+            val rightIsToken = right.syntaxType == SyntaxType.TOKEN
 
             if(!leftIsToken)
                 InferFromExpression(InferrerDetails(left, variables, exceptions, additionalVars)).infer()
 
             val leftType = if(leftIsToken) inferTypeFromLiteral(left,variables)
-                else if(left.type == SyntaxType.EXPRESSION) left.components[0]
-                else if(left.type == SyntaxType.LIST) makeList(left.components[0])
-                else if(left.type == SyntaxType.METHOD) makeMethod(left)
+                else if(left.syntaxType == SyntaxType.EXPRESSION) left.components[0]
+                else if(left.syntaxType == SyntaxType.LIST) makeList(left.components[0])
+                else if(left.syntaxType == SyntaxType.METHOD) makeMethod(left)
                 else throw InternalErrorException()
 
             //Transform access operation into apply operation
             if(middle == TypeConstants.ACCESS_OPERATION)
             {
                 var methodCallComponents = mutableListOf<JSONStatement>()
-                if(right.type!=SyntaxType.TOKEN) {
-                    if(right.type == SyntaxType.EXPRESSION && right.components.getOrNull(1)?.name == APPLY_ID) {
+                if(right.syntaxType!=SyntaxType.TOKEN) {
+                    if(right.syntaxType == SyntaxType.EXPRESSION && right.components.getOrNull(1)?.name == APPLY_ID) {
                         methodCallComponents = right.components[2].components
                         right.name = AccessOperationIdentifiers.get(right.components[0].name,leftType)
                             ?: right.components[0].name
-                        right.type = right.components[0].type
+                        right.syntaxType = right.components[0].syntaxType
                         right.location = right.components[0].location
                         right.components = right.components[0].components
                     }
@@ -219,13 +219,13 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
                 //create correct components
                 assert(isThree)
                 middle.name = APPLY_ID
-                val oldLeft = if(statement.components[0].type==SyntaxType.EXPRESSION)
+                val oldLeft = if(statement.components[0].syntaxType==SyntaxType.EXPRESSION)
                     statement.components[0]
-                else JSONStatement(type = SyntaxType.EXPRESSION,
+                else JSONStatement(syntaxType = SyntaxType.EXPRESSION,
                     components = mutableListOf(statement.components[0]))
                 statement.components[0] = statement.components[2]
                 methodCallComponents.add(0,oldLeft)
-                statement.components[2] = JSONStatement(type = SyntaxType.METHOD_CALL,
+                statement.components[2] = JSONStatement(syntaxType = SyntaxType.METHOD_CALL,
                     components = methodCallComponents)
 
                 //redo infer
@@ -241,16 +241,16 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
             val rightType = if(rightIsToken && !middleIsImport) inferTypeFromLiteral(right,variables)
                 else if(rightIsToken && IS_IDENTIFIER.test(right.name)) inferTypeFromLiteral(right, additionalVars)
                 else if(middleIsImport) throw ExpectedIdentifierException(right.getFirstLocation())
-                else if(right.type == SyntaxType.EXPRESSION) right.components[0]
-                else if(right.type == SyntaxType.LIST) makeList(right.components[0])
-                else if(right.type == SyntaxType.METHOD) makeMethod(right)
-                else if(right.type == SyntaxType.METHOD_CALL) right.components[0]
+                else if(right.syntaxType == SyntaxType.EXPRESSION) right.components[0]
+                else if(right.syntaxType == SyntaxType.LIST) makeList(right.components[0])
+                else if(right.syntaxType == SyntaxType.METHOD) makeMethod(right)
+                else if(right.syntaxType == SyntaxType.METHOD_CALL) right.components[0]
                 else throw InternalErrorException()
 
             statement.components.add(0,getTypeOfExpression(leftType,middle,rightType))
 
             // simplify format
-            if(right.type == SyntaxType.METHOD_CALL)
+            if(right.syntaxType == SyntaxType.METHOD_CALL)
             {
                 right.components = right.components[0].components[0].components
             }

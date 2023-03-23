@@ -1,4 +1,4 @@
-package wiles.interpreter.services
+package wiles.interpreter.statics
 
 import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.exceptions.PanicException
@@ -100,13 +100,13 @@ object DoOperation {
             (x as Double).pow(y as Double)}, DOUBLE_TYPE)),
 
         //Prefix plus/minus
-        Pair("${NOTHING_ID}|${UNARY_PLUS_ID}|${INT64_ID}",createFunction({ _: Any?, y: Any? ->
+        Pair("${NOTHING_ID}|${UNARY_PLUS_ID}|${INT64_ID}", createFunction({ _: Any?, y: Any? ->
             (y as Long)}, INT64_TYPE)),
-        Pair("${NOTHING_ID}|${UNARY_PLUS_ID}|${DOUBLE_ID}",createFunction({ _: Any?, y: Any? ->
+        Pair("${NOTHING_ID}|${UNARY_PLUS_ID}|${DOUBLE_ID}", createFunction({ _: Any?, y: Any? ->
             (y as Double)}, DOUBLE_TYPE)),
-        Pair("${NOTHING_ID}|${UNARY_MINUS_ID}|${INT64_ID}",createFunction({ _: Any?, y: Any? ->
+        Pair("${NOTHING_ID}|${UNARY_MINUS_ID}|${INT64_ID}", createFunction({ _: Any?, y: Any? ->
             -(y as Long)}, INT64_TYPE)),
-        Pair("${NOTHING_ID}|${UNARY_MINUS_ID}|${DOUBLE_ID}",createFunction({ _: Any?, y: Any? ->
+        Pair("${NOTHING_ID}|${UNARY_MINUS_ID}|${DOUBLE_ID}", createFunction({ _: Any?, y: Any? ->
             -(y as Double)}, DOUBLE_TYPE)),
 
         //Not operation (other ones are handled seriously
@@ -229,9 +229,11 @@ object DoOperation {
 
         //Repeat string
         Pair("${STRING_ID}|${TIMES_ID}|${INT64_ID}", createFunction({ x : Any?, y : Any? ->
-            repeatString(x,y)}, STRING_TYPE)),
+            repeatString(x,y)
+        }, STRING_TYPE)),
         Pair("${INT64_ID}|${TIMES_ID}|${STRING_ID}", createFunction({ x : Any?, y : Any? ->
-            repeatString(y,x)}, STRING_TYPE)),
+            repeatString(y,x)
+        }, STRING_TYPE)),
     )
 
     private fun repeatString(x : Any?, y : Any?) : Any

@@ -11,7 +11,7 @@ class TokenStatement(val token: Token, context : Context) : AbstractStatement(co
         location = token.location
     }
 
-    override val type: SyntaxType
+    override val syntaxType: SyntaxType
         get() = SyntaxType.TOKEN
 
     override fun getComponents(): MutableList<AbstractStatement> {

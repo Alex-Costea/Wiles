@@ -19,7 +19,7 @@ class InferFromCodeBlock(details: InferrerDetails) : InferFromStatement(details)
                 inferrer.infer()
 
                 if(exceptions.isEmpty() &&
-                    part.type == SyntaxType.EXPRESSION && !isFormerSuperTypeOfLatter(NOTHING_TYPE, inferrer.getType()))
+                    part.syntaxType == SyntaxType.EXPRESSION && !isFormerSuperTypeOfLatter(NOTHING_TYPE, inferrer.getType()))
                     throw UnusedExpressionException(part.getFirstLocation())
             }
             catch (ex : AbstractCompilationException)

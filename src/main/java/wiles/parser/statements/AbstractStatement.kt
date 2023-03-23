@@ -14,7 +14,7 @@ abstract class AbstractStatement(val context: Context) : StatementInterface
     @JvmField
     protected val transmitter = context.transmitter
 
-    abstract override val type: SyntaxType
+    abstract override val syntaxType: SyntaxType
 
     override var name = ""
 
@@ -23,7 +23,7 @@ abstract class AbstractStatement(val context: Context) : StatementInterface
     abstract fun process(): CompilationExceptionsCollection
 
     override fun toString(): String {
-        return Utils.statementToString(name,type,getComponents())
+        return Utils.statementToString(name,syntaxType,getComponents())
     }
 
     abstract override fun getComponents(): MutableList<AbstractStatement>

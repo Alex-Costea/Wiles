@@ -25,8 +25,8 @@ class InferFromDeclaration(details: InferrerDetails,
     override fun infer() {
         //get details
         assert(statement.components.size>1)
-        val name = if(statement.components[0].type== TYPE) statement.components[1] else statement.components[0]
-        val type = if(statement.components[0].type== TYPE) statement.components[0] else null
+        val name = if(statement.components[0].syntaxType== TYPE) statement.components[1] else statement.components[0]
+        val type = if(statement.components[0].syntaxType== TYPE) statement.components[0] else null
         val default = statement.components.getOrNull(if(type==null) 1 else 2)
         var inferredType : JSONStatement? = null
 
@@ -56,10 +56,10 @@ class InferFromDeclaration(details: InferrerDetails,
         if(isNothing)
             statement.components.add(
                 JSONStatement(
-                    type = EXPRESSION,
+                    syntaxType = EXPRESSION,
                     components = mutableListOf(JSONStatement(
                         name = NOTHING_ID,
-                        type = TOKEN
+                        syntaxType = TOKEN
                     ))
                 ))
 
@@ -69,7 +69,7 @@ class InferFromDeclaration(details: InferrerDetails,
             modifiable = statement.name.contains(VARIABLE_ID)
         )
 
-        if(statement.components[0].type != TYPE)
+        if(statement.components[0].syntaxType != TYPE)
             statement.components.add(0,newType)
 
         if(type != null)

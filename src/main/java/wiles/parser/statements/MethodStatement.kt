@@ -25,7 +25,7 @@ class MethodStatement(oldContext : Context, private val isTypeDeclaration: Boole
     private var returnType: TypeDefinitionStatement? = null
     private var methodBody: CodeBlockStatement = CodeBlockStatement(context)
 
-    override val type: SyntaxType
+    override val syntaxType: SyntaxType
         get() = SyntaxType.METHOD
 
     override fun getComponents(): MutableList<AbstractStatement> {

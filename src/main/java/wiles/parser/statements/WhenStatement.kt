@@ -13,7 +13,7 @@ class WhenStatement(context: Context) : AbstractStatement(context) {
     private val expression = DefaultExpression(context)
     private val branches : MutableList<Pair<AbstractStatement,AbstractStatement>> = mutableListOf()
 
-    override val type: SyntaxType
+    override val syntaxType: SyntaxType
         get() = SyntaxType.WHEN
 
     override fun getComponents(): MutableList<AbstractStatement> {

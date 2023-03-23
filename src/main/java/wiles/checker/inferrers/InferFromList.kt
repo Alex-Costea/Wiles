@@ -10,15 +10,15 @@ import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 
 class InferFromList(details: InferrerDetails) : InferFromStatement(details) {
     override fun infer() {
-        assert(statement.type==SyntaxType.LIST)
-        val statedType = if(statement.components.isNotEmpty() && statement.components[0].type==SyntaxType.TYPE)
+        assert(statement.syntaxType==SyntaxType.LIST)
+        val statedType = if(statement.components.isNotEmpty() && statement.components[0].syntaxType==SyntaxType.TYPE)
             statement.components[0] else null
         var inferredType : JSONStatement? = null
         for(component in statement.components)
         {
-            if(component.type==SyntaxType.TYPE)
+            if(component.syntaxType==SyntaxType.TYPE)
                 continue
-            assert(component.type==SyntaxType.EXPRESSION)
+            assert(component.syntaxType==SyntaxType.EXPRESSION)
             val inferrer = InferFromExpression(
                 InferrerDetails(component, variables, CompilationExceptionsCollection(), additionalVars)
             )

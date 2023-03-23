@@ -26,7 +26,7 @@ class InterpretFromMethod(statement: JSONStatement, variables: InterpreterVariab
         }
         val defaultVars = InterpreterVariableMap()
         defaultVars.putAll(newVars.filter { it.key !in variables })
-        val functionType = JSONStatement(name = METHOD_ID, type = SyntaxType.TYPE, components = mutableListOf(type))
+        val functionType = JSONStatement(name = METHOD_ID, syntaxType = SyntaxType.TYPE, components = mutableListOf(type))
         reference = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ givenVars ->
             val funcVars = InterpreterVariableMap()
             funcVars.putAll(defaultVars.filter { it.key !in givenVars })

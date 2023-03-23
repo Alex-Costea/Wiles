@@ -23,7 +23,7 @@ public class MethodCallStatement extends AbstractStatement{
 
     @NotNull
     @Override
-    public SyntaxType getType() {
+    public SyntaxType getSyntaxType() {
         return SyntaxType.METHOD_CALL;
     }
 

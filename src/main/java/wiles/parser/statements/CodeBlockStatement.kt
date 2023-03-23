@@ -39,7 +39,7 @@ class CodeBlockStatement(context: Context) : AbstractStatement(context) {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private var parsed: Boolean? = null
 
-    override val type: SyntaxType
+    override val syntaxType: SyntaxType
         get() = SyntaxType.CODE_BLOCK
 
     override fun getComponents(): MutableList<AbstractStatement> {

@@ -21,7 +21,7 @@ class InferrerService(details: InferrerDetails)
     private val additionalVariables = details.additionalVars
 
     fun getType(): JSONStatement {
-        if(statement.components.getOrNull(0)?.type == TYPE)
+        if(statement.components.getOrNull(0)?.syntaxType == TYPE)
             return statement.components[0]
         throw InternalErrorException(UNKNOWN_SYNTAX_TYPE_ERROR)
     }
@@ -31,7 +31,7 @@ class InferrerService(details: InferrerDetails)
     {
         val details = InferrerDetails(statement, variables, exceptions, additionalVariables)
         val inferFromStatement : InferFromStatement
-        when (statement.type)
+        when (statement.syntaxType)
         {
             CODE_BLOCK -> inferFromStatement = InferFromCodeBlock(details)
             DECLARATION -> inferFromStatement = InferFromDeclaration(details)

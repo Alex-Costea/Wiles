@@ -22,7 +22,7 @@ class ForStatement(oldContext: Context) : AbstractStatement(oldContext.setWithin
     private var toExpression : DefaultExpression? = null
     private val codeBlock = CodeBlockStatement(context)
 
-    override val type: SyntaxType
+    override val syntaxType: SyntaxType
         get() = SyntaxType.FOR
 
     override fun getComponents(): MutableList<AbstractStatement> {

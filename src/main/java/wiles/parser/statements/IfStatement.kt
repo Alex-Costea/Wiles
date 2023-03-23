@@ -15,7 +15,7 @@ class IfStatement(context: Context) : AbstractStatement(context) {
 
     private val branches : MutableList<Pair<AbstractStatement,AbstractStatement>> = mutableListOf()
 
-    override val type: SyntaxType
+    override val syntaxType: SyntaxType
         get() = SyntaxType.IF
 
     override fun getComponents(): MutableList<AbstractStatement> {

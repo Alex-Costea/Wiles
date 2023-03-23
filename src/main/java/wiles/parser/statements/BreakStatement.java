@@ -14,7 +14,7 @@ public class BreakStatement extends AbstractStatement{
 
     @NotNull
     @Override
-    public SyntaxType getType() {
+    public SyntaxType getSyntaxType() {
         return SyntaxType.BREAK;
     }
 

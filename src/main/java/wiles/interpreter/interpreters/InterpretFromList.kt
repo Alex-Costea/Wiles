@@ -35,7 +35,7 @@ class InterpretFromList(statement: JSONStatement, variables: InterpreterVariable
         else if(resultingType.name == EITHER_ID) {
             resultingType.components.add(addedType)
             resultingType
-        } else JSONStatement(name = EITHER_ID, type = SyntaxType.TYPE,
+        } else JSONStatement(name = EITHER_ID, syntaxType = SyntaxType.TYPE,
             components = mutableListOf(resultingType,addedType))
     }
 }

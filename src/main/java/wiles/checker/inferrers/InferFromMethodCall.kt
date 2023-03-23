@@ -23,7 +23,7 @@ class InferFromMethodCall(details: InferrerDetails) : InferFromStatement(details
                     throw ExpectedIdentifierException(identifierExpression.getFirstLocation())
                 expression.components[0] = identifierExpression
             }
-            if(expression.components[0].type==SyntaxType.TYPE)
+            if(expression.components[0].syntaxType==SyntaxType.TYPE)
                 continue
             InferFromExpression(InferrerDetails(expressionToInfer,variables, exceptions, additionalVars)).infer()
         }
