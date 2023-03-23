@@ -2,7 +2,6 @@ package wiles.checker.inferrers
 
 import wiles.checker.Checker
 import wiles.checker.data.InferrerDetails
-import wiles.checker.data.VariableDetails
 import wiles.checker.exceptions.GenericAlreadyDefinedException
 import wiles.checker.statics.InferrerUtils.createGenericType
 import wiles.checker.statics.InferrerUtils.getTypeNumber
@@ -10,7 +9,6 @@ import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
-import wiles.shared.constants.TypeConstants
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
 import wiles.shared.constants.Types.EITHER_ID
 import wiles.shared.constants.Types.GENERIC_ID
@@ -58,7 +56,6 @@ class InferFromType(details: InferrerDetails,
         }
         if(isTopMostType) {
             createGenericType(statement, genericTypes)
-            variables.putAll(genericTypes.map { Pair(it.key, VariableDetails(TypeConstants.TYPE_TYPE)) })
         }
     }
 }
