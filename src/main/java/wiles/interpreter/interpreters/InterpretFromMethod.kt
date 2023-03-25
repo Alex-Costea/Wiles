@@ -1,5 +1,6 @@
 package wiles.interpreter.interpreters
 
+import wiles.checker.data.GenericTypesMap
 import wiles.interpreter.data.InterpreterVariableMap
 import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.exceptions.ReturnSignal
@@ -8,6 +9,8 @@ import wiles.shared.SyntaxType
 import wiles.shared.constants.StandardLibrary.NOTHING_REF
 import wiles.shared.constants.StandardLibrary.defaultInterpreterVars
 import wiles.shared.constants.Tokens.METHOD_ID
+import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
+import wiles.shared.constants.Types
 import java.util.function.Function
 
 class InterpretFromMethod(statement: JSONStatement, variables: InterpreterVariableMap, additionalVars: InterpreterVariableMap)
@@ -31,6 +34,18 @@ class InterpretFromMethod(statement: JSONStatement, variables: InterpreterVariab
             val funcVars = InterpreterVariableMap()
             funcVars.putAll(defaultVars.filter { it.key !in givenVars })
             funcVars.putAll(givenVars)
+            val genericTypesMap = GenericTypesMap()
+            for(component in type.components)
+            {
+                if(component.syntaxType == SyntaxType.TYPE)
+                    continue
+                val name = component.components[1].name
+                val superType = component.components[0]
+                require(isFormerSuperTypeOfLatter(superType,funcVars[name]!!.type, genericTypes = genericTypesMap))
+            }
+            funcVars.putAll(genericTypesMap.map { Pair(it.key.split("|")[0], ObjectDetails(it.value.first,
+                JSONStatement(syntaxType = SyntaxType.TYPE, name = Types.TYPE_TYPE_ID,
+                    components = mutableListOf(it.value.first)))) })
             funcVars.putAll(defaultInterpreterVars)
             try
             {
