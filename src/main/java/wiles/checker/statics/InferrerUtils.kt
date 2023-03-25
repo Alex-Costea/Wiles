@@ -61,7 +61,7 @@ object InferrerUtils {
         throw InternalErrorException(NOT_ONE_TOKEN_ERROR)
     }
 
-    fun createGenericType(
+    fun createTypes(
         type: JSONStatement,
         typeNames: MutableMap<String, JSONStatement>,
         variables: CheckerVariableMap
@@ -88,13 +88,16 @@ object InferrerUtils {
             type.name = GENERIC_ID
             return
         }
-        else if(type.syntaxType == SyntaxType.TYPE && IS_IDENTIFIER.test(type.name) && type.name != NOTHING_ID)
+        else if(type.syntaxType == SyntaxType.TYPE && IS_IDENTIFIER.test(type.name)) {
+            if(type.name == NOTHING_ID)
+                return
             throw UnknownTypeException(type.getFirstLocation())
+        }
         if(type.components.isNotEmpty())
         {
             for(component in type.components)
             {
-                createGenericType(component, typeNames, variables)
+                createTypes(component, typeNames, variables)
             }
         }
     }

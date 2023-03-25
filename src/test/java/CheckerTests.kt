@@ -1458,7 +1458,7 @@ class CheckerTests {
 }""","CODE_BLOCK(DECLARATION(TYPE INT64; !temp; EXPRESSION(TYPE INT64; #2; INT64|PLUS|INT64; EXPRESSION(TYPE MUTABLE; (TYPE INT64); MUTABLE; #3))))")
 
     /*
-        let a : either[int,text] := mut "2"
+        let a : mut[either[int,text]] := mut "2"
         a.set(10)
      */
         checkResult(null,"""{

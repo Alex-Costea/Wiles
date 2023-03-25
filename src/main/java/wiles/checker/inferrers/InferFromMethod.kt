@@ -8,7 +8,7 @@ import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.exceptions.InferenceFailException
 import wiles.checker.exceptions.ReturnNotGuaranteedException
 import wiles.checker.services.InferrerService
-import wiles.checker.statics.InferrerUtils.createGenericType
+import wiles.checker.statics.InferrerUtils.createTypes
 import wiles.checker.statics.InferrerUtils.makeGeneric
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
@@ -113,7 +113,7 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
             inferrer.infer()
         }
 
-        createGenericType(statement, genericTypes, variables = additionalVars)
+        createTypes(statement, genericTypes, variables = additionalVars)
 
         declarationVariables.forEach { it.value.initialized = true }
         variables.putAll(declarationVariables.filter { it.key !in additionalVars })

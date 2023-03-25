@@ -3,7 +3,7 @@ package wiles.checker.inferrers
 import wiles.checker.Checker
 import wiles.checker.data.InferrerDetails
 import wiles.checker.exceptions.GenericAlreadyDefinedException
-import wiles.checker.statics.InferrerUtils.createGenericType
+import wiles.checker.statics.InferrerUtils.createTypes
 import wiles.checker.statics.InferrerUtils.getTypeNumber
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
@@ -55,7 +55,7 @@ class InferFromType(details: InferrerDetails,
             }
         }
         if(isTopMostType) {
-            createGenericType(statement, genericTypes, additionalVars)
+            createTypes(statement, genericTypes, variables)
         }
     }
 }
