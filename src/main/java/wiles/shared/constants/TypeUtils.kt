@@ -131,6 +131,11 @@ object TypeUtils {
             return isFormerSuperTypeOfLatter(supertype.components[0], subtype.components[0], getMinus = getMinus,
                 genericTypes = genericTypes)
 
+        else if (supertype.name == Types.GENERIC_TYPE_ID && subtype.name == Types.GENERIC_TYPE_ID)
+            return isFormerSuperTypeOfLatter(supertype.components[0], subtype.components[0], getMinus = getMinus,
+                genericTypes = genericTypes, unboxGenerics = unboxGenerics)
+
+
         else if (subtype.name == Tokens.MUTABLE_ID)
             return isFormerSuperTypeOfLatter(supertype, subtype.components[0], getMinus = getMinus,
                 genericTypes = genericTypes)
