@@ -191,7 +191,7 @@ object TypeUtils {
         val list = mutableListOf<String>()
         for(component in statement.components)
         {
-            list.addAll(getGenericComponents(statement))
+            list.addAll(getGenericComponents(component))
         }
         return list
     }
