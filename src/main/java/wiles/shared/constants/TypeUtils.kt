@@ -25,19 +25,22 @@ object TypeUtils {
 
         else if(supertype.name == Types.GENERIC_ID && subtype.name == Types.GENERIC_ID
             && supertype.components[0].name == subtype.components[0].name
-            && isFormerSuperTypeOfLatter(supertype.components[1], subtype.components[1], getMinus = getMinus))
+            && isFormerSuperTypeOfLatter(supertype.components[1], subtype.components[1], genericTypes = genericTypes,
+                getMinus = getMinus))
             return true
 
         if(supertype.name == Types.GENERIC_ID && isFormerSuperTypeOfLatter(supertype.components[1], subtype,
-                getMinus = getMinus && unboxGenerics)){
+                getMinus = getMinus && unboxGenerics, genericTypes = genericTypes)){
             val genName = supertype.components[0].name
             if(genericTypes?.containsKey(genName) == true)
             {
-                return if(isFormerSuperTypeOfLatter(genericTypes[genName]!!.first, subtype, unboxGenerics = false)) {
+                return if(isFormerSuperTypeOfLatter(genericTypes[genName]!!.first, subtype, unboxGenerics = false,
+                        genericTypes = genericTypes)) {
                     genericTypes[genName] = Pair(genericTypes[genName]!!.first,true)
                     true
                 }
-                else if(isFormerSuperTypeOfLatter(subtype, genericTypes[genName]!!.first, unboxGenerics = false)) {
+                else if(isFormerSuperTypeOfLatter(subtype, genericTypes[genName]!!.first, unboxGenerics = false,
+                        genericTypes = genericTypes)) {
                     genericTypes[genName] = Pair(subtype,true)
                     true
                 } else false
@@ -50,17 +53,18 @@ object TypeUtils {
 
         else if(subtype.name == Types.GENERIC_ID)
         {
-            return isFormerSuperTypeOfLatter(supertype,subtype.components[1], getMinus = getMinus)
+            return isFormerSuperTypeOfLatter(supertype,subtype.components[1], getMinus = getMinus,
+                genericTypes = genericTypes)
         }
 
         else if(supertype.name == Types.ANYTHING_ID)
         {
             return if(subtype.name != Types.EITHER_ID) {
-                !isFormerSuperTypeOfLatter(TypeConstants.NOTHING_TYPE, subtype)
+                !isFormerSuperTypeOfLatter(TypeConstants.NOTHING_TYPE, subtype, genericTypes = genericTypes)
             } else {
                 var isValid = true
                 for (component in subtype.components) {
-                    if(isFormerSuperTypeOfLatter(TypeConstants.NOTHING_TYPE,component))
+                    if(isFormerSuperTypeOfLatter(TypeConstants.NOTHING_TYPE,component, genericTypes = genericTypes))
                         isValid = false
                 }
                 isValid
@@ -74,7 +78,7 @@ object TypeUtils {
                 var isValid = false
                 for (component in supertype.components)
                 {
-                    if (isFormerSuperTypeOfLatter(component,subtype, getMinus = getMinus))
+                    if (isFormerSuperTypeOfLatter(component,subtype, getMinus = getMinus, genericTypes = genericTypes))
                     {
                         isValid = true
                     }
@@ -86,14 +90,16 @@ object TypeUtils {
                 var isValid = true
                 for(subtypeComponent in subtype.components)
                 {
-                    if(isFormerSuperTypeOfLatter(supertype,subtypeComponent, getMinus = getMinus))
+                    if(isFormerSuperTypeOfLatter(supertype,subtypeComponent, getMinus = getMinus,
+                            genericTypes = genericTypes))
                     {
                         continue
                     }
                     var hasMatch = false
                     for(supertypeComponent in supertype.components)
                     {
-                        if(isFormerSuperTypeOfLatter(supertypeComponent,subtypeComponent, getMinus = getMinus))
+                        if(isFormerSuperTypeOfLatter(supertypeComponent,subtypeComponent, getMinus = getMinus,
+                                genericTypes = genericTypes))
                         {
                             hasMatch = true
                             break
@@ -119,13 +125,15 @@ object TypeUtils {
         }
 
         else if (supertype.name == Types.LIST_ID && subtype.name == Types.LIST_ID)
-            return isFormerSuperTypeOfLatter(supertype.components[0],subtype.components[0], getMinus = getMinus)
+            return isFormerSuperTypeOfLatter(supertype.components[0],subtype.components[0], getMinus = getMinus, genericTypes = genericTypes)
 
         else if (supertype.name == Tokens.MUTABLE_ID && subtype.name == Tokens.MUTABLE_ID)
-            return isFormerSuperTypeOfLatter(supertype.components[0], subtype.components[0], getMinus = getMinus)
+            return isFormerSuperTypeOfLatter(supertype.components[0], subtype.components[0], getMinus = getMinus,
+                genericTypes = genericTypes)
 
         else if (subtype.name == Tokens.MUTABLE_ID)
-            return isFormerSuperTypeOfLatter(supertype, subtype.components[0], getMinus = getMinus)
+            return isFormerSuperTypeOfLatter(supertype, subtype.components[0], getMinus = getMinus,
+                genericTypes = genericTypes)
 
         else if(supertype.name == Tokens.METHOD_ID && subtype.name == Tokens.METHOD_ID)
             return checkMethodIsSubtype(supertype, subtype, genericTypes?: GenericTypesMap())
