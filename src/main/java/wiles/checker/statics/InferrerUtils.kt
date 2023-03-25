@@ -1,6 +1,5 @@
 package wiles.checker.statics
 
-import wiles.checker.Checker.Companion.GENERIC_NAME
 import wiles.checker.Checker.Companion.currentFunctionNumber
 import wiles.checker.data.CheckerVariableMap
 import wiles.checker.data.GenericTypesMap
@@ -78,7 +77,7 @@ object InferrerUtils {
         {
             return
         }
-        else if(variables.containsKey(type.name + GENERIC_NAME))
+        else if(variables.containsKey(type.name))
             throw VariableAlreadyDeclaredException(type.getFirstLocation())
         else if(typeNames.containsKey(name))
         {

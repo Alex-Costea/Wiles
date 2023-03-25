@@ -77,7 +77,6 @@ class Checker(private val jsonCode : String? = null) {
         private val NOTHING_TOKEN = JSONStatement(name = NOTHING_ID, syntaxType = SyntaxType.TOKEN)
         val scanner = Scanner(System.`in`)
         var currentFunctionNumber : Long = 0
-        const val GENERIC_NAME = " GENERIC"
         val KEEP_TYPE =
             arrayOf(SyntaxType.FOR, SyntaxType.DECLARATION, SyntaxType.TYPE, SyntaxType.LIST, SyntaxType.METHOD)
     }

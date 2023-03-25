@@ -1,7 +1,6 @@
 package wiles.checker.inferrers
 
 import wiles.checker.Checker
-import wiles.checker.Checker.Companion.GENERIC_NAME
 import wiles.checker.data.CheckerVariableMap
 import wiles.checker.data.InferrerDetails
 import wiles.checker.data.VariableDetails
@@ -17,6 +16,7 @@ import wiles.shared.constants.Tokens.ELSE_ID
 import wiles.shared.constants.TypeConstants.GENERIC_VALUE_TYPE
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
 import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
+import wiles.shared.constants.Types.TYPE_TYPE_ID
 
 class InferFromMethod(details: InferrerDetails) : InferFromStatement(
     InferrerDetails(details.statement,
@@ -117,8 +117,9 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
         declarationVariables.forEach { it.value.initialized = true }
         variables.putAll(declarationVariables.filter { it.key !in additionalVars })
         variables.putAll(genericTypes.map { Pair(it.key,VariableDetails(GENERIC_VALUE_TYPE)) })
-        variables.putAll(genericTypes.map { Pair(it.key.split("|")[0]+ GENERIC_NAME,
-            VariableDetails(GENERIC_VALUE_TYPE)) })
+        variables.putAll(genericTypes.map { Pair(it.key.split("|")[0],
+            VariableDetails(JSONStatement(syntaxType = SyntaxType.TYPE, name = TYPE_TYPE_ID,
+                components = mutableListOf(it.value)))) })
 
         val inferrer = InferrerService(InferrerDetails(statement.components.last(), variables, exceptions, additionalVars))
         inferrer.infer()
