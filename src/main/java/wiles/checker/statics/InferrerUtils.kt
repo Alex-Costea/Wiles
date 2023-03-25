@@ -70,6 +70,8 @@ object InferrerUtils {
         val name = getTypeNumber(type.name)
         if(type.name == GENERIC_ID)
         {
+            if(variables.containsKey(type.components[0].name))
+                throw VariableAlreadyDeclaredException(type.components[0].getFirstLocation())
             type.components[0].name=getTypeNumber(type.components[0].name)
             return
         }
@@ -77,8 +79,6 @@ object InferrerUtils {
         {
             return
         }
-        else if(variables.containsKey(type.name))
-            throw VariableAlreadyDeclaredException(type.getFirstLocation())
         else if(typeNames.containsKey(name))
         {
             val newType = typeNames[name]!!

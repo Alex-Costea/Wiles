@@ -5973,7 +5973,6 @@ class CheckerTests {
         let func1 := fun(elem1 : anything? as T, elem2 : T)
         begin
             let func2 := fun(elem3 : anything? as T, elem4 : T) do nothing
-            yield func2
         end
          */
         checkResult(createExceptions(VariableAlreadyDeclaredException(NULL_LOCATION)),
@@ -6157,8 +6156,7 @@ class CheckerTests {
       } ]
     } ]
   } ]
-}""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(DECLARATION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem1); DECLARATION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem2))); !func1; EXPRESSION(TYPE METHOD; (METHOD(DECLARATION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem1); DECLARATION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem2))); METHOD(DECLARATION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem1); DECLARATION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem2); CODE_BLOCK(DECLARATION(!func2; EXPRESSION(METHOD(DECLARATION(TYPE GENERIC; (!T|2; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem3); DECLARATION(TYPE !T; !elem4); CODE_BLOCK(EXPRESSION(!nothing))))))))))")
-
+}""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(DECLARATION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem1); DECLARATION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem2))); !func1; EXPRESSION(TYPE METHOD; (METHOD(DECLARATION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem1); DECLARATION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem2))); METHOD(DECLARATION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem1); DECLARATION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem2); CODE_BLOCK(DECLARATION(!func2; EXPRESSION(METHOD(DECLARATION(TYPE GENERIC; (!T; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem3); DECLARATION(TYPE !T; !elem4); CODE_BLOCK(EXPRESSION(!nothing))))))))))")
         /*
         let add_func := fun(arg list : list[anything? as T], arg elem : T) -> list[T] do
             yield list + [elem]
