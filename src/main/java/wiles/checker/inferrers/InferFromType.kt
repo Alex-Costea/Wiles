@@ -55,7 +55,7 @@ class InferFromType(details: InferrerDetails,
             }
         }
         if(isTopMostType) {
-            createGenericType(statement, genericTypes)
+            createGenericType(statement, genericTypes, additionalVars)
         }
     }
 }

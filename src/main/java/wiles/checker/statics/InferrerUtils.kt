@@ -1,5 +1,6 @@
 package wiles.checker.statics
 
+import wiles.checker.Checker.Companion.GENERIC_NAME
 import wiles.checker.Checker.Companion.currentFunctionNumber
 import wiles.checker.data.CheckerVariableMap
 import wiles.checker.data.GenericTypesMap
@@ -61,7 +62,11 @@ object InferrerUtils {
         throw InternalErrorException(NOT_ONE_TOKEN_ERROR)
     }
 
-    fun createGenericType(type: JSONStatement, typeNames: MutableMap<String, JSONStatement>)
+    fun createGenericType(
+        type: JSONStatement,
+        typeNames: MutableMap<String, JSONStatement>,
+        variables: CheckerVariableMap
+    )
     {
         val name = getTypeNumber(type.name)
         if(type.name == GENERIC_ID)
@@ -73,6 +78,8 @@ object InferrerUtils {
         {
             return
         }
+        else if(variables.containsKey(type.name + GENERIC_NAME))
+            throw VariableAlreadyDeclaredException(type.getFirstLocation())
         else if(typeNames.containsKey(name))
         {
             val newType = typeNames[name]!!
@@ -88,7 +95,7 @@ object InferrerUtils {
         {
             for(component in type.components)
             {
-                createGenericType(component, typeNames)
+                createGenericType(component, typeNames, variables)
             }
         }
     }

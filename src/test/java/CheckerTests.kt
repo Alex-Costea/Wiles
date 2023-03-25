@@ -5855,6 +5855,196 @@ class CheckerTests {
     fun genericsTest()
     {
         /*
+        let func1 := fun(elem1 : anything? as T, elem2 : T)
+        begin
+            let func2 := fun(elem3 : anything? as T, elem4 : T) do nothing
+            yield func2
+        end
+         */
+        checkResult(createExceptions(VariableAlreadyDeclaredException(NULL_LOCATION)),
+            """{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "!func1",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "type" : "METHOD",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 14
+        },
+        "components" : [ {
+          "type" : "DECLARATION",
+          "components" : [ {
+            "name" : "GENERIC",
+            "type" : "TYPE",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 26
+            },
+            "components" : [ {
+              "name" : "!T",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 1,
+                "lineIndex" : 39
+              }
+            }, {
+              "name" : "EITHER",
+              "type" : "TYPE",
+              "location" : {
+                "line" : 1,
+                "lineIndex" : 26
+              },
+              "components" : [ {
+                "name" : "ANYTHING",
+                "type" : "TYPE",
+                "location" : {
+                  "line" : 1,
+                  "lineIndex" : 26
+                }
+              }, {
+                "name" : "!nothing",
+                "type" : "TYPE"
+              } ]
+            } ]
+          }, {
+            "name" : "!elem1",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 18
+            }
+          } ]
+        }, {
+          "type" : "DECLARATION",
+          "components" : [ {
+            "name" : "!T",
+            "type" : "TYPE",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 50
+            }
+          }, {
+            "name" : "!elem2",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 42
+            }
+          } ]
+        }, {
+          "type" : "CODE_BLOCK",
+          "components" : [ {
+            "type" : "DECLARATION",
+            "components" : [ {
+              "name" : "!func2",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 3,
+                "lineIndex" : 9
+              }
+            }, {
+              "type" : "EXPRESSION",
+              "components" : [ {
+                "type" : "METHOD",
+                "location" : {
+                  "line" : 3,
+                  "lineIndex" : 18
+                },
+                "components" : [ {
+                  "type" : "DECLARATION",
+                  "components" : [ {
+                    "name" : "GENERIC",
+                    "type" : "TYPE",
+                    "location" : {
+                      "line" : 3,
+                      "lineIndex" : 30
+                    },
+                    "components" : [ {
+                      "name" : "!T",
+                      "type" : "TOKEN",
+                      "location" : {
+                        "line" : 3,
+                        "lineIndex" : 43
+                      }
+                    }, {
+                      "name" : "EITHER",
+                      "type" : "TYPE",
+                      "location" : {
+                        "line" : 3,
+                        "lineIndex" : 30
+                      },
+                      "components" : [ {
+                        "name" : "ANYTHING",
+                        "type" : "TYPE",
+                        "location" : {
+                          "line" : 3,
+                          "lineIndex" : 30
+                        }
+                      }, {
+                        "name" : "!nothing",
+                        "type" : "TYPE"
+                      } ]
+                    } ]
+                  }, {
+                    "name" : "!elem3",
+                    "type" : "TOKEN",
+                    "location" : {
+                      "line" : 3,
+                      "lineIndex" : 22
+                    }
+                  } ]
+                }, {
+                  "type" : "DECLARATION",
+                  "components" : [ {
+                    "name" : "!T",
+                    "type" : "TYPE",
+                    "location" : {
+                      "line" : 3,
+                      "lineIndex" : 54
+                    }
+                  }, {
+                    "name" : "!elem4",
+                    "type" : "TOKEN",
+                    "location" : {
+                      "line" : 3,
+                      "lineIndex" : 46
+                    }
+                  } ]
+                }, {
+                  "type" : "CODE_BLOCK",
+                  "components" : [ {
+                    "type" : "EXPRESSION",
+                    "components" : [ {
+                      "name" : "!nothing",
+                      "type" : "TOKEN",
+                      "location" : {
+                        "line" : 3,
+                        "lineIndex" : 60
+                      }
+                    } ]
+                  } ]
+                } ]
+              } ]
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(DECLARATION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem1); DECLARATION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem2))); !func1; EXPRESSION(TYPE METHOD; (METHOD(DECLARATION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem1); DECLARATION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem2))); METHOD(DECLARATION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem1); DECLARATION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem2); CODE_BLOCK(DECLARATION(!func2; EXPRESSION(METHOD(DECLARATION(TYPE GENERIC; (!T|2; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem3); DECLARATION(TYPE !T; !elem4); CODE_BLOCK(EXPRESSION(!nothing))))))))))")
+
+        /*
         let add_func := fun(arg list : list[anything? as T], arg elem : T) -> list[T] do
             yield list + [elem]
         writeline([1,2].add_func(3))
