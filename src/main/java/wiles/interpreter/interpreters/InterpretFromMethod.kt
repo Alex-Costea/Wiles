@@ -1,6 +1,7 @@
 package wiles.interpreter.interpreters
 
 import wiles.checker.data.GenericTypesMap
+import wiles.checker.statics.InferrerUtils.makeGeneric
 import wiles.interpreter.data.InterpreterVariableMap
 import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.exceptions.ReturnSignal
@@ -43,9 +44,11 @@ class InterpretFromMethod(statement: JSONStatement, variables: InterpreterVariab
                 val superType = component.components[0]
                 require(isFormerSuperTypeOfLatter(superType,funcVars[name]!!.type, genericTypes = genericTypesMap))
             }
-            funcVars.putAll(genericTypesMap.map { Pair(it.key.split("|")[0], ObjectDetails(it.value.first,
+            funcVars.putAll(genericTypesMap.map {
+                val genericValue = makeGeneric(it.value.first,it.key)
+                Pair(it.key.split("|")[0], ObjectDetails(genericValue,
                 JSONStatement(syntaxType = SyntaxType.TYPE, name = Types.TYPE_TYPE_ID,
-                    components = mutableListOf(it.value.first)))) })
+                    components = mutableListOf(genericValue)))) })
             funcVars.putAll(defaultInterpreterVars)
             try
             {

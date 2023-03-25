@@ -9,6 +9,7 @@ import wiles.checker.exceptions.InferenceFailException
 import wiles.checker.exceptions.ReturnNotGuaranteedException
 import wiles.checker.services.InferrerService
 import wiles.checker.statics.InferrerUtils.createGenericType
+import wiles.checker.statics.InferrerUtils.makeGeneric
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.StandardLibrary
@@ -119,7 +120,7 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
         variables.putAll(genericTypes.map { Pair(it.key,VariableDetails(GENERIC_VALUE_TYPE)) })
         variables.putAll(genericTypes.map { Pair(it.key.split("|")[0],
             VariableDetails(JSONStatement(syntaxType = SyntaxType.TYPE, name = TYPE_TYPE_ID,
-                components = mutableListOf(it.value)))) })
+                components = mutableListOf(makeGeneric(it.value,it.key))))) })
 
         val inferrer = InferrerService(InferrerDetails(statement.components.last(), variables, exceptions, additionalVars))
         inferrer.infer()
