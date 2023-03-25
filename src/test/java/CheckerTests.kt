@@ -5855,6 +5855,121 @@ class CheckerTests {
     fun genericsTest()
     {
         /*
+        let list := mut [1,2,3]
+        list.add("hi!")
+         */
+        checkResult(createExceptions(CannotCallMethodException(NULL_LOCATION)),
+            """{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "!list",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "MUTABLE",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 13
+        }
+      }, {
+        "type" : "LIST",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 23
+        },
+        "components" : [ {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "#1",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 18
+            }
+          } ]
+        }, {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "#2",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 20
+            }
+          } ]
+        }, {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "#3",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 22
+            }
+          } ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "type" : "EXPRESSION",
+    "components" : [ {
+      "name" : "!list",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 2,
+        "lineIndex" : 1
+      }
+    }, {
+      "name" : "ACCESS",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 2,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!add",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 6
+        }
+      }, {
+        "name" : "APPLY",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 9
+        }
+      }, {
+        "type" : "METHOD_CALL",
+        "components" : [ {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "@hi!",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 2,
+              "lineIndex" : 10
+            }
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(DECLARATION(TYPE MUTABLE; (TYPE LIST; (TYPE MUTABLE; (TYPE INT64))); !list; EXPRESSION(TYPE MUTABLE; (TYPE LIST; (TYPE MUTABLE; (TYPE INT64))); MUTABLE; LIST(TYPE INT64; EXPRESSION(TYPE INT64; #1); EXPRESSION(TYPE INT64; #2); EXPRESSION(TYPE INT64; #3)))); EXPRESSION(!add; APPLY; METHOD_CALL(TYPE METHOD_CALL; (METHOD_CALL(EXPRESSION(TYPE MUTABLE; (TYPE LIST; (TYPE MUTABLE; (TYPE INT64))); !list); EXPRESSION(TYPE STRING; @hi!))))))")
+
+        /*
         let func1 := fun(elem1 : anything? as T, elem2 : T)
         begin
             let func2 := fun(elem3 : anything? as T, elem4 : T) do nothing
