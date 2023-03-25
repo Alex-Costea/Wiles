@@ -86,6 +86,7 @@
 - `read_line`, `read_truth`, `read_int`, `read_rational`: read an object from the command line
 - `run`: runs the function given as argument
 - `maybe` : makes a nullable type out of non-nullable object
+- `list.add(arg elem, {index})` : add an element to a mutable list, at the end by default
 
 ### Miscellaneous
 - `;` can be specified or inferred from newline

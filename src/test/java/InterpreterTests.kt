@@ -3069,6 +3069,212 @@ class InterpreterTests {
         assertVar(vars2,"!y", 20L)
     }
 
+    @Test
+    fun standardLibraryTests()
+    {
+        /*
+        let list := mut [1, 2, 3]
+        list.add(4)
+        list.add(index := 3, 5)
+        let list_text := list.as_text
+         */
+        val vars = getVars("""{
+  "parsed" : true,
+  "components" : [ {
+    "components" : [ {
+      "name" : "MUTABLE",
+      "components" : [ {
+        "name" : "LIST",
+        "components" : [ {
+          "name" : "MUTABLE",
+          "components" : [ {
+            "name" : "INT64",
+            "type" : "TYPE"
+          } ],
+          "type" : "TYPE"
+        } ],
+        "type" : "TYPE"
+      } ],
+      "type" : "TYPE"
+    }, {
+      "name" : "!list",
+      "type" : "TOKEN"
+    }, {
+      "components" : [ {
+        "name" : "!nothing",
+        "type" : "TOKEN"
+      }, {
+        "name" : "MUTABLE",
+        "type" : "TOKEN"
+      }, {
+        "components" : [ {
+          "name" : "INT64",
+          "type" : "TYPE"
+        }, {
+          "components" : [ {
+            "name" : "#1",
+            "type" : "TOKEN"
+          } ],
+          "type" : "EXPRESSION"
+        }, {
+          "components" : [ {
+            "name" : "#2",
+            "type" : "TOKEN"
+          } ],
+          "type" : "EXPRESSION"
+        }, {
+          "components" : [ {
+            "name" : "#3",
+            "type" : "TOKEN"
+          } ],
+          "type" : "EXPRESSION"
+        } ],
+        "type" : "LIST"
+      } ],
+      "type" : "EXPRESSION"
+    } ],
+    "type" : "DECLARATION"
+  }, {
+    "components" : [ {
+      "name" : "!add",
+      "type" : "TOKEN"
+    }, {
+      "name" : "METHOD|APPLY|METHOD_CALL",
+      "type" : "TOKEN"
+    }, {
+      "components" : [ {
+        "components" : [ {
+          "name" : "!elem",
+          "type" : "TOKEN"
+        }, {
+          "name" : "ASSIGN",
+          "type" : "TOKEN"
+        }, {
+          "components" : [ {
+            "name" : "#4",
+            "type" : "TOKEN"
+          } ],
+          "type" : "EXPRESSION"
+        } ],
+        "type" : "EXPRESSION"
+      }, {
+        "components" : [ {
+          "name" : "!list",
+          "type" : "TOKEN"
+        }, {
+          "name" : "ASSIGN",
+          "type" : "TOKEN"
+        }, {
+          "components" : [ {
+            "name" : "!list",
+            "type" : "TOKEN"
+          } ],
+          "type" : "EXPRESSION"
+        } ],
+        "type" : "EXPRESSION"
+      } ],
+      "type" : "METHOD_CALL"
+    } ],
+    "type" : "EXPRESSION"
+  }, {
+    "components" : [ {
+      "name" : "!add",
+      "type" : "TOKEN"
+    }, {
+      "name" : "METHOD|APPLY|METHOD_CALL",
+      "type" : "TOKEN"
+    }, {
+      "components" : [ {
+        "components" : [ {
+          "name" : "!elem",
+          "type" : "TOKEN"
+        }, {
+          "name" : "ASSIGN",
+          "type" : "TOKEN"
+        }, {
+          "components" : [ {
+            "name" : "#5",
+            "type" : "TOKEN"
+          } ],
+          "type" : "EXPRESSION"
+        } ],
+        "type" : "EXPRESSION"
+      }, {
+        "components" : [ {
+          "name" : "!index",
+          "type" : "TOKEN"
+        }, {
+          "name" : "ASSIGN",
+          "type" : "TOKEN"
+        }, {
+          "components" : [ {
+            "name" : "#3",
+            "type" : "TOKEN"
+          } ],
+          "type" : "EXPRESSION"
+        } ],
+        "type" : "EXPRESSION"
+      }, {
+        "components" : [ {
+          "name" : "!list",
+          "type" : "TOKEN"
+        }, {
+          "name" : "ASSIGN",
+          "type" : "TOKEN"
+        }, {
+          "components" : [ {
+            "name" : "!list",
+            "type" : "TOKEN"
+          } ],
+          "type" : "EXPRESSION"
+        } ],
+        "type" : "EXPRESSION"
+      } ],
+      "type" : "METHOD_CALL"
+    } ],
+    "type" : "EXPRESSION"
+  }, {
+    "components" : [ {
+      "name" : "STRING",
+      "type" : "TYPE"
+    }, {
+      "name" : "!list_text",
+      "type" : "TOKEN"
+    }, {
+      "components" : [ {
+        "name" : "!as_text",
+        "type" : "TOKEN"
+      }, {
+        "name" : "METHOD|APPLY|METHOD_CALL",
+        "type" : "TOKEN"
+      }, {
+        "components" : [ {
+          "components" : [ {
+            "name" : "!elem",
+            "type" : "TOKEN"
+          }, {
+            "name" : "ASSIGN",
+            "type" : "TOKEN"
+          }, {
+            "components" : [ {
+              "name" : "!list",
+              "type" : "TOKEN"
+            } ],
+            "type" : "EXPRESSION"
+          } ],
+          "type" : "EXPRESSION"
+        } ],
+        "type" : "METHOD_CALL"
+      } ],
+      "type" : "EXPRESSION"
+    } ],
+    "type" : "DECLARATION"
+  } ],
+  "type" : "CODE_BLOCK"
+}""")
+        assertVar(vars,"!list_text","[1, 2, 3, 5, 4]")
+    }
+
     companion object {
         @JvmStatic
         @BeforeAll

@@ -6,6 +6,7 @@ import wiles.checker.data.VariableDetails
 import wiles.interpreter.data.InterpreterVariableMap
 import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.exceptions.PanicException
+import wiles.interpreter.statics.InterpreterConstants.toIntOrNull
 import wiles.shared.constants.ErrorMessages.CANNOT_READ_INT_ERROR
 import wiles.shared.constants.ErrorMessages.CANNOT_READ_RATIONAL_ERROR
 import wiles.shared.constants.ErrorMessages.CANNOT_READ_TEXT_ERROR
@@ -13,6 +14,7 @@ import wiles.shared.constants.ErrorMessages.CANNOT_READ_TRUTH_ERROR
 import wiles.shared.constants.Tokens.FALSE_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.TRUE_ID
+import wiles.shared.constants.TypeConstants.ADD_TYPE
 import wiles.shared.constants.TypeConstants.AS_LIST_TYPE
 import wiles.shared.constants.TypeConstants.AS_TEXT_TYPE
 import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
@@ -58,6 +60,7 @@ object StandardLibrary {
     private const val SET_VALUE = "!set"
     private const val MAYBE = "!maybe"
     private const val RUN = "!run"
+    private const val ADD = "!add"
 
     val defaultCheckerVars = CheckerVariableMap(
         hashMapOf(
@@ -82,6 +85,7 @@ object StandardLibrary {
             Pair(SET_VALUE, VariableDetails(SET_VALUE_TYPE)),
             Pair(MAYBE, VariableDetails(MAYBE_TYPE)),
             Pair(RUN, VariableDetails(RUN_TYPE)),
+            Pair(ADD, VariableDetails(ADD_TYPE)),
         )
     )
 
@@ -180,6 +184,28 @@ object StandardLibrary {
         func.apply(map)
     }, defaultCheckerVars[RUN]!!.type)
 
+    @Suppress("UNCHECKED_CAST")
+    private val ADD_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
+        val list = map["!list"]!!
+        val elem = map["!elem"]!!
+        val listValue = list.value as MutableList<ObjectDetails>
+        val index = (map["!index"]?.value as Long?)
+        if(index == null)
+            listValue.add(elem)
+        else try {
+            listValue.add(index.toIntOrNull()!!, elem)
+        }
+        catch (ex : IndexOutOfBoundsException)
+        {
+            throw PanicException("Value out of bounds!")
+        }
+        catch (ex : NullPointerException)
+        {
+            throw PanicException("Value out of bounds!")
+        }
+        list
+    }, defaultCheckerVars[MAYBE]!!.type)
+
     init{
         defaultInterpreterVars[NOTHING_ID] = NOTHING_REF
         defaultInterpreterVars[FALSE_ID] = FALSE_REF
@@ -202,5 +228,6 @@ object StandardLibrary {
         defaultInterpreterVars[SET_VALUE] = SET_VALUE_REF
         defaultInterpreterVars[MAYBE] = MAYBE_REF
         defaultInterpreterVars[RUN] = RUN_REF
+        defaultInterpreterVars[ADD] = ADD_REF
     }
 }
