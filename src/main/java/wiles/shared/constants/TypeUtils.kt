@@ -3,6 +3,7 @@ package wiles.shared.constants
 import wiles.checker.data.GenericTypesMap
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
+import wiles.shared.constants.Tokens.DECLARE_ID
 
 object TypeUtils {
 
@@ -29,17 +30,22 @@ object TypeUtils {
                 getMinus = getMinus))
             return true
 
-        if(supertype.name == Types.GENERIC_ID && isFormerSuperTypeOfLatter(supertype.components[1], subtype,
+        else if(supertype.name == Types.GENERIC_ID && isFormerSuperTypeOfLatter(supertype.components[1], subtype,
                 getMinus = getMinus && unboxGenerics, genericTypes = genericTypes)){
             val genName = supertype.components[0].name
             if(genericTypes?.containsKey(genName) == true)
             {
+                val isDeclaration = supertype.components.getOrNull(2)?.name == DECLARE_ID
                 return if(isFormerSuperTypeOfLatter(genericTypes[genName]!!.first, subtype, unboxGenerics = false,
-                        genericTypes = genericTypes)) {
+                        genericTypes = genericTypes) && !isDeclaration) {
                     genericTypes[genName] = Pair(genericTypes[genName]!!.first,true)
                     true
                 }
-                else false
+                else if(isFormerSuperTypeOfLatter(subtype, genericTypes[genName]!!.first, unboxGenerics = false,
+                        genericTypes = genericTypes)) {
+                    genericTypes[genName] = Pair(subtype,true)
+                    true
+                } else false
             }
             if (genericTypes!=null)
                 genericTypes[genName] = Pair(subtype,false)

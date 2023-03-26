@@ -75,6 +75,7 @@ object InferrerUtils {
             if(variables.containsKey(type.components[0].name))
                 throw VariableAlreadyDeclaredException(type.components[0].getFirstLocation())
             type.components[0].name=getTypeNumber(type.components[0].name)
+            type.components.add(JSONStatement(name = Tokens.DECLARE_ID, syntaxType = SyntaxType.TOKEN))
             return
         }
         else if(type.syntaxType == SyntaxType.CODE_BLOCK)
