@@ -22,6 +22,7 @@ import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
 import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
+import wiles.shared.constants.TypeUtils.makeEither
 import wiles.shared.constants.TypeUtils.makeMutable
 import wiles.shared.constants.Types.DOUBLE_ID
 import wiles.shared.constants.Types.EITHER_ID
@@ -124,13 +125,6 @@ object InferrerUtils {
             components = mutableListOf(
                 JSONStatement(syntaxType = SyntaxType.TOKEN, name = name),
                 type.copyRemovingLocation()))
-    }
-
-    private fun makeEither(types: MutableList<JSONStatement>) : JSONStatement
-    {
-        return JSONStatement(name = EITHER_ID,
-            syntaxType = SyntaxType.TYPE,
-            components = types.map { it.copyRemovingLocation() }.toMutableList())
     }
 
     fun specifyGenericTypesForFunction(statement : JSONStatement, genericTypes : GenericTypesMap)

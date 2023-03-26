@@ -304,4 +304,11 @@ object TypeUtils {
             syntaxType = SyntaxType.TYPE,
             components = mutableListOf(newType))
     }
+
+    fun makeEither(types: MutableList<JSONStatement>) : JSONStatement
+    {
+        return JSONStatement(name = Types.EITHER_ID,
+            syntaxType = SyntaxType.TYPE,
+            components = types.map { it.copyRemovingLocation() }.toMutableList())
+    }
 }

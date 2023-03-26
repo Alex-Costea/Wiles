@@ -7,6 +7,7 @@ import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.ANON_ARG_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.STRING_START
+import wiles.shared.constants.TypeUtils.makeEither
 import wiles.shared.constants.TypeUtils.makeList
 import wiles.shared.constants.TypeUtils.makeMutable
 import wiles.shared.constants.Types.ANYTHING_ID
@@ -254,6 +255,6 @@ object TypeConstants {
 
     val AS_TEXT_TYPE = Utils.createFunctionType(Pair(NULLABLE_ANYTHING_TYPE, STRING_TYPE))
     val AS_LIST_TYPE = Utils.createFunctionType(Pair(STRING_TYPE, LIST_OF_STRING))
-    val LIST_SIZE_TYPE = Utils.createFunctionType(Pair(LIST_OF_ANYTHING_TYPE, INT64_TYPE))
-    val STRING_SIZE_TYPE = Utils.createFunctionType(Pair(STRING_TYPE, INT64_TYPE))
+    val SIZE_TYPE = Utils.createFunctionType(Pair(makeEither(mutableListOf(STRING_TYPE,LIST_OF_ANYTHING_TYPE)),
+        INT64_TYPE))
 }
