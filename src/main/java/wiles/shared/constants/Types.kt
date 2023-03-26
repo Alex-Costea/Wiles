@@ -20,7 +20,6 @@ object Types {
     const val ANYTHING_ID = "ANYTHING"
     const val METHOD_CALL_ID = "METHOD_CALL"
     const val GENERIC_ID = "GENERIC"
-    const val GENERIC_VALUE_ID = "GENERIC_VALUE"
     const val GENERIC_TYPE_ID = "GENERIC_TYPE"
 
     val REQUIRES_SUBTYPE = setOf(LIST_ID, EITHER_ID, MUTABLE_ID)

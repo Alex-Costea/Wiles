@@ -26,6 +26,7 @@ import wiles.shared.constants.TypeUtils.makeMutable
 import wiles.shared.constants.Types.DOUBLE_ID
 import wiles.shared.constants.Types.EITHER_ID
 import wiles.shared.constants.Types.GENERIC_ID
+import wiles.shared.constants.Types.GENERIC_TYPE_ID
 import wiles.shared.constants.Types.INT64_ID
 import wiles.shared.constants.Types.LIST_ID
 import wiles.shared.constants.Types.STRING_ID
@@ -233,8 +234,11 @@ object InferrerUtils {
 
     fun unGenerify(statement : JSONStatement, variableMap: CheckerVariableMap? = null) : JSONStatement
     {
+        val name = statement.components.getOrNull(0)?.name
+        val type = if(name==null) null
+                   else variableMap?.getOrDefault(name.split("|")[0],null)?.type
         if(statement.syntaxType == SyntaxType.TYPE && statement.name == GENERIC_ID &&
-            (variableMap == null || !variableMap.containsKey(statement.components[0].name)))
+            (variableMap == null || type?.name != GENERIC_TYPE_ID || type.components[0].components[0].name != name))
         {
             statement.name = statement.components[1].name
             statement.location = statement.components[1].location
