@@ -181,7 +181,7 @@ object StandardLibrary {
     @Suppress("UNCHECKED_CAST")
     private val ADD_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
         val list = map["!list"]!!
-        val elem = map["!elem"]!!
+        val elem = map["!elem"]!!.makeMutable()
         val listValue = list.value as MutableList<ObjectDetails>
         val index = (map["!index"]?.value as Long?)
         if(index == null)

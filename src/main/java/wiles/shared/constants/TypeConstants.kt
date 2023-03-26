@@ -225,7 +225,7 @@ object TypeConstants {
     )
 
     private val ADD_GENERIC_TYPE = makeGeneric(makeNullable(ANYTHING_TYPE), "!T|add")
-    private val ADD_LIST_TYPE = makeMutable(makeList(ADD_GENERIC_TYPE))
+    private val ADD_LIST_TYPE = makeMutable(makeList(makeNullable(ADD_GENERIC_TYPE)))
     val ADD_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
         components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
             components = mutableListOf(

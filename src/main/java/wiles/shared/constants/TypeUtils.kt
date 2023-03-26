@@ -39,11 +39,7 @@ object TypeUtils {
                     genericTypes[genName] = Pair(genericTypes[genName]!!.first,true)
                     true
                 }
-                else if(isFormerSuperTypeOfLatter(subtype, genericTypes[genName]!!.first, unboxGenerics = false,
-                        genericTypes = genericTypes)) {
-                    genericTypes[genName] = Pair(subtype,true)
-                    true
-                } else false
+                else false
             }
             if (genericTypes!=null)
                 genericTypes[genName] = Pair(subtype,false)
