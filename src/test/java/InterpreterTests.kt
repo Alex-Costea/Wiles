@@ -23,6 +23,122 @@ class InterpreterTests {
     {
 
         /*
+        let a : int := mut 10
+        let a_type : type[int?] := a.type
+        let a_type_text := a_type.as_text
+         */
+        val vars8 = getVars("""{
+  "parsed" : true,
+  "components" : [ {
+    "components" : [ {
+      "name" : "INT64",
+      "type" : "TYPE"
+    }, {
+      "name" : "!a",
+      "type" : "TOKEN"
+    }, {
+      "components" : [ {
+        "name" : "!nothing",
+        "type" : "TOKEN"
+      }, {
+        "name" : "MUTABLE",
+        "type" : "TOKEN"
+      }, {
+        "name" : "#10",
+        "type" : "TOKEN"
+      } ],
+      "type" : "EXPRESSION"
+    } ],
+    "type" : "DECLARATION"
+  }, {
+    "components" : [ {
+      "name" : "TYPE_TYPE",
+      "components" : [ {
+        "name" : "EITHER",
+        "components" : [ {
+          "name" : "INT64",
+          "type" : "TYPE"
+        }, {
+          "name" : "!nothing",
+          "type" : "TYPE"
+        } ],
+        "type" : "TYPE"
+      } ],
+      "type" : "TYPE"
+    }, {
+      "name" : "!a_type",
+      "type" : "TOKEN"
+    }, {
+      "components" : [ {
+        "name" : "!type",
+        "type" : "TOKEN"
+      }, {
+        "name" : "METHOD|APPLY|METHOD_CALL",
+        "type" : "TOKEN"
+      }, {
+        "components" : [ {
+          "components" : [ {
+            "name" : "!elem",
+            "type" : "TOKEN"
+          }, {
+            "name" : "ASSIGN",
+            "type" : "TOKEN"
+          }, {
+            "components" : [ {
+              "name" : "!a",
+              "type" : "TOKEN"
+            } ],
+            "type" : "EXPRESSION"
+          } ],
+          "type" : "EXPRESSION"
+        } ],
+        "type" : "METHOD_CALL"
+      } ],
+      "type" : "EXPRESSION"
+    } ],
+    "type" : "DECLARATION"
+  }, {
+    "components" : [ {
+      "name" : "STRING",
+      "type" : "TYPE"
+    }, {
+      "name" : "!a_type_text",
+      "type" : "TOKEN"
+    }, {
+      "components" : [ {
+        "name" : "!as_text",
+        "type" : "TOKEN"
+      }, {
+        "name" : "METHOD|APPLY|METHOD_CALL",
+        "type" : "TOKEN"
+      }, {
+        "components" : [ {
+          "components" : [ {
+            "name" : "!elem",
+            "type" : "TOKEN"
+          }, {
+            "name" : "ASSIGN",
+            "type" : "TOKEN"
+          }, {
+            "components" : [ {
+              "name" : "!a_type",
+              "type" : "TOKEN"
+            } ],
+            "type" : "EXPRESSION"
+          } ],
+          "type" : "EXPRESSION"
+        } ],
+        "type" : "METHOD_CALL"
+      } ],
+      "type" : "EXPRESSION"
+    } ],
+    "type" : "DECLARATION"
+  } ],
+  "type" : "CODE_BLOCK"
+}""")
+        assertVar(vars8, "!a_type_text","TYPE MUTABLE; (TYPE INT64)")
+
+        /*
         let list := mut [1,2,3]
         let elem := list @ 1
         when elem is mut[int] begin
