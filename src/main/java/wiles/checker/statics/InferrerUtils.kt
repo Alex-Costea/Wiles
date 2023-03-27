@@ -28,10 +28,10 @@ import wiles.shared.constants.TypeUtils.makeMutable
 import wiles.shared.constants.Types.DOUBLE_ID
 import wiles.shared.constants.Types.EITHER_ID
 import wiles.shared.constants.Types.GENERIC_ID
-import wiles.shared.constants.Types.TYPE_TYPE_ID
 import wiles.shared.constants.Types.INT64_ID
 import wiles.shared.constants.Types.LIST_ID
 import wiles.shared.constants.Types.STRING_ID
+import wiles.shared.constants.Types.TYPE_TYPE_ID
 
 object InferrerUtils {
     fun inferTypeFromLiteral(token : JSONStatement, variables : HashMap<String, VariableDetails>) : JSONStatement
@@ -64,6 +64,16 @@ object InferrerUtils {
         throw InternalErrorException(NOT_ONE_TOKEN_ERROR)
     }
 
+    private fun checkStatementContainsReference(statement1 : JSONStatement, statement2 : JSONStatement)
+    {
+        if(statement1 === statement2)
+            throw RecursiveTypeDefinitionException(statement1.getFirstLocation())
+        for(component in statement1.components)
+        {
+            checkStatementContainsReference(component,statement2)
+        }
+    }
+
     fun createTypes(
         type: JSONStatement,
         typeNames: MutableMap<String, JSONStatement>,
@@ -77,6 +87,7 @@ object InferrerUtils {
                 throw VariableAlreadyDeclaredException(type.components[0].getFirstLocation())
             type.components[0].name=getTypeNumber(type.components[0].name)
             type.components.add(JSONStatement(name = Tokens.DECLARE_ID, syntaxType = SyntaxType.TOKEN))
+            createTypes(type.components[1], typeNames, variables)
             return
         }
         else if(type.syntaxType == SyntaxType.CODE_BLOCK)
@@ -86,6 +97,7 @@ object InferrerUtils {
         else if(typeNames.containsKey(name))
         {
             val newType = typeNames[name]!!
+            checkStatementContainsReference(newType, type)
             assert(type.components.isEmpty())
             type.components.add(JSONStatement(name = name, syntaxType = SyntaxType.TOKEN))
             type.components.add(newType)

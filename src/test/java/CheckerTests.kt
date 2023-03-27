@@ -3524,6 +3524,111 @@ class CheckerTests {
     @Test
     fun methodsTest()
     {
+        //let a := fun(a : A as B, b : B as A) do nothing
+        checkResult(createExceptions(RecursiveTypeDefinitionException(NULL_LOCATION)),
+            """{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "!a",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "type" : "METHOD",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 10
+        },
+        "components" : [ {
+          "type" : "DECLARATION",
+          "components" : [ {
+            "name" : "GENERIC",
+            "type" : "TYPE",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 18
+            },
+            "components" : [ {
+              "name" : "!B",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 1,
+                "lineIndex" : 23
+              }
+            }, {
+              "name" : "!A",
+              "type" : "TYPE",
+              "location" : {
+                "line" : 1,
+                "lineIndex" : 18
+              }
+            } ]
+          }, {
+            "name" : "!a",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 14
+            }
+          } ]
+        }, {
+          "type" : "DECLARATION",
+          "components" : [ {
+            "name" : "GENERIC",
+            "type" : "TYPE",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 30
+            },
+            "components" : [ {
+              "name" : "!A",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 1,
+                "lineIndex" : 35
+              }
+            }, {
+              "name" : "!B",
+              "type" : "TYPE",
+              "location" : {
+                "line" : 1,
+                "lineIndex" : 30
+              }
+            } ]
+          }, {
+            "name" : "!b",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 26
+            }
+          } ]
+        }, {
+          "type" : "CODE_BLOCK",
+          "components" : [ {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "!nothing",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 1,
+                "lineIndex" : 41
+              }
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(DECLARATION(!a; EXPRESSION(METHOD(DECLARATION(TYPE GENERIC; (!B|1; TYPE GENERIC; (!A|1; TYPE !B); DECLARE); !a); DECLARATION(TYPE GENERIC; (!A|1; TYPE !B; DECLARE); !b); CODE_BLOCK(EXPRESSION(!nothing))))))")
+
         /*
         let func := begin
             if true do yield 1

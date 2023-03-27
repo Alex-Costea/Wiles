@@ -34,6 +34,7 @@ object ErrorMessages {
     const val USED_BEFORE_INITIALIZED_ERROR = "The variable is used before being initialized."
     const val VARIABLE_ALREADY_DECLARED_ERROR = "The variable has already been declared."
     const val WRONG_OPERATION_ERROR = "The operation cannot be executed between types %s and %s."
+    const val RECURSIVE_TYPE_DEFINITION_ERROR = "This type definition cannot be computed, as it is recursive."
 
     // Runtime exceptions
     const val STACK_OVERFLOW_ERROR = "A stack overflow error has occurred."
