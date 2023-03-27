@@ -51,7 +51,7 @@ class TypeAnnotationStatement(context: Context, private val allowGenerics : Bool
                 for(i in 1..(max?:Int.MAX_VALUE)) {
                     if(transmitter.expectMaybe(tokenOf(BRACKET_END_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
                         break
-                    val subType = TypeAnnotationStatement(context, allowGenerics = ALLOWS_GENERICS[name]?:false)
+                    val subType = TypeAnnotationStatement(context, allowGenerics = ALLOWS_GENERICS.contains(name))
                     subType.process().throwFirstIfExists()
                     subtypes.add(subType)
                     if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break
