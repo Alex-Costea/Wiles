@@ -66,5 +66,11 @@ end"""
             writeline(list.size + text.size)
 """
         assertEquals(getOutput(code2),"10\n")
+
+        val code3 = """
+            typedef integer := int
+            let a : integer := 10
+            writeline(integer)"""
+        assertEquals(getOutput(code3),"TYPE INT64\n")
     }
 }
