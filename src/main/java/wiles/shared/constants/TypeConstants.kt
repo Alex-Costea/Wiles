@@ -14,6 +14,7 @@ import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.EITHER_ID
 import wiles.shared.constants.Types.METHOD_CALL_ID
 import wiles.shared.constants.Types.STRING_ID
+import wiles.shared.constants.Types.TYPE_TYPE_ID
 
 object TypeConstants {
 
@@ -198,6 +199,23 @@ object TypeConstants {
                 JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
                     components = mutableListOf(
                         MAYBE_GENERIC_TYPE,
+                        JSONStatement(name = "!elem", syntaxType = SyntaxType.TOKEN)
+                    )
+                ),
+            )
+        ))
+    )
+
+    private const val GET_TYPE_GENERIC_NAME = "!T|type"
+    private val GET_TYPE_GENERIC_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, GET_TYPE_GENERIC_NAME)
+    val GET_TYPE_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
+        components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
+            components = mutableListOf(
+                JSONStatement(name = TYPE_TYPE_ID, syntaxType = SyntaxType.TYPE,
+                    components = mutableListOf(GET_TYPE_GENERIC_TYPE)),
+                JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
+                    components = mutableListOf(
+                        GET_TYPE_GENERIC_TYPE,
                         JSONStatement(name = "!elem", syntaxType = SyntaxType.TOKEN)
                     )
                 ),

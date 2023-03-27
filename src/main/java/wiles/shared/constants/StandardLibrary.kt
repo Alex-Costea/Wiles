@@ -7,6 +7,8 @@ import wiles.interpreter.data.InterpreterVariableMap
 import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.exceptions.PanicException
 import wiles.interpreter.statics.InterpreterConstants.toIntOrNull
+import wiles.shared.JSONStatement
+import wiles.shared.SyntaxType
 import wiles.shared.constants.ErrorMessages.CANNOT_READ_INT_ERROR
 import wiles.shared.constants.ErrorMessages.CANNOT_READ_RATIONAL_ERROR
 import wiles.shared.constants.ErrorMessages.CANNOT_READ_TEXT_ERROR
@@ -19,6 +21,7 @@ import wiles.shared.constants.TypeConstants.AS_LIST_TYPE
 import wiles.shared.constants.TypeConstants.AS_TEXT_TYPE
 import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
 import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
+import wiles.shared.constants.TypeConstants.GET_TYPE_TYPE
 import wiles.shared.constants.TypeConstants.IGNORE_TYPE
 import wiles.shared.constants.TypeConstants.INT64_TYPE
 import wiles.shared.constants.TypeConstants.LIST_OF_STRING
@@ -36,6 +39,7 @@ import wiles.shared.constants.TypeConstants.SIZE_TYPE
 import wiles.shared.constants.TypeConstants.STRING_TYPE
 import wiles.shared.constants.TypeConstants.WRITELINE_TYPE
 import wiles.shared.constants.TypeConstants.WRITE_TYPE
+import wiles.shared.constants.Types.TYPE_TYPE_ID
 import java.util.function.Function
 
 object StandardLibrary {
@@ -59,6 +63,7 @@ object StandardLibrary {
     private const val MAYBE = "!maybe"
     private const val RUN = "!run"
     private const val ADD = "!add"
+    private const val GET_TYPE = "!type"
 
     val defaultCheckerVars = CheckerVariableMap(
         hashMapOf(
@@ -83,6 +88,7 @@ object StandardLibrary {
             Pair(MAYBE, VariableDetails(MAYBE_TYPE)),
             Pair(RUN, VariableDetails(RUN_TYPE)),
             Pair(ADD, VariableDetails(ADD_TYPE)),
+            Pair(GET_TYPE, VariableDetails(GET_TYPE_TYPE)),
         )
     )
 
@@ -197,7 +203,13 @@ object StandardLibrary {
         {
             throw PanicException("Value out of bounds!")
         }
-        list
+        NOTHING_REF
+    }, defaultCheckerVars[MAYBE]!!.type)
+
+    private val GET_TYPE_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
+        val newType = map["!elem"]!!.type.copy()
+        ObjectDetails(newType, JSONStatement(name = TYPE_TYPE_ID, syntaxType = SyntaxType.TYPE,
+            components = mutableListOf(newType)))
     }, defaultCheckerVars[MAYBE]!!.type)
 
     init{
@@ -222,5 +234,6 @@ object StandardLibrary {
         defaultInterpreterVars[MAYBE] = MAYBE_REF
         defaultInterpreterVars[RUN] = RUN_REF
         defaultInterpreterVars[ADD] = ADD_REF
+        defaultInterpreterVars[GET_TYPE] = GET_TYPE_REF
     }
 }

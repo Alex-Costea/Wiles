@@ -87,6 +87,7 @@
 - `run`: runs the function given as argument
 - `maybe` : makes a nullable type out of non-nullable object
 - `list.add(arg elem, {index})` : add an element to a mutable list, at the end by default
+- `type` : get type of object at runtime
 
 ### Miscellaneous
 - `;` can be specified or inferred from newline
