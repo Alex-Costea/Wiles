@@ -24,6 +24,7 @@
 
 ### Statements
 - Value: `let {var} name {: type} {:= value}` (`var` makes it a variable, type can be inferred)
+- Type definition: `typedef name := type` (can be used at compile time for inference)
 - Assignment: `name := value`
 - Simple conditional: `if [condition] [block]`
 - Complex conditional: `if begin; {@clause;@} end`
@@ -36,8 +37,7 @@
 - For loop: `for x {in collection} {from a} {to b} [block]`
 - While loop: `while condition [block]`
 - Code block: `do [operation]` or `begin; {@operation;@} end`
-- Yield: `yield [expression]` (return equivalent)
-- `nothing` (no operation)
+- Yield: `yield [expression]` (return equivalent)- `nothing` (no operation)
 - `stop`, `skip` (`break`, `continue` equivalents)
 
 ### Symbols

@@ -10,7 +10,8 @@ Wiles supports features such as:
 - Opt-in nullability using the `?` symbol
 - Opt-out named arguments as mandatory in function calls
 - Newline as statement terminators, but no significant indentation
-- Type inference
+- Type inference in many cases
+- First class types and type definitions at compile-time
 - Generics
 
 The informal specifications can be found [here](specifications.md).
