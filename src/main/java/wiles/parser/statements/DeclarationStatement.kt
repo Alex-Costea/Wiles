@@ -10,7 +10,7 @@ import wiles.shared.constants.ErrorMessages.IDENTIFIER_EXPECTED_ERROR
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.ANON_ARG_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
-import wiles.shared.constants.Tokens.TYPEDEF_ID
+import wiles.shared.constants.Tokens.TYPE_ANNOTATION_ID
 import wiles.shared.constants.Tokens.VARIABLE_ID
 
 class DeclarationStatement(context: Context,
@@ -18,7 +18,7 @@ class DeclarationStatement(context: Context,
                            private val allowGenerics : Boolean = false)
     : AbstractStatement(context) {
     private var left: TokenStatement? = null
-    private var typeStatement : TypeDefinitionStatement? = null
+    private var typeStatement : TypeAnnotationStatement? = null
     private var right: DefaultExpression? = null
     private val exceptions = CompilationExceptionsCollection()
 
@@ -50,8 +50,8 @@ class DeclarationStatement(context: Context,
             this.left = TokenStatement(transmitter.expect(tokenOf(IS_IDENTIFIER)
                 .withErrorMessage(IDENTIFIER_EXPECTED_ERROR)),context)
 
-            if(transmitter.expectMaybe(tokenOf(TYPEDEF_ID)).isPresent) {
-                typeStatement = TypeDefinitionStatement(context,allowGenerics)
+            if(transmitter.expectMaybe(tokenOf(TYPE_ANNOTATION_ID)).isPresent) {
+                typeStatement = TypeAnnotationStatement(context,allowGenerics)
                 typeStatement!!.process().throwFirstIfExists()
                 if(transmitter.expectMaybe(tokenOf(ASSIGN_ID).dontIgnoreNewLine()).isPresent)
                     readRight()

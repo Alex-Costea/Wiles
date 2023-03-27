@@ -22,7 +22,7 @@ class MethodStatement(oldContext : Context, private val isTypeDeclaration: Boole
     private val parameters: MutableList<DeclarationStatement> = ArrayList()
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
 
-    private var returnType: TypeDefinitionStatement? = null
+    private var returnType: TypeAnnotationStatement? = null
     private var methodBody: CodeBlockStatement = CodeBlockStatement(context)
 
     override val syntaxType: SyntaxType
@@ -70,7 +70,7 @@ class MethodStatement(oldContext : Context, private val isTypeDeclaration: Boole
 
                 //Return type
                 if (transmitter.expectMaybe(tokenOf(RIGHT_ARROW_ID).dontIgnoreNewLine()).isPresent) {
-                    returnType = TypeDefinitionStatement(context,allowGenerics = true)
+                    returnType = TypeAnnotationStatement(context,allowGenerics = true)
                     exceptions.addAll(returnType!!.process())
                 }
             }

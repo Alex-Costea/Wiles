@@ -33,7 +33,7 @@ object Tokens {
     const val IDENTIFIER_START = "!"
     const val STRING_START = "@"
     const val NUM_START = "#"
-    const val TYPEDEF_ID = "TYPEDEF"
+    const val TYPE_ANNOTATION_ID = "TYPE_ANNOTATION"
     const val SEPARATOR_ID = "SEPARATOR"
     const val DO_ID = "DO"
     const val RIGHT_ARROW_ID = "RIGHT_ARROW"
@@ -69,6 +69,7 @@ object Tokens {
     const val IS_ID = "IS"
     const val NEW_ID = "NEW"
     const val AS_ID = "AS"
+    const val TYPEDEF_ID = "TYPEDEF"
 
     const val TRUE_ID = "!true"
     const val FALSE_ID = "!false"
@@ -129,6 +130,7 @@ object Tokens {
         KEYWORDS["arg"] = ANON_ARG_ID
         KEYWORDS["new"] = NEW_ID
         KEYWORDS["as"] = AS_ID
+        KEYWORDS["typedef"] = TYPEDEF_ID
 
         SYMBOLS["+"] = PLUS_ID
         SYMBOLS["-"] = MINUS_ID
@@ -149,7 +151,7 @@ object Tokens {
         SYMBOLS["@"] = ELEM_ACCESS_ID
         SYMBOLS[","] = SEPARATOR_ID
         SYMBOLS["."] = ACCESS_ID
-        SYMBOLS[":"] = TYPEDEF_ID
+        SYMBOLS[":"] = TYPE_ANNOTATION_ID
         SYMBOLS[";"] = TERMINATOR_ID
         SYMBOLS["->"] = RIGHT_ARROW_ID
         SYMBOLS["?"] = MAYBE_ID

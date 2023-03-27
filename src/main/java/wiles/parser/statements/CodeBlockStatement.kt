@@ -30,6 +30,7 @@ class CodeBlockStatement(context: Context) : AbstractStatement(context) {
             .addType(StatementFactoryTypes.RETURN_STATEMENT)
             .addType(StatementFactoryTypes.CONTINUE_STATEMENT)
             .addType(StatementFactoryTypes.WHEN_STATEMENT)
+            .addType(StatementFactoryTypes.TYPE_DEFINITION_STATEMENT)
     }
 
     private val components: MutableList<AbstractStatement> = ArrayList()
