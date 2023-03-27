@@ -20,6 +20,7 @@ import wiles.shared.constants.Tokens.ANON_ARG_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
+import wiles.shared.constants.Tokens.TYPEDEF_ID
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
 import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 import wiles.shared.constants.TypeUtils.makeEither
@@ -94,7 +95,16 @@ object InferrerUtils {
         else if(type.syntaxType == SyntaxType.TYPE && IS_IDENTIFIER.test(type.name)) {
             if(type.name == NOTHING_ID)
                 return
-            throw UnknownTypeException(type.getFirstLocation())
+            val nameOfTypeDef = type.name + "|" + TYPEDEF_ID
+            if(variables.containsKey(nameOfTypeDef))
+            {
+                val newType = variables[nameOfTypeDef]!!.type.components[0]
+                type.name = newType.name
+                type.syntaxType = newType.syntaxType
+                type.components = newType.components
+                return
+            }
+            else throw UnknownTypeException(type.getFirstLocation())
         }
         if(type.components.isNotEmpty())
         {
