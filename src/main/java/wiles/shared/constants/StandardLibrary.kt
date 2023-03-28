@@ -20,6 +20,7 @@ import wiles.shared.constants.TypeConstants.ADD_TYPE
 import wiles.shared.constants.TypeConstants.AS_LIST_TYPE
 import wiles.shared.constants.TypeConstants.AS_TEXT_TYPE
 import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
+import wiles.shared.constants.TypeConstants.CLONE_TYPE
 import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
 import wiles.shared.constants.TypeConstants.GET_TYPE_TYPE
 import wiles.shared.constants.TypeConstants.IGNORE_TYPE
@@ -64,6 +65,7 @@ object StandardLibrary {
     private const val RUN = "!run"
     private const val ADD = "!add"
     private const val GET_TYPE = "!type"
+    private const val CLONE = "!clone"
 
     val defaultCheckerVars = CheckerVariableMap(
         hashMapOf(
@@ -89,6 +91,7 @@ object StandardLibrary {
             Pair(RUN, VariableDetails(RUN_TYPE)),
             Pair(ADD, VariableDetails(ADD_TYPE)),
             Pair(GET_TYPE, VariableDetails(GET_TYPE_TYPE)),
+            Pair(CLONE, VariableDetails(CLONE_TYPE)),
         )
     )
 
@@ -212,6 +215,10 @@ object StandardLibrary {
             components = mutableListOf(newType)))
     }, defaultCheckerVars[MAYBE]!!.type)
 
+    private val CLONE_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
+        map["!elem"]!!.clone(deep = (map["!deep"]?.value ?: true) as Boolean)
+    }, defaultCheckerVars[MAYBE]!!.type)
+
     init{
         defaultInterpreterVars[NOTHING_ID] = NOTHING_REF
         defaultInterpreterVars[FALSE_ID] = FALSE_REF
@@ -235,5 +242,6 @@ object StandardLibrary {
         defaultInterpreterVars[RUN] = RUN_REF
         defaultInterpreterVars[ADD] = ADD_REF
         defaultInterpreterVars[GET_TYPE] = GET_TYPE_REF
+        defaultInterpreterVars[CLONE] = CLONE_REF
     }
 }

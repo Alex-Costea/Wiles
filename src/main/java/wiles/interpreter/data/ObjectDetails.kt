@@ -10,22 +10,22 @@ import java.util.function.Function
 class ObjectDetails(var value : Any?, var type : JSONStatement)
 {
 
-    private fun cloneValue(value : Any?) : Any?
+    private fun cloneValue(value: Any?, deep: Boolean) : Any?
     {
         val newValue = when(value)
         {
             is Double, is Long, is String, is Boolean, null -> value
-            is MutableList<*> -> value.map{cloneValue(it)}.toMutableList()
+            is MutableList<*> -> value.map{if(deep) cloneValue(it, true) else it}.toMutableList()
             is Function<*, *> -> value
-            is ObjectDetails -> ObjectDetails(cloneValue(value.value),value.type.copyRemovingLocation())
+            is ObjectDetails -> ObjectDetails(cloneValue(value.value, deep), value.type.copyRemovingLocation())
             else -> throw InternalErrorException()
         }
         return newValue
     }
 
-    fun clone() : ObjectDetails
+    fun clone(deep : Boolean = true) : ObjectDetails
     {
-        return cloneValue(this) as ObjectDetails
+        return cloneValue(this, deep) as ObjectDetails
     }
 
     @Suppress("UNCHECKED_CAST")

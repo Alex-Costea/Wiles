@@ -7,6 +7,7 @@ import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.ANON_ARG_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.STRING_START
+import wiles.shared.constants.Tokens.TRUE_ID
 import wiles.shared.constants.TypeUtils.makeEither
 import wiles.shared.constants.TypeUtils.makeList
 import wiles.shared.constants.TypeUtils.makeMutable
@@ -201,6 +202,28 @@ object TypeConstants {
                         MAYBE_GENERIC_TYPE,
                         JSONStatement(name = "!elem", syntaxType = SyntaxType.TOKEN)
                     )
+                ),
+            )
+        ))
+    )
+
+    private const val CLONE_GENERIC_NAME = "!T|clone"
+    private val CLONE_GENERIC_TYPE = makeGeneric(ANYTHING_TYPE, CLONE_GENERIC_NAME)
+    val CLONE_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
+        components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
+            components = mutableListOf(CLONE_GENERIC_TYPE,
+                JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
+                    components = mutableListOf(
+                        CLONE_GENERIC_TYPE,
+                        JSONStatement(name = "!elem", syntaxType = SyntaxType.TOKEN)
+                    )),
+                    JSONStatement(syntaxType = SyntaxType.DECLARATION,
+                        components = mutableListOf(
+                            BOOLEAN_TYPE,
+                            JSONStatement(name = "!deep", syntaxType = SyntaxType.TOKEN),
+                            JSONStatement(syntaxType = SyntaxType.EXPRESSION, components =
+                                mutableListOf(JSONStatement(name = TRUE_ID, syntaxType = SyntaxType.TOKEN)))
+                        ),
                 ),
             )
         ))
