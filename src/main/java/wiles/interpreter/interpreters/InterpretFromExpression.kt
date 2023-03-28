@@ -22,7 +22,6 @@ import wiles.shared.constants.Tokens.ELEM_ACCESS_ID
 import wiles.shared.constants.Tokens.IMPORT_ID
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
-import wiles.shared.constants.Tokens.NEW_ID
 import wiles.shared.constants.Tokens.OR_ID
 import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
 import wiles.shared.constants.TypeConstants.INT64_TYPE
@@ -157,7 +156,6 @@ class InterpretFromExpression(statement: JSONStatement, variables: InterpreterVa
                         if (value == null) NOTHING_REF
                         else (leftRef.value as MutableList<ObjectDetails>).getOrNull(value) ?: NOTHING_REF
                     }
-                    NEW_ID -> getReference(rightStatement).clone()
                     IMPORT_ID -> {
                         val newVars = variables.copy()
                         newVars.putAll(additionalVars.filter { it.key == rightStatement.name })

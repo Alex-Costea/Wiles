@@ -67,7 +67,6 @@ object Tokens {
     const val IMPORT_ID = "IMPORT"
     const val WHEN_ID = "WHEN"
     const val IS_ID = "IS"
-    const val NEW_ID = "NEW"
     const val AS_ID = "AS"
     const val TYPEDEF_ID = "TYPEDEF"
 
@@ -88,9 +87,9 @@ object Tokens {
         AND_ID, OR_ID, APPLY_ID, ACCESS_ID, ELEM_ACCESS_ID
     )
     @JvmField
-    val PREFIX_OPERATORS = setOf(UNARY_PLUS_ID, UNARY_MINUS_ID, NOT_ID, MUTABLE_ID, IMPORT_ID, NEW_ID)
+    val PREFIX_OPERATORS = setOf(UNARY_PLUS_ID, UNARY_MINUS_ID, NOT_ID, MUTABLE_ID, IMPORT_ID)
     @JvmField
-    val STARTING_OPERATORS = setOf(PLUS_ID, MINUS_ID, NOT_ID, MUTABLE_ID, IMPORT_ID, NEW_ID)
+    val STARTING_OPERATORS = setOf(PLUS_ID, MINUS_ID, NOT_ID, MUTABLE_ID, IMPORT_ID)
     @JvmField
     val PARENS = setOf(PAREN_START_ID, PAREN_END_ID, BRACKET_START_ID)
     @JvmField
@@ -128,7 +127,6 @@ object Tokens {
         KEYWORDS["is"] = IS_ID
         KEYWORDS["mut"] = MUTABLE_ID
         KEYWORDS["arg"] = ANON_ARG_ID
-        KEYWORDS["new"] = NEW_ID
         KEYWORDS["as"] = AS_ID
         KEYWORDS["typedef"] = TYPEDEF_ID
 

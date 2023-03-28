@@ -3,7 +3,6 @@ package wiles.checker.statics
 import wiles.checker.statics.InferrerUtils.unbox
 import wiles.shared.JSONStatement
 import wiles.shared.constants.Tokens.IMPORT_ID
-import wiles.shared.constants.Tokens.NEW_ID
 import wiles.shared.constants.Tokens.PLUS_ID
 import wiles.shared.constants.TypeConstants.AND_OPERATION
 import wiles.shared.constants.TypeConstants.ASSIGN_OPERATION
@@ -157,7 +156,7 @@ object SimpleTypeGenerator {
     {
         val unboxedTriple = Triple(unbox(triple.first), triple.second, unbox(triple.third))
 
-        if(unboxedTriple.second.name in arrayOf(IMPORT_ID, NEW_ID))
+        if(unboxedTriple.second.name == IMPORT_ID)
             return unboxedTriple.third.copyRemovingLocation()
 
         if(unboxedTriple.second == ELEM_ACCESS_OPERATION)
