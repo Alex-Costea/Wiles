@@ -34,7 +34,9 @@ import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_BOOL_TYPE
 import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_DOUBLE_TYPE
 import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_INT_TYPE
 import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_STRING_TYPE
+import wiles.shared.constants.TypeConstants.REMOVE_AT_TYPE
 import wiles.shared.constants.TypeConstants.RUN_TYPE
+import wiles.shared.constants.TypeConstants.SET_AT_TYPE
 import wiles.shared.constants.TypeConstants.SET_VALUE_TYPE
 import wiles.shared.constants.TypeConstants.SIZE_TYPE
 import wiles.shared.constants.TypeConstants.STRING_TYPE
@@ -66,6 +68,8 @@ object StandardLibrary {
     private const val ADD = "!add"
     private const val GET_TYPE = "!type"
     private const val CLONE = "!clone"
+    private const val SET_AT = "!set_at"
+    private const val REMOVE_AT = "!remove"
 
     val defaultCheckerVars = CheckerVariableMap(
         hashMapOf(
@@ -92,6 +96,8 @@ object StandardLibrary {
             Pair(ADD, VariableDetails(ADD_TYPE)),
             Pair(GET_TYPE, VariableDetails(GET_TYPE_TYPE)),
             Pair(CLONE, VariableDetails(CLONE_TYPE)),
+            Pair(SET_AT, VariableDetails(SET_AT_TYPE)),
+            Pair(REMOVE_AT, VariableDetails(REMOVE_AT_TYPE)),
         )
     )
 
@@ -209,6 +215,47 @@ object StandardLibrary {
         NOTHING_REF
     }, defaultCheckerVars[MAYBE]!!.type)
 
+    @Suppress("UNCHECKED_CAST")
+    private val SET_AT_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
+        val list = map["!list"]!!
+        val elem = map["!elem"]!!.makeMutable()
+        val listValue = list.value as MutableList<ObjectDetails>
+        val index = (map["!index"]!!.value as Long)
+        try {
+            val value = listValue[index.toIntOrNull()!!]
+            value.type = elem.type.copy()
+            value.value = elem.value
+        }
+        catch (ex : IndexOutOfBoundsException)
+        {
+            throw PanicException("Value out of bounds!")
+        }
+        catch (ex : NullPointerException)
+        {
+            throw PanicException("Value out of bounds!")
+        }
+        NOTHING_REF
+    }, defaultCheckerVars[MAYBE]!!.type)
+
+    @Suppress("UNCHECKED_CAST")
+    private val REMOVE_AT_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
+        val list = map["!list"]!!
+        val listValue = list.value as MutableList<ObjectDetails>
+        val index = (map["!index"]!!.value as Long)
+        try {
+            listValue.removeAt(index.toIntOrNull()!!)
+        }
+        catch (ex : IndexOutOfBoundsException)
+        {
+            throw PanicException("Value out of bounds!")
+        }
+        catch (ex : NullPointerException)
+        {
+            throw PanicException("Value out of bounds!")
+        }
+        NOTHING_REF
+    }, defaultCheckerVars[MAYBE]!!.type)
+
     private val GET_TYPE_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
         val newType = map["!elem"]!!.type.copy()
         ObjectDetails(newType, JSONStatement(name = TYPE_TYPE_ID, syntaxType = SyntaxType.TYPE,
@@ -243,5 +290,7 @@ object StandardLibrary {
         defaultInterpreterVars[ADD] = ADD_REF
         defaultInterpreterVars[GET_TYPE] = GET_TYPE_REF
         defaultInterpreterVars[CLONE] = CLONE_REF
+        defaultInterpreterVars[SET_AT] = SET_AT_REF
+        defaultInterpreterVars[REMOVE_AT] = REMOVE_AT_REF
     }
 }

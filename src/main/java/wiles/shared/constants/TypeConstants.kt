@@ -37,6 +37,8 @@ object TypeConstants {
 
     val NULLABLE_STRING = makeNullable(STRING_TYPE)
 
+    val MUTABLE_NULLABLE_ANYTHING = makeMutable(makeNullable(ANYTHING_TYPE))
+
     val PLUS_OPERATION = JSONStatement(syntaxType = SyntaxType.TOKEN, name = Tokens.PLUS_ID)
     val MINUS_OPERATION = JSONStatement(syntaxType = SyntaxType.TOKEN, name = Tokens.MINUS_ID)
     val TIMES_OPERATION = JSONStatement(syntaxType = SyntaxType.TOKEN, name = Tokens.TIMES_ID)
@@ -265,7 +267,7 @@ object TypeConstants {
         ))
     )
 
-    private val ADD_GENERIC_TYPE = makeGeneric(makeNullable(ANYTHING_TYPE), "!T|add")
+    private val ADD_GENERIC_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|add")
     private val ADD_LIST_TYPE = makeMutable(makeList(makeNullable(ADD_GENERIC_TYPE)))
     val ADD_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
         components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
@@ -289,6 +291,54 @@ object TypeConstants {
                         JSONStatement(name = "!index", syntaxType = SyntaxType.TOKEN),
                         JSONStatement(name = NOTHING_ID, syntaxType =  SyntaxType.TOKEN),
                         )
+                ),
+            )
+        ))
+    )
+
+    private val SET_AT_GENERIC_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|set_at")
+    private val SET_AT_LIST_TYPE = makeMutable(makeList(makeNullable(SET_AT_GENERIC_TYPE)))
+    val SET_AT_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
+        components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
+            components = mutableListOf(
+                NOTHING_TYPE,
+                JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
+                    components = mutableListOf(
+                        SET_AT_LIST_TYPE,
+                        JSONStatement(name = "!list", syntaxType = SyntaxType.TOKEN)
+                    )
+                ),
+                JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
+                    components = mutableListOf(
+                        SET_AT_GENERIC_TYPE,
+                        JSONStatement(name = "!elem", syntaxType = SyntaxType.TOKEN)
+                    )
+                ),
+                JSONStatement(syntaxType = SyntaxType.DECLARATION,
+                    components = mutableListOf(
+                        makeNullable(INT64_TYPE),
+                        JSONStatement(name = "!index", syntaxType = SyntaxType.TOKEN),
+                    )
+                ),
+            )
+        ))
+    )
+
+    val REMOVE_AT_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
+        components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
+            components = mutableListOf(
+                NOTHING_TYPE,
+                JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
+                    components = mutableListOf(
+                        makeMutable(LIST_OF_NULLABLE_ANYTHING_TYPE),
+                        JSONStatement(name = "!list", syntaxType = SyntaxType.TOKEN)
+                    )
+                ),
+                JSONStatement(syntaxType = SyntaxType.DECLARATION,
+                    components = mutableListOf(
+                        makeNullable(INT64_TYPE),
+                        JSONStatement(name = "!index", syntaxType = SyntaxType.TOKEN),
+                    )
                 ),
             )
         ))

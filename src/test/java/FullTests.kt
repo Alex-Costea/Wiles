@@ -82,12 +82,22 @@ end"""
         assertEquals(getOutput(code4),"100\n")
 
         val code5 = """
+            let a := mut 2
+            let list := mut [1, a, 3]
+            list.remove(index := 0)
+            list.set_at(index := 0, 10)
+            writeline(a)
+            writeline(list)
+        """
+        assertEquals(getOutput(code5),"10\n[10, 3]\n")
+
+        val code6 = """
             let var a := 10
             let func := do import a := 100
             writeline(a)
             func()
             writeline(a)
         """
-        assertEquals(getOutput(code5),"10\n100\n")
+        assertEquals(getOutput(code6),"10\n100\n")
     }
 }
