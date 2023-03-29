@@ -72,5 +72,13 @@ end"""
             let a : integer := 10
             writeline(integer)"""
         assertEquals(getOutput(code3),"TYPE INT64\n")
+
+        val code4 = """
+            let var a := 10
+            let func := do writeline(import a)
+            a := 100
+            func()
+        """
+        assertEquals(getOutput(code4),"100\n")
     }
 }

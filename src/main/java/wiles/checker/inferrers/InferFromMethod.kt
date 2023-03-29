@@ -22,7 +22,7 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
     InferrerDetails(details.statement,
         StandardLibrary.defaultCheckerVars.copy(),
         details.exceptions,
-        additionalVars = details.variables.copy())
+        additionalVars = details.variables)
 )
 {
     private val statedType = if(statement.components.getOrNull(0)?.syntaxType == SyntaxType.TYPE)
