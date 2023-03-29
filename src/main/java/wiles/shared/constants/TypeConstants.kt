@@ -316,9 +316,16 @@ object TypeConstants {
                 ),
                 JSONStatement(syntaxType = SyntaxType.DECLARATION,
                     components = mutableListOf(
-                        makeNullable(INT64_TYPE),
+                        INT64_TYPE,
                         JSONStatement(name = "!index", syntaxType = SyntaxType.TOKEN),
                     )
+                ),
+                JSONStatement(syntaxType = SyntaxType.DECLARATION,
+                    components = mutableListOf(
+                        BOOLEAN_TYPE,
+                        JSONStatement(name = "!mutate", syntaxType = SyntaxType.TOKEN),
+                        JSONStatement(name = TRUE_ID, syntaxType =  SyntaxType.TOKEN),
+                        )
                 ),
             )
         ))
@@ -336,7 +343,7 @@ object TypeConstants {
                 ),
                 JSONStatement(syntaxType = SyntaxType.DECLARATION,
                     components = mutableListOf(
-                        makeNullable(INT64_TYPE),
+                        INT64_TYPE,
                         JSONStatement(name = "!index", syntaxType = SyntaxType.TOKEN),
                     )
                 ),

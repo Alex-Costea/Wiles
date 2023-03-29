@@ -219,12 +219,16 @@ object StandardLibrary {
     private val SET_AT_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
         val list = map["!list"]!!
         val elem = map["!elem"]!!.makeMutable()
+        val mutate = ((map["!mutate"]?.value) as Boolean?)?: true
         val listValue = list.value as MutableList<ObjectDetails>
         val index = (map["!index"]!!.value as Long)
         try {
-            val value = listValue[index.toIntOrNull()!!]
-            value.type = elem.type.copy()
-            value.value = elem.value
+            if(mutate) {
+                val value = listValue[index.toIntOrNull()!!]
+                value.type = elem.type.copy()
+                value.value = elem.value
+            }
+            else listValue[index.toIntOrNull()!!] = elem
         }
         catch (ex : IndexOutOfBoundsException)
         {
