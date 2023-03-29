@@ -30,28 +30,33 @@ class ObjectDetails(var value : Any?, var type : JSONStatement)
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun makeTypeMutable(newObject : ObjectDetails)
+    private fun makeTypeMutable(obj : ObjectDetails) : ObjectDetails
     {
-        if(isFormerSuperTypeOfLatter(MUTABLE_NULLABLE_ANYTHING,newObject.type))
-            return
-        val isList = isFormerSuperTypeOfLatter(LIST_OF_NULLABLE_ANYTHING_TYPE,newObject.type)
-        if(isList)
-            newObject.type.components[0] = TypeUtils.makeMutable(newObject.type.components[0])
-        newObject.type = TypeUtils.makeMutable(newObject.type)
+        val isList = isFormerSuperTypeOfLatter(LIST_OF_NULLABLE_ANYTHING_TYPE, obj.type)
+        var newObject = obj
+
+        if(isFormerSuperTypeOfLatter(MUTABLE_NULLABLE_ANYTHING,obj.type))
+            Unit
+        else {
+            newObject = obj.clone(deep = false)
+            if (isList)
+                newObject.type.components[0] = TypeUtils.makeMutable(obj.type.components[0])
+            newObject.type = TypeUtils.makeMutable(obj.type)
+        }
         if(isList)
         {
-            for(component in newObject.value as MutableList<ObjectDetails>)
+            val list = (newObject.value as MutableList<ObjectDetails>)
+            for(i in list.indices)
             {
-                makeTypeMutable(component)
+                list[i]=makeTypeMutable(list[i])
             }
         }
+        return newObject
     }
 
     fun makeMutable() : ObjectDetails
     {
-        val newObject = this.clone(deep = false)
-        makeTypeMutable(newObject)
-        return newObject
+        return makeTypeMutable(this)
     }
 
     override fun toString(): String {
