@@ -75,9 +75,7 @@ class Checker(private val jsonCode : String? = null) {
         }
         catch(ex : AbstractCompilationException)
         {
-            val exceptions = CompilationExceptionsCollection()
-            exceptions.add(ex)
-            return exceptions
+            inferrer.exceptions.add(ex)
         }
         writeObjectFile()
         return inferrer.exceptions
