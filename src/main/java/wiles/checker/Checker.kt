@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper
 import wiles.checker.data.CheckerVariableMap
 import wiles.checker.data.InferrerDetails
 import wiles.checker.services.InferrerService
+import wiles.shared.AbstractCompilationException
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
@@ -68,7 +69,16 @@ class Checker(private val jsonCode : String? = null) {
     fun check() : CompilationExceptionsCollection
     {
         currentFunctionNumber = 0
-        inferrer.infer()
+        try
+        {
+            inferrer.infer()
+        }
+        catch(ex : AbstractCompilationException)
+        {
+            val exceptions = CompilationExceptionsCollection()
+            exceptions.add(ex)
+            return exceptions
+        }
         writeObjectFile()
         return inferrer.exceptions
     }
