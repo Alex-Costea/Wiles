@@ -508,6 +508,42 @@ class CheckerTests {
     @Test
     fun inferFromExpression()
     {
+        checkResult(createExceptions(UnknownIdentifierException(NULL_LOCATION)),"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "EXPRESSION",
+    "components" : [ {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!abc",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 1
+        }
+      } ]
+    }, {
+      "name" : "ASSIGN",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "#100",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 8
+        }
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(EXPRESSION(EXPRESSION(!abc); ASSIGN; EXPRESSION(#100)))")
+
         checkResult(createExceptions(CannotCallMethodException(NULL_LOCATION)),"""{
   "parsed" : true,
   "type" : "CODE_BLOCK",

@@ -179,9 +179,11 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
                 //Change value of variable
                 if(left.components.size == 1 && IS_IDENTIFIER.test(left.components[0].name)) {
                     val variableName = left.components[0].name
-                    if(variables[variableName]?.modifiable != true && variables[variableName]?.initialized != false)
-                        throw CannotModifyException(left.getFirstLocation())
-                    variables[variableName]?.initialized  = true
+                    if(variables.containsKey(variableName)) {
+                        if (variables[variableName]?.modifiable != true && variables[variableName]?.initialized != false)
+                            throw CannotModifyException(left.getFirstLocation())
+                        variables[variableName]?.initialized = true
+                    }
                 }
                 else throw ExpectedIdentifierException(left.getFirstLocation())
             }

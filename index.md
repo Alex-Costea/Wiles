@@ -77,13 +77,13 @@ begin
 end
 
 let read_list := begin
-    let var list := [] : int
+    let list := mut [] : int
     write("list size: ")
     let list_size := read_int()
     for i from 0 to list_size
     begin
-        write("element " + i + ": ")
-        list := list + [read_int()]
+        write("Element " + i + ": ")
+        list.add(read_int())
     end
     yield list
 end

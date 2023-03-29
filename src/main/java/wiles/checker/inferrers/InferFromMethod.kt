@@ -120,7 +120,8 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
             VariableDetails(JSONStatement(syntaxType = SyntaxType.TYPE, name = TYPE_TYPE_ID,
                 components = mutableListOf(makeGeneric(it.value,it.key))))) })
 
-        val inferrer = InferrerService(InferrerDetails(statement.components.last(), variables, exceptions, additionalVars))
+        val inferrer = InferrerService(InferrerDetails(statement.components.last(), variables, exceptions,
+            additionalVars))
         inferrer.infer()
 
         if(exceptions.isNotEmpty())
