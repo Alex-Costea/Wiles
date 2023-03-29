@@ -18,6 +18,7 @@ import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.ANON_ARG_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
+import wiles.shared.constants.Tokens.IMPORT_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.TYPEDEF_ID
@@ -34,7 +35,9 @@ import wiles.shared.constants.Types.STRING_ID
 import wiles.shared.constants.Types.TYPE_TYPE_ID
 
 object InferrerUtils {
-    fun inferTypeFromLiteral(token : JSONStatement, variables : HashMap<String, VariableDetails>) : JSONStatement
+    fun inferTypeFromLiteral(token : JSONStatement,
+                             variables : HashMap<String, VariableDetails>,
+                             additionalVars : HashMap<String, VariableDetails>,) : JSONStatement
     {
         assert(token.syntaxType == SyntaxType.TOKEN)
         val name = token.name
@@ -55,11 +58,16 @@ object InferrerUtils {
         if(IS_IDENTIFIER.test(name)) {
             if( variables[name]?.initialized==false)
                 throw UsedBeforeInitializationException(token.getFirstLocation())
+            var value = variables[name]
+            if(value == null && name.startsWith("!$IMPORT_ID"))
+            {
+                value = additionalVars[name.split("!$IMPORT_ID")[1]]
+            }
             return JSONStatement(
-                name = variables[name]?.type?.name ?:
+                name = value?.type?.name ?:
                 throw UnknownIdentifierException(token.getFirstLocation()),
                 syntaxType = SyntaxType.TYPE,
-                components = variables[name]!!.type.components.map { it.copyRemovingLocation() }.toMutableList())
+                components = value.type.components.map { it.copyRemovingLocation() }.toMutableList())
         }
         throw InternalErrorException(NOT_ONE_TOKEN_ERROR)
     }

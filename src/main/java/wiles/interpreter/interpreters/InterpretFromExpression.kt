@@ -102,7 +102,9 @@ class InterpretFromExpression(statement: JSONStatement, variables: InterpreterVa
                     {
                         val leftName = leftStatement.components[0].name
                         val rightRef = getReference(rightStatement)
-                        variables[leftName] = rightRef
+                        if(!leftName.startsWith("!$IMPORT_ID"))
+                            variables[leftName] = rightRef
+                        else additionalVars[leftName.split("!$IMPORT_ID")[1]] = rightRef
                         NOTHING_REF
                     }
                     MUTABLE_ID ->

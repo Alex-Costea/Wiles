@@ -80,5 +80,14 @@ end"""
             func()
         """
         assertEquals(getOutput(code4),"100\n")
+
+        val code5 = """
+            let var a := 10
+            let func := do import a := 100
+            writeline(a)
+            func()
+            writeline(a)
+        """
+        assertEquals(getOutput(code5),"10\n100\n")
     }
 }
