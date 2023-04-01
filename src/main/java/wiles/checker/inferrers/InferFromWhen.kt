@@ -69,7 +69,7 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
             {
                 if (!isFormerSuperTypeOfLatter(inferredType, component)) {
                     throw ConflictingTypeDefinitionException(component.getFirstLocation(),
-                        inferredType.toString(), component.toString())
+                        component.toString(), inferredType.toString())
                 }
             }
         }
