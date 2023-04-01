@@ -7,7 +7,6 @@ import wiles.shared.AbstractCompilationException
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens
-import wiles.shared.constants.Tokens.IS_ID
 
 class WhenStatement(context: Context) : AbstractStatement(context) {
     private val expression = DefaultExpression(context)
@@ -26,7 +25,6 @@ class WhenStatement(context: Context) : AbstractStatement(context) {
         try
         {
             exceptions.addAll(expression.process())
-            transmitter.expect(tokenOf(IS_ID))
             val isOnlyOne = transmitter.expectMaybe(tokenOf(Tokens.START_BLOCK_ID)).isEmpty
             while(true)
             {
@@ -36,6 +34,7 @@ class WhenStatement(context: Context) : AbstractStatement(context) {
                     break
                 val expectMaybeElse = transmitter.expectMaybe(tokenOf(Tokens.ELSE_ID))
                 val isDefaultCondition = expectMaybeElse.isPresent
+                if(!isDefaultCondition) transmitter.expect(tokenOf(Tokens.IS_ID))
                 type = if(!isDefaultCondition) TypeAnnotationStatement(context)
                 else TokenStatement(expectMaybeElse.get(),context)
                 body = CodeBlockStatement(context)

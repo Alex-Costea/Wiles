@@ -322,9 +322,9 @@ class SyntaxTreeConverterTests {
     fun whenTests()
     {
         assertResults(null,"CODE_BLOCK(WHEN(EXPRESSION(!a); TYPE INT64; CODE_BLOCK(EXPRESSION(!nothing)); TYPE STRING; CODE_BLOCK(EXPRESSION(!nothing)); ELSE; CODE_BLOCK(EXPRESSION(!nothing))))",
-            WHEN_ID, "!a", IS_ID, START_BLOCK_ID, NEWLINE_ID,
-            "!int", DO_ID, NOTHING_ID, NEWLINE_ID,
-            "!text", DO_ID, NOTHING_ID, NEWLINE_ID,
+            WHEN_ID, "!a", START_BLOCK_ID, NEWLINE_ID,
+            IS_ID, "!int", DO_ID, NOTHING_ID, NEWLINE_ID,
+            IS_ID, "!text", DO_ID, NOTHING_ID, NEWLINE_ID,
             ELSE_ID, DO_ID, NOTHING_ID, NEWLINE_ID, END_BLOCK_ID)
     }
 

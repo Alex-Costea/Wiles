@@ -50,8 +50,8 @@ let read_list := begin
 end
 
 let result := min(list := read_list())
-when result is begin
-    int do writeline("Min found: " + result)
+when result begin
+    is int do writeline("Min found: " + result)
     default do writeline("Error: no min found!")
 end"""
         //TODO: refactor

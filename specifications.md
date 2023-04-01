@@ -31,8 +31,8 @@
     - Normal clause: `[condition] [block]`
     - Default clause: `default [block]`
 - Simple conditional type cast: `when [object] is [type] do [block]`
-- Complex conditional type cast: `when [object] is begin; {@clause;@} end`
-    - Normal clause: `[type] [block]`
+- Complex conditional type cast: `when [object] begin; {@clause;@} end`
+    - Normal clause: `is [type] [block]`
     - Default clause: `default [block]`
 - For loop: `for x {in collection} {from a} {to b} [block]`
 - While loop: `while condition [block]`
@@ -67,7 +67,6 @@
 - Type: `mut[type]`, always subtype of `type`
 - Make an immutable type into a mutable type with `mut` prefix operator
 - Change the value of a mutable object with `object.set(new_val)`
-- `mut [collection]` also makes its elements mutable
 
 ### Generics in functions
 - Example: `fun(x : list[anything as T]) -> T`, will return the same type as the list's components type
