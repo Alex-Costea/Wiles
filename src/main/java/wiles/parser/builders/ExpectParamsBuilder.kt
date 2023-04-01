@@ -1,12 +1,11 @@
 package wiles.parser.builders
 
-import wiles.shared.constants.ErrorMessages.FROZEN_ERROR
-import wiles.shared.constants.ErrorMessages.ERROR_MESSAGE_EXPECTED_ERROR
 import wiles.parser.enums.WhenRemoveToken
-import wiles.shared.constants.Tokens.TOKENS_INVERSE
+import wiles.shared.InternalErrorException
+import wiles.shared.constants.ErrorMessages.ERROR_MESSAGE_EXPECTED_ERROR
+import wiles.shared.constants.ErrorMessages.FROZEN_ERROR
 import wiles.shared.constants.ErrorMessages.TOKEN_EXPECTED_ERROR
 import wiles.shared.constants.ErrorMessages.WHEN_REMOVE_EXPECTED_ERROR
-import wiles.shared.InternalErrorException
 import java.util.function.Predicate
 
 class ExpectParamsBuilder private constructor(var foundTest: Predicate<String>) {
@@ -70,7 +69,7 @@ class ExpectParamsBuilder private constructor(var foundTest: Predicate<String>) 
         @JvmStatic
         fun tokenOf(expectedToken: String): ExpectParamsBuilder {
             return ExpectParamsBuilder { x: String -> x == expectedToken }
-                .withErrorMessage(TOKEN_EXPECTED_ERROR.format(TOKENS_INVERSE[expectedToken]))
+                .withErrorMessage(TOKEN_EXPECTED_ERROR.format(expectedToken))
         }
 
         @JvmStatic

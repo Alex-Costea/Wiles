@@ -1,7 +1,5 @@
 package wiles.shared.constants
 
-import com.google.common.collect.BiMap
-import com.google.common.collect.HashBiMap
 import wiles.shared.InternalErrorException
 import wiles.shared.constants.Chars.CONTINUE_LINE
 import wiles.shared.constants.ErrorMessages.MAX_SYMBOL_TOO_LARGE_ERROR
@@ -77,9 +75,7 @@ object Tokens {
     private val KEYWORDS: HashMap<String, String> = HashMap()
     private val SYMBOLS: HashMap<String, String> = HashMap()
     @JvmField
-    val TOKENS: BiMap<String, String>
-    @JvmField
-    val TOKENS_INVERSE: BiMap<String, String>
+    val TOKENS: HashMap<String, String>
     @JvmField
     val INFIX_OPERATORS = setOf(
         PLUS_ID, MINUS_ID, TIMES_ID, DIVIDE_ID, POWER_ID,
@@ -156,9 +152,9 @@ object Tokens {
         SYMBOLS["" + CONTINUE_LINE] = CONTINUE_LINE_ID
         SYMBOLS["\n"] = NEWLINE_ID
 
-        TOKENS = HashBiMap.create(KEYWORDS)
+        TOKENS = hashMapOf()
+        TOKENS.putAll(KEYWORDS)
         TOKENS.putAll(SYMBOLS)
-        TOKENS_INVERSE = TOKENS.inverse()
         if(Collections.max(SYMBOLS.keys.stream().mapToInt { obj: String -> obj.length }.toList()) > MAX_SYMBOL_LENGTH)
             throw InternalErrorException(MAX_SYMBOL_TOO_LARGE_ERROR)
     }

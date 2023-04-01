@@ -3,7 +3,6 @@ package wiles.parser
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter
 import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.json.JsonMapper
-import com.google.common.base.CharMatcher
 import wiles.Main.DEBUG
 import wiles.Main.filename
 import wiles.parser.converters.TokensToSyntaxTreeConverter
@@ -56,7 +55,7 @@ class Parser(content : String?) {
 
     private fun lastLocation(input : String) : TokenLocation
     {
-        val textSplit = CharMatcher.whitespace().trimTrailingFrom(input).split("\n")
+        val textSplit = input.trimStart().split("\n")
         val lastIndex = textSplit.lastIndex
         val lastLineLocation = textSplit[lastIndex].length
         return TokenLocation(lastIndex+1,lastLineLocation+2)

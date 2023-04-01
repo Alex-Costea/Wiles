@@ -1,7 +1,5 @@
 package wiles.shared.constants
 
-import com.google.common.collect.BiMap
-import com.google.common.collect.HashBiMap
 import wiles.shared.constants.Tokens.MAYBE_ID
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
@@ -9,7 +7,7 @@ import wiles.shared.constants.Tokens.NOTHING_ID
 
 object Types {
     @JvmField
-    val TYPES: BiMap<String, String> = HashBiMap.create()
+    val TYPES = hashMapOf<String, String>()
 
     const val BOOLEAN_ID = "BOOLEAN"
     const val INT64_ID = "INT64"

@@ -143,17 +143,17 @@ class SyntaxTreeConverterTests {
 
     @Test
     fun programExceptionsTest() {
-        assertResults(createExceptions(UnexpectedEndException(TOKEN_EXPECTED_ERROR.format("end"), NULL_LOCATION)),
+        assertResults(createExceptions(UnexpectedEndException(TOKEN_EXPECTED_ERROR.format(END_BLOCK_ID), NULL_LOCATION)),
             null,
             DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, START_BLOCK_ID)
         assertResults(createExceptions(TokenExpectedException(END_OF_STATEMENT_EXPECTED_ERROR, NULL_LOCATION)),
             null,
             DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, NEWLINE_ID,
             START_BLOCK_ID, NEWLINE_ID, "!a", PLUS_ID, "!b", DECLARE_ID, NEWLINE_ID, END_BLOCK_ID)
-        assertResults(createExceptions(UnexpectedEndException(TOKEN_EXPECTED_ERROR.format("end"), NULL_LOCATION)),
+        assertResults(createExceptions(UnexpectedEndException(TOKEN_EXPECTED_ERROR.format(END_BLOCK_ID), NULL_LOCATION)),
                 null,
             DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, START_BLOCK_ID, TERMINATOR_ID)
-        assertResults(createExceptions(UnexpectedEndException(TOKEN_EXPECTED_ERROR.format(")"), NULL_LOCATION)),
+        assertResults(createExceptions(UnexpectedEndException(TOKEN_EXPECTED_ERROR.format(PAREN_END_ID), NULL_LOCATION)),
                 null,
             DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID)
         assertResults(createExceptions(TokenExpectedException(INVALID_EXPRESSION_ERROR, NULL_LOCATION),TokenExpectedException(
@@ -231,7 +231,7 @@ class SyntaxTreeConverterTests {
     {
         assertResults(null,"CODE_BLOCK(DECLARATION(TYPE INT64; !a; EXPRESSION(#10)))",
             DECLARE_ID, "!a", TYPE_ANNOTATION_ID, "!int", ASSIGN_ID, "#10")
-        assertResults(createExceptions(UnexpectedEndException(TOKEN_EXPECTED_ERROR.format(":="), NULL_LOCATION)),
+        assertResults(createExceptions(UnexpectedEndException(TOKEN_EXPECTED_ERROR.format(ASSIGN_ID), NULL_LOCATION)),
             "CODE_BLOCK(DECLARATION(TYPE INT64; !a; EXPRESSION(#2)); DECLARATION(!a; EXPRESSION(#2)); DECLARATION(TYPE INT64; !a); DECLARATION(!a))",
             DECLARE_ID, "!a", TYPE_ANNOTATION_ID, "!int", ASSIGN_ID, "#2", NEWLINE_ID, DECLARE_ID, "!a", ASSIGN_ID, "#2", NEWLINE_ID, DECLARE_ID, "!a", TYPE_ANNOTATION_ID, "!int", NEWLINE_ID, DECLARE_ID, "!a")
     }
