@@ -85,7 +85,7 @@ end"""
             let a := mut 2
             let list := mut [mut 1, a, mut 3]
             list.remove(index := 0)
-            list.set_at(index := 0, 10)
+            list.set_at(index := 0, mut 10)
             writeline(a)
             writeline(list)
         """

@@ -158,6 +158,13 @@ object InferrerUtils {
                 type.copyRemovingLocation()))
     }
 
+    fun makeGenericDeclaration(type: JSONStatement) : JSONStatement
+    {
+        val copy = type.copy()
+        copy.components.add(JSONStatement(name = Tokens.DECLARE_ID, syntaxType = SyntaxType.TOKEN))
+        return copy
+    }
+
     fun specifyGenericTypesForFunction(statement : JSONStatement, genericTypes : GenericTypesMap)
     {
         if(statement.syntaxType == SyntaxType.TYPE && statement.name == GENERIC_ID)

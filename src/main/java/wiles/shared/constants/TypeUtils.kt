@@ -33,22 +33,22 @@ object TypeUtils {
         else if(supertype.name == Types.GENERIC_ID && isFormerSuperTypeOfLatter(supertype.components[1], subtype,
                 getMinus = getMinus && unboxGenerics, genericTypes = genericTypes)){
             val genName = supertype.components[0].name
+            val isDeclaration = supertype.components.getOrNull(2)?.name == DECLARE_ID
             if(genericTypes?.containsKey(genName) == true)
             {
-                val isDeclaration = supertype.components.getOrNull(2)?.name == DECLARE_ID
                 return if(isFormerSuperTypeOfLatter(genericTypes[genName]!!.first, subtype, unboxGenerics = false,
                         genericTypes = genericTypes) && !isDeclaration) {
-                    genericTypes[genName] = Pair(genericTypes[genName]!!.first,true)
+                    genericTypes[genName] = Triple(genericTypes[genName]!!.first,true, false)
                     true
                 }
-                else if(isFormerSuperTypeOfLatter(subtype, genericTypes[genName]!!.first, unboxGenerics = false,
-                        genericTypes = genericTypes)) {
-                    genericTypes[genName] = Pair(subtype,true)
+                else if(genericTypes[genName]?.third != true && isFormerSuperTypeOfLatter(subtype,
+                        genericTypes[genName]!!.first, unboxGenerics = false, genericTypes = genericTypes)) {
+                    genericTypes[genName] = Triple(subtype,true, isDeclaration)
                     true
                 } else false
             }
             if (genericTypes!=null)
-                genericTypes[genName] = Pair(subtype,false)
+                genericTypes[genName] = Triple(subtype,false, isDeclaration)
             if(unboxGenerics)
                 return true
         }

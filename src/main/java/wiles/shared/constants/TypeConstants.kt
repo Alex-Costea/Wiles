@@ -1,6 +1,7 @@
 package wiles.shared.constants
 
 import wiles.checker.statics.InferrerUtils.makeGeneric
+import wiles.checker.statics.InferrerUtils.makeGenericDeclaration
 import wiles.checker.statics.InferrerUtils.makeNullable
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
@@ -180,7 +181,7 @@ object TypeConstants {
             components = mutableListOf(NOTHING_TYPE,
                 JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
                     components = mutableListOf(
-                        makeMutable(SET_VALUE_GENERIC_TYPE),
+                        makeMutable(makeGenericDeclaration(SET_VALUE_GENERIC_TYPE)),
                         JSONStatement(name = "!elem", syntaxType = SyntaxType.TOKEN)
                     )
                 ),
@@ -201,7 +202,7 @@ object TypeConstants {
             components = mutableListOf(makeNullable(MAYBE_GENERIC_TYPE),
                 JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
                     components = mutableListOf(
-                        MAYBE_GENERIC_TYPE,
+                        makeGenericDeclaration(MAYBE_GENERIC_TYPE),
                         JSONStatement(name = "!elem", syntaxType = SyntaxType.TOKEN)
                     )
                 ),
@@ -216,7 +217,7 @@ object TypeConstants {
             components = mutableListOf(CLONE_GENERIC_TYPE,
                 JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
                     components = mutableListOf(
-                        CLONE_GENERIC_TYPE,
+                        makeGenericDeclaration(CLONE_GENERIC_TYPE),
                         JSONStatement(name = "!elem", syntaxType = SyntaxType.TOKEN)
                     )),
                     JSONStatement(syntaxType = SyntaxType.DECLARATION,
@@ -240,7 +241,7 @@ object TypeConstants {
                     components = mutableListOf(GET_TYPE_GENERIC_TYPE)),
                 JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
                     components = mutableListOf(
-                        GET_TYPE_GENERIC_TYPE,
+                        makeGenericDeclaration(GET_TYPE_GENERIC_TYPE),
                         JSONStatement(name = "!elem", syntaxType = SyntaxType.TOKEN)
                     )
                 ),
@@ -251,7 +252,7 @@ object TypeConstants {
     private val RUN_GENERIC_TYPE = makeGeneric(makeNullable(ANYTHING_TYPE), "!T|run")
     private val RUN_SUBTYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
         components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
-            components = mutableListOf(RUN_GENERIC_TYPE)
+            components = mutableListOf(makeGenericDeclaration(RUN_GENERIC_TYPE))
         ))
     )
     val RUN_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
@@ -268,7 +269,7 @@ object TypeConstants {
     )
 
     private val ADD_GENERIC_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|add")
-    private val ADD_LIST_TYPE = makeMutable(makeList(ADD_GENERIC_TYPE))
+    private val ADD_LIST_TYPE = makeMutable(makeList(makeGenericDeclaration(ADD_GENERIC_TYPE)))
     val ADD_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
         components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
             components = mutableListOf(
@@ -297,7 +298,7 @@ object TypeConstants {
     )
 
     private val SET_AT_GENERIC_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|set_at")
-    private val SET_AT_LIST_TYPE = makeMutable(makeList(SET_AT_GENERIC_TYPE))
+    private val SET_AT_LIST_TYPE = makeMutable(makeList(makeGenericDeclaration(SET_AT_GENERIC_TYPE)))
     val SET_AT_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
         components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
             components = mutableListOf(
