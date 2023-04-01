@@ -107,6 +107,13 @@ end"""
         """
         assertEquals(getOutput(code7),"10\n")
 
+        val code9 = """
+        let var a : anything := 1
+        a := true
+        writeline(a.type)
+        """
+        assertEquals(getOutput(code9),"TYPE BOOLEAN\n")
+
         val code8 = """
         let a := mut [1] : anything
         a.add(true)
