@@ -106,5 +106,21 @@ end"""
             b()
         """
         assertEquals(getOutput(code7),"10\n")
+
+        val code8 = """
+        let a := mut [1] : anything
+        a.add(true)
+        when a begin
+            is mut[list[int]] begin
+                let b := a @ 1
+                when b begin
+                    is nothing do panic()
+                    default do writeline(b + 10)
+                end
+            end
+            default do writeline("not mut[list[int]]")
+        end
+        """
+        assertEquals(getOutput(code8),"not mut[list[int]]\n")
     }
 }
