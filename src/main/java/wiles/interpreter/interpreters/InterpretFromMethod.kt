@@ -21,15 +21,15 @@ class InterpretFromMethod(statement: JSONStatement, variables: InterpreterVariab
     override fun interpret() {
         val type = statement.copyRemovingLocation()
         type.components.removeLast()
-        val newVars = variables.copy()
+        val newVars = defaultInterpreterVars.copy()
         val codeBlock = statement.components.last()
         for(component in statement.components.dropLast(1).drop(1))
         {
-            val interpreter = InterpretFromDeclaration(component, newVars, additionalVars)
+            val interpreter = InterpretFromDeclaration(component, newVars, variables)
             interpreter.interpret()
         }
         val defaultVars = InterpreterVariableMap()
-        defaultVars.putAll(newVars.filter { it.key !in variables })
+        defaultVars.putAll(newVars)
         val functionType = JSONStatement(name = METHOD_ID, syntaxType = SyntaxType.TYPE, components = mutableListOf(type))
         reference = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ givenVars ->
             val funcVars = InterpreterVariableMap()

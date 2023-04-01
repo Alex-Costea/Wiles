@@ -1,7 +1,6 @@
 package wiles.checker.inferrers
 
 import wiles.checker.Checker
-import wiles.checker.data.CheckerVariableMap
 import wiles.checker.data.InferrerDetails
 import wiles.checker.data.VariableDetails
 import wiles.checker.exceptions.ConflictingTypeDefinitionException
@@ -89,14 +88,14 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
     }
 
     override fun infer() {
-        val declarationVariables = additionalVars.copy()
+        val declarationVariables = StandardLibrary.defaultCheckerVars.copy()
         val genericTypes = hashMapOf<String, JSONStatement>()
         Checker.currentFunctionNumber++
         for(component in statement.components)
         {
             if(component.syntaxType==SyntaxType.TYPE) {
                 InferFromType(
-                    InferrerDetails(component, declarationVariables, exceptions, CheckerVariableMap()),
+                    InferrerDetails(component, declarationVariables, exceptions, additionalVars),
                     isTopMostType = false, genericTypes = genericTypes
                 ).infer()
                 continue
@@ -106,7 +105,7 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
             assert(component.syntaxType == SyntaxType.DECLARATION)
 
             val inferrer = InferFromDeclaration(
-                InferrerDetails(component, declarationVariables, exceptions, CheckerVariableMap()),
+                InferrerDetails(component, declarationVariables, exceptions, additionalVars),
                 inFunction = true, isTopMostType = false, genericTypes = genericTypes
             )
             inferrer.infer()
@@ -115,7 +114,7 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
         createTypes(statement, genericTypes, variables = additionalVars)
 
         declarationVariables.forEach { it.value.initialized = true }
-        variables.putAll(declarationVariables.filter { it.key !in additionalVars })
+        variables.putAll(declarationVariables)
         variables.putAll(genericTypes.map { Pair(it.key.split("|")[0],
             VariableDetails(JSONStatement(syntaxType = SyntaxType.TYPE, name = TYPE_TYPE_ID,
                 components = mutableListOf(makeGeneric(it.value,it.key))))) })

@@ -3,7 +3,7 @@ package wiles.shared.constants
 object ErrorMessages {
     const val LINE_SYMBOL = "\n>>> "
     const val COMPILATION_FAILED_ERROR = "${LINE_SYMBOL}COMPILATION FAILED$LINE_SYMBOL"
-    const val TOKEN_EXPECTED_ERROR = "The token is missing or incorrect. Did you mean \"%s\"?"
+    const val TOKEN_EXPECTED_ERROR = "The token is missing or incorrect. Did you mean %s?"
     const val IDENTIFIER_EXPECTED_ERROR = "The identifier name is invalid or missing."
     const val IDENTIFIER_TOO_LONG_ERROR = "A simple identifier name is expected."
     const val GENERIC_ALREADY_DEFINED_ERROR = "This generic value was already defined."

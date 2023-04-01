@@ -99,5 +99,12 @@ end"""
             writeline(a)
         """
         assertEquals(getOutput(code6),"10\n100\n")
+
+        val code7 = """
+            let a := 10
+            let b := fun(b := import a) do writeline(b)
+            b()
+        """
+        assertEquals(getOutput(code7),"10\n")
     }
 }
