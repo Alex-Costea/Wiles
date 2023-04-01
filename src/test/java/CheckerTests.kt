@@ -6015,6 +6015,159 @@ class CheckerTests {
     {
         /*
         let list := mut [1,2,3]
+        let b : int? := 4
+        list.add(b)
+         */
+        checkResult(createExceptions(CannotCallMethodException(NULL_LOCATION)),"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "!list",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "MUTABLE",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 13
+        }
+      }, {
+        "type" : "LIST",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 23
+        },
+        "components" : [ {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "#1",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 18
+            }
+          } ]
+        }, {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "#2",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 20
+            }
+          } ]
+        }, {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "#3",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 22
+            }
+          } ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "EITHER",
+      "type" : "TYPE",
+      "location" : {
+        "line" : 2,
+        "lineIndex" : 9
+      },
+      "components" : [ {
+        "name" : "INT64",
+        "type" : "TYPE",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 9
+        }
+      }, {
+        "name" : "!nothing",
+        "type" : "TYPE"
+      } ]
+    }, {
+      "name" : "!b",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 2,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "#4",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 17
+        }
+      } ]
+    } ]
+  }, {
+    "type" : "EXPRESSION",
+    "components" : [ {
+      "name" : "!list",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 3,
+        "lineIndex" : 1
+      }
+    }, {
+      "name" : "ACCESS",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 3,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!add",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 3,
+          "lineIndex" : 6
+        }
+      }, {
+        "name" : "APPLY",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 3,
+          "lineIndex" : 9
+        }
+      }, {
+        "type" : "METHOD_CALL",
+        "components" : [ {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "!b",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 3,
+              "lineIndex" : 10
+            }
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(DECLARATION(TYPE MUTABLE; (TYPE LIST; (TYPE INT64)); !list; EXPRESSION(TYPE MUTABLE; (TYPE LIST; (TYPE INT64)); MUTABLE; LIST(TYPE INT64; EXPRESSION(TYPE INT64; #1); EXPRESSION(TYPE INT64; #2); EXPRESSION(TYPE INT64; #3)))); DECLARATION(TYPE EITHER; (TYPE INT64; TYPE !nothing); !b; EXPRESSION(TYPE INT64; #4)); EXPRESSION(!add; APPLY; METHOD_CALL(TYPE METHOD_CALL; (METHOD_CALL(EXPRESSION(TYPE MUTABLE; (TYPE LIST; (TYPE INT64)); !list); EXPRESSION(TYPE EITHER; (TYPE INT64; TYPE !nothing); !b))))))")
+
+        /*
+        let list := mut [1,2,3]
         list.add("hi!")
          */
         checkResult(createExceptions(CannotCallMethodException(NULL_LOCATION)),
