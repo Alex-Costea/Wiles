@@ -268,7 +268,7 @@ object TypeConstants {
     )
 
     private val ADD_GENERIC_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|add")
-    private val ADD_LIST_TYPE = makeMutable(makeList(makeNullable(ADD_GENERIC_TYPE)))
+    private val ADD_LIST_TYPE = makeMutable(makeList(ADD_GENERIC_TYPE))
     val ADD_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
         components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
             components = mutableListOf(
@@ -297,7 +297,7 @@ object TypeConstants {
     )
 
     private val SET_AT_GENERIC_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|set_at")
-    private val SET_AT_LIST_TYPE = makeMutable(makeList(makeNullable(SET_AT_GENERIC_TYPE)))
+    private val SET_AT_LIST_TYPE = makeMutable(makeList(SET_AT_GENERIC_TYPE))
     val SET_AT_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
         components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
             components = mutableListOf(
@@ -319,13 +319,6 @@ object TypeConstants {
                         INT64_TYPE,
                         JSONStatement(name = "!index", syntaxType = SyntaxType.TOKEN),
                     )
-                ),
-                JSONStatement(syntaxType = SyntaxType.DECLARATION,
-                    components = mutableListOf(
-                        BOOLEAN_TYPE,
-                        JSONStatement(name = "!mutate", syntaxType = SyntaxType.TOKEN),
-                        JSONStatement(name = TRUE_ID, syntaxType =  SyntaxType.TOKEN),
-                        )
                 ),
             )
         ))

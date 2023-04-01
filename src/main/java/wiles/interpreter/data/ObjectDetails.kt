@@ -2,7 +2,6 @@ package wiles.interpreter.data
 
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
-import wiles.shared.constants.TypeConstants.LIST_OF_NULLABLE_ANYTHING_TYPE
 import wiles.shared.constants.TypeConstants.MUTABLE_NULLABLE_ANYTHING
 import wiles.shared.constants.TypeUtils
 import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
@@ -29,27 +28,15 @@ class ObjectDetails(var value : Any?, var type : JSONStatement)
         return cloneValue(this, deep) as ObjectDetails
     }
 
-    @Suppress("UNCHECKED_CAST")
     private fun makeTypeMutable(obj : ObjectDetails) : ObjectDetails
     {
-        val isList = isFormerSuperTypeOfLatter(LIST_OF_NULLABLE_ANYTHING_TYPE, obj.type)
         var newObject = obj
 
         if(isFormerSuperTypeOfLatter(MUTABLE_NULLABLE_ANYTHING,obj.type))
             Unit
         else {
             newObject = obj.clone(deep = false)
-            if (isList)
-                newObject.type.components[0] = TypeUtils.makeMutable(obj.type.components[0])
             newObject.type = TypeUtils.makeMutable(obj.type)
-        }
-        if(isList)
-        {
-            val list = (newObject.value as MutableList<ObjectDetails>)
-            for(i in list.indices)
-            {
-                list[i]=makeTypeMutable(list[i])
-            }
         }
         return newObject
     }

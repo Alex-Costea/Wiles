@@ -2206,6 +2206,10 @@ class CheckerTests {
   } ]
 }""","CODE_BLOCK(DECLARATION(TYPE LIST; (TYPE EITHER; (TYPE INT64; TYPE EITHER; (TYPE EITHER; (TYPE INT64; TYPE !nothing); TYPE STRING))); !a; EXPRESSION(TYPE LIST; (TYPE EITHER; (TYPE INT64; TYPE EITHER; (TYPE EITHER; (TYPE INT64; TYPE !nothing); TYPE STRING))); LIST(TYPE EITHER; (TYPE INT64; TYPE EITHER; (TYPE EITHER; (TYPE INT64; TYPE !nothing); TYPE STRING)); EXPRESSION(TYPE INT64; #1); EXPRESSION(TYPE INT64; #2); EXPRESSION(TYPE MUTABLE; (TYPE STRING); MUTABLE; @nothing); EXPRESSION(TYPE !nothing; !nothing)))); DECLARATION(TYPE LIST; (TYPE EITHER; (TYPE INT64; TYPE STRING)); !b; EXPRESSION(TYPE LIST; (TYPE EITHER; (TYPE INT64; TYPE EITHER; (TYPE EITHER; (TYPE INT64; TYPE !nothing); TYPE STRING))); !a)))")
 
+        /*
+        let a := mut [] : int
+        let b := a @ 0
+         */
         checkResult(null,"""{
   "parsed" : true,
   "type" : "CODE_BLOCK",
@@ -2296,7 +2300,7 @@ class CheckerTests {
       } ]
     } ]
   } ]
-}""","CODE_BLOCK(DECLARATION(TYPE MUTABLE; (TYPE LIST; (TYPE MUTABLE; (TYPE INT64))); !a; EXPRESSION(TYPE MUTABLE; (TYPE LIST; (TYPE MUTABLE; (TYPE INT64))); MUTABLE; LIST(TYPE INT64))); DECLARATION(TYPE EITHER; (TYPE INT64; TYPE !nothing); !b; EXPRESSION(TYPE EITHER; (TYPE MUTABLE; (TYPE INT64); TYPE !nothing); !a; LIST|ELEM_ACCESS|INT64; #0)))")
+}""","CODE_BLOCK(DECLARATION(TYPE MUTABLE; (TYPE LIST; (TYPE INT64)); !a; EXPRESSION(TYPE MUTABLE; (TYPE LIST; (TYPE INT64)); MUTABLE; LIST(TYPE INT64))); DECLARATION(TYPE EITHER; (TYPE INT64; TYPE !nothing); !b; EXPRESSION(TYPE EITHER; (TYPE INT64; TYPE !nothing); !a; LIST|ELEM_ACCESS|INT64; #0)))")
     }
 
     @Test
@@ -5082,7 +5086,7 @@ class CheckerTests {
     fun whenStatementTests()
     {
         /*
-        let list := mut [] : int?
+        let list := mut [] : mut[int?]
         let x := list @ 0
         when x is begin
             nothing do ignore(x)
@@ -5119,22 +5123,30 @@ class CheckerTests {
           "lineIndex" : 18
         },
         "components" : [ {
-          "name" : "EITHER",
+          "name" : "MUTABLE",
           "type" : "TYPE",
           "location" : {
             "line" : 1,
             "lineIndex" : 22
           },
           "components" : [ {
-            "name" : "INT64",
+            "name" : "EITHER",
             "type" : "TYPE",
             "location" : {
               "line" : 1,
-              "lineIndex" : 22
-            }
-          }, {
-            "name" : "!nothing",
-            "type" : "TYPE"
+              "lineIndex" : 26
+            },
+            "components" : [ {
+              "name" : "INT64",
+              "type" : "TYPE",
+              "location" : {
+                "line" : 1,
+                "lineIndex" : 26
+              }
+            }, {
+              "name" : "!nothing",
+              "type" : "TYPE"
+            } ]
           } ]
         } ]
       } ]
@@ -5315,8 +5327,7 @@ class CheckerTests {
       } ]
     } ]
   } ]
-}""","CODE_BLOCK(DECLARATION(TYPE MUTABLE; (TYPE LIST; (TYPE MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE !nothing)))); !list; EXPRESSION(TYPE MUTABLE; (TYPE LIST; (TYPE MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE !nothing)))); MUTABLE; LIST(TYPE EITHER; (TYPE INT64; TYPE !nothing)))); DECLARATION(TYPE EITHER; (TYPE MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE !nothing)); TYPE !nothing); !x; EXPRESSION(TYPE EITHER; (TYPE MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE !nothing)); TYPE !nothing); !list; LIST|ELEM_ACCESS|INT64; #0)); WHEN(EXPRESSION(!x); TYPE !nothing; CODE_BLOCK(EXPRESSION(TYPE !nothing; !ignore; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE !nothing; !x))))); TYPE MUTABLE; (TYPE !nothing); CODE_BLOCK(EXPRESSION(!ignore; APPLY; METHOD_CALL(EXPRESSION(!x)))); ELSE; CODE_BLOCK(EXPRESSION(!ignore; APPLY; METHOD_CALL(EXPRESSION(!x))))))")
-
+}""","CODE_BLOCK(DECLARATION(TYPE MUTABLE; (TYPE LIST; (TYPE MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE !nothing)))); !list; EXPRESSION(TYPE MUTABLE; (TYPE LIST; (TYPE MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE !nothing)))); MUTABLE; LIST(TYPE MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE !nothing))))); DECLARATION(TYPE EITHER; (TYPE MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE !nothing)); TYPE !nothing); !x; EXPRESSION(TYPE EITHER; (TYPE MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE !nothing)); TYPE !nothing); !list; LIST|ELEM_ACCESS|INT64; #0)); WHEN(EXPRESSION(!x); TYPE !nothing; CODE_BLOCK(EXPRESSION(TYPE !nothing; !ignore; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE !nothing; !x))))); TYPE MUTABLE; (TYPE !nothing); CODE_BLOCK(EXPRESSION(!ignore; APPLY; METHOD_CALL(EXPRESSION(!x)))); ELSE; CODE_BLOCK(EXPRESSION(!ignore; APPLY; METHOD_CALL(EXPRESSION(!x))))))")
         /*
         let list := mut [] : int?
         let x := list @ 0
@@ -5337,7 +5348,7 @@ class CheckerTests {
       "type" : "TOKEN",
       "location" : {
         "line" : 1,
-        "lineIndex" : 13
+        "lineIndex" : 5
       }
     }, {
       "type" : "EXPRESSION",
@@ -5346,31 +5357,39 @@ class CheckerTests {
         "type" : "TOKEN",
         "location" : {
           "line" : 1,
-          "lineIndex" : 21
+          "lineIndex" : 13
         }
       }, {
         "type" : "LIST",
         "location" : {
           "line" : 1,
-          "lineIndex" : 26
+          "lineIndex" : 18
         },
         "components" : [ {
-          "name" : "EITHER",
+          "name" : "MUTABLE",
           "type" : "TYPE",
           "location" : {
             "line" : 1,
-            "lineIndex" : 30
+            "lineIndex" : 22
           },
           "components" : [ {
-            "name" : "INT64",
+            "name" : "EITHER",
             "type" : "TYPE",
             "location" : {
               "line" : 1,
-              "lineIndex" : 30
-            }
-          }, {
-            "name" : "!nothing",
-            "type" : "TYPE"
+              "lineIndex" : 26
+            },
+            "components" : [ {
+              "name" : "INT64",
+              "type" : "TYPE",
+              "location" : {
+                "line" : 1,
+                "lineIndex" : 26
+              }
+            }, {
+              "name" : "!nothing",
+              "type" : "TYPE"
+            } ]
           } ]
         } ]
       } ]
@@ -5382,7 +5401,7 @@ class CheckerTests {
       "type" : "TOKEN",
       "location" : {
         "line" : 2,
-        "lineIndex" : 13
+        "lineIndex" : 5
       }
     }, {
       "type" : "EXPRESSION",
@@ -5391,21 +5410,21 @@ class CheckerTests {
         "type" : "TOKEN",
         "location" : {
           "line" : 2,
-          "lineIndex" : 18
+          "lineIndex" : 10
         }
       }, {
         "name" : "ELEM_ACCESS",
         "type" : "TOKEN",
         "location" : {
           "line" : 2,
-          "lineIndex" : 23
+          "lineIndex" : 15
         }
       }, {
         "name" : "#0",
         "type" : "TOKEN",
         "location" : {
           "line" : 2,
-          "lineIndex" : 25
+          "lineIndex" : 17
         }
       } ]
     } ]
@@ -5418,7 +5437,7 @@ class CheckerTests {
         "type" : "TOKEN",
         "location" : {
           "line" : 3,
-          "lineIndex" : 14
+          "lineIndex" : 6
         }
       } ]
     }, {
@@ -5426,14 +5445,14 @@ class CheckerTests {
       "type" : "TYPE",
       "location" : {
         "line" : 4,
-        "lineIndex" : 13
+        "lineIndex" : 5
       },
       "components" : [ {
         "name" : "!nothing",
         "type" : "TYPE",
         "location" : {
           "line" : 4,
-          "lineIndex" : 17
+          "lineIndex" : 9
         }
       } ]
     }, {
@@ -5445,14 +5464,14 @@ class CheckerTests {
           "type" : "TOKEN",
           "location" : {
             "line" : 4,
-            "lineIndex" : 29
+            "lineIndex" : 21
           }
         }, {
           "name" : "APPLY",
           "type" : "TOKEN",
           "location" : {
             "line" : 4,
-            "lineIndex" : 35
+            "lineIndex" : 27
           }
         }, {
           "type" : "METHOD_CALL",
@@ -5463,7 +5482,7 @@ class CheckerTests {
               "type" : "TOKEN",
               "location" : {
                 "line" : 4,
-                "lineIndex" : 36
+                "lineIndex" : 28
               }
             } ]
           } ]
@@ -5474,7 +5493,7 @@ class CheckerTests {
       "type" : "TYPE",
       "location" : {
         "line" : 5,
-        "lineIndex" : 13
+        "lineIndex" : 5
       }
     }, {
       "type" : "CODE_BLOCK",
@@ -5485,14 +5504,14 @@ class CheckerTests {
           "type" : "TOKEN",
           "location" : {
             "line" : 5,
-            "lineIndex" : 24
+            "lineIndex" : 16
           }
         }, {
           "name" : "APPLY",
           "type" : "TOKEN",
           "location" : {
             "line" : 5,
-            "lineIndex" : 30
+            "lineIndex" : 22
           }
         }, {
           "type" : "METHOD_CALL",
@@ -5503,7 +5522,7 @@ class CheckerTests {
               "type" : "TOKEN",
               "location" : {
                 "line" : 5,
-                "lineIndex" : 31
+                "lineIndex" : 23
               }
             } ]
           } ]
@@ -5514,7 +5533,7 @@ class CheckerTests {
       "type" : "TOKEN",
       "location" : {
         "line" : 6,
-        "lineIndex" : 13
+        "lineIndex" : 5
       }
     }, {
       "type" : "CODE_BLOCK",
@@ -5525,14 +5544,14 @@ class CheckerTests {
           "type" : "TOKEN",
           "location" : {
             "line" : 6,
-            "lineIndex" : 24
+            "lineIndex" : 16
           }
         }, {
           "name" : "APPLY",
           "type" : "TOKEN",
           "location" : {
             "line" : 6,
-            "lineIndex" : 30
+            "lineIndex" : 22
           }
         }, {
           "type" : "METHOD_CALL",
@@ -5543,7 +5562,7 @@ class CheckerTests {
               "type" : "TOKEN",
               "location" : {
                 "line" : 6,
-                "lineIndex" : 31
+                "lineIndex" : 23
               }
             } ]
           } ]
@@ -5551,8 +5570,7 @@ class CheckerTests {
       } ]
     } ]
   } ]
-}""","CODE_BLOCK(DECLARATION(TYPE MUTABLE; (TYPE LIST; (TYPE MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE !nothing)))); !list; EXPRESSION(TYPE MUTABLE; (TYPE LIST; (TYPE MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE !nothing)))); MUTABLE; LIST(TYPE EITHER; (TYPE INT64; TYPE !nothing)))); DECLARATION(TYPE EITHER; (TYPE MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE !nothing)); TYPE !nothing); !x; EXPRESSION(TYPE EITHER; (TYPE MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE !nothing)); TYPE !nothing); !list; LIST|ELEM_ACCESS|INT64; #0)); WHEN(EXPRESSION(!x); TYPE MUTABLE; (TYPE !nothing); CODE_BLOCK(EXPRESSION(TYPE !nothing; !ignore; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE MUTABLE; (TYPE !nothing); !x))))); TYPE !nothing; CODE_BLOCK(EXPRESSION(TYPE !nothing; !ignore; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE !nothing; !x))))); TYPE ELSE; (TYPE MUTABLE; (TYPE INT64)); CODE_BLOCK(EXPRESSION(TYPE !nothing; !ignore; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE MUTABLE; (TYPE INT64); !x)))))))")
-
+}""","CODE_BLOCK(DECLARATION(TYPE MUTABLE; (TYPE LIST; (TYPE MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE !nothing)))); !list; EXPRESSION(TYPE MUTABLE; (TYPE LIST; (TYPE MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE !nothing)))); MUTABLE; LIST(TYPE MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE !nothing))))); DECLARATION(TYPE EITHER; (TYPE MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE !nothing)); TYPE !nothing); !x; EXPRESSION(TYPE EITHER; (TYPE MUTABLE; (TYPE EITHER; (TYPE INT64; TYPE !nothing)); TYPE !nothing); !list; LIST|ELEM_ACCESS|INT64; #0)); WHEN(EXPRESSION(!x); TYPE MUTABLE; (TYPE !nothing); CODE_BLOCK(EXPRESSION(TYPE !nothing; !ignore; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE MUTABLE; (TYPE !nothing); !x))))); TYPE !nothing; CODE_BLOCK(EXPRESSION(TYPE !nothing; !ignore; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE !nothing; !x))))); TYPE ELSE; (TYPE MUTABLE; (TYPE INT64)); CODE_BLOCK(EXPRESSION(TYPE !nothing; !ignore; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE MUTABLE; (TYPE INT64); !x)))))))")
         /*
         let a : either[text, int] := 2
         when a is int do
@@ -6108,7 +6126,7 @@ class CheckerTests {
       } ]
     } ]
   } ]
-}""","CODE_BLOCK(DECLARATION(TYPE MUTABLE; (TYPE LIST; (TYPE MUTABLE; (TYPE INT64))); !list; EXPRESSION(TYPE MUTABLE; (TYPE LIST; (TYPE MUTABLE; (TYPE INT64))); MUTABLE; LIST(TYPE INT64; EXPRESSION(TYPE INT64; #1); EXPRESSION(TYPE INT64; #2); EXPRESSION(TYPE INT64; #3)))); EXPRESSION(!add; APPLY; METHOD_CALL(TYPE METHOD_CALL; (METHOD_CALL(EXPRESSION(TYPE MUTABLE; (TYPE LIST; (TYPE MUTABLE; (TYPE INT64))); !list); EXPRESSION(TYPE STRING; @hi!))))))")
+}""","CODE_BLOCK(DECLARATION(TYPE MUTABLE; (TYPE LIST; (TYPE INT64)); !list; EXPRESSION(TYPE MUTABLE; (TYPE LIST; (TYPE INT64)); MUTABLE; LIST(TYPE INT64; EXPRESSION(TYPE INT64; #1); EXPRESSION(TYPE INT64; #2); EXPRESSION(TYPE INT64; #3)))); EXPRESSION(!add; APPLY; METHOD_CALL(TYPE METHOD_CALL; (METHOD_CALL(EXPRESSION(TYPE MUTABLE; (TYPE LIST; (TYPE INT64)); !list); EXPRESSION(TYPE STRING; @hi!))))))")
 
         /*
         let func1 := fun(elem1 : anything? as T, elem2 : T)

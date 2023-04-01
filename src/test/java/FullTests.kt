@@ -83,23 +83,13 @@ end"""
 
         val code5 = """
             let a := mut 2
-            let list := mut [1, a, 3]
+            let list := mut [mut 1, a, mut 3]
             list.remove(index := 0)
             list.set_at(index := 0, 10)
             writeline(a)
             writeline(list)
         """
-        assertEquals(getOutput(code5),"10\n[10, 3]\n")
-
-        val code5v2 = """
-            let a := mut 2
-            let list := mut [1, a, 3]
-            list.remove(index := 0)
-            list.set_at(index := 0, 10, mutate := false)
-            writeline(a)
-            writeline(list)
-        """
-        assertEquals(getOutput(code5v2),"2\n[10, 3]\n")
+        assertEquals(getOutput(code5),"2\n[10, 3]\n")
 
         val code6 = """
             let var a := 10

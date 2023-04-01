@@ -173,13 +173,9 @@ object SimpleTypeGenerator {
             && isFormerSuperTypeOfLatter(triple.first, triple.third))
                 return triple.first.copyRemovingLocation()
 
-        if(unboxedTriple.second == MUTABLE_OPERATION)
-        {
+        if(unboxedTriple.second == MUTABLE_OPERATION) {
             assert(unboxedTriple.first == NOTHING_TYPE)
-            val result = makeMutable(unboxedTriple.third)
-            if(isFormerSuperTypeOfLatter(LIST_OF_NULLABLE_ANYTHING_TYPE,unboxedTriple.third))
-                result.components[0].components[0] = makeMutable(result.components[0].components[0])
-            return result
+            return makeMutable(unboxedTriple.third)
         }
 
         if(unboxedTriple.second == ASSIGN_OPERATION && isFormerSuperTypeOfLatter(unboxedTriple.first,unboxedTriple.third))
