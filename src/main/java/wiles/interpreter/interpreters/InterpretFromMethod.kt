@@ -42,7 +42,7 @@ class InterpretFromMethod(statement: JSONStatement, variables: InterpreterVariab
                     continue
                 val name = component.components[1].name
                 val superType = component.components[0]
-                require(isFormerSuperTypeOfLatter(superType,funcVars[name]!!.type, genericTypes = genericTypesMap))
+                require(isFormerSuperTypeOfLatter(superType,funcVars[name]!!.getType(), genericTypes = genericTypesMap))
             }
             funcVars.putAll(genericTypesMap.map {
                 val genericValue = makeGeneric(it.value.first,it.key)

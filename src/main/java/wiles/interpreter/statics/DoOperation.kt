@@ -251,9 +251,9 @@ object DoOperation {
         return if(middle.contains(ANYTHING_ID)) {
             val operationNameSplit = middle.split("|").toMutableList()
             if (operationNameSplit[0] == ANYTHING_ID)
-                operationNameSplit[0] = left.type.name
+                operationNameSplit[0] = left.getType().name
             if (operationNameSplit[2] == ANYTHING_ID)
-                operationNameSplit[2] = right.type.name
+                operationNameSplit[2] = right.getType().name
 
             val operation = operationNameSplit[0] + "|" + operationNameSplit[1] + "|" + operationNameSplit[2]
             operationMap[operation]?.apply(leftValue, rightValue) ?: throw InternalErrorException()

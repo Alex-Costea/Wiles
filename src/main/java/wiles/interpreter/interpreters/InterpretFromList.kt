@@ -2,11 +2,9 @@ package wiles.interpreter.interpreters
 
 import wiles.interpreter.data.InterpreterVariableMap
 import wiles.interpreter.data.ObjectDetails
+import wiles.interpreter.statics.InterpreterConstants.addType
 import wiles.shared.JSONStatement
-import wiles.shared.SyntaxType
-import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
-import wiles.shared.constants.TypeUtils.makeList
-import wiles.shared.constants.Types.EITHER_ID
+import wiles.shared.constants.TypeUtils
 
 class InterpretFromList(statement: JSONStatement, variables: InterpreterVariableMap, additionalVars: InterpreterVariableMap)
     : InterpreterWithRef(statement, variables, additionalVars)
@@ -21,21 +19,9 @@ class InterpretFromList(statement: JSONStatement, variables: InterpreterVariable
             interpreter.interpret()
             list.add(interpreter.reference)
             newType = if(newType == null)
-                interpreter.reference.type
-            else addType(newType, interpreter.reference.type)
+                interpreter.reference.getType()
+            else addType(newType, interpreter.reference.getType())
         }
-        reference = ObjectDetails(list, makeList((newType?:statement.components[0].copyRemovingLocation())))
-    }
-
-    private fun addType(resultingType: JSONStatement, addedType: JSONStatement): JSONStatement {
-        return if(isFormerSuperTypeOfLatter(resultingType,addedType))
-            resultingType
-        else if(isFormerSuperTypeOfLatter(addedType, resultingType))
-            addedType
-        else if(resultingType.name == EITHER_ID) {
-            resultingType.components.add(addedType)
-            resultingType
-        } else JSONStatement(name = EITHER_ID, syntaxType = SyntaxType.TYPE,
-            components = mutableListOf(resultingType,addedType))
+        reference = ObjectDetails(list, TypeUtils.makeList((newType ?: statement.components[0].copyRemovingLocation())))
     }
 }

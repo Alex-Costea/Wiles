@@ -16,7 +16,7 @@ class InterpretFromWhen(statement: JSONStatement, variables: InterpreterVariable
         {
             val type = components.removeFirst()
             val expression = components.removeFirst()
-            if(type.name != ELSE_ID && !isFormerSuperTypeOfLatter(type,objectDetails!!.type))
+            if(type.name != ELSE_ID && !isFormerSuperTypeOfLatter(type,objectDetails!!.getType()))
                 continue
 
             val interpreter = InterpretFromCodeBlock(expression, variables, additionalVars)

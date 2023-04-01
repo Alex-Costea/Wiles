@@ -178,7 +178,7 @@ object StandardLibrary {
     private val SET_VALUE_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
         val leftRef = map["!elem"]!!
         val mutableObj = map["!value"]!!.makeMutable()
-        leftRef.type = mutableObj.type
+        leftRef.setType(mutableObj.getType())
         leftRef.value = mutableObj.value
         NOTHING_REF
     }, defaultCheckerVars[SET_VALUE]!!.type)
@@ -255,7 +255,7 @@ object StandardLibrary {
     }, defaultCheckerVars[MAYBE]!!.type)
 
     private val GET_TYPE_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
-        val newType = map["!elem"]!!.type.copy()
+        val newType = map["!elem"]!!.getType().copy()
         ObjectDetails(newType, JSONStatement(name = TYPE_TYPE_ID, syntaxType = SyntaxType.TYPE,
             components = mutableListOf(newType)))
     }, defaultCheckerVars[MAYBE]!!.type)
