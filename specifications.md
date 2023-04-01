@@ -86,7 +86,7 @@
 - `maybe` : makes a nullable type out of non-nullable object
 - `list.add(arg elem, {index})` : add an element to a mutable list, at the end by default
 - `list.remove(arg elem, index)` : remove an element from the list at the index
-- `list.set_at(arg elem, index, {mutate : Boolean})` : set element at index. by default, it mutates the associated value
+- `list.set_at(arg elem, index)` : set element at index.
 - `type` : get type of object at runtime
 - `clone({deep := [boolean]})` : clone object, deeply by default
 
