@@ -21,6 +21,7 @@ import wiles.shared.constants.TypeConstants.AS_LIST_TYPE
 import wiles.shared.constants.TypeConstants.AS_TEXT_TYPE
 import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
 import wiles.shared.constants.TypeConstants.CLONE_TYPE
+import wiles.shared.constants.TypeConstants.CONTENT_TYPE
 import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
 import wiles.shared.constants.TypeConstants.GET_TYPE_TYPE
 import wiles.shared.constants.TypeConstants.IGNORE_TYPE
@@ -64,6 +65,7 @@ object StandardLibrary {
     private const val NAN = "!NaN"
     private const val SET_VALUE = "!set"
     private const val MAYBE = "!maybe"
+    private const val CONTENT = "!content"
     private const val RUN = "!run"
     private const val ADD = "!add"
     private const val GET_TYPE = "!type"
@@ -92,6 +94,7 @@ object StandardLibrary {
             Pair(NAN, VariableDetails(DOUBLE_TYPE)),
             Pair(SET_VALUE, VariableDetails(SET_VALUE_TYPE)),
             Pair(MAYBE, VariableDetails(MAYBE_TYPE)),
+            Pair(CONTENT, VariableDetails(CONTENT_TYPE)),
             Pair(RUN, VariableDetails(RUN_TYPE)),
             Pair(ADD, VariableDetails(ADD_TYPE)),
             Pair(GET_TYPE, VariableDetails(GET_TYPE_TYPE)),
@@ -186,6 +189,13 @@ object StandardLibrary {
     private val MAYBE_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
         map["!elem"]!!
     }, defaultCheckerVars[MAYBE]!!.type)
+
+    private val CONTENT_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
+        val elem = map["!elem"]!!
+        if(elem.value == null)
+            throw PanicException("Content of element can't be retrieved because element is nothing.")
+        elem
+    }, defaultCheckerVars[CONTENT]!!.type)
 
     @Suppress("UNCHECKED_CAST")
     private val RUN_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
@@ -284,6 +294,7 @@ object StandardLibrary {
         defaultInterpreterVars[NAN] = NAN_REF
         defaultInterpreterVars[SET_VALUE] = SET_VALUE_REF
         defaultInterpreterVars[MAYBE] = MAYBE_REF
+        defaultInterpreterVars[CONTENT] = CONTENT_REF
         defaultInterpreterVars[RUN] = RUN_REF
         defaultInterpreterVars[ADD] = ADD_REF
         defaultInterpreterVars[GET_TYPE] = GET_TYPE_REF

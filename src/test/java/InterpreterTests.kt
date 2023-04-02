@@ -3219,6 +3219,97 @@ class InterpreterTests {
     fun standardLibraryTests()
     {
         /*
+        let a : int? := 10
+        writeline(a.content)
+         */
+
+        val vars10 = getVars("""{
+  "parsed" : true,
+  "components" : [ {
+    "components" : [ {
+      "name" : "EITHER",
+      "components" : [ {
+        "name" : "INT64",
+        "type" : "TYPE"
+      }, {
+        "name" : "!nothing",
+        "type" : "TYPE"
+      } ],
+      "type" : "TYPE"
+    }, {
+      "name" : "!a",
+      "type" : "TOKEN"
+    }, {
+      "components" : [ {
+        "name" : "#10",
+        "type" : "TOKEN"
+      } ],
+      "type" : "EXPRESSION"
+    } ],
+    "type" : "DECLARATION"
+  }, {
+    "components" : [ {
+      "name" : "STRING",
+      "type" : "TYPE"
+    }, {
+      "name" : "!text",
+      "type" : "TOKEN"
+    }, {
+      "components" : [ {
+        "name" : "!as_text",
+        "type" : "TOKEN"
+      }, {
+        "name" : "METHOD|APPLY|METHOD_CALL",
+        "type" : "TOKEN"
+      }, {
+        "components" : [ {
+          "components" : [ {
+            "name" : "!elem",
+            "type" : "TOKEN"
+          }, {
+            "name" : "ASSIGN",
+            "type" : "TOKEN"
+          }, {
+            "components" : [ {
+              "name" : "!content",
+              "type" : "TOKEN"
+            }, {
+              "name" : "METHOD|APPLY|METHOD_CALL",
+              "type" : "TOKEN"
+            }, {
+              "components" : [ {
+                "components" : [ {
+                  "name" : "!elem",
+                  "type" : "TOKEN"
+                }, {
+                  "name" : "ASSIGN",
+                  "type" : "TOKEN"
+                }, {
+                  "components" : [ {
+                    "name" : "!a",
+                    "type" : "TOKEN"
+                  } ],
+                  "type" : "EXPRESSION"
+                } ],
+                "type" : "EXPRESSION"
+              } ],
+              "type" : "METHOD_CALL"
+            } ],
+            "type" : "EXPRESSION"
+          } ],
+          "type" : "EXPRESSION"
+        } ],
+        "type" : "METHOD_CALL"
+      } ],
+      "type" : "EXPRESSION"
+    } ],
+    "type" : "DECLARATION"
+  } ],
+  "type" : "CODE_BLOCK"
+}""")
+        assertVar(vars10,"!text","10")
+
+        /*
         let list1 := mut [mut [1]]
 
         let list2 := list1.clone(deep := false)

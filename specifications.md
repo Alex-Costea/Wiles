@@ -89,6 +89,7 @@
 - `list.set_at(arg elem, index)` : set element at index.
 - `type` : get type of object at runtime
 - `clone({deep := [boolean]})` : clone object, deeply by default
+- `content` : get content of variable. panics if the value is `nothing`.
 
 ### Miscellaneous
 - `;` can be specified or inferred from newline

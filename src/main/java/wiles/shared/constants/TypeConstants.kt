@@ -210,6 +210,21 @@ object TypeConstants {
         ))
     )
 
+    private const val CONTENT_GENERIC_NAME = "!T|content"
+    private val CONTENT_GENERIC_TYPE = makeGeneric(ANYTHING_TYPE, CONTENT_GENERIC_NAME)
+    val CONTENT_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
+        components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
+            components = mutableListOf(makeGenericDeclaration(CONTENT_GENERIC_TYPE),
+                JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
+                    components = mutableListOf(
+                        makeNullable(CONTENT_GENERIC_TYPE),
+                        JSONStatement(name = "!elem", syntaxType = SyntaxType.TOKEN)
+                    )
+                ),
+            )
+        ))
+    )
+
     private const val CLONE_GENERIC_NAME = "!T|clone"
     private val CLONE_GENERIC_TYPE = makeGeneric(ANYTHING_TYPE, CLONE_GENERIC_NAME)
     val CLONE_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
