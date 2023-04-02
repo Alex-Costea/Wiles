@@ -1,6 +1,6 @@
 package wiles.interpreter.data
 
-import wiles.interpreter.statics.InterpreterConstants.addType
+import wiles.checker.statics.InferrerUtils.addType
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.constants.Tokens.MUTABLE_ID

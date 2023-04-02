@@ -1,8 +1,8 @@
 package wiles.interpreter.interpreters
 
+import wiles.checker.statics.InferrerUtils.addType
 import wiles.interpreter.data.InterpreterVariableMap
 import wiles.interpreter.data.ObjectDetails
-import wiles.interpreter.statics.InterpreterConstants.addType
 import wiles.shared.JSONStatement
 import wiles.shared.constants.TypeUtils
 

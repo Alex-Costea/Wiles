@@ -27,6 +27,7 @@ import wiles.shared.constants.TypeConstants.NOTHING_TYPE
 import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 import wiles.shared.constants.TypeUtils.makeEither
 import wiles.shared.constants.TypeUtils.makeMutable
+import wiles.shared.constants.TypeUtils.removeEmptyEither
 import wiles.shared.constants.Types.DOUBLE_ID
 import wiles.shared.constants.Types.EITHER_ID
 import wiles.shared.constants.Types.GENERIC_ID
@@ -350,6 +351,18 @@ object InferrerUtils {
         return newComponents
     }
 
+    fun addType(resultingType: JSONStatement, addedType: JSONStatement): JSONStatement {
+        return if(isFormerSuperTypeOfLatter(resultingType, addedType))
+            resultingType
+        else if(isFormerSuperTypeOfLatter(addedType, resultingType))
+            addedType
+        else if(resultingType.name == EITHER_ID) {
+            resultingType.components.add(addedType)
+            resultingType
+        } else JSONStatement(name = EITHER_ID, syntaxType = SyntaxType.TYPE,
+            components = mutableListOf(resultingType,addedType))
+    }
+
     fun checkIsInitialized(
         variables: HashMap<String, VariableDetails>,
         listOfVariableMaps: MutableList<CheckerVariableMap>,
@@ -357,25 +370,38 @@ object InferrerUtils {
         originalComponents : List<JSONStatement>
     )
     {
-        if(originalComponents.none{it.name == Tokens.ELSE_ID }) return
+        val hasElse = originalComponents.any {it.name == Tokens.ELSE_ID }
+        val variableNameForWhen = originalComponents.getOrNull(0)?.components?.getOrNull(0)?.name
         for(variable in variables.entries)
         {
-            if(!variable.value.initialized)
-            {
-                var isInitialized = true
+            val shouldGetType = variable.key == variableNameForWhen
+            val isAlreadyInitialized = variable.value.initialized
+            val codeBlocks = codeBlockLists.toMutableList()
+            if((!isAlreadyInitialized) || shouldGetType) {
+                var isInitializedHere = true
                 var atLeastOne = false
-                for(map in listOfVariableMaps)
-                {
-                    if(containsStopStatement(codeBlockLists.removeFirst())) continue
+                var type : JSONStatement = variable.value.type.copy()
+                for (map in listOfVariableMaps) {
+                    if (containsStopStatement(codeBlocks.removeFirst())) {
+                        if(shouldGetType)
+                        {
+                            val typeToRemove = map[variable.key]!!.type.copy()
+                            isFormerSuperTypeOfLatter(typeToRemove, type, getMinus = true)
+                            type = removeEmptyEither(type)
+                        }
+                        continue
+                    }
                     atLeastOne = true
                     if (!map[variable.key]!!.initialized) {
-                        isInitialized = false
+                        isInitializedHere = false
                         break
                     }
                 }
-                variables[variable.key]= VariableDetails(variable.value.type,
-                    isInitialized && atLeastOne,
-                    variable.value.modifiable)
+                variables[variable.key] = VariableDetails(
+                    type,
+                    isAlreadyInitialized || (isInitializedHere && atLeastOne && hasElse),
+                    variable.value.modifiable
+                )
             }
         }
     }

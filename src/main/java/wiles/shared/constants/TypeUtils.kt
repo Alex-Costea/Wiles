@@ -7,6 +7,25 @@ import wiles.shared.constants.Tokens.DECLARE_ID
 
 object TypeUtils {
 
+    fun removeEmptyEither(statement : JSONStatement) : JSONStatement
+    {
+        var i = 0
+        while(i < statement.components.size) {
+            val component = statement.components[i]
+            if(component.name == Types.EITHER_ID && component.components.isEmpty())
+            {
+                statement.components.removeAt(i)
+            }
+            else {
+                statement.components[i] = removeEmptyEither(component)
+                i++
+            }
+        }
+        if(statement.name == Types.EITHER_ID && statement.components.size == 1)
+            return statement.components[0]
+        return statement
+    }
+
     fun isFormerSuperTypeOfLatter(
         supertype : JSONStatement, subtype : JSONStatement,
         unboxGenerics : Boolean = true, //should generics match?

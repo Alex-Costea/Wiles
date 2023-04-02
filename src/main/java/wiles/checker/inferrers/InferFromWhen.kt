@@ -10,6 +10,7 @@ import wiles.shared.SyntaxType
 import wiles.shared.TokenLocation
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.ELSE_ID
+import wiles.shared.constants.TypeUtils
 import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 import wiles.shared.constants.Types.EITHER_ID
 
@@ -25,26 +26,7 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
             throw TypesExhaustedException(newLocation)
         val result = former.copyRemovingLocation()
         isFormerSuperTypeOfLatter(latter, result, getMinus = true)
-        return removeEmptyEither(result)
-    }
-
-    private fun removeEmptyEither(statement : JSONStatement) : JSONStatement
-    {
-        var i = 0
-        while(i < statement.components.size) {
-            val component = statement.components[i]
-            if(component.name == EITHER_ID && component.components.isEmpty())
-            {
-                statement.components.removeAt(i)
-            }
-            else {
-                statement.components[i] = removeEmptyEither(component)
-                i++
-            }
-        }
-        if(statement.name == EITHER_ID && statement.components.size == 1)
-            return statement.components[0]
-        return statement
+        return TypeUtils.removeEmptyEither(result)
     }
 
     override fun infer() {
