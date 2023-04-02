@@ -77,8 +77,7 @@
 - `panic`: print an error message and exit
 - `ignore`: ignore the value
 - `modulo(x,y)`: calculate the modulo
-- `[list].size`: size of lists
-- `[text].size`: size of text
+- `size`: size of list/text
 - `as_list` : convert text into list
 - `as_text`: convert object to text
 - `read_line`, `read_truth`, `read_int`, `read_rational`: read an object from the command line
