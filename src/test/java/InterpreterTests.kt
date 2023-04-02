@@ -3889,11 +3889,7 @@ class InterpreterTests {
       "components" : [ {
         "name" : "LIST",
         "components" : [ {
-          "name" : "MUTABLE",
-          "components" : [ {
-            "name" : "INT64",
-            "type" : "TYPE"
-          } ],
+          "name" : "INT64",
           "type" : "TYPE"
         } ],
         "type" : "TYPE"
@@ -3947,7 +3943,43 @@ class InterpreterTests {
     }, {
       "components" : [ {
         "components" : [ {
-          "name" : "!elem",
+          "name" : "!at",
+          "type" : "TOKEN"
+        }, {
+          "name" : "ASSIGN",
+          "type" : "TOKEN"
+        }, {
+          "components" : [ {
+            "name" : "!size",
+            "type" : "TOKEN"
+          }, {
+            "name" : "METHOD|APPLY|METHOD_CALL",
+            "type" : "TOKEN"
+          }, {
+            "components" : [ {
+              "components" : [ {
+                "name" : "!elem",
+                "type" : "TOKEN"
+              }, {
+                "name" : "ASSIGN",
+                "type" : "TOKEN"
+              }, {
+                "components" : [ {
+                  "name" : "!list",
+                  "type" : "TOKEN"
+                } ],
+                "type" : "EXPRESSION"
+              } ],
+              "type" : "EXPRESSION"
+            } ],
+            "type" : "METHOD_CALL"
+          } ],
+          "type" : "EXPRESSION"
+        } ],
+        "type" : "EXPRESSION"
+      }, {
+        "components" : [ {
+          "name" : "!value",
           "type" : "TOKEN"
         }, {
           "name" : "ASSIGN",
@@ -3962,7 +3994,7 @@ class InterpreterTests {
         "type" : "EXPRESSION"
       }, {
         "components" : [ {
-          "name" : "!list",
+          "name" : "!collection",
           "type" : "TOKEN"
         }, {
           "name" : "ASSIGN",
@@ -3989,22 +4021,7 @@ class InterpreterTests {
     }, {
       "components" : [ {
         "components" : [ {
-          "name" : "!elem",
-          "type" : "TOKEN"
-        }, {
-          "name" : "ASSIGN",
-          "type" : "TOKEN"
-        }, {
-          "components" : [ {
-            "name" : "#5",
-            "type" : "TOKEN"
-          } ],
-          "type" : "EXPRESSION"
-        } ],
-        "type" : "EXPRESSION"
-      }, {
-        "components" : [ {
-          "name" : "!index",
+          "name" : "!at",
           "type" : "TOKEN"
         }, {
           "name" : "ASSIGN",
@@ -4019,7 +4036,22 @@ class InterpreterTests {
         "type" : "EXPRESSION"
       }, {
         "components" : [ {
-          "name" : "!list",
+          "name" : "!value",
+          "type" : "TOKEN"
+        }, {
+          "name" : "ASSIGN",
+          "type" : "TOKEN"
+        }, {
+          "components" : [ {
+            "name" : "#5",
+            "type" : "TOKEN"
+          } ],
+          "type" : "EXPRESSION"
+        } ],
+        "type" : "EXPRESSION"
+      }, {
+        "components" : [ {
+          "name" : "!collection",
           "type" : "TOKEN"
         }, {
           "name" : "ASSIGN",

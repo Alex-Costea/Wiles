@@ -65,10 +65,12 @@ object StandardLibrary {
     private const val SET_VALUE = "!set"
     private const val MAYBE = "!maybe"
     private const val RUN = "!run"
-    private const val ADD = "!add"
     private const val GET_TYPE = "!type"
     private const val CLONE = "!clone"
-    private const val SET_AT = "!set_at"
+
+    //CRUD
+    private const val ADD = "!add"
+    private const val SET_AT = "!update"
     private const val REMOVE_AT = "!remove"
 
     val defaultCheckerVars = CheckerVariableMap(
@@ -195,13 +197,11 @@ object StandardLibrary {
 
     @Suppress("UNCHECKED_CAST")
     private val ADD_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
-        val list = map["!list"]!!
-        val elem = map["!elem"]!!.makeMutable()
+        val list = map["!collection"]!!
+        val elem = map["!value"]!!.makeMutable()
         val listValue = list.value as MutableList<ObjectDetails>
-        val index = (map["!index"]?.value as Long?)
-        if(index == null)
-            listValue.add(elem)
-        else try {
+        val index = (map["!at"]!!.value as Long)
+        try {
             listValue.add(index.toIntOrNull()!!, elem)
         }
         catch (ex : IndexOutOfBoundsException)
@@ -217,10 +217,10 @@ object StandardLibrary {
 
     @Suppress("UNCHECKED_CAST")
     private val SET_AT_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
-        val list = map["!list"]!!
-        val elem = map["!elem"]!!.makeMutable()
+        val list = map["!collection"]!!
+        val elem = map["!value"]!!.makeMutable()
         val listValue = list.value as MutableList<ObjectDetails>
-        val index = (map["!index"]!!.value as Long)
+        val index = (map["!at"]!!.value as Long)
         try {
             listValue[index.toIntOrNull()!!] = elem
         }
@@ -237,9 +237,9 @@ object StandardLibrary {
 
     @Suppress("UNCHECKED_CAST")
     private val REMOVE_AT_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
-        val list = map["!list"]!!
+        val list = map["!collection"]!!
         val listValue = list.value as MutableList<ObjectDetails>
-        val index = (map["!index"]!!.value as Long)
+        val index = (map["!at"]!!.value as Long)
         try {
             listValue.removeAt(index.toIntOrNull()!!)
         }

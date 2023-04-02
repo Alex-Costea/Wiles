@@ -277,21 +277,20 @@ object TypeConstants {
                 JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
                     components = mutableListOf(
                         ADD_LIST_TYPE,
-                        JSONStatement(name = "!list", syntaxType = SyntaxType.TOKEN)
-                    )
-                ),
-                JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
-                    components = mutableListOf(
-                        ADD_GENERIC_TYPE,
-                        JSONStatement(name = "!elem", syntaxType = SyntaxType.TOKEN)
+                        JSONStatement(name = "!collection", syntaxType = SyntaxType.TOKEN)
                     )
                 ),
                 JSONStatement(syntaxType = SyntaxType.DECLARATION,
                     components = mutableListOf(
                         makeNullable(INT64_TYPE),
-                        JSONStatement(name = "!index", syntaxType = SyntaxType.TOKEN),
-                        JSONStatement(name = NOTHING_ID, syntaxType =  SyntaxType.TOKEN),
+                        JSONStatement(name = "!at", syntaxType = SyntaxType.TOKEN),
                         )
+                ),
+                JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
+                    components = mutableListOf(
+                        ADD_GENERIC_TYPE,
+                        JSONStatement(name = "!value", syntaxType = SyntaxType.TOKEN)
+                    )
                 ),
             )
         ))
@@ -306,19 +305,19 @@ object TypeConstants {
                 JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
                     components = mutableListOf(
                         SET_AT_LIST_TYPE,
-                        JSONStatement(name = "!list", syntaxType = SyntaxType.TOKEN)
-                    )
-                ),
-                JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
-                    components = mutableListOf(
-                        SET_AT_GENERIC_TYPE,
-                        JSONStatement(name = "!elem", syntaxType = SyntaxType.TOKEN)
+                        JSONStatement(name = "!collection", syntaxType = SyntaxType.TOKEN)
                     )
                 ),
                 JSONStatement(syntaxType = SyntaxType.DECLARATION,
                     components = mutableListOf(
                         INT64_TYPE,
-                        JSONStatement(name = "!index", syntaxType = SyntaxType.TOKEN),
+                        JSONStatement(name = "!at", syntaxType = SyntaxType.TOKEN),
+                    )
+                ),
+                JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
+                    components = mutableListOf(
+                        SET_AT_GENERIC_TYPE,
+                        JSONStatement(name = "!value", syntaxType = SyntaxType.TOKEN)
                     )
                 ),
             )
@@ -332,13 +331,13 @@ object TypeConstants {
                 JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
                     components = mutableListOf(
                         makeMutable(LIST_OF_NULLABLE_ANYTHING_TYPE),
-                        JSONStatement(name = "!list", syntaxType = SyntaxType.TOKEN)
+                        JSONStatement(name = "!collection", syntaxType = SyntaxType.TOKEN)
                     )
                 ),
                 JSONStatement(syntaxType = SyntaxType.DECLARATION,
                     components = mutableListOf(
                         INT64_TYPE,
-                        JSONStatement(name = "!index", syntaxType = SyntaxType.TOKEN),
+                        JSONStatement(name = "!at", syntaxType = SyntaxType.TOKEN),
                     )
                 ),
             )
