@@ -17,6 +17,7 @@ import wiles.shared.constants.Predicates
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.ANON_ARG_ID
+import wiles.shared.constants.Tokens.APPLY_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.IMPORT_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
@@ -302,11 +303,14 @@ object InferrerUtils {
 
     private fun containsStopStatement(statement: JSONStatement) : Boolean {
         for (component in statement.components) {
-            if (component.syntaxType !in arrayListOf(SyntaxType.IF, SyntaxType.FOR, SyntaxType.WHEN)) {
+            if (component.syntaxType !in arrayListOf(SyntaxType.IF, SyntaxType.FOR, SyntaxType.WHEN, SyntaxType.METHOD)) {
                 if (containsStopStatement(component))
                     return true
             }
             if (component.syntaxType in arrayListOf(SyntaxType.BREAK, SyntaxType.CONTINUE, SyntaxType.RETURN))
+                return true
+            if(component.syntaxType == SyntaxType.EXPRESSION && component.components.size == 4
+                && component.components[1].name == "!panic" && component.components[2].name.contains(APPLY_ID))
                 return true
         }
         return false
