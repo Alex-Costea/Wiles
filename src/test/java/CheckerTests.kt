@@ -5086,6 +5086,133 @@ class CheckerTests {
     fun whenStatementTests()
     {
         /*
+        let a := maybe(10)
+        when a is nothing do panic()
+        let b := a + 10
+         */
+        checkResult(null,"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "!a",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!maybe",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 10
+        }
+      }, {
+        "name" : "APPLY",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 15
+        }
+      }, {
+        "type" : "METHOD_CALL",
+        "components" : [ {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "#10",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 16
+            }
+          } ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "type" : "WHEN",
+    "components" : [ {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!a",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 6
+        }
+      } ]
+    }, {
+      "name" : "!nothing",
+      "type" : "TYPE",
+      "location" : {
+        "line" : 2,
+        "lineIndex" : 11
+      }
+    }, {
+      "type" : "CODE_BLOCK",
+      "components" : [ {
+        "type" : "EXPRESSION",
+        "components" : [ {
+          "name" : "!panic",
+          "type" : "TOKEN",
+          "location" : {
+            "line" : 2,
+            "lineIndex" : 22
+          }
+        }, {
+          "name" : "APPLY",
+          "type" : "TOKEN",
+          "location" : {
+            "line" : 2,
+            "lineIndex" : 27
+          }
+        }, {
+          "type" : "METHOD_CALL"
+        } ]
+      } ]
+    } ]
+  }, {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "!b",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 3,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!a",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 3,
+          "lineIndex" : 10
+        }
+      }, {
+        "name" : "PLUS",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 3,
+          "lineIndex" : 12
+        }
+      }, {
+        "name" : "#10",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 3,
+          "lineIndex" : 14
+        }
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE INT64; TYPE !nothing); !a; EXPRESSION(TYPE EITHER; (TYPE INT64; TYPE !nothing); !maybe; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE INT64; #10))))); WHEN(EXPRESSION(!a); TYPE !nothing; CODE_BLOCK(EXPRESSION(TYPE !nothing; !panic; METHOD|APPLY|METHOD_CALL; METHOD_CALL))); DECLARATION(TYPE INT64; !b; EXPRESSION(TYPE INT64; !a; INT64|PLUS|INT64; #10)))")
+
+        /*
         let list := mut [] : mut[int?]
         let x := list @ 0
         when x is begin
