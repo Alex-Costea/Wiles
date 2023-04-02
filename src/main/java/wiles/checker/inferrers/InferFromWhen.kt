@@ -4,7 +4,7 @@ import wiles.checker.data.CheckerVariableMap
 import wiles.checker.data.InferrerDetails
 import wiles.checker.data.VariableDetails
 import wiles.checker.exceptions.*
-import wiles.checker.statics.InferrerUtils.checkIsInitialized
+import wiles.checker.statics.InferrerUtils.checkVarsAfterConditional
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.TokenLocation
@@ -93,6 +93,6 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
             }
         }
 
-        checkIsInitialized(variables, listOfVariableMaps, codeBlockLists, statement.components)
+        checkVarsAfterConditional(variables, listOfVariableMaps, codeBlockLists, statement.components)
     }
 }

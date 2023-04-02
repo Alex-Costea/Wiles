@@ -363,7 +363,7 @@ object InferrerUtils {
             components = mutableListOf(resultingType,addedType))
     }
 
-    fun checkIsInitialized(
+    fun checkVarsAfterConditional(
         variables: HashMap<String, VariableDetails>,
         listOfVariableMaps: MutableList<CheckerVariableMap>,
         codeBlockLists: MutableList<JSONStatement>,
@@ -398,7 +398,7 @@ object InferrerUtils {
                     }
                 }
                 variables[variable.key] = VariableDetails(
-                    type,
+                    if(type.name == EITHER_ID && type.components.isEmpty()) variable.value.type else type,
                     isAlreadyInitialized || (isInitializedHere && atLeastOne && hasElse),
                     variable.value.modifiable
                 )
