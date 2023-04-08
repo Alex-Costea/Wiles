@@ -1,11 +1,24 @@
 package wiles.shared.constants
 
 import wiles.checker.data.GenericTypesMap
+import wiles.checker.statics.InferrerUtils
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.DECLARE_ID
 
 object TypeUtils {
+
+    fun unbox(statement: JSONStatement) : JSONStatement
+    {
+        assert(statement.syntaxType == SyntaxType.TYPE)
+        if(statement.name == Tokens.METHOD_ID || statement.name == Types.METHOD_CALL_ID)
+            return statement
+        if(statement.name == Tokens.MUTABLE_ID)
+            return unbox(statement.components[0])
+        if(statement.name == Types.GENERIC_ID)
+            return unbox(InferrerUtils.unGenerify(statement.components[1]))
+        return statement
+    }
 
     fun removeEmptyEither(statement : JSONStatement) : JSONStatement
     {

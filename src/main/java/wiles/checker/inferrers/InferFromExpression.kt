@@ -12,7 +12,6 @@ import wiles.checker.statics.InferrerUtils.createComponents
 import wiles.checker.statics.InferrerUtils.inferTypeFromLiteral
 import wiles.checker.statics.InferrerUtils.specifyGenericTypesForFunction
 import wiles.checker.statics.InferrerUtils.unGenerify
-import wiles.checker.statics.InferrerUtils.unbox
 import wiles.checker.statics.SimpleTypeGenerator.getSimpleTypes
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.InternalErrorException
@@ -33,6 +32,7 @@ import wiles.shared.constants.TypeConstants
 import wiles.shared.constants.TypeConstants.NOTHING_TOKEN
 import wiles.shared.constants.TypeUtils.makeList
 import wiles.shared.constants.TypeUtils.makeMethod
+import wiles.shared.constants.TypeUtils.unbox
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.BOOLEAN_ID
 import wiles.shared.constants.Types.DOUBLE_ID

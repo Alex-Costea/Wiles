@@ -1,6 +1,5 @@
 package wiles.checker.statics
 
-import wiles.checker.statics.InferrerUtils.unbox
 import wiles.shared.JSONStatement
 import wiles.shared.constants.Tokens.IMPORT_ID
 import wiles.shared.constants.Tokens.PLUS_ID
@@ -32,6 +31,7 @@ import wiles.shared.constants.TypeConstants.UNARY_MINUS_OPERATION
 import wiles.shared.constants.TypeConstants.UNARY_PLUS_OPERATION
 import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 import wiles.shared.constants.TypeUtils.makeMutable
+import wiles.shared.constants.TypeUtils.unbox
 
 object SimpleTypeGenerator {
 

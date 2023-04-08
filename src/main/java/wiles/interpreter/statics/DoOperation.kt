@@ -1,6 +1,5 @@
 package wiles.interpreter.statics
 
-import wiles.checker.statics.InferrerUtils.unbox
 import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.exceptions.PanicException
 import wiles.interpreter.statics.InterpreterConstants.toIntOrNull
@@ -32,6 +31,7 @@ import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
 import wiles.shared.constants.TypeConstants.INT64_TYPE
 import wiles.shared.constants.TypeConstants.NULLABLE_STRING
 import wiles.shared.constants.TypeConstants.STRING_TYPE
+import wiles.shared.constants.TypeUtils.unbox
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.BOOLEAN_ID
 import wiles.shared.constants.Types.DOUBLE_ID
