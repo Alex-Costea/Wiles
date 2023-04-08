@@ -86,7 +86,7 @@
 - `maybe` : makes a nullable type out of non-nullable object
 - `list.add(arg value, at)` : add an element to a mutable list
 - `list.remove(arg value, at)` : remove an element from the list at the index
-- `list.set_at(arg value, at)` : set element at index.
+- `list.update(arg value, at)` : set element at index.
 - `type` : get type of object at runtime
 - `clone({deep := [boolean]})` : clone object, deeply by default
 
