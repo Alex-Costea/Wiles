@@ -43,6 +43,9 @@ object TypeUtils {
             return true
         }
 
+        else if(subtype.name == Types.UNIVERSAL_SUBTYPE_ID)
+            return true
+
         else if(supertype.name == Types.GENERIC_ID && subtype.name == Types.GENERIC_ID
             && supertype.components[0].name == subtype.components[0].name
             && isFormerSuperTypeOfLatter(supertype.components[1], subtype.components[1], genericTypes = genericTypes,

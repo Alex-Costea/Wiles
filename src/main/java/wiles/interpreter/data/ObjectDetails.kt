@@ -5,7 +5,7 @@ import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.TypeConstants.MUTABLE_NULLABLE_ANYTHING
-import wiles.shared.constants.TypeConstants.NULLABLE_ANYTHING_TYPE
+import wiles.shared.constants.TypeConstants.UNIVERSAL_SUBTYPE_TYPE
 import wiles.shared.constants.TypeUtils
 import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 import wiles.shared.constants.Types.LIST_ID
@@ -34,7 +34,7 @@ class ObjectDetails(var value : Any?, type : JSONStatement)
                 else addType(newType, component.getType())
             }
             result.components[0].components.clear()
-            result.components[0].components.add(newType ?: NULLABLE_ANYTHING_TYPE)
+            result.components[0].components.add(newType ?: UNIVERSAL_SUBTYPE_TYPE)
         }
         return result
     }

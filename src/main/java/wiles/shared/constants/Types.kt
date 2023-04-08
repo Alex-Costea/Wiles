@@ -19,6 +19,7 @@ object Types {
     const val METHOD_CALL_ID = "METHOD_CALL"
     const val GENERIC_ID = "GENERIC"
     const val TYPE_TYPE_ID = "TYPE_TYPE"
+    const val UNIVERSAL_SUBTYPE_ID = "UNIVERSAL_SUBTYPE"
 
     val REQUIRES_SUBTYPE = setOf(LIST_ID, EITHER_ID, MUTABLE_ID, this.TYPE_TYPE_ID)
     val ALLOWS_GENERICS = hashSetOf(LIST_ID, MUTABLE_ID, this.TYPE_TYPE_ID)
