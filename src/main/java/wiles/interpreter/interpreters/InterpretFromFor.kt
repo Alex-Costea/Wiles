@@ -66,7 +66,7 @@ class InterpretFromFor(statement: JSONStatement, variables: InterpreterVariableM
             ((fromValue.value as Long) downTo (toValue.value as Long))
             else (fromValue.value as Long until toValue.value as Long)
 
-        val newCollection = collection?.clone()
+        val newCollection = collection?.clone(deep = false)
 
         for(i in range)
         {
