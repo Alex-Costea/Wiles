@@ -84,8 +84,8 @@ end"""
         val code5 = """
             let a := mut 2
             let list := mut [mut 1, a, mut 3]
-            list.remove(index := 0)
-            list.set_at(index := 0, mut 10)
+            list.remove(at := 0)
+            list.update(at := 0, mut 10)
             writeline(a)
             writeline(list)
         """
@@ -116,7 +116,7 @@ end"""
 
         val code8 = """
         let a := mut [1] : anything
-        a.add(true)
+        a.add(at := a.size, true)
         when a begin
             is mut[list[int]] begin
                 let b := a @ 1
