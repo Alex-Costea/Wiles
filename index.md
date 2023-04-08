@@ -6,13 +6,13 @@ Wiles supports features such as:
 - Functions as first-class objects using the `fun` keyword, including support for closures
 - Sum types using the `either` keyword
 - Support for types such as: integers (`int`), floating point numbers (`rational`), strings (`text`), booleans (`truth`), lists (`list`)
-- Conditional type casting using `when` statements
+- Pattern matching on types using `when` statements
 - Opt-in nullability using the `?` symbol
 - Opt-out named arguments as mandatory in function calls
 - Newline as statement terminators, but no significant indentation
 - Type inference in many cases
 - Type definitions at compile-time
-- Generics
+- Generics in function definitions
 
 The informal specifications can be found [here](specifications.md).
 
