@@ -37,6 +37,7 @@ import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.BOOLEAN_ID
 import wiles.shared.constants.Types.DOUBLE_ID
 import wiles.shared.constants.Types.EITHER_ID
+import wiles.shared.constants.Types.GENERIC_ID
 import wiles.shared.constants.Types.INT64_ID
 import wiles.shared.constants.Types.LIST_ID
 import wiles.shared.constants.Types.METHOD_CALL_ID
@@ -53,6 +54,12 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
         assert(left.syntaxType == SyntaxType.TYPE)
         assert(middle.syntaxType == SyntaxType.TOKEN)
         assert(right.syntaxType == SyntaxType.TYPE)
+
+        if(left.name == GENERIC_ID)
+            return getTypeOfExpression(left.components[1], middle, right)
+
+        if(right.name == GENERIC_ID)
+            return getTypeOfExpression(left, middle, right.components[1])
 
         val leftComponents = createComponents(left,middle.name)
 

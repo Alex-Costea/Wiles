@@ -66,13 +66,16 @@ end
 ### Minimum value
 
 ```
-let min := fun(list : list[int]) -> int?
+typedef number := either[int,rational]
+
+let min := fun(list : list[number as T]) -> T?
 begin
     let var min_value := list @ 0
-    when min_value is int do
-        for x in list from 1 do
-            if x < min_value do
-                min_value := x
+    when min_value is nothing 
+        do yield nothing
+    for x in list from 1 do
+        if x < min_value do
+            min_value := x
     yield min_value
 end
 
@@ -83,14 +86,12 @@ let read_list := begin
     for i from 0 to list_size
     begin
         write("Element " + i + ": ")
-        list.add(read_int())
+        list.add(at := i, read_int())
     end
     yield list
 end
 
 let result := min(list := read_list())
-when result begin
-    is int do writeline("Min found: " + result)
-    default do panic("Error: no min found!")
-end
+when result is nothing do panic("Error: no min found!")
+writeline("Min found: " + result)
 ```

@@ -20,6 +20,7 @@ import wiles.shared.constants.Tokens.ANON_ARG_ID
 import wiles.shared.constants.Tokens.APPLY_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.IMPORT_ID
+import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.TYPEDEF_ID
@@ -33,6 +34,7 @@ import wiles.shared.constants.Types.EITHER_ID
 import wiles.shared.constants.Types.GENERIC_ID
 import wiles.shared.constants.Types.INT64_ID
 import wiles.shared.constants.Types.LIST_ID
+import wiles.shared.constants.Types.METHOD_CALL_ID
 import wiles.shared.constants.Types.STRING_ID
 import wiles.shared.constants.Types.TYPE_TYPE_ID
 
@@ -259,6 +261,8 @@ object InferrerUtils {
     fun unbox(statement: JSONStatement) : JSONStatement
     {
         assert(statement.syntaxType == SyntaxType.TYPE)
+        if(statement.name == METHOD_ID || statement.name == METHOD_CALL_ID)
+            return statement
         if(statement.name == MUTABLE_ID)
             return unbox(statement.components[0])
         if(statement.name == GENERIC_ID)

@@ -29,31 +29,39 @@ class FullTests {
     @Test
     fun fullTest()
     {
-        val code = """let min := fun(list : list[int]) -> int?
+        val code = """
+            
+typedef number := either[int,rational]
+
+let min := fun(list : list[number as T]) -> T?
 begin
     let var min_value := list @ 0
-    when min_value is int
-    begin
-        for x in list from 1 do
-            if x < min_value do
-                min_value := x
-    end
+    when min_value is nothing 
+        do yield nothing
+    for x in list from 1 do
+        if x < min_value do
+            min_value := x
     yield min_value
 end
 
 let read_list := begin
-    let var list := [] : int
+    let list := mut [] : int
     let list_size := read_int()
-    for i from 0 to list_size do
-        list := list + [read_int()]
+    for i from 0 to list_size
+    begin
+        list.add(at := i, read_int())
+    end
     yield list
 end
 
 let result := min(list := read_list())
-when result begin
-    is int do writeline("Min found: " + result)
-    default do writeline("Error: no min found!")
-end"""
+when result is nothing
+begin
+    writeline("Error: no min found!")
+    panic()
+end
+writeline("Min found: " + result)
+"""
         //TODO: refactor
         setUpIO("4\n10\n8\n20\n-1\n" + "0\n")
 

@@ -1,5 +1,6 @@
 package wiles.interpreter.statics
 
+import wiles.checker.statics.InferrerUtils.unbox
 import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.exceptions.PanicException
 import wiles.interpreter.statics.InterpreterConstants.toIntOrNull
@@ -251,12 +252,13 @@ object DoOperation {
         return if(middle.contains(ANYTHING_ID)) {
             val operationNameSplit = middle.split("|").toMutableList()
             if (operationNameSplit[0] == ANYTHING_ID)
-                operationNameSplit[0] = left.getType().name
+                operationNameSplit[0] = unbox(left.getType()).name
             if (operationNameSplit[2] == ANYTHING_ID)
-                operationNameSplit[2] = right.getType().name
+                operationNameSplit[2] = unbox(right.getType()).name
 
             val operation = operationNameSplit[0] + "|" + operationNameSplit[1] + "|" + operationNameSplit[2]
-            operationMap[operation]?.apply(leftValue, rightValue) ?: throw InternalErrorException()
+            operationMap[operation]?.apply(leftValue, rightValue)
+                ?: throw InternalErrorException()
         }
         else (operationMap[middle]?:throw InternalErrorException(CANNOT_PERFORM_OPERATION_ERROR
             .format(left, middle, right))).apply(leftValue, rightValue)
