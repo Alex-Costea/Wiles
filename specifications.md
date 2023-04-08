@@ -84,8 +84,8 @@
 - `run`: runs the function given as argument
 - `maybe` : makes a nullable type out of non-nullable object
 - `list.add(arg value, at)` : add an element to a mutable list
-- `list.remove(arg value, at)` : remove an element from the list at the index
-- `list.update(arg value, at)` : set element at index.
+- `list.remove(arg value, at)` : remove an element from the mutable list at the index
+- `list.update(arg value, at)` : set element of mutable list at index.
 - `type` : get type of object at runtime
 - `clone({deep := [boolean]})` : clone object, deeply by default
 - `content` : get content of variable. panics if the value is `nothing`.
