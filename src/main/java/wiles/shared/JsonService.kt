@@ -7,16 +7,16 @@ object JsonService {
         return readValueAsJSONStatement(file.readText())
     }
 
+    fun writeValue(file: File, statement: StatementInterface) {
+        file.writeText(writeValueAsString(statement))
+    }
+
     fun readValueAsJSONStatement(text: String): JSONStatement {
         TODO("Not yet implemented")
     }
 
     fun writeValueAsString(statement: StatementInterface): String
     {
-        TODO("Not yet implemented")
-    }
-
-    fun writeValue(file: File, value: StatementInterface) {
         TODO("Not yet implemented")
     }
 }
