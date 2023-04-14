@@ -30,7 +30,7 @@ object TypeConstants {
     private val ANYTHING_TYPE = JSONStatement(syntaxType = SyntaxType.TYPE, name = ANYTHING_ID)
     val METHOD_CALL_TYPE = JSONStatement(syntaxType = SyntaxType.TYPE, name = METHOD_CALL_ID)
     val UNIVERSAL_SUBTYPE_TYPE = JSONStatement(syntaxType = SyntaxType.TYPE, name = UNIVERSAL_SUBTYPE_ID)
-    val NULLABLE_ANYTHING_TYPE = makeNullable(ANYTHING_TYPE)
+    private val NULLABLE_ANYTHING_TYPE = makeNullable(ANYTHING_TYPE)
 
     private val LIST_OF_ANYTHING_TYPE = makeList(ANYTHING_TYPE)
 
@@ -40,7 +40,7 @@ object TypeConstants {
 
     val NULLABLE_STRING = makeNullable(STRING_TYPE)
 
-    val MUTABLE_NULLABLE_ANYTHING = makeMutable(makeNullable(ANYTHING_TYPE))
+    val MUTABLE_NULLABLE_ANYTHING = makeMutable(NULLABLE_ANYTHING_TYPE)
 
     val PLUS_OPERATION = JSONStatement(syntaxType = SyntaxType.TOKEN, name = Tokens.PLUS_ID)
     val MINUS_OPERATION = JSONStatement(syntaxType = SyntaxType.TOKEN, name = Tokens.MINUS_ID)
@@ -266,7 +266,7 @@ object TypeConstants {
         ))
     )
 
-    private val RUN_GENERIC_TYPE = makeGeneric(makeNullable(ANYTHING_TYPE), "!T|run")
+    private val RUN_GENERIC_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|run")
     private val RUN_SUBTYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
         components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
             components = mutableListOf(makeGenericDeclaration(RUN_GENERIC_TYPE))
@@ -285,15 +285,22 @@ object TypeConstants {
         ))
     )
 
-    private val ADD_GENERIC_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|add")
-    private val ADD_LIST_TYPE = makeMutable(makeList(makeGenericDeclaration(ADD_GENERIC_TYPE)))
+    val AS_TEXT_TYPE = Utils.createFunctionType(Pair(NULLABLE_ANYTHING_TYPE, STRING_TYPE))
+    val AS_LIST_TYPE = Utils.createFunctionType(Pair(STRING_TYPE, LIST_OF_STRING))
+    val SIZE_TYPE = Utils.createFunctionType(Pair(makeEither(mutableListOf(STRING_TYPE, LIST_OF_ANYTHING_TYPE)),
+        INT64_TYPE))
+
+    // CRUD operations
+
+    private val ADD_GENERIC_VALUE_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|add")
+    private val ADD_COLLECTION_TYPE = makeMutable(makeList(makeGenericDeclaration(ADD_GENERIC_VALUE_TYPE)))
     val ADD_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
         components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
             components = mutableListOf(
                 NOTHING_TYPE,
                 JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
                     components = mutableListOf(
-                        ADD_LIST_TYPE,
+                        ADD_COLLECTION_TYPE,
                         JSONStatement(name = "!collection", syntaxType = SyntaxType.TOKEN)
                     )
                 ),
@@ -305,7 +312,7 @@ object TypeConstants {
                 ),
                 JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
                     components = mutableListOf(
-                        ADD_GENERIC_TYPE,
+                        ADD_GENERIC_VALUE_TYPE,
                         JSONStatement(name = "!value", syntaxType = SyntaxType.TOKEN)
                     )
                 ),
@@ -313,15 +320,15 @@ object TypeConstants {
         ))
     )
 
-    private val SET_AT_GENERIC_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|set_at")
-    private val SET_AT_LIST_TYPE = makeMutable(makeList(makeGenericDeclaration(SET_AT_GENERIC_TYPE)))
+    private val SET_AT_GENERIC_VALUE_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|set_at")
+    private val SET_AT_COLLECTION_TYPE = makeMutable(makeList(makeGenericDeclaration(SET_AT_GENERIC_VALUE_TYPE)))
     val SET_AT_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
         components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
             components = mutableListOf(
                 NOTHING_TYPE,
                 JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
                     components = mutableListOf(
-                        SET_AT_LIST_TYPE,
+                        SET_AT_COLLECTION_TYPE,
                         JSONStatement(name = "!collection", syntaxType = SyntaxType.TOKEN)
                     )
                 ),
@@ -333,7 +340,7 @@ object TypeConstants {
                 ),
                 JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
                     components = mutableListOf(
-                        SET_AT_GENERIC_TYPE,
+                        SET_AT_GENERIC_VALUE_TYPE,
                         JSONStatement(name = "!value", syntaxType = SyntaxType.TOKEN)
                     )
                 ),
@@ -360,9 +367,4 @@ object TypeConstants {
             )
         ))
     )
-
-    val AS_TEXT_TYPE = Utils.createFunctionType(Pair(NULLABLE_ANYTHING_TYPE, STRING_TYPE))
-    val AS_LIST_TYPE = Utils.createFunctionType(Pair(STRING_TYPE, LIST_OF_STRING))
-    val SIZE_TYPE = Utils.createFunctionType(Pair(makeEither(mutableListOf(STRING_TYPE,LIST_OF_ANYTHING_TYPE)),
-        INT64_TYPE))
 }

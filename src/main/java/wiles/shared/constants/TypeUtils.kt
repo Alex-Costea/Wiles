@@ -342,6 +342,13 @@ object TypeUtils {
             components = mutableListOf(type.copyRemovingLocation()))
     }
 
+    fun makeCollection(key : JSONStatement, value : JSONStatement) : JSONStatement
+    {
+        return JSONStatement(name = LIST_ID,
+            syntaxType = SyntaxType.TYPE,
+            components = mutableListOf(key.copyRemovingLocation(),value.copyRemovingLocation()))
+    }
+
     fun makeMethod(type : JSONStatement) : JSONStatement
     {
         val newType = type.copyRemovingLocation()
