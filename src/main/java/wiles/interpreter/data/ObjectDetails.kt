@@ -65,22 +65,17 @@ class ObjectDetails(var value : Any?, type : JSONStatement)
         return cloneValue(this, deep) as ObjectDetails
     }
 
-    private fun makeTypeMutable(obj : ObjectDetails) : ObjectDetails
-    {
-        var newObject = obj
-
-        if(isFormerSuperTypeOfLatter(MUTABLE_NULLABLE_ANYTHING,obj.getType()))
-            Unit
-        else {
-            newObject = obj.clone(deep = false)
-            newObject.setType(TypeUtils.makeMutable(obj.getType()))
-        }
-        return newObject
-    }
-
     fun makeMutable() : ObjectDetails
     {
-        return makeTypeMutable(this)
+        var newObject = this
+
+        if(isFormerSuperTypeOfLatter(MUTABLE_NULLABLE_ANYTHING,this.getType()))
+            Unit
+        else {
+            newObject = this.clone(deep = false)
+            newObject.setType(TypeUtils.makeMutable(this.getType()))
+        }
+        return newObject
     }
 
     override fun toString(): String {
