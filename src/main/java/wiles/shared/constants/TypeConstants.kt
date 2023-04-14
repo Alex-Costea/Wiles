@@ -9,6 +9,7 @@ import wiles.shared.constants.Tokens.ANON_ARG_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.STRING_START
 import wiles.shared.constants.Tokens.TRUE_ID
+import wiles.shared.constants.TypeUtils.makeCollection
 import wiles.shared.constants.TypeUtils.makeEither
 import wiles.shared.constants.TypeUtils.makeList
 import wiles.shared.constants.TypeUtils.makeMutable
@@ -292,8 +293,10 @@ object TypeConstants {
 
     // CRUD operations
 
-    private val ADD_GENERIC_VALUE_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|add")
-    private val ADD_COLLECTION_TYPE = makeMutable(makeList(makeGenericDeclaration(ADD_GENERIC_VALUE_TYPE)))
+    private val ADD_GENERIC_KEY_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|add_key")
+    private val ADD_GENERIC_VALUE_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|add_value")
+    private val ADD_COLLECTION_TYPE = makeMutable(makeCollection(
+        makeGenericDeclaration(ADD_GENERIC_KEY_TYPE),makeGenericDeclaration(ADD_GENERIC_VALUE_TYPE)))
     val ADD_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
         components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
             components = mutableListOf(
@@ -306,7 +309,7 @@ object TypeConstants {
                 ),
                 JSONStatement(syntaxType = SyntaxType.DECLARATION,
                     components = mutableListOf(
-                        makeNullable(INT64_TYPE),
+                        ADD_GENERIC_KEY_TYPE,
                         JSONStatement(name = "!at", syntaxType = SyntaxType.TOKEN),
                         )
                 ),
@@ -320,8 +323,10 @@ object TypeConstants {
         ))
     )
 
-    private val SET_AT_GENERIC_VALUE_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|set_at")
-    private val SET_AT_COLLECTION_TYPE = makeMutable(makeList(makeGenericDeclaration(SET_AT_GENERIC_VALUE_TYPE)))
+    private val SET_AT_GENERIC_KEY_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|set_at_key")
+    private val SET_AT_GENERIC_VALUE_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|set_at_value")
+    private val SET_AT_COLLECTION_TYPE = makeMutable(makeCollection(
+        makeGenericDeclaration(SET_AT_GENERIC_KEY_TYPE),makeGenericDeclaration(SET_AT_GENERIC_VALUE_TYPE)))
     val SET_AT_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
         components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
             components = mutableListOf(
@@ -334,7 +339,7 @@ object TypeConstants {
                 ),
                 JSONStatement(syntaxType = SyntaxType.DECLARATION,
                     components = mutableListOf(
-                        INT64_TYPE,
+                        SET_AT_GENERIC_KEY_TYPE,
                         JSONStatement(name = "!at", syntaxType = SyntaxType.TOKEN),
                     )
                 ),
@@ -348,19 +353,22 @@ object TypeConstants {
         ))
     )
 
+    private val REMOVE_AT_GENERIC_KEY_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|remove_at_key")
+    private val REMOVE_AT_COLLECTION_TYPE = makeMutable(makeCollection(
+        makeGenericDeclaration(REMOVE_AT_GENERIC_KEY_TYPE), NULLABLE_ANYTHING_TYPE))
     val REMOVE_AT_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
         components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
             components = mutableListOf(
                 NOTHING_TYPE,
                 JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
                     components = mutableListOf(
-                        makeMutable(LIST_OF_NULLABLE_ANYTHING_TYPE),
+                        REMOVE_AT_COLLECTION_TYPE,
                         JSONStatement(name = "!collection", syntaxType = SyntaxType.TOKEN)
                     )
                 ),
                 JSONStatement(syntaxType = SyntaxType.DECLARATION,
                     components = mutableListOf(
-                        INT64_TYPE,
+                        REMOVE_AT_GENERIC_KEY_TYPE,
                         JSONStatement(name = "!at", syntaxType = SyntaxType.TOKEN),
                     )
                 ),

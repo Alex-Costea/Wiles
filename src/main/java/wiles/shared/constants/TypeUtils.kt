@@ -344,7 +344,7 @@ object TypeUtils {
 
     fun makeCollection(key : JSONStatement, value : JSONStatement) : JSONStatement
     {
-        return JSONStatement(name = LIST_ID,
+        return JSONStatement(name = COLLECTION_ID,
             syntaxType = SyntaxType.TYPE,
             components = mutableListOf(key.copyRemovingLocation(),value.copyRemovingLocation()))
     }

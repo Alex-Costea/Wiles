@@ -248,7 +248,6 @@ object InferrerUtils {
 
             if(!isFormerSuperTypeOfLatter(superType, subType, genericTypes = genericTypes))
                 throw CannotCallMethodException(location)
-
         }
 
         if(unnamedArgsInMethodList.any { !it.component2().second })
