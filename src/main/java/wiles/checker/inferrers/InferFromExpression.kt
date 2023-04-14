@@ -37,7 +37,6 @@ import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.BOOLEAN_ID
 import wiles.shared.constants.Types.DOUBLE_ID
 import wiles.shared.constants.Types.EITHER_ID
-import wiles.shared.constants.Types.GENERIC_ID
 import wiles.shared.constants.Types.INT64_ID
 import wiles.shared.constants.Types.LIST_ID
 import wiles.shared.constants.Types.METHOD_CALL_ID
@@ -55,16 +54,12 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
         assert(middle.syntaxType == SyntaxType.TOKEN)
         assert(right.syntaxType == SyntaxType.TYPE)
 
-        if(left.name == GENERIC_ID)
-            return getTypeOfExpression(left.components[1], middle, right)
+        val unboxedLeft = unbox(left)
+        val unboxedRight = unbox(right)
 
-        if(right.name == GENERIC_ID)
-            return getTypeOfExpression(left, middle, right.components[1])
+        val leftComponents = createComponents(unboxedLeft,middle.name)
 
-        val leftComponents = createComponents(left,middle.name)
-
-        val rightComponents = createComponents(right,middle.name)
-
+        val rightComponents = createComponents(unboxedRight,middle.name)
 
         val resultingTypes : MutableList<JSONStatement> = mutableListOf()
         var isValid = true
@@ -106,7 +101,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
             }
         }
         if(!isValid)
-            throw WrongOperationException(middle.getFirstLocation(),left.toString(),right.toString())
+            throw WrongOperationException(middle.getFirstLocation(),unboxedLeft.toString(),unboxedRight.toString())
         if(resultingTypes.isNotEmpty())
         {
             var leftText : String = if(leftComponents.size == 1) unbox(leftComponents[0]).name else ANYTHING_ID
@@ -120,7 +115,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
                 resultingTypes[0]
             else JSONStatement(name = EITHER_ID, syntaxType = SyntaxType.TYPE, components = resultingTypes)
         }
-        throw WrongOperationException(middle.getFirstLocation(),left.toString(),right.toString())
+        throw WrongOperationException(middle.getFirstLocation(),unboxedLeft.toString(),unboxedRight.toString())
     }
 
     override fun infer() {
