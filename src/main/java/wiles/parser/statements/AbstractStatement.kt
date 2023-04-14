@@ -17,6 +17,7 @@ abstract class AbstractStatement(val context: Context) : StatementInterface
     override var name = ""
 
     override var location: TokenLocation? = null
+    override var parsed: Boolean? = null
 
     abstract fun process(): CompilationExceptionsCollection
 

@@ -34,7 +34,7 @@ class CodeBlockStatement(context: Context) : AbstractStatement(context) {
     private val components: MutableList<AbstractStatement> = ArrayList()
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
 
-    private var parsed: Boolean? = null
+    override var parsed: Boolean? = null
 
     override val syntaxType: SyntaxType
         get() = SyntaxType.CODE_BLOCK

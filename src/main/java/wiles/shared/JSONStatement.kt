@@ -6,7 +6,7 @@ class JSONStatement(
     override var name: String = "",
     override var location: TokenLocation? = null,
     override var syntaxType : SyntaxType? = null,
-    var parsed: Boolean? = null,
+    override var parsed: Boolean? = null,
     @JvmField var components : MutableList<JSONStatement> = mutableListOf()
 ) : StatementInterface
 {
