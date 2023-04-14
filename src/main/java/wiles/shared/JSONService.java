@@ -1,8 +1,10 @@
 package wiles.shared;
 
+import com.eclipsesource.json.*;
 import org.apache.commons.lang3.NotImplementedException;
 
 import java.io.*;
+import java.util.Objects;
 
 public final class JSONService {
     private JSONService(){}
@@ -32,12 +34,53 @@ public final class JSONService {
     }
 
     public static JSONStatement readValueAsJSONStatement(String text) {
-        throw new NotImplementedException("read JSON");
+        throw new NotImplementedException("read JSON " + text);
     }
 
-    public static String writeValueAsString(StatementInterface statement)
+    private static JsonObject getLocation(TokenLocation location)
     {
-        //("parsed", "name", "type", "location", "components")
-        throw new NotImplementedException("write JSON " + statement);
+        JsonObject value = Json.object();
+        value.add("line",location.getLine());
+        value.add("lineIndex",location.getLineIndex());
+        return value;
+    }
+
+    private static JsonObject getJsonObjectFromStatement(StatementInterface statement)
+    {
+        JsonObject value = Json.object();
+
+        Boolean parsed = statement.getParsed();
+        if (parsed != null)
+            value.add("parsed", parsed);
+
+        String name = statement.getName();
+        if (!name.equals(""))
+            value.add("name", name);
+
+        String type = Objects.requireNonNull(statement.getSyntaxType()).toString();
+        value.add("type", type);
+
+        TokenLocation location = statement.getLocation();
+        if (location != null)
+        {
+            value.add("location",getLocation(location));
+        }
+
+        var components = statement.getComponents();
+        if(!components.isEmpty())
+        {
+            JsonArray array = new JsonArray();
+            for(var component : components)
+            {
+                array.add(getJsonObjectFromStatement(component));
+            }
+            value.add("components",array);
+        }
+
+        return value;
+    }
+
+    public static String writeValueAsString(StatementInterface statement) {
+        return getJsonObjectFromStatement(statement).toString(WriterConfig.PRETTY_PRINT);
     }
 }
