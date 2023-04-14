@@ -183,6 +183,12 @@ object TypeUtils {
         else if(supertype.name == Tokens.METHOD_ID && subtype.name == Tokens.METHOD_ID)
             return checkMethodIsSubtype(supertype, subtype, genericTypes?: GenericTypesMap())
 
+        else if(supertype.name == COLLECTION_ID && subtype.name == COLLECTION_ID)
+            return isFormerSuperTypeOfLatter(supertype.components[0], subtype.components[0], getMinus = getMinus,
+                genericTypes = genericTypes) and
+                    isFormerSuperTypeOfLatter(supertype.components[1],subtype.components[1], getMinus = getMinus,
+                        genericTypes = genericTypes)
+
         else if(supertype.name == COLLECTION_ID && subtype.name == LIST_ID)
             return isFormerSuperTypeOfLatter(supertype.components[0], INT64_TYPE, getMinus = getMinus,
                 genericTypes = genericTypes) and
