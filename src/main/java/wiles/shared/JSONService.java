@@ -1,7 +1,6 @@
 package wiles.shared;
 
 import com.eclipsesource.json.*;
-import org.apache.commons.lang3.NotImplementedException;
 
 import java.io.*;
 import java.util.Objects;
@@ -42,15 +41,43 @@ public final class JSONService {
     }
 
     public static JSONStatement readValueAsJSONStatement(String text) {
-        throw new NotImplementedException("read JSON " + text);
-    }
+        JSONStatement statement = new JSONStatement();
+        JsonObject object = Json.parse(text).asObject();
 
-    private static JsonObject getLocation(TokenLocation location)
-    {
-        JsonObject value = Json.object();
-        value.add(LINE, location.getLine());
-        value.add(LINE_INDEX, location.getLineIndex());
-        return value;
+        JsonValue name = object.get(NAME);
+        if(name != null)
+            statement.setName(name.asString());
+
+        JsonValue parsed = object.get(PARSED);
+        if(parsed != null)
+            statement.setParsed(parsed.asBoolean());
+        else statement.setParsed(null);
+
+        JsonValue type = Objects.requireNonNull(object.get(TYPE));
+        statement.setSyntaxType(SyntaxType.valueOf(type.asString()));
+
+        JsonValue location = object.get(LOCATION);
+        if(location != null)
+        {
+            JsonObject locationObject = location.asObject();
+            int line = Objects.requireNonNull(locationObject.get(LINE)).asInt();
+            int lineIndex = Objects.requireNonNull(locationObject.get(LINE_INDEX)).asInt();
+            TokenLocation tokenLocation = new TokenLocation(line, lineIndex);
+            statement.setLocation(tokenLocation);
+        }
+
+        JsonValue components = object.get(COMPONENTS);
+        if(components != null)
+        {
+            JsonArray array = components.asArray();
+            for(var component : array.values())
+            {
+                var newComponent = readValueAsJSONStatement(component.toString());
+                statement.components.add(newComponent);
+            }
+        }
+
+        return statement;
     }
 
     private static JsonObject getJsonObjectFromStatement(StatementInterface statement)
@@ -71,7 +98,10 @@ public final class JSONService {
         TokenLocation location = statement.getLocation();
         if (location != null)
         {
-            value.add(LOCATION, getLocation(location));
+            JsonObject object = Json.object();
+            object.add(LINE, location.getLine());
+            object.add(LINE_INDEX, location.getLineIndex());
+            value.add(LOCATION, object);
         }
 
         var components = statement.getComponents();
