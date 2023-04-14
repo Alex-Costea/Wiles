@@ -1,12 +1,12 @@
 package wiles.interpreter
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import wiles.Main
 import wiles.Main.DEBUG
 import wiles.interpreter.data.InterpreterVariableMap
 import wiles.interpreter.exceptions.PanicException
 import wiles.interpreter.services.InterpreterService
 import wiles.shared.JSONStatement
+import wiles.shared.JsonService
 import wiles.shared.constants.ErrorMessages.RED_TEXT_END_ERROR
 import wiles.shared.constants.ErrorMessages.RED_TEXT_START_ERROR
 import wiles.shared.constants.ErrorMessages.STACK_OVERFLOW_ERROR
@@ -19,8 +19,8 @@ class Interpreter(private val code : String?) {
 
     private fun parseJson(): JSONStatement {
         if(code==null)
-            return ObjectMapper().readValue(File(Main.filename), JSONStatement::class.java)
-        return ObjectMapper().readValue(code, JSONStatement::class.java)
+            return JsonService.readValueAsJSONStatement(File(Main.filename))
+        return JsonService.readValueAsJSONStatement(code)
     }
 
     fun interpret()

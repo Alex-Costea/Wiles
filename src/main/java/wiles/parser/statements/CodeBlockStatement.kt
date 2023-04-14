@@ -1,7 +1,5 @@
 package wiles.parser.statements
 
-import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.annotation.JsonProperty
 import wiles.parser.builders.Context
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.builders.StatementFactory
@@ -36,8 +34,6 @@ class CodeBlockStatement(context: Context) : AbstractStatement(context) {
     private val components: MutableList<AbstractStatement> = ArrayList()
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
 
-    @JsonProperty
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private var parsed: Boolean? = null
 
     override val syntaxType: SyntaxType

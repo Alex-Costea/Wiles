@@ -1,15 +1,13 @@
 package wiles.shared
 
-import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.annotation.JsonProperty
 import wiles.shared.constants.Utils
 
 class JSONStatement(
-    @JsonProperty override var name: String = "",
-    @JsonProperty override var location: TokenLocation? = null,
-    @JsonProperty override var syntaxType : SyntaxType? = null,
-    @field:JsonProperty @field:JsonInclude(JsonInclude.Include.NON_NULL) var parsed: Boolean? = null,
-    @JvmField @JsonProperty var components : MutableList<JSONStatement> = mutableListOf()
+    override var name: String = "",
+    override var location: TokenLocation? = null,
+    override var syntaxType : SyntaxType? = null,
+    var parsed: Boolean? = null,
+    @JvmField var components : MutableList<JSONStatement> = mutableListOf()
 ) : StatementInterface
 {
     override fun toString(): String {

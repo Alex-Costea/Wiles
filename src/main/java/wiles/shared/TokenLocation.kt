@@ -1,18 +1,9 @@
 package wiles.shared
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import wiles.shared.constants.ErrorMessages.LINE_SYMBOL
 
-//Suppress warning because is required for Jackson
-@Suppress("CanBePrimaryConstructorProperty")
-class TokenLocation(line: Int, lineIndex: Int) {
+class TokenLocation(val line: Int,val  lineIndex: Int) {
     constructor() : this(-1,-1)
-
-    @JsonProperty("line")
-    val line = line
-
-    @JsonProperty("lineIndex")
-    val lineIndex = lineIndex
 
     override fun equals(other: Any?): Boolean {
         if (other is TokenLocation)
@@ -35,6 +26,4 @@ class TokenLocation(line: Int, lineIndex: Int) {
     override fun toString(): String {
         return "TokenLocation(line=$line, lineIndex=$lineIndex)"
     }
-
-
 }

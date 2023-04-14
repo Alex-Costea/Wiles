@@ -1,16 +1,9 @@
 package wiles.checker
 
-import com.fasterxml.jackson.core.util.DefaultPrettyPrinter
-import com.fasterxml.jackson.databind.MapperFeature
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.json.JsonMapper
 import wiles.checker.data.CheckerVariableMap
 import wiles.checker.data.InferrerDetails
 import wiles.checker.services.InferrerService
-import wiles.shared.AbstractCompilationException
-import wiles.shared.CompilationExceptionsCollection
-import wiles.shared.JSONStatement
-import wiles.shared.SyntaxType
+import wiles.shared.*
 import wiles.shared.constants.Settings
 import wiles.shared.constants.StandardLibrary.defaultCheckerVars
 import wiles.shared.constants.Tokens.ELSE_ID
@@ -28,8 +21,8 @@ class Checker(private val jsonCode : String? = null) {
 
     private fun parseSyntaxTreeJson(): JSONStatement {
         if(jsonCode==null)
-            return ObjectMapper().readValue(File(Settings.SYNTAX_TREE_FILE), JSONStatement::class.java)
-        return ObjectMapper().readValue(jsonCode, JSONStatement::class.java)
+            return JsonService.readValueAsJSONStatement(File(Settings.SYNTAX_TREE_FILE))
+        return JsonService.readValueAsJSONStatement(jsonCode)
     }
 
     private fun createObject(statement : JSONStatement, topLevel : Boolean = true) : JSONStatement
@@ -59,11 +52,7 @@ class Checker(private val jsonCode : String? = null) {
 
     private fun writeObjectFile()
     {
-        val mapper = JsonMapper.builder().disable(MapperFeature.AUTO_DETECT_CREATORS).disable(MapperFeature.AUTO_DETECT_FIELDS)
-            .disable(MapperFeature.AUTO_DETECT_GETTERS).disable(MapperFeature.AUTO_DETECT_IS_GETTERS).build()
-
-        val writer = mapper.writer(DefaultPrettyPrinter())
-        codeAsJSONString = writer.writeValueAsString(createObject(code.copyRemovingLocation()))
+        codeAsJSONString = JsonService.writeValueAsString(createObject(code.copyRemovingLocation()))
     }
 
     fun check() : CompilationExceptionsCollection
