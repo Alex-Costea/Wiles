@@ -46,8 +46,6 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
 
     private lateinit var operationName : String
 
-
-
     private fun getTypeOfExpression(left : JSONStatement, middle : JSONStatement, right: JSONStatement) : JSONStatement
     {
         assert(left.syntaxType == SyntaxType.TYPE)

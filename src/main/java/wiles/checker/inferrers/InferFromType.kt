@@ -8,11 +8,9 @@ import wiles.checker.statics.InferrerUtils.getTypeNumber
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.METHOD_ID
-import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
-import wiles.shared.constants.Types.EITHER_ID
 import wiles.shared.constants.Types.GENERIC_ID
-import wiles.shared.constants.Types.LIST_ID
+import wiles.shared.constants.Types.REQUIRES_SUBTYPE
 
 class InferFromType(details: InferrerDetails,
                     private val genericTypes : MutableMap<String,JSONStatement> = mutableMapOf(),
@@ -47,7 +45,7 @@ class InferFromType(details: InferrerDetails,
             if(method.components.getOrNull(0)?.syntaxType != SyntaxType.TYPE)
                 method.components.add(0,NOTHING_TYPE)
         }
-        else if(statement.name == EITHER_ID || statement.name == MUTABLE_ID || statement.name == LIST_ID)
+        else if(statement.name in REQUIRES_SUBTYPE)
         {
             for(component in statement.components)
             {

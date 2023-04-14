@@ -5,6 +5,9 @@ import wiles.checker.statics.InferrerUtils
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.DECLARE_ID
+import wiles.shared.constants.TypeConstants.INT64_TYPE
+import wiles.shared.constants.Types.COLLECTION_ID
+import wiles.shared.constants.Types.LIST_ID
 
 object TypeUtils {
 
@@ -135,7 +138,7 @@ object TypeUtils {
                     var hasMatch = false
                     for(supertypeComponent in supertype.components)
                     {
-                        if(isFormerSuperTypeOfLatter(supertypeComponent,subtypeComponent, getMinus = getMinus,
+                        if(isFormerSuperTypeOfLatter(supertypeComponent, subtypeComponent, getMinus = getMinus,
                                 genericTypes = genericTypes))
                         {
                             hasMatch = true
@@ -161,7 +164,7 @@ object TypeUtils {
             return isValid
         }
 
-        else if (supertype.name == Types.LIST_ID && subtype.name == Types.LIST_ID)
+        else if (supertype.name == LIST_ID && subtype.name == LIST_ID)
             return isFormerSuperTypeOfLatter(supertype.components[0],subtype.components[0], getMinus = getMinus, genericTypes = genericTypes)
 
         else if (supertype.name == Tokens.MUTABLE_ID && subtype.name == Tokens.MUTABLE_ID)
@@ -179,6 +182,12 @@ object TypeUtils {
 
         else if(supertype.name == Tokens.METHOD_ID && subtype.name == Tokens.METHOD_ID)
             return checkMethodIsSubtype(supertype, subtype, genericTypes?: GenericTypesMap())
+
+        else if(supertype.name == COLLECTION_ID && subtype.name == LIST_ID)
+            return isFormerSuperTypeOfLatter(supertype.components[0], INT64_TYPE, getMinus = getMinus,
+                genericTypes = genericTypes) and
+                    isFormerSuperTypeOfLatter(supertype.components[1],subtype.components[0], getMinus = getMinus,
+                        genericTypes = genericTypes)
 
         return false
     }
@@ -328,7 +337,7 @@ object TypeUtils {
 
     fun makeList(type : JSONStatement) : JSONStatement
     {
-        return JSONStatement(name = Types.LIST_ID,
+        return JSONStatement(name = LIST_ID,
             syntaxType = SyntaxType.TYPE,
             components = mutableListOf(type.copyRemovingLocation()))
     }

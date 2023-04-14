@@ -20,11 +20,13 @@ object Types {
     const val GENERIC_ID = "GENERIC"
     const val TYPE_TYPE_ID = "TYPE_TYPE"
     const val UNIVERSAL_SUBTYPE_ID = "UNIVERSAL_SUBTYPE"
+    const val COLLECTION_ID = "COLLECTION"
 
-    val REQUIRES_SUBTYPE = setOf(LIST_ID, EITHER_ID, MUTABLE_ID, this.TYPE_TYPE_ID)
-    val ALLOWS_GENERICS = hashSetOf(LIST_ID, MUTABLE_ID, this.TYPE_TYPE_ID)
-    val MAX_NR_TYPES = hashMapOf(Pair(LIST_ID,1),Pair(MUTABLE_ID,1),Pair(this.TYPE_TYPE_ID,1))
-    val MIN_NR_TYPES = hashMapOf(Pair(LIST_ID,1),Pair(MUTABLE_ID,1),Pair(EITHER_ID,2),Pair(this.TYPE_TYPE_ID,1))
+    val REQUIRES_SUBTYPE = setOf(LIST_ID, EITHER_ID, MUTABLE_ID, TYPE_TYPE_ID, COLLECTION_ID)
+    val ALLOWS_GENERICS = hashSetOf(LIST_ID, MUTABLE_ID, TYPE_TYPE_ID, COLLECTION_ID)
+    val MAX_NR_TYPES = hashMapOf(Pair(LIST_ID,1),Pair(MUTABLE_ID,1),Pair(TYPE_TYPE_ID,1),Pair(COLLECTION_ID,2))
+    val MIN_NR_TYPES = hashMapOf(Pair(LIST_ID,1),Pair(MUTABLE_ID,1),Pair(EITHER_ID,2),
+        Pair(TYPE_TYPE_ID,1),Pair(COLLECTION_ID,2))
 
     init {
         TYPES["!truth"] = BOOLEAN_ID
@@ -34,7 +36,8 @@ object Types {
         TYPES["!list"] = LIST_ID
         TYPES["!either"] = EITHER_ID
         TYPES["!anything"] = ANYTHING_ID
-        TYPES["!type"] = this.TYPE_TYPE_ID
+        TYPES["!type"] = TYPE_TYPE_ID
+        TYPES["!collection"] = COLLECTION_ID
         TYPES[NOTHING_ID] = NOTHING_ID
         TYPES[MAYBE_ID] = MAYBE_ID
         TYPES[METHOD_ID] = METHOD_ID
