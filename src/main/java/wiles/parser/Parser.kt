@@ -29,8 +29,8 @@ class Parser(content : String?) {
         results = ast
 
         if(DEBUG)
-            JsonService.writeValue(File(SYNTAX_TREE_FILE), ast)
-        else json = JsonService.writeValueAsString(ast)
+            JSONService.writeValue(File(SYNTAX_TREE_FILE), ast)
+        else json = JSONService.writeValueAsString(ast)
     }
 
     fun getExceptions() : CompilationExceptionsCollection

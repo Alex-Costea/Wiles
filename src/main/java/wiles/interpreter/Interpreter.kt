@@ -6,7 +6,7 @@ import wiles.interpreter.data.InterpreterVariableMap
 import wiles.interpreter.exceptions.PanicException
 import wiles.interpreter.services.InterpreterService
 import wiles.shared.JSONStatement
-import wiles.shared.JsonService
+import wiles.shared.JSONService
 import wiles.shared.constants.ErrorMessages.RED_TEXT_END_ERROR
 import wiles.shared.constants.ErrorMessages.RED_TEXT_START_ERROR
 import wiles.shared.constants.ErrorMessages.STACK_OVERFLOW_ERROR
@@ -19,8 +19,8 @@ class Interpreter(private val code : String?) {
 
     private fun parseJson(): JSONStatement {
         if(code==null)
-            return JsonService.readValueAsJSONStatement(File(Main.filename))
-        return JsonService.readValueAsJSONStatement(code)
+            return JSONService.readValueAsJSONStatement(File(Main.filename))
+        return JSONService.readValueAsJSONStatement(code)
     }
 
     fun interpret()

@@ -21,8 +21,8 @@ class Checker(private val jsonCode : String? = null) {
 
     private fun parseSyntaxTreeJson(): JSONStatement {
         if(jsonCode==null)
-            return JsonService.readValueAsJSONStatement(File(Settings.SYNTAX_TREE_FILE))
-        return JsonService.readValueAsJSONStatement(jsonCode)
+            return JSONService.readValueAsJSONStatement(File(Settings.SYNTAX_TREE_FILE))
+        return JSONService.readValueAsJSONStatement(jsonCode)
     }
 
     private fun createObject(statement : JSONStatement, topLevel : Boolean = true) : JSONStatement
@@ -52,7 +52,7 @@ class Checker(private val jsonCode : String? = null) {
 
     private fun writeObjectFile()
     {
-        codeAsJSONString = JsonService.writeValueAsString(createObject(code.copyRemovingLocation()))
+        codeAsJSONString = JSONService.writeValueAsString(createObject(code.copyRemovingLocation()))
     }
 
     fun check() : CompilationExceptionsCollection
