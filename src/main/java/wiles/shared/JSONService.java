@@ -7,6 +7,14 @@ import java.io.*;
 import java.util.Objects;
 
 public final class JSONService {
+    private static final String PARSED = "parsed";
+    private static final String NAME = "name";
+    private static final String TYPE = "type";
+    private static final String LOCATION = "location";
+    private static final String COMPONENTS = "components";
+    private static final String LINE = "line";
+    private static final String LINE_INDEX = "lineIndex";
+
     private JSONService(){}
     public static JSONStatement readValueAsJSONStatement(File file) {
         try(BufferedReader br = new BufferedReader(new FileReader(file)))
@@ -40,8 +48,8 @@ public final class JSONService {
     private static JsonObject getLocation(TokenLocation location)
     {
         JsonObject value = Json.object();
-        value.add("line",location.getLine());
-        value.add("lineIndex",location.getLineIndex());
+        value.add(LINE, location.getLine());
+        value.add(LINE_INDEX, location.getLineIndex());
         return value;
     }
 
@@ -51,19 +59,19 @@ public final class JSONService {
 
         Boolean parsed = statement.getParsed();
         if (parsed != null)
-            value.add("parsed", parsed);
+            value.add(PARSED, parsed);
 
         String name = statement.getName();
         if (!name.equals(""))
-            value.add("name", name);
+            value.add(NAME, name);
 
         String type = Objects.requireNonNull(statement.getSyntaxType()).toString();
-        value.add("type", type);
+        value.add(TYPE, type);
 
         TokenLocation location = statement.getLocation();
         if (location != null)
         {
-            value.add("location",getLocation(location));
+            value.add(LOCATION, getLocation(location));
         }
 
         var components = statement.getComponents();
@@ -74,7 +82,7 @@ public final class JSONService {
             {
                 array.add(getJsonObjectFromStatement(component));
             }
-            value.add("components",array);
+            value.add(COMPONENTS, array);
         }
 
         return value;
