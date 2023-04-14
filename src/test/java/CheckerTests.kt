@@ -6141,6 +6141,150 @@ class CheckerTests {
     fun genericsTest()
     {
         /*
+        let list : mut[collection[int,text]] := mut ["1"]
+        list.remove(at := 0)
+         */
+        checkResult(null,"""{
+  "parsed" : true,
+  "type" : "CODE_BLOCK",
+  "components" : [ {
+    "type" : "DECLARATION",
+    "components" : [ {
+      "name" : "MUTABLE",
+      "type" : "TYPE",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 12
+      },
+      "components" : [ {
+        "name" : "COLLECTION",
+        "type" : "TYPE",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 16
+        },
+        "components" : [ {
+          "name" : "INT64",
+          "type" : "TYPE",
+          "location" : {
+            "line" : 1,
+            "lineIndex" : 27
+          }
+        }, {
+          "name" : "STRING",
+          "type" : "TYPE",
+          "location" : {
+            "line" : 1,
+            "lineIndex" : 31
+          }
+        } ]
+      } ]
+    }, {
+      "name" : "!list",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 1,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "MUTABLE",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 41
+        }
+      }, {
+        "type" : "LIST",
+        "location" : {
+          "line" : 1,
+          "lineIndex" : 49
+        },
+        "components" : [ {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "name" : "@1",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 1,
+              "lineIndex" : 46
+            }
+          } ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "type" : "EXPRESSION",
+    "components" : [ {
+      "name" : "!list",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 2,
+        "lineIndex" : 1
+      }
+    }, {
+      "name" : "ACCESS",
+      "type" : "TOKEN",
+      "location" : {
+        "line" : 2,
+        "lineIndex" : 5
+      }
+    }, {
+      "type" : "EXPRESSION",
+      "components" : [ {
+        "name" : "!remove",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 6
+        }
+      }, {
+        "name" : "APPLY",
+        "type" : "TOKEN",
+        "location" : {
+          "line" : 2,
+          "lineIndex" : 12
+        }
+      }, {
+        "type" : "METHOD_CALL",
+        "components" : [ {
+          "type" : "EXPRESSION",
+          "components" : [ {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "!at",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 2,
+                "lineIndex" : 13
+              }
+            } ]
+          }, {
+            "name" : "ASSIGN",
+            "type" : "TOKEN",
+            "location" : {
+              "line" : 2,
+              "lineIndex" : 16
+            }
+          }, {
+            "type" : "EXPRESSION",
+            "components" : [ {
+              "name" : "#0",
+              "type" : "TOKEN",
+              "location" : {
+                "line" : 2,
+                "lineIndex" : 19
+              }
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  } ]
+}""","CODE_BLOCK(DECLARATION(TYPE MUTABLE; (TYPE COLLECTION; (TYPE INT64; TYPE STRING)); !list; EXPRESSION(TYPE MUTABLE; (TYPE LIST; (TYPE STRING)); MUTABLE; LIST(TYPE STRING; EXPRESSION(TYPE STRING; @1)))); EXPRESSION(TYPE !nothing; !remove; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!at; ASSIGN; EXPRESSION(TYPE INT64; #0)); EXPRESSION(!collection; ASSIGN; EXPRESSION(TYPE MUTABLE; (TYPE COLLECTION; (TYPE INT64; TYPE STRING)); !list)))))")
+
+        /*
         let list := mut [1,2,3]
         let b : int? := 4
         list.add(b)
