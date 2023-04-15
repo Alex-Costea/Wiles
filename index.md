@@ -34,8 +34,8 @@ The interpreter is functional and includes the features found in the specificati
 ### Why is the language called Wiles?
 As it is inspired by Pascal, I decided to also name my language after a mathematician, but unlike Pascal, one that is contemporary. As such, it's named after Andrew Wiles, who proved Fermat's Last Theorem.
 
-### Are there plans to make the language object-oriented? What about generics, first-class types or other cool features?
-This is a one-man project mostly meant for myself to try out making an interpreter, so honestly, it depends on my time and motivation. However, I'd like to implement these features.
+### Are there plans to make the language object-oriented, or add other more advanced features?
+This is a one-man project mostly meant for myself to try out making an interpreter, so honestly, it depends on my time and motivation.
 
 ### Will there be a formal specification?
 Unless this project blows up, probably not. Languages much bigger and widely used don't have a formal specification, so it doesn't seem like a priority. However, I am working on more thorough specifications.
