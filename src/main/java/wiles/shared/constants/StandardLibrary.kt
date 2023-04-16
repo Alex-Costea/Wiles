@@ -23,6 +23,7 @@ import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
 import wiles.shared.constants.TypeConstants.CLONE_TYPE
 import wiles.shared.constants.TypeConstants.CONTENT_TYPE
 import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
+import wiles.shared.constants.TypeConstants.GET_AT_TYPE
 import wiles.shared.constants.TypeConstants.GET_TYPE_TYPE
 import wiles.shared.constants.TypeConstants.IGNORE_TYPE
 import wiles.shared.constants.TypeConstants.INT64_TYPE
@@ -71,6 +72,7 @@ object StandardLibrary {
     private const val CLONE = "!clone"
 
     //CRUD
+    private const val GET = "!get"
     private const val ADD = "!add"
     private const val SET_AT = "!update"
     private const val REMOVE_AT = "!remove"
@@ -103,6 +105,7 @@ object StandardLibrary {
             Pair(CLONE, VariableDetails(CLONE_TYPE)),
             Pair(SET_AT, VariableDetails(SET_AT_TYPE)),
             Pair(REMOVE_AT, VariableDetails(REMOVE_AT_TYPE)),
+            Pair(GET, VariableDetails(GET_AT_TYPE)),
         )
     )
 
@@ -216,14 +219,14 @@ object StandardLibrary {
         }
         catch (ex : IndexOutOfBoundsException)
         {
-            throw PanicException("Value out of bounds!")
+            throw PanicException("Index out of bounds!")
         }
         catch (ex : NullPointerException)
         {
-            throw PanicException("Value out of bounds!")
+            throw PanicException("Index out of bounds!")
         }
         NOTHING_REF
-    }, defaultCheckerVars[MAYBE]!!.type)
+    }, defaultCheckerVars[ADD]!!.type)
 
     @Suppress("UNCHECKED_CAST")
     private val SET_AT_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
@@ -236,14 +239,32 @@ object StandardLibrary {
         }
         catch (ex : IndexOutOfBoundsException)
         {
-            throw PanicException("Value out of bounds!")
+            throw PanicException("Index out of bounds!")
         }
         catch (ex : NullPointerException)
         {
-            throw PanicException("Value out of bounds!")
+            throw PanicException("Index out of bounds!")
         }
         NOTHING_REF
-    }, defaultCheckerVars[MAYBE]!!.type)
+    }, defaultCheckerVars[SET_AT]!!.type)
+
+    @Suppress("UNCHECKED_CAST")
+    private val GET_AT_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
+        val list = map["!collection"]!!
+        val listValue = list.value as MutableList<ObjectDetails>
+        val index = (map["!at"]!!.value as Long)
+        try {
+            listValue[index.toIntOrNull()!!]
+        }
+        catch (ex : IndexOutOfBoundsException)
+        {
+            throw PanicException("Index out of bounds!")
+        }
+        catch (ex : NullPointerException)
+        {
+            throw PanicException("Index out of bounds!")
+        }
+    }, defaultCheckerVars[GET]!!.type)
 
     @Suppress("UNCHECKED_CAST")
     private val REMOVE_AT_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
@@ -255,24 +276,24 @@ object StandardLibrary {
         }
         catch (ex : IndexOutOfBoundsException)
         {
-            throw PanicException("Value out of bounds!")
+            throw PanicException("Index out of bounds!")
         }
         catch (ex : NullPointerException)
         {
-            throw PanicException("Value out of bounds!")
+            throw PanicException("Index out of bounds!")
         }
         NOTHING_REF
-    }, defaultCheckerVars[MAYBE]!!.type)
+    }, defaultCheckerVars[REMOVE_AT]!!.type)
 
     private val GET_TYPE_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
         val newType = map["!elem"]!!.getType().copy()
         ObjectDetails(newType, JSONStatement(name = TYPE_TYPE_ID, syntaxType = SyntaxType.TYPE,
             components = mutableListOf(newType)))
-    }, defaultCheckerVars[MAYBE]!!.type)
+    }, defaultCheckerVars[GET_TYPE]!!.type)
 
     private val CLONE_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
         map["!elem"]!!.clone(deep = (map["!deep"]?.value ?: true) as Boolean)
-    }, defaultCheckerVars[MAYBE]!!.type)
+    }, defaultCheckerVars[CLONE]!!.type)
 
     init{
         defaultInterpreterVars[NOTHING_ID] = NOTHING_REF
@@ -301,5 +322,6 @@ object StandardLibrary {
         defaultInterpreterVars[CLONE] = CLONE_REF
         defaultInterpreterVars[SET_AT] = SET_AT_REF
         defaultInterpreterVars[REMOVE_AT] = REMOVE_AT_REF
+        defaultInterpreterVars[GET] = GET_AT_REF
     }
 }

@@ -87,6 +87,7 @@
 - `list.add(arg value, at)` : add an element to a mutable list
 - `list.remove(arg value, at)` : remove an element from the mutable list at the index
 - `list.update(arg value, at)` : set element of mutable list at index.
+- `list.get(arg at)` : get element of list at index, panic if doesn't exist
 - `type` : get type of object at runtime
 - `clone({deep := [boolean]})` : clone object, deeply by default
 - `content` : get content of variable. panics if the value is `nothing`.
@@ -100,5 +101,3 @@
 - Top level expressions must be of type `nothing`
 - Trailing commas are valid but not necessary
 - Pass by reference to object
-
-### [Potential future additions](future.md)

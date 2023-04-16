@@ -293,6 +293,30 @@ object TypeConstants {
 
     // CRUD operations
 
+    private val GET_AT_GENERIC_KEY_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|get_at_key")
+    private val GET_AT_GENERIC_VALUE_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|get_at_value")
+    private val GET_AT_COLLECTION_TYPE = makeCollection(
+        makeGenericDeclaration(GET_AT_GENERIC_KEY_TYPE),makeGenericDeclaration(GET_AT_GENERIC_VALUE_TYPE))
+    val GET_AT_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
+        components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
+            components = mutableListOf(
+                GET_AT_GENERIC_VALUE_TYPE,
+                JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
+                    components = mutableListOf(
+                        GET_AT_COLLECTION_TYPE,
+                        JSONStatement(name = "!collection", syntaxType = SyntaxType.TOKEN)
+                    )
+                ),
+                JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
+                    components = mutableListOf(
+                        GET_AT_GENERIC_KEY_TYPE,
+                        JSONStatement(name = "!at", syntaxType = SyntaxType.TOKEN),
+                    )
+                )
+            )
+        ))
+    )
+
     private val ADD_GENERIC_KEY_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|add_key")
     private val ADD_GENERIC_VALUE_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|add_value")
     private val ADD_COLLECTION_TYPE = makeMutable(makeCollection(

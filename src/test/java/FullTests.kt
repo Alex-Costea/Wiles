@@ -1,3 +1,4 @@
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import wiles.Main.main
 import wiles.shared.constants.CommandLineArguments
@@ -19,11 +20,6 @@ class FullTests {
         System.setIn(systemIn)
         System.setOut(systemOut)
         return baos.toString("UTF-8")
-    }
-
-    private fun setUpIO(input : String)
-    {
-        System.setIn(input.byteInputStream())
     }
 
     @Test
@@ -62,8 +58,6 @@ begin
 end
 writeline("Min found: " + result)
 """
-        //TODO: refactor
-        setUpIO("4\n10\n8\n20\n-1\n" + "0\n")
 
         assertEquals(getOutput(code),"Min found: -1\n")
         assertEquals(getOutput(code),"Error: no min found!\n")
@@ -115,13 +109,6 @@ writeline("Min found: " + result)
         """
         assertEquals(getOutput(code7),"10\n")
 
-        val code9 = """
-        let var a : anything := 1
-        a := true
-        writeline(a.type)
-        """
-        assertEquals(getOutput(code9),"TYPE BOOLEAN\n")
-
         val code8 = """
         let a := mut [1] : anything
         a.add(at := a.size, true)
@@ -137,5 +124,26 @@ writeline("Min found: " + result)
         end
         """
         assertEquals(getOutput(code8),"not mut[list[int]]\n")
+
+        val code9 = """
+        let var a : anything := 1
+        a := true
+        writeline(a.type)
+        """
+        assertEquals(getOutput(code9),"TYPE BOOLEAN\n")
+
+        val code10 = """
+        let list := [1,2,3]
+        writeline(list.get(0))
+        """
+        assertEquals(getOutput(code10),"1\n")
+    }
+
+    companion object {
+        @JvmStatic
+        @BeforeAll
+        fun setUpIO() {
+            System.setIn(("4\n10\n8\n20\n-1\n" + "0\n").byteInputStream())
+        }
     }
 }
