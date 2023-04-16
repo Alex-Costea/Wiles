@@ -5,7 +5,6 @@ import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.TypeConstants.MUTABLE_NULLABLE_ANYTHING
-import wiles.shared.constants.TypeConstants.UNIVERSAL_SUBTYPE_TYPE
 import wiles.shared.constants.TypeUtils
 import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 import wiles.shared.constants.Types.LIST_ID
@@ -26,6 +25,7 @@ class ObjectDetails(var value : Any?, type : JSONStatement)
         if(typeStatement.name == MUTABLE_ID && typeStatement.components.getOrNull(0)?.name == LIST_ID)
         {
             val list = value as MutableList<ObjectDetails>
+            val originalType = result.components[0].components[0]
             var newType : JSONStatement? = null
             for(component in list)
             {
@@ -34,7 +34,7 @@ class ObjectDetails(var value : Any?, type : JSONStatement)
                 else addType(newType, component.getType())
             }
             result.components[0].components.clear()
-            result.components[0].components.add(newType ?: UNIVERSAL_SUBTYPE_TYPE)
+            result.components[0].components.add(newType ?: originalType)
         }
         return result
     }
@@ -42,9 +42,6 @@ class ObjectDetails(var value : Any?, type : JSONStatement)
     fun setType(type : JSONStatement)
     {
         typeStatement = type.copy()
-        if(typeStatement.name == MUTABLE_ID && typeStatement.components.getOrNull(0)?.name == LIST_ID) {
-            typeStatement.components[0].components.clear()
-        }
     }
 
     private fun cloneValue(value: Any?, deep: Boolean) : Any?

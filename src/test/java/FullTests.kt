@@ -137,6 +137,26 @@ writeline("Min found: " + result)
         writeline(list.get(0))
         """
         assertEquals(getOutput(code10),"1\n")
+
+        val code11 = """
+            let func := fun(arg list : list[int])
+        begin
+            let object : anything := list
+            when object is mut[list[text]]
+            begin
+                object.add(at := 0, "hi!")
+                yield nothing
+            end
+            writeline("oops!")
+            panic()
+        end
+        
+        let list := mut [] : int
+        func(list)
+        let a := list.get(0)
+        writeline(a)
+        """
+        assertEquals(getOutput(code11),"oops!\n")
     }
 
     companion object {

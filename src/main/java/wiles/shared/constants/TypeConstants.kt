@@ -30,6 +30,7 @@ object TypeConstants {
     val ERROR_TYPE = JSONStatement(syntaxType = SyntaxType.TYPE, name = Tokens.ERROR_TOKEN)
     private val ANYTHING_TYPE = JSONStatement(syntaxType = SyntaxType.TYPE, name = ANYTHING_ID)
     val METHOD_CALL_TYPE = JSONStatement(syntaxType = SyntaxType.TYPE, name = METHOD_CALL_ID)
+    @Suppress("UNUSED")
     val UNIVERSAL_SUBTYPE_TYPE = JSONStatement(syntaxType = SyntaxType.TYPE, name = UNIVERSAL_SUBTYPE_ID)
     private val NULLABLE_ANYTHING_TYPE = makeNullable(ANYTHING_TYPE)
 
