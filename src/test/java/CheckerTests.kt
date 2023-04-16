@@ -3564,6 +3564,78 @@ class CheckerTests {
     @Test
     fun methodsTest()
     {
+        //let func := fun() -> int do panic()
+        checkResult(null,"""{
+  "parsed": true,
+  "type": "CODE_BLOCK",
+  "components": [
+    {
+      "type": "DECLARATION",
+      "components": [
+        {
+          "name": "!func",
+          "type": "TOKEN",
+          "location": {
+            "line": 1,
+            "lineIndex": 5
+          }
+        },
+        {
+          "type": "EXPRESSION",
+          "components": [
+            {
+              "type": "METHOD",
+              "location": {
+                "line": 1,
+                "lineIndex": 13
+              },
+              "components": [
+                {
+                  "name": "INT64",
+                  "type": "TYPE",
+                  "location": {
+                    "line": 1,
+                    "lineIndex": 22
+                  }
+                },
+                {
+                  "type": "CODE_BLOCK",
+                  "components": [
+                    {
+                      "type": "EXPRESSION",
+                      "components": [
+                        {
+                          "name": "!panic",
+                          "type": "TOKEN",
+                          "location": {
+                            "line": 1,
+                            "lineIndex": 29
+                          }
+                        },
+                        {
+                          "name": "APPLY",
+                          "type": "TOKEN",
+                          "location": {
+                            "line": 1,
+                            "lineIndex": 34
+                          }
+                        },
+                        {
+                          "type": "METHOD_CALL"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE INT64)); !func; EXPRESSION(TYPE METHOD; (METHOD(TYPE INT64)); METHOD(TYPE INT64; CODE_BLOCK(EXPRESSION(TYPE !nothing; !panic; METHOD|APPLY|METHOD_CALL; METHOD_CALL))))))")
+
         //let a := fun(a : A as B, b : B as A) do nothing
         checkResult(createExceptions(RecursiveTypeDefinitionException(NULL_LOCATION)),
             """{

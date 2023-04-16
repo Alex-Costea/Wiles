@@ -12,6 +12,7 @@ import wiles.checker.statics.InferrerUtils.makeGeneric
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.StandardLibrary
+import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.ELSE_ID
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
 import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
@@ -55,6 +56,9 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
             if(component.syntaxType==SyntaxType.METHOD)
                 continue
             if(component.syntaxType==SyntaxType.RETURN)
+                return true
+            if(component.syntaxType == SyntaxType.EXPRESSION && component.components.size == 4
+                && component.components[1].name == "!panic" && component.components[2].name.contains(Tokens.APPLY_ID))
                 return true
             if(component.syntaxType==SyntaxType.IF || component.syntaxType == SyntaxType.WHEN)
             {
