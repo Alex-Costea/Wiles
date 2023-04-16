@@ -154,7 +154,7 @@ writeline("Min found: " + result)
         let list := mut [] : int
         func(list)
         let a := list.get(0)
-        writeline(a)
+        writeline(a>0)
         """
         assertEquals(getOutput(code11),"oops!\n")
     }
