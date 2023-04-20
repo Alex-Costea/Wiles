@@ -4,7 +4,6 @@ import wiles.interpreter.data.InterpreterVariableMap
 import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.exceptions.PanicException
 import wiles.interpreter.statics.DoOperation
-import wiles.interpreter.statics.InterpreterConstants.toIntOrNull
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
@@ -18,7 +17,6 @@ import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.AND_ID
 import wiles.shared.constants.Tokens.APPLY_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
-import wiles.shared.constants.Tokens.ELEM_ACCESS_ID
 import wiles.shared.constants.Tokens.IMPORT_ID
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
@@ -26,7 +24,6 @@ import wiles.shared.constants.Tokens.OR_ID
 import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
 import wiles.shared.constants.TypeConstants.INT64_TYPE
 import wiles.shared.constants.TypeConstants.STRING_TYPE
-import wiles.shared.constants.Types.INT64_ID
 import wiles.shared.constants.Types.LIST_ID
 import wiles.shared.constants.Types.METHOD_CALL_ID
 import java.util.function.Function
@@ -150,13 +147,6 @@ class InterpretFromExpression(statement: JSONStatement, variables: InterpreterVa
                             newVarMap[name] = expressionRef
                         }
                         function.apply(newVarMap)
-                    }
-                    "$LIST_ID|$ELEM_ACCESS_ID|$INT64_ID" -> {
-                        val leftRef = getReference(leftStatement)
-                        val rightRef = getReference(rightStatement)
-                        val value = (rightRef.value as Long).toIntOrNull()
-                        if (value == null) NOTHING_REF
-                        else (leftRef.value as MutableList<ObjectDetails>).getOrNull(value) ?: NOTHING_REF
                     }
                     IMPORT_ID -> {
                         val newVars = variables.copy()

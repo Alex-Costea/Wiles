@@ -59,7 +59,6 @@ object Tokens {
     const val FROM_ID = "FROM"
     const val TO_ID = "TO"
     const val WHILE_ID = "WHILE"
-    const val ELEM_ACCESS_ID = "ELEM_ACCESS"
     const val ANON_ARG_ID = "ANON_ARG"
     const val MUTABLE_ID = "MUTABLE"
     const val IMPORT_ID = "IMPORT"
@@ -80,7 +79,7 @@ object Tokens {
     val INFIX_OPERATORS = setOf(
         PLUS_ID, MINUS_ID, TIMES_ID, DIVIDE_ID, POWER_ID,
         EQUALS_ID, LARGER_ID, SMALLER_ID, LARGER_EQUALS_ID, SMALLER_EQUALS_ID, NOT_EQUAL_ID,
-        AND_ID, OR_ID, APPLY_ID, ACCESS_ID, ELEM_ACCESS_ID
+        AND_ID, OR_ID, APPLY_ID, ACCESS_ID
     )
     @JvmField
     val PREFIX_OPERATORS = setOf(UNARY_PLUS_ID, UNARY_MINUS_ID, NOT_ID, MUTABLE_ID, IMPORT_ID)
@@ -142,7 +141,6 @@ object Tokens {
         SYMBOLS[")"] = PAREN_END_ID
         SYMBOLS["["] = BRACKET_START_ID
         SYMBOLS["]"] = BRACKET_END_ID
-        SYMBOLS["@"] = ELEM_ACCESS_ID
         SYMBOLS[","] = SEPARATOR_ID
         SYMBOLS["."] = ACCESS_ID
         SYMBOLS[":"] = TYPE_ANNOTATION_ID

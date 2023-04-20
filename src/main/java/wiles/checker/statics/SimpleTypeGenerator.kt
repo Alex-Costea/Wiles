@@ -8,7 +8,6 @@ import wiles.shared.constants.TypeConstants.ASSIGN_OPERATION
 import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
 import wiles.shared.constants.TypeConstants.DIVIDE_OPERATION
 import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
-import wiles.shared.constants.TypeConstants.ELEM_ACCESS_OPERATION
 import wiles.shared.constants.TypeConstants.EQUALS_OPERATION
 import wiles.shared.constants.TypeConstants.INT64_TYPE
 import wiles.shared.constants.TypeConstants.LARGER_EQUALS_OPERATION
@@ -19,7 +18,6 @@ import wiles.shared.constants.TypeConstants.MUTABLE_OPERATION
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
 import wiles.shared.constants.TypeConstants.NOT_EQUAL_OPERATION
 import wiles.shared.constants.TypeConstants.NOT_OPERATION
-import wiles.shared.constants.TypeConstants.NULLABLE_STRING
 import wiles.shared.constants.TypeConstants.OR_OPERATION
 import wiles.shared.constants.TypeConstants.PLUS_OPERATION
 import wiles.shared.constants.TypeConstants.POWER_OPERATION
@@ -144,9 +142,6 @@ object SimpleTypeGenerator {
         Pair(Triple(DOUBLE_TYPE, SMALLER_EQUALS_OPERATION, INT64_TYPE), BOOLEAN_TYPE),
         Pair(Triple(DOUBLE_TYPE, SMALLER_EQUALS_OPERATION, DOUBLE_TYPE), BOOLEAN_TYPE),
 
-        //String elem access
-        Pair(Triple(STRING_TYPE, ELEM_ACCESS_OPERATION, INT64_TYPE), NULLABLE_STRING),
-
         //Repeat string
         Pair(Triple(STRING_TYPE, TIMES_OPERATION, INT64_TYPE), STRING_TYPE),
         Pair(Triple(INT64_TYPE, TIMES_OPERATION, STRING_TYPE), STRING_TYPE),
@@ -158,15 +153,6 @@ object SimpleTypeGenerator {
 
         if(unboxedTriple.second.name == IMPORT_ID)
             return unboxedTriple.third.copyRemovingLocation()
-
-        if(unboxedTriple.second == ELEM_ACCESS_OPERATION)
-        {
-            if(isFormerSuperTypeOfLatter(LIST_OF_NULLABLE_ANYTHING_TYPE,unboxedTriple.first)
-                && isFormerSuperTypeOfLatter(INT64_TYPE,unboxedTriple.third))
-            {
-                return InferrerUtils.makeNullable(unboxedTriple.first.components[0])
-            }
-        }
 
         if(triple.second.name == PLUS_ID
             && isFormerSuperTypeOfLatter(LIST_OF_NULLABLE_ANYTHING_TYPE, triple.first)

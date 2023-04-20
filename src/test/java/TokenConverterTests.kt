@@ -11,11 +11,11 @@ import wiles.shared.constants.Settings.MAX_SYMBOL_LENGTH
 import wiles.shared.constants.Tokens.ACCESS_ID
 import wiles.shared.constants.Tokens.BREAK_ID
 import wiles.shared.constants.Tokens.DO_ID
-import wiles.shared.constants.Tokens.ELEM_ACCESS_ID
 import wiles.shared.constants.Tokens.END_BLOCK_ID
 import wiles.shared.constants.Tokens.NEWLINE_ID
 import wiles.shared.constants.Tokens.NOT_ID
 import wiles.shared.constants.Tokens.PAREN_END_ID
+import wiles.shared.constants.Tokens.PLUS_ID
 import wiles.shared.constants.Tokens.TRUE_ID
 import wiles.shared.constants.Tokens.WHILE_ID
 import wiles.shared.constants.Utils.NULL_LOCATION
@@ -67,7 +67,7 @@ class TokenConverterTests {
         Assumptions.assumingThat(invalidProgram.length >= 2 * MAX_SYMBOL_LENGTH + 1) {
             tokenConverterEquals( invalidProgram, arrayOf("\${}","{}{","}{}","{}"))
         }
-        tokenConverterEquals( "$\n@", arrayOf("$","NEWLINE", ELEM_ACCESS_ID))
+        tokenConverterEquals( "$\n+", arrayOf("$", NEWLINE_ID, PLUS_ID))
     }
 
     @Test

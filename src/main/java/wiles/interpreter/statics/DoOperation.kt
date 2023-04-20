@@ -11,7 +11,6 @@ import wiles.shared.constants.ErrorMessages.INTEGER_TOO_LARGE_FOR_REPEAT_ERROR
 import wiles.shared.constants.StandardLibrary.FALSE_REF
 import wiles.shared.constants.StandardLibrary.TRUE_REF
 import wiles.shared.constants.Tokens.DIVIDE_ID
-import wiles.shared.constants.Tokens.ELEM_ACCESS_ID
 import wiles.shared.constants.Tokens.EQUALS_ID
 import wiles.shared.constants.Tokens.LARGER_EQUALS_ID
 import wiles.shared.constants.Tokens.LARGER_ID
@@ -29,7 +28,6 @@ import wiles.shared.constants.Tokens.UNARY_PLUS_ID
 import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
 import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
 import wiles.shared.constants.TypeConstants.INT64_TYPE
-import wiles.shared.constants.TypeConstants.NULLABLE_STRING
 import wiles.shared.constants.TypeConstants.STRING_TYPE
 import wiles.shared.constants.TypeUtils.unbox
 import wiles.shared.constants.Types.ANYTHING_ID
@@ -223,10 +221,6 @@ object DoOperation {
             (x as Double) <= (y as Long)}, BOOLEAN_TYPE)),
         Pair("${DOUBLE_ID}|${SMALLER_EQUALS_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
             (x as Double) <= (y as Double)}, BOOLEAN_TYPE)),
-
-        //String elem access
-        Pair("${STRING_ID}|${ELEM_ACCESS_ID}|${INT64_ID}", createFunction({ x : Any?, y : Any? ->
-            (x as String).getOrNull((y as Long).toIntOrNull()?:-1).toString()}, NULLABLE_STRING)),
 
         //Repeat string
         Pair("${STRING_ID}|${TIMES_ID}|${INT64_ID}", createFunction({ x : Any?, y : Any? ->

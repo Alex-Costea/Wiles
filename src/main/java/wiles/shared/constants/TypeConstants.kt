@@ -61,7 +61,6 @@ object TypeConstants {
     val SMALLER_OPERATION = JSONStatement(syntaxType = SyntaxType.TOKEN, name = Tokens.SMALLER_ID)
     val SMALLER_EQUALS_OPERATION = JSONStatement(syntaxType = SyntaxType.TOKEN, name = Tokens.SMALLER_EQUALS_ID)
     val ACCESS_OPERATION = JSONStatement(syntaxType = SyntaxType.TOKEN, name = Tokens.ACCESS_ID)
-    val ELEM_ACCESS_OPERATION = JSONStatement(syntaxType = SyntaxType.TOKEN, name = Tokens.ELEM_ACCESS_ID)
     val APPLY_OPERATION = JSONStatement(syntaxType = SyntaxType.TOKEN, name = Tokens.APPLY_ID)
     val ASSIGN_OPERATION = JSONStatement(syntaxType = SyntaxType.TOKEN, name = Tokens.ASSIGN_ID)
     val MUTABLE_OPERATION = JSONStatement(syntaxType = SyntaxType.TOKEN, name = Tokens.MUTABLE_ID)
