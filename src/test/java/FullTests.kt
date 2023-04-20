@@ -31,9 +31,8 @@ typedef number := either[int,rational]
 
 let min := fun(list : list[number as T]) -> T?
 begin
-    let var min_value := list @ 0
-    when min_value is nothing 
-        do yield nothing
+    if list.size = 0 do yield nothing
+    let var min_value := list.get(0)
     for x in list from 1 do
         if x < min_value do
             min_value := x
@@ -114,11 +113,8 @@ writeline("Min found: " + result)
         a.add(at := a.size, true)
         when a begin
             is mut[list[int]] begin
-                let b := a @ 1
-                when b begin
-                    is nothing do panic()
-                    default do writeline(b + 10)
-                end
+                let b := a.get(1)
+                writeline(b + 10)
             end
             default do writeline("not mut[list[int]]")
         end
