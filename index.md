@@ -70,9 +70,8 @@ typedef number := either[int,rational]
 
 let min := fun(list : list[number as T]) -> T?
 begin
-    let var min_value := list @ 0
-    when min_value is nothing 
-        do yield nothing
+    if list.size = 0 do yield nothing
+    let var min_value := list.get(0)
     for x in list from 1 do
         if x < min_value do
             min_value := x
