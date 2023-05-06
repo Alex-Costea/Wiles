@@ -362,6 +362,13 @@ object TypeUtils {
             components = mutableListOf(key.copyRemovingLocation(),value.copyRemovingLocation()))
     }
 
+    fun makeDict(key : JSONStatement, value : JSONStatement) : JSONStatement
+    {
+        return JSONStatement(name = DICT_ID,
+            syntaxType = SyntaxType.TYPE,
+            components = mutableListOf(key.copyRemovingLocation(),value.copyRemovingLocation()))
+    }
+
     fun makeMethod(type : JSONStatement) : JSONStatement
     {
         val newType = type.copyRemovingLocation()

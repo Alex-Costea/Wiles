@@ -65,7 +65,8 @@ class InferFromDict(details: InferrerDetails) : InferFromStatement(details) {
             } else if (inferredType != null) finalTypes.add(inferredType)
             else throw InferenceFailException(statement.getFirstLocation())
         }
-        statement.components.removeFirst()
+        if(statement.components.first().syntaxType == SyntaxType.TYPE)
+            statement.components.removeFirst()
         statement.components.add(0, JSONStatement(syntaxType = SyntaxType.TYPE, name = DICT_ID,
             components = finalTypes.map { it }.toMutableList()))
     }
