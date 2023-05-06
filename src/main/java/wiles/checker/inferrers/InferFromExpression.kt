@@ -117,16 +117,14 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
     }
 
     override fun infer() {
-        val typesList = listOf(SyntaxType.METHOD, SyntaxType.LIST, SyntaxType.METHOD_CALL, SyntaxType.TYPE)
-
-        if(statement.syntaxType in typesList)
+        if(statement.syntaxType in TYPES_LIST)
         {
             val inferrer = InferrerService(InferrerDetails(
                 statement,variables, CompilationExceptionsCollection(),additionalVars))
             inferrer.infer()
             exceptions.addAll(inferrer.exceptions)
         }
-        else if(statement.components.size==1 && statement.components[0].syntaxType in typesList)
+        else if(statement.components.size==1 && statement.components[0].syntaxType in TYPES_LIST)
         {
             val inferrer = InferrerService(
                 InferrerDetails(statement.components[0],
@@ -282,5 +280,8 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
     companion object {
         val VALID_NAMED = arrayListOf(
             METHOD_ID,DOUBLE_ID, INT64_ID, STRING_ID, BOOLEAN_ID, LIST_ID, ANYTHING_ID, NOTHING_ID, METHOD_CALL_ID)
+
+        val TYPES_LIST =
+            listOf(SyntaxType.METHOD, SyntaxType.LIST, SyntaxType.METHOD_CALL, SyntaxType.TYPE, SyntaxType.DICT)
     }
 }
