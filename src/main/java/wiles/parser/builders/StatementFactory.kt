@@ -15,6 +15,7 @@ import wiles.shared.constants.ErrorMessages.INVALID_STATEMENT_ERROR
 import wiles.shared.constants.ErrorMessages.NOT_YET_IMPLEMENTED_ERROR
 import wiles.shared.constants.Predicates.ANYTHING
 import wiles.shared.constants.Predicates.START_OF_EXPRESSION
+import wiles.shared.constants.Tokens.BRACE_START_ID
 import wiles.shared.constants.Tokens.BRACKET_START_ID
 import wiles.shared.constants.Tokens.BREAK_ID
 import wiles.shared.constants.Tokens.CONTINUE_ID
@@ -84,6 +85,7 @@ class StatementFactory {
             params[StatementFactoryTypes.FOR_STATEMENT] = tokenOf(FOR_ID)
             params[StatementFactoryTypes.WHEN_STATEMENT] = tokenOf(WHEN_ID)
             params[StatementFactoryTypes.TYPE_DEFINITION_STATEMENT] = tokenOf(TYPEDEF_ID)
+            params[StatementFactoryTypes.DICT_STATEMENT] = tokenOf(BRACE_START_ID)
             createObject[StatementFactoryTypes.TOP_LEVEL_EXPRESSION] =
                 Function { context: Context -> TopLevelExpression(context) }
             createObject[StatementFactoryTypes.DEFAULT_EXPRESSION_NO_CODE_BLOCK] =
@@ -110,6 +112,8 @@ class StatementFactory {
                 Function { context : Context -> WhenStatement(context) }
             createObject[StatementFactoryTypes.TYPE_DEFINITION_STATEMENT] =
                 Function { context : Context -> TypeDefinitionStatement(context) }
+            createObject[StatementFactoryTypes.DICT_STATEMENT] =
+                Function { context : Context -> DictStatement(context) }
         }
     }
 }

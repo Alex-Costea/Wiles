@@ -16,6 +16,8 @@ object Tokens {
     const val PAREN_END_ID = "PAREN_END"
     const val BRACKET_START_ID = "BRACKET_START"
     const val BRACKET_END_ID = "BRACKET_END"
+    const val BRACE_START_ID = "BRACE_START"
+    const val BRACE_END_ID = "BRACE_END"
     const val METHOD_ID = "METHOD"
     const val TERMINATOR_ID = "TERMINATOR"
     const val CONTINUE_LINE_ID = "CONTINUE_LINE"
@@ -86,8 +88,6 @@ object Tokens {
     @JvmField
     val STARTING_OPERATORS = setOf(PLUS_ID, MINUS_ID, NOT_ID, MUTABLE_ID, IMPORT_ID)
     @JvmField
-    val PARENS = setOf(PAREN_START_ID, PAREN_END_ID, BRACKET_START_ID)
-    @JvmField
     val TERMINATORS = setOf(NEWLINE_ID, TERMINATOR_ID)
 
     @JvmField
@@ -141,6 +141,8 @@ object Tokens {
         SYMBOLS[")"] = PAREN_END_ID
         SYMBOLS["["] = BRACKET_START_ID
         SYMBOLS["]"] = BRACKET_END_ID
+        SYMBOLS["{"] = BRACE_START_ID
+        SYMBOLS["}"] = BRACE_END_ID
         SYMBOLS[","] = SEPARATOR_ID
         SYMBOLS["."] = ACCESS_ID
         SYMBOLS[":"] = TYPE_ANNOTATION_ID

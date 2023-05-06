@@ -30,7 +30,7 @@ public abstract class AbstractExpression extends AbstractStatement {
     public AbstractStatement right = null;
     @NotNull
     private final StatementFactory SpecialStatementFactory = new StatementFactory().setContext(getContext())
-            .addType(StatementFactoryTypes.LIST_STATEMENT);
+            .addType(StatementFactoryTypes.LIST_STATEMENT).addType(StatementFactoryTypes.DICT_STATEMENT);
     protected boolean isInner = false;
 
     protected AbstractExpression(@NotNull Context context) {
@@ -169,7 +169,7 @@ public abstract class AbstractExpression extends AbstractStatement {
             if (expectNext == ExpectNext.TOKEN)
                 throw new UnexpectedEndException(EXPRESSION_UNFINISHED_ERROR, mainCurrentToken.getLocation());
             if (this instanceof InnerExpression && !mainCurrentToken.getContent().equals(PAREN_END_ID))
-                throw new UnexpectedEndException(UNEXPECTED_OPENING_BRACKET_ERROR, transmitter.getLastLocation());
+                throw new UnexpectedEndException(UNEXPECTED_OPENING_PAREN_ERROR, transmitter.getLastLocation());
             setComponents(precedenceProcessor);
         } catch (AbstractCompilationException ex) {
             exceptions.add(ex);

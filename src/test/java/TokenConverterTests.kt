@@ -63,9 +63,9 @@ class TokenConverterTests {
         tokenConverterEquals("=/=", arrayOf("NOT_EQUAL"))
         tokenConverterEquals( "$", arrayOf("$"))
         tokenConverterEquals( "=$", arrayOf("EQUALS","$"))
-        val invalidProgram = "\${}{}{}{}{}"
+        val invalidProgram = "\$⟨⟩⟨⟩⟨⟩⟨⟩⟨⟩"
         Assumptions.assumingThat(invalidProgram.length >= 2 * MAX_SYMBOL_LENGTH + 1) {
-            tokenConverterEquals( invalidProgram, arrayOf("\${}","{}{","}{}","{}"))
+            tokenConverterEquals( invalidProgram, arrayOf("\$⟨⟩","⟨⟩⟨","⟩⟨⟩","⟨⟩"))
         }
         tokenConverterEquals( "$\n+", arrayOf("$", NEWLINE_ID, PLUS_ID))
     }

@@ -50,6 +50,7 @@ class InferrerService(details: InferrerDetails)
             FOR -> inferFromStatement = InferFromFor(details)
             WHILE -> inferFromStatement = InferFromWhile(details)
             TYPEDEF -> inferFromStatement = InferFromTypeDef(details)
+            DICT -> TODO()
 
             //should not appear at all
             null  -> throw InternalErrorException(IRREGULAR_STATEMENT_ERROR)

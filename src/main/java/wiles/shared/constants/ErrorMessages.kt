@@ -9,7 +9,7 @@ object ErrorMessages {
     const val GENERIC_ALREADY_DEFINED_ERROR = "This generic value was already defined."
     const val TYPE_EXPECTED_ERROR = "The type definition is unknown."
     const val EXPRESSION_EXPECTED_ERROR = "The expression is invalid or missing."
-    const val UNEXPECTED_OPENING_BRACKET_ERROR = "Expected a closing bracket here."
+    const val UNEXPECTED_OPENING_PAREN_ERROR = "Expected a closing parenthesis here."
     const val OPERATOR_EXPECTED_ERROR = "Expected an operator."
     const val EXPRESSION_UNFINISHED_ERROR = "The expression is unfinished."
     const val INVALID_EXPRESSION_ERROR = "The expression starting from this point is invalid."
