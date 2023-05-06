@@ -153,6 +153,16 @@ writeline("Min found: " + result)
         writeline(a>0)
         """
         assertEquals(getOutput(code11),"oops!\n")
+
+        val code12 = """
+        let dict := mut {"alex" -> 7, "diana" -> 10}
+        dict.add(at := "jim", 15)
+        dict.update(at := "alex", 3)
+        writeline(dict.get(at := "diana"))
+        dict.remove(at := "diana")
+        writeline(dict)
+        """
+        assertEquals(getOutput(code12),"10\n{alex=3, jim=15}\n")
     }
 
     companion object {
