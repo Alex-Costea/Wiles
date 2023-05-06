@@ -5,7 +5,7 @@ Wiles supports features such as:
 - Basic operators for arithmetics, boolean logic and comparisons
 - Functions as first-class objects using the `fun` keyword, including support for closures
 - Sum types using the `either` keyword
-- Support for types such as: integers (`int`), floating point numbers (`rational`), strings (`text`), booleans (`truth`), lists (`list`)
+- Support for types such as: integers (`int`), floating point numbers (`rational`), strings (`text`), booleans (`truth`), lists (`list`), hashmaps (`dict`)
 - Pattern matching on types using `when` statements
 - Opt-in nullability using the `?` symbol
 - Opt-out named arguments as mandatory in function calls

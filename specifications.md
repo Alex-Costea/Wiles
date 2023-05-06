@@ -1,6 +1,6 @@
 ## Language specification
 ### NOTE: BREAKING CHANGES CAN STILL BE MADE
-#### Note: [] means required, {} means optional, {@ @} means repeating
+#### Note: [] means required, ⟨⟩ means optional, ⟪⟫ means repeating
 
 ### Literals
 
@@ -9,8 +9,9 @@
 - Floating: `12345.6` (also `Infinity`, `-Infinity` and `NaN`)
 - String: `"abc"` (escape characters HTML-style)
 - Boolean: `true` and `false`
-- List literal: `[{@value,@}] : type`
-- Functions literals: `{fun ({@param1 {: type} {:= default_value},@})} {-> return_type}} [block]`
+- List literal: `[⟪value,⟫] ⟨: type⟩`
+- Dict literal: `{ ⟪key -> value,⟫ } ⟨: key_type -> value_type⟩`
+- Functions literals: `⟨fun (⟪param1 ⟨: type⟩ ⟨:= default_value⟩,⟫)⟩ ⟨-> return_type⟩⟩ [block]`
 
 ### Types
 - Nothing: only valid value is `nothing`
@@ -19,24 +20,25 @@
 - String: `text`
 - Floating point: `rational` (equivalent to `double` in other languages)
 - Function type: like function literals, but no function body and put between square brackets (ex: `fun[x : int, -> int]`)
-- Sum types: `either[{@type,@}]`
+- Sum types: `either[⟪type,⟫]`
 - List: `list[type]`
+- Dict: `dict[key_type, value_type]`
 
 ### Statements
-- Value: `let {var} name {: type} {:= value}` (`var` makes it a variable, type can be inferred)
+- Value: `let ⟨var⟩ name ⟨: type⟩ ⟨:= value⟩` (`var` makes it a variable, type can be inferred)
 - Type definition: `typedef name := type` (can be used at compile time for inference)
 - Assignment: `name := value`
 - Simple conditional: `if [condition] [block]`
-- Complex conditional: `if begin; {@clause;@} end`
+- Complex conditional: `if begin; ⟪clause;⟫ end`
     - Normal clause: `[condition] [block]`
     - Default clause: `default [block]`
 - Simple conditional type cast: `when [object] is [type] do [block]`
-- Complex conditional type cast: `when [object] begin; {@clause;@} end`
+- Complex conditional type cast: `when [object] begin; ⟪clause;⟫ end`
     - Normal clause: `is [type] [block]`
     - Default clause: `default [block]`
-- For loop: `for x {in collection} {from a} {to b} [block]`
+- For loop: `for x ⟨in collection⟩ ⟨from a⟩ ⟨to b⟩ [block]`
 - While loop: `while condition [block]`
-- Code block: `do [operation]` or `begin; {@operation;@} end`
+- Code block: `do [operation]` or `begin; ⟪operation;⟫ end`
 - Yield: `yield [expression]` (return equivalent)
 - `nothing` (no operation)
 - `stop`, `skip` (`break`, `continue` equivalents)
@@ -48,7 +50,7 @@
 - `and`, `or`, `not` (not bitwise!)
 - `=`, `>`, `>=`, `<`, `<=`, `=/=`
 - `:=` (assign, declare or name parameters)
-- `.` (`b.a{ ( {@ param @} ) }` is `a(b,{ {@ param @}} )`, also used for field access)
+- `.` (`b.a⟨ ( ⟪ param ⟫ ) ⟩` is `a(b,⟨⟪ param ⟫⟩ )`, also used for field access)
 - `:` (type annotation)
 -`+=` (append to end of mutable list)
 - `()` (order of operations, function access)
@@ -83,12 +85,12 @@
 - `read_line`, `read_truth`, `read_int`, `read_rational`: read an object from the command line
 - `run`: runs the function given as argument
 - `maybe` : makes a nullable type out of non-nullable object
-- `list.add(arg value, at)` : add an element to a mutable list
-- `list.remove(arg value, at)` : remove an element from the mutable list at the index
-- `list.update(arg value, at)` : set element of mutable list at index.
-- `list.get(arg at)` : get element of list at index, panic if doesn't exist
+- `collection.add(arg value, at)` : add an element to a mutable collection
+- `collection.remove(arg value, at)` : remove an element from the mutable collection at the index
+- `collection.update(arg value, at)` : set element of mutable collection at index
+- `collection.get(arg at)` : get element of collection at index, panic if it doesn't exist
 - `type` : get type of object at runtime
-- `clone({deep := [boolean]})` : clone object, deeply by default
+- `clone(⟨deep := [boolean]⟩)` : clone object, deeply by default
 - `content` : get content of variable. panics if the value is `nothing`.
 
 ### Miscellaneous
