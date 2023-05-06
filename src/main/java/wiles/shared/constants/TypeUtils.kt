@@ -7,6 +7,7 @@ import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.DECLARE_ID
 import wiles.shared.constants.TypeConstants.INT64_TYPE
 import wiles.shared.constants.Types.COLLECTION_ID
+import wiles.shared.constants.Types.DICT_ID
 import wiles.shared.constants.Types.LIST_ID
 
 object TypeUtils {
@@ -193,6 +194,12 @@ object TypeUtils {
             return isFormerSuperTypeOfLatter(supertype.components[0], INT64_TYPE, getMinus = getMinus,
                 genericTypes = genericTypes) and
                     isFormerSuperTypeOfLatter(supertype.components[1],subtype.components[0], getMinus = getMinus,
+                        genericTypes = genericTypes)
+
+        else if(supertype.name == COLLECTION_ID && subtype.name == DICT_ID)
+            return isFormerSuperTypeOfLatter(supertype.components[0], subtype.components[0], getMinus = getMinus,
+                genericTypes = genericTypes) and
+                    isFormerSuperTypeOfLatter(supertype.components[1],subtype.components[1], getMinus = getMinus,
                         genericTypes = genericTypes)
 
         return false
