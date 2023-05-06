@@ -50,6 +50,12 @@ class ObjectDetails(var value : Any?, type : JSONStatement)
         {
             is Double, is Long, is String, is Boolean, null -> value
             is MutableList<*> -> value.map{if(deep) cloneValue(it, true) else it}.toMutableList()
+            is LinkedHashMap<*,*> -> {
+                val newValue = value.toList().map { if(!deep) it else
+                    Pair(cloneValue(it.first, true), cloneValue(it.second,true))}
+                    .associate { it.first to it.second }
+                return newValue
+            }
             is Function<*, *> -> value
             is ObjectDetails -> ObjectDetails(cloneValue(value.value, deep), value.getType().copyRemovingLocation())
             else -> throw InternalErrorException()
