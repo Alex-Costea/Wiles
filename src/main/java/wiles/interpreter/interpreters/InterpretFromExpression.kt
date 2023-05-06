@@ -62,6 +62,9 @@ class InterpretFromExpression(statement: JSONStatement, variables: InterpreterVa
                 SyntaxType.METHOD -> {
                     InterpretFromMethod(component, variables, additionalVars)
                 }
+                SyntaxType.DICT -> {
+                    InterpretFromDict(component, variables, additionalVars)
+                }
                 else -> throw InternalErrorException()
             }
             interpreter.interpret()

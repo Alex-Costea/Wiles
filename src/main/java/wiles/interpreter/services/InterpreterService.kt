@@ -24,9 +24,8 @@ class InterpreterService(val statement : JSONStatement,
             SyntaxType.CONTINUE -> InterpretFromContinue(statement, variables, additionalVars)
             SyntaxType.FOR -> InterpretFromFor(statement, variables, additionalVars)
             SyntaxType.TYPEDEF -> InterpretFromTypeDef(statement, variables, additionalVars)
-            SyntaxType.DICT -> TODO()
 
-            SyntaxType.METHOD, SyntaxType.LIST, SyntaxType.TOKEN,
+            SyntaxType.METHOD, SyntaxType.LIST, SyntaxType.TOKEN, SyntaxType.DICT,
                 SyntaxType.TYPE, SyntaxType.METHOD_CALL, null -> throw InternalErrorException()
         }
         interpreter.interpret()

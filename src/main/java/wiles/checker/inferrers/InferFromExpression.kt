@@ -211,6 +211,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
 
             val leftType = if(leftIsToken) inferTypeFromLiteral(left,variables, additionalVars)
                 else if(left.syntaxType == SyntaxType.EXPRESSION) left.components[0]
+                else if(left.syntaxType == SyntaxType.DICT) left.components[0]
                 else if(left.syntaxType == SyntaxType.LIST) makeList(left.components[0])
                 else if(left.syntaxType == SyntaxType.METHOD) makeMethod(left)
                 else throw InternalErrorException()
@@ -258,6 +259,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
                     inferTypeFromLiteral(right, additionalVars, additionalVars)
                 else if(middleIsImport) throw ExpectedIdentifierException(right.getFirstLocation())
                 else if(right.syntaxType == SyntaxType.EXPRESSION) right.components[0]
+                else if(right.syntaxType == SyntaxType.DICT) right.components[0]
                 else if(right.syntaxType == SyntaxType.LIST) makeList(right.components[0])
                 else if(right.syntaxType == SyntaxType.METHOD) makeMethod(right)
                 else if(right.syntaxType == SyntaxType.METHOD_CALL) right.components[0]
