@@ -7,6 +7,7 @@ import wiles.interpreter.data.InterpreterVariableMap
 import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.exceptions.PanicException
 import wiles.interpreter.statics.InterpreterConstants.toIntOrNull
+import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.ErrorMessages.CANNOT_READ_INT_ERROR
@@ -210,12 +211,15 @@ object StandardLibrary {
 
     @Suppress("UNCHECKED_CAST")
     private val ADD_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
-        val list = map["!collection"]!!
+        val coll = map["!collection"]!!
         val elem = map["!value"]!!.makeMutable()
-        val listValue = list.value as MutableList<ObjectDetails>
-        val index = (map["!at"]!!.value as Long)
+        val at = map["!at"]!!
         try {
-            listValue.add(index.toIntOrNull()!!, elem)
+            when(val collection = coll.value)
+            {
+                is MutableList<*> -> (collection as MutableList<ObjectDetails>).add((at.value as Long).toIntOrNull()!!, elem)
+                is LinkedHashMap<*, *> -> (collection as LinkedHashMap<ObjectDetails, ObjectDetails>)[at] = elem
+            }
         }
         catch (ex : IndexOutOfBoundsException)
         {
@@ -230,12 +234,15 @@ object StandardLibrary {
 
     @Suppress("UNCHECKED_CAST")
     private val SET_AT_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
-        val list = map["!collection"]!!
+        val coll = map["!collection"]!!
         val elem = map["!value"]!!.makeMutable()
-        val listValue = list.value as MutableList<ObjectDetails>
-        val index = (map["!at"]!!.value as Long)
+        val at = map["!at"]!!
         try {
-            listValue[index.toIntOrNull()!!] = elem
+            when(val collection = coll.value)
+            {
+                is MutableList<*> -> (collection as MutableList<ObjectDetails>)[(at.value as Long).toIntOrNull()!!] = elem
+                is LinkedHashMap<*, *> -> (collection as LinkedHashMap<ObjectDetails, ObjectDetails>)[at] = elem
+            }
         }
         catch (ex : IndexOutOfBoundsException)
         {
@@ -250,11 +257,15 @@ object StandardLibrary {
 
     @Suppress("UNCHECKED_CAST")
     private val GET_AT_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
-        val list = map["!collection"]!!
-        val listValue = list.value as MutableList<ObjectDetails>
-        val index = (map["!at"]!!.value as Long)
+        val coll = map["!collection"]!!
+        val at = map["!at"]!!
         try {
-            listValue[index.toIntOrNull()!!]
+            when(val collection = coll.value)
+            {
+                is MutableList<*> -> (collection as MutableList<ObjectDetails>)[(at.value as Long).toIntOrNull()!!]
+                is LinkedHashMap<*, *> -> (collection as LinkedHashMap<ObjectDetails, ObjectDetails>)[at]
+                else -> throw InternalErrorException()
+            }
         }
         catch (ex : IndexOutOfBoundsException)
         {
@@ -268,11 +279,14 @@ object StandardLibrary {
 
     @Suppress("UNCHECKED_CAST")
     private val REMOVE_AT_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
-        val list = map["!collection"]!!
-        val listValue = list.value as MutableList<ObjectDetails>
-        val index = (map["!at"]!!.value as Long)
+        val coll = map["!collection"]!!
+        val at = map["!at"]!!
         try {
-            listValue.removeAt(index.toIntOrNull()!!)
+            when(val collection = coll.value)
+            {
+                is MutableList<*> -> (collection as MutableList<ObjectDetails>).removeAt((at.value as Long).toIntOrNull()!!)
+                is LinkedHashMap<*, *> -> (collection as LinkedHashMap<ObjectDetails, ObjectDetails>).remove(key = at)
+            }
         }
         catch (ex : IndexOutOfBoundsException)
         {
