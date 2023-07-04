@@ -399,4 +399,21 @@ object TypeConstants {
             )
         ))
     )
+
+    private val GET_KEYS_GENERIC_KEY_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|get_keys_key")
+    private val GET_KEYS_COLLECTION_TYPE = makeCollection(
+        makeGenericDeclaration(GET_KEYS_GENERIC_KEY_TYPE), NULLABLE_ANYTHING_TYPE)
+    val GET_KEYS_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
+        components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
+            components = mutableListOf(
+                makeList(GET_KEYS_GENERIC_KEY_TYPE),
+                JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
+                    components = mutableListOf(
+                        GET_KEYS_COLLECTION_TYPE,
+                        JSONStatement(name = "!collection", syntaxType = SyntaxType.TOKEN)
+                    )
+                )
+            )
+        ))
+    )
 }

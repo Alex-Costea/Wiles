@@ -25,6 +25,7 @@ import wiles.shared.constants.TypeConstants.CLONE_TYPE
 import wiles.shared.constants.TypeConstants.CONTENT_TYPE
 import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
 import wiles.shared.constants.TypeConstants.GET_AT_TYPE
+import wiles.shared.constants.TypeConstants.GET_KEYS_TYPE
 import wiles.shared.constants.TypeConstants.GET_TYPE_TYPE
 import wiles.shared.constants.TypeConstants.IGNORE_TYPE
 import wiles.shared.constants.TypeConstants.INT64_TYPE
@@ -71,6 +72,7 @@ object StandardLibrary {
     private const val RUN = "!run"
     private const val GET_TYPE = "!type"
     private const val CLONE = "!clone"
+    private const val GET_KEYS = "!keys"
 
     //CRUD
     private const val GET = "!get"
@@ -107,6 +109,7 @@ object StandardLibrary {
             Pair(SET_AT, VariableDetails(SET_AT_TYPE)),
             Pair(REMOVE_AT, VariableDetails(REMOVE_AT_TYPE)),
             Pair(GET, VariableDetails(GET_AT_TYPE)),
+            Pair(GET_KEYS, VariableDetails(GET_KEYS_TYPE)),
         )
     )
 
@@ -309,6 +312,13 @@ object StandardLibrary {
         map["!elem"]!!.clone(deep = (map["!deep"]?.value ?: true) as Boolean)
     }, defaultCheckerVars[CLONE]!!.type)
 
+    @Suppress("UNCHECKED_CAST")
+    private val GET_KEYS_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
+        val collection = map["!collection"]!!.value as LinkedHashMap<ObjectDetails, ObjectDetails>
+        val type = map["!collection"]!!.getType()
+        ObjectDetails(type = type, value = collection.keys.toMutableList())
+    }, defaultCheckerVars[GET_KEYS]!!.type)
+
     init{
         defaultInterpreterVars[NOTHING_ID] = NOTHING_REF
         defaultInterpreterVars[FALSE_ID] = FALSE_REF
@@ -337,5 +347,6 @@ object StandardLibrary {
         defaultInterpreterVars[SET_AT] = SET_AT_REF
         defaultInterpreterVars[REMOVE_AT] = REMOVE_AT_REF
         defaultInterpreterVars[GET] = GET_AT_REF
+        defaultInterpreterVars[GET_KEYS] = GET_KEYS_REF
     }
 }

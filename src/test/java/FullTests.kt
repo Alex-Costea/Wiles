@@ -166,14 +166,20 @@ writeline("Min found: " + result)
 
         val code13 = """
         let a := mut {1 -> "hi!", 2 -> "bye!"} : int? -> text?
+        writeline(a.keys)
         writeline(a.type)
         a.add(at := nothing, nothing)
+        writeline(a.keys)
         writeline(a.type)
         a.remove(at := nothing)
+        writeline(a.keys)
         writeline(a.type)
         """
-        assertEquals(getOutput(code13),"TYPE MUTABLE; (TYPE DICT; (TYPE INT64; TYPE STRING))\n" +
+        assertEquals(getOutput(code13),"[1, 2]\n" +
+                "TYPE MUTABLE; (TYPE DICT; (TYPE INT64; TYPE STRING))\n" +
+                "[1, 2, nothing]\n" +
                 "TYPE MUTABLE; (TYPE DICT; (TYPE EITHER; (TYPE INT64; TYPE !nothing); TYPE EITHER; (TYPE STRING; TYPE !nothing)))\n" +
+                "[1, 2]\n" +
                 "TYPE MUTABLE; (TYPE DICT; (TYPE INT64; TYPE STRING))\n")
     }
 
