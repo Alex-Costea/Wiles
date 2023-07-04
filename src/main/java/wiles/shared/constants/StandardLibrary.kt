@@ -212,7 +212,7 @@ object StandardLibrary {
     @Suppress("UNCHECKED_CAST")
     private val ADD_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
         val coll = map["!collection"]!!
-        val elem = map["!value"]!!.makeMutable()
+        val elem = map["!value"]!!
         val at = map["!at"]!!
         try {
             when(val collection = coll.value)
@@ -235,7 +235,7 @@ object StandardLibrary {
     @Suppress("UNCHECKED_CAST")
     private val SET_AT_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
         val coll = map["!collection"]!!
-        val elem = map["!value"]!!.makeMutable()
+        val elem = map["!value"]!!
         val at = map["!at"]!!
         try {
             when(val collection = coll.value)

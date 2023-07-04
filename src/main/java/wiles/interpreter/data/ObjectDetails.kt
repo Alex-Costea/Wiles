@@ -7,6 +7,7 @@ import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.TypeConstants.MUTABLE_NULLABLE_ANYTHING
 import wiles.shared.constants.TypeUtils
 import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
+import wiles.shared.constants.Types.DICT_ID
 import wiles.shared.constants.Types.LIST_ID
 import java.util.function.Function
 
@@ -18,23 +19,37 @@ class ObjectDetails(var value : Any?, type : JSONStatement)
         setType(type)
     }
 
+    private fun getOverallType(list : MutableCollection<ObjectDetails>) : JSONStatement?
+    {
+        var newType : JSONStatement? = null
+        for(component in list)
+        {
+            newType = if(newType == null)
+                component.getType()
+            else addType(newType, component.getType())
+        }
+        return newType
+    }
+
     @Suppress("UNCHECKED_CAST")
     fun getType() : JSONStatement
     {
         val result = typeStatement.copy()
         if(typeStatement.name == MUTABLE_ID && typeStatement.components.getOrNull(0)?.name == LIST_ID)
         {
-            val list = value as MutableList<ObjectDetails>
             val originalType = result.components[0].components[0]
-            var newType : JSONStatement? = null
-            for(component in list)
-            {
-                newType = if(newType == null)
-                    component.getType()
-                else addType(newType, component.getType())
-            }
             result.components[0].components.clear()
-            result.components[0].components.add(newType ?: originalType)
+            result.components[0].components.add(getOverallType(value as MutableList<ObjectDetails>) ?: originalType)
+        }
+        if(typeStatement.name == MUTABLE_ID && typeStatement.components.getOrNull(0)?.name == DICT_ID)
+        {
+            val originalKeyType = result.components[0].components[0]
+            val originalValueType = result.components[0].components[1]
+            result.components[0].components.clear()
+            result.components[0].components.add(
+                getOverallType((value as LinkedHashMap<ObjectDetails,ObjectDetails>).keys) ?: originalKeyType)
+            result.components[0].components.add(
+                getOverallType((value as LinkedHashMap<ObjectDetails,ObjectDetails>).values) ?: originalValueType)
         }
         return result
     }
