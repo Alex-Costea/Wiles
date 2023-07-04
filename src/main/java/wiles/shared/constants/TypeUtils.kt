@@ -190,6 +190,12 @@ object TypeUtils {
                     isFormerSuperTypeOfLatter(supertype.components[1],subtype.components[1], getMinus = getMinus,
                         genericTypes = genericTypes)
 
+        else if(supertype.name == DICT_ID && subtype.name == DICT_ID)
+            return isFormerSuperTypeOfLatter(supertype.components[0], subtype.components[0], getMinus = getMinus,
+                genericTypes = genericTypes) and
+                    isFormerSuperTypeOfLatter(supertype.components[1],subtype.components[1], getMinus = getMinus,
+                        genericTypes = genericTypes)
+
         else if(supertype.name == COLLECTION_ID && subtype.name == LIST_ID)
             return isFormerSuperTypeOfLatter(supertype.components[0], INT64_TYPE, getMinus = getMinus,
                 genericTypes = genericTypes) and

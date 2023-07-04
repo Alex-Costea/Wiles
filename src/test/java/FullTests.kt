@@ -181,6 +181,13 @@ writeline("Min found: " + result)
                 "TYPE MUTABLE; (TYPE DICT; (TYPE EITHER; (TYPE INT64; TYPE !nothing); TYPE EITHER; (TYPE STRING; TYPE !nothing)))\n" +
                 "[1, 2]\n" +
                 "TYPE MUTABLE; (TYPE DICT; (TYPE INT64; TYPE STRING))\n")
+
+        val code14 = """
+        let a := mut {1 -> "hi!", 2 -> "bye!"} : int? -> text?
+        let b := mut {1 -> "hi!", 2 -> "bye!"}
+        writeline(a=b)
+        """
+        assertEquals(getOutput(code14),"true\n")
     }
 
     companion object {
