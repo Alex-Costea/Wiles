@@ -1,14 +1,15 @@
 package wiles.checker.statics
 
 import wiles.shared.JSONStatement
+import wiles.shared.constants.Tokens.EQUALS_ID
 import wiles.shared.constants.Tokens.IMPORT_ID
+import wiles.shared.constants.Tokens.NOT_EQUAL_ID
 import wiles.shared.constants.Tokens.PLUS_ID
 import wiles.shared.constants.TypeConstants.AND_OPERATION
 import wiles.shared.constants.TypeConstants.ASSIGN_OPERATION
 import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
 import wiles.shared.constants.TypeConstants.DIVIDE_OPERATION
 import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
-import wiles.shared.constants.TypeConstants.EQUALS_OPERATION
 import wiles.shared.constants.TypeConstants.INT64_TYPE
 import wiles.shared.constants.TypeConstants.LARGER_EQUALS_OPERATION
 import wiles.shared.constants.TypeConstants.LARGER_OPERATION
@@ -16,7 +17,6 @@ import wiles.shared.constants.TypeConstants.LIST_OF_NULLABLE_ANYTHING_TYPE
 import wiles.shared.constants.TypeConstants.MINUS_OPERATION
 import wiles.shared.constants.TypeConstants.MUTABLE_OPERATION
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
-import wiles.shared.constants.TypeConstants.NOT_EQUAL_OPERATION
 import wiles.shared.constants.TypeConstants.NOT_OPERATION
 import wiles.shared.constants.TypeConstants.OR_OPERATION
 import wiles.shared.constants.TypeConstants.PLUS_OPERATION
@@ -90,34 +90,6 @@ object SimpleTypeGenerator {
         Pair(Triple(DOUBLE_TYPE, PLUS_OPERATION, STRING_TYPE), STRING_TYPE),
         Pair(Triple(STRING_TYPE, PLUS_OPERATION, DOUBLE_TYPE), STRING_TYPE),
 
-        //Equals
-        Pair(Triple(INT64_TYPE, EQUALS_OPERATION, INT64_TYPE), BOOLEAN_TYPE),
-        Pair(Triple(BOOLEAN_TYPE, EQUALS_OPERATION, BOOLEAN_TYPE), BOOLEAN_TYPE),
-        Pair(Triple(STRING_TYPE, EQUALS_OPERATION, STRING_TYPE), BOOLEAN_TYPE),
-
-        //Equals nothing
-        Pair(Triple(NOTHING_TYPE, EQUALS_OPERATION, NOTHING_TYPE), BOOLEAN_TYPE),
-        Pair(Triple(NOTHING_TYPE, EQUALS_OPERATION, INT64_TYPE), BOOLEAN_TYPE),
-        Pair(Triple(INT64_TYPE, EQUALS_OPERATION, NOTHING_TYPE), BOOLEAN_TYPE),
-        Pair(Triple(NOTHING_TYPE, EQUALS_OPERATION, BOOLEAN_TYPE), BOOLEAN_TYPE),
-        Pair(Triple(BOOLEAN_TYPE, EQUALS_OPERATION, NOTHING_TYPE), BOOLEAN_TYPE),
-        Pair(Triple(NOTHING_TYPE, EQUALS_OPERATION, STRING_TYPE), BOOLEAN_TYPE),
-        Pair(Triple(STRING_TYPE, EQUALS_OPERATION, NOTHING_TYPE), BOOLEAN_TYPE),
-
-        //Not equals
-        Pair(Triple(INT64_TYPE, NOT_EQUAL_OPERATION, INT64_TYPE), BOOLEAN_TYPE),
-        Pair(Triple(BOOLEAN_TYPE, NOT_EQUAL_OPERATION, BOOLEAN_TYPE), BOOLEAN_TYPE),
-        Pair(Triple(STRING_TYPE, NOT_EQUAL_OPERATION, STRING_TYPE), BOOLEAN_TYPE),
-
-        //Not equals nothing
-        Pair(Triple(NOTHING_TYPE, NOT_EQUAL_OPERATION, NOTHING_TYPE), BOOLEAN_TYPE),
-        Pair(Triple(NOTHING_TYPE, NOT_EQUAL_OPERATION, INT64_TYPE), BOOLEAN_TYPE),
-        Pair(Triple(INT64_TYPE, NOT_EQUAL_OPERATION, NOTHING_TYPE), BOOLEAN_TYPE),
-        Pair(Triple(NOTHING_TYPE, NOT_EQUAL_OPERATION, BOOLEAN_TYPE), BOOLEAN_TYPE),
-        Pair(Triple(BOOLEAN_TYPE, NOT_EQUAL_OPERATION, NOTHING_TYPE), BOOLEAN_TYPE),
-        Pair(Triple(NOTHING_TYPE, NOT_EQUAL_OPERATION, STRING_TYPE), BOOLEAN_TYPE),
-        Pair(Triple(STRING_TYPE, NOT_EQUAL_OPERATION, NOTHING_TYPE), BOOLEAN_TYPE),
-
         //Larger
         Pair(Triple(INT64_TYPE, LARGER_OPERATION, INT64_TYPE), BOOLEAN_TYPE),
         Pair(Triple(INT64_TYPE, LARGER_OPERATION, DOUBLE_TYPE), BOOLEAN_TYPE),
@@ -153,6 +125,13 @@ object SimpleTypeGenerator {
 
         if(unboxedTriple.second.name == IMPORT_ID)
             return unboxedTriple.third.copyRemovingLocation()
+
+        if((unboxedTriple.second.name == EQUALS_ID || unboxedTriple.second.name == NOT_EQUAL_ID)
+                   && (isFormerSuperTypeOfLatter(NOTHING_TYPE, unboxedTriple.first)
+                    || isFormerSuperTypeOfLatter(NOTHING_TYPE, unboxedTriple.third)
+                    || isFormerSuperTypeOfLatter(unboxedTriple.first,unboxedTriple.third)
+                    || isFormerSuperTypeOfLatter(unboxedTriple.third,unboxedTriple.first)))
+            return BOOLEAN_TYPE
 
         if(triple.second.name == PLUS_ID
             && isFormerSuperTypeOfLatter(LIST_OF_NULLABLE_ANYTHING_TYPE, triple.first)

@@ -661,7 +661,7 @@ class InterpreterTests {
         "name" : "!a",
         "type" : "TOKEN"
       }, {
-        "name" : "STRING|EQUALS|STRING",
+        "name" : "EQUALS",
         "type" : "TOKEN"
       }, {
         "name" : "!b",
@@ -1031,7 +1031,7 @@ class InterpreterTests {
               "type" : "TOKEN"
             } ]
           }, {
-            "name" : "INT64|EQUALS|INT64",
+            "name" : "EQUALS",
             "type" : "TOKEN"
           }, {
             "name" : "#6",
@@ -1221,7 +1221,7 @@ class InterpreterTests {
             "name" : "!i",
             "type" : "TOKEN"
           }, {
-            "name" : "INT64|EQUALS|INT64",
+            "name" : "EQUALS",
             "type" : "TOKEN"
           }, {
             "name" : "#12",
@@ -1241,7 +1241,7 @@ class InterpreterTests {
             "name" : "!i",
             "type" : "TOKEN"
           }, {
-            "name" : "INT64|EQUALS|INT64",
+            "name" : "EQUALS",
             "type" : "TOKEN"
           }, {
             "name" : "#12",
@@ -1277,7 +1277,7 @@ class InterpreterTests {
             "name" : "!i",
             "type" : "TOKEN"
           }, {
-            "name" : "INT64|EQUALS|INT64",
+            "name" : "EQUALS",
             "type" : "TOKEN"
           }, {
             "name" : "#13",
@@ -1313,7 +1313,7 @@ class InterpreterTests {
             "name" : "!i",
             "type" : "TOKEN"
           }, {
-            "name" : "INT64|EQUALS|INT64",
+            "name" : "EQUALS",
             "type" : "TOKEN"
           }, {
             "name" : "#20",
@@ -1333,7 +1333,7 @@ class InterpreterTests {
             "name" : "!i",
             "type" : "TOKEN"
           }, {
-            "name" : "INT64|EQUALS|INT64",
+            "name" : "EQUALS",
             "type" : "TOKEN"
           }, {
             "name" : "#21",
@@ -1502,7 +1502,7 @@ class InterpreterTests {
             "name" : "!i",
             "type" : "TOKEN"
           }, {
-            "name" : "INT64|EQUALS|INT64",
+            "name" : "EQUALS",
             "type" : "TOKEN"
           }, {
             "name" : "#5",
@@ -1522,7 +1522,7 @@ class InterpreterTests {
             "name" : "!i",
             "type" : "TOKEN"
           }, {
-            "name" : "INT64|EQUALS|INT64",
+            "name" : "EQUALS",
             "type" : "TOKEN"
           }, {
             "name" : "#2",
@@ -1750,7 +1750,7 @@ class InterpreterTests {
               } ]
             } ]
           }, {
-            "name" : "INT64|EQUALS|INT64",
+            "name" : "EQUALS",
             "type" : "TOKEN"
           }, {
             "name" : "#0",
