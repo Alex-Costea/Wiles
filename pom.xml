@@ -6,7 +6,7 @@
 
     <groupId>in.costea</groupId>
     <artifactId>Wiles</artifactId>
-    <version>WIP</version>
+    <version>1.0.0</version>
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
