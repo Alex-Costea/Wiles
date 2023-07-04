@@ -91,7 +91,8 @@
 - `collection.get(arg at)` : get element of collection at index, panic if it doesn't exist
 - `type` : get type of object at runtime
 - `clone(⟨deep := [boolean]⟩)` : clone object, deeply by default
-- `content` : get content of variable. panics if the value is `nothing`.
+- `content` : get content of variable. panics if the value is `nothing`
+- `keys` : get the keys of a dictionary
 
 ### Miscellaneous
 - `;` can be specified or inferred from newline
