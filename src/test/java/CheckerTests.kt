@@ -8,6 +8,8 @@ import wiles.shared.AbstractCompilationException
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.constants.ErrorMessages.CONFLICTING_TYPES_FOR_IDENTIFIER_ERROR
 import wiles.shared.constants.ErrorMessages.EXPECTED_VALUE_FOR_IDENTIFIER_ERROR
+import wiles.shared.constants.ErrorMessages.NO_MATCH_FOR_ERROR
+import wiles.shared.constants.ErrorMessages.TOO_MANY_VALUES_PROVIDED_ERROR
 import wiles.shared.constants.Types.INT64_ID
 import wiles.shared.constants.Types.STRING_ID
 import wiles.shared.constants.Utils.NULL_LOCATION
@@ -3619,6 +3621,260 @@ class CheckerTests {
     } ]
   } ]
 }""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE !nothing; DECLARATION(TYPE INT64; !a); DECLARATION(TYPE INT64; !b; EXPRESSION(TYPE INT64; #2)); DECLARATION ANON_ARG; (TYPE INT64; !c); DECLARATION ANON_ARG; (TYPE INT64; !d; EXPRESSION(TYPE INT64; #4)))); !func; EXPRESSION(TYPE METHOD; (METHOD(TYPE !nothing; DECLARATION(TYPE INT64; !a); DECLARATION(TYPE INT64; !b; EXPRESSION(TYPE INT64; #2)); DECLARATION ANON_ARG; (TYPE INT64; !c); DECLARATION ANON_ARG; (TYPE INT64; !d; EXPRESSION(TYPE INT64; #4)))); METHOD(TYPE !nothing; DECLARATION(TYPE INT64; !a); DECLARATION(TYPE INT64; !b; EXPRESSION(TYPE INT64; #2)); DECLARATION ANON_ARG; (TYPE INT64; !c); DECLARATION ANON_ARG; (TYPE INT64; !d; EXPRESSION(TYPE INT64; #4)); CODE_BLOCK(EXPRESSION(TYPE !nothing; !nothing))))); EXPRESSION(!func; APPLY; METHOD_CALL(TYPE METHOD_CALL; (METHOD_CALL(EXPRESSION(TYPE INT64; #10); EXPRESSION(TYPE INT64; #20); EXPRESSION(TYPE INT64; #30))))))")
+
+    /*
+    let func := fun() do nothing
+    func(y := 10)
+     */
+    checkResult(createExceptions(CannotCallMethodException(NULL_LOCATION,NO_MATCH_FOR_ERROR.format("y"))),
+        """{
+  "parsed": true,
+  "type": "CODE_BLOCK",
+  "components": [
+    {
+      "type": "DECLARATION",
+      "components": [
+        {
+          "name": "!func",
+          "type": "TOKEN",
+          "location": {
+            "line": 1,
+            "lineIndex": 5
+          }
+        },
+        {
+          "type": "EXPRESSION",
+          "components": [
+            {
+              "type": "METHOD",
+              "location": {
+                "line": 1,
+                "lineIndex": 13
+              },
+              "components": [
+                {
+                  "type": "CODE_BLOCK",
+                  "components": [
+                    {
+                      "type": "EXPRESSION",
+                      "components": [
+                        {
+                          "name": "!nothing",
+                          "type": "TOKEN",
+                          "location": {
+                            "line": 1,
+                            "lineIndex": 22
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "EXPRESSION",
+      "components": [
+        {
+          "name": "!func",
+          "type": "TOKEN",
+          "location": {
+            "line": 2,
+            "lineIndex": 1
+          }
+        },
+        {
+          "name": "APPLY",
+          "type": "TOKEN",
+          "location": {
+            "line": 2,
+            "lineIndex": 5
+          }
+        },
+        {
+          "type": "METHOD_CALL",
+          "components": [
+            {
+              "type": "EXPRESSION",
+              "components": [
+                {
+                  "type": "EXPRESSION",
+                  "components": [
+                    {
+                      "name": "!y",
+                      "type": "TOKEN",
+                      "location": {
+                        "line": 2,
+                        "lineIndex": 6
+                      }
+                    }
+                  ]
+                },
+                {
+                  "name": "ASSIGN",
+                  "type": "TOKEN",
+                  "location": {
+                    "line": 2,
+                    "lineIndex": 8
+                  }
+                },
+                {
+                  "type": "EXPRESSION",
+                  "components": [
+                    {
+                      "name": "#10",
+                      "type": "TOKEN",
+                      "location": {
+                        "line": 2,
+                        "lineIndex": 11
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE !nothing)); !func; EXPRESSION(TYPE METHOD; (METHOD(TYPE !nothing)); METHOD(TYPE !nothing; CODE_BLOCK(EXPRESSION(TYPE !nothing; !nothing))))); EXPRESSION(!func; APPLY; METHOD_CALL(TYPE METHOD_CALL; (METHOD_CALL(EXPRESSION(!y; ASSIGN; EXPRESSION(TYPE INT64; #10)))))))")
+
+
+    /*
+    let func := fun(arg x : int) do nothing
+    func(10,20)
+     */
+    checkResult(createExceptions(CannotCallMethodException(NULL_LOCATION,TOO_MANY_VALUES_PROVIDED_ERROR.format("y"))),
+        """{
+  "parsed": true,
+  "type": "CODE_BLOCK",
+  "components": [
+    {
+      "type": "DECLARATION",
+      "components": [
+        {
+          "name": "!func",
+          "type": "TOKEN",
+          "location": {
+            "line": 1,
+            "lineIndex": 5
+          }
+        },
+        {
+          "type": "EXPRESSION",
+          "components": [
+            {
+              "type": "METHOD",
+              "location": {
+                "line": 1,
+                "lineIndex": 13
+              },
+              "components": [
+                {
+                  "name": "ANON_ARG",
+                  "type": "DECLARATION",
+                  "components": [
+                    {
+                      "name": "INT64",
+                      "type": "TYPE",
+                      "location": {
+                        "line": 1,
+                        "lineIndex": 25
+                      }
+                    },
+                    {
+                      "name": "!x",
+                      "type": "TOKEN",
+                      "location": {
+                        "line": 1,
+                        "lineIndex": 21
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "CODE_BLOCK",
+                  "components": [
+                    {
+                      "type": "EXPRESSION",
+                      "components": [
+                        {
+                          "name": "!nothing",
+                          "type": "TOKEN",
+                          "location": {
+                            "line": 1,
+                            "lineIndex": 33
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "EXPRESSION",
+      "components": [
+        {
+          "name": "!func",
+          "type": "TOKEN",
+          "location": {
+            "line": 2,
+            "lineIndex": 1
+          }
+        },
+        {
+          "name": "APPLY",
+          "type": "TOKEN",
+          "location": {
+            "line": 2,
+            "lineIndex": 5
+          }
+        },
+        {
+          "type": "METHOD_CALL",
+          "components": [
+            {
+              "type": "EXPRESSION",
+              "components": [
+                {
+                  "name": "#10",
+                  "type": "TOKEN",
+                  "location": {
+                    "line": 2,
+                    "lineIndex": 6
+                  }
+                }
+              ]
+            },
+            {
+              "type": "EXPRESSION",
+              "components": [
+                {
+                  "name": "#20",
+                  "type": "TOKEN",
+                  "location": {
+                    "line": 2,
+                    "lineIndex": 9
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE !nothing; DECLARATION ANON_ARG; (TYPE INT64; !x))); !func; EXPRESSION(TYPE METHOD; (METHOD(TYPE !nothing; DECLARATION ANON_ARG; (TYPE INT64; !x))); METHOD(TYPE !nothing; DECLARATION ANON_ARG; (TYPE INT64; !x); CODE_BLOCK(EXPRESSION(TYPE !nothing; !nothing))))); EXPRESSION(!func; APPLY; METHOD_CALL(TYPE METHOD_CALL; (METHOD_CALL(EXPRESSION(TYPE INT64; #10); EXPRESSION(TYPE INT64; #20))))))")
     }
 
     @Test
