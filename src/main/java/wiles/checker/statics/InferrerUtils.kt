@@ -12,7 +12,11 @@ import wiles.shared.TokenLocation
 import wiles.shared.constants.Chars
 import wiles.shared.constants.Chars.DIGIT_SEPARATOR
 import wiles.shared.constants.ErrorMessages.CANNOT_GET_LIST_ELEMENT_TYPE_ERROR
+import wiles.shared.constants.ErrorMessages.CONFLICTING_TYPES_FOR_IDENTIFIER_ERROR
+import wiles.shared.constants.ErrorMessages.EXPECTED_VALUE_FOR_IDENTIFIER_ERROR
 import wiles.shared.constants.ErrorMessages.NOT_ONE_TOKEN_ERROR
+import wiles.shared.constants.ErrorMessages.NO_MATCH_FOR_ERROR
+import wiles.shared.constants.ErrorMessages.TOO_MANY_VALUES_PROVIDED_ERROR
 import wiles.shared.constants.Predicates
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens
@@ -188,17 +192,17 @@ object InferrerUtils {
         : Map<String,Pair<JSONStatement,Boolean>>
     {
         // statement, does it need name addition
-        val finalCallArgumentsMap = hashMapOf<String,Pair<JSONStatement,Boolean>>()
+        val finalCallArgumentsMap = linkedMapOf<String,Pair<JSONStatement,Boolean>>()
 
         val methodComponents = methodType.components[0].components.filter{it.syntaxType!=SyntaxType.TYPE}
         val callComponents = methodCallType.components[0].components
 
         //Create method arguments
-        val namedArgsInMethod = hashMapOf<String,Pair<JSONStatement,Boolean>>()
+        val namedArgsInMethod = linkedMapOf<String,Pair<JSONStatement,Boolean>>()
         val unnamedArgsInMethod = linkedMapOf<String,Pair<JSONStatement,Boolean>>()
         for(component in methodComponents)
         {
-            if(!component.name.contains( ANON_ARG_ID))
+            if(!component.name.contains(ANON_ARG_ID))
                 namedArgsInMethod[component.components[1].name]=Pair(component.components[0],
                     component.components.size!=2)
             else unnamedArgsInMethod[component.components[1].name]=Pair(component.components[0],
@@ -206,7 +210,7 @@ object InferrerUtils {
         }
 
         //create method call arguments
-        val namedArgsInCall = hashMapOf<String,JSONStatement>()
+        val namedArgsInCall = linkedMapOf<String,JSONStatement>()
         val unnamedArgsInCall = mutableListOf<JSONStatement>()
         for(component in callComponents)
         {
@@ -222,24 +226,27 @@ object InferrerUtils {
             val name = component.component1()
             val superType = namedArgsInMethod[name]?.first ?:
                 unnamedArgsInMethod[name]?.first ?:
-                throw CannotCallMethodException(location)
+                throw CannotCallMethodException(location,NO_MATCH_FOR_ERROR.format(name.drop(1)))
             val subType = component.component2()
             if(isFormerSuperTypeOfLatter(superType, subType, genericTypes = genericTypes)) {
                 namedArgsInMethod.remove(name)
                 unnamedArgsInMethod.remove(name)
             }
-            else throw CannotCallMethodException(location)
+            else throw CannotCallMethodException(location,CONFLICTING_TYPES_FOR_IDENTIFIER_ERROR.format(
+                superType,subType,name.drop(1)))
         }
 
-        if(namedArgsInMethod.any { !it.component2().second })
-            throw CannotCallMethodException(location)
+        val namedArgsUnmatched = namedArgsInMethod.filter { !it.component2().second }
+        if(namedArgsUnmatched.isNotEmpty())
+            throw CannotCallMethodException(location,EXPECTED_VALUE_FOR_IDENTIFIER_ERROR.format(
+                namedArgsUnmatched.entries.first().key.drop(1)))
 
         val unnamedArgsInMethodList = unnamedArgsInMethod.toList().toMutableList()
 
         for(component in unnamedArgsInCall.withIndex())
         {
             if(unnamedArgsInMethodList.isEmpty())
-                throw CannotCallMethodException(location)
+                throw CannotCallMethodException(location,TOO_MANY_VALUES_PROVIDED_ERROR)
             val superType = unnamedArgsInMethodList[0].second.first
             val subType = component.value.components[0]
             val name = unnamedArgsInMethodList.removeFirst().first
@@ -247,11 +254,14 @@ object InferrerUtils {
             finalCallArgumentsMap[name] = Pair(component.value,true)
 
             if(!isFormerSuperTypeOfLatter(superType, subType, genericTypes = genericTypes))
-                throw CannotCallMethodException(location)
+                throw CannotCallMethodException(location,
+                    CONFLICTING_TYPES_FOR_IDENTIFIER_ERROR.format(superType,subType,name.drop(1)))
         }
 
-        if(unnamedArgsInMethodList.any { !it.component2().second })
-            throw CannotCallMethodException(location)
+        val unnamedArgsUnmatched = unnamedArgsInMethodList.filter { !it.component2().second }
+        if(unnamedArgsUnmatched.isNotEmpty())
+            throw CannotCallMethodException(location,EXPECTED_VALUE_FOR_IDENTIFIER_ERROR.format(
+                unnamedArgsUnmatched.first().first.drop(1)))
 
         return finalCallArgumentsMap
     }

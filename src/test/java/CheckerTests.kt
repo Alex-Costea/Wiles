@@ -6,6 +6,8 @@ import wiles.checker.Checker
 import wiles.checker.exceptions.*
 import wiles.shared.AbstractCompilationException
 import wiles.shared.CompilationExceptionsCollection
+import wiles.shared.constants.ErrorMessages.CONFLICTING_TYPES_FOR_IDENTIFIER_ERROR
+import wiles.shared.constants.ErrorMessages.EXPECTED_VALUE_FOR_IDENTIFIER_ERROR
 import wiles.shared.constants.Types.INT64_ID
 import wiles.shared.constants.Types.STRING_ID
 import wiles.shared.constants.Utils.NULL_LOCATION
@@ -544,7 +546,8 @@ class CheckerTests {
   } ]
 }""","CODE_BLOCK(EXPRESSION(EXPRESSION(!abc); ASSIGN; EXPRESSION(#100)))")
 
-        checkResult(createExceptions(CannotCallMethodException(NULL_LOCATION)),"""{
+        checkResult(createExceptions(CannotCallMethodException(NULL_LOCATION,
+            CONFLICTING_TYPES_FOR_IDENTIFIER_ERROR.format("TYPE ANYTHING","TYPE EITHER; (TYPE INT64; TYPE !nothing)","text"))),"""{
   "parsed" : true,
   "type" : "CODE_BLOCK",
   "components" : [ {
@@ -3283,7 +3286,7 @@ class CheckerTests {
   } ]
 }""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE !nothing; DECLARATION(TYPE INT64; !a); DECLARATION(TYPE INT64; !b; EXPRESSION(TYPE INT64; #2)); DECLARATION ANON_ARG; (TYPE INT64; !c); DECLARATION ANON_ARG; (TYPE INT64; !d; EXPRESSION(TYPE INT64; #4)))); !func; EXPRESSION(TYPE METHOD; (METHOD(TYPE !nothing; DECLARATION(TYPE INT64; !a); DECLARATION(TYPE INT64; !b; EXPRESSION(TYPE INT64; #2)); DECLARATION ANON_ARG; (TYPE INT64; !c); DECLARATION ANON_ARG; (TYPE INT64; !d; EXPRESSION(TYPE INT64; #4)))); METHOD(TYPE !nothing; DECLARATION(TYPE INT64; !a); DECLARATION(TYPE INT64; !b; EXPRESSION(TYPE INT64; #2)); DECLARATION ANON_ARG; (TYPE INT64; !c); DECLARATION ANON_ARG; (TYPE INT64; !d; EXPRESSION(TYPE INT64; #4)); CODE_BLOCK(EXPRESSION(TYPE !nothing; !nothing))))); EXPRESSION(TYPE !nothing; !func; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!a; ASSIGN; EXPRESSION(TYPE INT64; #10)); EXPRESSION(!c; ASSIGN; EXPRESSION(TYPE INT64; #30)); EXPRESSION(!d; ASSIGN; EXPRESSION(TYPE INT64; #40)))))")
 
-    checkResult(createExceptions(CannotCallMethodException(NULL_LOCATION)),
+    checkResult(createExceptions(CannotCallMethodException(NULL_LOCATION,"")),
         """{
   "parsed" : true,
   "type" : "CODE_BLOCK",
@@ -3455,7 +3458,7 @@ class CheckerTests {
   } ]
 }""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE !nothing; DECLARATION(TYPE INT64; !a); DECLARATION(TYPE INT64; !b; EXPRESSION(TYPE INT64; #2)); DECLARATION ANON_ARG; (TYPE INT64; !c); DECLARATION ANON_ARG; (TYPE INT64; !d; EXPRESSION(TYPE INT64; #4)))); !func; EXPRESSION(TYPE METHOD; (METHOD(TYPE !nothing; DECLARATION(TYPE INT64; !a); DECLARATION(TYPE INT64; !b; EXPRESSION(TYPE INT64; #2)); DECLARATION ANON_ARG; (TYPE INT64; !c); DECLARATION ANON_ARG; (TYPE INT64; !d; EXPRESSION(TYPE INT64; #4)))); METHOD(TYPE !nothing; DECLARATION(TYPE INT64; !a); DECLARATION(TYPE INT64; !b; EXPRESSION(TYPE INT64; #2)); DECLARATION ANON_ARG; (TYPE INT64; !c); DECLARATION ANON_ARG; (TYPE INT64; !d; EXPRESSION(TYPE INT64; #4)); CODE_BLOCK(EXPRESSION(TYPE !nothing; !nothing))))); EXPRESSION(!func; APPLY; METHOD_CALL(TYPE METHOD_CALL; (METHOD_CALL(EXPRESSION(TYPE INT64; #30); EXPRESSION(!b; ASSIGN; EXPRESSION(TYPE INT64; #20)))))))")
 
-        checkResult(createExceptions(CannotCallMethodException(NULL_LOCATION)),
+        checkResult(createExceptions(CannotCallMethodException(NULL_LOCATION,"")),
         """{
   "parsed" : true,
   "type" : "CODE_BLOCK",
@@ -6716,7 +6719,7 @@ class CheckerTests {
         let b : int? := 4
         list.add(b)
          */
-        checkResult(createExceptions(CannotCallMethodException(NULL_LOCATION)),"""{
+        checkResult(createExceptions(CannotCallMethodException(NULL_LOCATION,EXPECTED_VALUE_FOR_IDENTIFIER_ERROR.format("at"))),"""{
   "parsed" : true,
   "type" : "CODE_BLOCK",
   "components" : [ {
@@ -6868,7 +6871,7 @@ class CheckerTests {
         let list := mut [1,2,3]
         list.add("hi!")
          */
-        checkResult(createExceptions(CannotCallMethodException(NULL_LOCATION)),
+        checkResult(createExceptions(CannotCallMethodException(NULL_LOCATION,EXPECTED_VALUE_FOR_IDENTIFIER_ERROR.format("at"))),
             """{
   "parsed" : true,
   "type" : "CODE_BLOCK",
@@ -7753,7 +7756,7 @@ class CheckerTests {
   } ]
 }""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE GENERIC; (!T|1; TYPE ANYTHING); DECLARATION ANON_ARG; (TYPE GENERIC; (!T|1; TYPE ANYTHING; DECLARE); !x))); !func); EXPRESSION(EXPRESSION(TYPE METHOD; (METHOD(TYPE GENERIC; (!T|1; TYPE ANYTHING); DECLARATION ANON_ARG; (TYPE GENERIC; (!T|1; TYPE ANYTHING; DECLARE); !x))); !func); ASSIGN; EXPRESSION(TYPE METHOD; (METHOD(TYPE INT64; DECLARATION ANON_ARG; (TYPE INT64; !x))); METHOD(TYPE INT64; DECLARATION ANON_ARG; (TYPE INT64; !x); CODE_BLOCK(RETURN(EXPRESSION(TYPE INT64; !x)))))))")
 
-    checkResult(createExceptions(CannotCallMethodException(NULL_LOCATION)),
+    checkResult(createExceptions(CannotCallMethodException(NULL_LOCATION,"")),
         """{
   "parsed" : true,
   "type" : "CODE_BLOCK",

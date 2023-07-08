@@ -19,9 +19,13 @@ object ErrorMessages {
     const val NOT_ENOUGH_TYPES_ERROR = "Not enough types have been specified."
     const val END_OF_STATEMENT_EXPECTED_ERROR = "Expected end of statement. " +
             "Please use the ';' symbol or start a new line."
-    const val WRONG_ARGUMENTS_ERROR = "The function cannot be called with these arguments."
+    const val WRONG_ARGUMENTS_ERROR = "The function cannot be called with these arguments. Reason: "
+    const val NO_MATCH_FOR_ERROR = "Nothing matches the \"%s\" identifier name."
     const val CANNOT_MODIFY_IMMUTABLE_ERROR = "Cannot modify an immutable value."
     const val CONFLICTING_TYPES_ERROR = "The type definition %s conflicts with the inferred type %s."
+    const val CONFLICTING_TYPES_FOR_IDENTIFIER_ERROR = "The type definition %s conflicts with the inferred type %s for identifier \"%s\"."
+    const val EXPECTED_VALUE_FOR_IDENTIFIER_ERROR = "No value provided for identifier \"%s\"."
+    const val TOO_MANY_VALUES_PROVIDED_ERROR = "Too many values provided in function call."
     const val TYPE_INFERENCE_FAIL_ERROR = "Type inference has failed because there is not enough information present." +
             " Please specify the type manually."
     const val INVALID_LITERAL_ERROR = "The literal is invalid."
