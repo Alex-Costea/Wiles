@@ -3,7 +3,6 @@ package wiles.interpreter.statics
 import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.exceptions.PanicException
 import wiles.shared.constants.TypeConstants
-import java.math.BigDecimal
 import java.math.BigInteger
 
 object InterpreterConstants {
@@ -37,16 +36,6 @@ object InterpreterConstants {
     operator fun BigInteger.times(value: Double) : Double
     {
         return this.toBigDecimal().times(value.toBigDecimal()).toDouble()
-    }
-
-    operator fun BigInteger.div(value: Double) : Double
-    {
-        return this.toBigDecimal().div(value.toBigDecimal()).toDouble()
-    }
-
-    operator fun BigDecimal.div(value: Double) : Double
-    {
-        return this.div(value.toBigDecimal()).toDouble()
     }
 
     fun BigInteger.pow(value: BigInteger): Any? {

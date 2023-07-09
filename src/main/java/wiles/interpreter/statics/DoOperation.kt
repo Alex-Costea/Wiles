@@ -3,7 +3,6 @@ package wiles.interpreter.statics
 import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.exceptions.PanicException
 import wiles.interpreter.statics.InterpreterConstants.compareTo
-import wiles.interpreter.statics.InterpreterConstants.div
 import wiles.interpreter.statics.InterpreterConstants.minus
 import wiles.interpreter.statics.InterpreterConstants.plus
 import wiles.interpreter.statics.InterpreterConstants.pow
@@ -39,7 +38,6 @@ import wiles.shared.constants.Types.BOOLEAN_ID
 import wiles.shared.constants.Types.DOUBLE_ID
 import wiles.shared.constants.Types.INT_ID
 import wiles.shared.constants.Types.STRING_ID
-import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.function.BiFunction
 import kotlin.math.pow
@@ -90,9 +88,9 @@ object DoOperation {
         Pair("${INT_ID}|${DIVIDE_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
             (x as BigInteger) / (y as BigInteger)}, INT_TYPE)),
         Pair("${INT_ID}|${DIVIDE_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as BigInteger) / (y as Double)}, DOUBLE_TYPE)),
+            ((x as BigInteger).toDouble()) / (y as Double)}, DOUBLE_TYPE)),
         Pair("${DOUBLE_ID}|${DIVIDE_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
-            (BigDecimal.ONE / (x as BigInteger).toBigDecimal()).times((y as Double).toBigDecimal()).toDouble()}, DOUBLE_TYPE)),
+            (x as Double) / ((y as BigInteger).toDouble())}, DOUBLE_TYPE)),
         Pair("${DOUBLE_ID}|${DIVIDE_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
             (x as Double) / (y as Double)}, DOUBLE_TYPE)),
 
