@@ -15,7 +15,7 @@
 
 ### Types
 - Nothing: only valid value is `nothing`
-- Integers: `int` (64 bits unsigned)
+- Integers: `int` (any integral value)
 - Boolean: `truth`
 - String: `text`
 - Floating point: `rational` (equivalent to `double` in other languages)
