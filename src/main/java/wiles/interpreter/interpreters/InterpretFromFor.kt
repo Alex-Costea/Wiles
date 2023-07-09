@@ -77,7 +77,7 @@ class InterpretFromFor(statement: JSONStatement, variables: InterpreterVariableM
             }
             else if(step < BigInteger.ZERO)
             {
-                if(i < (toValue?.value as BigInteger?))
+                if(i == toValue?.value)
                     break
             }
             variables[name] = if(newCollection == null) ObjectDetails(i, INT_TYPE)

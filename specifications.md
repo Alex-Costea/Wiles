@@ -36,7 +36,9 @@
 - Complex conditional type cast: `when [object] begin; ⟪clause;⟫ end`
     - Normal clause: `is [type] [block]`
     - Default clause: `default [block]`
-- For loop: `for x ⟨in collection⟩ ⟨from a⟩ ⟨to b⟩ [block]`
+- For loop: `for x ⟨in list⟩ ⟨from a⟩ ⟨to b⟩ [block]`
+    - `from` value is inclusive, `to` value is exclusive
+    - if `in` statement is included, it will iterate through the list, by default ending at last element
 - While loop: `while condition [block]`
 - Code block: `do [operation]` or `begin; ⟪operation;⟫ end`
 - Yield: `yield [expression]` (return equivalent)
