@@ -22,22 +22,22 @@ object InterpreterConstants {
         return this.compareTo(value.toBigInteger())
     }
     operator fun BigInteger.compareTo(value: Double): Int {
-        return this.toBigDecimal().compareTo(value.toBigDecimal())
+        return this.toDouble().compareTo(value)
     }
 
     operator fun BigInteger.plus(value: Double) : Double
     {
-        return this.toBigDecimal().plus(value.toBigDecimal()).toDouble()
+        return this.toDouble().plus(value)
     }
 
     operator fun BigInteger.minus(value: Double) : Double
     {
-        return this.toBigDecimal().minus(value.toBigDecimal()).toDouble()
+        return this.toDouble().minus(value)
     }
 
     operator fun BigInteger.times(value: Double) : Double
     {
-        return this.toBigDecimal().times(value.toBigDecimal()).toDouble()
+        return this.toDouble().times(value)
     }
 
     fun BigInteger.pow(value: BigInteger): Any? {
