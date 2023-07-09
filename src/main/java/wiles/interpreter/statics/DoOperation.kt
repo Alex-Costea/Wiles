@@ -70,7 +70,7 @@ object DoOperation {
         Pair("${INT_ID}|${MINUS_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
             (x as BigInteger) - (y as Double)}, DOUBLE_TYPE)),
         Pair("${DOUBLE_ID}|${MINUS_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
-            -(y as BigInteger) - (x as Double)}, DOUBLE_TYPE)),
+            -(y as BigInteger) + (x as Double)}, DOUBLE_TYPE)),
         Pair("${DOUBLE_ID}|${MINUS_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
             (x as Double) - (y as Double)}, DOUBLE_TYPE)),
 
