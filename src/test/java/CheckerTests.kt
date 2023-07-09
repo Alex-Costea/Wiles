@@ -8012,7 +8012,7 @@ class CheckerTests {
   } ]
 }""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE GENERIC; (!T|1; TYPE ANYTHING); DECLARATION ANON_ARG; (TYPE GENERIC; (!T|1; TYPE ANYTHING; DECLARE); !x))); !func); EXPRESSION(EXPRESSION(TYPE METHOD; (METHOD(TYPE GENERIC; (!T|1; TYPE ANYTHING); DECLARATION ANON_ARG; (TYPE GENERIC; (!T|1; TYPE ANYTHING; DECLARE); !x))); !func); ASSIGN; EXPRESSION(TYPE METHOD; (METHOD(TYPE INT64; DECLARATION ANON_ARG; (TYPE INT64; !x))); METHOD(TYPE INT64; DECLARATION ANON_ARG; (TYPE INT64; !x); CODE_BLOCK(RETURN(EXPRESSION(TYPE INT64; !x)))))))")
 
-    checkResult(createExceptions(CannotCallMethodException(NULL_LOCATION,CONFLICTING_TYPES_FOR_IDENTIFIER_ERROR.format("TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing); DECLARE)","TYPE MUTABLE; (TYPE INT64)","y"))),
+    checkResult(createExceptions(CannotCallMethodException(NULL_LOCATION,CONFLICTING_TYPES_FOR_IDENTIFIER_ERROR.format("TYPE INT64","TYPE MUTABLE; (TYPE INT64)","y"))),
         """{
   "parsed" : true,
   "type" : "CODE_BLOCK",
@@ -8198,6 +8198,376 @@ class CheckerTests {
     } ]
   } ]
 }""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE !nothing; DECLARATION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !x); DECLARATION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing); DECLARE); !y))); !func; EXPRESSION(TYPE METHOD; (METHOD(TYPE !nothing; DECLARATION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !x); DECLARATION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing); DECLARE); !y))); METHOD(TYPE !nothing; DECLARATION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !x); DECLARATION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing); DECLARE); !y); CODE_BLOCK(EXPRESSION(TYPE !nothing; !nothing))))); EXPRESSION(!func; APPLY; METHOD_CALL(TYPE METHOD_CALL; (METHOD_CALL(EXPRESSION(!x; ASSIGN; EXPRESSION(TYPE INT64; #4)); EXPRESSION(!y; ASSIGN; EXPRESSION(TYPE MUTABLE; (TYPE INT64); MUTABLE; #5)))))))")
+
+   /*
+    let list := mut [1,2,3]
+    list.add(at := "hi", 4)
+    */
+        checkResult(createExceptions(CannotCallMethodException(NULL_LOCATION,CONFLICTING_TYPES_FOR_IDENTIFIER_ERROR.format("TYPE MUTABLE; (TYPE COLLECTION; (TYPE STRING; TYPE INT64))","TYPE MUTABLE; (TYPE LIST; (TYPE INT64))","collection"))),
+            """{
+  "parsed": true,
+  "type": "CODE_BLOCK",
+  "components": [
+    {
+      "type": "DECLARATION",
+      "components": [
+        {
+          "name": "!list",
+          "type": "TOKEN",
+          "location": {
+            "line": 1,
+            "lineIndex": 5
+          }
+        },
+        {
+          "type": "EXPRESSION",
+          "components": [
+            {
+              "name": "MUTABLE",
+              "type": "TOKEN",
+              "location": {
+                "line": 1,
+                "lineIndex": 13
+              }
+            },
+            {
+              "type": "LIST",
+              "location": {
+                "line": 1,
+                "lineIndex": 23
+              },
+              "components": [
+                {
+                  "type": "EXPRESSION",
+                  "components": [
+                    {
+                      "name": "#1",
+                      "type": "TOKEN",
+                      "location": {
+                        "line": 1,
+                        "lineIndex": 18
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "EXPRESSION",
+                  "components": [
+                    {
+                      "name": "#2",
+                      "type": "TOKEN",
+                      "location": {
+                        "line": 1,
+                        "lineIndex": 20
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "EXPRESSION",
+                  "components": [
+                    {
+                      "name": "#3",
+                      "type": "TOKEN",
+                      "location": {
+                        "line": 1,
+                        "lineIndex": 22
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "EXPRESSION",
+      "components": [
+        {
+          "name": "!list",
+          "type": "TOKEN",
+          "location": {
+            "line": 2,
+            "lineIndex": 1
+          }
+        },
+        {
+          "name": "ACCESS",
+          "type": "TOKEN",
+          "location": {
+            "line": 2,
+            "lineIndex": 5
+          }
+        },
+        {
+          "type": "EXPRESSION",
+          "components": [
+            {
+              "name": "!add",
+              "type": "TOKEN",
+              "location": {
+                "line": 2,
+                "lineIndex": 6
+              }
+            },
+            {
+              "name": "APPLY",
+              "type": "TOKEN",
+              "location": {
+                "line": 2,
+                "lineIndex": 9
+              }
+            },
+            {
+              "type": "METHOD_CALL",
+              "components": [
+                {
+                  "type": "EXPRESSION",
+                  "components": [
+                    {
+                      "type": "EXPRESSION",
+                      "components": [
+                        {
+                          "name": "!at",
+                          "type": "TOKEN",
+                          "location": {
+                            "line": 2,
+                            "lineIndex": 10
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "name": "ASSIGN",
+                      "type": "TOKEN",
+                      "location": {
+                        "line": 2,
+                        "lineIndex": 13
+                      }
+                    },
+                    {
+                      "type": "EXPRESSION",
+                      "components": [
+                        {
+                          "name": "@hi",
+                          "type": "TOKEN",
+                          "location": {
+                            "line": 2,
+                            "lineIndex": 16
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "EXPRESSION",
+                  "components": [
+                    {
+                      "name": "#4",
+                      "type": "TOKEN",
+                      "location": {
+                        "line": 2,
+                        "lineIndex": 22
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}""","CODE_BLOCK(DECLARATION(TYPE MUTABLE; (TYPE LIST; (TYPE INT64)); !list; EXPRESSION(TYPE MUTABLE; (TYPE LIST; (TYPE INT64)); MUTABLE; LIST(TYPE INT64; EXPRESSION(TYPE INT64; #1); EXPRESSION(TYPE INT64; #2); EXPRESSION(TYPE INT64; #3)))); EXPRESSION(!add; APPLY; METHOD_CALL(TYPE METHOD_CALL; (METHOD_CALL(EXPRESSION(TYPE MUTABLE; (TYPE LIST; (TYPE INT64)); !list); EXPRESSION(!at; ASSIGN; EXPRESSION(TYPE STRING; @hi)); EXPRESSION(TYPE INT64; #4))))))")
+
+    /*
+    let list := mut [1,2,3]
+    list.add(at := 2, "4")
+     */
+    checkResult(createExceptions(CannotCallMethodException(NULL_LOCATION,CONFLICTING_TYPES_FOR_IDENTIFIER_ERROR.format("TYPE INT64", "TYPE STRING","value"))),
+        """{
+  "parsed": true,
+  "type": "CODE_BLOCK",
+  "components": [
+    {
+      "type": "DECLARATION",
+      "components": [
+        {
+          "name": "!list",
+          "type": "TOKEN",
+          "location": {
+            "line": 1,
+            "lineIndex": 5
+          }
+        },
+        {
+          "type": "EXPRESSION",
+          "components": [
+            {
+              "name": "MUTABLE",
+              "type": "TOKEN",
+              "location": {
+                "line": 1,
+                "lineIndex": 13
+              }
+            },
+            {
+              "type": "LIST",
+              "location": {
+                "line": 1,
+                "lineIndex": 23
+              },
+              "components": [
+                {
+                  "type": "EXPRESSION",
+                  "components": [
+                    {
+                      "name": "#1",
+                      "type": "TOKEN",
+                      "location": {
+                        "line": 1,
+                        "lineIndex": 18
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "EXPRESSION",
+                  "components": [
+                    {
+                      "name": "#2",
+                      "type": "TOKEN",
+                      "location": {
+                        "line": 1,
+                        "lineIndex": 20
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "EXPRESSION",
+                  "components": [
+                    {
+                      "name": "#3",
+                      "type": "TOKEN",
+                      "location": {
+                        "line": 1,
+                        "lineIndex": 22
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "EXPRESSION",
+      "components": [
+        {
+          "name": "!list",
+          "type": "TOKEN",
+          "location": {
+            "line": 2,
+            "lineIndex": 1
+          }
+        },
+        {
+          "name": "ACCESS",
+          "type": "TOKEN",
+          "location": {
+            "line": 2,
+            "lineIndex": 5
+          }
+        },
+        {
+          "type": "EXPRESSION",
+          "components": [
+            {
+              "name": "!add",
+              "type": "TOKEN",
+              "location": {
+                "line": 2,
+                "lineIndex": 6
+              }
+            },
+            {
+              "name": "APPLY",
+              "type": "TOKEN",
+              "location": {
+                "line": 2,
+                "lineIndex": 9
+              }
+            },
+            {
+              "type": "METHOD_CALL",
+              "components": [
+                {
+                  "type": "EXPRESSION",
+                  "components": [
+                    {
+                      "type": "EXPRESSION",
+                      "components": [
+                        {
+                          "name": "!at",
+                          "type": "TOKEN",
+                          "location": {
+                            "line": 2,
+                            "lineIndex": 10
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "name": "ASSIGN",
+                      "type": "TOKEN",
+                      "location": {
+                        "line": 2,
+                        "lineIndex": 13
+                      }
+                    },
+                    {
+                      "type": "EXPRESSION",
+                      "components": [
+                        {
+                          "name": "#2",
+                          "type": "TOKEN",
+                          "location": {
+                            "line": 2,
+                            "lineIndex": 16
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "EXPRESSION",
+                  "components": [
+                    {
+                      "name": "@4",
+                      "type": "TOKEN",
+                      "location": {
+                        "line": 2,
+                        "lineIndex": 19
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}""","CODE_BLOCK(DECLARATION(TYPE MUTABLE; (TYPE LIST; (TYPE INT64)); !list; EXPRESSION(TYPE MUTABLE; (TYPE LIST; (TYPE INT64)); MUTABLE; LIST(TYPE INT64; EXPRESSION(TYPE INT64; #1); EXPRESSION(TYPE INT64; #2); EXPRESSION(TYPE INT64; #3)))); EXPRESSION(!add; APPLY; METHOD_CALL(TYPE METHOD_CALL; (METHOD_CALL(EXPRESSION(TYPE MUTABLE; (TYPE LIST; (TYPE INT64)); !list); EXPRESSION(!at; ASSIGN; EXPRESSION(TYPE INT64; #2)); EXPRESSION(TYPE STRING; @4))))))")
     }
 
     companion object {

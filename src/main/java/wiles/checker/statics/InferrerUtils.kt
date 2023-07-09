@@ -232,8 +232,8 @@ object InferrerUtils {
                 namedArgsInMethod.remove(name)
                 unnamedArgsInMethod.remove(name)
             }
-            else throw CannotCallMethodException(location,CONFLICTING_TYPES_FOR_IDENTIFIER_ERROR.format(
-                superType,subType,name.drop(1)))
+            else throw CannotCallMethodException(location,CONFLICTING_TYPES_FOR_IDENTIFIER_ERROR
+                .format(clarifyGenericType(superType, genericTypes),subType,name.drop(1)))
         }
 
         val namedArgsUnmatched = namedArgsInMethod.filter { !it.component2().second }
@@ -254,8 +254,8 @@ object InferrerUtils {
             finalCallArgumentsMap[name] = Pair(component.value,true)
 
             if(!isFormerSuperTypeOfLatter(superType, subType, genericTypes = genericTypes))
-                throw CannotCallMethodException(location,
-                    CONFLICTING_TYPES_FOR_IDENTIFIER_ERROR.format(superType,subType,name.drop(1)))
+                throw CannotCallMethodException(location, CONFLICTING_TYPES_FOR_IDENTIFIER_ERROR
+                    .format(clarifyGenericType(superType, genericTypes),subType,name.drop(1)))
         }
 
         val unnamedArgsUnmatched = unnamedArgsInMethodList.filter { !it.component2().second }
@@ -264,6 +264,26 @@ object InferrerUtils {
                 unnamedArgsUnmatched.first().first.drop(1)))
 
         return finalCallArgumentsMap
+    }
+
+    private fun clarifyGenericType(statement: JSONStatement, genericTypes: GenericTypesMap): JSONStatement {
+        return clarifyGenericTypeComponent(statement.copyRemovingLocation(), genericTypes)
+    }
+
+    private fun clarifyGenericTypeComponent(statement: JSONStatement, genericTypes: GenericTypesMap) : JSONStatement
+    {
+        val name = statement.components.getOrNull(0)?.name
+        if(statement.name == GENERIC_ID && name in genericTypes.keys)
+        {
+            val newType = genericTypes[name]!!.first.copyRemovingLocation()
+            statement.name = newType.name
+            statement.syntaxType = newType.syntaxType
+            statement.location = null
+            statement.components = newType.components
+        }
+        for(component in statement.components)
+            clarifyGenericTypeComponent(component, genericTypes)
+        return statement
     }
 
     fun unGenerify(statement : JSONStatement, variableMap: CheckerVariableMap? = null) : JSONStatement
