@@ -10,8 +10,6 @@ import java.math.BigInteger
 object InterpreterConstants {
 
     val ZERO_REF = ObjectDetails(BigInteger.ZERO, TypeConstants.INT_TYPE)
-    //TODO: should be infinity?
-    val MAX_INT_REF = ObjectDetails(Long.MAX_VALUE.toBigInteger(), TypeConstants.INT_TYPE)
 
     fun BigInteger.toIntOrNull(): Int? {
         return if (this >= Int.MIN_VALUE && this <= Int.MAX_VALUE) this.toInt()

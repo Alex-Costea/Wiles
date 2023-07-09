@@ -4,7 +4,6 @@ import wiles.interpreter.data.InterpreterVariableMap
 import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.exceptions.BreakSignal
 import wiles.interpreter.exceptions.ContinueSignal
-import wiles.interpreter.statics.InterpreterConstants.MAX_INT_REF
 import wiles.interpreter.statics.InterpreterConstants.ZERO_REF
 import wiles.shared.JSONStatement
 import wiles.shared.constants.Tokens.FROM_ID
@@ -56,26 +55,36 @@ class InterpretFromFor(statement: JSONStatement, variables: InterpreterVariableM
             interpreter.reference
         }
 
-        val toValue = if(toExpression == null) MAX_INT_REF else
+        val toValue = if(toExpression == null) null else
         {
             val interpreter = InterpretFromExpression(toExpression ,variables, additionalVars)
             interpreter.interpret()
             interpreter.reference
         }
 
-        //TODO: fix
-        val range = if(fromValue.value as BigInteger > toValue.value as BigInteger)
-            (((fromValue.value as BigInteger).toLong()) downTo ((toValue.value as BigInteger).toLong()))
-            else (((fromValue.value as BigInteger).toLong()) until ((toValue.value as BigInteger).toLong()))
-
         val newCollection = collection?.clone(deep = false)
 
-        for(i in range)
+        val step = if(toValue == null || (fromValue.value as BigInteger) <= (toValue.value as BigInteger))
+            BigInteger.valueOf(1) else BigInteger.valueOf(-1)
+
+        var i = (fromValue.value as BigInteger)
+        while(true)
         {
-            variables[name] = if(newCollection == null) ObjectDetails(i.toBigInteger(), INT_TYPE)
+            if(step > BigInteger.ZERO)
+            {
+                if(toValue != null && i == toValue.value)
+                    break
+            }
+            else if(step < BigInteger.ZERO)
+            {
+                if(i < (toValue?.value as BigInteger?))
+                    break
+            }
+            variables[name] = if(newCollection == null) ObjectDetails(i, INT_TYPE)
             else (newCollection.value as MutableList<ObjectDetails>).getOrNull(i.toInt()) ?: break
 
             val inferrer = InterpretFromCodeBlock(statement.components[compIndex], variables, additionalVars)
+            i += step
             try
             {
                 inferrer.interpret()
