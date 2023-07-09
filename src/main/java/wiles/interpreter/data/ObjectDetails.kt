@@ -9,6 +9,7 @@ import wiles.shared.constants.TypeUtils
 import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 import wiles.shared.constants.Types.DICT_ID
 import wiles.shared.constants.Types.LIST_ID
+import java.math.BigInteger
 import java.util.function.Function
 
 class ObjectDetails(var value : Any?, type : JSONStatement)
@@ -63,7 +64,7 @@ class ObjectDetails(var value : Any?, type : JSONStatement)
     {
         val newValue = when(value)
         {
-            is Double, is Long, is String, is Boolean, null -> value
+            is Double, is BigInteger, is String, is Boolean, null -> value
             is MutableList<*> -> value.map{if(deep) cloneValue(it, true) else it}.toMutableList()
             is LinkedHashMap<*,*> -> {
                 val newValue = value.toList().map { if(!deep) it else

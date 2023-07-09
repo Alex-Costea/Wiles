@@ -47,6 +47,7 @@ import wiles.shared.constants.TypeConstants.STRING_TYPE
 import wiles.shared.constants.TypeConstants.WRITELINE_TYPE
 import wiles.shared.constants.TypeConstants.WRITE_TYPE
 import wiles.shared.constants.Types.TYPE_TYPE_ID
+import java.math.BigInteger
 import java.util.function.Function
 
 object StandardLibrary {
@@ -141,8 +142,8 @@ object StandardLibrary {
         NOTHING_REF}, defaultCheckerVars[IGNORE]!!.type)
 
     private val MODULO_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
-        val x = it["!x"]!!.value as Long
-        val y =it["!y"]!!.value as Long
+        val x = it["!x"]!!.value as BigInteger
+        val y =it["!y"]!!.value as BigInteger
         ObjectDetails(x % y, INT_TYPE)
     }, defaultCheckerVars[MODULO]!!.type)
 
@@ -220,7 +221,7 @@ object StandardLibrary {
         try {
             when(val collection = coll.value)
             {
-                is MutableList<*> -> (collection as MutableList<ObjectDetails>).add((at.value as Long).toIntOrNull()!!, elem)
+                is MutableList<*> -> (collection as MutableList<ObjectDetails>).add((at.value as BigInteger).toIntOrNull()!!, elem)
                 is LinkedHashMap<*, *> -> (collection as LinkedHashMap<ObjectDetails, ObjectDetails>)[at] = elem
             }
         }
@@ -243,7 +244,7 @@ object StandardLibrary {
         try {
             when(val collection = coll.value)
             {
-                is MutableList<*> -> (collection as MutableList<ObjectDetails>)[(at.value as Long).toIntOrNull()!!] = elem
+                is MutableList<*> -> (collection as MutableList<ObjectDetails>)[(at.value as BigInteger).toIntOrNull()!!] = elem
                 is LinkedHashMap<*, *> -> (collection as LinkedHashMap<ObjectDetails, ObjectDetails>)[at] = elem
             }
         }
@@ -265,7 +266,7 @@ object StandardLibrary {
         try {
             when(val collection = coll.value)
             {
-                is MutableList<*> -> (collection as MutableList<ObjectDetails>)[(at.value as Long).toIntOrNull()!!]
+                is MutableList<*> -> (collection as MutableList<ObjectDetails>)[(at.value as BigInteger).toIntOrNull()!!]
                 is LinkedHashMap<*, *> -> (collection as LinkedHashMap<ObjectDetails, ObjectDetails>)[at]
                 else -> throw InternalErrorException()
             }
@@ -287,7 +288,7 @@ object StandardLibrary {
         try {
             when(val collection = coll.value)
             {
-                is MutableList<*> -> (collection as MutableList<ObjectDetails>).removeAt((at.value as Long).toIntOrNull()!!)
+                is MutableList<*> -> (collection as MutableList<ObjectDetails>).removeAt((at.value as BigInteger).toIntOrNull()!!)
                 is LinkedHashMap<*, *> -> (collection as LinkedHashMap<ObjectDetails, ObjectDetails>).remove(key = at)
             }
         }

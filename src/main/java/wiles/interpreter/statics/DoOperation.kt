@@ -2,6 +2,11 @@ package wiles.interpreter.statics
 
 import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.exceptions.PanicException
+import wiles.interpreter.statics.InterpreterConstants.compareTo
+import wiles.interpreter.statics.InterpreterConstants.div
+import wiles.interpreter.statics.InterpreterConstants.minus
+import wiles.interpreter.statics.InterpreterConstants.plus
+import wiles.interpreter.statics.InterpreterConstants.times
 import wiles.interpreter.statics.InterpreterConstants.toIntOrNull
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
@@ -33,6 +38,8 @@ import wiles.shared.constants.Types.BOOLEAN_ID
 import wiles.shared.constants.Types.DOUBLE_ID
 import wiles.shared.constants.Types.INT_ID
 import wiles.shared.constants.Types.STRING_ID
+import java.math.BigDecimal
+import java.math.BigInteger
 import java.util.function.BiFunction
 import kotlin.math.pow
 
@@ -45,64 +52,66 @@ object DoOperation {
         }
     }
 
+
+
     private val operationMap = hashMapOf(
         //Addition
         Pair("${INT_ID}|${PLUS_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as Long) + (y as Long)}, INT_TYPE)),
+            (x as BigInteger) + (y as BigInteger)}, INT_TYPE)),
         Pair("${INT_ID}|${PLUS_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as Long) + (y as Double)}, DOUBLE_TYPE)),
+            (x as BigInteger) + (y as Double)}, DOUBLE_TYPE)),
         Pair("${DOUBLE_ID}|${PLUS_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as Double) + (y as Long)}, DOUBLE_TYPE)),
+            (y as BigInteger) + (x as Double)}, DOUBLE_TYPE)),
         Pair("${DOUBLE_ID}|${PLUS_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
             (x as Double) + (y as Double)}, DOUBLE_TYPE)),
 
         //Subtraction
         Pair("${INT_ID}|${MINUS_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as Long) - (y as Long)}, INT_TYPE)),
+            (x as BigInteger) - (y as BigInteger)}, INT_TYPE)),
         Pair("${INT_ID}|${MINUS_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as Long) - (y as Double)}, DOUBLE_TYPE)),
+            (x as BigInteger) - (y as Double)}, DOUBLE_TYPE)),
         Pair("${DOUBLE_ID}|${MINUS_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as Double) - (y as Long)}, DOUBLE_TYPE)),
+            -(y as BigInteger) - (x as Double)}, DOUBLE_TYPE)),
         Pair("${DOUBLE_ID}|${MINUS_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
             (x as Double) - (y as Double)}, DOUBLE_TYPE)),
 
         //Multiplication
         Pair("${INT_ID}|${TIMES_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as Long) * (y as Long)}, INT_TYPE)),
+            (x as BigInteger) * (y as BigInteger)}, INT_TYPE)),
         Pair("${INT_ID}|${TIMES_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as Long) * (y as Double)}, DOUBLE_TYPE)),
+            (x as BigInteger) * (y as Double)}, DOUBLE_TYPE)),
         Pair("${DOUBLE_ID}|${TIMES_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as Double) * (y as Long)}, DOUBLE_TYPE)),
+            (y as BigInteger) * (x as Double)}, DOUBLE_TYPE)),
         Pair("${DOUBLE_ID}|${TIMES_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
             (x as Double) * (y as Double)}, DOUBLE_TYPE)),
 
         //Division
         Pair("${INT_ID}|${DIVIDE_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as Long) / (y as Long)}, INT_TYPE)),
+            (x as BigInteger) / (y as BigInteger)}, INT_TYPE)),
         Pair("${INT_ID}|${DIVIDE_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as Long) / (y as Double)}, DOUBLE_TYPE)),
+            (x as BigInteger) / (y as Double)}, DOUBLE_TYPE)),
         Pair("${DOUBLE_ID}|${DIVIDE_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as Double) / (y as Long)}, DOUBLE_TYPE)),
+            (BigDecimal.ONE / (x as BigInteger).toBigDecimal()).times((y as Double).toBigDecimal()).toDouble()}, DOUBLE_TYPE)),
         Pair("${DOUBLE_ID}|${DIVIDE_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
             (x as Double) / (y as Double)}, DOUBLE_TYPE)),
 
         //Exponentiation
         Pair("${INT_ID}|${POWER_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as Long).toDouble().pow((y as Long).toDouble()).toLong() }, INT_TYPE)),
+            (x as BigInteger).toDouble().pow((y as BigInteger).toDouble()).toLong() }, INT_TYPE)),
         Pair("${INT_ID}|${POWER_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as Long).toDouble().pow(y as Double)}, DOUBLE_TYPE)),
+            (x as BigInteger).toDouble().pow(y as Double)}, DOUBLE_TYPE)),
         Pair("${DOUBLE_ID}|${POWER_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as Double).pow((y as Long).toDouble())}, DOUBLE_TYPE)),
+            (x as Double).pow((y as BigInteger).toDouble())}, DOUBLE_TYPE)),
         Pair("${DOUBLE_ID}|${POWER_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
             (x as Double).pow(y as Double)}, DOUBLE_TYPE)),
 
         //Prefix plus/minus
         Pair("${NOTHING_ID}|${UNARY_PLUS_ID}|${INT_ID}", createFunction({ _: Any?, y: Any? ->
-            (y as Long)}, INT_TYPE)),
+            (y as BigInteger)}, INT_TYPE)),
         Pair("${NOTHING_ID}|${UNARY_PLUS_ID}|${DOUBLE_ID}", createFunction({ _: Any?, y: Any? ->
             (y as Double)}, DOUBLE_TYPE)),
         Pair("${NOTHING_ID}|${UNARY_MINUS_ID}|${INT_ID}", createFunction({ _: Any?, y: Any? ->
-            -(y as Long)}, INT_TYPE)),
+            -(y as BigInteger)}, INT_TYPE)),
         Pair("${NOTHING_ID}|${UNARY_MINUS_ID}|${DOUBLE_ID}", createFunction({ _: Any?, y: Any? ->
             -(y as Double)}, DOUBLE_TYPE)),
 
@@ -122,9 +131,9 @@ object DoOperation {
 
         //String and int concatenation
         Pair("${STRING_ID}|${PLUS_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
-            (x as String) + (y as Long)}, STRING_TYPE)),
+            (x as String) + (y as BigInteger)}, STRING_TYPE)),
         Pair("${INT_ID}|${PLUS_ID}|${STRING_ID}", createFunction({ x : Any?, y : Any? ->
-            (x as Long).toString() + (y as String)}, STRING_TYPE)),
+            (x as BigInteger).toString() + (y as String)}, STRING_TYPE)),
 
         //String and double concatenation
         Pair("${STRING_ID}|${PLUS_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
@@ -140,41 +149,41 @@ object DoOperation {
 
         //Larger
         Pair("${INT_ID}|${LARGER_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
-            (x as Long) > (y as Long)}, BOOLEAN_TYPE)),
+            (x as BigInteger) > (y as BigInteger)}, BOOLEAN_TYPE)),
         Pair("${INT_ID}|${LARGER_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
-            (x as Long) > (y as Double)}, BOOLEAN_TYPE)),
+            (x as BigInteger) > (y as Double)}, BOOLEAN_TYPE)),
         Pair("${DOUBLE_ID}|${LARGER_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
-            (x as Double) > (y as Long)}, BOOLEAN_TYPE)),
+             (y as BigInteger) < (x as Double)}, BOOLEAN_TYPE)),
         Pair("${DOUBLE_ID}|${LARGER_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
             (x as Double) > (y as Double)}, BOOLEAN_TYPE)),
 
         //Larger equals
         Pair("${INT_ID}|${LARGER_EQUALS_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
-            (x as Long) >= (y as Long)}, BOOLEAN_TYPE)),
+            (x as BigInteger) >= (y as BigInteger)}, BOOLEAN_TYPE)),
         Pair("${INT_ID}|${LARGER_EQUALS_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
-            (x as Long) >= (y as Double)}, BOOLEAN_TYPE)),
+            (x as BigInteger) >= (y as Double)}, BOOLEAN_TYPE)),
         Pair("${DOUBLE_ID}|${LARGER_EQUALS_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
-            (x as Double) >= (y as Long)}, BOOLEAN_TYPE)),
+             (y as BigInteger) <= (x as Double)}, BOOLEAN_TYPE)),
         Pair("${DOUBLE_ID}|${LARGER_EQUALS_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
             (x as Double) >= (y as Double)}, BOOLEAN_TYPE)),
 
         //Smaller
         Pair("${INT_ID}|${SMALLER_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
-            (x as Long) < (y as Long)}, BOOLEAN_TYPE)),
+            (x as BigInteger) < (y as BigInteger)}, BOOLEAN_TYPE)),
         Pair("${INT_ID}|${SMALLER_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
-            (x as Long) < (y as Double)}, BOOLEAN_TYPE)),
+            (x as BigInteger) < (y as Double)}, BOOLEAN_TYPE)),
         Pair("${DOUBLE_ID}|${SMALLER_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
-            (x as Double) < (y as Long)}, BOOLEAN_TYPE)),
+             (y as BigInteger) > (x as Double)}, BOOLEAN_TYPE)),
         Pair("${DOUBLE_ID}|${SMALLER_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
             (x as Double) < (y as Double)}, BOOLEAN_TYPE)),
 
         //Smaller equals
         Pair("${INT_ID}|${SMALLER_EQUALS_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
-            (x as Long) <= (y as Long)}, BOOLEAN_TYPE)),
+            (x as BigInteger) <= (y as BigInteger)}, BOOLEAN_TYPE)),
         Pair("${INT_ID}|${SMALLER_EQUALS_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
-            (x as Long) <= (y as Double)}, BOOLEAN_TYPE)),
+            (x as BigInteger) <= (y as Double)}, BOOLEAN_TYPE)),
         Pair("${DOUBLE_ID}|${SMALLER_EQUALS_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
-            (x as Double) <= (y as Long)}, BOOLEAN_TYPE)),
+            (y as BigInteger) >= (x as Double)}, BOOLEAN_TYPE)),
         Pair("${DOUBLE_ID}|${SMALLER_EQUALS_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
             (x as Double) <= (y as Double)}, BOOLEAN_TYPE)),
 
@@ -189,7 +198,7 @@ object DoOperation {
 
     private fun repeatString(x : Any?, y : Any?) : Any
     {
-        val times = (y as Long).toIntOrNull() ?: throw PanicException(INTEGER_TOO_LARGE_FOR_REPEAT_ERROR)
+        val times = (y as BigInteger).toIntOrNull() ?: throw PanicException(INTEGER_TOO_LARGE_FOR_REPEAT_ERROR)
         if(times < 0) throw PanicException(CANNOT_REPEAT_NEGATIVE_ERROR)
         return (x as String).repeat(times)
     }

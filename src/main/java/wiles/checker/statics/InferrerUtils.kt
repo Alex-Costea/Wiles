@@ -54,12 +54,7 @@ object InferrerUtils {
         {
             if(name.contains(Chars.DECIMAL_DELIMITER))
                 return JSONStatement(DOUBLE_ID, syntaxType = SyntaxType.TYPE)
-            try {
-                token.name = name.replace(DIGIT_SEPARATOR.toString(),"")
-                token.name.substring(1).toLong()
-            } catch (e: NumberFormatException) {
-                throw InvalidLiteralException(token.getFirstLocation())
-            }
+            token.name = name.replace(DIGIT_SEPARATOR.toString(),"")
             return JSONStatement(INT_ID, syntaxType = SyntaxType.TYPE)
         }
         if(IS_IDENTIFIER.test(name)) {

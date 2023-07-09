@@ -623,32 +623,6 @@ class CheckerTests {
   } ]
 }""","CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE INT; TYPE !nothing); !a; EXPRESSION(TYPE INT; #2)); EXPRESSION(!writeline; APPLY; METHOD_CALL(TYPE METHOD_CALL; (METHOD_CALL(EXPRESSION(TYPE EITHER; (TYPE INT; TYPE !nothing); !a))))))")
 
-        checkResult(createExceptions(InvalidLiteralException(NULL_LOCATION)),"""{
-  "parsed" : true,
-  "type" : "CODE_BLOCK",
-  "components" : [ {
-    "type" : "DECLARATION",
-    "components" : [ {
-      "name" : "!a",
-      "type" : "TOKEN",
-      "location" : {
-        "line" : 1,
-        "lineIndex" : 5
-      }
-    }, {
-      "type" : "EXPRESSION",
-      "components" : [ {
-        "name" : "#999999999999999999999999999999",
-        "type" : "TOKEN",
-        "location" : {
-          "line" : 1,
-          "lineIndex" : 10
-        }
-      } ]
-    } ]
-  } ]
-}""","CODE_BLOCK(DECLARATION(!a; EXPRESSION(#999999999999999999999999999999)))")
-
         checkResult(createExceptions(ExpectedIdentifierException(NULL_LOCATION)),"""{
   "parsed" : true,
   "type" : "CODE_BLOCK",

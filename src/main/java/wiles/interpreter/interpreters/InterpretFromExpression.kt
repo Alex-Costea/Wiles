@@ -39,7 +39,7 @@ class InterpretFromExpression(statement: JSONStatement, variables: InterpreterVa
         val type = component.syntaxType
 
         return if(Predicates.IS_NUMBER_LITERAL.test(name) && !name.contains(DECIMAL_DELIMITER)) {
-            ObjectDetails(name.substring(1).toLong(), INT_TYPE)
+            ObjectDetails(name.substring(1).toBigInteger(), INT_TYPE)
         }
 
         else if(Predicates.IS_NUMBER_LITERAL.test(name)) {
