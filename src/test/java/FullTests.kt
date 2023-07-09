@@ -188,6 +188,12 @@ writeline("Min found: " + result)
         writeline(a=b)
         """
         assertEquals(getOutput(code14),"true\n")
+
+        val code15 = """
+        let b := {} : int -> int
+        writeline(b.type)
+        """
+        assertEquals(getOutput(code15),"TYPE DICT; (TYPE INT64; TYPE INT64)\n")
     }
 
     companion object {

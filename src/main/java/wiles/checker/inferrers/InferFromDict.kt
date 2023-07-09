@@ -49,7 +49,7 @@ class InferFromDict(details: InferrerDetails) : InferFromStatement(details) {
             index = (index + 1) % 2
         }
 
-        val finalTypes : MutableList<JSONStatement> = mutableListOf()
+        var finalTypes : MutableList<JSONStatement> = mutableListOf()
         for(newIndex in 0 .. 1) {
             val inferredType = inferredTypes[newIndex]
             val statedType = dictStatedType?.getComponents()?.get(newIndex)
@@ -67,6 +67,8 @@ class InferFromDict(details: InferrerDetails) : InferFromStatement(details) {
         }
         if(statement.components.first().syntaxType == SyntaxType.TYPE)
             statement.components.removeFirst()
+        if(finalTypes.size == 0)
+            finalTypes = dictStatedType?.getComponents()!!
         statement.components.add(0, JSONStatement(syntaxType = SyntaxType.TYPE, name = DICT_ID,
             components = finalTypes.map { it }.toMutableList()))
     }
