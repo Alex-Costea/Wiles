@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test
 import wiles.Main
 import wiles.interpreter.Interpreter
 import wiles.interpreter.data.InterpreterVariableMap
+import java.math.BigInteger
 
 class InterpreterTests {
     private fun assertVar(vars : InterpreterVariableMap, name : String, value : Any?)
@@ -739,7 +740,7 @@ class InterpreterTests {
     } ]
   } ]
 }""")
-        assertVar(vars1, "!result", 10L)
+        assertVar(vars1, "!result", BigInteger.valueOf(10L))
 
         /*
         let a := mut 10
@@ -1401,7 +1402,7 @@ class InterpreterTests {
         assertVar(vars, "!reached12", false)
         assertVar(vars, "!reached13", true)
         assertVar(vars, "!reached21", false)
-        assertVar(vars, "!i", 20L)
+        assertVar(vars, "!i", BigInteger.valueOf(20L))
     }
 
     @Test
@@ -1614,7 +1615,7 @@ class InterpreterTests {
   } ]
 }""")
         assertVar(vars,"!a","987643")
-        assertVar(vars,"!i",2L)
+        assertVar(vars,"!i",BigInteger.valueOf(2L))
 
 
         /*
@@ -3447,8 +3448,8 @@ class InterpreterTests {
     } ]
   } ]
 }""")
-        assertVar(vars, "!a", 30L)
-        assertVar(vars, "!b", 21L)
+        assertVar(vars, "!a", BigInteger.valueOf(30L))
+        assertVar(vars, "!b", BigInteger.valueOf(21L))
 
         /*
         let create_addition := fun(arg x : int) do
@@ -3773,8 +3774,8 @@ class InterpreterTests {
     } ]
   } ]
 }""")
-        assertVar(vars2,"!x", 15L)
-        assertVar(vars2,"!y", 20L)
+        assertVar(vars2,"!x", BigInteger.valueOf(15L))
+        assertVar(vars2,"!y", BigInteger.valueOf(20L))
     }
 
     @Test

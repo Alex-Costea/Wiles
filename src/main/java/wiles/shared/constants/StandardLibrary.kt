@@ -150,8 +150,8 @@ object StandardLibrary {
     private val SIZE_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
         val value = it["!elem"]!!.value
         if(value is Collection<*>)
-            ObjectDetails(value.size.toLong(), INT_TYPE)
-        else ObjectDetails((value as String).length.toLong(), INT_TYPE)
+            ObjectDetails(value.size.toBigInteger(), INT_TYPE)
+        else ObjectDetails((value as String).length.toBigInteger(), INT_TYPE)
     }, defaultCheckerVars[SIZE]!!.type)
 
     private val AS_TEXT_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
@@ -159,9 +159,9 @@ object StandardLibrary {
     }, defaultCheckerVars[AS_TEXT]!!.type)
 
     private val READ_INT_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
-        if(!Checker.scanner.hasNextLong())
+        if(!Checker.scanner.hasNextBigInteger())
             throw PanicException(CANNOT_READ_INT_ERROR)
-        ObjectDetails(Checker.scanner.nextLong(), INT_TYPE)
+        ObjectDetails(Checker.scanner.nextBigInteger(), INT_TYPE)
     }, defaultCheckerVars[READ_INT]!!.type)
 
     private val READ_LINE_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{

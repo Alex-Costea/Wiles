@@ -11,6 +11,7 @@ import wiles.shared.constants.Tokens.FROM_ID
 import wiles.shared.constants.Tokens.IN_ID
 import wiles.shared.constants.Tokens.TO_ID
 import wiles.shared.constants.TypeConstants.INT_TYPE
+import java.math.BigInteger
 
 class InterpretFromFor(statement: JSONStatement, variables: InterpreterVariableMap, additionalVars: InterpreterVariableMap)
     : InterpretFromStatement(statement, variables, additionalVars)
@@ -63,15 +64,15 @@ class InterpretFromFor(statement: JSONStatement, variables: InterpreterVariableM
         }
 
         //TODO: fix
-        val range = if(fromValue.value as Long > toValue.value as Long)
-            ((fromValue.value as Long) downTo (toValue.value as Long))
-            else (fromValue.value as Long until toValue.value as Long)
+        val range = if(fromValue.value as BigInteger > toValue.value as BigInteger)
+            (((fromValue.value as BigInteger).toLong()) downTo ((toValue.value as BigInteger).toLong()))
+            else (((fromValue.value as BigInteger).toLong()) until ((toValue.value as BigInteger).toLong()))
 
         val newCollection = collection?.clone(deep = false)
 
         for(i in range)
         {
-            variables[name] = if(newCollection == null) ObjectDetails(i, INT_TYPE)
+            variables[name] = if(newCollection == null) ObjectDetails(i.toBigInteger(), INT_TYPE)
             else (newCollection.value as MutableList<ObjectDetails>).getOrNull(i.toInt()) ?: break
 
             val inferrer = InterpretFromCodeBlock(statement.components[compIndex], variables, additionalVars)
