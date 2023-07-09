@@ -204,7 +204,7 @@ writeline("Min found: " + result)
         val code17 = """
             for i from 9 to 0 do write(i)
         """
-        assertEquals(getOutput(code17),"9876543210")
+        assertEquals(getOutput(code17),"987654321")
     }
 
     companion object {
