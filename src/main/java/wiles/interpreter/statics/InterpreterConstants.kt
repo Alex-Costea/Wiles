@@ -22,7 +22,11 @@ object InterpreterConstants {
         return this.compareTo(value.toBigInteger())
     }
     operator fun BigInteger.compareTo(value: Double): Int {
-        return this.toDouble().compareTo(value)
+        return when (value) {
+            Double.POSITIVE_INFINITY -> -1
+            Double.NEGATIVE_INFINITY -> 1
+            else -> this.toDouble().compareTo(value)
+        }
     }
 
     operator fun BigInteger.plus(value: Double) : Double
