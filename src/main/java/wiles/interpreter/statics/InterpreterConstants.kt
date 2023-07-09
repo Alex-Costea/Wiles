@@ -2,6 +2,8 @@ package wiles.interpreter.statics
 
 import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.exceptions.PanicException
+import wiles.shared.constants.ErrorMessages.CANNOT_PERFORM_OPERATION_ERROR
+import wiles.shared.constants.Tokens.POWER_ID
 import wiles.shared.constants.TypeConstants
 import java.math.BigInteger
 
@@ -39,7 +41,8 @@ object InterpreterConstants {
     }
 
     fun BigInteger.pow(value: BigInteger): Any? {
-        val newValue = value.toIntOrNull() ?: throw PanicException("Operation out of bounds!")
+        val newValue = value.toIntOrNull() ?: throw PanicException(
+            CANNOT_PERFORM_OPERATION_ERROR.format(this,POWER_ID,value))
         return this.pow(newValue)
     }
 }
