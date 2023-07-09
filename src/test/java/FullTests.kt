@@ -162,7 +162,7 @@ writeline("Min found: " + result)
         dict.remove(at := "diana")
         writeline(dict)
         """
-        assertEquals(getOutput(code12),"10\n{alex=3, jim=15}\n")
+        assertEquals(getOutput(code12),"10\n{alex -> 3, jim -> 15}\n")
 
         val code13 = """
         let a := mut {1 -> "hi!", 2 -> "bye!"} : int? -> text?
@@ -194,6 +194,13 @@ writeline("Min found: " + result)
         writeline(b.type)
         """
         assertEquals(getOutput(code15),"TYPE DICT; (TYPE INT64; TYPE INT64)\n")
+
+        val code16= """
+        let b := {"hi" -> 1, "bye!" -> 2}
+        writeline(b)
+        """
+        assertEquals(getOutput(code16),"{hi -> 1, bye! -> 2}\n")
+
     }
 
     companion object {

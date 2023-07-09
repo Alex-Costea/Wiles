@@ -101,6 +101,9 @@ class ObjectDetails(var value : Any?, type : JSONStatement)
             null -> "nothing"
             is Function<*, *> -> getType().components[0].toString()
             is MutableList<*> -> (value as MutableList<*>).joinToString(prefix = "[", postfix = "]")
+            is LinkedHashMap<*, *> -> (value as LinkedHashMap<*, *>).entries.joinToString(prefix = "{", postfix = "}")
+                { it.key.toString() + " -> " + it.value }
+
             else -> value.toString()
         }
     }
