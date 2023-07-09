@@ -9,7 +9,7 @@ import wiles.shared.JSONStatement
 import wiles.shared.constants.Tokens.FROM_ID
 import wiles.shared.constants.Tokens.IN_ID
 import wiles.shared.constants.Tokens.TO_ID
-import wiles.shared.constants.TypeConstants.INT64_TYPE
+import wiles.shared.constants.TypeConstants.INT_TYPE
 import wiles.shared.constants.TypeConstants.LIST_OF_NULLABLE_ANYTHING_TYPE
 import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 
@@ -40,7 +40,7 @@ class InferFromFor(details: InferrerDetails) : InferFromStatement(
         if(variableName in variables.keys)
             throw VariableAlreadyDeclaredException(statement.components[0].getFirstLocation())
 
-        variables[variableName] = VariableDetails(INT64_TYPE)
+        variables[variableName] = VariableDetails(INT_TYPE)
 
         val components = statement.components.toMutableList()
         components.removeFirst()
@@ -53,12 +53,12 @@ class InferFromFor(details: InferrerDetails) : InferFromStatement(
 
         if(components.getOrNull(0)?.name == FROM_ID)
         {
-            checkCorrectType(components, INT64_TYPE)
+            checkCorrectType(components, INT_TYPE)
         }
 
         if(components.getOrNull(0)?.name == TO_ID)
         {
-            checkCorrectType(components, INT64_TYPE)
+            checkCorrectType(components, INT_TYPE)
         }
 
         val codeBlock = components[0]

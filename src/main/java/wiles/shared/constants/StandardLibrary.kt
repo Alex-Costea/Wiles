@@ -28,7 +28,7 @@ import wiles.shared.constants.TypeConstants.GET_AT_TYPE
 import wiles.shared.constants.TypeConstants.GET_KEYS_TYPE
 import wiles.shared.constants.TypeConstants.GET_TYPE_TYPE
 import wiles.shared.constants.TypeConstants.IGNORE_TYPE
-import wiles.shared.constants.TypeConstants.INT64_TYPE
+import wiles.shared.constants.TypeConstants.INT_TYPE
 import wiles.shared.constants.TypeConstants.LIST_OF_STRING
 import wiles.shared.constants.TypeConstants.MAYBE_TYPE
 import wiles.shared.constants.TypeConstants.MODULO_TYPE
@@ -143,14 +143,14 @@ object StandardLibrary {
     private val MODULO_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
         val x = it["!x"]!!.value as Long
         val y =it["!y"]!!.value as Long
-        ObjectDetails(x % y, INT64_TYPE)
+        ObjectDetails(x % y, INT_TYPE)
     }, defaultCheckerVars[MODULO]!!.type)
 
     private val SIZE_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
         val value = it["!elem"]!!.value
         if(value is Collection<*>)
-            ObjectDetails(value.size.toLong(), INT64_TYPE)
-        else ObjectDetails((value as String).length.toLong(), INT64_TYPE)
+            ObjectDetails(value.size.toLong(), INT_TYPE)
+        else ObjectDetails((value as String).length.toLong(), INT_TYPE)
     }, defaultCheckerVars[SIZE]!!.type)
 
     private val AS_TEXT_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
@@ -160,7 +160,7 @@ object StandardLibrary {
     private val READ_INT_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
         if(!Checker.scanner.hasNextLong())
             throw PanicException(CANNOT_READ_INT_ERROR)
-        ObjectDetails(Checker.scanner.nextLong(), INT64_TYPE)
+        ObjectDetails(Checker.scanner.nextLong(), INT_TYPE)
     }, defaultCheckerVars[READ_INT]!!.type)
 
     private val READ_LINE_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{

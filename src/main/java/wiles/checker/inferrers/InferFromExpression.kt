@@ -39,7 +39,7 @@ import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.BOOLEAN_ID
 import wiles.shared.constants.Types.DOUBLE_ID
 import wiles.shared.constants.Types.EITHER_ID
-import wiles.shared.constants.Types.INT64_ID
+import wiles.shared.constants.Types.INT_ID
 import wiles.shared.constants.Types.LIST_ID
 import wiles.shared.constants.Types.METHOD_CALL_ID
 import wiles.shared.constants.Types.STRING_ID
@@ -284,7 +284,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
 
     companion object {
         val VALID_NAMED = arrayListOf(
-            METHOD_ID,DOUBLE_ID, INT64_ID, STRING_ID, BOOLEAN_ID, LIST_ID, ANYTHING_ID, NOTHING_ID, METHOD_CALL_ID)
+            METHOD_ID,DOUBLE_ID, INT_ID, STRING_ID, BOOLEAN_ID, LIST_ID, ANYTHING_ID, NOTHING_ID, METHOD_CALL_ID)
 
         val TYPES_LIST =
             listOf(SyntaxType.METHOD, SyntaxType.LIST, SyntaxType.METHOD_CALL, SyntaxType.TYPE, SyntaxType.DICT)

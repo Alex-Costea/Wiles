@@ -36,7 +36,7 @@ import wiles.shared.constants.TypeUtils.unbox
 import wiles.shared.constants.Types.DOUBLE_ID
 import wiles.shared.constants.Types.EITHER_ID
 import wiles.shared.constants.Types.GENERIC_ID
-import wiles.shared.constants.Types.INT64_ID
+import wiles.shared.constants.Types.INT_ID
 import wiles.shared.constants.Types.LIST_ID
 import wiles.shared.constants.Types.STRING_ID
 import wiles.shared.constants.Types.TYPE_TYPE_ID
@@ -60,7 +60,7 @@ object InferrerUtils {
             } catch (e: NumberFormatException) {
                 throw InvalidLiteralException(token.getFirstLocation())
             }
-            return JSONStatement(INT64_ID, syntaxType = SyntaxType.TYPE)
+            return JSONStatement(INT_ID, syntaxType = SyntaxType.TYPE)
         }
         if(IS_IDENTIFIER.test(name)) {
             if( variables[name]?.initialized==false)

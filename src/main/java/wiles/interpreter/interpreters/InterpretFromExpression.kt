@@ -22,7 +22,7 @@ import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Tokens.OR_ID
 import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
-import wiles.shared.constants.TypeConstants.INT64_TYPE
+import wiles.shared.constants.TypeConstants.INT_TYPE
 import wiles.shared.constants.TypeConstants.STRING_TYPE
 import wiles.shared.constants.Types.LIST_ID
 import wiles.shared.constants.Types.METHOD_CALL_ID
@@ -39,7 +39,7 @@ class InterpretFromExpression(statement: JSONStatement, variables: InterpreterVa
         val type = component.syntaxType
 
         return if(Predicates.IS_NUMBER_LITERAL.test(name) && !name.contains(DECIMAL_DELIMITER)) {
-            ObjectDetails(name.substring(1).toLong(), INT64_TYPE)
+            ObjectDetails(name.substring(1).toLong(), INT_TYPE)
         }
 
         else if(Predicates.IS_NUMBER_LITERAL.test(name)) {

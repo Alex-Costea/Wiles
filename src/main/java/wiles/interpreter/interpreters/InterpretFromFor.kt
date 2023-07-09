@@ -4,13 +4,13 @@ import wiles.interpreter.data.InterpreterVariableMap
 import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.exceptions.BreakSignal
 import wiles.interpreter.exceptions.ContinueSignal
-import wiles.interpreter.statics.InterpreterConstants.MAX_INT64_REF
+import wiles.interpreter.statics.InterpreterConstants.MAX_INT_REF
 import wiles.interpreter.statics.InterpreterConstants.ZERO_REF
 import wiles.shared.JSONStatement
 import wiles.shared.constants.Tokens.FROM_ID
 import wiles.shared.constants.Tokens.IN_ID
 import wiles.shared.constants.Tokens.TO_ID
-import wiles.shared.constants.TypeConstants.INT64_TYPE
+import wiles.shared.constants.TypeConstants.INT_TYPE
 
 class InterpretFromFor(statement: JSONStatement, variables: InterpreterVariableMap, additionalVars: InterpreterVariableMap)
     : InterpretFromStatement(statement, variables, additionalVars)
@@ -55,7 +55,7 @@ class InterpretFromFor(statement: JSONStatement, variables: InterpreterVariableM
             interpreter.reference
         }
 
-        val toValue = if(toExpression == null) MAX_INT64_REF else
+        val toValue = if(toExpression == null) MAX_INT_REF else
         {
             val interpreter = InterpretFromExpression(toExpression ,variables, additionalVars)
             interpreter.interpret()
@@ -70,7 +70,7 @@ class InterpretFromFor(statement: JSONStatement, variables: InterpreterVariableM
 
         for(i in range)
         {
-            variables[name] = if(newCollection == null) ObjectDetails(i, INT64_TYPE)
+            variables[name] = if(newCollection == null) ObjectDetails(i, INT_TYPE)
             else (newCollection.value as MutableList<ObjectDetails>).getOrNull(i.toInt()) ?: break
 
             val inferrer = InterpretFromCodeBlock(statement.components[compIndex], variables, additionalVars)

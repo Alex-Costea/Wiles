@@ -72,7 +72,7 @@ writeline("Min found: " + result)
             typedef integer := int
             let a : integer := 10
             writeline(integer)"""
-        assertEquals(getOutput(code3),"TYPE INT64\n")
+        assertEquals(getOutput(code3),"TYPE INT\n")
 
         val code4 = """
             let var a := 10
@@ -176,11 +176,11 @@ writeline("Min found: " + result)
         writeline(a.type)
         """
         assertEquals(getOutput(code13),"[1, 2]\n" +
-                "TYPE MUTABLE; (TYPE DICT; (TYPE INT64; TYPE STRING))\n" +
+                "TYPE MUTABLE; (TYPE DICT; (TYPE INT; TYPE STRING))\n" +
                 "[1, 2, nothing]\n" +
-                "TYPE MUTABLE; (TYPE DICT; (TYPE EITHER; (TYPE INT64; TYPE !nothing); TYPE EITHER; (TYPE STRING; TYPE !nothing)))\n" +
+                "TYPE MUTABLE; (TYPE DICT; (TYPE EITHER; (TYPE INT; TYPE !nothing); TYPE EITHER; (TYPE STRING; TYPE !nothing)))\n" +
                 "[1, 2]\n" +
-                "TYPE MUTABLE; (TYPE DICT; (TYPE INT64; TYPE STRING))\n")
+                "TYPE MUTABLE; (TYPE DICT; (TYPE INT; TYPE STRING))\n")
 
         val code14 = """
         let a := mut {1 -> "hi!", 2 -> "bye!"} : int? -> text?
@@ -193,7 +193,7 @@ writeline("Min found: " + result)
         let b := {} : int -> int
         writeline(b.type)
         """
-        assertEquals(getOutput(code15),"TYPE DICT; (TYPE INT64; TYPE INT64)\n")
+        assertEquals(getOutput(code15),"TYPE DICT; (TYPE INT; TYPE INT)\n")
 
         val code16= """
         let b := {"hi" -> 1, "bye!" -> 2}

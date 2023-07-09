@@ -31,7 +31,7 @@ class InterpreterTests {
   "parsed" : true,
   "components" : [ {
     "components" : [ {
-      "name" : "INT64",
+      "name" : "INT",
       "type" : "TYPE"
     }, {
       "name" : "!a",
@@ -56,7 +56,7 @@ class InterpreterTests {
       "components" : [ {
         "name" : "EITHER",
         "components" : [ {
-          "name" : "INT64",
+          "name" : "INT",
           "type" : "TYPE"
         }, {
           "name" : "!nothing",
@@ -136,7 +136,7 @@ class InterpreterTests {
   } ],
   "type" : "CODE_BLOCK"
 }""")
-        assertVar(vars8, "!a_type_text","TYPE MUTABLE; (TYPE INT64)")
+        assertVar(vars8, "!a_type_text","TYPE MUTABLE; (TYPE INT)")
 
         /*
         let list := mut [mut 1, mut 2, mut 3] : mut[int]
@@ -164,7 +164,7 @@ class InterpreterTests {
                   "type": "TYPE",
                   "components": [
                     {
-                      "name": "INT64",
+                      "name": "INT",
                       "type": "TYPE"
                     }
                   ]
@@ -196,7 +196,7 @@ class InterpreterTests {
                   "type": "TYPE",
                   "components": [
                     {
-                      "name": "INT64",
+                      "name": "INT",
                       "type": "TYPE"
                     }
                   ]
@@ -266,7 +266,7 @@ class InterpreterTests {
           "type": "TYPE",
           "components": [
             {
-              "name": "INT64",
+              "name": "INT",
               "type": "TYPE"
             }
           ]
@@ -619,7 +619,7 @@ class InterpreterTests {
         "name" : "#10",
         "type" : "TOKEN"
       }, {
-        "name" : "INT64|TIMES|STRING",
+        "name" : "INT|TIMES|STRING",
         "type" : "TOKEN"
       }, {
         "name" : "@hi! ",
@@ -640,7 +640,7 @@ class InterpreterTests {
         "name" : "@hi! ",
         "type" : "TOKEN"
       }, {
-        "name" : "STRING|TIMES|INT64",
+        "name" : "STRING|TIMES|INT",
         "type" : "TOKEN"
       }, {
         "name" : "#10",
@@ -716,7 +716,7 @@ class InterpreterTests {
     } ]
   } ]
 }""")
-        assertVar(vars, "!a", "METHOD(TYPE INT64; DECLARATION ANON_ARG; (TYPE INT64; !x); DECLARATION ANON_ARG; (TYPE INT64; !y))")
+        assertVar(vars, "!a", "METHOD(TYPE INT; DECLARATION ANON_ARG; (TYPE INT; !x); DECLARATION ANON_ARG; (TYPE INT; !y))")
 
         // let result := 10
         val vars1 = getVars("""{
@@ -725,7 +725,7 @@ class InterpreterTests {
   "components" : [ {
     "type" : "DECLARATION",
     "components" : [ {
-      "name" : "INT64",
+      "name" : "INT",
       "type" : "TYPE"
     }, {
       "name" : "!result",
@@ -768,7 +768,7 @@ class InterpreterTests {
         "name" : "#2.0",
         "type" : "TOKEN"
       }, {
-        "name" : "DOUBLE|POWER|INT64",
+        "name" : "DOUBLE|POWER|INT",
         "type" : "TOKEN"
       }, {
         "type" : "EXPRESSION",
@@ -776,7 +776,7 @@ class InterpreterTests {
           "name" : "!nothing",
           "type" : "TOKEN"
         }, {
-          "name" : "!nothing|UNARY_MINUS|INT64",
+          "name" : "!nothing|UNARY_MINUS|INT",
           "type" : "TOKEN"
         }, {
           "name" : "#1",
@@ -940,7 +940,7 @@ class InterpreterTests {
         "name" : "#1",
         "type" : "TOKEN"
       }, {
-        "name" : "INT64|LARGER|INT64",
+        "name" : "INT|LARGER|INT",
         "type" : "TOKEN"
       }, {
         "name" : "#10",
@@ -981,7 +981,7 @@ class InterpreterTests {
           "name" : "#10",
           "type" : "TOKEN"
         }, {
-          "name" : "INT64|LARGER_EQUALS|INT64",
+          "name" : "INT|LARGER_EQUALS|INT",
           "type" : "TOKEN"
         }, {
           "name" : "#10",
@@ -1024,7 +1024,7 @@ class InterpreterTests {
               "name" : "#2",
               "type" : "TOKEN"
             }, {
-              "name" : "INT64|PLUS|INT64",
+              "name" : "INT|PLUS|INT",
               "type" : "TOKEN"
             }, {
               "name" : "#4",
@@ -1188,7 +1188,7 @@ class InterpreterTests {
   }, {
     "type" : "FOR",
     "components" : [ {
-      "name" : "INT64",
+      "name" : "INT",
       "type" : "TYPE"
     }, {
       "name" : "!i",
@@ -1385,7 +1385,7 @@ class InterpreterTests {
                 "name" : "@",
                 "type" : "TOKEN"
               }, {
-                "name" : "STRING|PLUS|INT64",
+                "name" : "STRING|PLUS|INT",
                 "type" : "TOKEN"
               }, {
                 "name" : "!i",
@@ -1442,7 +1442,7 @@ class InterpreterTests {
     "name" : "VARIABLE",
     "type" : "DECLARATION",
     "components" : [ {
-      "name" : "INT64",
+      "name" : "INT",
       "type" : "TYPE"
     }, {
       "name" : "!i",
@@ -1462,7 +1462,7 @@ class InterpreterTests {
         "name" : "!i",
         "type" : "TOKEN"
       }, {
-        "name" : "INT64|LARGER|INT64",
+        "name" : "INT|LARGER|INT",
         "type" : "TOKEN"
       }, {
         "name" : "#0",
@@ -1487,7 +1487,7 @@ class InterpreterTests {
             "name" : "!i",
             "type" : "TOKEN"
           }, {
-            "name" : "INT64|MINUS|INT64",
+            "name" : "INT|MINUS|INT",
             "type" : "TOKEN"
           }, {
             "name" : "#1",
@@ -1651,7 +1651,7 @@ class InterpreterTests {
     "name" : "VARIABLE",
     "type" : "DECLARATION",
     "components" : [ {
-      "name" : "INT64",
+      "name" : "INT",
       "type" : "TYPE"
     }, {
       "name" : "!i",
@@ -1671,7 +1671,7 @@ class InterpreterTests {
         "name" : "!i",
         "type" : "TOKEN"
       }, {
-        "name" : "INT64|LARGER|INT64",
+        "name" : "INT|LARGER|INT",
         "type" : "TOKEN"
       }, {
         "name" : "#0",
@@ -1696,7 +1696,7 @@ class InterpreterTests {
             "name" : "!i",
             "type" : "TOKEN"
           }, {
-            "name" : "INT64|MINUS|INT64",
+            "name" : "INT|MINUS|INT",
             "type" : "TOKEN"
           }, {
             "name" : "#1",
@@ -1859,7 +1859,7 @@ class InterpreterTests {
           "type": "TYPE",
           "components": [
             {
-              "name": "INT64",
+              "name": "INT",
               "type": "TYPE"
             }
           ]
@@ -1875,7 +1875,7 @@ class InterpreterTests {
               "type": "LIST",
               "components": [
                 {
-                  "name": "INT64",
+                  "name": "INT",
                   "type": "TYPE"
                 },
                 {
@@ -1978,7 +1978,7 @@ class InterpreterTests {
       "type": "FOR",
       "components": [
         {
-          "name": "INT64",
+          "name": "INT",
           "type": "TYPE"
         },
         {
@@ -2483,7 +2483,7 @@ class InterpreterTests {
           "name" : "MUTABLE",
           "type" : "TYPE",
           "components" : [ {
-            "name" : "INT64",
+            "name" : "INT",
             "type" : "TYPE"
           } ]
         } ]
@@ -2502,7 +2502,7 @@ class InterpreterTests {
       }, {
         "type" : "LIST",
         "components" : [ {
-          "name" : "INT64",
+          "name" : "INT",
           "type" : "TYPE"
         }, {
           "type" : "EXPRESSION",
@@ -2547,7 +2547,7 @@ class InterpreterTests {
       "name" : "MUTABLE",
       "type" : "TYPE",
       "components" : [ {
-        "name" : "INT64",
+        "name" : "INT",
         "type" : "TYPE"
       } ]
     }, {
@@ -2602,7 +2602,7 @@ class InterpreterTests {
               "components" : [ {
                 "type" : "LIST",
                 "components" : [ {
-                  "name" : "INT64",
+                  "name" : "INT",
                   "type" : "TYPE"
                 }, {
                   "type" : "EXPRESSION",
@@ -2644,7 +2644,7 @@ class InterpreterTests {
             "name" : "!b",
             "type" : "TOKEN"
           }, {
-            "name" : "STRING|PLUS|INT64",
+            "name" : "STRING|PLUS|INT",
             "type" : "TOKEN"
           }, {
             "name" : "!elem",
@@ -2737,7 +2737,7 @@ class InterpreterTests {
                       "type": "TYPE",
                       "components": [
                         {
-                          "name": "INT64",
+                          "name": "INT",
                           "type": "TYPE"
                         },
                         {
@@ -2779,7 +2779,7 @@ class InterpreterTests {
                       "type": "TYPE",
                       "components": [
                         {
-                          "name": "INT64",
+                          "name": "INT",
                           "type": "TYPE"
                         },
                         {
@@ -2857,7 +2857,7 @@ class InterpreterTests {
       "type": "FOR",
       "components": [
         {
-          "name": "INT64",
+          "name": "INT",
           "type": "TYPE"
         },
         {
@@ -2901,7 +2901,7 @@ class InterpreterTests {
                   "type": "TYPE",
                   "components": [
                     {
-                      "name": "INT64",
+                      "name": "INT",
                       "type": "TYPE"
                     },
                     {
@@ -2927,7 +2927,7 @@ class InterpreterTests {
                       "type": "TOKEN"
                     },
                     {
-                      "name": "INT64|SMALLER|INT64",
+                      "name": "INT|SMALLER|INT",
                       "type": "TOKEN"
                     },
                     {
@@ -3275,12 +3275,12 @@ class InterpreterTests {
       "components" : [ {
         "type" : "METHOD",
         "components" : [ {
-          "name" : "INT64",
+          "name" : "INT",
           "type" : "TYPE"
         }, {
           "type" : "DECLARATION",
           "components" : [ {
-            "name" : "INT64",
+            "name" : "INT",
             "type" : "TYPE"
           }, {
             "name" : "!a",
@@ -3295,7 +3295,7 @@ class InterpreterTests {
         }, {
           "type" : "DECLARATION",
           "components" : [ {
-            "name" : "INT64",
+            "name" : "INT",
             "type" : "TYPE"
           }, {
             "name" : "!b",
@@ -3311,12 +3311,12 @@ class InterpreterTests {
       "components" : [ {
         "type" : "METHOD",
         "components" : [ {
-          "name" : "INT64",
+          "name" : "INT",
           "type" : "TYPE"
         }, {
           "type" : "DECLARATION",
           "components" : [ {
-            "name" : "INT64",
+            "name" : "INT",
             "type" : "TYPE"
           }, {
             "name" : "!a",
@@ -3331,7 +3331,7 @@ class InterpreterTests {
         }, {
           "type" : "DECLARATION",
           "components" : [ {
-            "name" : "INT64",
+            "name" : "INT",
             "type" : "TYPE"
           }, {
             "name" : "!b",
@@ -3347,7 +3347,7 @@ class InterpreterTests {
                 "name" : "!a",
                 "type" : "TOKEN"
               }, {
-                "name" : "INT64|PLUS|INT64",
+                "name" : "INT|PLUS|INT",
                 "type" : "TOKEN"
               }, {
                 "name" : "!b",
@@ -3361,7 +3361,7 @@ class InterpreterTests {
   }, {
     "type" : "DECLARATION",
     "components" : [ {
-      "name" : "INT64",
+      "name" : "INT",
       "type" : "TYPE"
     }, {
       "name" : "!a",
@@ -3412,7 +3412,7 @@ class InterpreterTests {
   }, {
     "type" : "DECLARATION",
     "components" : [ {
-      "name" : "INT64",
+      "name" : "INT",
       "type" : "TYPE"
     }, {
       "name" : "!b",
@@ -3475,13 +3475,13 @@ class InterpreterTests {
           "components" : [ {
             "type" : "METHOD",
             "components" : [ {
-              "name" : "INT64",
+              "name" : "INT",
               "type" : "TYPE"
             }, {
               "name" : "ANON_ARG",
               "type" : "DECLARATION",
               "components" : [ {
-                "name" : "INT64",
+                "name" : "INT",
                 "type" : "TYPE"
               }, {
                 "name" : "!y",
@@ -3493,7 +3493,7 @@ class InterpreterTests {
           "name" : "ANON_ARG",
           "type" : "DECLARATION",
           "components" : [ {
-            "name" : "INT64",
+            "name" : "INT",
             "type" : "TYPE"
           }, {
             "name" : "!x",
@@ -3514,13 +3514,13 @@ class InterpreterTests {
           "components" : [ {
             "type" : "METHOD",
             "components" : [ {
-              "name" : "INT64",
+              "name" : "INT",
               "type" : "TYPE"
             }, {
               "name" : "ANON_ARG",
               "type" : "DECLARATION",
               "components" : [ {
-                "name" : "INT64",
+                "name" : "INT",
                 "type" : "TYPE"
               }, {
                 "name" : "!y",
@@ -3532,7 +3532,7 @@ class InterpreterTests {
           "name" : "ANON_ARG",
           "type" : "DECLARATION",
           "components" : [ {
-            "name" : "INT64",
+            "name" : "INT",
             "type" : "TYPE"
           }, {
             "name" : "!x",
@@ -3547,13 +3547,13 @@ class InterpreterTests {
               "components" : [ {
                 "type" : "METHOD",
                 "components" : [ {
-                  "name" : "INT64",
+                  "name" : "INT",
                   "type" : "TYPE"
                 }, {
                   "name" : "ANON_ARG",
                   "type" : "DECLARATION",
                   "components" : [ {
-                    "name" : "INT64",
+                    "name" : "INT",
                     "type" : "TYPE"
                   }, {
                     "name" : "!y",
@@ -3578,7 +3578,7 @@ class InterpreterTests {
                           "type" : "TOKEN"
                         } ]
                       }, {
-                        "name" : "INT64|PLUS|INT64",
+                        "name" : "INT|PLUS|INT",
                         "type" : "TOKEN"
                       }, {
                         "name" : "!y",
@@ -3601,13 +3601,13 @@ class InterpreterTests {
       "components" : [ {
         "type" : "METHOD",
         "components" : [ {
-          "name" : "INT64",
+          "name" : "INT",
           "type" : "TYPE"
         }, {
           "name" : "ANON_ARG",
           "type" : "DECLARATION",
           "components" : [ {
-            "name" : "INT64",
+            "name" : "INT",
             "type" : "TYPE"
           }, {
             "name" : "!y",
@@ -3654,13 +3654,13 @@ class InterpreterTests {
       "components" : [ {
         "type" : "METHOD",
         "components" : [ {
-          "name" : "INT64",
+          "name" : "INT",
           "type" : "TYPE"
         }, {
           "name" : "ANON_ARG",
           "type" : "DECLARATION",
           "components" : [ {
-            "name" : "INT64",
+            "name" : "INT",
             "type" : "TYPE"
           }, {
             "name" : "!y",
@@ -3702,7 +3702,7 @@ class InterpreterTests {
   }, {
     "type" : "DECLARATION",
     "components" : [ {
-      "name" : "INT64",
+      "name" : "INT",
       "type" : "TYPE"
     }, {
       "name" : "!x",
@@ -3738,7 +3738,7 @@ class InterpreterTests {
   }, {
     "type" : "DECLARATION",
     "components" : [ {
-      "name" : "INT64",
+      "name" : "INT",
       "type" : "TYPE"
     }, {
       "name" : "!y",
@@ -3791,7 +3791,7 @@ class InterpreterTests {
     "components" : [ {
       "name" : "EITHER",
       "components" : [ {
-        "name" : "INT64",
+        "name" : "INT",
         "type" : "TYPE"
       }, {
         "name" : "!nothing",
@@ -3905,7 +3905,7 @@ class InterpreterTests {
                       "type": "TYPE",
                       "components": [
                         {
-                          "name": "INT64",
+                          "name": "INT",
                           "type": "TYPE"
                         }
                       ]
@@ -3943,7 +3943,7 @@ class InterpreterTests {
                       "type": "TYPE",
                       "components": [
                         {
-                          "name": "INT64",
+                          "name": "INT",
                           "type": "TYPE"
                         }
                       ]
@@ -3965,7 +3965,7 @@ class InterpreterTests {
                       "type": "LIST",
                       "components": [
                         {
-                          "name": "INT64",
+                          "name": "INT",
                           "type": "TYPE"
                         },
                         {
@@ -4007,7 +4007,7 @@ class InterpreterTests {
                       "type": "TYPE",
                       "components": [
                         {
-                          "name": "INT64",
+                          "name": "INT",
                           "type": "TYPE"
                         }
                       ]
@@ -4098,7 +4098,7 @@ class InterpreterTests {
               "type": "TYPE",
               "components": [
                 {
-                  "name": "INT64",
+                  "name": "INT",
                   "type": "TYPE"
                 }
               ]
@@ -4227,7 +4227,7 @@ class InterpreterTests {
                       "type": "LIST",
                       "components": [
                         {
-                          "name": "INT64",
+                          "name": "INT",
                           "type": "TYPE"
                         },
                         {
@@ -4394,7 +4394,7 @@ class InterpreterTests {
                       "type": "TYPE",
                       "components": [
                         {
-                          "name": "INT64",
+                          "name": "INT",
                           "type": "TYPE"
                         }
                       ]
@@ -4432,7 +4432,7 @@ class InterpreterTests {
                       "type": "TYPE",
                       "components": [
                         {
-                          "name": "INT64",
+                          "name": "INT",
                           "type": "TYPE"
                         }
                       ]
@@ -4454,7 +4454,7 @@ class InterpreterTests {
                       "type": "LIST",
                       "components": [
                         {
-                          "name": "INT64",
+                          "name": "INT",
                           "type": "TYPE"
                         },
                         {
@@ -4496,7 +4496,7 @@ class InterpreterTests {
                       "type": "TYPE",
                       "components": [
                         {
-                          "name": "INT64",
+                          "name": "INT",
                           "type": "TYPE"
                         }
                       ]
@@ -4565,7 +4565,7 @@ class InterpreterTests {
               "type": "TYPE",
               "components": [
                 {
-                  "name": "INT64",
+                  "name": "INT",
                   "type": "TYPE"
                 }
               ]
@@ -4694,7 +4694,7 @@ class InterpreterTests {
                       "type": "LIST",
                       "components": [
                         {
-                          "name": "INT64",
+                          "name": "INT",
                           "type": "TYPE"
                         },
                         {
@@ -4841,7 +4841,7 @@ class InterpreterTests {
       "components" : [ {
         "name" : "LIST",
         "components" : [ {
-          "name" : "INT64",
+          "name" : "INT",
           "type" : "TYPE"
         } ],
         "type" : "TYPE"
@@ -4859,7 +4859,7 @@ class InterpreterTests {
         "type" : "TOKEN"
       }, {
         "components" : [ {
-          "name" : "INT64",
+          "name" : "INT",
           "type" : "TYPE"
         }, {
           "components" : [ {

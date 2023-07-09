@@ -25,13 +25,13 @@ import wiles.shared.constants.Tokens.UNARY_MINUS_ID
 import wiles.shared.constants.Tokens.UNARY_PLUS_ID
 import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
 import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
-import wiles.shared.constants.TypeConstants.INT64_TYPE
+import wiles.shared.constants.TypeConstants.INT_TYPE
 import wiles.shared.constants.TypeConstants.STRING_TYPE
 import wiles.shared.constants.TypeUtils.unbox
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.BOOLEAN_ID
 import wiles.shared.constants.Types.DOUBLE_ID
-import wiles.shared.constants.Types.INT64_ID
+import wiles.shared.constants.Types.INT_ID
 import wiles.shared.constants.Types.STRING_ID
 import java.util.function.BiFunction
 import kotlin.math.pow
@@ -47,62 +47,62 @@ object DoOperation {
 
     private val operationMap = hashMapOf(
         //Addition
-        Pair("${INT64_ID}|${PLUS_ID}|${INT64_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as Long) + (y as Long)}, INT64_TYPE)),
-        Pair("${INT64_ID}|${PLUS_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
+        Pair("${INT_ID}|${PLUS_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
+            (x as Long) + (y as Long)}, INT_TYPE)),
+        Pair("${INT_ID}|${PLUS_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
             (x as Long) + (y as Double)}, DOUBLE_TYPE)),
-        Pair("${DOUBLE_ID}|${PLUS_ID}|${INT64_ID}", createFunction({ x: Any?, y: Any? ->
+        Pair("${DOUBLE_ID}|${PLUS_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
             (x as Double) + (y as Long)}, DOUBLE_TYPE)),
         Pair("${DOUBLE_ID}|${PLUS_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
             (x as Double) + (y as Double)}, DOUBLE_TYPE)),
 
         //Subtraction
-        Pair("${INT64_ID}|${MINUS_ID}|${INT64_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as Long) - (y as Long)}, INT64_TYPE)),
-        Pair("${INT64_ID}|${MINUS_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
+        Pair("${INT_ID}|${MINUS_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
+            (x as Long) - (y as Long)}, INT_TYPE)),
+        Pair("${INT_ID}|${MINUS_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
             (x as Long) - (y as Double)}, DOUBLE_TYPE)),
-        Pair("${DOUBLE_ID}|${MINUS_ID}|${INT64_ID}", createFunction({ x: Any?, y: Any? ->
+        Pair("${DOUBLE_ID}|${MINUS_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
             (x as Double) - (y as Long)}, DOUBLE_TYPE)),
         Pair("${DOUBLE_ID}|${MINUS_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
             (x as Double) - (y as Double)}, DOUBLE_TYPE)),
 
         //Multiplication
-        Pair("${INT64_ID}|${TIMES_ID}|${INT64_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as Long) * (y as Long)}, INT64_TYPE)),
-        Pair("${INT64_ID}|${TIMES_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
+        Pair("${INT_ID}|${TIMES_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
+            (x as Long) * (y as Long)}, INT_TYPE)),
+        Pair("${INT_ID}|${TIMES_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
             (x as Long) * (y as Double)}, DOUBLE_TYPE)),
-        Pair("${DOUBLE_ID}|${TIMES_ID}|${INT64_ID}", createFunction({ x: Any?, y: Any? ->
+        Pair("${DOUBLE_ID}|${TIMES_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
             (x as Double) * (y as Long)}, DOUBLE_TYPE)),
         Pair("${DOUBLE_ID}|${TIMES_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
             (x as Double) * (y as Double)}, DOUBLE_TYPE)),
 
         //Division
-        Pair("${INT64_ID}|${DIVIDE_ID}|${INT64_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as Long) / (y as Long)}, INT64_TYPE)),
-        Pair("${INT64_ID}|${DIVIDE_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
+        Pair("${INT_ID}|${DIVIDE_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
+            (x as Long) / (y as Long)}, INT_TYPE)),
+        Pair("${INT_ID}|${DIVIDE_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
             (x as Long) / (y as Double)}, DOUBLE_TYPE)),
-        Pair("${DOUBLE_ID}|${DIVIDE_ID}|${INT64_ID}", createFunction({ x: Any?, y: Any? ->
+        Pair("${DOUBLE_ID}|${DIVIDE_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
             (x as Double) / (y as Long)}, DOUBLE_TYPE)),
         Pair("${DOUBLE_ID}|${DIVIDE_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
             (x as Double) / (y as Double)}, DOUBLE_TYPE)),
 
         //Exponentiation
-        Pair("${INT64_ID}|${POWER_ID}|${INT64_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as Long).toDouble().pow((y as Long).toDouble()).toLong() }, INT64_TYPE)),
-        Pair("${INT64_ID}|${POWER_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
+        Pair("${INT_ID}|${POWER_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
+            (x as Long).toDouble().pow((y as Long).toDouble()).toLong() }, INT_TYPE)),
+        Pair("${INT_ID}|${POWER_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
             (x as Long).toDouble().pow(y as Double)}, DOUBLE_TYPE)),
-        Pair("${DOUBLE_ID}|${POWER_ID}|${INT64_ID}", createFunction({ x: Any?, y: Any? ->
+        Pair("${DOUBLE_ID}|${POWER_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
             (x as Double).pow((y as Long).toDouble())}, DOUBLE_TYPE)),
         Pair("${DOUBLE_ID}|${POWER_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
             (x as Double).pow(y as Double)}, DOUBLE_TYPE)),
 
         //Prefix plus/minus
-        Pair("${NOTHING_ID}|${UNARY_PLUS_ID}|${INT64_ID}", createFunction({ _: Any?, y: Any? ->
-            (y as Long)}, INT64_TYPE)),
+        Pair("${NOTHING_ID}|${UNARY_PLUS_ID}|${INT_ID}", createFunction({ _: Any?, y: Any? ->
+            (y as Long)}, INT_TYPE)),
         Pair("${NOTHING_ID}|${UNARY_PLUS_ID}|${DOUBLE_ID}", createFunction({ _: Any?, y: Any? ->
             (y as Double)}, DOUBLE_TYPE)),
-        Pair("${NOTHING_ID}|${UNARY_MINUS_ID}|${INT64_ID}", createFunction({ _: Any?, y: Any? ->
-            -(y as Long)}, INT64_TYPE)),
+        Pair("${NOTHING_ID}|${UNARY_MINUS_ID}|${INT_ID}", createFunction({ _: Any?, y: Any? ->
+            -(y as Long)}, INT_TYPE)),
         Pair("${NOTHING_ID}|${UNARY_MINUS_ID}|${DOUBLE_ID}", createFunction({ _: Any?, y: Any? ->
             -(y as Double)}, DOUBLE_TYPE)),
 
@@ -121,9 +121,9 @@ object DoOperation {
             (x as Boolean).toString() + (y as String)}, STRING_TYPE)),
 
         //String and int concatenation
-        Pair("${STRING_ID}|${PLUS_ID}|${INT64_ID}", createFunction({ x : Any?, y : Any? ->
+        Pair("${STRING_ID}|${PLUS_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
             (x as String) + (y as Long)}, STRING_TYPE)),
-        Pair("${INT64_ID}|${PLUS_ID}|${STRING_ID}", createFunction({ x : Any?, y : Any? ->
+        Pair("${INT_ID}|${PLUS_ID}|${STRING_ID}", createFunction({ x : Any?, y : Any? ->
             (x as Long).toString() + (y as String)}, STRING_TYPE)),
 
         //String and double concatenation
@@ -139,50 +139,50 @@ object DoOperation {
             x != y}, BOOLEAN_TYPE)),
 
         //Larger
-        Pair("${INT64_ID}|${LARGER_ID}|${INT64_ID}", createFunction({ x : Any?, y : Any? ->
+        Pair("${INT_ID}|${LARGER_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
             (x as Long) > (y as Long)}, BOOLEAN_TYPE)),
-        Pair("${INT64_ID}|${LARGER_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
+        Pair("${INT_ID}|${LARGER_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
             (x as Long) > (y as Double)}, BOOLEAN_TYPE)),
-        Pair("${DOUBLE_ID}|${LARGER_ID}|${INT64_ID}", createFunction({ x : Any?, y : Any? ->
+        Pair("${DOUBLE_ID}|${LARGER_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
             (x as Double) > (y as Long)}, BOOLEAN_TYPE)),
         Pair("${DOUBLE_ID}|${LARGER_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
             (x as Double) > (y as Double)}, BOOLEAN_TYPE)),
 
         //Larger equals
-        Pair("${INT64_ID}|${LARGER_EQUALS_ID}|${INT64_ID}", createFunction({ x : Any?, y : Any? ->
+        Pair("${INT_ID}|${LARGER_EQUALS_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
             (x as Long) >= (y as Long)}, BOOLEAN_TYPE)),
-        Pair("${INT64_ID}|${LARGER_EQUALS_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
+        Pair("${INT_ID}|${LARGER_EQUALS_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
             (x as Long) >= (y as Double)}, BOOLEAN_TYPE)),
-        Pair("${DOUBLE_ID}|${LARGER_EQUALS_ID}|${INT64_ID}", createFunction({ x : Any?, y : Any? ->
+        Pair("${DOUBLE_ID}|${LARGER_EQUALS_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
             (x as Double) >= (y as Long)}, BOOLEAN_TYPE)),
         Pair("${DOUBLE_ID}|${LARGER_EQUALS_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
             (x as Double) >= (y as Double)}, BOOLEAN_TYPE)),
 
         //Smaller
-        Pair("${INT64_ID}|${SMALLER_ID}|${INT64_ID}", createFunction({ x : Any?, y : Any? ->
+        Pair("${INT_ID}|${SMALLER_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
             (x as Long) < (y as Long)}, BOOLEAN_TYPE)),
-        Pair("${INT64_ID}|${SMALLER_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
+        Pair("${INT_ID}|${SMALLER_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
             (x as Long) < (y as Double)}, BOOLEAN_TYPE)),
-        Pair("${DOUBLE_ID}|${SMALLER_ID}|${INT64_ID}", createFunction({ x : Any?, y : Any? ->
+        Pair("${DOUBLE_ID}|${SMALLER_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
             (x as Double) < (y as Long)}, BOOLEAN_TYPE)),
         Pair("${DOUBLE_ID}|${SMALLER_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
             (x as Double) < (y as Double)}, BOOLEAN_TYPE)),
 
         //Smaller equals
-        Pair("${INT64_ID}|${SMALLER_EQUALS_ID}|${INT64_ID}", createFunction({ x : Any?, y : Any? ->
+        Pair("${INT_ID}|${SMALLER_EQUALS_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
             (x as Long) <= (y as Long)}, BOOLEAN_TYPE)),
-        Pair("${INT64_ID}|${SMALLER_EQUALS_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
+        Pair("${INT_ID}|${SMALLER_EQUALS_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
             (x as Long) <= (y as Double)}, BOOLEAN_TYPE)),
-        Pair("${DOUBLE_ID}|${SMALLER_EQUALS_ID}|${INT64_ID}", createFunction({ x : Any?, y : Any? ->
+        Pair("${DOUBLE_ID}|${SMALLER_EQUALS_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
             (x as Double) <= (y as Long)}, BOOLEAN_TYPE)),
         Pair("${DOUBLE_ID}|${SMALLER_EQUALS_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
             (x as Double) <= (y as Double)}, BOOLEAN_TYPE)),
 
         //Repeat string
-        Pair("${STRING_ID}|${TIMES_ID}|${INT64_ID}", createFunction({ x : Any?, y : Any? ->
+        Pair("${STRING_ID}|${TIMES_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
             repeatString(x,y)
         }, STRING_TYPE)),
-        Pair("${INT64_ID}|${TIMES_ID}|${STRING_ID}", createFunction({ x : Any?, y : Any? ->
+        Pair("${INT_ID}|${TIMES_ID}|${STRING_ID}", createFunction({ x : Any?, y : Any? ->
             repeatString(y,x)
         }, STRING_TYPE)),
     )

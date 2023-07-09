@@ -24,7 +24,7 @@ object TypeConstants {
 
     val NOTHING_TYPE = JSONStatement(syntaxType = SyntaxType.TYPE, name = NOTHING_ID)
     val BOOLEAN_TYPE = JSONStatement(syntaxType = SyntaxType.TYPE, name = Types.BOOLEAN_ID)
-    val INT64_TYPE = JSONStatement(syntaxType = SyntaxType.TYPE, name = Types.INT64_ID)
+    val INT_TYPE = JSONStatement(syntaxType = SyntaxType.TYPE, name = Types.INT_ID)
     val STRING_TYPE = JSONStatement(syntaxType = SyntaxType.TYPE, name = STRING_ID)
     val DOUBLE_TYPE = JSONStatement(syntaxType = SyntaxType.TYPE, name = Types.DOUBLE_ID)
     val ERROR_TYPE = JSONStatement(syntaxType = SyntaxType.TYPE, name = Tokens.ERROR_TOKEN)
@@ -134,16 +134,16 @@ object TypeConstants {
     val MODULO_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
         components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
             components = mutableListOf(
-                INT64_TYPE,
+                INT_TYPE,
                 JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
                     components = mutableListOf(
-                        INT64_TYPE,
+                        INT_TYPE,
                         JSONStatement(name = "!x", syntaxType = SyntaxType.TOKEN)
                     )
                 ),
                 JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
                     components = mutableListOf(
-                        INT64_TYPE,
+                        INT_TYPE,
                         JSONStatement(name = "!y", syntaxType = SyntaxType.TOKEN)
                     )
                 )
@@ -153,7 +153,7 @@ object TypeConstants {
 
     val READ_NOTHING_RETURN_INT_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
         components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
-            components = mutableListOf(INT64_TYPE)
+            components = mutableListOf(INT_TYPE)
         ))
     )
 
@@ -289,7 +289,7 @@ object TypeConstants {
     val AS_TEXT_TYPE = Utils.createFunctionType(Pair(NULLABLE_ANYTHING_TYPE, STRING_TYPE))
     val AS_LIST_TYPE = Utils.createFunctionType(Pair(STRING_TYPE, LIST_OF_STRING))
     val SIZE_TYPE = Utils.createFunctionType(Pair(makeEither(mutableListOf(STRING_TYPE, LIST_OF_ANYTHING_TYPE)),
-        INT64_TYPE))
+        INT_TYPE))
 
     // CRUD operations
 

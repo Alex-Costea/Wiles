@@ -10,7 +10,7 @@ object Types {
     val TYPES = hashMapOf<String, String>()
 
     const val BOOLEAN_ID = "BOOLEAN"
-    const val INT64_ID = "INT64"
+    const val INT_ID = "INT"
     const val STRING_ID = "STRING"
     const val DOUBLE_ID = "DOUBLE"
     const val LIST_ID = "LIST"
@@ -32,7 +32,7 @@ object Types {
 
     init {
         TYPES["!truth"] = BOOLEAN_ID
-        TYPES["!int"] = INT64_ID
+        TYPES["!int"] = INT_ID
         TYPES["!text"] = STRING_ID
         TYPES["!rational"] = DOUBLE_ID
         TYPES["!list"] = LIST_ID
