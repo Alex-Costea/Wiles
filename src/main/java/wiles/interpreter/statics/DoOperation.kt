@@ -6,6 +6,7 @@ import wiles.interpreter.statics.InterpreterConstants.compareTo
 import wiles.interpreter.statics.InterpreterConstants.div
 import wiles.interpreter.statics.InterpreterConstants.minus
 import wiles.interpreter.statics.InterpreterConstants.plus
+import wiles.interpreter.statics.InterpreterConstants.pow
 import wiles.interpreter.statics.InterpreterConstants.times
 import wiles.interpreter.statics.InterpreterConstants.toIntOrNull
 import wiles.shared.InternalErrorException
@@ -97,7 +98,7 @@ object DoOperation {
 
         //Exponentiation
         Pair("${INT_ID}|${POWER_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as BigInteger).toDouble().pow((y as BigInteger).toDouble()).toLong() }, INT_TYPE)),
+            (x as BigInteger).pow(y as BigInteger) }, INT_TYPE)),
         Pair("${INT_ID}|${POWER_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
             (x as BigInteger).toDouble().pow(y as Double)}, DOUBLE_TYPE)),
         Pair("${DOUBLE_ID}|${POWER_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->

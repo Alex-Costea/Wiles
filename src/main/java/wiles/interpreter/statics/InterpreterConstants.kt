@@ -1,6 +1,7 @@
 package wiles.interpreter.statics
 
 import wiles.interpreter.data.ObjectDetails
+import wiles.interpreter.exceptions.PanicException
 import wiles.shared.constants.TypeConstants
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -46,6 +47,11 @@ object InterpreterConstants {
     operator fun BigDecimal.div(value: Double) : Double
     {
         return this.div(value.toBigDecimal()).toDouble()
+    }
+
+    fun BigInteger.pow(value: BigInteger): Any? {
+        val newValue = value.toIntOrNull() ?: throw PanicException("Operation out of bounds!")
+        return this.pow(newValue)
     }
 }
 
