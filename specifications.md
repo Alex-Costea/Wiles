@@ -20,7 +20,7 @@
 - String: `text`
 - Floating point: `rational` (equivalent to `double` in other languages)
 - Function type: like function literals, but no function body and put between square brackets (ex: `fun[x : int, -> int]`)
-- Sum types: `either[⟪type,⟫]`
+- Sum types: `either[⟪type,⟫]`, or `type1 or type2`
 - List: `list[type]`
 - Dict: `dict[key_type, value_type]`
 
@@ -58,7 +58,7 @@
 - `()` (order of operations, function access)
 - `[]` (list literals, subcomponents in type definitions)
 - `,` (separator between elements)
-- `?` (syntactic sugar for `type? = either[type,nothing]`)
+- `?` (syntactic sugar for `type? = type or nothing`)
 - `import` (get a variable from the outside scope)
 
 ### Named parameters

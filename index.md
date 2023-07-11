@@ -4,7 +4,7 @@ Wiles supports features such as:
 - `if`, `for` (including foreach functionality), `while`
 - Basic operators for arithmetics, boolean logic and comparisons
 - Functions as first-class objects using the `fun` keyword, including support for closures
-- Sum types using the `either` keyword
+- Sum types: `type1 or type2`
 - Support for types such as: integers (`int`), floating point numbers (`rational`), strings (`text`), booleans (`truth`), lists (`list`), hashmaps (`dict`)
 - Pattern matching on types using `when` statements
 - Opt-in nullability using the `?` symbol
@@ -66,7 +66,7 @@ end
 ### Minimum value
 
 ```
-typedef number := either[int,rational]
+typedef number := int or rational
 
 let min := fun(list : list[number as T]) -> T?
 begin
