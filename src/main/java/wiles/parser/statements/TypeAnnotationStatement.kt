@@ -12,6 +12,7 @@ import wiles.shared.constants.ErrorMessages.NOT_ENOUGH_TYPES_ERROR
 import wiles.shared.constants.ErrorMessages.TYPE_EXPECTED_ERROR
 import wiles.shared.constants.Predicates.IS_CONTAINED_IN
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
+import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.AS_ID
 import wiles.shared.constants.Tokens.BRACKET_END_ID
 import wiles.shared.constants.Tokens.BRACKET_START_ID
@@ -82,6 +83,22 @@ class TypeAnnotationStatement(context: Context, private val allowGenerics : Bool
                 val component2 = TypeAnnotationStatement(context)
                 component2.name = NOTHING_ID
                 subtypes.add(component2)
+            }
+            if(transmitter.expectMaybe(tokenOf(Tokens.OR_ID).dontIgnoreNewLine()).isPresent)
+            {
+                val oldName = name
+                name = EITHER_ID
+
+                val component1 = TypeAnnotationStatement(context)
+                component1.name = oldName
+                component1.location = location
+                component1.subtypes.addAll(subtypes)
+                subtypes.clear()
+                subtypes.add(component1)
+
+                val newStatement = TypeAnnotationStatement(context)
+                newStatement.process().throwFirstIfExists()
+                subtypes.add(newStatement)
             }
             if(allowGenerics && transmitter.expectMaybe(tokenOf(AS_ID).dontIgnoreNewLine()).isPresent)
             {

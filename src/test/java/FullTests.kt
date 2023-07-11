@@ -205,6 +205,12 @@ writeline("Min found: " + result)
             for i from 9 to 0 do write(i)
         """
         assertEquals(getOutput(code17),"987654321")
+
+        val code18 = """
+            let a := fun(x : int or text? as T) do nothing
+            writeline(a)
+        """
+        assertEquals(getOutput(code18),"METHOD(TYPE !nothing; DECLARATION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE INT; TYPE EITHER; (TYPE STRING; TYPE !nothing)); DECLARE); !x))\n")
     }
 
     companion object {
