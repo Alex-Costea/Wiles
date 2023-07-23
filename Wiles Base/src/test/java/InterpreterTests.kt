@@ -1,7 +1,5 @@
 
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import wiles.Main
 import wiles.interpreter.Interpreter
 import wiles.interpreter.data.InterpreterVariableMap
 import java.math.BigInteger
@@ -14,7 +12,7 @@ class InterpreterTests {
 
     private fun getVars(code : String) : InterpreterVariableMap
     {
-        val interpreter = Interpreter(code)
+        val interpreter = Interpreter(code, true, "code.wiles")
         interpreter.interpret()
         return interpreter.newVars
     }
@@ -5061,13 +5059,5 @@ class InterpreterTests {
   "type" : "CODE_BLOCK"
 }""")
         assertVar(vars,"!list_text","[1, 2, 3, 5, 4]")
-    }
-
-    companion object {
-        @JvmStatic
-        @BeforeAll
-        fun setUp() {
-            Main.DEBUG = true
-        }
     }
 }

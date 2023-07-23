@@ -1,7 +1,5 @@
 package wiles.parser
 
-import wiles.Main.DEBUG
-import wiles.Main.filename
 import wiles.parser.converters.TokensToSyntaxTreeConverter
 import wiles.parser.statements.CodeBlockStatement
 import wiles.shared.*
@@ -11,7 +9,7 @@ import java.io.*
 import java.util.*
 import java.util.stream.Collectors
 
-class Parser(content : String?) {
+class Parser(content : String?, DEBUG : Boolean, filename : String) {
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
     private var results : CodeBlockStatement
     val input = content?:loadFile(filename)

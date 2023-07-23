@@ -1,7 +1,6 @@
+
 import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import wiles.Main
 import wiles.checker.Checker
 import wiles.checker.exceptions.*
 import wiles.shared.AbstractCompilationException
@@ -8546,11 +8545,5 @@ class CheckerTests {
 
     companion object {
         private const val TYPE = "TYPE "
-
-        @JvmStatic
-        @BeforeAll
-        fun init() {
-            Main.filename = "code.wiles"
-        }
     }
 }

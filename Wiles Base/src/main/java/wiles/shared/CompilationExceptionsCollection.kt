@@ -1,20 +1,6 @@
 package wiles.shared
 
-import wiles.Main.DEBUG
-import wiles.shared.constants.ErrorMessages.COMPILATION_FAILED_ERROR
-import wiles.shared.constants.ErrorMessages.LINE_SYMBOL
-
 class CompilationExceptionsCollection : ArrayList<AbstractCompilationException>() {
-    fun getExceptionsString(input: String, additionalLines: Int): String {
-        val optional = sortedWith(nullsLast(compareBy<AbstractCompilationException> { it.tokenLocation.line }
-            .thenBy { it.tokenLocation.lineIndex }))
-            .map { LINE_SYMBOL+ "Line ${it.tokenLocation.line}: " + it.message +
-                    it.tokenLocation.displayLocation(input, additionalLines) + (if (DEBUG) "\n"+it.stackTraceToString() else "") }
-            .fold("") { a, b -> a + b }
-        if (optional.isEmpty())
-            throw InternalErrorException()
-        return COMPILATION_FAILED_ERROR+optional
-    }
 
     override fun equals(other: Any?): Boolean {
         if (other !is CompilationExceptionsCollection)
