@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Without Debug" type="JetRunConfigurationType">
+    <option name="MAIN_CLASS_NAME" value="wiles.Main" />
+    <module name="Wiles" />
+    <option name="PROGRAM_PARAMETERS" value="--file=input.wiles" />
+    <shortenClasspath name="NONE" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
