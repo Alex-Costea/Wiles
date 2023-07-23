@@ -12,6 +12,7 @@ import wiles.Main;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
@@ -30,8 +31,14 @@ public class WilesWebBackendApplication {
 	@RequestMapping(value = "/run", method = RequestMethod.POST,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public CompilationResponse compile(@RequestBody Map<String, Object> payload) throws IOException {
-		//sysin
-		String input = (String) payload.getOrDefault("input",null);
+		String code = (String) payload.getOrDefault("code",null);
+		if(code == null)
+			return new CompilationResponse(null,"Code not provided!");
+		String input = (String) payload.getOrDefault("input","");
+
+		ArrayList<String> args = new ArrayList<>();
+		args.add("--code="+code);
+		args.add("--input="+input);
 
 		//sysout
 		ByteArrayOutputStream outputBaos = new ByteArrayOutputStream();
@@ -43,18 +50,13 @@ public class WilesWebBackendApplication {
 		PrintStream errorStream = new PrintStream(errorBaos);
 		System.setErr(errorStream);
 
-		ArrayList<String> args = new ArrayList<>();
-		args.add("--code="+payload.get("code").toString());
-		if(input != null)
-			args.add("--input="+input);
-
 		Main.main(args.toArray(String[]::new));
 		System.setOut(systemOut);
 		System.setErr(systemErr);
-		String errorsText = errorBaos.toString("UTF-8");
+		String errorsText = errorBaos.toString(StandardCharsets.UTF_8);
 		if(Objects.equals(errorsText, ""))
 			errorsText = null;
-		return new CompilationResponse(outputBaos.toString("UTF-8"),
+		return new CompilationResponse(outputBaos.toString(StandardCharsets.UTF_8),
 				errorsText);
 	}
 }
