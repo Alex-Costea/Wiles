@@ -9,10 +9,10 @@ import java.io.*
 import java.util.*
 import java.util.stream.Collectors
 
-class Parser(content : String?, DEBUG : Boolean, filename : String) {
+class Parser(content : String?, DEBUG : Boolean, filename : String?) {
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
     private var results : CodeBlockStatement
-    val input = content?:loadFile(filename)
+    val input = content?:loadFile(filename!!)
     lateinit var json : String
     var additionalLines = 0
 

@@ -10,6 +10,7 @@ import wiles.shared.constants.ErrorMessages.RED_TEXT_START_ERROR
 import wiles.shared.constants.ErrorMessages.STACK_OVERFLOW_ERROR
 import wiles.shared.constants.StandardLibrary.defaultInterpreterVars
 import java.io.File
+import java.util.*
 
 class Interpreter(private val code : String?, private val DEBUG : Boolean, private val filename : String) {
     private val input = parseJson()
@@ -52,5 +53,10 @@ class Interpreter(private val code : String?, private val DEBUG : Boolean, priva
             newVars.putAll(variableMap.filter{it.key !in defaultInterpreterVars})
             println(newVars.map { it.key + " -> " + it.value})
         }
+    }
+
+    companion object
+    {
+        var SCANNER = Scanner(System.`in`)
     }
 }

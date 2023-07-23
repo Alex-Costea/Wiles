@@ -1,8 +1,8 @@
 package wiles.shared.constants
 
-import wiles.checker.Checker
 import wiles.checker.data.CheckerVariableMap
 import wiles.checker.data.VariableDetails
+import wiles.interpreter.Interpreter.Companion.SCANNER
 import wiles.interpreter.data.InterpreterVariableMap
 import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.exceptions.PanicException
@@ -159,27 +159,27 @@ object StandardLibrary {
     }, defaultCheckerVars[AS_TEXT]!!.type)
 
     private val READ_INT_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
-        if(!Checker.scanner.hasNextBigInteger())
+        if(!SCANNER.hasNextBigInteger())
             throw PanicException(CANNOT_READ_INT_ERROR)
-        ObjectDetails(Checker.scanner.nextBigInteger(), INT_TYPE)
+        ObjectDetails(SCANNER.nextBigInteger(), INT_TYPE)
     }, defaultCheckerVars[READ_INT]!!.type)
 
     private val READ_LINE_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
-        if(!Checker.scanner.hasNextLine())
+        if(!SCANNER.hasNextLine())
             throw PanicException(CANNOT_READ_TEXT_ERROR)
-        ObjectDetails(Checker.scanner.nextLine(), STRING_TYPE)
+        ObjectDetails(SCANNER.nextLine(), STRING_TYPE)
     }, defaultCheckerVars[READ_LINE]!!.type)
 
     private val READ_RATIONAL_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
-        if(!Checker.scanner.hasNextDouble())
+        if(!SCANNER.hasNextDouble())
             throw PanicException(CANNOT_READ_RATIONAL_ERROR)
-        ObjectDetails(Checker.scanner.nextDouble(), DOUBLE_TYPE)
+        ObjectDetails(SCANNER.nextDouble(), DOUBLE_TYPE)
     }, defaultCheckerVars[READ_RATIONAL]!!.type)
 
     private val READ_TRUTH_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
-        if(!Checker.scanner.hasNextBoolean())
+        if(!SCANNER.hasNextBoolean())
             throw PanicException(CANNOT_READ_TRUTH_ERROR)
-        ObjectDetails(Checker.scanner.nextBoolean(), BOOLEAN_TYPE)
+        ObjectDetails(SCANNER.nextBoolean(), BOOLEAN_TYPE)
     }, defaultCheckerVars[READ_TRUTH]!!.type)
 
     private val AS_LIST_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->

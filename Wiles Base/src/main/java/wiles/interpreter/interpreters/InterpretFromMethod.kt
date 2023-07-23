@@ -14,7 +14,8 @@ import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 import wiles.shared.constants.Types
 import java.util.function.Function
 
-class InterpretFromMethod(statement: JSONStatement, variables: InterpreterVariableMap, additionalVars: InterpreterVariableMap)
+class InterpretFromMethod(statement: JSONStatement, variables: InterpreterVariableMap,
+                          additionalVars: InterpreterVariableMap)
     : InterpreterWithRef(statement, variables, additionalVars)
 {
     override lateinit var reference : ObjectDetails

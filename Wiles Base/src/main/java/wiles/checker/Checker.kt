@@ -9,7 +9,6 @@ import wiles.shared.constants.StandardLibrary.defaultCheckerVars
 import wiles.shared.constants.Tokens.ELSE_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import java.io.File
-import java.util.*
 
 class Checker(private val jsonCode : String? = null) {
     val code: JSONStatement = parseSyntaxTreeJson()
@@ -72,7 +71,6 @@ class Checker(private val jsonCode : String? = null) {
 
     companion object {
         private val NOTHING_TOKEN = JSONStatement(name = NOTHING_ID, syntaxType = SyntaxType.TOKEN)
-        val scanner = Scanner(System.`in`)
         var currentFunctionNumber : Long = 0
         val KEEP_TYPE = arrayOf(SyntaxType.FOR, SyntaxType.DECLARATION, SyntaxType.TYPE, SyntaxType.LIST,
                 SyntaxType.DICT, SyntaxType.METHOD)

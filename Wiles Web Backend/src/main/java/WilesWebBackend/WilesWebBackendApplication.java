@@ -24,7 +24,6 @@ public class WilesWebBackendApplication {
 		SpringApplication.run(WilesWebBackendApplication.class, args);
 	}
 
-	private final InputStream systemIn = System.in;
 	private final PrintStream systemOut = System.out;
 	private final PrintStream systemErr = System.err;
 
@@ -45,7 +44,6 @@ public class WilesWebBackendApplication {
 		Main.main(args);
 		System.setOut(systemOut);
 		System.setErr(systemErr);
-		System.setIn(systemIn);
 		String errorsText = errorBaos.toString("UTF-8");
 		if(Objects.equals(errorsText, ""))
 			errorsText = null;

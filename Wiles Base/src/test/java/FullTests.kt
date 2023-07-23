@@ -1,4 +1,4 @@
-import org.junit.jupiter.api.BeforeAll
+
 import org.junit.jupiter.api.Test
 import wiles.Main.main
 import wiles.shared.constants.CommandLineArguments
@@ -11,12 +11,16 @@ class FullTests {
 
     private val systemIn = System.`in`
     private val systemOut = System.out
-    private fun getOutput(code : String) : String
+    private fun getOutput(code : String, input : String? = null) : String
     {
         val baos = ByteArrayOutputStream()
         val outputStream = PrintStream(baos)
         System.setOut(outputStream)
-        main(arrayOf(code, CommandLineArguments.NO_INPUT_FILE_COMMAND))
+        val args = mutableListOf(CommandLineArguments.CODE_COMMAND + code)
+        if(input != null) {
+            args.add(0,CommandLineArguments.INPUT_COMMAND+input)
+        }
+        main(args.toTypedArray())
         System.setIn(systemIn)
         System.setOut(systemOut)
         return baos.toString("UTF-8")
@@ -58,8 +62,12 @@ end
 writeline("Min found: " + result)
 """
 
-        assertEquals(getOutput(code),"Min found: -1\n")
-        assertEquals(getOutput(code),"Error: no min found!\n")
+        assertEquals(getOutput(code,"4\n" +
+                "10\n" +
+                "8\n" +
+                "20\n" +
+                "-1\n"),"Min found: -1\n")
+        assertEquals(getOutput(code,"0\n"),"Error: no min found!\n")
 
         val code2 = """
             let list := [1,2,3]
@@ -211,13 +219,5 @@ writeline("Min found: " + result)
             writeline(a)
         """
         assertEquals(getOutput(code18),"METHOD(TYPE !nothing; DECLARATION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE INT; TYPE EITHER; (TYPE STRING; TYPE !nothing)); DECLARE); !x))\n")
-    }
-
-    companion object {
-        @JvmStatic
-        @BeforeAll
-        fun setUpIO() {
-            System.setIn(("4\n10\n8\n20\n-1\n" + "0\n").byteInputStream())
-        }
     }
 }
