@@ -3,11 +3,15 @@ package WilesWebBackend;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import wiles.Main;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Map;
 import java.util.Objects;
@@ -20,11 +24,14 @@ public class WilesWebBackendApplication {
 		SpringApplication.run(WilesWebBackendApplication.class, args);
 	}
 
+	private final InputStream systemIn = System.in;
+	private final PrintStream systemOut = System.out;
+	private final PrintStream systemErr = System.err;
 
 	@RequestMapping(value = "/run", method = RequestMethod.POST,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public CompilationResponse compile(@RequestBody Map<String, Object> payload) throws IOException {
-		//systout
+		//sysout
 		ByteArrayOutputStream outputBaos = new ByteArrayOutputStream();
 		PrintStream outputStream = new PrintStream(outputBaos);
 		System.setOut(outputStream);
@@ -36,8 +43,9 @@ public class WilesWebBackendApplication {
 
 		String[] args = {"--nofile",payload.get("code").toString()};
 		Main.main(args);
-		System.setOut(System.out);
-		System.setErr(System.err);
+		System.setOut(systemOut);
+		System.setErr(systemErr);
+		System.setIn(systemIn);
 		String errorsText = errorBaos.toString("UTF-8");
 		if(Objects.equals(errorsText, ""))
 			errorsText = null;
