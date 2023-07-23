@@ -61,7 +61,7 @@ class Parser(content : String?) {
             }
         }
         catch (ex: IOException) {
-            throw InternalErrorException(IO_ERROR)
+            throw InternalErrorException(IO_ERROR + ex.message)
         }
     }
 
