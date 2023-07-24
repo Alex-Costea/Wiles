@@ -1,5 +1,6 @@
 package wiles.interpreter.interpreters
 
+import wiles.interpreter.data.InterpreterContext
 import wiles.interpreter.data.InterpreterVariableMap
 import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.exceptions.BreakSignal
@@ -12,8 +13,8 @@ import wiles.shared.constants.Tokens.TO_ID
 import wiles.shared.constants.TypeConstants.INT_TYPE
 import java.math.BigInteger
 
-class InterpretFromFor(statement: JSONStatement, variables: InterpreterVariableMap, additionalVars: InterpreterVariableMap)
-    : InterpretFromStatement(statement, variables, additionalVars)
+class InterpretFromFor(statement: JSONStatement, variables: InterpreterVariableMap, additionalVars: InterpreterVariableMap, context: InterpreterContext)
+    : InterpretFromStatement(statement, variables, additionalVars, context)
 {
     @Suppress("UNCHECKED_CAST")
     override fun interpret() {
@@ -43,21 +44,21 @@ class InterpretFromFor(statement: JSONStatement, variables: InterpreterVariableM
         else null
 
         val collection = if(inCollection != null) {
-            val inferFromCollection = InterpretFromExpression(inCollection, variables, additionalVars)
+            val inferFromCollection = InterpretFromExpression(inCollection, variables, additionalVars, context)
             inferFromCollection.interpret()
             inferFromCollection.reference
         } else null
 
         val fromValue = if(fromExpression == null) ZERO_REF else
         {
-            val interpreter = InterpretFromExpression(fromExpression ,variables, additionalVars)
+            val interpreter = InterpretFromExpression(fromExpression ,variables, additionalVars, context)
             interpreter.interpret()
             interpreter.reference
         }
 
         val toValue = if(toExpression == null) null else
         {
-            val interpreter = InterpretFromExpression(toExpression ,variables, additionalVars)
+            val interpreter = InterpretFromExpression(toExpression ,variables, additionalVars, context)
             interpreter.interpret()
             interpreter.reference
         }
@@ -83,7 +84,7 @@ class InterpretFromFor(statement: JSONStatement, variables: InterpreterVariableM
             variables[name] = if(newCollection == null) ObjectDetails(i, INT_TYPE)
             else (newCollection.value as MutableList<ObjectDetails>).getOrNull(i.toInt()) ?: break
 
-            val inferrer = InterpretFromCodeBlock(statement.components[compIndex], variables, additionalVars)
+            val inferrer = InterpretFromCodeBlock(statement.components[compIndex], variables, additionalVars, context)
             i += step
             try
             {

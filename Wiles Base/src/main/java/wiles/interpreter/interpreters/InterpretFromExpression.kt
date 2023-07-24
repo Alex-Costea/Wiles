@@ -1,5 +1,6 @@
 package wiles.interpreter.interpreters
 
+import wiles.interpreter.data.InterpreterContext
 import wiles.interpreter.data.InterpreterVariableMap
 import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.exceptions.PanicException
@@ -26,10 +27,10 @@ import wiles.shared.constants.TypeConstants.INT_TYPE
 import wiles.shared.constants.TypeConstants.STRING_TYPE
 import wiles.shared.constants.Types.LIST_ID
 import wiles.shared.constants.Types.METHOD_CALL_ID
-import java.util.function.Function
+import java.util.function.BiFunction
 
-class InterpretFromExpression(statement: JSONStatement, variables: InterpreterVariableMap, additionalVars: InterpreterVariableMap)
-    : InterpreterWithRef(statement, variables, additionalVars)
+class InterpretFromExpression(statement: JSONStatement, variables: InterpreterVariableMap, additionalVars: InterpreterVariableMap, context: InterpreterContext)
+    : InterpreterWithRef(statement, variables, additionalVars,context)
 {
     override lateinit var reference : ObjectDetails
 
@@ -57,13 +58,13 @@ class InterpretFromExpression(statement: JSONStatement, variables: InterpreterVa
         else {
             val interpreter : InterpreterWithRef = when (type) {
                 SyntaxType.LIST -> {
-                    InterpretFromList(component, variables, additionalVars)
+                    InterpretFromList(component, variables, additionalVars, context)
                 }
                 SyntaxType.METHOD -> {
-                    InterpretFromMethod(component, variables, additionalVars)
+                    InterpretFromMethod(component, variables, additionalVars, context)
                 }
                 SyntaxType.DICT -> {
-                    InterpretFromDict(component, variables, additionalVars)
+                    InterpretFromDict(component, variables, additionalVars, context)
                 }
                 else -> throw InternalErrorException()
             }
@@ -76,7 +77,7 @@ class InterpretFromExpression(statement: JSONStatement, variables: InterpreterVa
     {
         return when (component.syntaxType) {
             SyntaxType.EXPRESSION -> {
-                val expressionRun = InterpretFromExpression(component, variables, additionalVars)
+                val expressionRun = InterpretFromExpression(component, variables, additionalVars, context)
                 expressionRun.interpret()
                 expressionRun.reference
             }
@@ -141,7 +142,7 @@ class InterpretFromExpression(statement: JSONStatement, variables: InterpreterVa
                     "${METHOD_ID}|${APPLY_ID}|${METHOD_CALL_ID}" ->
                     {
                         val leftRef = getReference(leftStatement)
-                        val function = leftRef.value as Function<InterpreterVariableMap, ObjectDetails>
+                        val function = leftRef.value as BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>
                         val newVarMap = InterpreterVariableMap()
                         for(component in rightStatement.components)
                         {
@@ -149,14 +150,14 @@ class InterpretFromExpression(statement: JSONStatement, variables: InterpreterVa
                             val expressionRef = getReference(component.components[2])
                             newVarMap[name] = expressionRef
                         }
-                        function.apply(newVarMap)
+                        function.apply(newVarMap, context)
                     }
                     IMPORT_ID -> {
                         val newVars = variables.copy()
                         newVars.putAll(additionalVars.filter { it.key == rightStatement.name })
                         val interpreter = InterpretFromExpression(
                             JSONStatement(syntaxType =  SyntaxType.EXPRESSION, components = mutableListOf(rightStatement)),
-                            newVars, additionalVars)
+                            newVars, additionalVars, context)
                         interpreter.interpret()
                         interpreter.reference
                     }

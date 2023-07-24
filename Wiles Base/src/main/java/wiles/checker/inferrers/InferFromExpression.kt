@@ -76,7 +76,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
                         val result = InferrerUtils.getFunctionArguments(unboxedNewLeft, newRight,
                             middle.getFirstLocation(), genericTypes)
                         unboxedNewLeft = unboxedNewLeft.copy()
-                        specifyGenericTypesForFunction(unboxedNewLeft, genericTypes)
+                        specifyGenericTypesForFunction(unboxedNewLeft, genericTypes, context)
                         val newResult = result.map {
                             if(it.value.second)
                                 JSONStatement(syntaxType = SyntaxType.EXPRESSION,
@@ -122,7 +122,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
         if(statement.syntaxType in TYPES_LIST)
         {
             val inferrer = InferrerService(InferrerDetails(
-                statement,variables, CompilationExceptionsCollection(),additionalVars))
+                statement,variables, CompilationExceptionsCollection(),additionalVars, context))
             inferrer.infer()
             exceptions.addAll(inferrer.exceptions)
         }
@@ -130,7 +130,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
         {
             val inferrer = InferrerService(
                 InferrerDetails(statement.components[0],
-                variables, CompilationExceptionsCollection(), additionalVars)
+                variables, CompilationExceptionsCollection(), additionalVars, context)
             )
             inferrer.infer()
             when (statement.components[0].syntaxType) {
@@ -209,7 +209,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
             val rightIsToken = right.syntaxType == SyntaxType.TOKEN
 
             if(!leftIsToken)
-                InferFromExpression(InferrerDetails(left, variables, exceptions, additionalVars)).infer()
+                InferFromExpression(InferrerDetails(left, variables, exceptions, additionalVars, context)).infer()
 
             val leftType = if(leftIsToken) inferTypeFromLiteral(left,variables, additionalVars)
                 else if(left.syntaxType == SyntaxType.EXPRESSION) left.components[0]
@@ -252,7 +252,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
             }
 
             if(!rightIsToken)
-                InferFromExpression(InferrerDetails(right, variables, exceptions, additionalVars)).infer()
+                InferFromExpression(InferrerDetails(right, variables, exceptions, additionalVars, context)).infer()
 
             val middleIsImport = middle.name == IMPORT_ID
 

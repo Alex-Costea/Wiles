@@ -1,6 +1,6 @@
 package wiles.parser.statements;
 
-import wiles.parser.builders.Context;
+import wiles.parser.builders.ParserContext;
 import wiles.shared.CompilationExceptionsCollection;
 import wiles.shared.SyntaxType;
 import org.jetbrains.annotations.NotNull;
@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class ContinueStatement extends AbstractStatement{
-    public ContinueStatement(@NotNull Context context) {
+    public ContinueStatement(@NotNull ParserContext context) {
         super(context);
     }
 

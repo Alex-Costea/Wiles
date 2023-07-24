@@ -2,6 +2,7 @@
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import wiles.checker.Checker
+import wiles.checker.data.CheckerContext
 import wiles.checker.exceptions.*
 import wiles.shared.AbstractCompilationException
 import wiles.shared.CompilationExceptionsCollection
@@ -15,7 +16,6 @@ import wiles.shared.constants.Utils.NULL_LOCATION
 import kotlin.test.assertEquals
 
 class CheckerTests {
-
     private fun createExceptions(vararg list: AbstractCompilationException): CompilationExceptionsCollection {
         val exceptions = CompilationExceptionsCollection()
         exceptions.addAll(listOf(*list))
@@ -24,7 +24,7 @@ class CheckerTests {
 
     private fun checkResult(exceptions : CompilationExceptionsCollection?, code : String, result : String)
     {
-        val checker = Checker(code)
+        val checker = Checker(code, CheckerContext(0))
         val exceptionList = exceptions ?: CompilationExceptionsCollection()
         Assertions.assertEquals(exceptionList, checker.check())
         assertEquals(result,checker.code.toString())

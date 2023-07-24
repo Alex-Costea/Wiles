@@ -2,7 +2,7 @@ package wiles.parser.builders
 
 import wiles.parser.services.TokenTransmitter
 
-class Context(val transmitter: TokenTransmitter) {
+class ParserContext(val transmitter: TokenTransmitter) {
     var isOutermost = false
     private set
     var isWithinMethod = false
@@ -13,7 +13,7 @@ class Context(val transmitter: TokenTransmitter) {
     var isWithinInnerExpression = false
         private set
 
-    fun setOutermost(to:Boolean) : Context
+    fun setOutermost(to:Boolean) : ParserContext
     {
         if(isOutermost == to)
             return this
@@ -22,7 +22,7 @@ class Context(val transmitter: TokenTransmitter) {
         return x
     }
 
-    fun setWithinMethod(to:Boolean) : Context
+    fun setWithinMethod(to:Boolean) : ParserContext
     {
         if(isWithinMethod == to)
             return this
@@ -31,7 +31,7 @@ class Context(val transmitter: TokenTransmitter) {
         return x
     }
 
-    fun setWithinLoop(to:Boolean) : Context
+    fun setWithinLoop(to:Boolean) : ParserContext
     {
         if(isWithinLoop == to)
             return this
@@ -40,7 +40,7 @@ class Context(val transmitter: TokenTransmitter) {
         return x
     }
 
-    fun setWithinInnerExpression(to:Boolean) : Context
+    fun setWithinInnerExpression(to:Boolean) : ParserContext
     {
         if(isWithinInnerExpression == to)
             return this
@@ -49,8 +49,8 @@ class Context(val transmitter: TokenTransmitter) {
         return x
     }
 
-    private fun clone(): Context {
-        return Context(transmitter)
+    private fun clone(): ParserContext {
+        return ParserContext(transmitter)
             .setOutermost(isOutermost).setWithinLoop(isWithinLoop)
             .setWithinMethod(isWithinMethod).setWithinInnerExpression(isWithinInnerExpression)
     }

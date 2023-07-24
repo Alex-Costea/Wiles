@@ -1,5 +1,6 @@
 package wiles.interpreter
 
+import wiles.interpreter.data.InterpreterContext
 import wiles.interpreter.data.InterpreterVariableMap
 import wiles.interpreter.exceptions.PanicException
 import wiles.interpreter.services.InterpreterService
@@ -10,9 +11,8 @@ import wiles.shared.constants.ErrorMessages.RED_TEXT_START_ERROR
 import wiles.shared.constants.ErrorMessages.STACK_OVERFLOW_ERROR
 import wiles.shared.constants.StandardLibrary.defaultInterpreterVars
 import java.io.File
-import java.util.*
 
-class Interpreter(private val code : String?, private val DEBUG : Boolean, private val filename : String) {
+class Interpreter(private val code : String?, private val debug : Boolean, private val filename : String, val context: InterpreterContext) {
     private val input = parseJson()
     var newVars = InterpreterVariableMap()
 
@@ -24,7 +24,7 @@ class Interpreter(private val code : String?, private val DEBUG : Boolean, priva
 
     fun interpret()
     {
-        if(DEBUG) {
+        if(debug) {
             print("Interpreting code: ")
             println(input)
         }
@@ -34,7 +34,7 @@ class Interpreter(private val code : String?, private val DEBUG : Boolean, priva
         try {
             try
             {
-                InterpreterService(input, variableMap, InterpreterVariableMap()).interpret()
+                InterpreterService(input, variableMap, InterpreterVariableMap(), context).interpret()
             }
             catch (ex : StackOverflowError)
             {
@@ -43,20 +43,15 @@ class Interpreter(private val code : String?, private val DEBUG : Boolean, priva
         }
         catch (ex : PanicException)
         {
-            System.err.println("$RED_TEXT_START_ERROR${ex.message?:"A runtime error occurred!"}$RED_TEXT_END_ERROR")
+            context.errors.append("$RED_TEXT_START_ERROR${ex.message?:"A runtime error occurred!"}$RED_TEXT_END_ERROR\n")
         }
 
-        if(DEBUG)
+        if(debug)
         {
             println()
             print("Variables: ")
             newVars.putAll(variableMap.filter{it.key !in defaultInterpreterVars})
             println(newVars.map { it.key + " -> " + it.value})
         }
-    }
-
-    companion object
-    {
-        var SCANNER = Scanner(System.`in`)
     }
 }

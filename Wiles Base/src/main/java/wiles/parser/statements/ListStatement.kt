@@ -1,6 +1,6 @@
 package wiles.parser.statements
 
-import wiles.parser.builders.Context
+import wiles.parser.builders.ParserContext
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.statements.expressions.InnerDefaultExpression
@@ -11,7 +11,7 @@ import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.BRACKET_END_ID
 import wiles.shared.constants.Tokens.SEPARATOR_ID
 
-class ListStatement(context: Context) : AbstractStatement(context) {
+class ListStatement(context: ParserContext) : AbstractStatement(context) {
     override val syntaxType = SyntaxType.LIST
     private val components : ArrayList<AbstractStatement> = arrayListOf()
 

@@ -1,7 +1,7 @@
 package wiles.parser.statements.expressions;
 
 import org.jetbrains.annotations.NotNull;
-import wiles.parser.builders.Context;
+import wiles.parser.builders.ParserContext;
 import wiles.parser.services.PrecedenceProcessor;
 import wiles.parser.statements.TokenStatement;
 import wiles.shared.AbstractCompilationException;
@@ -14,7 +14,7 @@ public class InsideMethodCallExpression extends AbstractExpression{
 
     protected boolean isAssignment=false;
 
-    public InsideMethodCallExpression(@NotNull Context oldContext) {
+    public InsideMethodCallExpression(@NotNull ParserContext oldContext) {
         super(oldContext.setWithinInnerExpression(true));
     }
     {

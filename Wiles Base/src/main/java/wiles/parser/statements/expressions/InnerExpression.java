@@ -1,6 +1,6 @@
 package wiles.parser.statements.expressions;
 
-import wiles.parser.builders.Context;
+import wiles.parser.builders.ParserContext;
 import wiles.shared.Token;
 import org.jetbrains.annotations.NotNull;
 import wiles.parser.exceptions.TokenExpectedException;
@@ -11,7 +11,7 @@ import static wiles.shared.constants.ErrorMessages.INTERNAL_ERROR;
 import static wiles.shared.constants.Tokens.PAREN_END_ID;
 
 public class InnerExpression extends AbstractExpression {
-    public InnerExpression(@NotNull Context oldContext) {
+    public InnerExpression(@NotNull ParserContext oldContext) {
         super(oldContext.setWithinInnerExpression(true));
     }
     {

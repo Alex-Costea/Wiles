@@ -1,6 +1,6 @@
 package wiles.parser.statements
 
-import wiles.parser.builders.Context
+import wiles.parser.builders.ParserContext
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.statements.expressions.DefaultExpression
 import wiles.shared.AbstractCompilationException
@@ -8,7 +8,7 @@ import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens
 
-class WhenStatement(context: Context) : AbstractStatement(context) {
+class WhenStatement(context: ParserContext) : AbstractStatement(context) {
     private val expression = DefaultExpression(context)
     private val branches : MutableList<Pair<AbstractStatement,AbstractStatement>> = mutableListOf()
 

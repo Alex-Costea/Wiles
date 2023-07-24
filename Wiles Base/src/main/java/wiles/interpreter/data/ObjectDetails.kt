@@ -10,7 +10,7 @@ import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 import wiles.shared.constants.Types.DICT_ID
 import wiles.shared.constants.Types.LIST_ID
 import java.math.BigInteger
-import java.util.function.Function
+import java.util.function.BiFunction
 
 class ObjectDetails(var value : Any?, type : JSONStatement)
 {
@@ -72,7 +72,7 @@ class ObjectDetails(var value : Any?, type : JSONStatement)
                     .associate { it.first to it.second }
                 return newValue
             }
-            is Function<*, *> -> value
+            is BiFunction<*, *, *> -> value
             is ObjectDetails -> ObjectDetails(cloneValue(value.value, deep), value.getType().copyRemovingLocation())
             else -> throw InternalErrorException()
         }
@@ -100,7 +100,7 @@ class ObjectDetails(var value : Any?, type : JSONStatement)
     override fun toString(): String {
         return when(value) {
             null -> "nothing"
-            is Function<*, *> -> getType().components[0].toString()
+            is BiFunction<*, *, *> -> getType().components[0].toString()
             is MutableList<*> -> (value as MutableList<*>).joinToString(prefix = "[", postfix = "]")
             is LinkedHashMap<*, *> -> (value as LinkedHashMap<*, *>).entries.joinToString(prefix = "{", postfix = "}")
                 { it.key.toString() + " -> " + it.value }

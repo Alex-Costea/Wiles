@@ -2,7 +2,7 @@ package wiles.shared.constants
 
 import wiles.checker.data.CheckerVariableMap
 import wiles.checker.data.VariableDetails
-import wiles.interpreter.Interpreter.Companion.SCANNER
+import wiles.interpreter.data.InterpreterContext
 import wiles.interpreter.data.InterpreterVariableMap
 import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.exceptions.PanicException
@@ -48,7 +48,7 @@ import wiles.shared.constants.TypeConstants.WRITELINE_TYPE
 import wiles.shared.constants.TypeConstants.WRITE_TYPE
 import wiles.shared.constants.Types.TYPE_TYPE_ID
 import java.math.BigInteger
-import java.util.function.Function
+import java.util.function.BiFunction
 
 object StandardLibrary {
     val defaultInterpreterVars = InterpreterVariableMap()
@@ -120,75 +120,75 @@ object StandardLibrary {
     private val INFINITY_REF = ObjectDetails(Double.POSITIVE_INFINITY, defaultCheckerVars[INFINITY]!!.type)
     private val NAN_REF = ObjectDetails(Double.NaN, defaultCheckerVars[NAN]!!.type)
 
-    private val WRITE_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
-        val value = it["!text"]?:return@Function NOTHING_REF
-        print(value)
+    private val WRITE_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ it, context ->
+        val value = it["!text"]?:return@BiFunction NOTHING_REF
+        context.output.append(value)
         NOTHING_REF
     }, defaultCheckerVars[WRITE]!!.type)
 
-    private val WRITELINE_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
+    private val WRITELINE_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ it, context ->
         val value = it["!text"]?:""
-        println(value)
+        context.output.append(value.toString()+"\n")
         NOTHING_REF
     }, defaultCheckerVars[WRITELINE]!!.type)
 
-    private val PANIC_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
+    private val PANIC_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ it, context ->
         val value = it["!text"]?.value as String?
         value?:throw PanicException()
         throw PanicException(value)
     }, defaultCheckerVars[PANIC]!!.type)
 
-    private val IGNORE_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
+    private val IGNORE_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ it, context ->
         NOTHING_REF}, defaultCheckerVars[IGNORE]!!.type)
 
-    private val MODULO_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
+    private val MODULO_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ it, context ->
         val x = it["!x"]!!.value as BigInteger
         val y =it["!y"]!!.value as BigInteger
         ObjectDetails(x % y, INT_TYPE)
     }, defaultCheckerVars[MODULO]!!.type)
 
-    private val SIZE_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
+    private val SIZE_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ it, context ->
         val value = it["!elem"]!!.value
         if(value is Collection<*>)
             ObjectDetails(value.size.toBigInteger(), INT_TYPE)
         else ObjectDetails((value as String).length.toBigInteger(), INT_TYPE)
     }, defaultCheckerVars[SIZE]!!.type)
 
-    private val AS_TEXT_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
+    private val AS_TEXT_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ it, context ->
         ObjectDetails(it["!elem"]!!.toString(), STRING_TYPE)
     }, defaultCheckerVars[AS_TEXT]!!.type)
 
-    private val READ_INT_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
-        if(!SCANNER.hasNextBigInteger())
+    private val READ_INT_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ it, context ->
+        if(!context.input.hasNextBigInteger())
             throw PanicException(CANNOT_READ_INT_ERROR)
-        ObjectDetails(SCANNER.nextBigInteger(), INT_TYPE)
+        ObjectDetails(context.input.nextBigInteger(), INT_TYPE)
     }, defaultCheckerVars[READ_INT]!!.type)
 
-    private val READ_LINE_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
-        if(!SCANNER.hasNextLine())
+    private val READ_LINE_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ it, context ->
+        if(!context.input.hasNextLine())
             throw PanicException(CANNOT_READ_TEXT_ERROR)
-        ObjectDetails(SCANNER.nextLine(), STRING_TYPE)
+        ObjectDetails(context.input.nextLine(), STRING_TYPE)
     }, defaultCheckerVars[READ_LINE]!!.type)
 
-    private val READ_RATIONAL_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
-        if(!SCANNER.hasNextDouble())
+    private val READ_RATIONAL_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ it, context ->
+        if(!context.input.hasNextDouble())
             throw PanicException(CANNOT_READ_RATIONAL_ERROR)
-        ObjectDetails(SCANNER.nextDouble(), DOUBLE_TYPE)
+        ObjectDetails(context.input.nextDouble(), DOUBLE_TYPE)
     }, defaultCheckerVars[READ_RATIONAL]!!.type)
 
-    private val READ_TRUTH_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{
-        if(!SCANNER.hasNextBoolean())
+    private val READ_TRUTH_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ it, context ->
+        if(!context.input.hasNextBoolean())
             throw PanicException(CANNOT_READ_TRUTH_ERROR)
-        ObjectDetails(SCANNER.nextBoolean(), BOOLEAN_TYPE)
+        ObjectDetails(context.input.nextBoolean(), BOOLEAN_TYPE)
     }, defaultCheckerVars[READ_TRUTH]!!.type)
 
-    private val AS_LIST_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
+    private val AS_LIST_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ map, context ->
         val elem = (map["!elem"]!!.value as String)
         ObjectDetails(elem.toMutableList().map {
             ObjectDetails(it.toString(), STRING_TYPE) }, LIST_OF_STRING)
     }, defaultCheckerVars[READ_LINE]!!.type)
 
-    private val SET_VALUE_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
+    private val SET_VALUE_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ map, context ->
         val leftRef = map["!elem"]!!
         val mutableObj = map["!value"]!!.makeMutable()
         leftRef.setType(mutableObj.getType())
@@ -196,11 +196,11 @@ object StandardLibrary {
         NOTHING_REF
     }, defaultCheckerVars[SET_VALUE]!!.type)
 
-    private val MAYBE_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
+    private val MAYBE_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ map, context ->
         map["!elem"]!!
     }, defaultCheckerVars[MAYBE]!!.type)
 
-    private val CONTENT_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
+    private val CONTENT_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ map, context ->
         val elem = map["!elem"]!!
         if(elem.value == null)
             throw PanicException("Content of element can't be retrieved because element is nothing.")
@@ -208,13 +208,13 @@ object StandardLibrary {
     }, defaultCheckerVars[CONTENT]!!.type)
 
     @Suppress("UNCHECKED_CAST")
-    private val RUN_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
-        val func = map["!func"]!!.value as Function<InterpreterVariableMap, ObjectDetails>
-        func.apply(map)
+    private val RUN_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ map, context ->
+        val func = map["!func"]!!.value as BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>
+        func.apply(map, context)
     }, defaultCheckerVars[RUN]!!.type)
 
     @Suppress("UNCHECKED_CAST")
-    private val ADD_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
+    private val ADD_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ map, context ->
         val coll = map["!collection"]!!
         val elem = map["!value"]!!
         val at = map["!at"]!!
@@ -237,7 +237,7 @@ object StandardLibrary {
     }, defaultCheckerVars[ADD]!!.type)
 
     @Suppress("UNCHECKED_CAST")
-    private val SET_AT_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
+    private val SET_AT_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ map, context ->
         val coll = map["!collection"]!!
         val elem = map["!value"]!!
         val at = map["!at"]!!
@@ -260,7 +260,7 @@ object StandardLibrary {
     }, defaultCheckerVars[SET_AT]!!.type)
 
     @Suppress("UNCHECKED_CAST")
-    private val GET_AT_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
+    private val GET_AT_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ map, context ->
         val coll = map["!collection"]!!
         val at = map["!at"]!!
         try {
@@ -282,7 +282,7 @@ object StandardLibrary {
     }, defaultCheckerVars[GET]!!.type)
 
     @Suppress("UNCHECKED_CAST")
-    private val REMOVE_AT_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
+    private val REMOVE_AT_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ map, context ->
         val coll = map["!collection"]!!
         val at = map["!at"]!!
         try {
@@ -303,18 +303,18 @@ object StandardLibrary {
         NOTHING_REF
     }, defaultCheckerVars[REMOVE_AT]!!.type)
 
-    private val GET_TYPE_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
+    private val GET_TYPE_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ map, context ->
         val newType = map["!elem"]!!.getType().copy()
         ObjectDetails(newType, JSONStatement(name = TYPE_TYPE_ID, syntaxType = SyntaxType.TYPE,
             components = mutableListOf(newType)))
     }, defaultCheckerVars[GET_TYPE]!!.type)
 
-    private val CLONE_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
+    private val CLONE_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ map, context ->
         map["!elem"]!!.clone(deep = (map["!deep"]?.value ?: true) as Boolean)
     }, defaultCheckerVars[CLONE]!!.type)
 
     @Suppress("UNCHECKED_CAST")
-    private val GET_KEYS_REF = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ map ->
+    private val GET_KEYS_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ map, context ->
         val collection = map["!collection"]!!.value as LinkedHashMap<ObjectDetails, ObjectDetails>
         val type = map["!collection"]!!.getType()
         ObjectDetails(type = type, value = collection.keys.toMutableList())

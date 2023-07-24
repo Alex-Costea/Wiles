@@ -1,6 +1,6 @@
 package wiles.checker.statics
 
-import wiles.checker.Checker.Companion.currentFunctionNumber
+import wiles.checker.data.CheckerContext
 import wiles.checker.data.CheckerVariableMap
 import wiles.checker.data.GenericTypesMap
 import wiles.checker.data.VariableDetails
@@ -87,17 +87,18 @@ object InferrerUtils {
     fun createTypes(
         type: JSONStatement,
         typeNames: MutableMap<String, JSONStatement>,
-        variables: CheckerVariableMap
+        variables: CheckerVariableMap,
+        context: CheckerContext
     )
     {
-        val name = getTypeNumber(type.name)
+        val name = getTypeNumber(type.name, context)
         if(type.name == GENERIC_ID)
         {
             if(variables.containsKey(type.components[0].name))
                 throw VariableAlreadyDeclaredException(type.components[0].getFirstLocation())
-            type.components[0].name=getTypeNumber(type.components[0].name)
+            type.components[0].name=getTypeNumber(type.components[0].name, context)
             type.components.add(JSONStatement(name = Tokens.DECLARE_ID, syntaxType = SyntaxType.TOKEN))
-            createTypes(type.components[1], typeNames, variables)
+            createTypes(type.components[1], typeNames, variables, context)
             return
         }
         else if(type.syntaxType == SyntaxType.CODE_BLOCK)
@@ -132,16 +133,16 @@ object InferrerUtils {
         {
             for(component in type.components)
             {
-                createTypes(component, typeNames, variables)
+                createTypes(component, typeNames, variables, context)
             }
         }
     }
 
-    fun getTypeNumber(name : String) : String
+    fun getTypeNumber(name : String, context: CheckerContext) : String
     {
         if(name.contains("|"))
             return name
-        return "$name|$currentFunctionNumber"
+        return "$name|${context.currentFunctionNumber}"
     }
 
     fun makeNullable(type: JSONStatement) : JSONStatement
@@ -167,11 +168,11 @@ object InferrerUtils {
         return copy
     }
 
-    fun specifyGenericTypesForFunction(statement : JSONStatement, genericTypes : GenericTypesMap)
+    fun specifyGenericTypesForFunction(statement : JSONStatement, genericTypes: GenericTypesMap, context: CheckerContext)
     {
         if(statement.syntaxType == SyntaxType.TYPE && statement.name == GENERIC_ID)
         {
-            val name = getTypeNumber(statement.components[0].name)
+            val name = getTypeNumber(statement.components[0].name, context)
             if(genericTypes.containsKey(name))
             {
                 statement.components[1] = genericTypes[name]!!.first
@@ -179,7 +180,7 @@ object InferrerUtils {
             return
         }
         for(component in statement.components)
-            specifyGenericTypesForFunction(component, genericTypes)
+            specifyGenericTypesForFunction(component, genericTypes, context)
     }
 
     fun getFunctionArguments(methodType : JSONStatement, methodCallType : JSONStatement,

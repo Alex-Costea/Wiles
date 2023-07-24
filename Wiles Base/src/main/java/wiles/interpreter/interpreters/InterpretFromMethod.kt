@@ -2,6 +2,7 @@ package wiles.interpreter.interpreters
 
 import wiles.checker.data.GenericTypesMap
 import wiles.checker.statics.InferrerUtils.makeGeneric
+import wiles.interpreter.data.InterpreterContext
 import wiles.interpreter.data.InterpreterVariableMap
 import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.exceptions.ReturnSignal
@@ -12,11 +13,11 @@ import wiles.shared.constants.StandardLibrary.defaultInterpreterVars
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 import wiles.shared.constants.Types
-import java.util.function.Function
+import java.util.function.BiFunction
 
 class InterpretFromMethod(statement: JSONStatement, variables: InterpreterVariableMap,
-                          additionalVars: InterpreterVariableMap)
-    : InterpreterWithRef(statement, variables, additionalVars)
+                          additionalVars: InterpreterVariableMap, context: InterpreterContext)
+    : InterpreterWithRef(statement, variables, additionalVars, context)
 {
     override lateinit var reference : ObjectDetails
     override fun interpret() {
@@ -26,13 +27,13 @@ class InterpretFromMethod(statement: JSONStatement, variables: InterpreterVariab
         val codeBlock = statement.components.last()
         for(component in statement.components.dropLast(1).drop(1))
         {
-            val interpreter = InterpretFromDeclaration(component, newVars, variables)
+            val interpreter = InterpretFromDeclaration(component, newVars, variables, context)
             interpreter.interpret()
         }
         val defaultVars = InterpreterVariableMap()
         defaultVars.putAll(newVars)
         val functionType = JSONStatement(name = METHOD_ID, syntaxType = SyntaxType.TYPE, components = mutableListOf(type))
-        reference = ObjectDetails(Function<InterpreterVariableMap, ObjectDetails>{ givenVars ->
+        reference = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ givenVars, _ ->
             val funcVars = InterpreterVariableMap()
             funcVars.putAll(defaultVars.filter { it.key !in givenVars })
             funcVars.putAll(givenVars)
@@ -53,13 +54,13 @@ class InterpretFromMethod(statement: JSONStatement, variables: InterpreterVariab
             funcVars.putAll(defaultInterpreterVars)
             try
             {
-                val interpreter = InterpretFromCodeBlock(codeBlock,funcVars, variables)
+                val interpreter = InterpretFromCodeBlock(codeBlock,funcVars, variables, context)
                 interpreter.interpret()
-                return@Function NOTHING_REF
+                return@BiFunction NOTHING_REF
             }
             catch (ret : ReturnSignal)
             {
-                return@Function ret.value
+                return@BiFunction ret.value
             }
         }, functionType)
     }

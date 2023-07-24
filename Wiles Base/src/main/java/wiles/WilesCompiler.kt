@@ -1,8 +1,9 @@
 package wiles
 
 import wiles.checker.Checker
+import wiles.checker.data.CheckerContext
 import wiles.interpreter.Interpreter
-import wiles.interpreter.Interpreter.Companion.SCANNER
+import wiles.interpreter.data.InterpreterContext
 import wiles.parser.Parser
 import wiles.shared.AbstractCompilationException
 import wiles.shared.CompilationExceptionsCollection
@@ -24,13 +25,13 @@ import java.io.IOException
 import java.util.*
 
 
-object Main {
+object WilesCompiler {
 
-    private fun printExceptions(exceptions: CompilationExceptionsCollection, input: String, additionalLines: Int,
-                                DEBUG : Boolean)
+    private fun getErrorsDisplay(exceptions: CompilationExceptionsCollection, input: String, additionalLines: Int,
+                                 debug : Boolean) : String
     {
         if (exceptions.size > 0)
-            System.err.println(RED_TEXT_START_ERROR+ run {
+            return RED_TEXT_START_ERROR+ run {
                 val optional =
                     exceptions.sortedWith(nullsLast(compareBy<AbstractCompilationException> { it.tokenLocation.line }
                         .thenBy { it.tokenLocation.lineIndex }))
@@ -39,58 +40,59 @@ object Main {
                                     it.tokenLocation.displayLocation(
                                         input,
                                         additionalLines
-                                    ) + (if (DEBUG) "\n" + it.stackTraceToString() else "")
+                                    ) + (if (debug) "\n" + it.stackTraceToString() else "")
                         }
                         .fold("") { a, b -> a + b }
                 if (optional.isEmpty())
                     throw InternalErrorException()
                 COMPILATION_FAILED_ERROR + optional
-            }
-                    +RED_TEXT_END_ERROR)
+            } +RED_TEXT_END_ERROR
+        else return ""
     }
 
-    @Throws(IOException::class)
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun getOutput(args: Array<String>) : Pair<String,String>
+    {
         //args
-        val DEBUG: Boolean = args.contains(DEBUG_COMMAND)
+        val debug: Boolean = args.contains(DEBUG_COMMAND)
         val writeCompileFile = args.contains(COMPILE_COMMAND)
         val runCommand = args.contains(RUN_COMMAND)
         val exceptions = CompilationExceptionsCollection()
         var interpreterCode : String? = null
         var filename = args.lastOrNull{it.startsWith(FILE_COMMAND)}?.split(FILE_COMMAND)?.get(1)
         val code = args.lastOrNull{it.startsWith(CODE_COMMAND)}?.split(CODE_COMMAND)?.get(1)
+        val exceptionsString = StringBuilder()
 
         if(filename == null && code == null)
             throw Exception("Invalid arguments!")
 
         //get input
         val inputText = args.firstOrNull{it.startsWith(INPUT_COMMAND)}?.split(INPUT_COMMAND)?.get(1)
-        SCANNER = if(inputText == null)
+        val scanner = if(inputText == null)
             Scanner(System.`in`)
         else Scanner(ByteArrayInputStream(inputText.toByteArray(Charsets.UTF_8)))
 
         if(!runCommand) {
-            val parser = Parser(code, DEBUG, filename)
+            val parser = Parser(code, debug, filename)
             if (filename == null)
                 filename = "code.wiles"
             exceptions.addAll(parser.getExceptions())
             val result = parser.getResults()
 
-            if (DEBUG) {
+            if (debug) {
                 print("Syntax tree: ")
                 println(result)
             }
 
             if (exceptions.isNotEmpty()) {
-                printExceptions(exceptions, parser.input, parser.additionalLines, DEBUG)
-                return
+                exceptionsString.append(getErrorsDisplay(exceptions, parser.input, parser.additionalLines, debug))
+                return Pair("", exceptionsString.toString())
             }
 
-            val checker = Checker(if (DEBUG) null else parser.json)
+            val checker = Checker(if (debug) null else parser.json, CheckerContext(0))
             exceptions.addAll(checker.check())
 
-            if (DEBUG) {
+            if (debug) {
                 print("After checking: ")
                 println(checker.code)
             }
@@ -101,15 +103,25 @@ object Main {
                 writer.close()
             }
 
-            printExceptions(exceptions, parser.input, parser.additionalLines, DEBUG)
+            exceptionsString.append(getErrorsDisplay(exceptions, parser.input, parser.additionalLines, debug))
 
             interpreterCode = checker.codeAsJSONString
         }
 
+        val output = StringBuilder()
         if(!writeCompileFile && exceptions.isEmpty())
         {
-            val interpreter = Interpreter(interpreterCode, DEBUG, filename!!)
+            val interpreter = Interpreter(interpreterCode, debug, filename!!, InterpreterContext(scanner, output, exceptionsString))
             interpreter.interpret()
         }
+        return Pair(output.toString(),exceptionsString.toString())
+    }
+
+    @Throws(IOException::class)
+    @JvmStatic
+    fun main(args: Array<String>) {
+        val result = getOutput(args)
+        System.err.print(result.second)
+        print(result.first)
     }
 }

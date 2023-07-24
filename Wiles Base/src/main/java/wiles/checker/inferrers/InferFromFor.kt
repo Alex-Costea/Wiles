@@ -17,14 +17,15 @@ class InferFromFor(details: InferrerDetails) : InferFromStatement(
     InferrerDetails(details.statement,
         details.variables.copy(),
         details.exceptions,
-        details.additionalVars)
+        details.additionalVars,
+        details.context)
 ) {
 
     private fun checkCorrectType(components : MutableList<JSONStatement>, superType : JSONStatement) : JSONStatement
     {
         components.removeFirst()
         val expression = components[0]
-        InferFromExpression(InferrerDetails(expression, variables, exceptions, additionalVars)).infer()
+        InferFromExpression(InferrerDetails(expression, variables, exceptions, additionalVars, context)).infer()
         val expressionType = components[0].components[0]
 
         if(!isFormerSuperTypeOfLatter(superType, expressionType))
@@ -63,7 +64,7 @@ class InferFromFor(details: InferrerDetails) : InferFromStatement(
 
         val codeBlock = components[0]
         val inferFromCodeBlock = InferFromCodeBlock(InferrerDetails(codeBlock,
-            variables, exceptions, additionalVars))
+            variables, exceptions, additionalVars, context))
         inferFromCodeBlock.infer()
 
         statement.components.add(0,variables[variableName]!!.type)

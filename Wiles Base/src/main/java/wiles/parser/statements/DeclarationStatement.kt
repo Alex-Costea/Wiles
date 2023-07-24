@@ -1,6 +1,6 @@
 package wiles.parser.statements
 
-import wiles.parser.builders.Context
+import wiles.parser.builders.ParserContext
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.statements.expressions.DefaultExpression
 import wiles.shared.AbstractCompilationException
@@ -13,7 +13,7 @@ import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.TYPE_ANNOTATION_ID
 import wiles.shared.constants.Tokens.VARIABLE_ID
 
-class DeclarationStatement(context: Context,
+class DeclarationStatement(context: ParserContext,
                            private val isParam: Boolean = false,
                            private val allowGenerics : Boolean = false)
     : AbstractStatement(context) {

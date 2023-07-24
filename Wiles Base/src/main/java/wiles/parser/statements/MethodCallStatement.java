@@ -1,6 +1,6 @@
 package wiles.parser.statements;
 
-import wiles.parser.builders.Context;
+import wiles.parser.builders.ParserContext;
 import wiles.shared.CompilationExceptionsCollection;
 import wiles.shared.SyntaxType;
 import wiles.parser.enums.WhenRemoveToken;
@@ -17,7 +17,7 @@ import static wiles.shared.constants.Tokens.SEPARATOR_ID;
 public class MethodCallStatement extends AbstractStatement{
     ArrayList<AbstractStatement> components = new ArrayList<>();
 
-    public MethodCallStatement(@NotNull Context context) {
+    public MethodCallStatement(@NotNull ParserContext context) {
         super(context);
     }
 

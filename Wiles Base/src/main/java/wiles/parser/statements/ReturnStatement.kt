@@ -1,12 +1,12 @@
 package wiles.parser.statements
 
-import wiles.parser.builders.Context
+import wiles.parser.builders.ParserContext
 import wiles.parser.statements.expressions.DefaultExpression
 import wiles.shared.AbstractCompilationException
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.SyntaxType
 
-class ReturnStatement(context : Context) : AbstractStatement(context) {
+class ReturnStatement(context : ParserContext) : AbstractStatement(context) {
     override val syntaxType: SyntaxType
         get() = SyntaxType.RETURN
 

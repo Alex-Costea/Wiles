@@ -1,7 +1,7 @@
 package wiles.parser.statements.expressions;
 
 import org.jetbrains.annotations.NotNull;
-import wiles.parser.builders.Context;
+import wiles.parser.builders.ParserContext;
 import wiles.parser.services.PrecedenceProcessor;
 import wiles.parser.statements.TokenStatement;
 import wiles.shared.AbstractCompilationException;
@@ -14,7 +14,7 @@ import static wiles.shared.constants.Tokens.ASSIGN_ID;
 public class TopLevelExpression extends AbstractExpression {
     public boolean isAssignment=false;
 
-    public TopLevelExpression(@NotNull Context context) {
+    public TopLevelExpression(@NotNull ParserContext context) {
         super(context);
     }
 

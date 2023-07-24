@@ -1,6 +1,6 @@
 package wiles.parser.statements
 
-import wiles.parser.builders.Context
+import wiles.parser.builders.ParserContext
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.exceptions.TokenExpectedException
@@ -28,7 +28,7 @@ import wiles.shared.constants.Types.MIN_NR_TYPES
 import wiles.shared.constants.Types.REQUIRES_SUBTYPE
 import wiles.shared.constants.Types.TYPES
 
-class TypeAnnotationStatement(context: Context, private val allowGenerics : Boolean = false)
+class TypeAnnotationStatement(context: ParserContext, private val allowGenerics : Boolean = false)
     : AbstractStatement(context) {
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
     private val subtypes : ArrayList<AbstractStatement> = ArrayList()

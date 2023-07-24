@@ -1,6 +1,5 @@
 package wiles.checker.inferrers
 
-import wiles.checker.Checker
 import wiles.checker.data.InferrerDetails
 import wiles.checker.exceptions.GenericAlreadyDefinedException
 import wiles.checker.statics.InferrerUtils.createTypes
@@ -19,9 +18,9 @@ class InferFromType(details: InferrerDetails,
     override fun infer() {
         if(statement.name == GENERIC_ID)
         {
-            InferFromType(InferrerDetails(statement.components[1],variables,exceptions, additionalVars),
+            InferFromType(InferrerDetails(statement.components[1],variables,exceptions, additionalVars, context),
                 genericTypes,false).infer()
-            val name = getTypeNumber(statement.components[0].name)
+            val name = getTypeNumber(statement.components[0].name, context)
             if(genericTypes.containsKey(name))
                 throw GenericAlreadyDefinedException(statement.getFirstLocation())
             genericTypes[name] = statement.components[1]
@@ -30,17 +29,18 @@ class InferFromType(details: InferrerDetails,
         if(statement.name==METHOD_ID)
         {
             if(isTopMostType)
-                Checker.currentFunctionNumber++
+                context.currentFunctionNumber++
             val method = statement.components[0]
             for(component in method.components)
             {
                 if(component.syntaxType == SyntaxType.DECLARATION)
                 {
-                    InferFromDeclaration(InferrerDetails(component, variables.copy(), exceptions, additionalVars),
-                        genericTypes = genericTypes, isTopMostType = false).infer()
+                    InferFromDeclaration(InferrerDetails(component, variables.copy(), exceptions, additionalVars,
+                        context), genericTypes = genericTypes, isTopMostType = false).infer()
                 }
                 else if(component.syntaxType == SyntaxType.TYPE)
-                    InferFromType(InferrerDetails(component,variables,exceptions, additionalVars), genericTypes).infer()
+                    InferFromType(InferrerDetails(component,variables,exceptions, additionalVars, context),
+                        genericTypes).infer()
             }
             if(method.components.getOrNull(0)?.syntaxType != SyntaxType.TYPE)
                 method.components.add(0,NOTHING_TYPE)
@@ -49,11 +49,11 @@ class InferFromType(details: InferrerDetails,
         {
             for(component in statement.components)
             {
-                InferFromType(InferrerDetails(component,variables,exceptions, additionalVars), genericTypes).infer()
+                InferFromType(InferrerDetails(component,variables,exceptions, additionalVars, context), genericTypes).infer()
             }
         }
         if(isTopMostType) {
-            createTypes(statement, genericTypes, variables)
+            createTypes(statement, genericTypes, variables, context)
         }
     }
 }

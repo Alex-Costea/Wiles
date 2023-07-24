@@ -1,7 +1,7 @@
 package wiles.parser.statements.expressions;
 
 import org.jetbrains.annotations.NotNull;
-import wiles.parser.builders.Context;
+import wiles.parser.builders.ParserContext;
 import wiles.parser.builders.StatementFactory;
 import wiles.shared.CompilationExceptionsCollection;
 import wiles.shared.Token;
@@ -33,7 +33,7 @@ public abstract class AbstractExpression extends AbstractStatement {
             .addType(StatementFactoryTypes.LIST_STATEMENT).addType(StatementFactoryTypes.DICT_STATEMENT);
     protected boolean isInner = false;
 
-    protected AbstractExpression(@NotNull Context context) {
+    protected AbstractExpression(@NotNull ParserContext context) {
         super(context);
     }
 

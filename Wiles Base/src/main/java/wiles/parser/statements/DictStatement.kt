@@ -1,6 +1,6 @@
 package wiles.parser.statements
 
-import wiles.parser.builders.Context
+import wiles.parser.builders.ParserContext
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.statements.expressions.InnerDefaultExpression
@@ -13,7 +13,7 @@ import wiles.shared.constants.Tokens.SEPARATOR_ID
 import wiles.shared.constants.Tokens.TYPE_ANNOTATION_ID
 import wiles.shared.constants.Types.DICT_ID
 
-class DictStatement(context: Context) : AbstractStatement(context) {
+class DictStatement(context: ParserContext) : AbstractStatement(context) {
     override val syntaxType = SyntaxType.DICT
     private val components : ArrayList<AbstractStatement> = arrayListOf()
 

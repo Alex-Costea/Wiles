@@ -17,7 +17,7 @@ class InferFromIf(details: InferrerDetails) : InferFromStatement(details) {
         while(components.isNotEmpty())
         {
             val condition = components.removeFirst()
-            InferrerService(InferrerDetails(condition, variables.copy(), exceptions, additionalVars)).infer()
+            InferrerService(InferrerDetails(condition, variables.copy(), exceptions, additionalVars, context)).infer()
 
             if(condition.components.isNotEmpty() &&
                 !isFormerSuperTypeOfLatter(BOOLEAN_TYPE,condition.components[0]))
@@ -28,7 +28,7 @@ class InferFromIf(details: InferrerDetails) : InferFromStatement(details) {
 
             val block = components.removeFirst()
             val newVars = variables.copy()
-            InferFromCodeBlock(InferrerDetails(block, newVars, exceptions, additionalVars)).infer()
+            InferFromCodeBlock(InferrerDetails(block, newVars, exceptions, additionalVars, context)).infer()
             listOfVariableMaps.add(newVars)
             codeBlockLists.add(block)
         }

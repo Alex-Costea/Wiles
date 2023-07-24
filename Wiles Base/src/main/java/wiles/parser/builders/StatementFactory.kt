@@ -34,7 +34,7 @@ import java.util.function.Function
 class StatementFactory {
     private val statements = LinkedHashSet<StatementFactoryTypes>()
     private lateinit var transmitter: TokenTransmitter
-    private lateinit var context: Context
+    private lateinit var context: ParserContext
     fun addType(statement: StatementFactoryTypes): StatementFactory {
         if (!params.containsKey(statement)) throw InternalErrorException(
             NOT_YET_IMPLEMENTED_ERROR
@@ -43,7 +43,7 @@ class StatementFactory {
         return this
     }
 
-    fun setContext(context: Context) : StatementFactory
+    fun setContext(context: ParserContext) : StatementFactory
     {
         this.context=context
         this.transmitter=context.transmitter
@@ -69,7 +69,7 @@ class StatementFactory {
 
     companion object {
         private val params = LinkedHashMap<StatementFactoryTypes, ExpectParamsBuilder>()
-        private val createObject = LinkedHashMap<StatementFactoryTypes, Function<Context, AbstractStatement>>()
+        private val createObject = LinkedHashMap<StatementFactoryTypes, Function<ParserContext, AbstractStatement>>()
 
         init {
             params[StatementFactoryTypes.TOP_LEVEL_EXPRESSION] = START_OF_EXPRESSION
@@ -87,33 +87,33 @@ class StatementFactory {
             params[StatementFactoryTypes.TYPE_DEFINITION_STATEMENT] = tokenOf(TYPEDEF_ID)
             params[StatementFactoryTypes.DICT_STATEMENT] = tokenOf(BRACE_START_ID)
             createObject[StatementFactoryTypes.TOP_LEVEL_EXPRESSION] =
-                Function { context: Context -> TopLevelExpression(context) }
+                Function { context: ParserContext -> TopLevelExpression(context) }
             createObject[StatementFactoryTypes.DEFAULT_EXPRESSION_NO_CODE_BLOCK] =
-                Function { context: Context -> DefaultExpression(context) }
+                Function { context: ParserContext -> DefaultExpression(context) }
             createObject[StatementFactoryTypes.DECLARATION_STATEMENT] =
-                Function { context: Context -> DeclarationStatement(context) }
+                Function { context: ParserContext -> DeclarationStatement(context) }
             createObject[StatementFactoryTypes.METHOD_STATEMENT] =
-                Function { context: Context -> MethodStatement(context) }
+                Function { context: ParserContext -> MethodStatement(context) }
             createObject[StatementFactoryTypes.RETURN_STATEMENT] =
-                Function { context: Context -> ReturnStatement(context) }
+                Function { context: ParserContext -> ReturnStatement(context) }
             createObject[StatementFactoryTypes.IF_STATEMENT] =
-                Function { context: Context -> IfStatement(context) }
+                Function { context: ParserContext -> IfStatement(context) }
             createObject[StatementFactoryTypes.WHILE_STATEMENT] =
-                Function { context: Context -> WhileStatement(context) }
+                Function { context: ParserContext -> WhileStatement(context) }
             createObject[StatementFactoryTypes.BREAK_STATEMENT] =
-                Function { context: Context -> BreakStatement(context) }
+                Function { context: ParserContext -> BreakStatement(context) }
             createObject[StatementFactoryTypes.CONTINUE_STATEMENT] =
-                Function { context: Context -> ContinueStatement(context) }
+                Function { context: ParserContext -> ContinueStatement(context) }
             createObject[StatementFactoryTypes.LIST_STATEMENT] =
-                Function { context : Context -> ListStatement(context) }
+                Function { context : ParserContext -> ListStatement(context) }
             createObject[StatementFactoryTypes.FOR_STATEMENT] =
-                Function { context : Context -> ForStatement(context) }
+                Function { context : ParserContext -> ForStatement(context) }
             createObject[StatementFactoryTypes.WHEN_STATEMENT] =
-                Function { context : Context -> WhenStatement(context) }
+                Function { context : ParserContext -> WhenStatement(context) }
             createObject[StatementFactoryTypes.TYPE_DEFINITION_STATEMENT] =
-                Function { context : Context -> TypeDefinitionStatement(context) }
+                Function { context : ParserContext -> TypeDefinitionStatement(context) }
             createObject[StatementFactoryTypes.DICT_STATEMENT] =
-                Function { context : Context -> DictStatement(context) }
+                Function { context : ParserContext -> DictStatement(context) }
         }
     }
 }

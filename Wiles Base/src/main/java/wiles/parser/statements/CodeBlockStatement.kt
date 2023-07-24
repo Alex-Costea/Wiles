@@ -1,6 +1,6 @@
 package wiles.parser.statements
 
-import wiles.parser.builders.Context
+import wiles.parser.builders.ParserContext
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.builders.StatementFactory
 import wiles.parser.enums.StatementFactoryTypes
@@ -16,7 +16,7 @@ import wiles.shared.constants.Tokens.DO_ID
 import wiles.shared.constants.Tokens.END_BLOCK_ID
 import wiles.shared.constants.Tokens.START_BLOCK_ID
 
-class CodeBlockStatement(context: Context) : AbstractStatement(context) {
+class CodeBlockStatement(context: ParserContext) : AbstractStatement(context) {
     companion object{
         val statementFactory = StatementFactory()
             .addType(StatementFactoryTypes.TOP_LEVEL_EXPRESSION)

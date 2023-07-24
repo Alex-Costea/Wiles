@@ -1,11 +1,11 @@
 package wiles.parser.statements
 
-import wiles.parser.builders.Context
+import wiles.parser.builders.ParserContext
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.Token
 import wiles.shared.SyntaxType
 
-class TokenStatement(val token: Token, context : Context) : AbstractStatement(context) {
+class TokenStatement(val token: Token, context : ParserContext) : AbstractStatement(context) {
     init {
         name = token.content
         location = token.location

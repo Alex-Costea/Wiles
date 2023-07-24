@@ -77,7 +77,7 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
 
             val block = components.removeFirst()
             InferFromCodeBlock(InferrerDetails(block, newVariables,
-                exceptions, additionalVars)).infer()
+                exceptions, additionalVars, context)).infer()
             listOfVariableMaps.add(newVariables)
             codeBlockLists.add(block)
         }

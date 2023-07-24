@@ -1,6 +1,6 @@
 package wiles.parser.statements.expressions
 
-import wiles.parser.builders.Context
+import wiles.parser.builders.ParserContext
 import wiles.shared.constants.ErrorMessages.CANNOT_BE_PROCESSED_ERROR
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.InternalErrorException
@@ -11,7 +11,7 @@ class BinaryExpression(
     operation: TokenStatement?,
     left: AbstractStatement?,
     right: AbstractStatement,
-    context: Context
+    context: ParserContext
 ) : AbstractExpression(context) {
     init {
         this.left=left

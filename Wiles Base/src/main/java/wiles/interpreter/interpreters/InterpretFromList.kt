@@ -1,13 +1,14 @@
 package wiles.interpreter.interpreters
 
 import wiles.checker.statics.InferrerUtils.addType
+import wiles.interpreter.data.InterpreterContext
 import wiles.interpreter.data.InterpreterVariableMap
 import wiles.interpreter.data.ObjectDetails
 import wiles.shared.JSONStatement
 import wiles.shared.constants.TypeUtils
 
-class InterpretFromList(statement: JSONStatement, variables: InterpreterVariableMap, additionalVars: InterpreterVariableMap)
-    : InterpreterWithRef(statement, variables, additionalVars)
+class InterpretFromList(statement: JSONStatement, variables: InterpreterVariableMap, additionalVars: InterpreterVariableMap, context: InterpreterContext)
+    : InterpreterWithRef(statement, variables, additionalVars, context)
 {
     override lateinit var reference : ObjectDetails
     override fun interpret() {
@@ -15,7 +16,7 @@ class InterpretFromList(statement: JSONStatement, variables: InterpreterVariable
         var newType : JSONStatement? = null
         for(component in statement.components.drop(1))
         {
-            val interpreter = InterpretFromExpression(component, variables, additionalVars)
+            val interpreter = InterpretFromExpression(component, variables, additionalVars, context)
             interpreter.interpret()
             list.add(interpreter.reference)
             newType = if(newType == null)

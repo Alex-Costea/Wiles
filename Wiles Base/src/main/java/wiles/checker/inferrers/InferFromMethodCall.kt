@@ -2,10 +2,10 @@ package wiles.checker.inferrers
 
 import wiles.checker.data.InferrerDetails
 import wiles.checker.exceptions.ExpectedIdentifierException
-import wiles.shared.constants.TypeConstants.METHOD_CALL_TYPE
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.ASSIGN_ID
+import wiles.shared.constants.TypeConstants.METHOD_CALL_TYPE
 
 class InferFromMethodCall(details: InferrerDetails) : InferFromStatement(details) {
     override fun infer() {
@@ -25,7 +25,7 @@ class InferFromMethodCall(details: InferrerDetails) : InferFromStatement(details
             }
             if(expression.components[0].syntaxType==SyntaxType.TYPE)
                 continue
-            InferFromExpression(InferrerDetails(expressionToInfer,variables, exceptions, additionalVars)).infer()
+            InferFromExpression(InferrerDetails(expressionToInfer,variables, exceptions, additionalVars, context)).infer()
         }
         val type = METHOD_CALL_TYPE.copyRemovingLocation()
         type.components.add(statement.copyRemovingLocation())

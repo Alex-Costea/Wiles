@@ -1,6 +1,5 @@
 package wiles.checker.inferrers
 
-import wiles.checker.Checker
 import wiles.checker.data.InferrerDetails
 import wiles.checker.data.VariableDetails
 import wiles.checker.exceptions.ConflictingTypeDefinitionException
@@ -22,7 +21,7 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
     InferrerDetails(details.statement,
         StandardLibrary.defaultCheckerVars.copy(),
         details.exceptions,
-        additionalVars = details.variables)
+        additionalVars = details.variables, details.context)
 )
 {
     private val statedType = if(statement.components.getOrNull(0)?.syntaxType == SyntaxType.TYPE)
@@ -94,12 +93,12 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
     override fun infer() {
         val declarationVariables = StandardLibrary.defaultCheckerVars.copy()
         val genericTypes = hashMapOf<String, JSONStatement>()
-        Checker.currentFunctionNumber++
+        context.currentFunctionNumber++
         for(component in statement.components)
         {
             if(component.syntaxType==SyntaxType.TYPE) {
                 InferFromType(
-                    InferrerDetails(component, declarationVariables, exceptions, additionalVars),
+                    InferrerDetails(component, declarationVariables, exceptions, additionalVars, context),
                     isTopMostType = false, genericTypes = genericTypes
                 ).infer()
                 continue
@@ -109,13 +108,13 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
             assert(component.syntaxType == SyntaxType.DECLARATION)
 
             val inferrer = InferFromDeclaration(
-                InferrerDetails(component, declarationVariables, exceptions, additionalVars),
+                InferrerDetails(component, declarationVariables, exceptions, additionalVars, context),
                 inFunction = true, isTopMostType = false, genericTypes = genericTypes
             )
             inferrer.infer()
         }
 
-        createTypes(statement, genericTypes, variables = additionalVars)
+        createTypes(statement, genericTypes, variables = additionalVars, context)
 
         declarationVariables.forEach { it.value.initialized = true }
         variables.putAll(declarationVariables)
@@ -124,7 +123,7 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
                 components = mutableListOf(makeGeneric(it.value,it.key))))) })
 
         val inferrer = InferrerService(InferrerDetails(statement.components.last(), variables, exceptions,
-            additionalVars))
+            additionalVars, context))
         inferrer.infer()
 
         if(exceptions.isNotEmpty())

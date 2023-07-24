@@ -12,7 +12,7 @@ class InferFromCodeBlock(details: InferrerDetails) : InferFromStatement(details)
     {
         for(part in statement.components)
         {
-            val inferrer = InferrerService(InferrerDetails(part,variables, exceptions, additionalVars))
+            val inferrer = InferrerService(InferrerDetails(part,variables, exceptions, additionalVars, context))
             inferrer.infer()
 
             if(exceptions.isEmpty() &&

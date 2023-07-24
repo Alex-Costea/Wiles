@@ -1,6 +1,6 @@
 package wiles.parser.statements
 
-import wiles.parser.builders.Context
+import wiles.parser.builders.ParserContext
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.enums.WhenRemoveToken
 import wiles.shared.AbstractCompilationException
@@ -16,7 +16,7 @@ import wiles.shared.constants.Tokens.RIGHT_ARROW_ID
 import wiles.shared.constants.Tokens.SEPARATOR_ID
 import wiles.shared.constants.Tokens.START_BLOCK_ID
 
-class MethodStatement(oldContext : Context, private val isTypeDeclaration: Boolean = false)
+class MethodStatement(oldContext : ParserContext, private val isTypeDeclaration: Boolean = false)
     : AbstractStatement(oldContext.setWithinMethod(true).setWithinLoop(false)) {
 
     private val parameters: MutableList<DeclarationStatement> = ArrayList()

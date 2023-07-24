@@ -1,6 +1,6 @@
 
 import org.junit.jupiter.api.Test
-import wiles.Main.main
+import wiles.WilesCompiler.main
 import wiles.shared.constants.CommandLineArguments
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream

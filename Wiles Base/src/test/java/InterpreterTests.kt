@@ -1,8 +1,10 @@
 
 import org.junit.jupiter.api.Test
 import wiles.interpreter.Interpreter
+import wiles.interpreter.data.InterpreterContext
 import wiles.interpreter.data.InterpreterVariableMap
 import java.math.BigInteger
+import java.util.*
 
 class InterpreterTests {
     private fun assertVar(vars : InterpreterVariableMap, name : String, value : Any?)
@@ -12,7 +14,8 @@ class InterpreterTests {
 
     private fun getVars(code : String) : InterpreterVariableMap
     {
-        val interpreter = Interpreter(code, true, "code.wiles")
+        val interpreter = Interpreter(code, true, "code.wiles",
+            InterpreterContext(Scanner(System.`in`), StringBuilder(), StringBuilder()))
         interpreter.interpret()
         return interpreter.newVars
     }

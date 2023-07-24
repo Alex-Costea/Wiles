@@ -1,6 +1,6 @@
 package wiles.parser.statements
 
-import wiles.parser.builders.Context
+import wiles.parser.builders.ParserContext
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.statements.expressions.DefaultExpression
 import wiles.shared.AbstractCompilationException
@@ -11,7 +11,7 @@ import wiles.shared.constants.Tokens.ELSE_ID
 import wiles.shared.constants.Tokens.END_BLOCK_ID
 import wiles.shared.constants.Tokens.IF_ID
 
-class IfStatement(context: Context) : AbstractStatement(context) {
+class IfStatement(context: ParserContext) : AbstractStatement(context) {
 
     private val branches : MutableList<Pair<AbstractStatement,AbstractStatement>> = mutableListOf()
 

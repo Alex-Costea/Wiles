@@ -1,8 +1,8 @@
 package wiles.parser.statements.expressions
 
-import wiles.parser.builders.Context
+import wiles.parser.builders.ParserContext
 
-class InnerDefaultExpression(oldContext: Context) : AbstractExpression(oldContext.setWithinInnerExpression(true)) {
+class InnerDefaultExpression(oldContext: ParserContext) : AbstractExpression(oldContext.setWithinInnerExpression(true)) {
     init {
         isInner = true
     }

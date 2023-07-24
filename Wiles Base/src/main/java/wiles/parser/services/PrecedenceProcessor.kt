@@ -1,6 +1,6 @@
 package wiles.parser.services
 
-import wiles.parser.builders.Context
+import wiles.parser.builders.ParserContext
 import wiles.parser.statements.AbstractStatement
 import wiles.parser.statements.TokenStatement
 import wiles.parser.statements.expressions.BinaryExpression
@@ -13,7 +13,7 @@ import wiles.shared.InternalErrorException
 import java.lang.Byte.MIN_VALUE
 import java.util.*
 
-class PrecedenceProcessor(private val context : Context) {
+class PrecedenceProcessor(private val context : ParserContext) {
 
     private val stack : LinkedList<AbstractStatement> = LinkedList()
     private fun isOperator(content : String) = (INFIX_OPERATORS.contains(content) || PREFIX_OPERATORS.contains(content))

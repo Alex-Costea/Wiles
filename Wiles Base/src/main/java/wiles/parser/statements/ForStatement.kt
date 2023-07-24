@@ -1,6 +1,6 @@
 package wiles.parser.statements
 
-import wiles.parser.builders.Context
+import wiles.parser.builders.ParserContext
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.shared.constants.ErrorMessages.IDENTIFIER_EXPECTED_ERROR
 import wiles.shared.constants.Predicates
@@ -12,7 +12,7 @@ import wiles.shared.SyntaxType
 import wiles.shared.AbstractCompilationException
 import wiles.parser.statements.expressions.DefaultExpression
 
-class ForStatement(oldContext: Context) : AbstractStatement(oldContext.setWithinLoop(true)) {
+class ForStatement(oldContext: ParserContext) : AbstractStatement(oldContext.setWithinLoop(true)) {
     private var identifierStatement : TokenStatement? = null
     private var inToken : TokenStatement? = null
     private var fromToken : TokenStatement? = null
