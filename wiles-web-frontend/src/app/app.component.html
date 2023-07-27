@@ -1,11 +1,11 @@
 <div [formGroup]="myForm">
   <p>Code:</p>
   <p>
-    <textarea formControlName="code" rows="10" cols="50" form="input"></textarea>
+    <textarea formControlName="code" rows="10" cols="50"></textarea>
   </p>
   <p>Input:</p>
   <p>
-    <textarea formControlName="input" rows="10" cols="50" form="input"></textarea>
+    <textarea formControlName="input" rows="10" cols="50"></textarea>
   </p>
   <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
     <input type="submit" value="Submit">
