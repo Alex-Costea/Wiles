@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 
@@ -12,7 +13,11 @@ export class AppComponent {
 
   onSubmit()
   {
-    window.alert(JSON.stringify(this.myForm.value))
+    this.http.put<any>("http://localhost:8080/run",this.myForm.value).subscribe(data =>
+      {
+        window.alert(JSON.stringify(data))
+      })
+    
   }
 
   myForm = this.formBuilder.group({
@@ -20,7 +25,9 @@ export class AppComponent {
     input: ''
   });
 
-  constructor(private formBuilder : FormBuilder)
+  constructor(private formBuilder : FormBuilder,
+    private http: HttpClient,
+    )
   {
     
   }
