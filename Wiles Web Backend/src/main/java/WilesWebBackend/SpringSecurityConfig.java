@@ -1,6 +1,7 @@
 package WilesWebBackend;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.server.Cookie;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +25,7 @@ public class SpringSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         CookieCsrfTokenRepository tokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
+        //tokenRepository.setCookieCustomizer((x) -> x.sameSite(Cookie.SameSite.NONE.attributeValue()).secure(true));
         XorCsrfTokenRequestAttributeHandler delegate = new XorCsrfTokenRequestAttributeHandler();
         delegate.setCsrfRequestAttributeName("_csrf");
         CsrfTokenRequestHandler requestHandler = delegate::handle;
