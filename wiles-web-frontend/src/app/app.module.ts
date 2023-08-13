@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { HttpXsrfInterceptor } from './xsrf-interceptor';
 
-
+//deploy: ng build --base-href /Wiles/run/
 @NgModule({
   declarations: [
     AppComponent
