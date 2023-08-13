@@ -1,6 +1,6 @@
 rm -d -r "wiles-web-frontend/dist/wiles-web-frontend/"
-rm -d -r "Wiles Web Backend/src/main/resources/static/online"
+rm -d -r "Wiles Web Backend/src/main/resources/online"
 cd wiles-web-frontend
-ng build --base-href /online/
+ng build --base-href /
 cd ..
-cp -R "wiles-web-frontend/dist/wiles-web-frontend/" "Wiles Web Backend/src/main/resources/static/online/"
+cp -R "wiles-web-frontend/dist/wiles-web-frontend/" "Wiles Web Backend/src/main/resources/static/"

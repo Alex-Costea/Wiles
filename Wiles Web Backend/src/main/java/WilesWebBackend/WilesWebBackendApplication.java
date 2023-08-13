@@ -25,11 +25,6 @@ public class WilesWebBackendApplication {
 		SpringApplication.run(WilesWebBackendApplication.class, args);
 	}
 
-	@GetMapping(value = "online")
-	public ModelAndView home(Model model) {
-		return new ModelAndView("/online/index.html");
-	}
-
 	@RequestMapping(value = "/run", method = RequestMethod.PUT,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CompilationResponse> compile(@RequestBody Map<String, Object> payload) {
