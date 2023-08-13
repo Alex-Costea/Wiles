@@ -3,13 +3,12 @@ package WilesWebBackend;
 import kotlin.Pair;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -18,6 +17,7 @@ import java.util.concurrent.*;
 
 @SpringBootApplication
 @RestController
+@ComponentScan(basePackages = "WilesWebBackend")
 public class WilesWebBackendApplication {
 
 	public static void main(String[] args) {
@@ -25,7 +25,7 @@ public class WilesWebBackendApplication {
 	}
 
 
-	@RequestMapping(value = "/run", method = RequestMethod.POST,
+	@RequestMapping(value = "/run", method = RequestMethod.PUT,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CompilationResponse> compile(@RequestBody Map<String, Object> payload) {
 		String code = (String) payload.getOrDefault("code",null);
