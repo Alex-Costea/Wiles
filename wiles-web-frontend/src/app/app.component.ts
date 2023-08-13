@@ -30,8 +30,10 @@ export class AppComponent implements OnInit {
   }
 
   myForm = this.formBuilder.group({
-    code: 'writeline("Hello, Wiles!")',
-    input: ''
+    code: 
+`let name := read_line()
+writeline("Hello, " + name + "!")`,
+    input: 'Wiles'
   });
 
   constructor(private formBuilder : FormBuilder,
