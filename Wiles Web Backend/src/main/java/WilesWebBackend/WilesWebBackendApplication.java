@@ -7,10 +7,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -26,6 +25,10 @@ public class WilesWebBackendApplication {
 		SpringApplication.run(WilesWebBackendApplication.class, args);
 	}
 
+	@GetMapping(value = "online")
+	public ModelAndView home(Model model) {
+		return new ModelAndView("/online/index.html");
+	}
 
 	@RequestMapping(value = "/run", method = RequestMethod.PUT,
 			produces = MediaType.APPLICATION_JSON_VALUE)

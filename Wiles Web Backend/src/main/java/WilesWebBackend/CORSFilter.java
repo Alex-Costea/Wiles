@@ -31,7 +31,7 @@ public class CORSFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) res;
         HttpServletRequest request = (HttpServletRequest) req;
         String domain = request.getHeader("origin");
-        if(allowedOrigins.contains(domain)) {
+        if(domain!=null && allowedOrigins.contains(domain)) {
             response.setHeader("Access-Control-Allow-Origin", domain);
         }
         response.setHeader("Access-Control-Allow-Methods", "PUT, OPTIONS");
