@@ -15,9 +15,10 @@ export class AppComponent {
   {
     this.http.put<any>("http://localhost:8080/run",this.myForm.value).subscribe(data =>
       {
-        //window.alert(JSON.stringify(data))
-        (<HTMLInputElement>document.getElementById("output")).value = data.response;
-        (<HTMLInputElement>document.getElementById("errors")).value = data.errors;
+        let response : string = data.response;
+        let errors : string | null = data.errors;
+        (<HTMLInputElement>document.getElementById("output")).value = response;
+        (<HTMLInputElement>document.getElementById("errors")).value = errors?.slice(6,-3) ?? "";
       })
     
   }

@@ -2,3 +2,7 @@
     display: flex;
     justify-content: space-around;
 }
+#errors
+{
+    color: #ff0000;
+}
