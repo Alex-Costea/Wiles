@@ -13,7 +13,7 @@ export class AppComponent {
 
   onSubmit()
   {
-    this.http.put<any>("http://localhost:8080/run",this.myForm.value).subscribe(data =>
+    this.http.put<any>("http://localhost:8080/run",this.myForm.value, { withCredentials: true}).subscribe(data =>
       {
         let response : string = data.response;
         let errors : string | null = data.errors;

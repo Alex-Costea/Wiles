@@ -8,6 +8,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -20,6 +21,8 @@ public class CORSFilter implements Filter {
         super();
     }
 
+    List<String> allowedOrigins = List.of("https://alex.costea.in", "http://localhost:4200");
+
     /**
      * Do Filter on every http-request.
      */
@@ -27,10 +30,14 @@ public class CORSFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         HttpServletResponse response = (HttpServletResponse) res;
         HttpServletRequest request = (HttpServletRequest) req;
-        response.setHeader("Access-Control-Allow-Origin", "https://alex.costea.in");
+        String domain = request.getHeader("origin");
+        if(allowedOrigins.contains(domain)) {
+            response.setHeader("Access-Control-Allow-Origin", domain);
+        }
         response.setHeader("Access-Control-Allow-Methods", "PUT");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers", "access_token, authorization, content-type");
+        response.setHeader("Access-Control-Allow-Headers", "access_token, authorization, content-type, x-xsrf-token");
 
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             response.setStatus(HttpServletResponse.SC_OK);
