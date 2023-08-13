@@ -13,13 +13,13 @@ export class AppComponent implements OnInit {
   ngOnInit()
   {
     //workaround to load CSFR on start
-    this.http.put<any>("http://localhost:8080/run",this.myForm.value, { withCredentials: true}).subscribe().unsubscribe()
+    this.http.put<any>("run",this.myForm.value, { withCredentials: true}).subscribe().unsubscribe()
   }
 
 
   onSubmit()
   {
-    this.http.put<any>("http://localhost:8080/run",this.myForm.value, { withCredentials: true}).subscribe(data =>
+    this.http.put<any>("/run",this.myForm.value, { withCredentials: true}).subscribe(data =>
       {
         let response : string = data.response;
         let errors : string | null = data.errors;
