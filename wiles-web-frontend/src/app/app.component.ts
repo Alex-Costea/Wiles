@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
         let response : string = data.response;
         let errors : string | null = data.errors;
         (<HTMLInputElement>document.getElementById("output")).value = response;
-        (<HTMLInputElement>document.getElementById("errors")).value = errors?.slice(6,-3) ?? "";
+        (<HTMLInputElement>document.getElementById("errors")).value = errors?.slice(5,-4) ?? "";
       })
     
   }
