@@ -20,12 +20,14 @@ export class AppComponent {
     });
     this.http.put<any>("getcsfr", {}, { withCredentials: true, headers : headers}).subscribe(
       () => {
-        console.log("CSFR request success");
-        this.CSFRLoaded=true
         this.loadRequest()
       },
-      () => {console.log("CSFR request error")},
-      () => {console.log("CSFR request complete")}
+      () => {
+        this.loadRequest()
+      },
+      () => {     
+        this.CSFRLoaded=true      
+      }
     )
   }
 
