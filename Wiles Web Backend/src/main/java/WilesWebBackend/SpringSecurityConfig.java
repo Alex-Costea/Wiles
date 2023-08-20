@@ -34,6 +34,8 @@ public class SpringSecurityConfig {
                 .anyRequest().permitAll()
                 .and().csrf((csrf) -> csrf
                         .csrfTokenRepository(tokenRepository)
+                        .ignoringRequestMatchers(request ->
+                                request!=null && request.getRequestURI().startsWith("/getcsfr"))
                         .csrfTokenRequestHandler(requestHandler)
                 );
         return http.build();
