@@ -15,17 +15,16 @@ export class AppComponent {
   {
     if(!this.CSFRLoaded)
     {
-      //workaround to load CSFR on start
       const headers = new HttpHeaders({
         'Cache-Control':  'no-cache, no-store, must-revalidate, post- check=0, pre-check=0',
         'Pragma': 'no-cache',
         'Expires': '0'
       });
-      this.http.put<any>("run",this.myForm.value, { withCredentials: true, headers : headers}).subscribe(
+      this.http.get<any>("getcsfr", { withCredentials: true, headers : headers}).subscribe(
         () => {console.log("CSFR request success")},
         () => {console.log("CSFR request error")},
         () => {console.log("CSFR request complete")}
-      ).unsubscribe()
+      )
       this.CSFRLoaded=true
     }
   }
@@ -41,11 +40,11 @@ export class AppComponent {
         (<HTMLInputElement>document.getElementById("output")).value = response;
         (<HTMLInputElement>document.getElementById("errors")).value = errors?.slice(5,-4) ?? "";
       })
-    
+
   }
 
   myForm = this.formBuilder.group({
-    code: 
+    code:
 `let name := read_line()
 writeline("Hello, " + name + "!")`,
     input: 'Wiles'
@@ -55,6 +54,6 @@ writeline("Hello, " + name + "!")`,
     private http: HttpClient,
     )
   {
-    
+
   }
 }

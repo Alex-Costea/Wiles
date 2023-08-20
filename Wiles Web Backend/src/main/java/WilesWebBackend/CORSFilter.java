@@ -34,7 +34,7 @@ public class CORSFilter implements Filter {
         if(domain!=null && allowedOrigins.contains(domain)) {
             response.setHeader("Access-Control-Allow-Origin", domain);
         }
-        response.setHeader("Access-Control-Allow-Methods", "PUT, OPTIONS");
+        response.setHeader("Access-Control-Allow-Methods", "GET, PUT, OPTIONS");
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Headers", "access_token, authorization, content-type, x-xsrf-token");
