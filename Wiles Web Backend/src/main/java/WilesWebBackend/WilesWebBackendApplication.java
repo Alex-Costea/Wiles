@@ -27,7 +27,7 @@ public class WilesWebBackendApplication {
 
 	@RequestMapping(value = "/getcsfr")
 	public ResponseEntity<String> getCsfr() {
-		return ResponseEntity.ok().body("Ok!");
+		return ResponseEntity.ok().body("{}");
 	}
 
 	@RequestMapping(value = "/run", method = RequestMethod.PUT,
