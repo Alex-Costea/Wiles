@@ -2,11 +2,11 @@
   <div class="part1">
     <p>Code:</p>
     <p>
-      <textarea formControlName="code" rows="10" cols="50"></textarea>
+      <textarea formControlName="code" rows="10" cols="40"></textarea>
     </p>
     <p>Input:</p>
     <p>
-      <textarea formControlName="input" rows="10" cols="50"></textarea>
+      <textarea formControlName="input" rows="10" cols="40"></textarea>
     </p>
     <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
       <input type="submit" value="Submit">
@@ -14,8 +14,8 @@
   </div>
   <div class="part2">
     <p>Output:</p>
-    <textarea disabled id="output" rows="10" cols="50"></textarea>
+    <textarea disabled id="output" rows="10" cols="40"></textarea>
     <p>Errors:</p>
-    <textarea disabled id="errors" rows="10" cols="50"></textarea>
+    <textarea disabled id="errors" rows="10" cols="40"></textarea>
   </div>
 </div>

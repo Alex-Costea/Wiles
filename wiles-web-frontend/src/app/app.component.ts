@@ -7,23 +7,33 @@ import { FormBuilder } from '@angular/forms';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   title = 'wiles-web-frontend';
+  CSFRLoaded = false
 
-  ngOnInit()
+  loadCSFR()
   {
-    //workaround to load CSFR on start
-    const headers = new HttpHeaders({
-      'Cache-Control':  'no-cache, no-store, must-revalidate, post- check=0, pre-check=0',
-      'Pragma': 'no-cache',
-      'Expires': '0'
-    });
-    this.http.put<any>("run",this.myForm.value, { withCredentials: true, headers : headers}).subscribe().unsubscribe()
+    if(!this.CSFRLoaded)
+    {
+      //workaround to load CSFR on start
+      const headers = new HttpHeaders({
+        'Cache-Control':  'no-cache, no-store, must-revalidate, post- check=0, pre-check=0',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      });
+      this.http.put<any>("run",this.myForm.value, { withCredentials: true, headers : headers}).subscribe(
+        () => {console.log("CSFR request success")},
+        () => {console.log("CSFR request error")},
+        () => {console.log("CSFR request complete")}
+      ).unsubscribe()
+      this.CSFRLoaded=true
+    }
   }
 
 
   onSubmit()
   {
+    this.loadCSFR()
     this.http.put<any>("/run",this.myForm.value, { withCredentials: true }).subscribe(data =>
       {
         let response : string = data.response;
