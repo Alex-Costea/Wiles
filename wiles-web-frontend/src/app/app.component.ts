@@ -18,14 +18,18 @@ export class AppComponent {
       'Pragma': 'no-cache',
       'Expires': '0'
     });
-    this.http.get<any>("getcsfr", { withCredentials: true, headers : headers}).subscribe(
+    this.http.put<any>("getcsfr",{}, { withCredentials: true, headers : headers}).subscribe(
       () => {
         console.log("CSFR request success");
-        this.CSFRLoaded=true
         this.loadRequest()
       },
-      () => {console.log("CSFR request error")},
-      () => {console.log("CSFR request complete")}
+      () => {
+        console.log("CSFR request error")
+        this.loadRequest()
+      },
+      () => {
+        this.CSFRLoaded=true
+      }
     )
   }
 

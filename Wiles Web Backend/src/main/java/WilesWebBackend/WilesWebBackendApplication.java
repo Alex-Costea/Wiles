@@ -25,7 +25,7 @@ public class WilesWebBackendApplication {
 		SpringApplication.run(WilesWebBackendApplication.class, args);
 	}
 
-	@RequestMapping(value = "/getcsfr")
+	@RequestMapping(value = "/getcsfr", method = RequestMethod.PUT)
 	public ResponseEntity<String> getCsfr() {
 		return ResponseEntity.ok().body("{}");
 	}
