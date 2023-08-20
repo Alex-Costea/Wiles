@@ -1,12 +1,15 @@
 package WilesWebBackend;
 
+import jakarta.servlet.http.HttpSession;
 import kotlin.Pair;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,13 +24,18 @@ import java.util.concurrent.*;
 @ComponentScan(basePackages = "WilesWebBackend")
 public class WilesWebBackendApplication {
 
+	@Autowired
+	private HttpSession session;
+
 	public static void main(String[] args) {
 		SpringApplication.run(WilesWebBackendApplication.class, args);
 	}
 
 	@RequestMapping(value = "/getcsfr", method = RequestMethod.PUT)
 	public ResponseEntity<String> getCsfr(@RequestBody Map<String, Object> payload) {
-		return ResponseEntity.ok().body("{}");
+		CsrfToken token = (CsrfToken) session.getAttribute(CsrfToken.class.getName());
+		return ResponseEntity.ok().header("Set-Cookie",
+				"XSRF-TOKEN="+token.getToken()+"; Path=/").body("{}");
 	}
 
 	@RequestMapping(value = "/run", method = RequestMethod.PUT,
