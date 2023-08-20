@@ -13,26 +13,24 @@ export class AppComponent {
 
   loadCSFR()
   {
-    if(!this.CSFRLoaded)
-    {
-      const headers = new HttpHeaders({
-        'Cache-Control':  'no-cache, no-store, must-revalidate, post- check=0, pre-check=0',
-        'Pragma': 'no-cache',
-        'Expires': '0'
-      });
-      this.http.get<any>("getcsfr", { withCredentials: true, headers : headers}).subscribe(
-        () => {console.log("CSFR request success")},
-        () => {console.log("CSFR request error")},
-        () => {console.log("CSFR request complete")}
-      )
-      this.CSFRLoaded=true
-    }
+    const headers = new HttpHeaders({
+      'Cache-Control':  'no-cache, no-store, must-revalidate, post- check=0, pre-check=0',
+      'Pragma': 'no-cache',
+      'Expires': '0'
+    });
+    this.http.get<any>("getcsfr", { withCredentials: true, headers : headers}).subscribe(
+      () => {
+        console.log("CSFR request success");
+        this.CSFRLoaded=true
+        this.loadRequest()
+      },
+      () => {console.log("CSFR request error")},
+      () => {console.log("CSFR request complete")}
+    )
   }
 
-
-  onSubmit()
+  loadRequest()
   {
-    this.loadCSFR()
     this.http.put<any>("/run",this.myForm.value, { withCredentials: true }).subscribe(data =>
       {
         let response : string = data.response;
@@ -40,7 +38,14 @@ export class AppComponent {
         (<HTMLInputElement>document.getElementById("output")).value = response;
         (<HTMLInputElement>document.getElementById("errors")).value = errors?.slice(5,-4) ?? "";
       })
+  }
 
+
+  onSubmit()
+  {
+    if(!this.CSFRLoaded)
+      this.loadCSFR()
+    else this.loadRequest()
   }
 
   myForm = this.formBuilder.group({
