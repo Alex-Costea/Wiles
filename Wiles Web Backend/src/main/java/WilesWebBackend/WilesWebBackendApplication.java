@@ -26,7 +26,7 @@ public class WilesWebBackendApplication {
 	}
 
 	@RequestMapping(value = "/getcsfr")
-	public ResponseEntity<String> getCsfr(@RequestBody Map<String, Object> payload) {
+	public ResponseEntity<String> getCsfr() {
 		return ResponseEntity.ok().body("Ok!");
 	}
 
