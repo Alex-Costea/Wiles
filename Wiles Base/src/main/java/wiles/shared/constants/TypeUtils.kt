@@ -1,5 +1,6 @@
 package wiles.shared.constants
 
+import wiles.checker.data.GenericTypeValue
 import wiles.checker.data.GenericTypesMap
 import wiles.checker.statics.InferrerUtils
 import wiles.shared.JSONStatement
@@ -75,19 +76,20 @@ object TypeUtils {
             val isDeclaration = supertype.components.getOrNull(2)?.name == DECLARE_ID
             if(genericTypes?.containsKey(genName) == true)
             {
-                return if(isFormerSuperTypeOfLatter(genericTypes[genName]!!.first, subtype, unboxGenerics = false,
+                return if(isFormerSuperTypeOfLatter(genericTypes[genName]!!.statement, subtype, unboxGenerics = false,
                         genericTypes = genericTypes) && !isDeclaration) {
-                    genericTypes[genName] = Triple(genericTypes[genName]!!.first,true, false)
+                    genericTypes[genName] = GenericTypeValue(genericTypes[genName]!!.statement,
+                        true, false)
                     true
                 }
-                else if(genericTypes[genName]?.third != true && isFormerSuperTypeOfLatter(subtype,
-                        genericTypes[genName]!!.first, unboxGenerics = false, genericTypes = genericTypes)) {
-                    genericTypes[genName] = Triple(subtype,true, isDeclaration)
+                else if(genericTypes[genName]?.declarationReached != true && isFormerSuperTypeOfLatter(subtype,
+                        genericTypes[genName]!!.statement, unboxGenerics = false, genericTypes = genericTypes)) {
+                    genericTypes[genName] = GenericTypeValue(subtype,true, isDeclaration)
                     true
                 } else false
             }
             if (genericTypes!=null)
-                genericTypes[genName] = Triple(subtype,false, isDeclaration)
+                genericTypes[genName] = GenericTypeValue(subtype,false, isDeclaration)
             if(unboxGenerics)
                 return true
         }
@@ -248,7 +250,7 @@ object TypeUtils {
         {
             assert(genericTypes.containsKey(component))
             val value = genericTypes[component]!!
-            if(value.first.name != Types.GENERIC_ID && value.second)
+            if(value.statement.name != Types.GENERIC_ID && value.occurredMultipleTimes)
                 return false
         }
         return true

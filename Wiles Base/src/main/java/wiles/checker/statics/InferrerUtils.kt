@@ -175,7 +175,7 @@ object InferrerUtils {
             val name = getTypeNumber(statement.components[0].name, context)
             if(genericTypes.containsKey(name))
             {
-                statement.components[1] = genericTypes[name]!!.first
+                statement.components[1] = genericTypes[name]!!.statement
             }
             return
         }
@@ -271,7 +271,7 @@ object InferrerUtils {
         val name = statement.components.getOrNull(0)?.name
         if(statement.name == GENERIC_ID && name in genericTypes.keys)
         {
-            val newType = genericTypes[name]!!.first.copyRemovingLocation()
+            val newType = genericTypes[name]!!.statement.copyRemovingLocation()
             statement.name = newType.name
             statement.syntaxType = newType.syntaxType
             statement.location = null
