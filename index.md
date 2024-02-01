@@ -29,6 +29,10 @@ java -jar Wiles.jar example.wiles
 ```
 You can also compile the source code by adding `--compile` as an argument, and run a compiled file using `--run`.  
 
+To run the `Wiles Web Backend`, you have to run `setup_server.sh` and add the `Wiles.jar` file manually to the following address before running Maven:
+
+`/Users/[username]/.m2/repository/costea/Wiles/[version]/Wiles-[version].jar`
+
 ## FAQ
 ### What is the state of the project right now?
 The interpreter is functional and includes the features found in the specifications. While the code is thoroughly tested automatically, there is no guarantee that bugs won't occur in edge cases.
