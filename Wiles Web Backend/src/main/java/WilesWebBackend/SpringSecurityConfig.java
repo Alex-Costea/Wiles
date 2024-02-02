@@ -25,16 +25,13 @@ public class SpringSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         CookieCsrfTokenRepository tokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
-        //tokenRepository.setCookieCustomizer((x) -> x.sameSite(Cookie.SameSite.NONE.attributeValue()).secure(true));
         XorCsrfTokenRequestAttributeHandler delegate = new XorCsrfTokenRequestAttributeHandler();
-        delegate.setCsrfRequestAttributeName("_csrf");
-        CsrfTokenRequestHandler requestHandler = delegate::handle;
         http.addFilterBefore(myCorsFilter, ChannelProcessingFilter.class)
                 .authorizeHttpRequests()
                 .anyRequest().permitAll()
                 .and().csrf((csrf) -> csrf
                         .csrfTokenRepository(tokenRepository)
-                        .csrfTokenRequestHandler(requestHandler)
+                        .csrfTokenRequestHandler(delegate::handle)
                 );
         return http.build();
     }
