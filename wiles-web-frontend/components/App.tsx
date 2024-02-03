@@ -8,24 +8,41 @@ function App() {
     const [code, setCode] = useState(`let name := read_line()
 writeline("Hello, " + name + "!")`)
     const [input, setInput] = useState("Wiles")
-    const csfr = Cookies.get("XSRF-TOKEN")
+
+    async function GetXSRF()
+    {
+        if(Cookies.get("XSRF-TOKEN") === undefined)
+        {
+            await fetch("run", {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
+            return Cookies.get("XSRF-TOKEN")!
+        }
+        return Cookies.get("XSRF-TOKEN")!
+    }
 
     function Submit(e : any)
     {
         e.preventDefault()
-        fetch("run", {
-            method: 'PUT',
-            headers: {
-                'X-XSRF-TOKEN' : csfr!,
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                code: code,
-                input: input
+        GetXSRF().then(xsrf => {
+            fetch("run", {
+                method: 'PUT',
+                headers: {
+                    'X-XSRF-TOKEN' : xsrf,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    code: code,
+                    input: input
+                })
+            }).then(response => response.json()).then(response => {
+                setOutput(response)
             })
-        }).then(response => response.json()).then(response => {
-            setOutput(response)
         })
     }
 
