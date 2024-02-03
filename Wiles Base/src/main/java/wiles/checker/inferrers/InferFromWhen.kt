@@ -49,6 +49,7 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
         {
             if(component.syntaxType == SyntaxType.TYPE)
             {
+                InferFromType(InferrerDetails(component,variables,exceptions, additionalVars, context)).infer()
                 if (!isFormerSuperTypeOfLatter(inferredType, component)) {
                     throw ConflictingTypeDefinitionException(component.getFirstLocation(),
                         component.toString(), inferredType.toString())

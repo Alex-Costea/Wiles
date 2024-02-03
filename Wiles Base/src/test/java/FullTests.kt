@@ -219,5 +219,14 @@ writeline("Min found: " + result)
             writeline(a)
         """
         assertEquals(getOutput(code18),"METHOD(TYPE !nothing; DECLARATION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE INT; TYPE EITHER; (TYPE STRING; TYPE !nothing)); DECLARE); !x))\n")
+
+        val code19="""
+            let f := fun(x : int) do writeline(x)
+
+            when f is fun[x : int] begin
+                f(x := 10)
+            end
+        """
+        assertEquals(getOutput(code19),"10\n")
     }
 }
