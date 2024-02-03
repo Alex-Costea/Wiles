@@ -44,9 +44,9 @@ public class WilesWebBackendApplication {
 			var result = future.get(10, TimeUnit.SECONDS);
 			String outputText = result.getFirst();
 			String errorsText = result.getSecond();
-			errorsText = errorsText.substring(5, errorsText.length()-4);
 			if(Objects.equals(errorsText, ""))
 				errorsText = null;
+			else errorsText = errorsText.substring(5, errorsText.length()-4);
 			return ResponseEntity.ok(new CompilationResponse(outputText, errorsText));
 		}
 		catch (TimeoutException | InterruptedException | ExecutionException e)
