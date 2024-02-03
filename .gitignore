@@ -90,3 +90,9 @@ syntaxTree.json
 /target/classes/StandardLibrary.wiles
 /target/classes/additional_code.wiles
 /.idea/inspectionProfiles/Project_Default.xml
+/.idea/consolestorage/flexible_search_region.json
+/.idea/hybrisProjectSettings.xml
+/.idea/modules.xml
+/.idea/consolestorage/solr_region.json
+/.idea/vcs.xml
+/.idea/Wiles.iml
