@@ -80,6 +80,7 @@ writeline("Hello, " + name + "!")`)
         <p>
             <textarea disabled id="errors" rows={10} cols={40} value={output.errors}></textarea>
         </p>
+        <p><a href={"https://alex.costea.in/Wiles/"}>Learn more about Wiles.</a></p>
     </div>
   );
 }

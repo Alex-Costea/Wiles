@@ -18,7 +18,7 @@ The informal specifications can be found [here](specifications.md).
 
 ## How to use
 
-Try it out [online](http://wiles.costea.in)! 
+Try it out [online](https://wiles.costea.in)! 
 
 Alternatively, from one of the [releases](https://github.com/Alex-Costea/Wiles/releases/), or compile the code yourself.
 
