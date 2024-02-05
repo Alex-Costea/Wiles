@@ -64,7 +64,7 @@ object TypeUtils {
         supertype : JSONStatement, subtype : JSONStatement,
         unboxGenerics : Boolean = true, //should generics match?
         genericTypes : GenericTypesMap? = null,
-        getMinus : Boolean = false,
+        getMinus : Boolean,
     ): Boolean {
         assert(supertype.syntaxType == SyntaxType.TYPE)
         assert(subtype.syntaxType == SyntaxType.TYPE)
