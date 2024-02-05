@@ -28,6 +28,7 @@ import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.TYPEDEF_ID
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
+import wiles.shared.constants.TypeUtils
 import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 import wiles.shared.constants.TypeUtils.makeEither
 import wiles.shared.constants.TypeUtils.makeMutable
@@ -402,7 +403,7 @@ object InferrerUtils {
                         if(shouldGetType)
                         {
                             val typeToRemove = map[variable.key]!!.type.copy()
-                            isFormerSuperTypeOfLatter(typeToRemove, type, getMinus = true)
+                            TypeUtils.getTypeMinusType(typeToRemove, type)
                             type = removeEmptyEither(type)
                         }
                         continue

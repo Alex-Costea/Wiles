@@ -48,6 +48,22 @@ object TypeUtils {
         supertype : JSONStatement, subtype : JSONStatement,
         unboxGenerics : Boolean = true, //should generics match?
         genericTypes : GenericTypesMap? = null,
+    ): Boolean
+    {
+        return isFormerSuperTypeOfLatter(supertype,subtype,unboxGenerics,genericTypes,getMinus = false)
+    }
+
+    fun getTypeMinusType(supertype : JSONStatement, subtype : JSONStatement,
+                                 unboxGenerics : Boolean = true, //should generics match?
+                                 genericTypes : GenericTypesMap? = null) : Boolean
+    {
+        return isFormerSuperTypeOfLatter(supertype,subtype,unboxGenerics,genericTypes,getMinus = true)
+    }
+
+    private fun isFormerSuperTypeOfLatter(
+        supertype : JSONStatement, subtype : JSONStatement,
+        unboxGenerics : Boolean = true, //should generics match?
+        genericTypes : GenericTypesMap? = null,
         getMinus : Boolean = false,
     ): Boolean {
         assert(supertype.syntaxType == SyntaxType.TYPE)
@@ -79,7 +95,8 @@ object TypeUtils {
                 return if(isFormerSuperTypeOfLatter(genericTypes[genName]!!.statement, subtype, unboxGenerics = false,
                         genericTypes = genericTypes) && !isDeclaration) {
                     genericTypes[genName] = GenericTypeValue(genericTypes[genName]!!.statement,
-                        true, false)
+                        occurredMultipleTimes = true, declarationReached = false
+                    )
                     true
                 }
                 else if(genericTypes[genName]?.declarationReached != true && isFormerSuperTypeOfLatter(subtype,

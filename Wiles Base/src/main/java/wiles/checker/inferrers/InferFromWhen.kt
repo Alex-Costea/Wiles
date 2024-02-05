@@ -11,6 +11,7 @@ import wiles.shared.TokenLocation
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.ELSE_ID
 import wiles.shared.constants.TypeUtils
+import wiles.shared.constants.TypeUtils.getTypeMinusType
 import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 import wiles.shared.constants.Types.EITHER_ID
 
@@ -25,7 +26,7 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
         if (former.name == EITHER_ID && former.components.size == 0)
             throw TypesExhaustedException(newLocation)
         val result = former.copyRemovingLocation()
-        isFormerSuperTypeOfLatter(latter, result, getMinus = true)
+        getTypeMinusType(latter, result)
         return TypeUtils.removeEmptyEither(result)
     }
 
