@@ -23,17 +23,17 @@
 body{
     height: 100%;
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background: url("../public/background3.png") no-repeat center center fixed;
     background-size: cover;
-    font-size: 1em;
+    font-size: 1.1em;
+    font-family: 'Roboto', sans-serif;
+    box-sizing: border-box;
 }
 
 textarea {
+    font-family: 'Roboto Mono', monospace;
     resize: none;
     width: 45svw;
     height: 25svh;
@@ -44,6 +44,8 @@ textarea {
     -webkit-backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.3);
     color: black;
+    outline:none;
+    padding: 0.5em;
 }
 
 main{
@@ -56,8 +58,26 @@ main{
     main {
         flex-direction: column;
     }
+    textarea{
+        width: 75svw;
+    }
 }
 
-a{
-    color: black;
+label, a{
+    color: whitesmoke;
+    filter: drop-shadow(2px 4px 6px black);
+}
+#submit{
+    border: none;
+    background: darkgreen;
+    color: whitesmoke;
+    border-radius: 10px;
+    filter: drop-shadow(2px 4px 6px black);
+    min-width: 20svw;
+    min-height: 5svh;
+    font-size: 0.9em;
+}
+
+#errors{
+    color: darkred;
 }

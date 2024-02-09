@@ -69,7 +69,7 @@ writeline("Hello, " + name + "!")`)
                                   onInput={e => setInput((e.target as HTMLTextAreaElement).value)}/>
                         </p>
                         <p>
-                            <input type="submit"></input>
+                            <input type="submit" id={"submit"}></input>
                         </p>
                     </form>
                 </div>
