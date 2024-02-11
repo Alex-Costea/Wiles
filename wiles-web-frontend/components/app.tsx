@@ -68,14 +68,14 @@ writeline("Hello, " + name + "!")`)
                             <label htmlFor="code">Code:</label>
                         </p>
                         <p>
-                        <textarea id="code" rows={10} cols={40} value={code}
+                        <textarea id="code" spellCheck={false} value={code}
                                   onInput={e => setCode((e.target as HTMLTextAreaElement).value)}/>
                         </p>
                         <p>
                             <label htmlFor="input">Input:</label>
                         </p>
                         <p>
-                        <textarea id="input" rows={10} cols={40} value={input}
+                        <textarea id="input" value={input}
                                   onInput={e => setInput((e.target as HTMLTextAreaElement).value)}/>
                         </p>
                         <p>
@@ -88,13 +88,13 @@ writeline("Hello, " + name + "!")`)
                         <label htmlFor="output">Output:</label>
                     </p>
                     <p>
-                        <textarea disabled id="output" rows={10} cols={40} value={output.response}></textarea>
+                        <textarea disabled id="output" value={output.response}></textarea>
                     </p>
                     <p>
                         <label htmlFor="errors">Errors:</label>
                     </p>
                     <p>
-                        <textarea disabled id="errors" rows={10} cols={40} value={output.errors}></textarea>
+                        <textarea disabled id="errors" value={output.errors}></textarea>
                     </p>
                     <p><a href={"https://alex.costea.in/Wiles/"}>Learn more about Wiles.</a></p>
                 </div>
