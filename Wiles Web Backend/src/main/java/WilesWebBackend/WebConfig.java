@@ -6,8 +6,8 @@ import org.springframework.http.CacheControl;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.time.Duration;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
@@ -16,8 +16,11 @@ public class WebConfig implements WebMvcConfigurer {
     public void addResourceHandlers(@NotNull ResourceHandlerRegistry registry) {
         Objects.requireNonNull(registry);
 
-        registry.addResourceHandler("/static/**")
-                .addResourceLocations("classpath:/static/")
-                .setCacheControl(CacheControl.maxAge(1, TimeUnit.DAYS));
+        registry.addResourceHandler("/**")
+                .addResourceLocations("classpath:/static/");
+
+        registry.addResourceHandler("/images/**")
+                .addResourceLocations("classpath:/static/images/")
+                .setCacheControl(CacheControl.maxAge(Duration.ofDays(1)));
     }
 }

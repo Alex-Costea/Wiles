@@ -94,10 +94,10 @@ function App() {
     return (
         <div className="App">
             <div className={"background"}>
-                <Image src="static/background3.png" alt={"background"} fill={true} priority style={{objectFit: "cover"}}></Image>
+                <Image src="images/background.png" alt={"background"} fill={true} priority style={{objectFit: "cover"}}></Image>
             </div>
             <header className="App-header">
-                <Image src="static/logo2.svg" width={500} height={500} className="App-logo" alt="Wiles logo" priority/>
+                <Image src="images/logo.svg" width={500} height={500} className="App-logo" alt="Wiles logo" priority/>
             </header>
             <main>
                 <div id={"column1"}>
