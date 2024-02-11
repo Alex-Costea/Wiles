@@ -4,3 +4,5 @@ cd wiles-web-frontend
 npm run build
 cd ..
 cp -R "wiles-web-frontend/build/" "Wiles Web Backend/src/main/resources/static/"
+cd "Wiles Web Backend"
+sh update_server.sh
