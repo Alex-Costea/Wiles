@@ -3,6 +3,16 @@ import Cookies from 'js-cookie';
 
 
 function App() {
+    function getDomain()
+    {
+        let domain = window.location.protocol + "//" + window.location.hostname
+        if(window.location.protocol === "http:")
+            domain += ":80"
+        else if(window.location.protocol === "http:")
+            domain += ":443"
+        else throw Error("Unknown protocol")
+        return domain
+    }
 
     const [output, setOutput] = useState({response: '', errors: ''})
     const [code, setCode] = useState(`let name := read_line()
@@ -13,7 +23,7 @@ writeline("Hello, " + name + "!")`)
     {
         if(Cookies.get("XSRF-TOKEN") === undefined)
         {
-            await fetch("run", {
+            await fetch(`${getDomain()}/run`, {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
@@ -29,7 +39,7 @@ writeline("Hello, " + name + "!")`)
     {
         e.preventDefault()
         GetXSRF().then(xsrf => {
-            fetch("run", {
+            fetch(`${getDomain()}/run`, {
                 method: 'PUT',
                 headers: {
                     'X-XSRF-TOKEN' : xsrf,

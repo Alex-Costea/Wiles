@@ -18,22 +18,9 @@ The informal specifications can be found [here](specifications.md).
 
 ## How to use
 
-Try it out [online](https://wiles.costea.in)! 
+Try it out [online](https://wiles.costea.in)!
 
-Alternatively, from one of the [releases](https://github.com/Alex-Costea/Wiles/releases/), or compile the code yourself.
-
-Run the function `main` within `wiles.Main`, with the input file as an argument. For instance, when using the JAR file `Wiles.jar`, run the command:
-
-```
-java -jar Wiles.jar example.wiles
-```
-You can also compile the source code by adding `--compile` as an argument, and run a compiled file using `--run`.  
-
-To run the `Wiles Web Backend`, you have to run `setup_server.sh` and add the `Wiles.jar` file manually to the following address before running Maven:
-
-```
- /Users/[username]/.m2/repository/costea/Wiles/[version]/Wiles-[version].jar
-```
+For other methods of using it, go [here](how_to_run.md).
 
 ## FAQ
 ### What is the state of the project right now?

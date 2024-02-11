@@ -1,0 +1,19 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+security:
+  require-ssl: true
+server:
+  port: '443'
+  ssl:
+    certificate: 'file:/etc/letsencrypt/live/wiles.costea.in/fullchain.pem'
+    certificate-private-key: 'file:/etc/letsencrypt/live/wiles.costea.in/privkey.pem'
+    trust-certificate: 'file:/etc/letsencrypt/live/wiles.costea.in/fullchain.pem'
+---
+spring:
+  config:
+    activate:
+      on-profile: default
+server:
+  port: '80'
