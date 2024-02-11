@@ -18,7 +18,6 @@ import java.util.concurrent.*;
 
 @SpringBootApplication
 @RestController
-@ComponentScan(basePackages = "WilesWebBackend")
 public class WilesWebBackendApplication {
 
 	public static void main(String[] args) {
