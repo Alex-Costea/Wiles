@@ -1,6 +1,37 @@
-import {useState} from "react";
+import {Dispatch, useEffect, useReducer} from "react";
 import Cookies from 'js-cookie';
 
+interface responseFormat{
+    response : string, errors : string
+}
+
+function usePersistedState(keyName : string, defaultValue : string)
+{
+    function persistState(keyName : string)
+    {
+        return function(_prevState : string, value : string)
+        {
+            window.localStorage.setItem(keyName, value)
+            return value
+        }
+    }
+
+    const [state, setState] = useReducer(persistState(keyName),"")
+
+    useEffect(()=>{
+        const storedState = window.localStorage.getItem(keyName)
+        if(storedState !== null)
+        {
+            setState(storedState)
+        }
+        else
+        {
+            setState(defaultValue)
+        }
+    },[])
+
+    return [state, setState] as [string, Dispatch<string>]
+}
 
 function App() {
     function getDomain()
@@ -14,10 +45,11 @@ function App() {
         return domain
     }
 
-    const [output, setOutput] = useState({response: '', errors: ''})
-    const [code, setCode] = useState(`let name := read_line()
-writeline("Hello, " + name + "!")`)
-    const [input, setInput] = useState("Wiles")
+    const [output, setOutput] = usePersistedState("output", "")
+    const [errors, setErrors] = usePersistedState("errors", "")
+    const [code, setCode] = usePersistedState("code",
+        'let name := read_line()\nwriteline("Hello, " + name + "!")')
+    const [input, setInput] = usePersistedState("input", "Wiles")
 
     async function GetXSRF()
     {
@@ -50,8 +82,10 @@ writeline("Hello, " + name + "!")`)
                     code: code,
                     input: input
                 })
-            }).then(response => response.json()).then(response => {
-                setOutput(response)
+            }).then(response => response.json()).then(
+                (response : responseFormat)  => {
+                setOutput(response.response)
+                setErrors(response.errors)
             })
         })
     }
@@ -88,13 +122,13 @@ writeline("Hello, " + name + "!")`)
                         <label htmlFor="output">Output:</label>
                     </p>
                     <p>
-                        <textarea disabled id="output" value={output.response}></textarea>
+                        <textarea disabled id="output" value={output}></textarea>
                     </p>
                     <p>
                         <label htmlFor="errors">Errors:</label>
                     </p>
                     <p>
-                        <textarea disabled id="errors" value={output.errors}></textarea>
+                        <textarea disabled id="errors" value={errors}></textarea>
                     </p>
                     <p><a href={"https://alex.costea.in/Wiles/"}>Learn more about Wiles.</a></p>
                 </div>
