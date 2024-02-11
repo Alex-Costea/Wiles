@@ -4,6 +4,7 @@
 
 .App-logo {
     height: 6em;
+    width: auto;
     pointer-events: none;
     filter: drop-shadow(3px 3px 3px rgba(0,0,0,0.7));
 }
@@ -25,8 +26,6 @@ body{
     margin: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background: url("../public/background3.png") no-repeat center center fixed;
-    background-size: cover;
     font-size: 1.1em;
     font-family: 'Roboto', sans-serif;
     box-sizing: border-box;
@@ -80,4 +79,13 @@ label, a{
 
 #errors{
     color: darkred;
+}
+
+
+.background {
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    z-index: -1;
 }

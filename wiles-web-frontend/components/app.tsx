@@ -1,5 +1,6 @@
 import {Dispatch, useEffect, useReducer} from "react";
 import Cookies from 'js-cookie';
+import Image from 'next/image'
 
 interface responseFormat{
     response : string, errors : string
@@ -92,8 +93,11 @@ function App() {
 
     return (
         <div className="App">
+            <div className={"background"}>
+                <Image src="background3.png" alt={"background"} fill={true} priority style={{objectFit: "cover"}}></Image>
+            </div>
             <header className="App-header">
-                <img src="/logo2.svg" className="App-logo" alt="logo"/>
+                <Image src="logo2.svg" width={500} height={500} className="App-logo" alt="Wiles logo" priority/>
             </header>
             <main>
                 <div id={"column1"}>
