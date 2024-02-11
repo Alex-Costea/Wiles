@@ -117,7 +117,7 @@ function App() {
                                   onInput={e => setInput((e.target as HTMLTextAreaElement).value)}/>
                         </p>
                         <p>
-                            <input type="submit" id={"submit"}></input>
+                            <input type="submit" id={"submit"} value={"Run Code"}></input>
                         </p>
                     </form>
                 </div>
