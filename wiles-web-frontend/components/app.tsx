@@ -8,7 +8,7 @@ function App() {
         let domain = window.location.protocol + "//" + window.location.hostname
         if(window.location.protocol === "http:")
             domain += ":80"
-        else if(window.location.protocol === "http:")
+        else if(window.location.protocol === "https:")
             domain += ":443"
         else throw Error("Unknown protocol")
         return domain
