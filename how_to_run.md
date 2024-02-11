@@ -20,7 +20,7 @@ You can also compile the source code by adding `--compile` as an argument, and r
 
 Using the backend and frontend locally.
 
-To use `Wiles Web Backend`, you have to run `setup_server.sh` and add the `Wiles.jar` file manually to the following address before running Maven:
+To use `Wiles Web Backend`, add the `Wiles.jar` file manually to the following address before running Maven:
 
 ```
  /Users/[username]/.m2/repository/costea/Wiles/[version]/Wiles-[version].jar
@@ -28,8 +28,16 @@ To use `Wiles Web Backend`, you have to run `setup_server.sh` and add the `Wiles
 
 (or equivalent for Windows)
 
-To run in production mode, using HTTPS and CSRF protection, add `-Dspring.profiles.active=prod` when running the backend. Also, make sure to update the links to the SSL certificates accordingly.
+Afterwards, you have to run `setup_server.sh` before running the backend.
 
 You can either:
 * Run only the backend, which will deploy the frontend statically
 * Run the backend and frontend servers at the same time, by doing `npm run dev` and going to `localhost:3000`.
+
+## Method 4
+
+Run the backend in production mode.
+
+Pull the repository from GitHub, add the `Wiles.jar` file as described above, and then do:
+
+`sh reboot.sh`
