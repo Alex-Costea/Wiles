@@ -3,13 +3,13 @@
 }
 
 .App-logo {
-    height: 15vmin;
+    height: 6em;
     pointer-events: none;
     filter: drop-shadow(3px 3px 3px rgba(0,0,0,0.7));
 }
 
 .App-header {
-    height: 15vh;
+    height: 6em;
     display: flex;
     flex-direction: column;
     align-items: center;
