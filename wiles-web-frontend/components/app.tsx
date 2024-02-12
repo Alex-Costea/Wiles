@@ -97,7 +97,7 @@ function App() {
                 <Image src="images/background.png" alt={"background"} fill={true} priority style={{objectFit: "cover"}}></Image>
             </div>
             <header className="App-header">
-                <Image src="images/logo.svg" width={500} height={500} className="App-logo" alt="Wiles logo" priority/>
+                <Image src="logo_pastel.svg" width={500} height={500} className="App-logo" alt="Wiles logo" priority/>
             </header>
             <main>
                 <div id={"column1"}>
