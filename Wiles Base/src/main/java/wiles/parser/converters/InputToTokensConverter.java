@@ -18,7 +18,7 @@ import static org.apache.commons.text.StringEscapeUtils.unescapeHtml4;
 import static wiles.shared.constants.Chars.*;
 
 public class InputToTokensConverter {
-    private final char[] arrayChars;
+    private final int[] arrayChars;
     @NotNull
     private final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
     private int originalIndex;
@@ -27,11 +27,11 @@ public class InputToTokensConverter {
     private int line = 1;
 
     public InputToTokensConverter(@NotNull String input) {
-        arrayChars = input.toCharArray();
+        arrayChars = input.codePoints().toArray();
     }
 
     public InputToTokensConverter(@NotNull String input, int additionalLines) {
-        arrayChars = input.toCharArray();
+        arrayChars = input.codePoints().toArray();
         line -= additionalLines;
     }
 
@@ -85,11 +85,11 @@ public class InputToTokensConverter {
         int currentIndex = index + 1;
         @NotNull
         StringBuilder sb = new StringBuilder();
-        char lastNonSpaceCharacter = 0;
+        int lastNonSpaceCharacter = 0;
         int lastNonSpaceCharacterIndex = -1;
         while (currentIndex < arrayChars.length) {
             if (arrayChars[currentIndex] == '\n') {
-                if (lastNonSpaceCharacter == CONTINUE_LINE)
+                if (lastNonSpaceCharacter == (int) CONTINUE_LINE)
                     sb.setLength(lastNonSpaceCharacterIndex - index - 1);
                 else {
                     if (!isComment)
@@ -102,7 +102,7 @@ public class InputToTokensConverter {
             }
             if (isComment && arrayChars[currentIndex] == STRING_DELIMITER)
                 break;
-            sb.append(arrayChars[currentIndex]);
+            sb.appendCodePoint(arrayChars[currentIndex]);
             if (currentIndex + 1 == arrayChars.length)
                 break;
             currentIndex++;
@@ -131,7 +131,7 @@ public class InputToTokensConverter {
         @NotNull
         StringBuilder sb = new StringBuilder();
         while (currentIndex < arrayChars.length && Utils.isAlphanumeric(arrayChars[currentIndex])) {
-            sb.append(arrayChars[currentIndex]);
+            sb.appendCodePoint(arrayChars[currentIndex]);
             currentIndex++;
         }
         index = currentIndex - 1;
@@ -148,7 +148,7 @@ public class InputToTokensConverter {
                 //first delimiter found, and not as the last digit
                 (!delimiterAlreadyFound && arrayChars[currentIndex] == DECIMAL_DELIMITER &&
                         currentIndex + 1 < arrayChars.length && Utils.isDigit(arrayChars[currentIndex + 1])))) {
-            sb.append(arrayChars[currentIndex]);
+            sb.appendCodePoint(arrayChars[currentIndex]);
             if (arrayChars[currentIndex] == DECIMAL_DELIMITER)
                 delimiterAlreadyFound = true;
             currentIndex++;
@@ -165,7 +165,7 @@ public class InputToTokensConverter {
         StringBuilder sb = new StringBuilder();
         String token = null;
         while (!Utils.isAlphanumeric(arrayChars[currentIndex]) && currentIndex - index < Settings.MAX_SYMBOL_LENGTH) {
-            sb.append(arrayChars[currentIndex]);
+            sb.appendCodePoint(arrayChars[currentIndex]);
             String tempId = Tokens.TOKENS.get(sb.toString());
             if (tempId != null) {
                 token = tempId;

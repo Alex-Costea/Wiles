@@ -7,18 +7,18 @@ import wiles.shared.constants.Chars.DIGIT_SEPARATOR
 
 object Utils {
     @JvmStatic
-    fun isAlphanumeric(c: Char): Boolean {
+    fun isAlphanumeric(c: Int): Boolean {
         return isAlphabetic(c) || isDigit(c)
     }
 
     @JvmStatic
-    fun isAlphabetic(c: Char): Boolean {
-        return Character.isAlphabetic(c.code) || c == DIGIT_SEPARATOR
+    fun isAlphabetic(c: Int): Boolean {
+        return Character.isAlphabetic(c) || c == DIGIT_SEPARATOR.code
     }
 
     @JvmStatic
-    fun isDigit(c: Char): Boolean {
-        return Character.isDigit(c) || c == DIGIT_SEPARATOR
+    fun isDigit(c: Int): Boolean {
+        return Character.isDigit(c) || c == DIGIT_SEPARATOR.code
     }
 
     val NULL_LOCATION = TokenLocation(-1,-1)
