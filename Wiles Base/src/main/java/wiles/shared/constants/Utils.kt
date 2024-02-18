@@ -14,11 +14,17 @@ object Utils {
     @JvmStatic
     fun isAlphabetic(c: Int): Boolean {
         return Character.isAlphabetic(c) || c == DIGIT_SEPARATOR.code
+                || (Character.isEmoji(c) && c > 127) || (c == 8205)
     }
 
     @JvmStatic
     fun isDigit(c: Int): Boolean {
         return Character.isDigit(c) || c == DIGIT_SEPARATOR.code
+    }
+
+    @JvmStatic
+    fun isWhitespace(c: Int): Boolean {
+        return Character.isWhitespace(c) && (c != 8205)
     }
 
     val NULL_LOCATION = TokenLocation(-1,-1)

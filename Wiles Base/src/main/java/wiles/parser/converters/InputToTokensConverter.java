@@ -96,7 +96,7 @@ public class InputToTokensConverter {
                         currentIndex--;
                     break;
                 }
-            } else if (!Character.isWhitespace(arrayChars[currentIndex])) {
+            } else if (!Utils.isWhitespace(arrayChars[currentIndex])) {
                 lastNonSpaceCharacterIndex = currentIndex;
                 lastNonSpaceCharacter = arrayChars[currentIndex];
             }
@@ -172,7 +172,7 @@ public class InputToTokensConverter {
                 operatorFoundIndex = currentIndex;
             }
             currentIndex++;
-            if (Character.isWhitespace(arrayChars[currentIndex-1]) ||
+            if (Utils.isWhitespace(arrayChars[currentIndex-1]) ||
                     currentIndex == arrayChars.length ||
                     arrayChars[currentIndex] == '\n')
                 break;
