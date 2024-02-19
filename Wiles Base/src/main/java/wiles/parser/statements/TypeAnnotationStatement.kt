@@ -1,7 +1,7 @@
 package wiles.parser.statements
 
-import wiles.parser.builders.ParserContext
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
+import wiles.parser.builders.ParserContext
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.exceptions.TokenExpectedException
 import wiles.shared.AbstractCompilationException
@@ -16,6 +16,7 @@ import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.AS_ID
 import wiles.shared.constants.Tokens.BRACKET_END_ID
 import wiles.shared.constants.Tokens.BRACKET_START_ID
+import wiles.shared.constants.Tokens.CLASS_ID
 import wiles.shared.constants.Tokens.MAYBE_ID
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
@@ -66,6 +67,24 @@ class TypeAnnotationStatement(context: ParserContext, private val allowGenerics 
                 val funStatement = MethodStatement(context, true)
                 funStatement.process().throwFirstIfExists()
                 subtypes.add(funStatement)
+                transmitter.expect(tokenOf(BRACKET_END_ID))
+            }
+            if(name == CLASS_ID) {
+                transmitter.expect(tokenOf(BRACKET_START_ID))
+                val classComponents : ArrayList<AbstractStatement> = arrayListOf()
+                while(transmitter.expectMaybe(tokenOf(BRACKET_END_ID).removeWhen(WhenRemoveToken.Never)).isEmpty)
+                {
+                    val left = TokenStatement(transmitter.expect(
+                        tokenOf(IS_IDENTIFIER)
+                            .withErrorMessage(IDENTIFIER_EXPECTED_ERROR)),context)
+                    transmitter.expect(tokenOf(Tokens.TYPE_ANNOTATION_ID))
+                    val right = TypeAnnotationStatement(context)
+                    right.process().throwFirstIfExists()
+                    classComponents.add(left)
+                    classComponents.add(right)
+                    if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break
+                }
+                subtypes.addAll(classComponents)
                 transmitter.expect(tokenOf(BRACKET_END_ID))
             }
             if(transmitter.expectMaybe(tokenOf(MAYBE_ID).dontIgnoreNewLine()).isPresent)
