@@ -29,7 +29,7 @@ import wiles.shared.constants.TypeConstants.UNARY_MINUS_OPERATION
 import wiles.shared.constants.TypeConstants.UNARY_PLUS_OPERATION
 import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 import wiles.shared.constants.TypeUtils.makeMutable
-import wiles.shared.constants.TypeUtils.unbox
+import wiles.shared.constants.TypeUtils.makeTypeUngeneric
 
 object SimpleTypeGenerator {
 
@@ -121,7 +121,7 @@ object SimpleTypeGenerator {
 
     fun getSimpleTypes(triple : Triple<JSONStatement, JSONStatement, JSONStatement>) : JSONStatement?
     {
-        val unboxedTriple = Triple(unbox(triple.first), triple.second, unbox(triple.third))
+        val unboxedTriple = Triple(makeTypeUngeneric(triple.first), triple.second, makeTypeUngeneric(triple.third))
 
         if(unboxedTriple.second.name == IMPORT_ID)
             return unboxedTriple.third.copyRemovingLocation()

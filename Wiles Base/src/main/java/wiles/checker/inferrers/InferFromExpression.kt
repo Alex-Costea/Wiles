@@ -34,7 +34,7 @@ import wiles.shared.constants.TypeConstants
 import wiles.shared.constants.TypeConstants.NOTHING_TOKEN
 import wiles.shared.constants.TypeUtils.makeList
 import wiles.shared.constants.TypeUtils.makeMethod
-import wiles.shared.constants.TypeUtils.unbox
+import wiles.shared.constants.TypeUtils.makeTypeUngeneric
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.BOOLEAN_ID
 import wiles.shared.constants.Types.DOUBLE_ID
@@ -54,8 +54,8 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
         assert(middle.syntaxType == SyntaxType.TOKEN)
         assert(right.syntaxType == SyntaxType.TYPE)
 
-        val unboxedLeft = unbox(left)
-        val unboxedRight = unbox(right)
+        val unboxedLeft = makeTypeUngeneric(left)
+        val unboxedRight = makeTypeUngeneric(right)
 
         val leftComponents = createComponents(unboxedLeft,middle.name)
 
@@ -67,7 +67,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
         {
             for(newRight in rightComponents)
             {
-                var unboxedNewLeft = unbox(newLeft)
+                var unboxedNewLeft = makeTypeUngeneric(newLeft)
                 val type = getSimpleTypes(Triple(newLeft, middle, newRight)) ?:
                     if(unboxedNewLeft.name == METHOD_ID &&
                             middle == TypeConstants.APPLY_OPERATION &&
@@ -104,9 +104,9 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
             throw WrongOperationException(middle.getFirstLocation(),unboxedLeft.toString(),unboxedRight.toString())
         if(resultingTypes.isNotEmpty())
         {
-            var leftText : String = if(leftComponents.size == 1) unbox(leftComponents[0]).name else ANYTHING_ID
+            var leftText : String = if(leftComponents.size == 1) makeTypeUngeneric(leftComponents[0]).name else ANYTHING_ID
             if(leftText !in VALID_NAMED) leftText = ANYTHING_ID
-            var rightText : String = if(rightComponents.size == 1) unbox(rightComponents[0]).name else ANYTHING_ID
+            var rightText : String = if(rightComponents.size == 1) makeTypeUngeneric(rightComponents[0]).name else ANYTHING_ID
             if(rightText !in VALID_NAMED) rightText = ANYTHING_ID
             operationName = if(middle.name in listOf(ASSIGN_ID, MUTABLE_ID,
                     IMPORT_ID, AND_ID, OR_ID, EQUALS_ID, NOT_EQUAL_ID)) middle.name

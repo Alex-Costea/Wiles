@@ -1421,56 +1421,6 @@ class CheckerTests {
   } ]
 }""","CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE DOUBLE; TYPE STRING); !a; EXPRESSION(TYPE STRING; @a)); DECLARATION(TYPE EITHER; (TYPE INT; TYPE STRING); !b; EXPRESSION(TYPE INT; #1)); DECLARATION(TYPE EITHER; (TYPE DOUBLE; TYPE STRING); !c); EXPRESSION(TYPE !nothing; EXPRESSION(TYPE EITHER; (TYPE DOUBLE; TYPE STRING); !c); ASSIGN; EXPRESSION(TYPE EITHER; (TYPE DOUBLE; TYPE STRING); !a; ANYTHING|PLUS|ANYTHING; !b)))")
 
-    checkResult(null,"""{
-  "parsed" : true,
-  "type" : "CODE_BLOCK",
-  "components" : [ {
-    "type" : "DECLARATION",
-    "components" : [ {
-      "name" : "!temp",
-      "type" : "TOKEN",
-      "location" : {
-        "line" : 1,
-        "lineIndex" : 5
-      }
-    }, {
-      "type" : "EXPRESSION",
-      "components" : [ {
-        "name" : "#2",
-        "type" : "TOKEN",
-        "location" : {
-          "line" : 1,
-          "lineIndex" : 13
-        }
-      }, {
-        "name" : "PLUS",
-        "type" : "TOKEN",
-        "location" : {
-          "line" : 1,
-          "lineIndex" : 15
-        }
-      }, {
-        "type" : "EXPRESSION",
-        "components" : [ {
-          "name" : "MUTABLE",
-          "type" : "TOKEN",
-          "location" : {
-            "line" : 1,
-            "lineIndex" : 17
-          }
-        }, {
-          "name" : "#3",
-          "type" : "TOKEN",
-          "location" : {
-            "line" : 1,
-            "lineIndex" : 21
-          }
-        } ]
-      } ]
-    } ]
-  } ]
-}""","CODE_BLOCK(DECLARATION(TYPE INT; !temp; EXPRESSION(TYPE INT; #2; INT|PLUS|INT; EXPRESSION(TYPE MUTABLE; (TYPE INT); MUTABLE; #3))))")
-
     /*
         let a : mut[either[int,text]] := mut "2"
         a.set(10)
