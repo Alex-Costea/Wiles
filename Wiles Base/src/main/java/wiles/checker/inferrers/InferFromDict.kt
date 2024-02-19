@@ -6,6 +6,8 @@ import wiles.checker.exceptions.InferenceFailException
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
+import wiles.shared.constants.Tokens.CLASS_ID
+import wiles.shared.constants.Tokens.IDENTIFIER_START
 import wiles.shared.constants.Tokens.OBJECT_ID
 import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 import wiles.shared.constants.Types.DICT_ID
@@ -75,6 +77,30 @@ class InferFromDict(details: InferrerDetails) : InferFromStatement(details) {
             statement.components.add(0, JSONStatement(syntaxType = SyntaxType.TYPE, name = DICT_ID,
                 components = finalTypes.map { it }.toMutableList()))
         }
-        else TODO()
+        else{
+            val inferredType = JSONStatement(name = CLASS_ID, syntaxType = SyntaxType.TYPE)
+            var isKey = true
+            for(component in statement.components)
+            {
+                if(isKey)
+                {
+                    val name = component.components[0].name
+                    inferredType.components.add(
+                        JSONStatement(IDENTIFIER_START + name.substring(1),
+                            syntaxType = SyntaxType.TOKEN)
+                    )
+                }
+                else
+                {
+                    val newComponent = component.copyRemovingLocation()
+                    val inferrer = InferFromExpression(
+                        InferrerDetails(newComponent, variables, exceptions, additionalVars, context))
+                    inferrer.infer()
+                    inferredType.components.add(newComponent.components[0])
+                }
+                isKey = !isKey
+            }
+            statement.components.add(0, inferredType)
+        }
     }
 }
