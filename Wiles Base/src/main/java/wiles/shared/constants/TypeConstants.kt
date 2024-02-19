@@ -6,6 +6,7 @@ import wiles.checker.statics.InferrerUtils.makeNullable
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.ANON_ARG_ID
+import wiles.shared.constants.Tokens.CLASS_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.STRING_START
 import wiles.shared.constants.Tokens.TRUE_ID
@@ -32,6 +33,7 @@ object TypeConstants {
     val METHOD_CALL_TYPE = JSONStatement(syntaxType = SyntaxType.TYPE, name = METHOD_CALL_ID)
     @Suppress("UNUSED")
     val UNIVERSAL_SUBTYPE_TYPE = JSONStatement(syntaxType = SyntaxType.TYPE, name = UNIVERSAL_SUBTYPE_ID)
+    val CLASS_TYPE = JSONStatement(syntaxType = SyntaxType.TYPE, name = CLASS_ID)
     private val NULLABLE_ANYTHING_TYPE = makeNullable(ANYTHING_TYPE)
 
     private val LIST_OF_ANYTHING_TYPE = makeList(ANYTHING_TYPE)
