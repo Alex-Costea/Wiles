@@ -228,5 +228,12 @@ writeline("Min found: " + result)
             end
         """
         assertEquals(getOutput(code19),"10\n")
+
+        val code20 ="""
+            typedef int2 := int
+            let x := 2
+            when x is int2 do writeline("hi")
+        """
+        assertEquals(getOutput(code20),"hi\n")
     }
 }
