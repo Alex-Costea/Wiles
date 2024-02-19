@@ -7,12 +7,12 @@ import wiles.shared.constants.ErrorMessages.INTERNAL_ERROR
 import wiles.shared.constants.ErrorMessages.INVALID_EXPRESSION_ERROR
 import wiles.shared.constants.Tokens.BRACE_START_ID
 import wiles.shared.constants.Tokens.BRACKET_START_ID
+import wiles.shared.constants.Tokens.DATA_ID
 import wiles.shared.constants.Tokens.DO_ID
 import wiles.shared.constants.Tokens.INFIX_OPERATORS
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.Tokens.NEWLINE_ID
 import wiles.shared.constants.Tokens.NEW_STATEMENT_START_KEYWORDS
-import wiles.shared.constants.Tokens.OBJECT_ID
 import wiles.shared.constants.Tokens.PAREN_START_ID
 import wiles.shared.constants.Tokens.STARTING_OPERATORS
 import wiles.shared.constants.Tokens.START_BLOCK_ID
@@ -33,7 +33,7 @@ object Predicates {
     @JvmField
     val STARTS_AS_TOKEN = Predicate { content : String ->
         IS_LITERAL.test(content) || content == PAREN_START_ID || content == Tokens.PAREN_END_ID ||
-                content == BRACKET_START_ID || content == BRACE_START_ID || content == DO_ID || content == OBJECT_ID
+                content == BRACKET_START_ID || content == BRACE_START_ID || content == DO_ID || content == DATA_ID
                 || content == START_BLOCK_ID || STARTING_OPERATORS.contains(content) || content == METHOD_ID }
 
     @JvmField
@@ -63,7 +63,7 @@ object Predicates {
 
     @JvmField
     val START_OF_EXPRESSION = tokenOf(IS_CONTAINED_IN(STARTING_OPERATORS)).or(IS_LITERAL).or(BRACE_START_ID)
-        .or(PAREN_START_ID).or(BRACKET_START_ID).or(METHOD_ID).or(DO_ID).or(START_BLOCK_ID).or(OBJECT_ID)
+        .or(PAREN_START_ID).or(BRACKET_START_ID).or(METHOD_ID).or(DO_ID).or(START_BLOCK_ID).or(DATA_ID)
         .withErrorMessage(EXPRESSION_EXPECTED_ERROR).removeWhen(WhenRemoveToken.Never).freeze()
 
     @JvmField

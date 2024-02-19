@@ -10,9 +10,10 @@ import wiles.shared.SyntaxType
 import wiles.shared.Token
 import wiles.shared.constants.ErrorMessages
 import wiles.shared.constants.Predicates
+import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.BRACE_END_ID
 import wiles.shared.constants.Tokens.BRACE_START_ID
-import wiles.shared.constants.Tokens.OBJECT_ID
+import wiles.shared.constants.Tokens.DATA_ID
 import wiles.shared.constants.Tokens.RIGHT_ARROW_ID
 import wiles.shared.constants.Tokens.SEPARATOR_ID
 import wiles.shared.constants.Tokens.STRING_START
@@ -38,13 +39,13 @@ class DictStatement(context: ParserContext) : AbstractStatement(context) {
     override fun process(): CompilationExceptionsCollection {
         val errors = CompilationExceptionsCollection()
         try{
-            val isObject = transmitter.expectMaybe(tokenOf(OBJECT_ID)).isPresent
-            if(isObject)
-                name = OBJECT_ID
+            val isData = transmitter.expectMaybe(tokenOf(DATA_ID)).isPresent
+            if(isData)
+                name = DATA_ID
             transmitter.expect(tokenOf(BRACE_START_ID))
             while(transmitter.expectMaybe(tokenOf(BRACE_END_ID).removeWhen(WhenRemoveToken.Never)).isEmpty)
             {
-                if(!isObject)
+                if(!isData)
                 {
                     val newComp1 = InnerDefaultExpression(context)
                     newComp1.process().throwFirstIfExists()
@@ -56,7 +57,9 @@ class DictStatement(context: ParserContext) : AbstractStatement(context) {
                     components.add(convertIdentifierToString(newComp1))
                 }
 
-                transmitter.expect(tokenOf(RIGHT_ARROW_ID))
+                if(!isData)
+                    transmitter.expect(tokenOf(RIGHT_ARROW_ID))
+                else transmitter.expect(tokenOf(ASSIGN_ID))
 
                 val newComp2 = InnerDefaultExpression(context)
                 newComp2.process().throwFirstIfExists()
@@ -65,7 +68,7 @@ class DictStatement(context: ParserContext) : AbstractStatement(context) {
                 if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break
             }
             location = transmitter.expect(tokenOf(BRACE_END_ID)).location
-            if(!isObject) {
+            if(!isData) {
                 if(transmitter.expectMaybe(tokenOf(TYPE_ANNOTATION_ID).dontIgnoreNewLine()).isPresent) {
                     val typeStatement1 = TypeAnnotationStatement(context)
                     typeStatement1.process().throwFirstIfExists()

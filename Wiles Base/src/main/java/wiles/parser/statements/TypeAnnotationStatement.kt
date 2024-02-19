@@ -16,7 +16,7 @@ import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.AS_ID
 import wiles.shared.constants.Tokens.BRACKET_END_ID
 import wiles.shared.constants.Tokens.BRACKET_START_ID
-import wiles.shared.constants.Tokens.CLASS_ID
+import wiles.shared.constants.Tokens.DATA_ID
 import wiles.shared.constants.Tokens.MAYBE_ID
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
@@ -69,7 +69,7 @@ class TypeAnnotationStatement(context: ParserContext, private val allowGenerics 
                 subtypes.add(funStatement)
                 transmitter.expect(tokenOf(BRACKET_END_ID))
             }
-            if(name == CLASS_ID) {
+            if(name == DATA_ID) {
                 transmitter.expect(tokenOf(BRACKET_START_ID))
                 val classComponents : ArrayList<AbstractStatement> = arrayListOf()
                 while(transmitter.expectMaybe(tokenOf(BRACKET_END_ID).removeWhen(WhenRemoveToken.Never)).isEmpty)

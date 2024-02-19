@@ -68,8 +68,7 @@ object Tokens {
     const val IS_ID = "IS"
     const val AS_ID = "AS"
     const val TYPEDEF_ID = "TYPEDEF"
-    const val CLASS_ID = "CLASS"
-    const val OBJECT_ID = "OBJECT"
+    const val DATA_ID = "DATA"
 
     const val TRUE_ID = "!true"
     const val FALSE_ID = "!false"
@@ -126,8 +125,7 @@ object Tokens {
         KEYWORDS["arg"] = ANON_ARG_ID
         KEYWORDS["as"] = AS_ID
         KEYWORDS["typedef"] = TYPEDEF_ID
-        KEYWORDS["class"] = CLASS_ID
-        KEYWORDS["object"] = OBJECT_ID
+        KEYWORDS["data"] = DATA_ID
 
         SYMBOLS["+"] = PLUS_ID
         SYMBOLS["-"] = MINUS_ID

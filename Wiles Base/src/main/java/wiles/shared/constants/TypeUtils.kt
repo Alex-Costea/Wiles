@@ -5,7 +5,7 @@ import wiles.checker.data.GenericTypesMap
 import wiles.checker.statics.InferrerUtils
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
-import wiles.shared.constants.Tokens.CLASS_ID
+import wiles.shared.constants.Tokens.DATA_ID
 import wiles.shared.constants.Tokens.DECLARE_ID
 import wiles.shared.constants.TypeConstants.INT_TYPE
 import wiles.shared.constants.Types.COLLECTION_ID
@@ -228,7 +228,7 @@ object TypeUtils {
                     isFormerSuperTypeOfLatter(supertype.components[1],subtype.components[1], getMinus = getMinus,
                         genericTypes = genericTypes)
 
-        else if(supertype.name == CLASS_ID && subtype.name == CLASS_ID)
+        else if(supertype.name == DATA_ID && subtype.name == DATA_ID)
         {
             return checkClassIsSubtype(supertype, subtype, genericTypes?: GenericTypesMap())
         }

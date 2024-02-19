@@ -6,16 +6,15 @@ import wiles.checker.exceptions.InferenceFailException
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
-import wiles.shared.constants.Tokens.CLASS_ID
+import wiles.shared.constants.Tokens.DATA_ID
 import wiles.shared.constants.Tokens.IDENTIFIER_START
-import wiles.shared.constants.Tokens.OBJECT_ID
 import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 import wiles.shared.constants.Types.DICT_ID
 
 class InferFromDict(details: InferrerDetails) : InferFromStatement(details) {
     override fun infer() {
         assert(statement.syntaxType==SyntaxType.DICT)
-        if(statement.name != OBJECT_ID)
+        if(statement.name != DATA_ID)
         {
             val dictStatedType = if(statement.components.isNotEmpty() && statement.components[0].syntaxType ==
                 SyntaxType.TYPE) statement.components[0] else null
@@ -78,7 +77,7 @@ class InferFromDict(details: InferrerDetails) : InferFromStatement(details) {
                 components = finalTypes.map { it }.toMutableList()))
         }
         else{
-            val inferredType = JSONStatement(name = CLASS_ID, syntaxType = SyntaxType.TYPE)
+            val inferredType = JSONStatement(name = DATA_ID, syntaxType = SyntaxType.TYPE)
             var isKey = true
             for(component in statement.components)
             {

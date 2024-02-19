@@ -34,7 +34,7 @@ import wiles.shared.constants.Tokens.OR_ID
 import wiles.shared.constants.Tokens.STRING_START
 import wiles.shared.constants.TypeConstants
 import wiles.shared.constants.TypeConstants.ACCESS_OPERATION
-import wiles.shared.constants.TypeConstants.CLASS_TYPE
+import wiles.shared.constants.TypeConstants.DATA_TYPE
 import wiles.shared.constants.TypeConstants.NOTHING_TOKEN
 import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 import wiles.shared.constants.TypeUtils.makeList
@@ -228,7 +228,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
             {
                 var methodCallComponents = mutableListOf<JSONStatement>()
                 var shouldTransform = true
-                if(isFormerSuperTypeOfLatter(CLASS_TYPE,leftType))
+                if(isFormerSuperTypeOfLatter(DATA_TYPE,leftType))
                 {
                     for(component in leftType.components)
                     {
