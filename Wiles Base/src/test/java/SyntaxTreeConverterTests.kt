@@ -265,8 +265,8 @@ class SyntaxTreeConverterTests {
     @Test
     fun forTest()
     {
-        assertResults(null,"CODE_BLOCK(FOR(!i; IN; EXPRESSION(!list); FROM; EXPRESSION(#1); TO; EXPRESSION(#100); CODE_BLOCK(EXPRESSION(!writeline; APPLY; METHOD_CALL(EXPRESSION(@hello!))))))",
-            FOR_ID, "!i", IN_ID, "!list", FROM_ID, "#1", TO_ID, "#100", NEWLINE_ID, START_BLOCK_ID, NEWLINE_ID, "!writeline", PAREN_START_ID, "@hello!", PAREN_END_ID, NEWLINE_ID, END_BLOCK_ID)
+        assertResults(null,"CODE_BLOCK(FOR(!i; IN; EXPRESSION(!list); FROM; EXPRESSION(#1); TO; EXPRESSION(#100); CODE_BLOCK(EXPRESSION(!write_line; APPLY; METHOD_CALL(EXPRESSION(@hello!))))))",
+            FOR_ID, "!i", IN_ID, "!list", FROM_ID, "#1", TO_ID, "#100", NEWLINE_ID, START_BLOCK_ID, NEWLINE_ID, "!write_line", PAREN_START_ID, "@hello!", PAREN_END_ID, NEWLINE_ID, END_BLOCK_ID)
         assertResults(null, "CODE_BLOCK(FOR(!i; CODE_BLOCK(EXPRESSION(!nothing))))",
             FOR_ID, "!i", DO_ID, NOTHING_ID)
     }

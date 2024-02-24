@@ -54,7 +54,7 @@ object StandardLibrary {
     val defaultInterpreterVars = InterpreterVariableMap()
 
     private const val WRITE = "!write"
-    private const val WRITELINE = "!writeline"
+    private const val WRITELINE = "!write_line"
     private const val PANIC = "!panic"
     private const val IGNORE = "!ignore"
     private const val MODULO = "!modulo"

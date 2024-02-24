@@ -78,7 +78,7 @@
 - Declare using the `as` keyword
 
 ### Standard library
-- `write`, `writeline`: write object to the command line
+- `write`, `write_line`: write object to the command line
 - `panic`: print an error message and exit
 - `ignore`: ignore the value
 - `modulo(x,y)`: calculate the modulo

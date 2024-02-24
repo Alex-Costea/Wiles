@@ -38,11 +38,11 @@ Unless this project blows up, probably not. Languages much bigger and widely use
 ## Examples
 ### Hello World
 ```
-writeline("Hello, world!")
+write_line("Hello, world!")
 ```
 or
 ```
-"Hello, world!".writeline
+"Hello, world!".write_line
 ```
 ### FizzBuzz
 ```
@@ -55,7 +55,7 @@ begin
         text := text + "Buzz"
     if text = "" do
         text := i.as_text
-    writeline(text)
+    write_line(text)
 end 
 ```
 ### Minimum value
@@ -87,5 +87,5 @@ end
 
 let result := min(list := read_list())
 when result is nothing do panic("Error: no min found!")
-writeline("Min found: " + result)
+write_line("Min found: " + result)
 ```

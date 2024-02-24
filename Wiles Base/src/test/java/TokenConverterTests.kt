@@ -109,9 +109,9 @@ class TokenConverterTests {
     fun whitespaceTest()
     {
         tokenConverterEquals("while\ttrue do\n" +
-                "\t\twriteline(\t\"\thi!\\\n" +
+                "\t\twrite_line(\t\"\thi!\\\n" +
                 "what's up?\") #this is a multi line \\\n" +
-                "comment", arrayOf(WHILE_ID, TRUE_ID, DO_ID, NEWLINE_ID, "!writeline", "PAREN_START", "@\thi!\n" +
+                "comment", arrayOf(WHILE_ID, TRUE_ID, DO_ID, NEWLINE_ID, "!write_line", "PAREN_START", "@\thi!\n" +
                 "what's up?", PAREN_END_ID))
     }
 }

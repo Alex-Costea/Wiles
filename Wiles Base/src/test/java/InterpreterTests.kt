@@ -1090,7 +1090,7 @@ class InterpreterTests {
   }, {
     "type" : "EXPRESSION",
     "components" : [ {
-      "name" : "!writeline",
+      "name" : "!write_line",
       "type" : "TOKEN"
     }, {
       "name" : "METHOD|APPLY|METHOD_CALL",
@@ -1133,7 +1133,7 @@ class InterpreterTests {
             if i = 13 do reached13 := true
             if i = 20 do stop
             if i = 21 do reached21 := true
-            writeline("" + i)
+            write_line("" + i)
         end
          */
         val vars = getVars("""{
@@ -1366,7 +1366,7 @@ class InterpreterTests {
       }, {
         "type" : "EXPRESSION",
         "components" : [ {
-          "name" : "!writeline",
+          "name" : "!write_line",
           "type" : "TOKEN"
         }, {
           "name" : "METHOD|APPLY|METHOD_CALL",
@@ -2210,7 +2210,7 @@ class InterpreterTests {
         /*
         let a := mut [1, "hi", nothing] : anything?
         let b := (a.get(2)).as_text
-        b.writeline
+        b.write_line
          */
         val vars2 = getVars("""{
   "parsed": true,
@@ -2420,7 +2420,7 @@ class InterpreterTests {
       "type": "EXPRESSION",
       "components": [
         {
-          "name": "!writeline",
+          "name": "!write_line",
           "type": "TOKEN"
         },
         {
@@ -2468,7 +2468,7 @@ class InterpreterTests {
             list.set([4, 5, 6])
             b := b + elem
         end
-        writeline(b)
+        write_line(b)
          */
         val vars3 = getVars("""{
   "type" : "CODE_BLOCK",
@@ -2658,7 +2658,7 @@ class InterpreterTests {
   }, {
     "type" : "EXPRESSION",
     "components" : [ {
-      "name" : "!writeline",
+      "name" : "!write_line",
       "type" : "TOKEN"
     }, {
       "name" : "METHOD|APPLY|METHOD_CALL",
@@ -3784,7 +3784,7 @@ class InterpreterTests {
     {
         /*
         let a : int? := 10
-        writeline(a.content)
+        write_line(a.content)
          */
 
         val vars10 = getVars("""{

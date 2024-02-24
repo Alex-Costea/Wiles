@@ -56,10 +56,10 @@ end
 let result := min(list := read_list())
 when result is nothing
 begin
-    writeline("Error: no min found!")
+    write_line("Error: no min found!")
     panic()
 end
-writeline("Min found: " + result)
+write_line("Min found: " + result)
 """
 
         assertEquals(getOutput(code,"4\n" +
@@ -72,19 +72,19 @@ writeline("Min found: " + result)
         val code2 = """
             let list := [1,2,3]
             let text := "[1,2,3]"
-            writeline(list.size + text.size)
+            write_line(list.size + text.size)
 """
         assertEquals(getOutput(code2),"10\n")
 
         val code3 = """
             typedef integer := int
             let a : integer := 10
-            writeline(integer)"""
+            write_line(integer)"""
         assertEquals(getOutput(code3),"TYPE INT\n")
 
         val code4 = """
             let var a := 10
-            let func := do writeline(import a)
+            let func := do write_line(import a)
             a := 100
             func()
         """
@@ -95,23 +95,23 @@ writeline("Min found: " + result)
             let list := mut [mut 1, a, mut 3]
             list.remove(at := 0)
             list.update(at := 0, mut 10)
-            writeline(a)
-            writeline(list)
+            write_line(a)
+            write_line(list)
         """
         assertEquals(getOutput(code5),"2\n[10, 3]\n")
 
         val code6 = """
             let var a := 10
             let func := do import a := 100
-            writeline(a)
+            write_line(a)
             func()
-            writeline(a)
+            write_line(a)
         """
         assertEquals(getOutput(code6),"10\n100\n")
 
         val code7 = """
             let a := 10
-            let b := fun(b := import a) do writeline(b)
+            let b := fun(b := import a) do write_line(b)
             b()
         """
         assertEquals(getOutput(code7),"10\n")
@@ -122,9 +122,9 @@ writeline("Min found: " + result)
         when a begin
             is mut[list[int]] begin
                 let b := a.get(1)
-                writeline(b + 10)
+                write_line(b + 10)
             end
-            default do writeline("not mut[list[int]]")
+            default do write_line("not mut[list[int]]")
         end
         """
         assertEquals(getOutput(code8),"not mut[list[int]]\n")
@@ -132,13 +132,13 @@ writeline("Min found: " + result)
         val code9 = """
         let var a : anything := 1
         a := true
-        writeline(a.type)
+        write_line(a.type)
         """
         assertEquals(getOutput(code9),"TYPE BOOLEAN\n")
 
         val code10 = """
         let list := [1,2,3]
-        writeline(list.get(0))
+        write_line(list.get(0))
         """
         assertEquals(getOutput(code10),"1\n")
 
@@ -151,14 +151,14 @@ writeline("Min found: " + result)
                 object.add(at := 0, "hi!")
                 yield nothing
             end
-            writeline("oops!")
+            write_line("oops!")
             panic()
         end
         
         let list := mut [] : int
         func(list)
         let a := list.get(0)
-        writeline(a>0)
+        write_line(a>0)
         """
         assertEquals(getOutput(code11),"oops!\n")
 
@@ -166,22 +166,22 @@ writeline("Min found: " + result)
         let dict := mut {"alex" -> 7, "diana" -> 10}
         dict.add(at := "jim", 15)
         dict.update(at := "alex", 3)
-        writeline(dict.get(at := "diana"))
+        write_line(dict.get(at := "diana"))
         dict.remove(at := "diana")
-        writeline(dict)
+        write_line(dict)
         """
         assertEquals(getOutput(code12),"10\n{alex -> 3, jim -> 15}\n")
 
         val code13 = """
         let a := mut {1 -> "hi!", 2 -> "bye!"} : int? -> text?
-        writeline(a.keys)
-        writeline(a.type)
+        write_line(a.keys)
+        write_line(a.type)
         a.add(at := nothing, nothing)
-        writeline(a.keys)
-        writeline(a.type)
+        write_line(a.keys)
+        write_line(a.type)
         a.remove(at := nothing)
-        writeline(a.keys)
-        writeline(a.type)
+        write_line(a.keys)
+        write_line(a.type)
         """
         assertEquals(getOutput(code13),"[1, 2]\n" +
                 "TYPE MUTABLE; (TYPE DICT; (TYPE INT; TYPE STRING))\n" +
@@ -193,19 +193,19 @@ writeline("Min found: " + result)
         val code14 = """
         let a := mut {1 -> "hi!", 2 -> "bye!"} : int? -> text?
         let b := mut {1 -> "hi!", 2 -> "bye!"}
-        writeline(a=b)
+        write_line(a=b)
         """
         assertEquals(getOutput(code14),"true\n")
 
         val code15 = """
         let b := {} : int -> int
-        writeline(b.type)
+        write_line(b.type)
         """
         assertEquals(getOutput(code15),"TYPE DICT; (TYPE INT; TYPE INT)\n")
 
         val code16= """
         let b := {"hi" -> 1, "bye!" -> 2}
-        writeline(b)
+        write_line(b)
         """
         assertEquals(getOutput(code16),"{hi -> 1, bye! -> 2}\n")
 
@@ -216,12 +216,12 @@ writeline("Min found: " + result)
 
         val code18 = """
             let a := fun(x : int or text? as T) do nothing
-            writeline(a)
+            write_line(a)
         """
         assertEquals(getOutput(code18),"METHOD(TYPE !nothing; DECLARATION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE INT; TYPE EITHER; (TYPE STRING; TYPE !nothing)); DECLARE); !x))\n")
 
         val code19="""
-            let f := fun(x : int) do writeline(x)
+            let f := fun(x : int) do write_line(x)
 
             when f is fun[x : int] begin
                 f(x := 10)
@@ -232,15 +232,15 @@ writeline("Min found: " + result)
         val code20 ="""
             typedef int2 := int
             let x := 2
-            when x is int2 do writeline("hi")
+            when x is int2 do write_line("hi")
         """
         assertEquals(getOutput(code20),"hi\n")
 
         val code21="""
             let me := data{name := "alex", age := 25}
-            writeline(me.name)
-            writeline(me.age)
-            writeline(me.type)
+            write_line(me.name)
+            write_line(me.age)
+            write_line(me.type)
         """
         assertEquals(getOutput(code21),"alex\n" +
                 "25\n" +
@@ -249,21 +249,21 @@ writeline("Min found: " + result)
         val code22="""
             typedef has_name := data[name : text]
             let me : has_name := data{name := "alex", age := 25}
-            when me is has_name do writeline(me)
+            when me is has_name do write_line(me)
         """
         assertEquals(getOutput(code22),"{name -> alex, age -> 25}\n")
 
         val code23="""
             let x := data{y := 2 + 3}
-            writeline(x.y)
+            write_line(x.y)
         """
         assertEquals(getOutput(code23),"5\n")
 
         val code24="""
             let ❤️ := data{😂 := 5, 🏳️‍🌈 := 25, 👩‍👩‍👧‍👧 := 125}
-            writeline(❤️.😂)
-            writeline(❤️.🏳️‍🌈)
-            writeline(❤️.👩‍👩‍👧‍👧)
+            write_line(❤️.😂)
+            write_line(❤️.🏳️‍🌈)
+            write_line(❤️.👩‍👩‍👧‍👧)
         """
         assertEquals(getOutput(code24),"5\n25\n125\n")
     }

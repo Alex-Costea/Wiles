@@ -592,7 +592,7 @@ class CheckerTests {
   }, {
     "type" : "EXPRESSION",
     "components" : [ {
-      "name" : "!writeline",
+      "name" : "!write_line",
       "type" : "TOKEN",
       "location" : {
         "line" : 2,
@@ -620,7 +620,7 @@ class CheckerTests {
       } ]
     } ]
   } ]
-}""","CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE INT; TYPE !nothing); !a; EXPRESSION(TYPE INT; #2)); EXPRESSION(!writeline; APPLY; METHOD_CALL(TYPE METHOD_CALL; (METHOD_CALL(EXPRESSION(TYPE EITHER; (TYPE INT; TYPE !nothing); !a))))))")
+}""","CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE INT; TYPE !nothing); !a; EXPRESSION(TYPE INT; #2)); EXPRESSION(!write_line; APPLY; METHOD_CALL(TYPE METHOD_CALL; (METHOD_CALL(EXPRESSION(TYPE EITHER; (TYPE INT; TYPE !nothing); !a))))))")
 
         checkResult(createExceptions(ExpectedIdentifierException(NULL_LOCATION)),"""{
   "parsed" : true,
@@ -2341,14 +2341,14 @@ class CheckerTests {
     @Test
     fun methodCallTest()
     {
-        //writeline([1,2,3].fun(arg list: list[int]) do yield 10)
+        //write_line([1,2,3].fun(arg list: list[int]) do yield 10)
         checkResult(null,"""{
   "parsed" : true,
   "type" : "CODE_BLOCK",
   "components" : [ {
     "type" : "EXPRESSION",
     "components" : [ {
-      "name" : "!writeline",
+      "name" : "!write_line",
       "type" : "TOKEN",
       "location" : {
         "line" : 1,
@@ -2462,17 +2462,17 @@ class CheckerTests {
       } ]
     } ]
   } ]
-}""","CODE_BLOCK(EXPRESSION(TYPE !nothing; !writeline; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!text; ASSIGN; EXPRESSION(TYPE INT; METHOD(TYPE INT; DECLARATION ANON_ARG; (TYPE LIST; (TYPE INT); !list); CODE_BLOCK(RETURN(EXPRESSION(TYPE INT; #10)))); METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!list; ASSIGN; EXPRESSION(TYPE LIST; (TYPE INT); LIST(TYPE INT; EXPRESSION(TYPE INT; #1); EXPRESSION(TYPE INT; #2); EXPRESSION(TYPE INT; #3))))))))))")
+}""","CODE_BLOCK(EXPRESSION(TYPE !nothing; !write_line; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!text; ASSIGN; EXPRESSION(TYPE INT; METHOD(TYPE INT; DECLARATION ANON_ARG; (TYPE LIST; (TYPE INT); !list); CODE_BLOCK(RETURN(EXPRESSION(TYPE INT; #10)))); METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!list; ASSIGN; EXPRESSION(TYPE LIST; (TYPE INT); LIST(TYPE INT; EXPRESSION(TYPE INT; #1); EXPRESSION(TYPE INT; #2); EXPRESSION(TYPE INT; #3))))))))))")
 
 
-        //writeline([1,2,3].size)
+        //write_line([1,2,3].size)
         checkResult(null,"""{
   "parsed" : true,
   "type" : "CODE_BLOCK",
   "components" : [ {
     "type" : "EXPRESSION",
     "components" : [ {
-      "name" : "!writeline",
+      "name" : "!write_line",
       "type" : "TOKEN",
       "location" : {
         "line" : 1,
@@ -2544,7 +2544,7 @@ class CheckerTests {
       } ]
     } ]
   } ]
-}""","CODE_BLOCK(EXPRESSION(TYPE !nothing; !writeline; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!text; ASSIGN; EXPRESSION(TYPE INT; !size; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE LIST; (TYPE INT); LIST(TYPE INT; EXPRESSION(TYPE INT; #1); EXPRESSION(TYPE INT; #2); EXPRESSION(TYPE INT; #3))))))))))")
+}""","CODE_BLOCK(EXPRESSION(TYPE !nothing; !write_line; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!text; ASSIGN; EXPRESSION(TYPE INT; !size; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE LIST; (TYPE INT); LIST(TYPE INT; EXPRESSION(TYPE INT; #1); EXPRESSION(TYPE INT; #2); EXPRESSION(TYPE INT; #3))))))))))")
 
         //let a := 10.modulo(3)
         checkResult(null,"""{
@@ -4938,7 +4938,7 @@ class CheckerTests {
         /*
         let list : either[list[int],list[text]] := [1,2,3]
         for i in list from 0 to 2 do
-            writeline(i.as_text)
+            write_line(i.as_text)
          */
         checkResult(null,"""{
   "parsed" : true,
@@ -5096,7 +5096,7 @@ class CheckerTests {
       "components" : [ {
         "type" : "EXPRESSION",
         "components" : [ {
-          "name" : "!writeline",
+          "name" : "!write_line",
           "type" : "TOKEN",
           "location" : {
             "line" : 3,
@@ -5140,7 +5140,7 @@ class CheckerTests {
       } ]
     } ]
   } ]
-}""","CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE LIST; (TYPE INT); TYPE LIST; (TYPE STRING)); !list; EXPRESSION(TYPE LIST; (TYPE INT); LIST(TYPE INT; EXPRESSION(TYPE INT; #1); EXPRESSION(TYPE INT; #2); EXPRESSION(TYPE INT; #3)))); FOR(TYPE EITHER; (TYPE INT; TYPE STRING); !i; IN; EXPRESSION(TYPE EITHER; (TYPE LIST; (TYPE INT); TYPE LIST; (TYPE STRING)); !list); FROM; EXPRESSION(TYPE INT; #0); TO; EXPRESSION(TYPE INT; #2); CODE_BLOCK(EXPRESSION(TYPE !nothing; !writeline; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!text; ASSIGN; EXPRESSION(TYPE STRING; !as_text; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE EITHER; (TYPE INT; TYPE STRING); !i))))))))))")
+}""","CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE LIST; (TYPE INT); TYPE LIST; (TYPE STRING)); !list; EXPRESSION(TYPE LIST; (TYPE INT); LIST(TYPE INT; EXPRESSION(TYPE INT; #1); EXPRESSION(TYPE INT; #2); EXPRESSION(TYPE INT; #3)))); FOR(TYPE EITHER; (TYPE INT; TYPE STRING); !i; IN; EXPRESSION(TYPE EITHER; (TYPE LIST; (TYPE INT); TYPE LIST; (TYPE STRING)); !list); FROM; EXPRESSION(TYPE INT; #0); TO; EXPRESSION(TYPE INT; #2); CODE_BLOCK(EXPRESSION(TYPE !nothing; !write_line; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!text; ASSIGN; EXPRESSION(TYPE STRING; !as_text; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE EITHER; (TYPE INT; TYPE STRING); !i))))))))))")
     }
 
     @Test
@@ -5149,7 +5149,7 @@ class CheckerTests {
         /*
         while true do
             let text := "hi!"
-        writeline(text)
+        write_line(text)
          */
         checkResult(createExceptions(UnknownIdentifierException(NULL_LOCATION)),"""{
   "parsed" : true,
@@ -5193,7 +5193,7 @@ class CheckerTests {
   }, {
     "type" : "EXPRESSION",
     "components" : [ {
-      "name" : "!writeline",
+      "name" : "!write_line",
       "type" : "TOKEN",
       "location" : {
         "line" : 3,
@@ -5221,7 +5221,7 @@ class CheckerTests {
       } ]
     } ]
   } ]
-}""","CODE_BLOCK(WHILE(EXPRESSION(TYPE BOOLEAN; !true); CODE_BLOCK(DECLARATION(TYPE STRING; !text; EXPRESSION(TYPE STRING; @hi!)))); EXPRESSION(!writeline; APPLY; METHOD_CALL(EXPRESSION(!text))))")
+}""","CODE_BLOCK(WHILE(EXPRESSION(TYPE BOOLEAN; !true); CODE_BLOCK(DECLARATION(TYPE STRING; !text; EXPRESSION(TYPE STRING; @hi!)))); EXPRESSION(!write_line; APPLY; METHOD_CALL(EXPRESSION(!text))))")
 
     checkResult(createExceptions(ConflictingTypeDefinitionException(NULL_LOCATION,"TYPE BOOLEAN","TYPE INT")),"""{
   "parsed" : true,
@@ -7402,7 +7402,7 @@ class CheckerTests {
         /*
         let add_func := fun(arg list : list[anything? as T], arg elem : T) -> list[T] do
             yield list + [elem]
-        writeline([1,2].add_func(3))
+        write_line([1,2].add_func(3))
          */
         checkResult(null,"""{
   "parsed" : true,
@@ -7555,7 +7555,7 @@ class CheckerTests {
   }, {
     "type" : "EXPRESSION",
     "components" : [ {
-      "name" : "!writeline",
+      "name" : "!write_line",
       "type" : "TOKEN",
       "location" : {
         "line" : 3,
@@ -7640,12 +7640,12 @@ class CheckerTests {
       } ]
     } ]
   } ]
-}""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing))); DECLARATION ANON_ARG; (TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing); DECLARE)); !list); DECLARATION ANON_ARG; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem))); !add_func; EXPRESSION(TYPE METHOD; (METHOD(TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing))); DECLARATION ANON_ARG; (TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing); DECLARE)); !list); DECLARATION ANON_ARG; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem))); METHOD(TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing))); DECLARATION ANON_ARG; (TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing); DECLARE)); !list); DECLARATION ANON_ARG; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem); CODE_BLOCK(RETURN(EXPRESSION(TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing); DECLARE)); !list; LIST|PLUS|LIST; LIST(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); EXPRESSION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem)))))))); EXPRESSION(TYPE !nothing; !writeline; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!text; ASSIGN; EXPRESSION(TYPE LIST; (TYPE INT); !add_func; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!list; ASSIGN; EXPRESSION(TYPE LIST; (TYPE INT); LIST(TYPE INT; EXPRESSION(TYPE INT; #1); EXPRESSION(TYPE INT; #2)))); EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE INT; #3))))))))")
+}""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing))); DECLARATION ANON_ARG; (TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing); DECLARE)); !list); DECLARATION ANON_ARG; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem))); !add_func; EXPRESSION(TYPE METHOD; (METHOD(TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing))); DECLARATION ANON_ARG; (TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing); DECLARE)); !list); DECLARATION ANON_ARG; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem))); METHOD(TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing))); DECLARATION ANON_ARG; (TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing); DECLARE)); !list); DECLARATION ANON_ARG; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem); CODE_BLOCK(RETURN(EXPRESSION(TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing); DECLARE)); !list; LIST|PLUS|LIST; LIST(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); EXPRESSION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem)))))))); EXPRESSION(TYPE !nothing; !write_line; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!text; ASSIGN; EXPRESSION(TYPE LIST; (TYPE INT); !add_func; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!list; ASSIGN; EXPRESSION(TYPE LIST; (TYPE INT); LIST(TYPE INT; EXPRESSION(TYPE INT; #1); EXPRESSION(TYPE INT; #2)))); EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE INT; #3))))))))")
         /*
         let run_func := fun(arg func : fun[->anything? as T]) -> T
             do yield func()
 
-        writeline(run_func(do yield 10)+20)
+        write_line(run_func(do yield 10)+20)
          */
     checkResult(null,"""{
   "parsed" : true,
@@ -7760,7 +7760,7 @@ class CheckerTests {
   }, {
     "type" : "EXPRESSION",
     "components" : [ {
-      "name" : "!writeline",
+      "name" : "!write_line",
       "type" : "TOKEN",
       "location" : {
         "line" : 3,
@@ -7841,7 +7841,7 @@ class CheckerTests {
       } ]
     } ]
   } ]
-}""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); DECLARATION ANON_ARG; (TYPE METHOD; (METHOD(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing); DECLARE))); !func))); !run_func; EXPRESSION(TYPE METHOD; (METHOD(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); DECLARATION ANON_ARG; (TYPE METHOD; (METHOD(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing); DECLARE))); !func))); METHOD(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); DECLARATION ANON_ARG; (TYPE METHOD; (METHOD(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing); DECLARE))); !func); CODE_BLOCK(RETURN(EXPRESSION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing); DECLARE); !func; METHOD|APPLY|METHOD_CALL; METHOD_CALL)))))); EXPRESSION(TYPE !nothing; !writeline; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!text; ASSIGN; EXPRESSION(TYPE INT; EXPRESSION(TYPE INT; !run_func; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!func; ASSIGN; EXPRESSION(TYPE METHOD; (METHOD(TYPE INT)); METHOD(TYPE INT; CODE_BLOCK(RETURN(EXPRESSION(TYPE INT; #10)))))))); INT|PLUS|INT; #20)))))")
+}""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); DECLARATION ANON_ARG; (TYPE METHOD; (METHOD(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing); DECLARE))); !func))); !run_func; EXPRESSION(TYPE METHOD; (METHOD(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); DECLARATION ANON_ARG; (TYPE METHOD; (METHOD(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing); DECLARE))); !func))); METHOD(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); DECLARATION ANON_ARG; (TYPE METHOD; (METHOD(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing); DECLARE))); !func); CODE_BLOCK(RETURN(EXPRESSION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing); DECLARE); !func; METHOD|APPLY|METHOD_CALL; METHOD_CALL)))))); EXPRESSION(TYPE !nothing; !write_line; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!text; ASSIGN; EXPRESSION(TYPE INT; EXPRESSION(TYPE INT; !run_func; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!func; ASSIGN; EXPRESSION(TYPE METHOD; (METHOD(TYPE INT)); METHOD(TYPE INT; CODE_BLOCK(RETURN(EXPRESSION(TYPE INT; #10)))))))); INT|PLUS|INT; #20)))))")
         /*
         let func : fun[arg x : anything as T -> T]
         func := fun(arg x : int) -> int do yield x
