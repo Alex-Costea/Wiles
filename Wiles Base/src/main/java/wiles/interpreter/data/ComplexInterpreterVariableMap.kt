@@ -14,6 +14,10 @@ class ComplexInterpreterVariableMap
         return list1 + list2
     }
 
+    override fun declare(name: String, value: ObjectDetails) {
+        innerMap[name] = value
+    }
+
     override fun set(name: String, value: ObjectDetails) {
         if(innerMap.containsKey(name))
             innerMap[name] = value

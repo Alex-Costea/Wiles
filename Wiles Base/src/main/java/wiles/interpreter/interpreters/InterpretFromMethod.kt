@@ -35,7 +35,7 @@ class InterpretFromMethod(
             val innerVars = InterpreterVariableMap()
             innerVars.putAll(givenVars)
             innerVars.putAll(uniqueFunctionDeclarationVars)
-            val funcVars= ComplexInterpreterVariableMap(innerVars, variables)
+            val funcVars = ComplexInterpreterVariableMap(innerVars, variables)
             val genericTypesMap = GenericTypesMap()
             for(component in type.components)
             {

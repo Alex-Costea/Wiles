@@ -11,7 +11,7 @@ class InterpretFromDeclaration(statement: JSONStatement, variables: InterpreterV
             val interpretFromExpression = InterpretFromExpression(statement.components[2], variables, context)
             interpretFromExpression.interpret()
 
-            variables[statement.components[1].name] = interpretFromExpression.reference
+            variables.declare(statement.components[1].name,interpretFromExpression.reference)
         }
     }
 }

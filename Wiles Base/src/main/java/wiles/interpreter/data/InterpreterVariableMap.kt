@@ -21,6 +21,10 @@ class InterpreterVariableMap : InterpreterVariableMapInterface
         return map.filter(predicate).toList()
     }
 
+    override fun declare(name: String, value: ObjectDetails) {
+        this[name] = value
+    }
+
     fun putAll(newMap: InterpreterVariableMap) {
         map.putAll(newMap.map)
     }

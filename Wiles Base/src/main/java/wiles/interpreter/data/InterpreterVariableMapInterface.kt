@@ -9,4 +9,6 @@ interface InterpreterVariableMapInterface{
     fun containsKey(key: String): Boolean
     fun putAll(newMap: List<Pair<String, ObjectDetails>>)
     fun filter(predicate: (Map.Entry<String, ObjectDetails>) -> Boolean): List<Pair<String, ObjectDetails>>
+
+    fun declare(name : String, value : ObjectDetails)
 }
