@@ -14,7 +14,7 @@ object Utils {
     @JvmStatic
     fun isAlphabetic(c: Int): Boolean {
         return Character.isAlphabetic(c) || c == DIGIT_SEPARATOR.code
-                || (Character.isEmoji(c) && c > 127) || (c == 8205)
+                || (Character.isEmoji(c) && c > 127) || (c == 8205) || (c == 65039)
     }
 
     @JvmStatic

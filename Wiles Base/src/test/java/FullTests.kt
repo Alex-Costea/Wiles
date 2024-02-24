@@ -258,5 +258,13 @@ writeline("Min found: " + result)
             writeline(x.y)
         """
         assertEquals(getOutput(code23),"5\n")
+
+        val code24="""
+            let ❤️ := data{😂 := 5, 🏳️‍🌈 := 25, 👩‍👩‍👧‍👧 := 125}
+            writeline(❤️.😂)
+            writeline(❤️.🏳️‍🌈)
+            writeline(❤️.👩‍👩‍👧‍👧)
+        """
+        assertEquals(getOutput(code24),"5\n25\n125\n")
     }
 }
