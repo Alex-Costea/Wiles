@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.*;
@@ -49,8 +50,11 @@ public class WilesWebBackendApplication {
 		}
 		catch (TimeoutException | InterruptedException | ExecutionException e)
 		{
+			System.out.println(e.getMessage());
+			System.out.println(Arrays.toString(e.getStackTrace()));
 			return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT)
-					.body(new CompilationResponse("", "Interpreter timed out!"));
+					.body(new CompilationResponse("",
+							"Interpreter timed out! Reason:" + e.getMessage()));
 		}
 		finally {
 			executor.shutdownNow();
