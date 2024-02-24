@@ -54,7 +54,6 @@
 - `:=` (assign, declare or name parameters)
 - `.` (`b.a⟨ ( ⟪ param ⟫ ) ⟩` is `a(b,⟨⟪ param ⟫⟩ )`, also used for field access)
 - `:` (type annotation)
--`+=` (append to end of mutable list)
 - `()` (order of operations, function access)
 - `[]` (list literals, subcomponents in type definitions)
 - `,` (separator between elements)
