@@ -4,7 +4,6 @@ import wiles.shared.JSONStatement
 import wiles.shared.constants.Tokens.EQUALS_ID
 import wiles.shared.constants.Tokens.IMPORT_ID
 import wiles.shared.constants.Tokens.NOT_EQUAL_ID
-import wiles.shared.constants.Tokens.PLUS_ID
 import wiles.shared.constants.TypeConstants.AND_OPERATION
 import wiles.shared.constants.TypeConstants.ASSIGN_OPERATION
 import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
@@ -13,7 +12,6 @@ import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
 import wiles.shared.constants.TypeConstants.INT_TYPE
 import wiles.shared.constants.TypeConstants.LARGER_EQUALS_OPERATION
 import wiles.shared.constants.TypeConstants.LARGER_OPERATION
-import wiles.shared.constants.TypeConstants.LIST_OF_NULLABLE_ANYTHING_TYPE
 import wiles.shared.constants.TypeConstants.MINUS_OPERATION
 import wiles.shared.constants.TypeConstants.MUTABLE_OPERATION
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
@@ -132,11 +130,6 @@ object SimpleTypeGenerator {
                     || isFormerSuperTypeOfLatter(unboxedTriple.first,unboxedTriple.third)
                     || isFormerSuperTypeOfLatter(unboxedTriple.third,unboxedTriple.first)))
             return BOOLEAN_TYPE
-
-        if(triple.second.name == PLUS_ID
-            && isFormerSuperTypeOfLatter(LIST_OF_NULLABLE_ANYTHING_TYPE, triple.first)
-            && isFormerSuperTypeOfLatter(triple.first, triple.third))
-                return triple.first.copyRemovingLocation()
 
         if(unboxedTriple.second == MUTABLE_OPERATION) {
             assert(unboxedTriple.first == NOTHING_TYPE)
