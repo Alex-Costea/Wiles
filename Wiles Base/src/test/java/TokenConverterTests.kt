@@ -94,6 +94,8 @@ class TokenConverterTests {
                     "My name is \"Alex\"\n" +
                     "This is a backslash: \\\n" +
                     "You write it as such: \\b;"))
+        tokenConverterThrows(0,"\"This is a backslash : \\. Cool, right?\"",
+            StringInvalidException::class.java, null, null)
     }
 
     @Test
