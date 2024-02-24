@@ -9,7 +9,6 @@ import wiles.interpreter.exceptions.ReturnSignal
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.StandardLibrary.NOTHING_REF
-import wiles.shared.constants.StandardLibrary.defaultInterpreterVars
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 import wiles.shared.constants.Types
@@ -25,18 +24,20 @@ class InterpretFromMethod(
     override fun interpret() {
         val type = statement.copyRemovingLocation()
         type.components.removeLast()
-        val vars = variables.copy()
         val codeBlock = statement.components.last()
+        val functionDeclarationVars = variables.copy()
         for(component in statement.components.dropLast(1).drop(1))
         {
-            val interpreter = InterpretFromDeclaration(component, vars, context)
+            val interpreter = InterpretFromDeclaration(component, functionDeclarationVars, context)
             interpreter.interpret()
         }
+        val uniqueFunctionDeclarationVars = functionDeclarationVars.filter { !variables.containsKey(it.key) }
         val functionType = JSONStatement(name = METHOD_ID, syntaxType = SyntaxType.TYPE, components = mutableListOf(type))
         reference = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ givenVars, _ ->
             val funcVars = InterpreterVariableMap()
-            funcVars.putAll(vars.filter { it.key !in givenVars })
+            funcVars.putAll(variables.filter { it.key !in givenVars })
             funcVars.putAll(givenVars)
+            funcVars.putAll(uniqueFunctionDeclarationVars)
             val genericTypesMap = GenericTypesMap()
             for(component in type.components)
             {
@@ -51,7 +52,6 @@ class InterpretFromMethod(
                 Pair(it.key.split("|")[0], ObjectDetails(genericValue,
                 JSONStatement(syntaxType = SyntaxType.TYPE, name = Types.TYPE_TYPE_ID,
                     components = mutableListOf(genericValue)))) })
-            funcVars.putAll(defaultInterpreterVars)
             try
             {
                 val interpreter = InterpretFromCodeBlock(codeBlock, funcVars, context)

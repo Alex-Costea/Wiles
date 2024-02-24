@@ -27,6 +27,32 @@ class FullTests {
     }
 
     @Test
+    fun functionVariableScopeTests()
+    {
+        val code1="""
+            let a := 123
+            let f := fun(d := 15)
+            begin
+                let c := 1
+                write_line(d)
+                yield a + 5
+            end
+            let c := 2
+            let d := 20
+            write_line(f() + c + d)
+        """
+        assertEquals(getOutput(code1),"15\n150\n")
+
+        val code2="""
+            let var a := 100
+            let func := do yield a + 5
+            a := 15
+            write_line(func())
+        """
+        assertEquals(getOutput(code2),"20\n")
+    }
+
+    @Test
     fun fullTest()
     {
         val code = """
@@ -266,19 +292,5 @@ write_line("Min found: " + result)
             write_line(❤️.👩‍👩‍👧‍👧)
         """
         assertEquals(getOutput(code24),"5\n25\n125\n")
-
-        val code25="""
-            let a := 123
-            let f := fun(d := 15)
-            begin
-                let c := 1
-                write_line(d)
-                yield a + 5
-            end
-            let c := 2
-            let d := 20
-            write_line(f() + c + d)
-        """
-        assertEquals(getOutput(code25),"15\n150\n")
     }
 }
