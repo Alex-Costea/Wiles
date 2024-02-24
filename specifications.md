@@ -101,7 +101,7 @@
 - `;` can be specified or inferred from newline
 - Language is statically, strongly typed with some type inference
 - Comment using `#`
-- `\` can be used to continue a line after a newline (including string literals and comments)
+- `\` can be used to continue a line after a newline
 - Types are not reserved keywords and can be used as variable names
 - Top level expressions must be of type `nothing`
 - Trailing commas are valid but not necessary
