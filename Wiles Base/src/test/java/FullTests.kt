@@ -250,7 +250,13 @@ writeline("Min found: " + result)
             typedef has_name := data[name : text]
             let me : has_name := data{name := "alex", age := 25}
             when me is has_name do writeline(me)
-            """
+        """
         assertEquals(getOutput(code22),"{name -> alex, age -> 25}\n")
+
+        val code23="""
+            let x := data{y := 2 + 3}
+            writeline(x.y)
+        """
+        assertEquals(getOutput(code23),"5\n")
     }
 }

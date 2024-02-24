@@ -24,12 +24,11 @@ class InferFromData(details: InferrerDetails) : InferFromStatement(details) {
             }
             else
             {
-                val newComponent = component.copyRemovingLocation()
                 val inferrer = InferFromExpression(
-                    InferrerDetails(newComponent, variables, exceptions, additionalVars, context)
+                    InferrerDetails(component, variables, exceptions, additionalVars, context)
                 )
                 inferrer.infer()
-                inferredType.components.add(newComponent.components[0])
+                inferredType.components.add(component.components[0].copyRemovingLocation())
             }
             isKey = !isKey
         }
