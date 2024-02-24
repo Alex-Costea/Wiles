@@ -2,7 +2,6 @@ package wiles.checker.statics
 
 import wiles.shared.JSONStatement
 import wiles.shared.constants.Tokens.EQUALS_ID
-import wiles.shared.constants.Tokens.IMPORT_ID
 import wiles.shared.constants.Tokens.NOT_EQUAL_ID
 import wiles.shared.constants.Tokens.PLUS_ID
 import wiles.shared.constants.TypeConstants.AND_OPERATION
@@ -122,9 +121,6 @@ object SimpleTypeGenerator {
     fun getSimpleTypes(triple : Triple<JSONStatement, JSONStatement, JSONStatement>) : JSONStatement?
     {
         val unboxedTriple = Triple(unbox(triple.first), triple.second, unbox(triple.third))
-
-        if(unboxedTriple.second.name == IMPORT_ID)
-            return unboxedTriple.third.copyRemovingLocation()
 
         if((unboxedTriple.second.name == EQUALS_ID || unboxedTriple.second.name == NOT_EQUAL_ID)
                    && (isFormerSuperTypeOfLatter(NOTHING_TYPE, unboxedTriple.first)

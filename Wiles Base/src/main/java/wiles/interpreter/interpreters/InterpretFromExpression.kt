@@ -18,7 +18,6 @@ import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.AND_ID
 import wiles.shared.constants.Tokens.APPLY_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
-import wiles.shared.constants.Tokens.IMPORT_ID
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Tokens.OR_ID
@@ -106,9 +105,7 @@ class InterpretFromExpression(statement: JSONStatement, variables: InterpreterVa
                     {
                         val leftName = leftStatement.components[0].name
                         val rightRef = getReference(rightStatement)
-                        if(!leftName.startsWith("!$IMPORT_ID"))
-                            variables[leftName] = rightRef
-                        else additionalVars[leftName.split("!$IMPORT_ID")[1]] = rightRef
+                        variables[leftName] = rightRef
                         NOTHING_REF
                     }
                     MUTABLE_ID ->
@@ -154,15 +151,6 @@ class InterpretFromExpression(statement: JSONStatement, variables: InterpreterVa
                             newVarMap[name] = expressionRef
                         }
                         function.apply(newVarMap, context)
-                    }
-                    IMPORT_ID -> {
-                        val newVars = variables.copy()
-                        newVars.putAll(additionalVars.filter { it.key == rightStatement.name })
-                        val interpreter = InterpretFromExpression(
-                            JSONStatement(syntaxType =  SyntaxType.EXPRESSION, components = mutableListOf(rightStatement)),
-                            newVars, additionalVars, context)
-                        interpreter.interpret()
-                        interpreter.reference
                     }
                     "$LIST_ID|${Tokens.PLUS_ID}|$LIST_ID" ->
                     {

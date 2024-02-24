@@ -23,7 +23,6 @@ import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.ANON_ARG_ID
 import wiles.shared.constants.Tokens.APPLY_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
-import wiles.shared.constants.Tokens.IMPORT_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.TYPEDEF_ID
@@ -61,11 +60,7 @@ object InferrerUtils {
         if(IS_IDENTIFIER.test(name)) {
             if( variables[name]?.initialized==false)
                 throw UsedBeforeInitializationException(token.getFirstLocation())
-            var value = variables[name]
-            if(value == null && name.startsWith("!$IMPORT_ID"))
-            {
-                value = additionalVars[name.split("!$IMPORT_ID")[1]]
-            }
+            val value = variables[name]
             return JSONStatement(
                 name = value?.type?.name ?:
                 throw UnknownIdentifierException(token.getFirstLocation()),

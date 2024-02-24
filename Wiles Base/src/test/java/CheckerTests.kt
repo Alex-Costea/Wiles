@@ -622,39 +622,6 @@ class CheckerTests {
   } ]
 }""","CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE INT; TYPE !nothing); !a; EXPRESSION(TYPE INT; #2)); EXPRESSION(!write_line; APPLY; METHOD_CALL(TYPE METHOD_CALL; (METHOD_CALL(EXPRESSION(TYPE EITHER; (TYPE INT; TYPE !nothing); !a))))))")
 
-        checkResult(createExceptions(ExpectedIdentifierException(NULL_LOCATION)),"""{
-  "parsed" : true,
-  "type" : "CODE_BLOCK",
-  "components" : [ {
-    "type" : "DECLARATION",
-    "components" : [ {
-      "name" : "!a",
-      "type" : "TOKEN",
-      "location" : {
-        "line" : 1,
-        "lineIndex" : 5
-      }
-    }, {
-      "type" : "EXPRESSION",
-      "components" : [ {
-        "name" : "IMPORT",
-        "type" : "TOKEN",
-        "location" : {
-          "line" : 1,
-          "lineIndex" : 10
-        }
-      }, {
-        "name" : "#1",
-        "type" : "TOKEN",
-        "location" : {
-          "line" : 1,
-          "lineIndex" : 17
-        }
-      } ]
-    } ]
-  } ]
-}""","CODE_BLOCK(DECLARATION(!a; EXPRESSION(IMPORT; #1)))")
-
         checkResult(createExceptions(UnusedExpressionException(NULL_LOCATION)),"""{
   "parsed" : true,
   "type" : "CODE_BLOCK",

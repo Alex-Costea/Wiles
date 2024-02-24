@@ -64,7 +64,6 @@
 - `[]` (list literals, subcomponents in type definitions)
 - `,` (separator between elements)
 - `?` (syntactic sugar for `type? = type or nothing`)
-- `import` (get a variable from the outside scope)
 
 ### Named parameters
 - Function calling with named parameters by default: `my_function(a := 1, b := 10)`
