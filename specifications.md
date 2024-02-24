@@ -21,7 +21,7 @@
 - String: `text`
 - Floating point: `rational` (equivalent to `double` in other languages)
 - Function type: like function literals, but no function body and put between square brackets (ex: `fun[x : int, -> int]`)
-- Sum types: `either[⟪type,⟫]`, or `type1 or type2`
+- Sum types:`type1 or type2`
 - List: `list[type]`
 - Dict: `dict[key_type, value_type]`
 - Data: `data[⟪key : type,⟫]`

@@ -31,7 +31,7 @@ class FullTests {
     {
         val code = """
             
-typedef number := either[int,rational]
+typedef number := int or rational
 
 let min := fun(list : list[number as T]) -> T?
 begin

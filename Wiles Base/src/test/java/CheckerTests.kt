@@ -1472,7 +1472,7 @@ class CheckerTests {
 }""","CODE_BLOCK(DECLARATION(TYPE INT; !temp; EXPRESSION(TYPE INT; #2; INT|PLUS|INT; EXPRESSION(TYPE MUTABLE; (TYPE INT); MUTABLE; #3))))")
 
     /*
-        let a : mut[either[int,text]] := mut "2"
+        let a : mut[int or text] := mut "2"
         a.set(10)
      */
         checkResult(null,"""{
@@ -4936,7 +4936,7 @@ class CheckerTests {
     fun forTests()
     {
         /*
-        let list : either[list[int],list[text]] := [1,2,3]
+        let list : list[int] or list[text] := [1,2,3]
         for i in list from 0 to 2 do
             write_line(i.as_text)
          */
@@ -6358,7 +6358,7 @@ class CheckerTests {
   ]
 }""","CODE_BLOCK(DECLARATION(TYPE MUTABLE; (TYPE LIST; (TYPE MUTABLE; (TYPE EITHER; (TYPE INT; TYPE !nothing)))); !list; EXPRESSION(TYPE MUTABLE; (TYPE LIST; (TYPE MUTABLE; (TYPE EITHER; (TYPE INT; TYPE !nothing)))); MUTABLE; LIST(TYPE MUTABLE; (TYPE EITHER; (TYPE INT; TYPE !nothing))))); DECLARATION(TYPE EITHER; (TYPE MUTABLE; (TYPE EITHER; (TYPE INT; TYPE !nothing)); TYPE !nothing); !x; EXPRESSION(TYPE EITHER; (TYPE MUTABLE; (TYPE EITHER; (TYPE INT; TYPE !nothing)); TYPE !nothing); !maybe; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE MUTABLE; (TYPE EITHER; (TYPE INT; TYPE !nothing)); !get; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!at; ASSIGN; EXPRESSION(TYPE INT; #0)); EXPRESSION(!collection; ASSIGN; EXPRESSION(TYPE MUTABLE; (TYPE LIST; (TYPE MUTABLE; (TYPE EITHER; (TYPE INT; TYPE !nothing)))); !list)))))))); WHEN(EXPRESSION(!x); TYPE MUTABLE; (TYPE !nothing); CODE_BLOCK(EXPRESSION(TYPE !nothing; !ignore; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE MUTABLE; (TYPE !nothing); !x))))); TYPE !nothing; CODE_BLOCK(EXPRESSION(TYPE !nothing; !ignore; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE !nothing; !x))))); TYPE ELSE; (TYPE MUTABLE; (TYPE INT)); CODE_BLOCK(EXPRESSION(TYPE !nothing; !ignore; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE MUTABLE; (TYPE INT); !x)))))))")
         /*
-        let a : either[text, int] := 2
+        let a : text or int := 2
         when a is int do
             ignore(a)
          */

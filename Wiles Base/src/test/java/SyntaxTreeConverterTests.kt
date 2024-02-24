@@ -315,7 +315,7 @@ class SyntaxTreeConverterTests {
             "!b", TYPE_ANNOTATION_ID, "!text", SEPARATOR_ID, RIGHT_ARROW_ID, "!truth", BRACKET_END_ID)
         assertResults(null,"CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE INT; TYPE !nothing); !a); DECLARATION(TYPE EITHER; (TYPE INT; TYPE !nothing); !b))",
             DECLARE_ID, "!a", TYPE_ANNOTATION_ID, "!int", MAYBE_ID, NEWLINE_ID,
-            DECLARE_ID, "!b", TYPE_ANNOTATION_ID, "!either", BRACKET_START_ID, "!int", SEPARATOR_ID, NOTHING_ID, BRACKET_END_ID)
+            DECLARE_ID, "!b", TYPE_ANNOTATION_ID, "!int", OR_ID, NOTHING_ID)
     }
 
     @Test
