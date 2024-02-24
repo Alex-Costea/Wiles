@@ -4,6 +4,7 @@ import wiles.interpreter.data.InterpreterContext
 import wiles.interpreter.data.InterpreterVariableMap
 import wiles.interpreter.data.ObjectDetails
 import wiles.shared.JSONStatement
+import wiles.shared.constants.Tokens.IDENTIFIER_START
 import wiles.shared.constants.TypeConstants.DATA_TYPE
 
 class InterpretFromData(statement: JSONStatement, variables: InterpreterVariableMap, additionalVars: InterpreterVariableMap, context: InterpreterContext)
@@ -29,7 +30,9 @@ class InterpretFromData(statement: JSONStatement, variables: InterpreterVariable
             dict[interpreter1.reference] = interpreter2.reference
             index++
 
-            type.components.add(statement1.copy())
+            val identifierStatement = statement1.copy().components[0]
+            identifierStatement.name = IDENTIFIER_START + identifierStatement.name.substring(1)
+            type.components.add(identifierStatement)
             type.components.add(interpreter2.reference.getType())
         }
         reference = ObjectDetails(dict, type)

@@ -244,7 +244,7 @@ writeline("Min found: " + result)
         """
         assertEquals(getOutput(code21),"alex\n" +
                 "25\n" +
-                "TYPE DATA; (EXPRESSION(@name); TYPE STRING; EXPRESSION(@age); TYPE INT)\n")
+                "TYPE DATA; (!name; TYPE STRING; !age; TYPE INT)\n")
 
         val code22="""
             typedef has_name := data[name : text]

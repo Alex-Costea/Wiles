@@ -7,7 +7,6 @@ import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.DATA_ID
 import wiles.shared.constants.Tokens.DECLARE_ID
-import wiles.shared.constants.Tokens.IDENTIFIER_START
 import wiles.shared.constants.TypeConstants.INT_TYPE
 import wiles.shared.constants.Types.COLLECTION_ID
 import wiles.shared.constants.Types.DICT_ID
@@ -240,12 +239,8 @@ object TypeUtils {
         val typeComponents = hashMapOf<String,JSONStatement>()
         for(i in 0 until type.components.size step 2)
         {
-            var component1 = type.components[i].copy()
+            val component1 = type.components[i]
             val component2 = type.components[i+1]
-            if(component1.syntaxType == SyntaxType.EXPRESSION) {
-                component1 = component1.components[0]
-                component1.name = IDENTIFIER_START + component1.name.substring(1)
-            }
             typeComponents[component1.toString()] = component2
         }
         return typeComponents
