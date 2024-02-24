@@ -85,15 +85,12 @@ class TokenConverterTests {
         tokenConverterThrows(0, "\"abc", StringInvalidException::class.java, STRING_UNFINISHED_ERROR)
         tokenConverterEquals("\"\"\"\"", arrayOf("@", "@"))
         tokenConverterThrows(0, "\"\"\"\"\"", StringInvalidException::class.java, STRING_UNFINISHED_ERROR)
-        tokenConverterThrows(0, "abc\"def\nghi\"jkl", StringInvalidException::class.java, null, null)
-        tokenConverterThrows(0, "true\n\nhello\"\n\"", StringInvalidException::class.java, null,3)
-        tokenConverterThrows(0, "@\n\"\n\"\n", StringInvalidException::class.java,null, 2)
-        tokenConverterThrows(1, "@\n\"\n\"\n", StringInvalidException::class.java, null,3)
         tokenConverterEquals("\"Hello world!\\n;My name is \\q;Alex\\q;\\n;This is a backslash: \\b;\\n;You write it as such: \\b;b;\"",
             arrayOf("@Hello world!\n" +
                     "My name is \"Alex\"\n" +
                     "This is a backslash: \\\n" +
                     "You write it as such: \\b;"))
+        tokenConverterEquals("\"multiline\nstrings\"", arrayOf("@multiline\nstrings"))
         tokenConverterThrows(0,"\"This is a backslash : \\. Cool, right?\"",
             StringInvalidException::class.java, null, null)
     }

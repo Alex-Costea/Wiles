@@ -32,6 +32,7 @@ public class InputToTokensConverter {
         ESCAPE_SEQUENCES.put("\\q;", "\"");
         ESCAPE_SEQUENCES.put("\\n;", "\n");
         ESCAPE_SEQUENCES.put("\\b;", "\\\\");
+        ESCAPE_SEQUENCES.put("\\d;", "\\$");
     }
 
     public InputToTokensConverter(@NotNull String input) {
@@ -106,9 +107,8 @@ public class InputToTokensConverter {
         @NotNull
         StringBuilder sb = new StringBuilder();
         while (currentIndex < arrayChars.length) {
-            if (arrayChars[currentIndex] == '\n') {
-                if (!isNotComment)
-                    currentIndex--;
+            if (!isNotComment & arrayChars[currentIndex] == '\n') {
+                currentIndex--;
                 break;
             }
             if (isNotComment && arrayChars[currentIndex] == STRING_DELIMITER)
