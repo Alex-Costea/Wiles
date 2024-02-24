@@ -145,10 +145,10 @@ writeline("Min found: " + result)
         val code11 = """
             let func := fun(arg list : list[int])
         begin
-            let obj : anything := list
-            when obj is mut[list[text]]
+            let object : anything := list
+            when object is mut[list[text]]
             begin
-                obj.add(at := 0, "hi!")
+                object.add(at := 0, "hi!")
                 yield nothing
             end
             writeline("oops!")

@@ -146,7 +146,8 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
                         components = mutableListOf(statement.components[0].components[0]))
                     statement.components.add(0, newListType)
                 }
-                SyntaxType.DICT -> statement.components.add(0, statement.components[0].components[0])
+                SyntaxType.DICT, SyntaxType.DATA ->
+                    statement.components.add(0, statement.components[0].components[0])
                 SyntaxType.METHOD -> {
                     val newType = statement.components[0].copyRemovingLocation()
                     newType.components.removeLast()
@@ -330,6 +331,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
             METHOD_ID,DOUBLE_ID, INT_ID, STRING_ID, BOOLEAN_ID, LIST_ID, ANYTHING_ID, NOTHING_ID, METHOD_CALL_ID)
 
         val TYPES_LIST =
-            listOf(SyntaxType.METHOD, SyntaxType.LIST, SyntaxType.METHOD_CALL, SyntaxType.TYPE, SyntaxType.DICT)
+            listOf(SyntaxType.METHOD, SyntaxType.LIST, SyntaxType.METHOD_CALL, SyntaxType.TYPE, SyntaxType.DICT,
+                SyntaxType.DATA)
     }
 }
