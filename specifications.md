@@ -7,7 +7,10 @@
 - `nothing`
 - Integer: `12345`
 - Floating: `12345.6` (also `Infinity`, `-Infinity` and `NaN`)
-- String: `"abc"` (escape characters HTML-style)
+- String: `"abc"`. Escaped sequences:
+  - `\n;` is newline
+  - `\b;` is backslash
+  - `\q;` is quote
 - Boolean: `true` and `false`
 - List literal: `[⟪value,⟫] ⟨: type⟩`
 - Dict literal: `{ ⟪key -> value,⟫ } ⟨: key_type -> value_type⟩`

@@ -89,8 +89,11 @@ class TokenConverterTests {
         tokenConverterThrows(0, "true\n\nhello\"\n\"", StringInvalidException::class.java, null,3)
         tokenConverterThrows(0, "@\n\"\n\"\n", StringInvalidException::class.java,null, 2)
         tokenConverterThrows(1, "@\n\"\n\"\n", StringInvalidException::class.java, null,3)
-        tokenConverterEquals("\"Hi, my name is &quot;Alex&quot;!What's your name? &#9786;&#65039;\"",
-            arrayOf("@Hi, my name is \"Alex\"!What's your name? ☺️"))
+        tokenConverterEquals("\"Hello world!\\n;My name is \\q;Alex\\q;\\n;This is a backslash: \\b;\\n;You write it as such: \\b;b;\"",
+            arrayOf("@Hello world!\n" +
+                    "My name is \"Alex\"\n" +
+                    "This is a backslash: \\\n" +
+                    "You write it as such: \\b;"))
     }
 
     @Test

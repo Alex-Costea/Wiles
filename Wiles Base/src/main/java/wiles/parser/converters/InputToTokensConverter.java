@@ -11,10 +11,10 @@ import wiles.shared.constants.Settings;
 import wiles.shared.constants.Tokens;
 import wiles.shared.constants.Utils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import static org.apache.commons.text.StringEscapeUtils.unescapeHtml4;
 import static wiles.shared.constants.Chars.*;
 
 public class InputToTokensConverter {
@@ -25,6 +25,14 @@ public class InputToTokensConverter {
     private int index;
     private int lineIndex = -1; //character at index -1 can be considered equivalent to newline
     private int line = 1;
+
+    private static final HashMap<String, String> ESCAPE_SEQUENCES = new HashMap<>();
+
+    static {
+        ESCAPE_SEQUENCES.put("\\q;", "\"");
+        ESCAPE_SEQUENCES.put("\\n;", "\n");
+        ESCAPE_SEQUENCES.put("\\b;", "\\\\");
+    }
 
     public InputToTokensConverter(@NotNull String input) {
         arrayChars = input.codePoints().toArray();
@@ -45,7 +53,7 @@ public class InputToTokensConverter {
                 if (arrayChars[index] == STRING_DELIMITER) //string literal
                 {
                     try {
-                        tokens.add(createToken(unescapeHtml4(readStringLiteral())));
+                        tokens.add(createToken(unescape(readStringLiteral())));
                     }
                     catch(IllegalArgumentException ex)
                     {
@@ -79,6 +87,18 @@ public class InputToTokensConverter {
             }
         }
         return tokens;
+    }
+
+    private @NotNull String unescape(@NotNull String s) {
+        Pattern pattern = Pattern.compile("(\\\\.*?;)");
+        Matcher matcher = pattern.matcher(s);
+        return matcher.replaceAll((matchResult ->
+            {
+                String matchString = matchResult.group();
+                if(!ESCAPE_SEQUENCES.containsKey(matchString))
+                    throw new IllegalArgumentException();
+                return ESCAPE_SEQUENCES.get(matchString);
+            }));
     }
 
     public StringBuilder createString(boolean isNotComment) {
