@@ -53,7 +53,6 @@ class TokenConverterTests {
         tokenConverterEquals("#", arrayOf())
         tokenConverterEquals("#\n", arrayOf("NEWLINE"))
         tokenConverterEquals("abc#de\nfgh", arrayOf("!abc", "NEWLINE", "!fgh"))
-        tokenConverterEquals("abc#de\\   \nfgh", arrayOf("!abc"))
         tokenConverterEquals("abc#a b c d e f break end continue", arrayOf("!abc"))
     }
 
@@ -90,8 +89,8 @@ class TokenConverterTests {
         tokenConverterThrows(0, "true\n\nhello\"\n\"", StringInvalidException::class.java, null,3)
         tokenConverterThrows(0, "@\n\"\n\"\n", StringInvalidException::class.java,null, 2)
         tokenConverterThrows(1, "@\n\"\n\"\n", StringInvalidException::class.java, null,3)
-        tokenConverterEquals("\"Hi, my name is &quot;Alex&quot;!\\\nWhat's your name? &#9786;&#65039;\"",
-            arrayOf("@Hi, my name is \"Alex\"!\nWhat's your name? ☺️"))
+        tokenConverterEquals("\"Hi, my name is &quot;Alex&quot;!What's your name? &#9786;&#65039;\"",
+            arrayOf("@Hi, my name is \"Alex\"!What's your name? ☺️"))
     }
 
     @Test
@@ -109,9 +108,9 @@ class TokenConverterTests {
     fun whitespaceTest()
     {
         tokenConverterEquals("while\ttrue do\n" +
-                "\t\twrite_line(\t\"\thi!\\\n" +
-                "what's up?\") #this is a multi line \\\n" +
-                "comment", arrayOf(WHILE_ID, TRUE_ID, DO_ID, NEWLINE_ID, "!write_line", "PAREN_START", "@\thi!\n" +
-                "what's up?", PAREN_END_ID))
+                "\t\twrite_line(\t\"\thi! " +
+                "what's up?\") #this is a comment",
+            arrayOf(WHILE_ID, TRUE_ID, DO_ID, NEWLINE_ID, "!write_line", "PAREN_START",
+                "@\thi! what's up?", PAREN_END_ID))
     }
 }

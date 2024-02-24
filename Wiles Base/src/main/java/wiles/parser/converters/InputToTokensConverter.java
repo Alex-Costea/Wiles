@@ -81,26 +81,17 @@ public class InputToTokensConverter {
         return tokens;
     }
 
-    public StringBuilder createString(boolean isComment) {
+    public StringBuilder createString(boolean isNotComment) {
         int currentIndex = index + 1;
         @NotNull
         StringBuilder sb = new StringBuilder();
-        int lastNonSpaceCharacter = 0;
-        int lastNonSpaceCharacterIndex = -1;
         while (currentIndex < arrayChars.length) {
             if (arrayChars[currentIndex] == '\n') {
-                if (lastNonSpaceCharacter == (int) CONTINUE_LINE)
-                    sb.setLength(lastNonSpaceCharacterIndex - index - 1);
-                else {
-                    if (!isComment)
-                        currentIndex--;
-                    break;
-                }
-            } else if (!Utils.isWhitespace(arrayChars[currentIndex])) {
-                lastNonSpaceCharacterIndex = currentIndex;
-                lastNonSpaceCharacter = arrayChars[currentIndex];
+                if (!isNotComment)
+                    currentIndex--;
+                break;
             }
-            if (isComment && arrayChars[currentIndex] == STRING_DELIMITER)
+            if (isNotComment && arrayChars[currentIndex] == STRING_DELIMITER)
                 break;
             sb.appendCodePoint(arrayChars[currentIndex]);
             if (currentIndex + 1 == arrayChars.length)
