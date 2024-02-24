@@ -91,7 +91,7 @@ public class InputToTokensConverter {
     }
 
     private @NotNull String unescape(@NotNull String s) {
-        Pattern pattern = Pattern.compile("(\\\\.*?;)|\\\\(?![^;]*;)");
+        Pattern pattern = Pattern.compile("$|(\\\\.*?;)|\\\\(?![^;]*;)");
         Matcher matcher = pattern.matcher(s);
         return matcher.replaceAll((matchResult ->
             {
