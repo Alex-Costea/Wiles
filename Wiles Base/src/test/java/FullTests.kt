@@ -229,13 +229,20 @@ writeline("Min found: " + result)
         """
         assertEquals(getOutput(code19),"10\n")
 
-        val code20="""
+        val code20 ="""
+            typedef int2 := int
+            let x := 2
+            when x is int2 do writeline("hi")
+        """
+        assertEquals(getOutput(code20),"hi\n")
+
+        val code21="""
             let me := data{name := "alex", age := 25}
             writeline(me.name)
             writeline(me.age)
             writeline(me.type)
         """
-        assertEquals(getOutput(code20),"alex\n" +
+        assertEquals(getOutput(code21),"alex\n" +
                 "25\n" +
                 "TYPE DATA; (EXPRESSION(@name); TYPE STRING; EXPRESSION(@age); TYPE INT)\n")
     }
