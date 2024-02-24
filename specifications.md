@@ -11,6 +11,7 @@
 - Boolean: `true` and `false`
 - List literal: `[⟪value,⟫] ⟨: type⟩`
 - Dict literal: `{ ⟪key -> value,⟫ } ⟨: key_type -> value_type⟩`
+- Data literal: `data{ ⟪identifier := value,⟫ }`
 - Functions literals: `⟨fun (⟪param1 ⟨: type⟩ ⟨:= default_value⟩,⟫)⟩ ⟨-> return_type⟩⟩ [block]`
 
 ### Types
@@ -23,6 +24,7 @@
 - Sum types: `either[⟪type,⟫]`, or `type1 or type2`
 - List: `list[type]`
 - Dict: `dict[key_type, value_type]`
+- Data: `data[⟪key : type,⟫]`
 
 ### Statements
 - Value: `let ⟨var⟩ name ⟨: type⟩ ⟨:= value⟩` (`var` makes it a variable, type can be inferred)
@@ -52,7 +54,7 @@
 - `and`, `or`, `not` (not bitwise!)
 - `=`, `>`, `>=`, `<`, `<=`, `=/=`
 - `:=` (assign, declare or name parameters)
-- `.` (`b.a⟨ ( ⟪ param ⟫ ) ⟩` is `a(b,⟨⟪ param ⟫⟩ )`, also used for field access)
+- `.` (`b.a⟨ ( ⟪ param ⟫ ) ⟩` is `a(b,⟨⟪ param ⟫⟩ )`, also used for field access on data)
 - `:` (type annotation)
 - `()` (order of operations, function access)
 - `[]` (list literals, subcomponents in type definitions)

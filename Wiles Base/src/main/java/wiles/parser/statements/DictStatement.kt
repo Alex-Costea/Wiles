@@ -1,7 +1,7 @@
 package wiles.parser.statements
 
-import wiles.parser.builders.ParserContext
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
+import wiles.parser.builders.ParserContext
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.statements.expressions.InnerDefaultExpression
 import wiles.shared.AbstractCompilationException

@@ -20,18 +20,23 @@ import wiles.shared.SyntaxType
 import wiles.shared.constants.ErrorMessages.IRREGULAR_STATEMENT_ERROR
 import wiles.shared.constants.ErrorMessages.UNKNOWN_SYNTAX_TYPE_ERROR
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
+import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.AND_ID
-import wiles.shared.constants.Tokens.APPLY_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.EQUALS_ID
+import wiles.shared.constants.Tokens.IDENTIFIER_START
 import wiles.shared.constants.Tokens.IMPORT_ID
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.NOT_EQUAL_ID
 import wiles.shared.constants.Tokens.OR_ID
+import wiles.shared.constants.Tokens.STRING_START
 import wiles.shared.constants.TypeConstants
+import wiles.shared.constants.TypeConstants.ACCESS_OPERATION
+import wiles.shared.constants.TypeConstants.DATA_TYPE
 import wiles.shared.constants.TypeConstants.NOTHING_TOKEN
+import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 import wiles.shared.constants.TypeUtils.makeList
 import wiles.shared.constants.TypeUtils.makeMethod
 import wiles.shared.constants.TypeUtils.unbox
@@ -141,7 +146,8 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
                         components = mutableListOf(statement.components[0].components[0]))
                     statement.components.add(0, newListType)
                 }
-                SyntaxType.DICT -> statement.components.add(0, statement.components[0].components[0])
+                SyntaxType.DICT, SyntaxType.DATA ->
+                    statement.components.add(0, statement.components[0].components[0])
                 SyntaxType.METHOD -> {
                     val newType = statement.components[0].copyRemovingLocation()
                     newType.components.removeLast()
@@ -222,33 +228,56 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
             if(middle == TypeConstants.ACCESS_OPERATION)
             {
                 var methodCallComponents = mutableListOf<JSONStatement>()
-                if(right.syntaxType!=SyntaxType.TOKEN) {
-                    if(right.syntaxType == SyntaxType.EXPRESSION &&
-                        right.components.getOrNull(1)?.name == APPLY_ID) {
-                        methodCallComponents = right.components[2].components
-                        right.name = right.components[0].name
-                        right.syntaxType = right.components[0].syntaxType
-                        right.location = right.components[0].location
-                        right.components = right.components[0].components
+                var shouldTransform = true
+                if(isFormerSuperTypeOfLatter(DATA_TYPE,leftType))
+                {
+                    for(component in leftType.components)
+                    {
+                        if(component.syntaxType != SyntaxType.TOKEN)
+                            continue
+                        val name = component.name
+                        if(name == right.toString())
+                        {
+                            shouldTransform = false
+                            right.syntaxType = SyntaxType.TOKEN
+                            right.name = STRING_START + right.name.substring(1)
+                            break
+                        }
                     }
                 }
-                else right.name = right.name
 
-                //create correct components
-                assert(isThree)
-                middle.name = APPLY_ID
-                val oldLeft = if(statement.components[0].syntaxType==SyntaxType.EXPRESSION)
-                    statement.components[0]
-                else JSONStatement(syntaxType = SyntaxType.EXPRESSION,
-                    components = mutableListOf(statement.components[0]))
-                statement.components[0] = statement.components[2]
-                methodCallComponents.add(0,oldLeft)
-                statement.components[2] = JSONStatement(syntaxType = SyntaxType.METHOD_CALL,
-                    components = methodCallComponents)
+                if(shouldTransform)
+                {
+                    if(right.syntaxType!=SyntaxType.TOKEN) {
+                        if(right.syntaxType == SyntaxType.EXPRESSION &&
+                            right.components.getOrNull(1)?.name == Tokens.APPLY_ID
+                        ) {
+                            methodCallComponents = right.components[2].components
+                            right.name = right.components[0].name
+                            right.syntaxType = right.components[0].syntaxType
+                            right.location = right.components[0].location
+                            right.components = right.components[0].components
+                        }
+                    }
+                    else right.name = right.name
 
-                //redo infer
-                infer()
-                return
+                    //create correct components
+                    assert(isThree)
+                    middle.name = Tokens.APPLY_ID
+                    val oldLeft = if(statement.components[0].syntaxType==SyntaxType.EXPRESSION)
+                        statement.components[0]
+                    else JSONStatement(syntaxType = SyntaxType.EXPRESSION,
+                        components = mutableListOf(statement.components[0]))
+                    statement.components[0] = statement.components[2]
+                    methodCallComponents.add(0,oldLeft)
+                    statement.components[2] = JSONStatement(syntaxType = SyntaxType.METHOD_CALL,
+                        components = methodCallComponents)
+
+                    //redo infer
+                    infer()
+                    return
+
+                }
             }
 
             if(!rightIsToken)
@@ -267,7 +296,22 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
                 else if(right.syntaxType == SyntaxType.METHOD_CALL) right.components[0]
                 else throw InternalErrorException()
 
-            statement.components.add(0,getTypeOfExpression(leftType,middle,rightType))
+            if(middle == ACCESS_OPERATION)
+            {
+                val rightIdentifier = IDENTIFIER_START + right.name.substring(1)
+                for(i in 0 until leftType.components.size)
+                {
+                    val component = leftType.components[i]
+                    if(component.name == rightIdentifier)
+                    {
+                        val correctType = leftType.components[i+1]
+                        statement.components.add(0,correctType.copyRemovingLocation())
+                        return
+                    }
+                }
+                throw InternalErrorException()
+            }
+            else statement.components.add(0,getTypeOfExpression(leftType,middle,rightType))
 
             // simplify format
             if(right.syntaxType == SyntaxType.METHOD_CALL)
@@ -287,6 +331,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
             METHOD_ID,DOUBLE_ID, INT_ID, STRING_ID, BOOLEAN_ID, LIST_ID, ANYTHING_ID, NOTHING_ID, METHOD_CALL_ID)
 
         val TYPES_LIST =
-            listOf(SyntaxType.METHOD, SyntaxType.LIST, SyntaxType.METHOD_CALL, SyntaxType.TYPE, SyntaxType.DICT)
+            listOf(SyntaxType.METHOD, SyntaxType.LIST, SyntaxType.METHOD_CALL, SyntaxType.TYPE, SyntaxType.DICT,
+                SyntaxType.DATA)
     }
 }

@@ -235,5 +235,22 @@ writeline("Min found: " + result)
             when x is int2 do writeline("hi")
         """
         assertEquals(getOutput(code20),"hi\n")
+
+        val code21="""
+            let me := data{name := "alex", age := 25}
+            writeline(me.name)
+            writeline(me.age)
+            writeline(me.type)
+        """
+        assertEquals(getOutput(code21),"alex\n" +
+                "25\n" +
+                "TYPE DATA; (!name; TYPE STRING; !age; TYPE INT)\n")
+
+        val code22="""
+            typedef has_name := data[name : text]
+            let me : has_name := data{name := "alex", age := 25}
+            when me is has_name do writeline(me)
+            """
+        assertEquals(getOutput(code22),"{name -> alex, age -> 25}\n")
     }
 }

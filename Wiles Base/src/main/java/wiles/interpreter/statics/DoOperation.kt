@@ -13,6 +13,7 @@ import wiles.shared.JSONStatement
 import wiles.shared.constants.ErrorMessages.CANNOT_PERFORM_OPERATION_ERROR
 import wiles.shared.constants.ErrorMessages.CANNOT_REPEAT_NEGATIVE_ERROR
 import wiles.shared.constants.ErrorMessages.INTEGER_TOO_LARGE_FOR_REPEAT_ERROR
+import wiles.shared.constants.Tokens.ACCESS_ID
 import wiles.shared.constants.Tokens.DIVIDE_ID
 import wiles.shared.constants.Tokens.EQUALS_ID
 import wiles.shared.constants.Tokens.LARGER_EQUALS_ID
@@ -217,6 +218,12 @@ object DoOperation {
             val operation = operationNameSplit[0] + "|" + operationNameSplit[1] + "|" + operationNameSplit[2]
             operationMap[operation]?.apply(leftValue, rightValue)
                 ?: throw InternalErrorException()
+        }
+        else if(middle == ACCESS_ID)
+        {
+            val rightValue = ObjectDetails(right.value, STRING_TYPE)
+            val leftValue = (left.value as LinkedHashMap<*, *>)
+            (leftValue[rightValue]) as ObjectDetails
         }
         else (operationMap[middle]?:throw InternalErrorException(CANNOT_PERFORM_OPERATION_ERROR
             .format(left, middle, right))).apply(leftValue, rightValue)

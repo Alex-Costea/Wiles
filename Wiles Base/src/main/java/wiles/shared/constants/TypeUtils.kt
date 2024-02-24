@@ -5,6 +5,7 @@ import wiles.checker.data.GenericTypesMap
 import wiles.checker.statics.InferrerUtils
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
+import wiles.shared.constants.Tokens.DATA_ID
 import wiles.shared.constants.Tokens.DECLARE_ID
 import wiles.shared.constants.TypeConstants.INT_TYPE
 import wiles.shared.constants.Types.COLLECTION_ID
@@ -227,7 +228,41 @@ object TypeUtils {
                     isFormerSuperTypeOfLatter(supertype.components[1],subtype.components[1], getMinus = getMinus,
                         genericTypes = genericTypes)
 
+        else if(supertype.name == DATA_ID && subtype.name == DATA_ID)
+        {
+            return checkClassIsSubtype(supertype, subtype, genericTypes?: GenericTypesMap())
+        }
         return false
+    }
+
+    private fun getClassComponents(type : JSONStatement): HashMap<String, JSONStatement> {
+        val typeComponents = hashMapOf<String,JSONStatement>()
+        for(i in 0 until type.components.size step 2)
+        {
+            val component1 = type.components[i]
+            val component2 = type.components[i+1]
+            typeComponents[component1.toString()] = component2
+        }
+        return typeComponents
+    }
+
+    private fun checkClassIsSubtype(
+        supertype: JSONStatement, subtype: JSONStatement,
+        genericTypes: GenericTypesMap
+    ) : Boolean
+    {
+        val supertypeComponents = getClassComponents(supertype)
+        val subtypeComponents = getClassComponents(subtype)
+        for(componentName in supertypeComponents.keys)
+        {
+            if(!subtypeComponents.containsKey(componentName))
+                return false
+            val supertype1 = supertypeComponents[componentName]!!
+            val subtype1 = subtypeComponents[componentName]!!
+            if(!isFormerSuperTypeOfLatter(supertype1, subtype1, genericTypes = genericTypes))
+                return false
+        }
+        return true
     }
 
     private fun checkMethodIsSubtype(

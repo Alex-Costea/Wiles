@@ -19,6 +19,7 @@ import wiles.shared.constants.Tokens.BRACE_START_ID
 import wiles.shared.constants.Tokens.BRACKET_START_ID
 import wiles.shared.constants.Tokens.BREAK_ID
 import wiles.shared.constants.Tokens.CONTINUE_ID
+import wiles.shared.constants.Tokens.DATA_ID
 import wiles.shared.constants.Tokens.DECLARE_ID
 import wiles.shared.constants.Tokens.DO_ID
 import wiles.shared.constants.Tokens.FOR_ID
@@ -86,6 +87,7 @@ class StatementFactory {
             params[StatementFactoryTypes.WHEN_STATEMENT] = tokenOf(WHEN_ID)
             params[StatementFactoryTypes.TYPE_DEFINITION_STATEMENT] = tokenOf(TYPEDEF_ID)
             params[StatementFactoryTypes.DICT_STATEMENT] = tokenOf(BRACE_START_ID)
+            params[StatementFactoryTypes.DATA_STATEMENT] = tokenOf(DATA_ID)
             createObject[StatementFactoryTypes.TOP_LEVEL_EXPRESSION] =
                 Function { context: ParserContext -> TopLevelExpression(context) }
             createObject[StatementFactoryTypes.DEFAULT_EXPRESSION_NO_CODE_BLOCK] =
@@ -114,6 +116,8 @@ class StatementFactory {
                 Function { context : ParserContext -> TypeDefinitionStatement(context) }
             createObject[StatementFactoryTypes.DICT_STATEMENT] =
                 Function { context : ParserContext -> DictStatement(context) }
+            createObject[StatementFactoryTypes.DATA_STATEMENT] =
+                Function { context : ParserContext -> DataStatement(context) }
         }
     }
 }
