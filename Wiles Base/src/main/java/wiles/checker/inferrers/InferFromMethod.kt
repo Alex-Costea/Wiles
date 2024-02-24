@@ -134,7 +134,7 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
         val inferredType = inferredType
         if(statedType!=null) {
             if(inferredType!=null) {
-                if (!isFormerSuperTypeOfLatter(statedType, inferredType, unboxGenerics = false))
+                if (!isFormerSuperTypeOfLatter(statedType, inferredType, unboxGenerics = true))
                     throw ConflictingTypeDefinitionException(statement.components[0].getFirstLocation(),
                         statedType.toString(),inferredType.toString())
             }
