@@ -1,15 +1,16 @@
 package wiles.interpreter.services
 
 import wiles.interpreter.data.InterpreterContext
-import wiles.interpreter.data.InterpreterVariableMap
+import wiles.interpreter.data.InterpreterVariableMapInterface
 import wiles.interpreter.interpreters.*
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 
-class InterpreterService(val statement : JSONStatement,
-                         val variables : InterpreterVariableMap,
-                         val context: InterpreterContext
+class InterpreterService(
+    val statement: JSONStatement,
+    val variables: InterpreterVariableMapInterface,
+    val context: InterpreterContext
 ) {
     fun interpret()
     {

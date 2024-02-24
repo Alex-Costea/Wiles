@@ -50,8 +50,8 @@ class Interpreter(private val code : String?, private val debug : Boolean, priva
         {
             println()
             print("Variables: ")
-            newVars.putAll(variableMap.filter{it.key !in defaultInterpreterVars})
-            println(newVars.map { it.key + " -> " + it.value})
+            newVars.putAll(variableMap.filter{!defaultInterpreterVars.containsKey(it.key)})
+            println(newVars.display())
         }
     }
 }

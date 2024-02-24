@@ -1,7 +1,7 @@
 package wiles.interpreter.interpreters
 
 import wiles.interpreter.data.InterpreterContext
-import wiles.interpreter.data.InterpreterVariableMap
+import wiles.interpreter.data.InterpreterVariableMapInterface
 import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.exceptions.BreakSignal
 import wiles.interpreter.exceptions.ContinueSignal
@@ -13,7 +13,7 @@ import wiles.shared.constants.Tokens.TO_ID
 import wiles.shared.constants.TypeConstants.INT_TYPE
 import java.math.BigInteger
 
-class InterpretFromFor(statement: JSONStatement, variables: InterpreterVariableMap, context: InterpreterContext)
+class InterpretFromFor(statement: JSONStatement, variables: InterpreterVariableMapInterface, context: InterpreterContext)
     : InterpretFromStatement(statement, variables, context)
 {
     @Suppress("UNCHECKED_CAST")

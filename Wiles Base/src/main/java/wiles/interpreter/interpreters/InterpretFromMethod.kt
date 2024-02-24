@@ -2,9 +2,7 @@ package wiles.interpreter.interpreters
 
 import wiles.checker.data.GenericTypesMap
 import wiles.checker.statics.InferrerUtils.makeGeneric
-import wiles.interpreter.data.InterpreterContext
-import wiles.interpreter.data.InterpreterVariableMap
-import wiles.interpreter.data.ObjectDetails
+import wiles.interpreter.data.*
 import wiles.interpreter.exceptions.ReturnSignal
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
@@ -15,7 +13,7 @@ import wiles.shared.constants.Types
 import java.util.function.BiFunction
 
 class InterpretFromMethod(
-    statement: JSONStatement, variables: InterpreterVariableMap,
+    statement: JSONStatement, variables: InterpreterVariableMapInterface,
     context: InterpreterContext
 )
     : InterpreterWithRef(statement, variables, context)
@@ -34,10 +32,10 @@ class InterpretFromMethod(
         val uniqueFunctionDeclarationVars = functionDeclarationVars.filter { !variables.containsKey(it.key) }
         val functionType = JSONStatement(name = METHOD_ID, syntaxType = SyntaxType.TYPE, components = mutableListOf(type))
         reference = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ givenVars, _ ->
-            val funcVars = InterpreterVariableMap()
-            funcVars.putAll(variables.filter { it.key !in givenVars })
-            funcVars.putAll(givenVars)
-            funcVars.putAll(uniqueFunctionDeclarationVars)
+            val innerVars = InterpreterVariableMap()
+            innerVars.putAll(givenVars)
+            innerVars.putAll(uniqueFunctionDeclarationVars)
+            val funcVars= ComplexInterpreterVariableMap(innerVars, variables)
             val genericTypesMap = GenericTypesMap()
             for(component in type.components)
             {

@@ -2,6 +2,7 @@ package wiles.interpreter.interpreters
 
 import wiles.interpreter.data.InterpreterContext
 import wiles.interpreter.data.InterpreterVariableMap
+import wiles.interpreter.data.InterpreterVariableMapInterface
 import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.exceptions.PanicException
 import wiles.interpreter.statics.DoOperation
@@ -28,7 +29,7 @@ import wiles.shared.constants.Types.LIST_ID
 import wiles.shared.constants.Types.METHOD_CALL_ID
 import java.util.function.BiFunction
 
-class InterpretFromExpression(statement: JSONStatement, variables: InterpreterVariableMap, context: InterpreterContext)
+class InterpretFromExpression(statement: JSONStatement, variables: InterpreterVariableMapInterface, context: InterpreterContext)
     : InterpreterWithRef(statement, variables,context)
 {
     override lateinit var reference : ObjectDetails
