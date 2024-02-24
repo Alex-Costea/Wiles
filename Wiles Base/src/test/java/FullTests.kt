@@ -50,6 +50,20 @@ class FullTests {
             write_line(func())
         """
         assertEquals(getOutput(code2),"20\n")
+
+        val code3="""
+            let var a := 100
+
+            let func := fun(b := 20)
+            begin
+                a := 200
+            end
+
+            write_line(a)
+            func()
+            write_line(a)
+        """
+        assertEquals(getOutput(code3),"100\n200\n")
     }
 
     @Test
