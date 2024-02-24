@@ -90,8 +90,10 @@ class TokenConverterTests {
                     "My name is \"Alex\"\n" +
                     "This is a backslash: \\\n" +
                     "You write it as such: \\b;"))
-        tokenConverterEquals("\"multiline\nstrings\"", arrayOf("@multiline\nstrings"))
+        tokenConverterEquals("\"multiline\nstring\\d;\"", arrayOf("@multiline\nstring$"))
         tokenConverterThrows(0,"\"This is a backslash : \\. Cool, right?\"",
+            StringInvalidException::class.java, null, null)
+        tokenConverterThrows(0,"\"Dollar: $\"",
             StringInvalidException::class.java, null, null)
     }
 
