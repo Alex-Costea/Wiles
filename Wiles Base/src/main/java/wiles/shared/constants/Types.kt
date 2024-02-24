@@ -23,11 +23,11 @@ object Types {
     const val COLLECTION_ID = "COLLECTION"
     const val DICT_ID = "DICT"
 
-    val REQUIRES_SUBTYPE = setOf(LIST_ID, EITHER_ID, MUTABLE_ID, TYPE_TYPE_ID, COLLECTION_ID, DICT_ID)
+    val REQUIRES_SUBTYPE = setOf(LIST_ID, MUTABLE_ID, TYPE_TYPE_ID, COLLECTION_ID, DICT_ID)
     val ALLOWS_GENERICS = hashSetOf(LIST_ID, MUTABLE_ID, TYPE_TYPE_ID, COLLECTION_ID, DICT_ID)
     val MAX_NR_TYPES = hashMapOf(Pair(LIST_ID,1),Pair(MUTABLE_ID,1),Pair(TYPE_TYPE_ID,1),Pair(COLLECTION_ID,2)
         ,Pair(DICT_ID,2))
-    val MIN_NR_TYPES = hashMapOf(Pair(LIST_ID,1),Pair(MUTABLE_ID,1),Pair(EITHER_ID,2),
+    val MIN_NR_TYPES = hashMapOf(Pair(LIST_ID,1),Pair(MUTABLE_ID,1),
         Pair(TYPE_TYPE_ID,1),Pair(COLLECTION_ID,2),Pair(DICT_ID,2))
 
     init {
@@ -36,7 +36,6 @@ object Types {
         TYPES["!text"] = STRING_ID
         TYPES["!rational"] = DOUBLE_ID
         TYPES["!list"] = LIST_ID
-        TYPES["!either"] = EITHER_ID
         TYPES["!anything"] = ANYTHING_ID
         TYPES["!type"] = TYPE_TYPE_ID
         TYPES["!collection"] = COLLECTION_ID

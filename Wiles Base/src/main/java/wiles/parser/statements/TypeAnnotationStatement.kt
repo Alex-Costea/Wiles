@@ -39,6 +39,20 @@ class TypeAnnotationStatement(context: ParserContext, private val allowGenerics 
         return subtypes
     }
 
+    private fun createNewEitherStatement(): TypeAnnotationStatement {
+        val oldName = name
+        name = EITHER_ID
+
+        val component1 = TypeAnnotationStatement(context)
+        component1.name = oldName
+        component1.location = location
+        component1.subtypes.addAll(subtypes)
+        subtypes.clear()
+        subtypes.add(component1)
+
+        return TypeAnnotationStatement(context)
+    }
+
     override fun process(): CompilationExceptionsCollection {
         try {
             val (content,location) = transmitter.expect(tokenOf(IS_CONTAINED_IN(TYPES.keys)
@@ -70,33 +84,13 @@ class TypeAnnotationStatement(context: ParserContext, private val allowGenerics 
             }
             if(transmitter.expectMaybe(tokenOf(MAYBE_ID).dontIgnoreNewLine()).isPresent)
             {
-                val oldName = name
-                name = EITHER_ID
-
-                val component1 = TypeAnnotationStatement(context)
-                component1.name = oldName
-                component1.location = location
-                component1.subtypes.addAll(subtypes)
-                subtypes.clear()
-                subtypes.add(component1)
-
-                val component2 = TypeAnnotationStatement(context)
-                component2.name = NOTHING_ID
-                subtypes.add(component2)
+                val newStatement = createNewEitherStatement()
+                newStatement.name = NOTHING_ID
+                subtypes.add(newStatement)
             }
             if(transmitter.expectMaybe(tokenOf(Tokens.OR_ID).dontIgnoreNewLine()).isPresent)
             {
-                val oldName = name
-                name = EITHER_ID
-
-                val component1 = TypeAnnotationStatement(context)
-                component1.name = oldName
-                component1.location = location
-                component1.subtypes.addAll(subtypes)
-                subtypes.clear()
-                subtypes.add(component1)
-
-                val newStatement = TypeAnnotationStatement(context)
+                val newStatement = createNewEitherStatement()
                 newStatement.process().throwFirstIfExists()
                 subtypes.add(newStatement)
             }
