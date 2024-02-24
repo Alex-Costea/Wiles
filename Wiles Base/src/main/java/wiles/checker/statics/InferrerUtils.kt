@@ -43,8 +43,7 @@ import wiles.shared.constants.Types.TYPE_TYPE_ID
 
 object InferrerUtils {
     fun inferTypeFromLiteral(token : JSONStatement,
-                             variables : HashMap<String, VariableDetails>,
-                             additionalVars : HashMap<String, VariableDetails>,) : JSONStatement
+                             variables : HashMap<String, VariableDetails>) : JSONStatement
     {
         assert(token.syntaxType == SyntaxType.TOKEN)
         val name = token.name

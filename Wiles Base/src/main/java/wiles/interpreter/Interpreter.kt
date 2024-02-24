@@ -34,7 +34,7 @@ class Interpreter(private val code : String?, private val debug : Boolean, priva
         try {
             try
             {
-                InterpreterService(input, variableMap, InterpreterVariableMap(), context).interpret()
+                InterpreterService(input, variableMap, context).interpret()
             }
             catch (ex : StackOverflowError)
             {

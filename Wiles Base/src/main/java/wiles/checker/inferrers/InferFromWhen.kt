@@ -50,7 +50,7 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
         {
             if(component.syntaxType == SyntaxType.TYPE)
             {
-                InferFromType(InferrerDetails(component,variables,exceptions, additionalVars, context),
+                InferFromType(InferrerDetails(component,variables,exceptions, context),
                     isTopMostType = true).infer()
                 if (!isFormerSuperTypeOfLatter(inferredType, component)) {
                     throw ConflictingTypeDefinitionException(component.getFirstLocation(),
@@ -80,7 +80,7 @@ class InferFromWhen(details: InferrerDetails) : InferFromStatement(details) {
 
             val block = components.removeFirst()
             InferFromCodeBlock(InferrerDetails(block, newVariables,
-                exceptions, additionalVars, context)).infer()
+                exceptions, context)).infer()
             listOfVariableMaps.add(newVariables)
             codeBlockLists.add(block)
         }

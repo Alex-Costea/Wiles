@@ -6,12 +6,12 @@ import wiles.interpreter.exceptions.BreakSignal
 import wiles.interpreter.exceptions.ContinueSignal
 import wiles.shared.JSONStatement
 
-class InterpretFromWhile(statement: JSONStatement, variables: InterpreterVariableMap, additionalVars: InterpreterVariableMap, context: InterpreterContext)
-    : InterpretFromStatement(statement, variables, additionalVars, context)
+class InterpretFromWhile(statement: JSONStatement, variables: InterpreterVariableMap, context: InterpreterContext)
+    : InterpretFromStatement(statement, variables, context)
 {
     override fun interpret() {
-        val conditionInterpreter = InterpretFromExpression(statement.components[0], variables, additionalVars, context)
-        val codeBlockInterpreter = InterpretFromCodeBlock(statement.components[1], variables, additionalVars, context)
+        val conditionInterpreter = InterpretFromExpression(statement.components[0], variables, context)
+        val codeBlockInterpreter = InterpretFromCodeBlock(statement.components[1], variables, context)
 
         while(true)
         {

@@ -25,7 +25,7 @@ class InferFromData(details: InferrerDetails) : InferFromStatement(details) {
             else
             {
                 val inferrer = InferFromExpression(
-                    InferrerDetails(component, variables, exceptions, additionalVars, context)
+                    InferrerDetails(component, variables, exceptions, context)
                 )
                 inferrer.infer()
                 inferredType.components.add(component.components[0].copyRemovingLocation())

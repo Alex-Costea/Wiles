@@ -266,5 +266,19 @@ write_line("Min found: " + result)
             write_line(❤️.👩‍👩‍👧‍👧)
         """
         assertEquals(getOutput(code24),"5\n25\n125\n")
+
+        val code25="""
+            let a := 123
+            let f := fun(d := 15)
+            begin
+                let c := 1
+                write_line(d)
+                yield a + 5
+            end
+            let c := 2
+            let d := 20
+            write_line(f() + c + d)
+        """
+        assertEquals(getOutput(code25),"15\n150\n")
     }
 }

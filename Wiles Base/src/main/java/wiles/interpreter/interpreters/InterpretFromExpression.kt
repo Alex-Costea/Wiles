@@ -28,8 +28,8 @@ import wiles.shared.constants.Types.LIST_ID
 import wiles.shared.constants.Types.METHOD_CALL_ID
 import java.util.function.BiFunction
 
-class InterpretFromExpression(statement: JSONStatement, variables: InterpreterVariableMap, additionalVars: InterpreterVariableMap, context: InterpreterContext)
-    : InterpreterWithRef(statement, variables, additionalVars,context)
+class InterpretFromExpression(statement: JSONStatement, variables: InterpreterVariableMap, context: InterpreterContext)
+    : InterpreterWithRef(statement, variables,context)
 {
     override lateinit var reference : ObjectDetails
 
@@ -57,16 +57,16 @@ class InterpretFromExpression(statement: JSONStatement, variables: InterpreterVa
         else {
             val interpreter : InterpreterWithRef = when (type) {
                 SyntaxType.LIST -> {
-                    InterpretFromList(component, variables, additionalVars, context)
+                    InterpretFromList(component, variables, context)
                 }
                 SyntaxType.METHOD -> {
-                    InterpretFromMethod(component, variables, additionalVars, context)
+                    InterpretFromMethod(component, variables, context)
                 }
                 SyntaxType.DICT -> {
-                    InterpretFromDict(component, variables, additionalVars, context)
+                    InterpretFromDict(component, variables, context)
                 }
                 SyntaxType.DATA -> {
-                    InterpretFromData(component, variables, additionalVars, context)
+                    InterpretFromData(component, variables, context)
                 }
                 else -> throw InternalErrorException()
             }
@@ -79,7 +79,7 @@ class InterpretFromExpression(statement: JSONStatement, variables: InterpreterVa
     {
         return when (component.syntaxType) {
             SyntaxType.EXPRESSION -> {
-                val expressionRun = InterpretFromExpression(component, variables, additionalVars, context)
+                val expressionRun = InterpretFromExpression(component, variables, context)
                 expressionRun.interpret()
                 expressionRun.reference
             }

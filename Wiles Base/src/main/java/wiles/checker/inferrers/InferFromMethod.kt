@@ -19,9 +19,9 @@ import wiles.shared.constants.Types.TYPE_TYPE_ID
 
 class InferFromMethod(details: InferrerDetails) : InferFromStatement(
     InferrerDetails(details.statement,
-        StandardLibrary.defaultCheckerVars.copy(),
+        details.variables.copy(),
         details.exceptions,
-        additionalVars = details.variables, details.context)
+        details.context)
 )
 {
     private val statedType = if(statement.components.getOrNull(0)?.syntaxType == SyntaxType.TYPE)
@@ -98,7 +98,7 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
         {
             if(component.syntaxType==SyntaxType.TYPE) {
                 InferFromType(
-                    InferrerDetails(component, declarationVariables, exceptions, additionalVars, context),
+                    InferrerDetails(component, declarationVariables, exceptions, context),
                     isTopMostType = false, genericTypes = genericTypes
                 ).infer()
                 continue
@@ -108,13 +108,13 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
             assert(component.syntaxType == SyntaxType.DECLARATION)
 
             val inferrer = InferFromDeclaration(
-                InferrerDetails(component, declarationVariables, exceptions, additionalVars, context),
+                InferrerDetails(component, declarationVariables, exceptions, context),
                 inFunction = true, isTopMostType = false, genericTypes = genericTypes
             )
             inferrer.infer()
         }
 
-        createTypes(statement, genericTypes, variables = additionalVars, context)
+        createTypes(statement, genericTypes, variables, context)
 
         declarationVariables.forEach { it.value.initialized = true }
         variables.putAll(declarationVariables)
@@ -122,8 +122,7 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
             VariableDetails(JSONStatement(syntaxType = SyntaxType.TYPE, name = TYPE_TYPE_ID,
                 components = mutableListOf(makeGeneric(it.value,it.key))))) })
 
-        val inferrer = InferrerService(InferrerDetails(statement.components.last(), variables, exceptions,
-            additionalVars, context))
+        val inferrer = InferrerService(InferrerDetails(statement.components.last(), variables, exceptions, context))
         inferrer.infer()
 
         if(exceptions.isNotEmpty())

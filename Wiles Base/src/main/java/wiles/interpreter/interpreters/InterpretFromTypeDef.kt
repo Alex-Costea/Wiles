@@ -8,9 +8,9 @@ import wiles.shared.SyntaxType
 import wiles.shared.constants.Types
 
 class InterpretFromTypeDef(statement: JSONStatement, variables: InterpreterVariableMap,
-                           additionalVars: InterpreterVariableMap, context: InterpreterContext
+                           context: InterpreterContext
 )
-    : InterpretFromStatement(statement, variables, additionalVars,context ) {
+    : InterpretFromStatement(statement, variables,context ) {
     override fun interpret() {
         val name = statement.components[0].name
         val type = statement.components[1]
