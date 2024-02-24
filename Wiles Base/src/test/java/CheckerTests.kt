@@ -29,6 +29,126 @@ class CheckerTests {
         Assertions.assertEquals(exceptionList, checker.check())
         assertEquals(result,checker.code.toString())
     }
+
+    @Test
+    fun variableContextTest()
+    {
+        /*
+            let var a := 100
+            let func := fun(a := 200) do nothing
+         */
+        checkResult(createExceptions(VariableAlreadyDeclaredException(NULL_LOCATION)),
+            """
+                {
+  "parsed": true,
+  "type": "CODE_BLOCK",
+  "components": [
+    {
+      "name": "VARIABLE",
+      "type": "DECLARATION",
+      "components": [
+        {
+          "name": "!a",
+          "type": "TOKEN",
+          "location": {
+            "line": 1,
+            "lineIndex": 9
+          }
+        },
+        {
+          "type": "EXPRESSION",
+          "components": [
+            {
+              "name": "#100",
+              "type": "TOKEN",
+              "location": {
+                "line": 1,
+                "lineIndex": 14
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "DECLARATION",
+      "components": [
+        {
+          "name": "!func",
+          "type": "TOKEN",
+          "location": {
+            "line": 2,
+            "lineIndex": 5
+          }
+        },
+        {
+          "type": "EXPRESSION",
+          "components": [
+            {
+              "type": "METHOD",
+              "location": {
+                "line": 2,
+                "lineIndex": 13
+              },
+              "components": [
+                {
+                  "type": "DECLARATION",
+                  "components": [
+                    {
+                      "name": "!a",
+                      "type": "TOKEN",
+                      "location": {
+                        "line": 2,
+                        "lineIndex": 17
+                      }
+                    },
+                    {
+                      "type": "EXPRESSION",
+                      "components": [
+                        {
+                          "name": "#200",
+                          "type": "TOKEN",
+                          "location": {
+                            "line": 2,
+                            "lineIndex": 22
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "CODE_BLOCK",
+                  "components": [
+                    {
+                      "type": "EXPRESSION",
+                      "components": [
+                        {
+                          "name": "!nothing",
+                          "type": "TOKEN",
+                          "location": {
+                            "line": 2,
+                            "lineIndex": 30
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+            """,
+            "CODE_BLOCK(DECLARATION VARIABLE; (TYPE INT; !a; EXPRESSION(TYPE INT; #100)); DECLARATION(!func; EXPRESSION(METHOD(DECLARATION(!a; EXPRESSION(#200)); CODE_BLOCK(EXPRESSION(!nothing))))))")
+    }
+
+
+
     @Test
     fun inferFromDeclaration()
     {
