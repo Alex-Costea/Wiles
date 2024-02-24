@@ -24,7 +24,7 @@ class DataStatement(context: ParserContext) : AbstractStatement(context) {
         val name = tokenStatement.token.content
         val expression = InnerDefaultExpression(context)
         val newToken = Token(Tokens.STRING_START + name.substring(1), tokenStatement.token.location)
-        expression.left = TokenStatement(newToken, context)
+        expression.right = TokenStatement(newToken, context)
         return expression
     }
 

@@ -228,5 +228,15 @@ writeline("Min found: " + result)
             end
         """
         assertEquals(getOutput(code19),"10\n")
+
+        val code20="""
+            let me := data{name := "alex", age := 25}
+            writeline(me.name)
+            writeline(me.age)
+            writeline(me.type)
+        """
+        assertEquals(getOutput(code20),"alex\n" +
+                "25\n" +
+                "TYPE DATA; (EXPRESSION(@name); TYPE STRING; EXPRESSION(@age); TYPE INT)\n")
     }
 }
