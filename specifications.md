@@ -6,7 +6,7 @@
 
 - `nothing`
 - Integer: `12345`
-- Floating: `12345.6` (also `Infinity`, `-Infinity` and `NaN`)
+- Floating: `12345.6`
 - String: `"abc"`. Can be multiline. Escaped sequences:
   - `\n;` is newline
   - `\b;` is backslash

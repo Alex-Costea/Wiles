@@ -64,8 +64,6 @@ object StandardLibrary {
     private const val READ_TRUTH = "!read_truth"
     private const val AS_TEXT = "!as_text"
     private const val AS_LIST = "!as_list"
-    private const val INFINITY = "!Infinity"
-    private const val NAN = "!NaN"
     private const val MAYBE = "!maybe"
     private const val CONTENT = "!content"
     private const val RUN = "!run"
@@ -96,8 +94,6 @@ object StandardLibrary {
             Pair(READ_TRUTH, VariableDetails(READ_NOTHING_RETURN_BOOL_TYPE)),
             Pair(AS_TEXT, VariableDetails(AS_TEXT_TYPE)),
             Pair(AS_LIST, VariableDetails(AS_LIST_TYPE)),
-            Pair(INFINITY, VariableDetails(DECIMAL_TYPE)),
-            Pair(NAN, VariableDetails(DECIMAL_TYPE)),
             Pair(MAYBE, VariableDetails(MAYBE_TYPE)),
             Pair(CONTENT, VariableDetails(CONTENT_TYPE)),
             Pair(RUN, VariableDetails(RUN_TYPE)),
@@ -114,8 +110,6 @@ object StandardLibrary {
     val NOTHING_REF = ObjectDetails(null, defaultCheckerVars[NOTHING_ID]!!.type)
     val FALSE_REF = ObjectDetails(false, defaultCheckerVars[FALSE_ID]!!.type)
     val TRUE_REF = ObjectDetails(true, defaultCheckerVars[TRUE_ID]!!.type)
-    private val INFINITY_REF = ObjectDetails(Double.POSITIVE_INFINITY, defaultCheckerVars[INFINITY]!!.type)
-    private val NAN_REF = ObjectDetails(Double.NaN, defaultCheckerVars[NAN]!!.type)
 
     private val WRITE_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ it, context ->
         val value = it["!text"]?:return@BiFunction NOTHING_REF
@@ -325,8 +319,6 @@ object StandardLibrary {
         defaultInterpreterVars[READ_TRUTH] = READ_TRUTH_REF
         defaultInterpreterVars[AS_TEXT] = AS_TEXT_REF
         defaultInterpreterVars[AS_LIST] = AS_LIST_REF
-        defaultInterpreterVars[INFINITY] = INFINITY_REF
-        defaultInterpreterVars[NAN] = NAN_REF
         defaultInterpreterVars[MAYBE] = MAYBE_REF
         defaultInterpreterVars[CONTENT] = CONTENT_REF
         defaultInterpreterVars[RUN] = RUN_REF
