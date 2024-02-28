@@ -131,10 +131,10 @@ write_line("Min found: " + result)
         assertEquals(getOutput(code4),"100\n")
 
         val code5 = """
-            let a := mut 2
-            let list := mut [mut 1, a, mut 3]
+            let a := 2
+            let list := mut [1, a, 3]
             list.remove(at := 0)
-            list.update(at := 0, mut 10)
+            list.update(at := 0, 10)
             write_line(a)
             write_line(list)
         """
@@ -326,5 +326,12 @@ write_line("Min found: " + result)
             write_line(list.as_text)
         """
         assertEquals(getOutput(code26),"[1, 10, 3]\n")
+
+        val code27= """
+            let a := mut [1, 2, "nothing", nothing] : int or text?
+            let b : list[int or text?] := a
+            write_line(a.type)
+        """
+        assertEquals(getOutput(code27),"TYPE MUTABLE; (TYPE LIST; (TYPE EITHER; (TYPE INT; TYPE STRING; TYPE !nothing)))\n")
     }
 }
