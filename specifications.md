@@ -6,8 +6,12 @@
 
 - `nothing`
 - Integer: `12345`
-- Floating: `12345.6` (also `Infinity`, `-Infinity` and `NaN`)
-- String: `"abc"` (escape characters HTML-style)
+- Floating: `12345.6`
+- String: `"abc"`. Can be multiline. Escaped sequences:
+  - `\n;` is newline
+  - `\b;` is backslash
+  - `\q;` is quote
+  - `\d;` is dollar (reserved for future use)
 - Boolean: `true` and `false`
 - List literal: `[⟪value,⟫] ⟨: type⟩`
 - Dict literal: `{ ⟪key -> value,⟫ } ⟨: key_type -> value_type⟩`
@@ -19,9 +23,9 @@
 - Integers: `int` (any integral value)
 - Boolean: `truth`
 - String: `text`
-- Floating point: `rational` (equivalent to `double` in other languages)
+- Floating point: `decimal` (equivalent to `BigDecimal`)
 - Function type: like function literals, but no function body and put between square brackets (ex: `fun[x : int, -> int]`)
-- Sum types: `either[⟪type,⟫]`, or `type1 or type2`
+- Sum types:`type1 or type2`
 - List: `list[type]`
 - Dict: `dict[key_type, value_type]`
 - Data: `data[⟪key : type,⟫]`
@@ -49,7 +53,7 @@
 
 ### Symbols
 - `+`, `-`, `*`, `/`, `^` (power)
-- `+` (text and list concatenation)
+- `+` (text concatenation)
 - `*` (repeat text)
 - `and`, `or`, `not` (not bitwise!)
 - `=`, `>`, `>=`, `<`, `<=`, `=/=`
@@ -60,7 +64,6 @@
 - `[]` (list literals, subcomponents in type definitions)
 - `,` (separator between elements)
 - `?` (syntactic sugar for `type? = type or nothing`)
-- `import` (get a variable from the outside scope)
 
 ### Named parameters
 - Function calling with named parameters by default: `my_function(a := 1, b := 10)`
@@ -70,15 +73,14 @@
 
 ### Mutable types
 - Type: `mut[type]`, always subtype of `type`
-- Make an immutable type into a mutable type with `mut` prefix operator
-- Change the value of a mutable object with `object.set(new_val)`
+- Make an immutable collection into a mutable type with `mut` prefix operator
 
 ### Generics in functions
 - Example: `fun(x : list[anything as T]) -> T`, will return the same type as the list's components type
 - Declare using the `as` keyword
 
 ### Standard library
-- `write`, `writeline`: write object to the command line
+- `write`, `write_line`: write object to the command line
 - `panic`: print an error message and exit
 - `ignore`: ignore the value
 - `modulo(x,y)`: calculate the modulo
@@ -101,7 +103,7 @@
 - `;` can be specified or inferred from newline
 - Language is statically, strongly typed with some type inference
 - Comment using `#`
-- `\` can be used to continue a line after a newline (including string literals and comments)
+- `\` can be used to continue a line after a newline
 - Types are not reserved keywords and can be used as variable names
 - Top level expressions must be of type `nothing`
 - Trailing commas are valid but not necessary

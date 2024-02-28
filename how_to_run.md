@@ -20,7 +20,7 @@ You can also compile the source code by adding `--compile` as an argument, and r
 
 Using the backend and frontend locally.
 
-To use `Wiles Web Backend`, add the `Wiles.jar` file manually to the following address before running Maven:
+To use `wiles-web-backend`, add the `Wiles.jar` file manually to the following address before running Maven:
 
 ```
  /Users/[username]/.m2/repository/costea/Wiles/[version]/Wiles-[version].jar

@@ -90,3 +90,4 @@ syntaxTree.json
 /target/classes/StandardLibrary.wiles
 /target/classes/additional_code.wiles
 /.idea/
+input.wiles_compiled.json

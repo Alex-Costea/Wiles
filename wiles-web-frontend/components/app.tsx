@@ -49,7 +49,7 @@ function App() {
     const [output, setOutput] = usePersistedState("output", "")
     const [errors, setErrors] = usePersistedState("errors", "")
     const [code, setCode] = usePersistedState("code",
-        'let name := read_line()\nwriteline("Hello, " + name + "!")')
+        'let name := read_line()\nwrite_line("Hello, " + name + "!")')
     const [input, setInput] = usePersistedState("input", "Wiles")
 
     async function GetXSRF()
