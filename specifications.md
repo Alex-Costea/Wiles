@@ -53,7 +53,7 @@
 
 ### Symbols
 - `+`, `-`, `*`, `/`, `^` (power)
-- `+` (text and list concatenation)
+- `+` (text concatenation)
 - `*` (repeat text)
 - `and`, `or`, `not` (not bitwise!)
 - `=`, `>`, `>=`, `<`, `<=`, `=/=`
@@ -73,8 +73,7 @@
 
 ### Mutable types
 - Type: `mut[type]`, always subtype of `type`
-- Make an immutable type into a mutable type with `mut` prefix operator
-- Change the value of a mutable object with `object.set(new_val)`
+- Make an immutable collection into a mutable type with `mut` prefix operator
 
 ### Generics in functions
 - Example: `fun(x : list[anything as T]) -> T`, will return the same type as the list's components type
