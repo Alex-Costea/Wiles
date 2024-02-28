@@ -2,13 +2,13 @@ package wiles.interpreter.interpreters
 
 import wiles.checker.statics.InferrerUtils
 import wiles.interpreter.data.InterpreterContext
-import wiles.interpreter.data.InterpreterVariableMap
+import wiles.interpreter.data.InterpreterVariableMapInterface
 import wiles.interpreter.data.ObjectDetails
 import wiles.shared.JSONStatement
 import wiles.shared.constants.TypeUtils.makeDict
 
-class InterpretFromDict(statement: JSONStatement, variables: InterpreterVariableMap, additionalVars: InterpreterVariableMap, context: InterpreterContext)
-    : InterpreterWithRef(statement, variables, additionalVars,context)
+class InterpretFromDict(statement: JSONStatement, variables: InterpreterVariableMapInterface, context: InterpreterContext)
+    : InterpreterWithRef(statement, variables,context)
 {
     override lateinit var reference : ObjectDetails
     override fun interpret() {
@@ -18,7 +18,7 @@ class InterpretFromDict(statement: JSONStatement, variables: InterpreterVariable
         var index = 1
         while(index < statement.components.size)
         {
-            val interpreter1 = InterpretFromExpression(statement.components[index], variables, additionalVars, context)
+            val interpreter1 = InterpretFromExpression(statement.components[index], variables, context)
             interpreter1.interpret()
 
             newType1 = if(newType1 == null)
@@ -27,7 +27,7 @@ class InterpretFromDict(statement: JSONStatement, variables: InterpreterVariable
 
             index++
 
-            val interpreter2 = InterpretFromExpression(statement.components[index], variables, additionalVars, context)
+            val interpreter2 = InterpretFromExpression(statement.components[index], variables, context)
             interpreter2.interpret()
 
             newType2 = if(newType2 == null)

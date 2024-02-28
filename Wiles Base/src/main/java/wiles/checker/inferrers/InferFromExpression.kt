@@ -25,7 +25,6 @@ import wiles.shared.constants.Tokens.AND_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.EQUALS_ID
 import wiles.shared.constants.Tokens.IDENTIFIER_START
-import wiles.shared.constants.Tokens.IMPORT_ID
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
@@ -114,7 +113,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
             var rightText : String = if(rightComponents.size == 1) makeTypeUngeneric(rightComponents[0]).name else ANYTHING_ID
             if(rightText !in VALID_NAMED) rightText = ANYTHING_ID
             operationName = if(middle.name in listOf(ASSIGN_ID, MUTABLE_ID,
-                    IMPORT_ID, AND_ID, OR_ID, EQUALS_ID, NOT_EQUAL_ID)) middle.name
+                    AND_ID, OR_ID, EQUALS_ID, NOT_EQUAL_ID)) middle.name
                 else "${leftText}|${middle.name}|${rightText}"
             return if(resultingTypes.size == 1)
                 resultingTypes[0]
@@ -127,7 +126,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
         if(statement.syntaxType in TYPES_LIST)
         {
             val inferrer = InferrerService(InferrerDetails(
-                statement,variables, CompilationExceptionsCollection(),additionalVars, context))
+                statement,variables, CompilationExceptionsCollection(), context))
             inferrer.infer()
             exceptions.addAll(inferrer.exceptions)
         }
@@ -135,7 +134,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
         {
             val inferrer = InferrerService(
                 InferrerDetails(statement.components[0],
-                variables, CompilationExceptionsCollection(), additionalVars, context)
+                variables, CompilationExceptionsCollection(), context)
             )
             inferrer.infer()
             when (statement.components[0].syntaxType) {
@@ -161,7 +160,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
         }
         else if(statement.components.size==1 && statement.components[0].syntaxType == SyntaxType.TOKEN)
         {
-            val type = inferTypeFromLiteral(statement.components[0],variables, additionalVars)
+            val type = inferTypeFromLiteral(statement.components[0],variables)
             statement.components.add(0,type)
         }
         else if (statement.components.size == 2 || statement.components.size == 3)
@@ -183,22 +182,6 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
             //Check if value can be assigned to
             if(middle.name == ASSIGN_ID)
             {
-                //Import statement
-                if(left.components.size == 2 && left.components.all { it.syntaxType == SyntaxType.TOKEN }
-                    && left.components[0].name == IMPORT_ID) {
-                    left.name = ""
-                    left.syntaxType = SyntaxType.EXPRESSION
-                    val name = left.components[1].name
-                    val location = left.components[1].getFirstLocation()
-                    left.components.clear()
-                    left.components.add(
-                        JSONStatement(
-                            name = "!$IMPORT_ID$name",
-                            syntaxType = SyntaxType.TOKEN,
-                            location = location
-                    ))
-                }
-
                 //Change value of variable
                 if(left.components.size == 1 && IS_IDENTIFIER.test(left.components[0].name)) {
                     val variableName = left.components[0].name
@@ -215,9 +198,9 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
             val rightIsToken = right.syntaxType == SyntaxType.TOKEN
 
             if(!leftIsToken)
-                InferFromExpression(InferrerDetails(left, variables, exceptions, additionalVars, context)).infer()
+                InferFromExpression(InferrerDetails(left, variables, exceptions, context)).infer()
 
-            val leftType = if(leftIsToken) inferTypeFromLiteral(left,variables, additionalVars)
+            val leftType = if(leftIsToken) inferTypeFromLiteral(left,variables)
                 else if(left.syntaxType == SyntaxType.EXPRESSION) left.components[0]
                 else if(left.syntaxType == SyntaxType.DICT) left.components[0]
                 else if(left.syntaxType == SyntaxType.LIST) makeList(left.components[0])
@@ -225,7 +208,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
                 else throw InternalErrorException()
 
             //Transform access operation into apply operation
-            if(middle == TypeConstants.ACCESS_OPERATION)
+            if(middle == ACCESS_OPERATION)
             {
                 var methodCallComponents = mutableListOf<JSONStatement>()
                 var shouldTransform = true
@@ -281,20 +264,15 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
             }
 
             if(!rightIsToken)
-                InferFromExpression(InferrerDetails(right, variables, exceptions, additionalVars, context)).infer()
+                InferFromExpression(InferrerDetails(right, variables, exceptions, context)).infer()
 
-            val middleIsImport = middle.name == IMPORT_ID
-
-            val rightType = if(rightIsToken && !middleIsImport) inferTypeFromLiteral(right,variables, additionalVars)
-                else if(rightIsToken && IS_IDENTIFIER.test(right.name))
-                    inferTypeFromLiteral(right, additionalVars, additionalVars)
-                else if(middleIsImport) throw ExpectedIdentifierException(right.getFirstLocation())
-                else if(right.syntaxType == SyntaxType.EXPRESSION) right.components[0]
-                else if(right.syntaxType == SyntaxType.DICT) right.components[0]
-                else if(right.syntaxType == SyntaxType.LIST) makeList(right.components[0])
-                else if(right.syntaxType == SyntaxType.METHOD) makeMethod(right)
-                else if(right.syntaxType == SyntaxType.METHOD_CALL) right.components[0]
-                else throw InternalErrorException()
+            val rightType = if(rightIsToken) inferTypeFromLiteral(right,variables)
+            else if (right.syntaxType == SyntaxType.EXPRESSION) right.components[0]
+            else if (right.syntaxType == SyntaxType.DICT) right.components[0]
+            else if (right.syntaxType == SyntaxType.LIST) makeList(right.components[0])
+            else if (right.syntaxType == SyntaxType.METHOD) makeMethod(right)
+            else if (right.syntaxType == SyntaxType.METHOD_CALL) right.components[0]
+            else throw InternalErrorException()
 
             if(middle == ACCESS_OPERATION)
             {

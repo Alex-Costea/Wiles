@@ -17,7 +17,6 @@ class InferFromFor(details: InferrerDetails) : InferFromStatement(
     InferrerDetails(details.statement,
         details.variables.copy(),
         details.exceptions,
-        details.additionalVars,
         details.context)
 ) {
 
@@ -25,7 +24,7 @@ class InferFromFor(details: InferrerDetails) : InferFromStatement(
     {
         components.removeFirst()
         val expression = components[0]
-        InferFromExpression(InferrerDetails(expression, variables, exceptions, additionalVars, context)).infer()
+        InferFromExpression(InferrerDetails(expression, variables, exceptions, context)).infer()
         val expressionType = components[0].components[0]
 
         if(!isFormerSuperTypeOfLatter(superType, expressionType))
@@ -64,7 +63,7 @@ class InferFromFor(details: InferrerDetails) : InferFromStatement(
 
         val codeBlock = components[0]
         val inferFromCodeBlock = InferFromCodeBlock(InferrerDetails(codeBlock,
-            variables, exceptions, additionalVars, context))
+            variables, exceptions, context))
         inferFromCodeBlock.infer()
 
         statement.components.add(0,variables[variableName]!!.type)

@@ -2,41 +2,40 @@ package wiles.interpreter.interpreters
 
 import wiles.checker.data.GenericTypesMap
 import wiles.checker.statics.InferrerUtils.makeGeneric
-import wiles.interpreter.data.InterpreterContext
-import wiles.interpreter.data.InterpreterVariableMap
-import wiles.interpreter.data.ObjectDetails
+import wiles.interpreter.data.*
 import wiles.interpreter.exceptions.ReturnSignal
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.StandardLibrary.NOTHING_REF
-import wiles.shared.constants.StandardLibrary.defaultInterpreterVars
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 import wiles.shared.constants.Types
 import java.util.function.BiFunction
 
-class InterpretFromMethod(statement: JSONStatement, variables: InterpreterVariableMap,
-                          additionalVars: InterpreterVariableMap, context: InterpreterContext)
-    : InterpreterWithRef(statement, variables, additionalVars, context)
+class InterpretFromMethod(
+    statement: JSONStatement, variables: InterpreterVariableMapInterface,
+    context: InterpreterContext
+)
+    : InterpreterWithRef(statement, variables, context)
 {
     override lateinit var reference : ObjectDetails
     override fun interpret() {
         val type = statement.copyRemovingLocation()
         type.components.removeLast()
-        val newVars = defaultInterpreterVars.copy()
         val codeBlock = statement.components.last()
+        val functionDeclarationVars = variables.copy()
         for(component in statement.components.dropLast(1).drop(1))
         {
-            val interpreter = InterpretFromDeclaration(component, newVars, variables, context)
+            val interpreter = InterpretFromDeclaration(component, functionDeclarationVars, context)
             interpreter.interpret()
         }
-        val defaultVars = InterpreterVariableMap()
-        defaultVars.putAll(newVars)
+        val uniqueFunctionDeclarationVars = functionDeclarationVars.filter { !variables.containsKey(it.key) }
         val functionType = JSONStatement(name = METHOD_ID, syntaxType = SyntaxType.TYPE, components = mutableListOf(type))
         reference = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ givenVars, _ ->
-            val funcVars = InterpreterVariableMap()
-            funcVars.putAll(defaultVars.filter { it.key !in givenVars })
-            funcVars.putAll(givenVars)
+            val innerVars = InterpreterVariableMap()
+            innerVars.putAll(uniqueFunctionDeclarationVars)
+            innerVars.putAll(givenVars)
+            val funcVars = ComplexInterpreterVariableMap(innerVars, variables)
             val genericTypesMap = GenericTypesMap()
             for(component in type.components)
             {
@@ -51,10 +50,9 @@ class InterpretFromMethod(statement: JSONStatement, variables: InterpreterVariab
                 Pair(it.key.split("|")[0], ObjectDetails(genericValue,
                 JSONStatement(syntaxType = SyntaxType.TYPE, name = Types.TYPE_TYPE_ID,
                     components = mutableListOf(genericValue)))) })
-            funcVars.putAll(defaultInterpreterVars)
             try
             {
-                val interpreter = InterpretFromCodeBlock(codeBlock,funcVars, variables, context)
+                val interpreter = InterpretFromCodeBlock(codeBlock, funcVars, context)
                 interpreter.interpret()
                 return@BiFunction NOTHING_REF
             }

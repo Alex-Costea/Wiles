@@ -29,6 +29,126 @@ class CheckerTests {
         Assertions.assertEquals(exceptionList, checker.check())
         assertEquals(result,checker.code.toString())
     }
+
+    @Test
+    fun variableContextTest()
+    {
+        /*
+            let var a := 100
+            let func := fun(a := 200) do nothing
+         */
+        checkResult(createExceptions(VariableAlreadyDeclaredException(NULL_LOCATION)),
+            """
+                {
+  "parsed": true,
+  "type": "CODE_BLOCK",
+  "components": [
+    {
+      "name": "VARIABLE",
+      "type": "DECLARATION",
+      "components": [
+        {
+          "name": "!a",
+          "type": "TOKEN",
+          "location": {
+            "line": 1,
+            "lineIndex": 9
+          }
+        },
+        {
+          "type": "EXPRESSION",
+          "components": [
+            {
+              "name": "#100",
+              "type": "TOKEN",
+              "location": {
+                "line": 1,
+                "lineIndex": 14
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "DECLARATION",
+      "components": [
+        {
+          "name": "!func",
+          "type": "TOKEN",
+          "location": {
+            "line": 2,
+            "lineIndex": 5
+          }
+        },
+        {
+          "type": "EXPRESSION",
+          "components": [
+            {
+              "type": "METHOD",
+              "location": {
+                "line": 2,
+                "lineIndex": 13
+              },
+              "components": [
+                {
+                  "type": "DECLARATION",
+                  "components": [
+                    {
+                      "name": "!a",
+                      "type": "TOKEN",
+                      "location": {
+                        "line": 2,
+                        "lineIndex": 17
+                      }
+                    },
+                    {
+                      "type": "EXPRESSION",
+                      "components": [
+                        {
+                          "name": "#200",
+                          "type": "TOKEN",
+                          "location": {
+                            "line": 2,
+                            "lineIndex": 22
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "CODE_BLOCK",
+                  "components": [
+                    {
+                      "type": "EXPRESSION",
+                      "components": [
+                        {
+                          "name": "!nothing",
+                          "type": "TOKEN",
+                          "location": {
+                            "line": 2,
+                            "lineIndex": 30
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+            """,
+            "CODE_BLOCK(DECLARATION VARIABLE; (TYPE INT; !a; EXPRESSION(TYPE INT; #100)); DECLARATION(!func; EXPRESSION(METHOD(DECLARATION(!a; EXPRESSION(#200)); CODE_BLOCK(EXPRESSION(!nothing))))))")
+    }
+
+
+
     @Test
     fun inferFromDeclaration()
     {
@@ -621,39 +741,6 @@ class CheckerTests {
     } ]
   } ]
 }""","CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE INT; TYPE !nothing); !a; EXPRESSION(TYPE INT; #2)); EXPRESSION(!write_line; APPLY; METHOD_CALL(TYPE METHOD_CALL; (METHOD_CALL(EXPRESSION(TYPE EITHER; (TYPE INT; TYPE !nothing); !a))))))")
-
-        checkResult(createExceptions(ExpectedIdentifierException(NULL_LOCATION)),"""{
-  "parsed" : true,
-  "type" : "CODE_BLOCK",
-  "components" : [ {
-    "type" : "DECLARATION",
-    "components" : [ {
-      "name" : "!a",
-      "type" : "TOKEN",
-      "location" : {
-        "line" : 1,
-        "lineIndex" : 5
-      }
-    }, {
-      "type" : "EXPRESSION",
-      "components" : [ {
-        "name" : "IMPORT",
-        "type" : "TOKEN",
-        "location" : {
-          "line" : 1,
-          "lineIndex" : 10
-        }
-      }, {
-        "name" : "#1",
-        "type" : "TOKEN",
-        "location" : {
-          "line" : 1,
-          "lineIndex" : 17
-        }
-      } ]
-    } ]
-  } ]
-}""","CODE_BLOCK(DECLARATION(!a; EXPRESSION(IMPORT; #1)))")
 
         checkResult(createExceptions(UnusedExpressionException(NULL_LOCATION)),"""{
   "parsed" : true,
@@ -4781,201 +4868,256 @@ class CheckerTests {
         /*
         let create_sum := fun(arg a : int) do
             yield fun(arg b : int) do
-                yield (import a) + b
+                yield a + b
 
         let add_5 := create_sum(5)
         let number := add_5(5)
          */
 
         checkResult(null,"""{
-  "parsed" : true,
-  "type" : "CODE_BLOCK",
-  "components" : [ {
-    "type" : "DECLARATION",
-    "components" : [ {
-      "name" : "!create_sum",
-      "type" : "TOKEN",
-      "location" : {
-        "line" : 1,
-        "lineIndex" : 5
-      }
-    }, {
-      "type" : "EXPRESSION",
-      "components" : [ {
-        "type" : "METHOD",
-        "components" : [ {
-          "name" : "ANON_ARG",
-          "type" : "DECLARATION",
-          "components" : [ {
-            "name" : "INT",
-            "type" : "TYPE",
-            "location" : {
-              "line" : 1,
-              "lineIndex" : 31
-            }
-          }, {
-            "name" : "!a",
-            "type" : "TOKEN",
-            "location" : {
-              "line" : 1,
-              "lineIndex" : 27
-            }
-          } ]
-        }, {
-          "type" : "CODE_BLOCK",
-          "components" : [ {
-            "type" : "RETURN",
-            "components" : [ {
-              "type" : "EXPRESSION",
-              "components" : [ {
-                "type" : "METHOD",
-                "components" : [ {
-                  "name" : "ANON_ARG",
-                  "type" : "DECLARATION",
-                  "components" : [ {
-                    "name" : "INT",
-                    "type" : "TYPE",
-                    "location" : {
-                      "line" : 2,
-                      "lineIndex" : 23
+  "parsed": true,
+  "type": "CODE_BLOCK",
+  "components": [
+    {
+      "type": "DECLARATION",
+      "components": [
+        {
+          "name": "!create_sum",
+          "type": "TOKEN",
+          "location": {
+            "line": 1,
+            "lineIndex": 5
+          }
+        },
+        {
+          "type": "EXPRESSION",
+          "components": [
+            {
+              "type": "METHOD",
+              "location": {
+                "line": 1,
+                "lineIndex": 19
+              },
+              "components": [
+                {
+                  "name": "ANON_ARG",
+                  "type": "DECLARATION",
+                  "components": [
+                    {
+                      "name": "INT",
+                      "type": "TYPE",
+                      "location": {
+                        "line": 1,
+                        "lineIndex": 31
+                      }
+                    },
+                    {
+                      "name": "!a",
+                      "type": "TOKEN",
+                      "location": {
+                        "line": 1,
+                        "lineIndex": 27
+                      }
                     }
-                  }, {
-                    "name" : "!b",
-                    "type" : "TOKEN",
-                    "location" : {
-                      "line" : 2,
-                      "lineIndex" : 19
+                  ]
+                },
+                {
+                  "type": "CODE_BLOCK",
+                  "components": [
+                    {
+                      "type": "RETURN",
+                      "components": [
+                        {
+                          "type": "EXPRESSION",
+                          "components": [
+                            {
+                              "type": "METHOD",
+                              "location": {
+                                "line": 2,
+                                "lineIndex": 11
+                              },
+                              "components": [
+                                {
+                                  "name": "ANON_ARG",
+                                  "type": "DECLARATION",
+                                  "components": [
+                                    {
+                                      "name": "INT",
+                                      "type": "TYPE",
+                                      "location": {
+                                        "line": 2,
+                                        "lineIndex": 23
+                                      }
+                                    },
+                                    {
+                                      "name": "!b",
+                                      "type": "TOKEN",
+                                      "location": {
+                                        "line": 2,
+                                        "lineIndex": 19
+                                      }
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "CODE_BLOCK",
+                                  "components": [
+                                    {
+                                      "type": "RETURN",
+                                      "components": [
+                                        {
+                                          "type": "EXPRESSION",
+                                          "components": [
+                                            {
+                                              "name": "!a",
+                                              "type": "TOKEN",
+                                              "location": {
+                                                "line": 3,
+                                                "lineIndex": 15
+                                              }
+                                            },
+                                            {
+                                              "name": "PLUS",
+                                              "type": "TOKEN",
+                                              "location": {
+                                                "line": 3,
+                                                "lineIndex": 17
+                                              }
+                                            },
+                                            {
+                                              "name": "!b",
+                                              "type": "TOKEN",
+                                              "location": {
+                                                "line": 3,
+                                                "lineIndex": 19
+                                              }
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
                     }
-                  } ]
-                }, {
-                  "type" : "CODE_BLOCK",
-                  "components" : [ {
-                    "type" : "RETURN",
-                    "components" : [ {
-                      "type" : "EXPRESSION",
-                      "components" : [ {
-                        "type" : "EXPRESSION",
-                        "components" : [ {
-                          "name" : "IMPORT",
-                          "type" : "TOKEN",
-                          "location" : {
-                            "line" : 3,
-                            "lineIndex" : 16
-                          }
-                        }, {
-                          "name" : "!a",
-                          "type" : "TOKEN",
-                          "location" : {
-                            "line" : 3,
-                            "lineIndex" : 23
-                          }
-                        } ]
-                      }, {
-                        "name" : "PLUS",
-                        "type" : "TOKEN",
-                        "location" : {
-                          "line" : 3,
-                          "lineIndex" : 26
-                        }
-                      }, {
-                        "name" : "!b",
-                        "type" : "TOKEN",
-                        "location" : {
-                          "line" : 3,
-                          "lineIndex" : 28
-                        }
-                      } ]
-                    } ]
-                  } ]
-                } ]
-              } ]
-            } ]
-          } ]
-        } ]
-      } ]
-    } ]
-  }, {
-    "type" : "DECLARATION",
-    "components" : [ {
-      "name" : "!add_5",
-      "type" : "TOKEN",
-      "location" : {
-        "line" : 5,
-        "lineIndex" : 5
-      }
-    }, {
-      "type" : "EXPRESSION",
-      "components" : [ {
-        "name" : "!create_sum",
-        "type" : "TOKEN",
-        "location" : {
-          "line" : 5,
-          "lineIndex" : 14
-        }
-      }, {
-        "name" : "APPLY",
-        "type" : "TOKEN",
-        "location" : {
-          "line" : 5,
-          "lineIndex" : 24
-        }
-      }, {
-        "type" : "METHOD_CALL",
-        "components" : [ {
-          "type" : "EXPRESSION",
-          "components" : [ {
-            "name" : "#5",
-            "type" : "TOKEN",
-            "location" : {
-              "line" : 5,
-              "lineIndex" : 25
+                  ]
+                }
+              ]
             }
-          } ]
-        } ]
-      } ]
-    } ]
-  }, {
-    "type" : "DECLARATION",
-    "components" : [ {
-      "name" : "!number",
-      "type" : "TOKEN",
-      "location" : {
-        "line" : 6,
-        "lineIndex" : 5
-      }
-    }, {
-      "type" : "EXPRESSION",
-      "components" : [ {
-        "name" : "!add_5",
-        "type" : "TOKEN",
-        "location" : {
-          "line" : 6,
-          "lineIndex" : 15
+          ]
         }
-      }, {
-        "name" : "APPLY",
-        "type" : "TOKEN",
-        "location" : {
-          "line" : 6,
-          "lineIndex" : 20
-        }
-      }, {
-        "type" : "METHOD_CALL",
-        "components" : [ {
-          "type" : "EXPRESSION",
-          "components" : [ {
-            "name" : "#5",
-            "type" : "TOKEN",
-            "location" : {
-              "line" : 6,
-              "lineIndex" : 21
+      ]
+    },
+    {
+      "type": "DECLARATION",
+      "components": [
+        {
+          "name": "!add_5",
+          "type": "TOKEN",
+          "location": {
+            "line": 5,
+            "lineIndex": 5
+          }
+        },
+        {
+          "type": "EXPRESSION",
+          "components": [
+            {
+              "name": "!create_sum",
+              "type": "TOKEN",
+              "location": {
+                "line": 5,
+                "lineIndex": 14
+              }
+            },
+            {
+              "name": "APPLY",
+              "type": "TOKEN",
+              "location": {
+                "line": 5,
+                "lineIndex": 24
+              }
+            },
+            {
+              "type": "METHOD_CALL",
+              "components": [
+                {
+                  "type": "EXPRESSION",
+                  "components": [
+                    {
+                      "name": "#5",
+                      "type": "TOKEN",
+                      "location": {
+                        "line": 5,
+                        "lineIndex": 25
+                      }
+                    }
+                  ]
+                }
+              ]
             }
-          } ]
-        } ]
-      } ]
-    } ]
-  } ]
-}""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE METHOD; (METHOD(TYPE INT; DECLARATION ANON_ARG; (TYPE INT; !b))); DECLARATION ANON_ARG; (TYPE INT; !a))); !create_sum; EXPRESSION(TYPE METHOD; (METHOD(TYPE METHOD; (METHOD(TYPE INT; DECLARATION ANON_ARG; (TYPE INT; !b))); DECLARATION ANON_ARG; (TYPE INT; !a))); METHOD(TYPE METHOD; (METHOD(TYPE INT; DECLARATION ANON_ARG; (TYPE INT; !b))); DECLARATION ANON_ARG; (TYPE INT; !a); CODE_BLOCK(RETURN(EXPRESSION(TYPE METHOD; (METHOD(TYPE INT; DECLARATION ANON_ARG; (TYPE INT; !b))); METHOD(TYPE INT; DECLARATION ANON_ARG; (TYPE INT; !b); CODE_BLOCK(RETURN(EXPRESSION(TYPE INT; EXPRESSION(TYPE INT; IMPORT; !a); INT|PLUS|INT; !b)))))))))); DECLARATION(TYPE METHOD; (METHOD(TYPE INT; DECLARATION ANON_ARG; (TYPE INT; !b))); !add_5; EXPRESSION(TYPE METHOD; (METHOD(TYPE INT; DECLARATION ANON_ARG; (TYPE INT; !b))); !create_sum; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!a; ASSIGN; EXPRESSION(TYPE INT; #5))))); DECLARATION(TYPE INT; !number; EXPRESSION(TYPE INT; !add_5; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!b; ASSIGN; EXPRESSION(TYPE INT; #5))))))")
+          ]
+        }
+      ]
+    },
+    {
+      "type": "DECLARATION",
+      "components": [
+        {
+          "name": "!number",
+          "type": "TOKEN",
+          "location": {
+            "line": 6,
+            "lineIndex": 5
+          }
+        },
+        {
+          "type": "EXPRESSION",
+          "components": [
+            {
+              "name": "!add_5",
+              "type": "TOKEN",
+              "location": {
+                "line": 6,
+                "lineIndex": 15
+              }
+            },
+            {
+              "name": "APPLY",
+              "type": "TOKEN",
+              "location": {
+                "line": 6,
+                "lineIndex": 20
+              }
+            },
+            {
+              "type": "METHOD_CALL",
+              "components": [
+                {
+                  "type": "EXPRESSION",
+                  "components": [
+                    {
+                      "name": "#5",
+                      "type": "TOKEN",
+                      "location": {
+                        "line": 6,
+                        "lineIndex": 21
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE METHOD; (METHOD(TYPE INT; DECLARATION ANON_ARG; (TYPE INT; !b))); DECLARATION ANON_ARG; (TYPE INT; !a))); !create_sum; EXPRESSION(TYPE METHOD; (METHOD(TYPE METHOD; (METHOD(TYPE INT; DECLARATION ANON_ARG; (TYPE INT; !b))); DECLARATION ANON_ARG; (TYPE INT; !a))); METHOD(TYPE METHOD; (METHOD(TYPE INT; DECLARATION ANON_ARG; (TYPE INT; !b))); DECLARATION ANON_ARG; (TYPE INT; !a); CODE_BLOCK(RETURN(EXPRESSION(TYPE METHOD; (METHOD(TYPE INT; DECLARATION ANON_ARG; (TYPE INT; !b))); METHOD(TYPE INT; DECLARATION ANON_ARG; (TYPE INT; !b); CODE_BLOCK(RETURN(EXPRESSION(TYPE INT; !a; INT|PLUS|INT; !b)))))))))); DECLARATION(TYPE METHOD; (METHOD(TYPE INT; DECLARATION ANON_ARG; (TYPE INT; !b))); !add_5; EXPRESSION(TYPE METHOD; (METHOD(TYPE INT; DECLARATION ANON_ARG; (TYPE INT; !b))); !create_sum; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!a; ASSIGN; EXPRESSION(TYPE INT; #5))))); DECLARATION(TYPE INT; !number; EXPRESSION(TYPE INT; !add_5; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!b; ASSIGN; EXPRESSION(TYPE INT; #5))))))")
     }
 
     @Test

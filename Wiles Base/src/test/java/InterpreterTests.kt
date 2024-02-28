@@ -3462,318 +3462,453 @@ class InterpreterTests {
         let y := add10(10)
          */
         val vars2 = getVars("""{
-  "type" : "CODE_BLOCK",
-  "parsed" : true,
-  "components" : [ {
-    "type" : "DECLARATION",
-    "components" : [ {
-      "name" : "METHOD",
-      "type" : "TYPE",
-      "components" : [ {
-        "type" : "METHOD",
-        "components" : [ {
-          "name" : "METHOD",
-          "type" : "TYPE",
-          "components" : [ {
-            "type" : "METHOD",
-            "components" : [ {
-              "name" : "INT",
-              "type" : "TYPE"
-            }, {
-              "name" : "ANON_ARG",
-              "type" : "DECLARATION",
-              "components" : [ {
-                "name" : "INT",
-                "type" : "TYPE"
-              }, {
-                "name" : "!y",
-                "type" : "TOKEN"
-              } ]
-            } ]
-          } ]
-        }, {
-          "name" : "ANON_ARG",
-          "type" : "DECLARATION",
-          "components" : [ {
-            "name" : "INT",
-            "type" : "TYPE"
-          }, {
-            "name" : "!x",
-            "type" : "TOKEN"
-          } ]
-        } ]
-      } ]
-    }, {
-      "name" : "!create_addition",
-      "type" : "TOKEN"
-    }, {
-      "type" : "EXPRESSION",
-      "components" : [ {
-        "type" : "METHOD",
-        "components" : [ {
-          "name" : "METHOD",
-          "type" : "TYPE",
-          "components" : [ {
-            "type" : "METHOD",
-            "components" : [ {
-              "name" : "INT",
-              "type" : "TYPE"
-            }, {
-              "name" : "ANON_ARG",
-              "type" : "DECLARATION",
-              "components" : [ {
-                "name" : "INT",
-                "type" : "TYPE"
-              }, {
-                "name" : "!y",
-                "type" : "TOKEN"
-              } ]
-            } ]
-          } ]
-        }, {
-          "name" : "ANON_ARG",
-          "type" : "DECLARATION",
-          "components" : [ {
-            "name" : "INT",
-            "type" : "TYPE"
-          }, {
-            "name" : "!x",
-            "type" : "TOKEN"
-          } ]
-        }, {
-          "type" : "CODE_BLOCK",
-          "components" : [ {
-            "type" : "RETURN",
-            "components" : [ {
-              "type" : "EXPRESSION",
-              "components" : [ {
-                "type" : "METHOD",
-                "components" : [ {
-                  "name" : "INT",
-                  "type" : "TYPE"
-                }, {
-                  "name" : "ANON_ARG",
-                  "type" : "DECLARATION",
-                  "components" : [ {
-                    "name" : "INT",
-                    "type" : "TYPE"
-                  }, {
-                    "name" : "!y",
-                    "type" : "TOKEN"
-                  } ]
-                }, {
-                  "type" : "CODE_BLOCK",
-                  "components" : [ {
-                    "type" : "RETURN",
-                    "components" : [ {
-                      "type" : "EXPRESSION",
-                      "components" : [ {
-                        "type" : "EXPRESSION",
-                        "components" : [ {
-                          "name" : "!nothing",
-                          "type" : "TOKEN"
-                        }, {
-                          "name" : "IMPORT",
-                          "type" : "TOKEN"
-                        }, {
-                          "name" : "!x",
-                          "type" : "TOKEN"
-                        } ]
-                      }, {
-                        "name" : "INT|PLUS|INT",
-                        "type" : "TOKEN"
-                      }, {
-                        "name" : "!y",
-                        "type" : "TOKEN"
-                      } ]
-                    } ]
-                  } ]
-                } ]
-              } ]
-            } ]
-          } ]
-        } ]
-      } ]
-    } ]
-  }, {
-    "type" : "DECLARATION",
-    "components" : [ {
-      "name" : "METHOD",
-      "type" : "TYPE",
-      "components" : [ {
-        "type" : "METHOD",
-        "components" : [ {
-          "name" : "INT",
-          "type" : "TYPE"
-        }, {
-          "name" : "ANON_ARG",
-          "type" : "DECLARATION",
-          "components" : [ {
-            "name" : "INT",
-            "type" : "TYPE"
-          }, {
-            "name" : "!y",
-            "type" : "TOKEN"
-          } ]
-        } ]
-      } ]
-    }, {
-      "name" : "!add5",
-      "type" : "TOKEN"
-    }, {
-      "type" : "EXPRESSION",
-      "components" : [ {
-        "name" : "!create_addition",
-        "type" : "TOKEN"
-      }, {
-        "name" : "METHOD|APPLY|METHOD_CALL",
-        "type" : "TOKEN"
-      }, {
-        "type" : "METHOD_CALL",
-        "components" : [ {
-          "type" : "EXPRESSION",
-          "components" : [ {
-            "name" : "!x",
-            "type" : "TOKEN"
-          }, {
-            "name" : "ASSIGN",
-            "type" : "TOKEN"
-          }, {
-            "type" : "EXPRESSION",
-            "components" : [ {
-              "name" : "#5",
-              "type" : "TOKEN"
-            } ]
-          } ]
-        } ]
-      } ]
-    } ]
-  }, {
-    "type" : "DECLARATION",
-    "components" : [ {
-      "name" : "METHOD",
-      "type" : "TYPE",
-      "components" : [ {
-        "type" : "METHOD",
-        "components" : [ {
-          "name" : "INT",
-          "type" : "TYPE"
-        }, {
-          "name" : "ANON_ARG",
-          "type" : "DECLARATION",
-          "components" : [ {
-            "name" : "INT",
-            "type" : "TYPE"
-          }, {
-            "name" : "!y",
-            "type" : "TOKEN"
-          } ]
-        } ]
-      } ]
-    }, {
-      "name" : "!add10",
-      "type" : "TOKEN"
-    }, {
-      "type" : "EXPRESSION",
-      "components" : [ {
-        "name" : "!create_addition",
-        "type" : "TOKEN"
-      }, {
-        "name" : "METHOD|APPLY|METHOD_CALL",
-        "type" : "TOKEN"
-      }, {
-        "type" : "METHOD_CALL",
-        "components" : [ {
-          "type" : "EXPRESSION",
-          "components" : [ {
-            "name" : "!x",
-            "type" : "TOKEN"
-          }, {
-            "name" : "ASSIGN",
-            "type" : "TOKEN"
-          }, {
-            "type" : "EXPRESSION",
-            "components" : [ {
-              "name" : "#10",
-              "type" : "TOKEN"
-            } ]
-          } ]
-        } ]
-      } ]
-    } ]
-  }, {
-    "type" : "DECLARATION",
-    "components" : [ {
-      "name" : "INT",
-      "type" : "TYPE"
-    }, {
-      "name" : "!x",
-      "type" : "TOKEN"
-    }, {
-      "type" : "EXPRESSION",
-      "components" : [ {
-        "name" : "!add5",
-        "type" : "TOKEN"
-      }, {
-        "name" : "METHOD|APPLY|METHOD_CALL",
-        "type" : "TOKEN"
-      }, {
-        "type" : "METHOD_CALL",
-        "components" : [ {
-          "type" : "EXPRESSION",
-          "components" : [ {
-            "name" : "!y",
-            "type" : "TOKEN"
-          }, {
-            "name" : "ASSIGN",
-            "type" : "TOKEN"
-          }, {
-            "type" : "EXPRESSION",
-            "components" : [ {
-              "name" : "#10",
-              "type" : "TOKEN"
-            } ]
-          } ]
-        } ]
-      } ]
-    } ]
-  }, {
-    "type" : "DECLARATION",
-    "components" : [ {
-      "name" : "INT",
-      "type" : "TYPE"
-    }, {
-      "name" : "!y",
-      "type" : "TOKEN"
-    }, {
-      "type" : "EXPRESSION",
-      "components" : [ {
-        "name" : "!add10",
-        "type" : "TOKEN"
-      }, {
-        "name" : "METHOD|APPLY|METHOD_CALL",
-        "type" : "TOKEN"
-      }, {
-        "type" : "METHOD_CALL",
-        "components" : [ {
-          "type" : "EXPRESSION",
-          "components" : [ {
-            "name" : "!y",
-            "type" : "TOKEN"
-          }, {
-            "name" : "ASSIGN",
-            "type" : "TOKEN"
-          }, {
-            "type" : "EXPRESSION",
-            "components" : [ {
-              "name" : "#10",
-              "type" : "TOKEN"
-            } ]
-          } ]
-        } ]
-      } ]
-    } ]
-  } ]
+  "parsed": true,
+  "type": "CODE_BLOCK",
+  "components": [
+    {
+      "type": "DECLARATION",
+      "components": [
+        {
+          "name": "METHOD",
+          "type": "TYPE",
+          "components": [
+            {
+              "type": "METHOD",
+              "components": [
+                {
+                  "name": "METHOD",
+                  "type": "TYPE",
+                  "components": [
+                    {
+                      "type": "METHOD",
+                      "components": [
+                        {
+                          "name": "INT",
+                          "type": "TYPE"
+                        },
+                        {
+                          "name": "ANON_ARG",
+                          "type": "DECLARATION",
+                          "components": [
+                            {
+                              "name": "INT",
+                              "type": "TYPE"
+                            },
+                            {
+                              "name": "!y",
+                              "type": "TOKEN"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "ANON_ARG",
+                  "type": "DECLARATION",
+                  "components": [
+                    {
+                      "name": "INT",
+                      "type": "TYPE"
+                    },
+                    {
+                      "name": "!x",
+                      "type": "TOKEN"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "!create_addition",
+          "type": "TOKEN"
+        },
+        {
+          "type": "EXPRESSION",
+          "components": [
+            {
+              "type": "METHOD",
+              "components": [
+                {
+                  "name": "METHOD",
+                  "type": "TYPE",
+                  "components": [
+                    {
+                      "type": "METHOD",
+                      "components": [
+                        {
+                          "name": "INT",
+                          "type": "TYPE"
+                        },
+                        {
+                          "name": "ANON_ARG",
+                          "type": "DECLARATION",
+                          "components": [
+                            {
+                              "name": "INT",
+                              "type": "TYPE"
+                            },
+                            {
+                              "name": "!y",
+                              "type": "TOKEN"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "ANON_ARG",
+                  "type": "DECLARATION",
+                  "components": [
+                    {
+                      "name": "INT",
+                      "type": "TYPE"
+                    },
+                    {
+                      "name": "!x",
+                      "type": "TOKEN"
+                    }
+                  ]
+                },
+                {
+                  "type": "CODE_BLOCK",
+                  "components": [
+                    {
+                      "type": "RETURN",
+                      "components": [
+                        {
+                          "type": "EXPRESSION",
+                          "components": [
+                            {
+                              "type": "METHOD",
+                              "components": [
+                                {
+                                  "name": "INT",
+                                  "type": "TYPE"
+                                },
+                                {
+                                  "name": "ANON_ARG",
+                                  "type": "DECLARATION",
+                                  "components": [
+                                    {
+                                      "name": "INT",
+                                      "type": "TYPE"
+                                    },
+                                    {
+                                      "name": "!y",
+                                      "type": "TOKEN"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "CODE_BLOCK",
+                                  "components": [
+                                    {
+                                      "type": "RETURN",
+                                      "components": [
+                                        {
+                                          "type": "EXPRESSION",
+                                          "components": [
+                                            {
+                                              "name": "!x",
+                                              "type": "TOKEN"
+                                            },
+                                            {
+                                              "name": "INT|PLUS|INT",
+                                              "type": "TOKEN"
+                                            },
+                                            {
+                                              "name": "!y",
+                                              "type": "TOKEN"
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "DECLARATION",
+      "components": [
+        {
+          "name": "METHOD",
+          "type": "TYPE",
+          "components": [
+            {
+              "type": "METHOD",
+              "components": [
+                {
+                  "name": "INT",
+                  "type": "TYPE"
+                },
+                {
+                  "name": "ANON_ARG",
+                  "type": "DECLARATION",
+                  "components": [
+                    {
+                      "name": "INT",
+                      "type": "TYPE"
+                    },
+                    {
+                      "name": "!y",
+                      "type": "TOKEN"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "!add5",
+          "type": "TOKEN"
+        },
+        {
+          "type": "EXPRESSION",
+          "components": [
+            {
+              "name": "!create_addition",
+              "type": "TOKEN"
+            },
+            {
+              "name": "METHOD|APPLY|METHOD_CALL",
+              "type": "TOKEN"
+            },
+            {
+              "type": "METHOD_CALL",
+              "components": [
+                {
+                  "type": "EXPRESSION",
+                  "components": [
+                    {
+                      "name": "!x",
+                      "type": "TOKEN"
+                    },
+                    {
+                      "name": "ASSIGN",
+                      "type": "TOKEN"
+                    },
+                    {
+                      "type": "EXPRESSION",
+                      "components": [
+                        {
+                          "name": "#5",
+                          "type": "TOKEN"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "DECLARATION",
+      "components": [
+        {
+          "name": "METHOD",
+          "type": "TYPE",
+          "components": [
+            {
+              "type": "METHOD",
+              "components": [
+                {
+                  "name": "INT",
+                  "type": "TYPE"
+                },
+                {
+                  "name": "ANON_ARG",
+                  "type": "DECLARATION",
+                  "components": [
+                    {
+                      "name": "INT",
+                      "type": "TYPE"
+                    },
+                    {
+                      "name": "!y",
+                      "type": "TOKEN"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "!add10",
+          "type": "TOKEN"
+        },
+        {
+          "type": "EXPRESSION",
+          "components": [
+            {
+              "name": "!create_addition",
+              "type": "TOKEN"
+            },
+            {
+              "name": "METHOD|APPLY|METHOD_CALL",
+              "type": "TOKEN"
+            },
+            {
+              "type": "METHOD_CALL",
+              "components": [
+                {
+                  "type": "EXPRESSION",
+                  "components": [
+                    {
+                      "name": "!x",
+                      "type": "TOKEN"
+                    },
+                    {
+                      "name": "ASSIGN",
+                      "type": "TOKEN"
+                    },
+                    {
+                      "type": "EXPRESSION",
+                      "components": [
+                        {
+                          "name": "#10",
+                          "type": "TOKEN"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "DECLARATION",
+      "components": [
+        {
+          "name": "INT",
+          "type": "TYPE"
+        },
+        {
+          "name": "!x",
+          "type": "TOKEN"
+        },
+        {
+          "type": "EXPRESSION",
+          "components": [
+            {
+              "name": "!add5",
+              "type": "TOKEN"
+            },
+            {
+              "name": "METHOD|APPLY|METHOD_CALL",
+              "type": "TOKEN"
+            },
+            {
+              "type": "METHOD_CALL",
+              "components": [
+                {
+                  "type": "EXPRESSION",
+                  "components": [
+                    {
+                      "name": "!y",
+                      "type": "TOKEN"
+                    },
+                    {
+                      "name": "ASSIGN",
+                      "type": "TOKEN"
+                    },
+                    {
+                      "type": "EXPRESSION",
+                      "components": [
+                        {
+                          "name": "#10",
+                          "type": "TOKEN"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "DECLARATION",
+      "components": [
+        {
+          "name": "INT",
+          "type": "TYPE"
+        },
+        {
+          "name": "!y",
+          "type": "TOKEN"
+        },
+        {
+          "type": "EXPRESSION",
+          "components": [
+            {
+              "name": "!add10",
+              "type": "TOKEN"
+            },
+            {
+              "name": "METHOD|APPLY|METHOD_CALL",
+              "type": "TOKEN"
+            },
+            {
+              "type": "METHOD_CALL",
+              "components": [
+                {
+                  "type": "EXPRESSION",
+                  "components": [
+                    {
+                      "name": "!y",
+                      "type": "TOKEN"
+                    },
+                    {
+                      "name": "ASSIGN",
+                      "type": "TOKEN"
+                    },
+                    {
+                      "type": "EXPRESSION",
+                      "components": [
+                        {
+                          "name": "#10",
+                          "type": "TOKEN"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }""")
         assertVar(vars2,"!x", BigInteger.valueOf(15L))
         assertVar(vars2,"!y", BigInteger.valueOf(20L))

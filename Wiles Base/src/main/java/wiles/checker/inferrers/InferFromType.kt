@@ -18,7 +18,7 @@ class InferFromType(details: InferrerDetails,
     override fun infer() {
         if(statement.name == GENERIC_ID)
         {
-            InferFromType(InferrerDetails(statement.components[1],variables,exceptions, additionalVars, context),
+            InferFromType(InferrerDetails(statement.components[1],variables,exceptions, context),
                 genericTypes,false).infer()
             val name = getTypeNumber(statement.components[0].name, context)
             if(genericTypes.containsKey(name))
@@ -35,11 +35,11 @@ class InferFromType(details: InferrerDetails,
             {
                 if(component.syntaxType == SyntaxType.DECLARATION)
                 {
-                    InferFromDeclaration(InferrerDetails(component, variables.copy(), exceptions, additionalVars,
+                    InferFromDeclaration(InferrerDetails(component, variables.copy(), exceptions,
                         context), genericTypes = genericTypes, isTopMostType = false).infer()
                 }
                 else if(component.syntaxType == SyntaxType.TYPE)
-                    InferFromType(InferrerDetails(component,variables,exceptions, additionalVars, context),
+                    InferFromType(InferrerDetails(component,variables,exceptions, context),
                         genericTypes).infer()
             }
             if(method.components.getOrNull(0)?.syntaxType != SyntaxType.TYPE)
@@ -49,7 +49,7 @@ class InferFromType(details: InferrerDetails,
         {
             for(component in statement.components)
             {
-                InferFromType(InferrerDetails(component,variables,exceptions, additionalVars, context), genericTypes).infer()
+                InferFromType(InferrerDetails(component,variables,exceptions, context), genericTypes).infer()
             }
         }
         if(isTopMostType) {

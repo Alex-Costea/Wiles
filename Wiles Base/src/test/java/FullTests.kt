@@ -27,6 +27,46 @@ class FullTests {
     }
 
     @Test
+    fun functionVariableScopeTests()
+    {
+        val code1="""
+            let a := 123
+            let f := fun(d := 15)
+            begin
+                let c := 1
+                write_line(d)
+                yield a + 5
+            end
+            let c := 2
+            let d := 20
+            write_line(f() + c + d)
+        """
+        assertEquals(getOutput(code1),"15\n150\n")
+
+        val code2="""
+            let var a := 100
+            let func := do yield a + 5
+            a := 15
+            write_line(func())
+        """
+        assertEquals(getOutput(code2),"20\n")
+
+        val code3="""
+            let var a := 100
+
+            let func := fun(b := 20)
+            begin
+                a := 200
+            end
+
+            write_line(a)
+            func()
+            write_line(a)
+        """
+        assertEquals(getOutput(code3),"100\n200\n")
+    }
+
+    @Test
     fun fullTest()
     {
         val code = """
@@ -84,7 +124,7 @@ write_line("Min found: " + result)
 
         val code4 = """
             let var a := 10
-            let func := do write_line(import a)
+            let func := do write_line(a)
             a := 100
             func()
         """
@@ -102,7 +142,7 @@ write_line("Min found: " + result)
 
         val code6 = """
             let var a := 10
-            let func := do import a := 100
+            let func := do a := 100
             write_line(a)
             func()
             write_line(a)
@@ -111,7 +151,7 @@ write_line("Min found: " + result)
 
         val code7 = """
             let a := 10
-            let b := fun(b := import a) do write_line(b)
+            let b := fun(b := a) do write_line(b)
             b()
         """
         assertEquals(getOutput(code7),"10\n")
