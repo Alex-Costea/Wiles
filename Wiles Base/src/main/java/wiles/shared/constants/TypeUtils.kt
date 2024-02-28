@@ -14,15 +14,13 @@ import wiles.shared.constants.Types.LIST_ID
 
 object TypeUtils {
 
-    fun unbox(statement: JSONStatement) : JSONStatement
+    fun makeTypeUngeneric(statement: JSONStatement) : JSONStatement
     {
         assert(statement.syntaxType == SyntaxType.TYPE)
         if(statement.name == Tokens.METHOD_ID || statement.name == Types.METHOD_CALL_ID)
             return statement
-        if(statement.name == Tokens.MUTABLE_ID)
-            return unbox(statement.components[0])
         if(statement.name == Types.GENERIC_ID)
-            return unbox(InferrerUtils.unGenerify(statement.components[1]))
+            return makeTypeUngeneric(InferrerUtils.unGenerify(statement.components[1]))
         return statement
     }
 

@@ -33,7 +33,7 @@ import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
 import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
 import wiles.shared.constants.TypeConstants.INT_TYPE
 import wiles.shared.constants.TypeConstants.STRING_TYPE
-import wiles.shared.constants.TypeUtils.unbox
+import wiles.shared.constants.TypeUtils.makeTypeUngeneric
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.BOOLEAN_ID
 import wiles.shared.constants.Types.DOUBLE_ID
@@ -211,9 +211,9 @@ object DoOperation {
         return if(middle.contains(ANYTHING_ID)) {
             val operationNameSplit = middle.split("|").toMutableList()
             if (operationNameSplit[0] == ANYTHING_ID)
-                operationNameSplit[0] = unbox(left.getType()).name
+                operationNameSplit[0] = makeTypeUngeneric(left.getType()).name
             if (operationNameSplit[2] == ANYTHING_ID)
-                operationNameSplit[2] = unbox(right.getType()).name
+                operationNameSplit[2] = makeTypeUngeneric(right.getType()).name
 
             val operation = operationNameSplit[0] + "|" + operationNameSplit[1] + "|" + operationNameSplit[2]
             operationMap[operation]?.apply(leftValue, rightValue)
