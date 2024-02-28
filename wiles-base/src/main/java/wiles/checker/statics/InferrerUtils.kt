@@ -33,6 +33,7 @@ import wiles.shared.constants.TypeUtils.makeEither
 import wiles.shared.constants.TypeUtils.makeMutable
 import wiles.shared.constants.TypeUtils.removeEmptyEither
 import wiles.shared.constants.TypeUtils.makeTypeUngeneric
+import wiles.shared.constants.TypeUtils.makeTypeUnmutable
 import wiles.shared.constants.Types.DOUBLE_ID
 import wiles.shared.constants.Types.EITHER_ID
 import wiles.shared.constants.Types.GENERIC_ID
@@ -296,7 +297,7 @@ object InferrerUtils {
 
     fun getElementTypeFromListType(statement: JSONStatement) : JSONStatement
     {
-        val newStatement = makeTypeUngeneric(statement)
+        val newStatement = makeTypeUnmutable(statement)
         if(newStatement.name == LIST_ID)
             return newStatement.components[0]
 

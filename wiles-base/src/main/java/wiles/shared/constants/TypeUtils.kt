@@ -7,12 +7,23 @@ import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.DATA_ID
 import wiles.shared.constants.Tokens.DECLARE_ID
+import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.TypeConstants.INT_TYPE
 import wiles.shared.constants.Types.COLLECTION_ID
 import wiles.shared.constants.Types.DICT_ID
 import wiles.shared.constants.Types.LIST_ID
 
 object TypeUtils {
+
+    fun makeTypeUnmutable(statement: JSONStatement) : JSONStatement
+    {
+        assert(statement.syntaxType == SyntaxType.TYPE)
+        if(statement.name == LIST_ID || statement.name == DICT_ID || statement.name == COLLECTION_ID )
+            return statement
+        if(statement.name == MUTABLE_ID)
+            return makeTypeUnmutable(statement.components[0])
+        return statement
+    }
 
     fun makeTypeUngeneric(statement: JSONStatement) : JSONStatement
     {

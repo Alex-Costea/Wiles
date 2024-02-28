@@ -179,27 +179,6 @@ object TypeConstants {
 
     val LIST_OF_STRING = makeList(STRING_TYPE)
 
-    private const val SET_VALUE_GENERIC_NAME = "!T|set"
-    private val SET_VALUE_GENERIC_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, SET_VALUE_GENERIC_NAME)
-    val SET_VALUE_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
-        components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
-            components = mutableListOf(NOTHING_TYPE,
-                JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
-                    components = mutableListOf(
-                        makeMutable(makeGenericDeclaration(SET_VALUE_GENERIC_TYPE)),
-                        JSONStatement(name = "!elem", syntaxType = SyntaxType.TOKEN)
-                    )
-                ),
-                JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
-                    components = mutableListOf(
-                        SET_VALUE_GENERIC_TYPE,
-                        JSONStatement(name = "!value", syntaxType = SyntaxType.TOKEN)
-                    )
-                ),
-                )
-        ))
-    )
-
     private const val MAYBE_GENERIC_NAME = "!T|maybe"
     private val MAYBE_GENERIC_TYPE = makeGeneric(ANYTHING_TYPE, MAYBE_GENERIC_NAME)
     val MAYBE_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,

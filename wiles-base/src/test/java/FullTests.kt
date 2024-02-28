@@ -306,5 +306,25 @@ write_line("Min found: " + result)
             write_line(❤️.👩‍👩‍👧‍👧)
         """
         assertEquals(getOutput(code24),"5\n25\n125\n")
+
+        val code25="""
+            let list := mut [1, 2, 3]
+            let var b := ""
+            for elem in list
+            begin
+                list.add(at := 0, 10)
+                b := b + elem
+            end
+            write_line(b)
+            write_line(list)
+        """
+        assertEquals(getOutput(code25),"123\n[10, 10, 10, 1, 2, 3]\n")
+
+        val code26="""
+            let list := mut [1,2,3]
+            list.update(at := 1, 10)
+            write_line(list.as_text)
+        """
+        assertEquals(getOutput(code26),"[1, 10, 3]\n")
     }
 }

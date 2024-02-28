@@ -41,7 +41,6 @@ import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_STRING_TYPE
 import wiles.shared.constants.TypeConstants.REMOVE_AT_TYPE
 import wiles.shared.constants.TypeConstants.RUN_TYPE
 import wiles.shared.constants.TypeConstants.SET_AT_TYPE
-import wiles.shared.constants.TypeConstants.SET_VALUE_TYPE
 import wiles.shared.constants.TypeConstants.SIZE_TYPE
 import wiles.shared.constants.TypeConstants.STRING_TYPE
 import wiles.shared.constants.TypeConstants.WRITELINE_TYPE
@@ -67,7 +66,6 @@ object StandardLibrary {
     private const val AS_LIST = "!as_list"
     private const val INFINITY = "!Infinity"
     private const val NAN = "!NaN"
-    private const val SET_VALUE = "!set"
     private const val MAYBE = "!maybe"
     private const val CONTENT = "!content"
     private const val RUN = "!run"
@@ -100,7 +98,6 @@ object StandardLibrary {
             Pair(AS_LIST, VariableDetails(AS_LIST_TYPE)),
             Pair(INFINITY, VariableDetails(DOUBLE_TYPE)),
             Pair(NAN, VariableDetails(DOUBLE_TYPE)),
-            Pair(SET_VALUE, VariableDetails(SET_VALUE_TYPE)),
             Pair(MAYBE, VariableDetails(MAYBE_TYPE)),
             Pair(CONTENT, VariableDetails(CONTENT_TYPE)),
             Pair(RUN, VariableDetails(RUN_TYPE)),
@@ -187,14 +184,6 @@ object StandardLibrary {
         ObjectDetails(elem.toMutableList().map {
             ObjectDetails(it.toString(), STRING_TYPE) }, LIST_OF_STRING)
     }, defaultCheckerVars[READ_LINE]!!.type)
-
-    private val SET_VALUE_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ map, context ->
-        val leftRef = map["!elem"]!!
-        val mutableObj = map["!value"]!!.makeMutable()
-        leftRef.setType(mutableObj.getType())
-        leftRef.value = mutableObj.value
-        NOTHING_REF
-    }, defaultCheckerVars[SET_VALUE]!!.type)
 
     private val MAYBE_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ map, context ->
         map["!elem"]!!
@@ -338,7 +327,6 @@ object StandardLibrary {
         defaultInterpreterVars[AS_LIST] = AS_LIST_REF
         defaultInterpreterVars[INFINITY] = INFINITY_REF
         defaultInterpreterVars[NAN] = NAN_REF
-        defaultInterpreterVars[SET_VALUE] = SET_VALUE_REF
         defaultInterpreterVars[MAYBE] = MAYBE_REF
         defaultInterpreterVars[CONTENT] = CONTENT_REF
         defaultInterpreterVars[RUN] = RUN_REF
