@@ -15,7 +15,6 @@ import wiles.shared.constants.Predicates
 import wiles.shared.constants.StandardLibrary.FALSE_REF
 import wiles.shared.constants.StandardLibrary.NOTHING_REF
 import wiles.shared.constants.StandardLibrary.TRUE_REF
-import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.AND_ID
 import wiles.shared.constants.Tokens.APPLY_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
@@ -25,7 +24,6 @@ import wiles.shared.constants.Tokens.OR_ID
 import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
 import wiles.shared.constants.TypeConstants.INT_TYPE
 import wiles.shared.constants.TypeConstants.STRING_TYPE
-import wiles.shared.constants.Types.LIST_ID
 import wiles.shared.constants.Types.METHOD_CALL_ID
 import java.util.function.BiFunction
 
@@ -152,14 +150,6 @@ class InterpretFromExpression(statement: JSONStatement, variables: InterpreterVa
                             newVarMap[name] = expressionRef
                         }
                         function.apply(newVarMap, context)
-                    }
-                    "$LIST_ID|${Tokens.PLUS_ID}|$LIST_ID" ->
-                    {
-                        val leftRef = getReference(leftStatement).clone()
-                        val rightRef = getReference(rightStatement)
-                        (leftRef.value as MutableList<ObjectDetails>)
-                            .addAll(rightRef.value as MutableList<ObjectDetails>)
-                        leftRef
                     }
                     else -> {
                         val leftRef = getReference(leftStatement)

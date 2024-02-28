@@ -7588,253 +7588,568 @@ class CheckerTests {
   } ]
 }""","CODE_BLOCK(DECLARATION(!func1; EXPRESSION(METHOD(DECLARATION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing); DECLARE); !elem1); DECLARATION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem2); CODE_BLOCK(DECLARATION(!func2; EXPRESSION(METHOD(DECLARATION(TYPE GENERIC; (!T; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem3); DECLARATION(TYPE !T; !elem4); CODE_BLOCK(EXPRESSION(!nothing))))))))))")
         /*
-        let add_func := fun(arg list : list[anything? as T], arg elem : T) -> list[T] do
-            yield list + [elem]
+        let add_func := fun(arg list : list[anything? as T], arg elem : T) -> list[T]
+        begin
+            yield list
+        end
         write_line([1,2].add_func(3))
          */
         checkResult(null,"""{
-  "parsed" : true,
-  "type" : "CODE_BLOCK",
-  "components" : [ {
-    "type" : "DECLARATION",
-    "components" : [ {
-      "name" : "!add_func",
-      "type" : "TOKEN",
-      "location" : {
-        "line" : 1,
-        "lineIndex" : 5
-      }
-    }, {
-      "type" : "EXPRESSION",
-      "components" : [ {
-        "type" : "METHOD",
-        "location" : {
-          "line" : 1,
-          "lineIndex" : 17
-        },
-        "components" : [ {
-          "name" : "LIST",
-          "type" : "TYPE",
-          "location" : {
-            "line" : 1,
-            "lineIndex" : 71
-          },
-          "components" : [ {
-            "name" : "!T",
-            "type" : "TYPE",
-            "location" : {
-              "line" : 1,
-              "lineIndex" : 76
-            }
-          } ]
-        }, {
-          "name" : "ANON_ARG",
-          "type" : "DECLARATION",
-          "components" : [ {
-            "name" : "LIST",
-            "type" : "TYPE",
-            "location" : {
-              "line" : 1,
-              "lineIndex" : 32
-            },
-            "components" : [ {
-              "name" : "GENERIC",
-              "type" : "TYPE",
-              "location" : {
-                "line" : 1,
-                "lineIndex" : 37
-              },
-              "components" : [ {
-                "name" : "!T",
-                "type" : "TOKEN",
-                "location" : {
-                  "line" : 1,
-                  "lineIndex" : 50
-                }
-              }, {
-                "name" : "EITHER",
-                "type" : "TYPE",
-                "location" : {
-                  "line" : 1,
-                  "lineIndex" : 37
-                },
-                "components" : [ {
-                  "name" : "ANYTHING",
-                  "type" : "TYPE",
-                  "location" : {
-                    "line" : 1,
-                    "lineIndex" : 37
-                  }
-                }, {
-                  "name" : "!nothing",
-                  "type" : "TYPE"
-                } ]
-              } ]
-            } ]
-          }, {
-            "name" : "!list",
-            "type" : "TOKEN",
-            "location" : {
-              "line" : 1,
-              "lineIndex" : 25
-            }
-          } ]
-        }, {
-          "name" : "ANON_ARG",
-          "type" : "DECLARATION",
-          "components" : [ {
-            "name" : "!T",
-            "type" : "TYPE",
-            "location" : {
-              "line" : 1,
-              "lineIndex" : 65
-            }
-          }, {
-            "name" : "!elem",
-            "type" : "TOKEN",
-            "location" : {
-              "line" : 1,
-              "lineIndex" : 58
-            }
-          } ]
-        }, {
-          "type" : "CODE_BLOCK",
-          "components" : [ {
-            "type" : "RETURN",
-            "components" : [ {
-              "type" : "EXPRESSION",
-              "components" : [ {
-                "name" : "!list",
-                "type" : "TOKEN",
-                "location" : {
-                  "line" : 2,
-                  "lineIndex" : 11
-                }
-              }, {
-                "name" : "PLUS",
-                "type" : "TOKEN",
-                "location" : {
-                  "line" : 2,
-                  "lineIndex" : 16
-                }
-              }, {
-                "type" : "LIST",
-                "location" : {
-                  "line" : 2,
-                  "lineIndex" : 23
-                },
-                "components" : [ {
-                  "type" : "EXPRESSION",
-                  "components" : [ {
-                    "name" : "!elem",
-                    "type" : "TOKEN",
-                    "location" : {
-                      "line" : 2,
-                      "lineIndex" : 19
-                    }
-                  } ]
-                } ]
-              } ]
-            } ]
-          } ]
-        } ]
-      } ]
-    } ]
-  }, {
-    "type" : "EXPRESSION",
-    "components" : [ {
-      "name" : "!write_line",
-      "type" : "TOKEN",
-      "location" : {
-        "line" : 3,
-        "lineIndex" : 1
-      }
-    }, {
-      "name" : "APPLY",
-      "type" : "TOKEN",
-      "location" : {
-        "line" : 3,
-        "lineIndex" : 10
-      }
-    }, {
-      "type" : "METHOD_CALL",
-      "components" : [ {
-        "type" : "EXPRESSION",
-        "components" : [ {
-          "type" : "LIST",
-          "location" : {
-            "line" : 3,
-            "lineIndex" : 15
-          },
-          "components" : [ {
-            "type" : "EXPRESSION",
-            "components" : [ {
-              "name" : "#1",
-              "type" : "TOKEN",
-              "location" : {
-                "line" : 3,
-                "lineIndex" : 12
-              }
-            } ]
-          }, {
-            "type" : "EXPRESSION",
-            "components" : [ {
-              "name" : "#2",
-              "type" : "TOKEN",
-              "location" : {
-                "line" : 3,
-                "lineIndex" : 14
-              }
-            } ]
-          } ]
-        }, {
-          "name" : "ACCESS",
-          "type" : "TOKEN",
-          "location" : {
-            "line" : 3,
-            "lineIndex" : 16
+  "parsed": true,
+  "type": "CODE_BLOCK",
+  "components": [
+    {
+      "type": "DECLARATION",
+      "components": [
+        {
+          "name": "!add_func",
+          "type": "TOKEN",
+          "location": {
+            "line": 1,
+            "lineIndex": 5
           }
-        }, {
-          "type" : "EXPRESSION",
-          "components" : [ {
-            "name" : "!add_func",
-            "type" : "TOKEN",
-            "location" : {
-              "line" : 3,
-              "lineIndex" : 17
-            }
-          }, {
-            "name" : "APPLY",
-            "type" : "TOKEN",
-            "location" : {
-              "line" : 3,
-              "lineIndex" : 25
-            }
-          }, {
-            "type" : "METHOD_CALL",
-            "components" : [ {
-              "type" : "EXPRESSION",
-              "components" : [ {
-                "name" : "#3",
-                "type" : "TOKEN",
-                "location" : {
-                  "line" : 3,
-                  "lineIndex" : 26
+        },
+        {
+          "type": "EXPRESSION",
+          "components": [
+            {
+              "type": "METHOD",
+              "location": {
+                "line": 1,
+                "lineIndex": 17
+              },
+              "components": [
+                {
+                  "name": "LIST",
+                  "type": "TYPE",
+                  "location": {
+                    "line": 1,
+                    "lineIndex": 71
+                  },
+                  "components": [
+                    {
+                      "name": "!T",
+                      "type": "TYPE",
+                      "location": {
+                        "line": 1,
+                        "lineIndex": 76
+                      }
+                    }
+                  ]
+                },
+                {
+                  "name": "ANON_ARG",
+                  "type": "DECLARATION",
+                  "components": [
+                    {
+                      "name": "LIST",
+                      "type": "TYPE",
+                      "location": {
+                        "line": 1,
+                        "lineIndex": 32
+                      },
+                      "components": [
+                        {
+                          "name": "GENERIC",
+                          "type": "TYPE",
+                          "location": {
+                            "line": 1,
+                            "lineIndex": 37
+                          },
+                          "components": [
+                            {
+                              "name": "!T",
+                              "type": "TOKEN",
+                              "location": {
+                                "line": 1,
+                                "lineIndex": 50
+                              }
+                            },
+                            {
+                              "name": "EITHER",
+                              "type": "TYPE",
+                              "location": {
+                                "line": 1,
+                                "lineIndex": 37
+                              },
+                              "components": [
+                                {
+                                  "name": "ANYTHING",
+                                  "type": "TYPE",
+                                  "location": {
+                                    "line": 1,
+                                    "lineIndex": 37
+                                  }
+                                },
+                                {
+                                  "name": "!nothing",
+                                  "type": "TYPE"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "!list",
+                      "type": "TOKEN",
+                      "location": {
+                        "line": 1,
+                        "lineIndex": 25
+                      }
+                    }
+                  ]
+                },
+                {
+                  "name": "ANON_ARG",
+                  "type": "DECLARATION",
+                  "components": [
+                    {
+                      "name": "!T",
+                      "type": "TYPE",
+                      "location": {
+                        "line": 1,
+                        "lineIndex": 65
+                      }
+                    },
+                    {
+                      "name": "!elem",
+                      "type": "TOKEN",
+                      "location": {
+                        "line": 1,
+                        "lineIndex": 58
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "CODE_BLOCK",
+                  "components": [
+                    {
+                      "type": "RETURN",
+                      "components": [
+                        {
+                          "type": "EXPRESSION",
+                          "components": [
+                            {
+                              "name": "!list",
+                              "type": "TOKEN",
+                              "location": {
+                                "line": 3,
+                                "lineIndex": 11
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
                 }
-              } ]
-            } ]
-          } ]
-        } ]
-      } ]
-    } ]
-  } ]
-}""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing))); DECLARATION ANON_ARG; (TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing); DECLARE)); !list); DECLARATION ANON_ARG; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem))); !add_func; EXPRESSION(TYPE METHOD; (METHOD(TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing))); DECLARATION ANON_ARG; (TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing); DECLARE)); !list); DECLARATION ANON_ARG; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem))); METHOD(TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing))); DECLARATION ANON_ARG; (TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing); DECLARE)); !list); DECLARATION ANON_ARG; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem); CODE_BLOCK(RETURN(EXPRESSION(TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing); DECLARE)); !list; LIST|PLUS|LIST; LIST(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); EXPRESSION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem)))))))); EXPRESSION(TYPE !nothing; !write_line; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!text; ASSIGN; EXPRESSION(TYPE LIST; (TYPE INT); !add_func; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!list; ASSIGN; EXPRESSION(TYPE LIST; (TYPE INT); LIST(TYPE INT; EXPRESSION(TYPE INT; #1); EXPRESSION(TYPE INT; #2)))); EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE INT; #3))))))))")
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "EXPRESSION",
+      "components": [
+        {
+          "name": "!write_line",
+          "type": "TOKEN",
+          "location": {
+            "line": 5,
+            "lineIndex": 1
+          }
+        },
+        {
+          "name": "APPLY",
+          "type": "TOKEN",
+          "location": {
+            "line": 5,
+            "lineIndex": 11
+          }
+        },
+        {
+          "type": "METHOD_CALL",
+          "components": [
+            {
+              "type": "EXPRESSION",
+              "components": [
+                {
+                  "type": "LIST",
+                  "location": {
+                    "line": 5,
+                    "lineIndex": 16
+                  },
+                  "components": [
+                    {
+                      "type": "EXPRESSION",
+                      "components": [
+                        {
+                          "name": "#1",
+                          "type": "TOKEN",
+                          "location": {
+                            "line": 5,
+                            "lineIndex": 13
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "EXPRESSION",
+                      "components": [
+                        {
+                          "name": "#2",
+                          "type": "TOKEN",
+                          "location": {
+                            "line": 5,
+                            "lineIndex": 15
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "ACCESS",
+                  "type": "TOKEN",
+                  "location": {
+                    "line": 5,
+                    "lineIndex": 17
+                  }
+                },
+                {
+                  "type": "EXPRESSION",
+                  "components": [
+                    {
+                      "name": "!add_func",
+                      "type": "TOKEN",
+                      "location": {
+                        "line": 5,
+                        "lineIndex": 18
+                      }
+                    },
+                    {
+                      "name": "APPLY",
+                      "type": "TOKEN",
+                      "location": {
+                        "line": 5,
+                        "lineIndex": 26
+                      }
+                    },
+                    {
+                      "type": "METHOD_CALL",
+                      "components": [
+                        {
+                          "type": "EXPRESSION",
+                          "components": [
+                            {
+                              "name": "#3",
+                              "type": "TOKEN",
+                              "location": {
+                                "line": 5,
+                                "lineIndex": 27
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}""","CODE_BLOCK(DECLARATION(TYPE METHOD; (METHOD(TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing))); DECLARATION ANON_ARG; (TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing); DECLARE)); !list); DECLARATION ANON_ARG; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem))); !add_func; EXPRESSION(TYPE METHOD; (METHOD(TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing))); DECLARATION ANON_ARG; (TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing); DECLARE)); !list); DECLARATION ANON_ARG; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem))); METHOD(TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing))); DECLARATION ANON_ARG; (TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing); DECLARE)); !list); DECLARATION ANON_ARG; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing)); !elem); CODE_BLOCK(RETURN(EXPRESSION(TYPE LIST; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE ANYTHING; TYPE !nothing); DECLARE)); !list)))))); EXPRESSION(TYPE !nothing; !write_line; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!text; ASSIGN; EXPRESSION(TYPE LIST; (TYPE INT); !add_func; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!list; ASSIGN; EXPRESSION(TYPE LIST; (TYPE INT); LIST(TYPE INT; EXPRESSION(TYPE INT; #1); EXPRESSION(TYPE INT; #2)))); EXPRESSION(!elem; ASSIGN; EXPRESSION(TYPE INT; #3))))))))")
+
+        /*
+        typedef number := int or rational
+        let add_func := fun(arg x :number as T, arg y : T) -> T
+        begin
+            yield x + y
+        end
+        write_line(2.add_func(3))
+         */
+        checkResult(null,"""{
+  "parsed": true,
+  "type": "CODE_BLOCK",
+  "components": [
+    {
+      "type": "TYPEDEF",
+      "components": [
+        {
+          "name": "!number",
+          "type": "TOKEN",
+          "location": {
+            "line": 1,
+            "lineIndex": 9
+          }
+        },
+        {
+          "name": "EITHER",
+          "type": "TYPE",
+          "location": {
+            "line": 1,
+            "lineIndex": 19
+          },
+          "components": [
+            {
+              "name": "INT",
+              "type": "TYPE",
+              "location": {
+                "line": 1,
+                "lineIndex": 19
+              }
+            },
+            {
+              "name": "DOUBLE",
+              "type": "TYPE",
+              "location": {
+                "line": 1,
+                "lineIndex": 26
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "DECLARATION",
+      "components": [
+        {
+          "name": "!add_func",
+          "type": "TOKEN",
+          "location": {
+            "line": 3,
+            "lineIndex": 5
+          }
+        },
+        {
+          "type": "EXPRESSION",
+          "components": [
+            {
+              "type": "METHOD",
+              "location": {
+                "line": 3,
+                "lineIndex": 17
+              },
+              "components": [
+                {
+                  "name": "!T",
+                  "type": "TYPE",
+                  "location": {
+                    "line": 3,
+                    "lineIndex": 55
+                  }
+                },
+                {
+                  "name": "ANON_ARG",
+                  "type": "DECLARATION",
+                  "components": [
+                    {
+                      "name": "GENERIC",
+                      "type": "TYPE",
+                      "location": {
+                        "line": 3,
+                        "lineIndex": 28
+                      },
+                      "components": [
+                        {
+                          "name": "!T",
+                          "type": "TOKEN",
+                          "location": {
+                            "line": 3,
+                            "lineIndex": 38
+                          }
+                        },
+                        {
+                          "name": "!number",
+                          "type": "TYPE",
+                          "location": {
+                            "line": 3,
+                            "lineIndex": 28
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "name": "!x",
+                      "type": "TOKEN",
+                      "location": {
+                        "line": 3,
+                        "lineIndex": 25
+                      }
+                    }
+                  ]
+                },
+                {
+                  "name": "ANON_ARG",
+                  "type": "DECLARATION",
+                  "components": [
+                    {
+                      "name": "!T",
+                      "type": "TYPE",
+                      "location": {
+                        "line": 3,
+                        "lineIndex": 49
+                      }
+                    },
+                    {
+                      "name": "!y",
+                      "type": "TOKEN",
+                      "location": {
+                        "line": 3,
+                        "lineIndex": 45
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "CODE_BLOCK",
+                  "components": [
+                    {
+                      "type": "RETURN",
+                      "components": [
+                        {
+                          "type": "EXPRESSION",
+                          "components": [
+                            {
+                              "name": "!x",
+                              "type": "TOKEN",
+                              "location": {
+                                "line": 5,
+                                "lineIndex": 11
+                              }
+                            },
+                            {
+                              "name": "PLUS",
+                              "type": "TOKEN",
+                              "location": {
+                                "line": 5,
+                                "lineIndex": 13
+                              }
+                            },
+                            {
+                              "name": "!y",
+                              "type": "TOKEN",
+                              "location": {
+                                "line": 5,
+                                "lineIndex": 15
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "EXPRESSION",
+      "components": [
+        {
+          "name": "!write_line",
+          "type": "TOKEN",
+          "location": {
+            "line": 7,
+            "lineIndex": 1
+          }
+        },
+        {
+          "name": "APPLY",
+          "type": "TOKEN",
+          "location": {
+            "line": 7,
+            "lineIndex": 11
+          }
+        },
+        {
+          "type": "METHOD_CALL",
+          "components": [
+            {
+              "type": "EXPRESSION",
+              "components": [
+                {
+                  "name": "#2",
+                  "type": "TOKEN",
+                  "location": {
+                    "line": 7,
+                    "lineIndex": 12
+                  }
+                },
+                {
+                  "name": "ACCESS",
+                  "type": "TOKEN",
+                  "location": {
+                    "line": 7,
+                    "lineIndex": 13
+                  }
+                },
+                {
+                  "type": "EXPRESSION",
+                  "components": [
+                    {
+                      "name": "!add_func",
+                      "type": "TOKEN",
+                      "location": {
+                        "line": 7,
+                        "lineIndex": 14
+                      }
+                    },
+                    {
+                      "name": "APPLY",
+                      "type": "TOKEN",
+                      "location": {
+                        "line": 7,
+                        "lineIndex": 22
+                      }
+                    },
+                    {
+                      "type": "METHOD_CALL",
+                      "components": [
+                        {
+                          "type": "EXPRESSION",
+                          "components": [
+                            {
+                              "name": "#3",
+                              "type": "TOKEN",
+                              "location": {
+                                "line": 7,
+                                "lineIndex": 23
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}""","CODE_BLOCK(TYPEDEF(!number; TYPE EITHER; (TYPE INT; TYPE DOUBLE)); DECLARATION(TYPE METHOD; (METHOD(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE INT; TYPE DOUBLE)); DECLARATION ANON_ARG; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE INT; TYPE DOUBLE); DECLARE); !x); DECLARATION ANON_ARG; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE INT; TYPE DOUBLE)); !y))); !add_func; EXPRESSION(TYPE METHOD; (METHOD(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE INT; TYPE DOUBLE)); DECLARATION ANON_ARG; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE INT; TYPE DOUBLE); DECLARE); !x); DECLARATION ANON_ARG; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE INT; TYPE DOUBLE)); !y))); METHOD(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE INT; TYPE DOUBLE)); DECLARATION ANON_ARG; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE INT; TYPE DOUBLE); DECLARE); !x); DECLARATION ANON_ARG; (TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE INT; TYPE DOUBLE)); !y); CODE_BLOCK(RETURN(EXPRESSION(TYPE EITHER; (TYPE INT; TYPE DOUBLE); !x; ANYTHING|PLUS|ANYTHING; !y)))))); EXPRESSION(TYPE !nothing; !write_line; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!text; ASSIGN; EXPRESSION(TYPE INT; !add_func; METHOD|APPLY|METHOD_CALL; METHOD_CALL(EXPRESSION(!x; ASSIGN; EXPRESSION(TYPE INT; #2)); EXPRESSION(!y; ASSIGN; EXPRESSION(TYPE INT; #3))))))))")
+
         /*
         let run_func := fun(arg func : fun[->anything? as T]) -> T
             do yield func()
 
         write_line(run_func(do yield 10)+20)
-         */
+        */
     checkResult(null,"""{
   "parsed" : true,
   "type" : "CODE_BLOCK",
