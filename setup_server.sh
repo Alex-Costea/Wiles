@@ -1,8 +1,8 @@
 rm -d -r "wiles-web-frontend/build/"
-rm -d -r "Wiles Web Backend/src/main/resources/static"
+rm -d -r "wiles-web-backend/src/main/resources/static"
 cd wiles-web-frontend
 npm run build
 cd ..
-cp -R "wiles-web-frontend/build/" "Wiles Web Backend/src/main/resources/static/"
-cd "Wiles Web Backend"
+cp -R "wiles-web-frontend/build/" "wiles-web-backend/src/main/resources/static/"
+cd "wiles-web-backend"
 sh update_server.sh
