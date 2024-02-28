@@ -71,7 +71,7 @@ class FullTests {
     {
         val code = """
             
-typedef number := int or rational
+typedef number := int or decimal
 
 let min := fun(list : list[number as T]) -> T?
 begin

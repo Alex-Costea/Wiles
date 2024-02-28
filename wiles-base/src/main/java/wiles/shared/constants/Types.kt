@@ -13,7 +13,7 @@ object Types {
     const val BOOLEAN_ID = "BOOLEAN"
     const val INT_ID = "INT"
     const val STRING_ID = "STRING"
-    const val DOUBLE_ID = "DOUBLE"
+    const val DECIMAL_ID = "DECIMAL"
     const val LIST_ID = "LIST"
     const val EITHER_ID = "EITHER"
     const val ANYTHING_ID = "ANYTHING"
@@ -35,7 +35,7 @@ object Types {
         TYPES["!truth"] = BOOLEAN_ID
         TYPES["!int"] = INT_ID
         TYPES["!text"] = STRING_ID
-        TYPES["!rational"] = DOUBLE_ID
+        TYPES["!decimal"] = DECIMAL_ID
         TYPES["!list"] = LIST_ID
         TYPES["!anything"] = ANYTHING_ID
         TYPES["!type"] = TYPE_TYPE_ID

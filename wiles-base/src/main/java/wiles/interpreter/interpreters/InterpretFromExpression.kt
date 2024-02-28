@@ -21,7 +21,7 @@ import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Tokens.OR_ID
-import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
+import wiles.shared.constants.TypeConstants.DECIMAL_TYPE
 import wiles.shared.constants.TypeConstants.INT_TYPE
 import wiles.shared.constants.TypeConstants.STRING_TYPE
 import wiles.shared.constants.Types.METHOD_CALL_ID
@@ -42,7 +42,7 @@ class InterpretFromExpression(statement: JSONStatement, variables: InterpreterVa
         }
 
         else if(Predicates.IS_NUMBER_LITERAL.test(name)) {
-            ObjectDetails(name.substring(1).toBigDecimal(), DOUBLE_TYPE)
+            ObjectDetails(name.substring(1).toBigDecimal(), DECIMAL_TYPE)
         }
 
         else if(Predicates.IS_TEXT_LITERAL.test(name)) {

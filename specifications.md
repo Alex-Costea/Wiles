@@ -23,7 +23,7 @@
 - Integers: `int` (any integral value)
 - Boolean: `truth`
 - String: `text`
-- Floating point: `rational` (equivalent to `double` in other languages)
+- Floating point: `decimal` (equivalent to `BigDecimal`)
 - Function type: like function literals, but no function body and put between square brackets (ex: `fun[x : int, -> int]`)
 - Sum types:`type1 or type2`
 - List: `list[type]`

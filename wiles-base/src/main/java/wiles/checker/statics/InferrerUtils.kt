@@ -34,7 +34,7 @@ import wiles.shared.constants.TypeUtils.makeMutable
 import wiles.shared.constants.TypeUtils.removeEmptyEither
 import wiles.shared.constants.TypeUtils.makeTypeUngeneric
 import wiles.shared.constants.TypeUtils.makeTypeUnmutable
-import wiles.shared.constants.Types.DOUBLE_ID
+import wiles.shared.constants.Types.DECIMAL_ID
 import wiles.shared.constants.Types.EITHER_ID
 import wiles.shared.constants.Types.GENERIC_ID
 import wiles.shared.constants.Types.INT_ID
@@ -53,7 +53,7 @@ object InferrerUtils {
         if (Predicates.IS_NUMBER_LITERAL.test(name))
         {
             if(name.contains(Chars.DECIMAL_DELIMITER))
-                return JSONStatement(DOUBLE_ID, syntaxType = SyntaxType.TYPE)
+                return JSONStatement(DECIMAL_ID, syntaxType = SyntaxType.TYPE)
             token.name = name.replace(DIGIT_SEPARATOR.toString(),"")
             return JSONStatement(INT_ID, syntaxType = SyntaxType.TYPE)
         }

@@ -27,7 +27,7 @@ object TypeConstants {
     val BOOLEAN_TYPE = JSONStatement(syntaxType = SyntaxType.TYPE, name = Types.BOOLEAN_ID)
     val INT_TYPE = JSONStatement(syntaxType = SyntaxType.TYPE, name = Types.INT_ID)
     val STRING_TYPE = JSONStatement(syntaxType = SyntaxType.TYPE, name = STRING_ID)
-    val DOUBLE_TYPE = JSONStatement(syntaxType = SyntaxType.TYPE, name = Types.DOUBLE_ID)
+    val DECIMAL_TYPE = JSONStatement(syntaxType = SyntaxType.TYPE, name = Types.DECIMAL_ID)
     val ERROR_TYPE = JSONStatement(syntaxType = SyntaxType.TYPE, name = Tokens.ERROR_TOKEN)
     private val ANYTHING_TYPE = JSONStatement(syntaxType = SyntaxType.TYPE, name = ANYTHING_ID)
     val METHOD_CALL_TYPE = JSONStatement(syntaxType = SyntaxType.TYPE, name = METHOD_CALL_ID)
@@ -171,9 +171,9 @@ object TypeConstants {
         ))
     )
 
-    val READ_NOTHING_RETURN_DOUBLE_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
+    val READ_NOTHING_RETURN_DECIMAL_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
         components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
-            components = mutableListOf(DOUBLE_TYPE)
+            components = mutableListOf(DECIMAL_TYPE)
         ))
     )
 

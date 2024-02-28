@@ -439,7 +439,7 @@ class InterpreterTests {
   "components" : [ {
     "type" : "DECLARATION",
     "components" : [ {
-      "name" : "DOUBLE",
+      "name" : "DECIMAL",
       "type" : "TYPE"
     }, {
       "name" : "!a",
@@ -450,7 +450,7 @@ class InterpreterTests {
         "name" : "#2.0",
         "type" : "TOKEN"
       }, {
-        "name" : "DOUBLE|POWER|INT",
+        "name" : "DECIMAL|POWER|INT",
         "type" : "TOKEN"
       }, {
         "type" : "EXPRESSION",

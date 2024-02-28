@@ -26,13 +26,13 @@ import wiles.shared.constants.Tokens.TIMES_ID
 import wiles.shared.constants.Tokens.UNARY_MINUS_ID
 import wiles.shared.constants.Tokens.UNARY_PLUS_ID
 import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
-import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
+import wiles.shared.constants.TypeConstants.DECIMAL_TYPE
 import wiles.shared.constants.TypeConstants.INT_TYPE
 import wiles.shared.constants.TypeConstants.STRING_TYPE
 import wiles.shared.constants.TypeUtils.makeTypeUngeneric
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.BOOLEAN_ID
-import wiles.shared.constants.Types.DOUBLE_ID
+import wiles.shared.constants.Types.DECIMAL_ID
 import wiles.shared.constants.Types.INT_ID
 import wiles.shared.constants.Types.STRING_ID
 import java.math.BigDecimal
@@ -55,62 +55,62 @@ object DoOperation {
         //Addition
         Pair("${INT_ID}|${PLUS_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
             (x as BigInteger) + (y as BigInteger)}, INT_TYPE)),
-        Pair("${INT_ID}|${PLUS_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as BigInteger).toBigDecimal() + (y as BigDecimal)}, DOUBLE_TYPE)),
-        Pair("${DOUBLE_ID}|${PLUS_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
-            (y as BigInteger).toBigDecimal() + (x as BigDecimal)}, DOUBLE_TYPE)),
-        Pair("${DOUBLE_ID}|${PLUS_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as BigDecimal) + (y as BigDecimal)}, DOUBLE_TYPE)),
+        Pair("${INT_ID}|${PLUS_ID}|${DECIMAL_ID}", createFunction({ x: Any?, y: Any? ->
+            (x as BigInteger).toBigDecimal() + (y as BigDecimal)}, DECIMAL_TYPE)),
+        Pair("${DECIMAL_ID}|${PLUS_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
+            (y as BigInteger).toBigDecimal() + (x as BigDecimal)}, DECIMAL_TYPE)),
+        Pair("${DECIMAL_ID}|${PLUS_ID}|${DECIMAL_ID}", createFunction({ x: Any?, y: Any? ->
+            (x as BigDecimal) + (y as BigDecimal)}, DECIMAL_TYPE)),
 
         //Subtraction
         Pair("${INT_ID}|${MINUS_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
             (x as BigInteger) - (y as BigInteger)}, INT_TYPE)),
-        Pair("${INT_ID}|${MINUS_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as BigInteger).toBigDecimal() - (y as BigDecimal)}, DOUBLE_TYPE)),
-        Pair("${DOUBLE_ID}|${MINUS_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
-            -(y as BigInteger).toBigDecimal() + (x as BigDecimal)}, DOUBLE_TYPE)),
-        Pair("${DOUBLE_ID}|${MINUS_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as BigDecimal) - (y as BigDecimal)}, DOUBLE_TYPE)),
+        Pair("${INT_ID}|${MINUS_ID}|${DECIMAL_ID}", createFunction({ x: Any?, y: Any? ->
+            (x as BigInteger).toBigDecimal() - (y as BigDecimal)}, DECIMAL_TYPE)),
+        Pair("${DECIMAL_ID}|${MINUS_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
+            -(y as BigInteger).toBigDecimal() + (x as BigDecimal)}, DECIMAL_TYPE)),
+        Pair("${DECIMAL_ID}|${MINUS_ID}|${DECIMAL_ID}", createFunction({ x: Any?, y: Any? ->
+            (x as BigDecimal) - (y as BigDecimal)}, DECIMAL_TYPE)),
 
         //Multiplication
         Pair("${INT_ID}|${TIMES_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
             (x as BigInteger) * (y as BigInteger)}, INT_TYPE)),
-        Pair("${INT_ID}|${TIMES_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as BigInteger).toBigDecimal() * (y as BigDecimal)}, DOUBLE_TYPE)),
-        Pair("${DOUBLE_ID}|${TIMES_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
-            (y as BigInteger).toBigDecimal() * (x as BigDecimal)}, DOUBLE_TYPE)),
-        Pair("${DOUBLE_ID}|${TIMES_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as BigDecimal) * (y as BigDecimal)}, DOUBLE_TYPE)),
+        Pair("${INT_ID}|${TIMES_ID}|${DECIMAL_ID}", createFunction({ x: Any?, y: Any? ->
+            (x as BigInteger).toBigDecimal() * (y as BigDecimal)}, DECIMAL_TYPE)),
+        Pair("${DECIMAL_ID}|${TIMES_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
+            (y as BigInteger).toBigDecimal() * (x as BigDecimal)}, DECIMAL_TYPE)),
+        Pair("${DECIMAL_ID}|${TIMES_ID}|${DECIMAL_ID}", createFunction({ x: Any?, y: Any? ->
+            (x as BigDecimal) * (y as BigDecimal)}, DECIMAL_TYPE)),
 
         //Division
         Pair("${INT_ID}|${DIVIDE_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
             (x as BigInteger) / (y as BigInteger)}, INT_TYPE)),
-        Pair("${INT_ID}|${DIVIDE_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
-            ((x as BigInteger).toBigDecimal()) / (y as BigDecimal)}, DOUBLE_TYPE)),
-        Pair("${DOUBLE_ID}|${DIVIDE_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as BigDecimal) / ((y as BigInteger).toBigDecimal())}, DOUBLE_TYPE)),
-        Pair("${DOUBLE_ID}|${DIVIDE_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as BigDecimal) / (y as BigDecimal)}, DOUBLE_TYPE)),
+        Pair("${INT_ID}|${DIVIDE_ID}|${DECIMAL_ID}", createFunction({ x: Any?, y: Any? ->
+            ((x as BigInteger).toBigDecimal()) / (y as BigDecimal)}, DECIMAL_TYPE)),
+        Pair("${DECIMAL_ID}|${DIVIDE_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
+            (x as BigDecimal) / ((y as BigInteger).toBigDecimal())}, DECIMAL_TYPE)),
+        Pair("${DECIMAL_ID}|${DIVIDE_ID}|${DECIMAL_ID}", createFunction({ x: Any?, y: Any? ->
+            (x as BigDecimal) / (y as BigDecimal)}, DECIMAL_TYPE)),
 
         //Exponentiation
         Pair("${INT_ID}|${POWER_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
             (x as BigInteger).pow(y as BigInteger) }, INT_TYPE)),
-        Pair("${INT_ID}|${POWER_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as BigInteger).toBigDecimal().pow(y as BigDecimal)}, DOUBLE_TYPE)),
-        Pair("${DOUBLE_ID}|${POWER_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as BigDecimal).pow((y as BigInteger).toBigDecimal())}, DOUBLE_TYPE)),
-        Pair("${DOUBLE_ID}|${POWER_ID}|${DOUBLE_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as BigDecimal).pow(y as BigDecimal)}, DOUBLE_TYPE)),
+        Pair("${INT_ID}|${POWER_ID}|${DECIMAL_ID}", createFunction({ x: Any?, y: Any? ->
+            (x as BigInteger).toBigDecimal().pow(y as BigDecimal)}, DECIMAL_TYPE)),
+        Pair("${DECIMAL_ID}|${POWER_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
+            (x as BigDecimal).pow((y as BigInteger).toBigDecimal())}, DECIMAL_TYPE)),
+        Pair("${DECIMAL_ID}|${POWER_ID}|${DECIMAL_ID}", createFunction({ x: Any?, y: Any? ->
+            (x as BigDecimal).pow(y as BigDecimal)}, DECIMAL_TYPE)),
 
         //Prefix plus/minus
         Pair("${NOTHING_ID}|${UNARY_PLUS_ID}|${INT_ID}", createFunction({ _: Any?, y: Any? ->
             (y as BigInteger)}, INT_TYPE)),
-        Pair("${NOTHING_ID}|${UNARY_PLUS_ID}|${DOUBLE_ID}", createFunction({ _: Any?, y: Any? ->
-            (y as BigDecimal)}, DOUBLE_TYPE)),
+        Pair("${NOTHING_ID}|${UNARY_PLUS_ID}|${DECIMAL_ID}", createFunction({ _: Any?, y: Any? ->
+            (y as BigDecimal)}, DECIMAL_TYPE)),
         Pair("${NOTHING_ID}|${UNARY_MINUS_ID}|${INT_ID}", createFunction({ _: Any?, y: Any? ->
             -(y as BigInteger)}, INT_TYPE)),
-        Pair("${NOTHING_ID}|${UNARY_MINUS_ID}|${DOUBLE_ID}", createFunction({ _: Any?, y: Any? ->
-            -(y as BigDecimal)}, DOUBLE_TYPE)),
+        Pair("${NOTHING_ID}|${UNARY_MINUS_ID}|${DECIMAL_ID}", createFunction({ _: Any?, y: Any? ->
+            -(y as BigDecimal)}, DECIMAL_TYPE)),
 
         //Not operation (other ones are handled seriously
         Pair("${NOTHING_ID}|${NOT_ID}|${BOOLEAN_ID}", createFunction({ _ : Any?, y : Any? ->
@@ -133,9 +133,9 @@ object DoOperation {
             (x as BigInteger).toString() + (y as String)}, STRING_TYPE)),
 
         //String and double concatenation
-        Pair("${STRING_ID}|${PLUS_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
+        Pair("${STRING_ID}|${PLUS_ID}|${DECIMAL_ID}", createFunction({ x : Any?, y : Any? ->
             (x as String) + (y as BigDecimal)}, STRING_TYPE)),
-        Pair("${DOUBLE_ID}|${PLUS_ID}|${STRING_ID}", createFunction({ x : Any?, y : Any? ->
+        Pair("${DECIMAL_ID}|${PLUS_ID}|${STRING_ID}", createFunction({ x : Any?, y : Any? ->
             (x as BigDecimal).toString() + (y as String)}, STRING_TYPE)),
 
         //Equals
@@ -147,41 +147,41 @@ object DoOperation {
         //Larger
         Pair("${INT_ID}|${LARGER_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
             (x as BigInteger) > (y as BigInteger)}, BOOLEAN_TYPE)),
-        Pair("${INT_ID}|${LARGER_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
+        Pair("${INT_ID}|${LARGER_ID}|${DECIMAL_ID}", createFunction({ x : Any?, y : Any? ->
             (x as BigInteger).toBigDecimal() > (y as BigDecimal)}, BOOLEAN_TYPE)),
-        Pair("${DOUBLE_ID}|${LARGER_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
+        Pair("${DECIMAL_ID}|${LARGER_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
              (y as BigInteger).toBigDecimal() < (x as BigDecimal)}, BOOLEAN_TYPE)),
-        Pair("${DOUBLE_ID}|${LARGER_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
+        Pair("${DECIMAL_ID}|${LARGER_ID}|${DECIMAL_ID}", createFunction({ x : Any?, y : Any? ->
             (x as BigDecimal) > (y as BigDecimal)}, BOOLEAN_TYPE)),
 
         //Larger equals
         Pair("${INT_ID}|${LARGER_EQUALS_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
             (x as BigInteger) >= (y as BigInteger)}, BOOLEAN_TYPE)),
-        Pair("${INT_ID}|${LARGER_EQUALS_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
+        Pair("${INT_ID}|${LARGER_EQUALS_ID}|${DECIMAL_ID}", createFunction({ x : Any?, y : Any? ->
             (x as BigInteger).toBigDecimal() >= (y as BigDecimal)}, BOOLEAN_TYPE)),
-        Pair("${DOUBLE_ID}|${LARGER_EQUALS_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
+        Pair("${DECIMAL_ID}|${LARGER_EQUALS_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
             (y as BigInteger).toBigDecimal() <= (x as BigDecimal)}, BOOLEAN_TYPE)),
-        Pair("${DOUBLE_ID}|${LARGER_EQUALS_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
+        Pair("${DECIMAL_ID}|${LARGER_EQUALS_ID}|${DECIMAL_ID}", createFunction({ x : Any?, y : Any? ->
             (x as BigDecimal) >= (y as BigDecimal)}, BOOLEAN_TYPE)),
 
         //Smaller
         Pair("${INT_ID}|${SMALLER_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
             (x as BigInteger) < (y as BigInteger)}, BOOLEAN_TYPE)),
-        Pair("${INT_ID}|${SMALLER_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
+        Pair("${INT_ID}|${SMALLER_ID}|${DECIMAL_ID}", createFunction({ x : Any?, y : Any? ->
             (x as BigInteger).toBigDecimal() < (y as BigDecimal)}, BOOLEAN_TYPE)),
-        Pair("${DOUBLE_ID}|${SMALLER_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
+        Pair("${DECIMAL_ID}|${SMALLER_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
              (y as BigInteger).toBigDecimal() > (x as BigDecimal)}, BOOLEAN_TYPE)),
-        Pair("${DOUBLE_ID}|${SMALLER_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
+        Pair("${DECIMAL_ID}|${SMALLER_ID}|${DECIMAL_ID}", createFunction({ x : Any?, y : Any? ->
             (x as BigDecimal) < (y as BigDecimal)}, BOOLEAN_TYPE)),
 
         //Smaller equals
         Pair("${INT_ID}|${SMALLER_EQUALS_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
             (x as BigInteger) <= (y as BigInteger)}, BOOLEAN_TYPE)),
-        Pair("${INT_ID}|${SMALLER_EQUALS_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
+        Pair("${INT_ID}|${SMALLER_EQUALS_ID}|${DECIMAL_ID}", createFunction({ x : Any?, y : Any? ->
             (x as BigInteger).toBigDecimal() <= (y as BigDecimal)}, BOOLEAN_TYPE)),
-        Pair("${DOUBLE_ID}|${SMALLER_EQUALS_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
+        Pair("${DECIMAL_ID}|${SMALLER_EQUALS_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
             (y as BigInteger).toBigDecimal() >= (x as BigDecimal)}, BOOLEAN_TYPE)),
-        Pair("${DOUBLE_ID}|${SMALLER_EQUALS_ID}|${DOUBLE_ID}", createFunction({ x : Any?, y : Any? ->
+        Pair("${DECIMAL_ID}|${SMALLER_EQUALS_ID}|${DECIMAL_ID}", createFunction({ x : Any?, y : Any? ->
             (x as BigDecimal) <= (y as BigDecimal)}, BOOLEAN_TYPE)),
 
         //Repeat string

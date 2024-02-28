@@ -11,7 +11,7 @@ import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.ErrorMessages.CANNOT_READ_INT_ERROR
-import wiles.shared.constants.ErrorMessages.CANNOT_READ_RATIONAL_ERROR
+import wiles.shared.constants.ErrorMessages.CANNOT_READ_DECIMAL_ERROR
 import wiles.shared.constants.ErrorMessages.CANNOT_READ_TEXT_ERROR
 import wiles.shared.constants.ErrorMessages.CANNOT_READ_TRUTH_ERROR
 import wiles.shared.constants.Tokens.FALSE_ID
@@ -23,7 +23,7 @@ import wiles.shared.constants.TypeConstants.AS_TEXT_TYPE
 import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
 import wiles.shared.constants.TypeConstants.CLONE_TYPE
 import wiles.shared.constants.TypeConstants.CONTENT_TYPE
-import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
+import wiles.shared.constants.TypeConstants.DECIMAL_TYPE
 import wiles.shared.constants.TypeConstants.GET_AT_TYPE
 import wiles.shared.constants.TypeConstants.GET_KEYS_TYPE
 import wiles.shared.constants.TypeConstants.GET_TYPE_TYPE
@@ -35,7 +35,7 @@ import wiles.shared.constants.TypeConstants.MODULO_TYPE
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
 import wiles.shared.constants.TypeConstants.PANIC_TYPE
 import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_BOOL_TYPE
-import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_DOUBLE_TYPE
+import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_DECIMAL_TYPE
 import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_INT_TYPE
 import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_STRING_TYPE
 import wiles.shared.constants.TypeConstants.REMOVE_AT_TYPE
@@ -60,7 +60,7 @@ object StandardLibrary {
     private const val SIZE = "!size"
     private const val READ_INT = "!read_int"
     private const val READ_LINE = "!read_line"
-    private const val READ_RATIONAL = "!read_rational"
+    private const val READ_DECIMAL = "!read_DECIMAL"
     private const val READ_TRUTH = "!read_truth"
     private const val AS_TEXT = "!as_text"
     private const val AS_LIST = "!as_list"
@@ -92,12 +92,12 @@ object StandardLibrary {
             Pair(SIZE, VariableDetails(SIZE_TYPE)),
             Pair(READ_INT, VariableDetails(READ_NOTHING_RETURN_INT_TYPE)),
             Pair(READ_LINE, VariableDetails(READ_NOTHING_RETURN_STRING_TYPE)),
-            Pair(READ_RATIONAL, VariableDetails(READ_NOTHING_RETURN_DOUBLE_TYPE)),
+            Pair(READ_DECIMAL, VariableDetails(READ_NOTHING_RETURN_DECIMAL_TYPE)),
             Pair(READ_TRUTH, VariableDetails(READ_NOTHING_RETURN_BOOL_TYPE)),
             Pair(AS_TEXT, VariableDetails(AS_TEXT_TYPE)),
             Pair(AS_LIST, VariableDetails(AS_LIST_TYPE)),
-            Pair(INFINITY, VariableDetails(DOUBLE_TYPE)),
-            Pair(NAN, VariableDetails(DOUBLE_TYPE)),
+            Pair(INFINITY, VariableDetails(DECIMAL_TYPE)),
+            Pair(NAN, VariableDetails(DECIMAL_TYPE)),
             Pair(MAYBE, VariableDetails(MAYBE_TYPE)),
             Pair(CONTENT, VariableDetails(CONTENT_TYPE)),
             Pair(RUN, VariableDetails(RUN_TYPE)),
@@ -167,11 +167,11 @@ object StandardLibrary {
         ObjectDetails(context.input.nextLine(), STRING_TYPE)
     }, defaultCheckerVars[READ_LINE]!!.type)
 
-    private val READ_RATIONAL_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ it, context ->
+    private val READ_DECIMAL_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ it, context ->
         if(!context.input.hasNextDouble())
-            throw PanicException(CANNOT_READ_RATIONAL_ERROR)
-        ObjectDetails(context.input.nextDouble(), DOUBLE_TYPE)
-    }, defaultCheckerVars[READ_RATIONAL]!!.type)
+            throw PanicException(CANNOT_READ_DECIMAL_ERROR)
+        ObjectDetails(context.input.nextDouble(), DECIMAL_TYPE)
+    }, defaultCheckerVars[READ_DECIMAL]!!.type)
 
     private val READ_TRUTH_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ it, context ->
         if(!context.input.hasNextBoolean())
@@ -321,7 +321,7 @@ object StandardLibrary {
         defaultInterpreterVars[SIZE] = SIZE_REF
         defaultInterpreterVars[READ_INT] = READ_INT_REF
         defaultInterpreterVars[READ_LINE] = READ_LINE_REF
-        defaultInterpreterVars[READ_RATIONAL] = READ_RATIONAL_REF
+        defaultInterpreterVars[READ_DECIMAL] = READ_DECIMAL_REF
         defaultInterpreterVars[READ_TRUTH] = READ_TRUTH_REF
         defaultInterpreterVars[AS_TEXT] = AS_TEXT_REF
         defaultInterpreterVars[AS_LIST] = AS_LIST_REF
