@@ -124,7 +124,7 @@ write_line("Min found: " + result)
 
         val code4 = """
             let var a := 10
-            let func := do write_line(import a)
+            let func := do write_line(a)
             a := 100
             func()
         """
@@ -142,7 +142,7 @@ write_line("Min found: " + result)
 
         val code6 = """
             let var a := 10
-            let func := do import a := 100
+            let func := do a := 100
             write_line(a)
             func()
             write_line(a)
@@ -151,7 +151,7 @@ write_line("Min found: " + result)
 
         val code7 = """
             let a := 10
-            let b := fun(b := import a) do write_line(b)
+            let b := fun(b := a) do write_line(b)
             b()
         """
         assertEquals(getOutput(code7),"10\n")
