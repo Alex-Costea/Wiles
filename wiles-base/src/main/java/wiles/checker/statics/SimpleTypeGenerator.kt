@@ -6,6 +6,7 @@ import wiles.shared.constants.Tokens.NOT_EQUAL_ID
 import wiles.shared.constants.TypeConstants.AND_OPERATION
 import wiles.shared.constants.TypeConstants.ASSIGN_OPERATION
 import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
+import wiles.shared.constants.TypeConstants.COLLECTION_OF_NULLABLE_ANYTHING
 import wiles.shared.constants.TypeConstants.DIVIDE_OPERATION
 import wiles.shared.constants.TypeConstants.DOUBLE_TYPE
 import wiles.shared.constants.TypeConstants.INT_TYPE
@@ -118,25 +119,26 @@ object SimpleTypeGenerator {
 
     fun getSimpleTypes(triple : Triple<JSONStatement, JSONStatement, JSONStatement>) : JSONStatement?
     {
-        val unboxedTriple = Triple(makeTypeUngeneric(triple.first), triple.second, makeTypeUngeneric(triple.third))
+        val newTriple = Triple(makeTypeUngeneric(triple.first), triple.second, makeTypeUngeneric(triple.third))
 
-        if((unboxedTriple.second.name == EQUALS_ID || unboxedTriple.second.name == NOT_EQUAL_ID)
-                   && (isFormerSuperTypeOfLatter(NOTHING_TYPE, unboxedTriple.first)
-                    || isFormerSuperTypeOfLatter(NOTHING_TYPE, unboxedTriple.third)
-                    || isFormerSuperTypeOfLatter(unboxedTriple.first,unboxedTriple.third)
-                    || isFormerSuperTypeOfLatter(unboxedTriple.third,unboxedTriple.first)))
+        if((newTriple.second.name == EQUALS_ID || newTriple.second.name == NOT_EQUAL_ID)
+                   && (isFormerSuperTypeOfLatter(NOTHING_TYPE, newTriple.first)
+                    || isFormerSuperTypeOfLatter(NOTHING_TYPE, newTriple.third)
+                    || isFormerSuperTypeOfLatter(newTriple.first,newTriple.third)
+                    || isFormerSuperTypeOfLatter(newTriple.third,newTriple.first)))
             return BOOLEAN_TYPE
 
-        if(unboxedTriple.second == MUTABLE_OPERATION) {
-            assert(unboxedTriple.first == NOTHING_TYPE)
-            return makeMutable(unboxedTriple.third)
+        if(newTriple.second == MUTABLE_OPERATION) {
+            assert(newTriple.first == NOTHING_TYPE)
+            if(isFormerSuperTypeOfLatter(COLLECTION_OF_NULLABLE_ANYTHING,newTriple.third))
+                return makeMutable(newTriple.third)
         }
 
-        if(unboxedTriple.second == ASSIGN_OPERATION && isFormerSuperTypeOfLatter(unboxedTriple.first,unboxedTriple.third))
+        if(newTriple.second == ASSIGN_OPERATION && isFormerSuperTypeOfLatter(newTriple.first,newTriple.third))
         {
             return NOTHING_TYPE
         }
 
-        return simpleTypes[unboxedTriple]
+        return simpleTypes[newTriple]
     }
 }

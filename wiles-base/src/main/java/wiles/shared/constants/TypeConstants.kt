@@ -397,4 +397,7 @@ object TypeConstants {
             )
         ))
     )
+
+    val COLLECTION_OF_NULLABLE_ANYTHING = makeCollection(
+        NULLABLE_ANYTHING_TYPE, NULLABLE_ANYTHING_TYPE)
 }
