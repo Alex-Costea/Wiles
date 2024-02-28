@@ -13,7 +13,7 @@ import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.function.BiFunction
 
-class ObjectDetails(var value : Any?, type : JSONStatement)
+class ObjectDetails(val value : Any?, type : JSONStatement)
 {
 
     private lateinit var typeStatement : JSONStatement
@@ -51,12 +51,12 @@ class ObjectDetails(var value : Any?, type : JSONStatement)
             result.components[0].components.add(
                 getOverallType((value as LinkedHashMap<ObjectDetails,ObjectDetails>).keys) ?: originalKeyType)
             result.components[0].components.add(
-                getOverallType((value as LinkedHashMap<ObjectDetails,ObjectDetails>).values) ?: originalValueType)
+                getOverallType(value.values) ?: originalValueType)
         }
         return result
     }
 
-    fun setType(type : JSONStatement)
+    private fun setType(type : JSONStatement)
     {
         typeStatement = type.copy()
     }
@@ -102,10 +102,10 @@ class ObjectDetails(var value : Any?, type : JSONStatement)
         return when(value) {
             null -> "nothing"
             is BiFunction<*, *, *> -> getType().components[0].toString()
-            is MutableList<*> -> (value as MutableList<*>).joinToString(prefix = "[", postfix = "]")
-            is LinkedHashMap<*, *> -> (value as LinkedHashMap<*, *>).entries.joinToString(prefix = "{", postfix = "}")
+            is MutableList<*> -> value.joinToString(prefix = "[", postfix = "]")
+            is LinkedHashMap<*, *> -> value.entries.joinToString(prefix = "{", postfix = "}")
                 { it.key.toString() + " -> " + it.value }
-            is BigDecimal -> (value as BigDecimal).toPlainString()
+            is BigDecimal -> value.toPlainString()
             else -> value.toString()
         }
     }
