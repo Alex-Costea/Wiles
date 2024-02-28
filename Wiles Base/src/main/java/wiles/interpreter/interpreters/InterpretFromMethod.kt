@@ -33,8 +33,8 @@ class InterpretFromMethod(
         val functionType = JSONStatement(name = METHOD_ID, syntaxType = SyntaxType.TYPE, components = mutableListOf(type))
         reference = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ givenVars, _ ->
             val innerVars = InterpreterVariableMap()
-            innerVars.putAll(givenVars)
             innerVars.putAll(uniqueFunctionDeclarationVars)
+            innerVars.putAll(givenVars)
             val funcVars = ComplexInterpreterVariableMap(innerVars, variables)
             val genericTypesMap = GenericTypesMap()
             for(component in type.components)
