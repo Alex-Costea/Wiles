@@ -468,7 +468,7 @@ class InterpreterTests {
     } ]
   } ]
 }""")
-        assertVar(vars3,"!a", 0.5)
+        assertVar(vars3,"!a", (0.5).toBigDecimal())
 
         /*
         let var a := true

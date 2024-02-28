@@ -42,7 +42,7 @@ class InterpretFromExpression(statement: JSONStatement, variables: InterpreterVa
         }
 
         else if(Predicates.IS_NUMBER_LITERAL.test(name)) {
-            ObjectDetails(name.substring(1).toDouble(), DOUBLE_TYPE)
+            ObjectDetails(name.substring(1).toBigDecimal(), DOUBLE_TYPE)
         }
 
         else if(Predicates.IS_TEXT_LITERAL.test(name)) {

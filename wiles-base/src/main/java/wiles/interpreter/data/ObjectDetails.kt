@@ -9,6 +9,7 @@ import wiles.shared.constants.TypeUtils
 import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 import wiles.shared.constants.Types.DICT_ID
 import wiles.shared.constants.Types.LIST_ID
+import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.function.BiFunction
 
@@ -104,7 +105,7 @@ class ObjectDetails(var value : Any?, type : JSONStatement)
             is MutableList<*> -> (value as MutableList<*>).joinToString(prefix = "[", postfix = "]")
             is LinkedHashMap<*, *> -> (value as LinkedHashMap<*, *>).entries.joinToString(prefix = "{", postfix = "}")
                 { it.key.toString() + " -> " + it.value }
-
+            is BigDecimal -> (value as BigDecimal).toPlainString()
             else -> value.toString()
         }
     }

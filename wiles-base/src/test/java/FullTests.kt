@@ -333,5 +333,14 @@ write_line("Min found: " + result)
             write_line(a.type)
         """
         assertEquals(getOutput(code27),"TYPE MUTABLE; (TYPE LIST; (TYPE EITHER; (TYPE INT; TYPE STRING; TYPE !nothing)))\n")
+
+
+        val code28 ="""
+        write_line(0.1 + 0.2)
+        write_line(10.0^100 + 7)
+    """
+        assertEquals(getOutput(code28),"0.3\n" +
+                "10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007\n")
+
     }
 }
