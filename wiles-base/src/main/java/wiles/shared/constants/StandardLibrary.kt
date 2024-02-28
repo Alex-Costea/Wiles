@@ -60,7 +60,7 @@ object StandardLibrary {
     private const val SIZE = "!size"
     private const val READ_INT = "!read_int"
     private const val READ_LINE = "!read_line"
-    private const val READ_DECIMAL = "!read_DECIMAL"
+    private const val READ_DECIMAL = "!read_decimal"
     private const val READ_TRUTH = "!read_truth"
     private const val AS_TEXT = "!as_text"
     private const val AS_LIST = "!as_list"
@@ -168,9 +168,9 @@ object StandardLibrary {
     }, defaultCheckerVars[READ_LINE]!!.type)
 
     private val READ_DECIMAL_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ it, context ->
-        if(!context.input.hasNextDouble())
+        if(!context.input.hasNextBigDecimal())
             throw PanicException(CANNOT_READ_DECIMAL_ERROR)
-        ObjectDetails(context.input.nextDouble(), DECIMAL_TYPE)
+        ObjectDetails(context.input.nextBigDecimal(), DECIMAL_TYPE)
     }, defaultCheckerVars[READ_DECIMAL]!!.type)
 
     private val READ_TRUTH_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ it, context ->

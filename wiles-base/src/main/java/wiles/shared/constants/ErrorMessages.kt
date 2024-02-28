@@ -47,7 +47,7 @@ object ErrorMessages {
     const val CANNOT_REPEAT_NEGATIVE_ERROR = "Cannot repeat a text a negative number of times."
     const val CANNOT_READ_INT_ERROR = "Cannot read integer value."
     const val CANNOT_READ_TEXT_ERROR = "Cannot read text value."
-    const val CANNOT_READ_DECIMAL_ERROR = "Cannot read DECIMAL value."
+    const val CANNOT_READ_DECIMAL_ERROR = "Cannot read decimal value."
     const val CANNOT_READ_TRUTH_ERROR = "Cannot read truth value."
 
     // Internal errors
