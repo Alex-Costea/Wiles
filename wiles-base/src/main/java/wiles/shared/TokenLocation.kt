@@ -28,6 +28,6 @@ class TokenLocation(val line: Int,
     }
 
     override fun toString(): String {
-        return "TokenLocation(line=$line, lineIndex=$lineIndex)"
+        return "TokenLocation(line=$line, lineIndex=$lineIndex, lineEnd=$lineEnd, lineEndIndex=$lineEndIndex)"
     }
 }

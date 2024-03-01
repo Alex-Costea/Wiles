@@ -25,6 +25,7 @@ public class InputToTokensConverter {
     private int index;
     private int lineIndex = -1; //character at index -1 can be considered equivalent to newline
     private int line = 1;
+    private final TokenLocation lastLocation;
 
     private static final HashMap<String, String> ESCAPE_SEQUENCES = new HashMap<>();
 
@@ -35,13 +36,15 @@ public class InputToTokensConverter {
         ESCAPE_SEQUENCES.put("\\d;", "\\$");
     }
 
-    public InputToTokensConverter(@NotNull String input) {
+    public InputToTokensConverter(@NotNull String input, @NotNull TokenLocation lastLocation) {
         arrayChars = input.codePoints().toArray();
+        this.lastLocation = lastLocation;
     }
 
-    public InputToTokensConverter(@NotNull String input, int additionalLines) {
+    public InputToTokensConverter(@NotNull String input, int additionalLines, @NotNull TokenLocation lastLocation) {
         arrayChars = input.codePoints().toArray();
         line -= additionalLines;
+        this.lastLocation = lastLocation;
     }
 
     @NotNull
@@ -80,6 +83,7 @@ public class InputToTokensConverter {
                     }
                     if (!id.isBlank())
                         tokens.add(createToken(id));
+                    else tokens.add(createToken(""));
                     if (id.equals(Tokens.NEWLINE_ID))
                         addNewLine();
                 }
@@ -88,7 +92,34 @@ public class InputToTokensConverter {
                 tokens.add(createToken(Tokens.ERROR_TOKEN));
             }
         }
-        return tokens;
+        return removeNull(addLocationEnd(tokens));
+    }
+
+    private @NotNull ArrayList<Token> addLocationEnd(ArrayList<Token> tokens)
+    {
+        ArrayList<Token> newTokens = new ArrayList<>();
+        for(int i = 0; i < tokens.size(); i++)
+        {
+            Token token = tokens.get(i);
+            TokenLocation nextLocation;
+            if(i != tokens.size() - 1)
+            {
+                nextLocation = tokens.get(i+1).getLocation();
+            }
+            else{
+                nextLocation = lastLocation;
+            }
+            TokenLocation location = token.getLocation();
+            newTokens.add(new Token(token.getContent(),
+                    new TokenLocation(location.getLine(), location.getLineIndex(),
+                            nextLocation.getLine(), nextLocation.getLineIndex())));
+        }
+        return newTokens;
+    }
+
+    private List<Token> removeNull(ArrayList<Token> tokens)
+    {
+        return tokens.stream().filter(token -> !token.component1().isEmpty()).toList();
     }
 
     private @NotNull String unescape(@NotNull String s) {

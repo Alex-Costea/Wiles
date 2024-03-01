@@ -9,7 +9,7 @@ import java.io.*
 import java.util.*
 import java.util.stream.Collectors
 
-class Parser(content : String?, DEBUG : Boolean, filename : String?) {
+class Parser(content : String?, isDebug : Boolean, filename : String?) {
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
     private var results : CodeBlockStatement
     val input = content?:loadFile(filename!!)
@@ -18,7 +18,7 @@ class Parser(content : String?, DEBUG : Boolean, filename : String?) {
 
     init{
         val tokens = sourceToTokens(input)
-        if(DEBUG) {
+        if(isDebug) {
             print("Tokens: ")
             println(tokens.stream().map(Token::content).toList())
         }
@@ -26,7 +26,7 @@ class Parser(content : String?, DEBUG : Boolean, filename : String?) {
         val ast = tokensToAST(tokens, lastLocation(input))
         results = ast
 
-        if(DEBUG)
+        if(isDebug)
             JSONService.writeValue(File(SYNTAX_TREE_FILE), ast)
         else json = JSONService.writeValueAsString(ast)
     }
@@ -46,8 +46,8 @@ class Parser(content : String?, DEBUG : Boolean, filename : String?) {
         val textSplit = input.trimStart().split("\n")
         val lastIndex = textSplit.lastIndex
         val lastLineLocation = textSplit[lastIndex].length
-        return TokenLocation(lastIndex+1,lastLineLocation+2,
-            lastIndex+1,lastLineLocation+2)
+        return TokenLocation(lastIndex+1,lastLineLocation+1,
+            lastIndex+1,lastLineLocation+1)
     }
 
     private fun loadFile(filename: String): String {
@@ -83,7 +83,7 @@ class Parser(content : String?, DEBUG : Boolean, filename : String?) {
     }
 
     private fun sourceToTokens(input: String): List<Token> {
-        val converter = wiles.parser.converters.InputToTokensConverter(input,additionalLines)
+        val converter = wiles.parser.converters.InputToTokensConverter(input,additionalLines, lastLocation(input))
         val tokens = converter.convert()
         exceptions.addAll(converter.exceptions)
         return tokens

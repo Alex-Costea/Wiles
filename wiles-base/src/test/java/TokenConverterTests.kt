@@ -28,14 +28,14 @@ class TokenConverterTests {
         for (s in solution) {
             solutionList.add(Token(s, NULL_LOCATION))
         }
-        val givenList = InputToTokensConverter(input).convert()
+        val givenList = InputToTokensConverter(input, NULL_LOCATION).convert()
         assert(givenList.size == solutionList.size)
         for((i,x) in givenList.withIndex())
             assert(x.content == solutionList[i].content)
     }
 
     private fun tokenConverterThrows(exceptionIndex: Int, input: String, throwing: Class<out Throwable>, message: String? = null, line: Int? = null) {
-        val x = InputToTokensConverter(input)
+        val x = InputToTokensConverter(input, NULL_LOCATION)
         x.convert()
         val t = if (message != null) Assertions.assertThrows(throwing, { x.throwExceptionIfExists(exceptionIndex) }, message) else Assertions.assertThrows(throwing) { x.throwExceptionIfExists(exceptionIndex) }
         assert(t is AbstractCompilationException)
