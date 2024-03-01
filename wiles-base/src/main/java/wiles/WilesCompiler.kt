@@ -6,6 +6,7 @@ import wiles.interpreter.Interpreter
 import wiles.interpreter.data.InterpreterContext
 import wiles.parser.Parser
 import wiles.shared.AbstractCompilationException
+import wiles.shared.CommandLineArgs
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.InternalErrorException
 import wiles.shared.constants.CommandLineArguments.CODE_COMMAND
@@ -50,20 +51,31 @@ object WilesCompiler {
         else return ""
     }
 
+    private fun getCommandLine(args: Array<String>): CommandLineArgs {
+        val debug: Boolean = args.contains(DEBUG_COMMAND)
+        val compileCommand = args.contains(COMPILE_COMMAND)
+        val runCommand = args.contains(RUN_COMMAND)
+        val filename = args.lastOrNull{it.startsWith(FILE_COMMAND)}?.split(FILE_COMMAND)?.get(1)
+        val code = args.lastOrNull{it.startsWith(CODE_COMMAND)}?.split(CODE_COMMAND)?.get(1)
+        return CommandLineArgs(
+            isDebug = debug,
+            isCompileCommand = compileCommand,
+            isRunCommand = runCommand,
+            filename = filename,
+            code = code
+        )
+    }
+
     @JvmStatic
     fun getOutput(args: Array<String>) : Pair<String,String>
     {
         //args
-        val debug: Boolean = args.contains(DEBUG_COMMAND)
-        val writeCompileFile = args.contains(COMPILE_COMMAND)
-        val runCommand = args.contains(RUN_COMMAND)
         val exceptions = CompilationExceptionsCollection()
         var interpreterCode : String? = null
-        var filename = args.lastOrNull{it.startsWith(FILE_COMMAND)}?.split(FILE_COMMAND)?.get(1)
-        val code = args.lastOrNull{it.startsWith(CODE_COMMAND)}?.split(CODE_COMMAND)?.get(1)
         val exceptionsString = StringBuilder()
+        val clArgs = getCommandLine(args)
 
-        if(filename == null && code == null)
+        if(clArgs.filename == null && clArgs.code == null)
             throw Exception("Invalid arguments!")
 
         //get input
@@ -72,46 +84,46 @@ object WilesCompiler {
             Scanner(System.`in`)
         else Scanner(ByteArrayInputStream(inputText.toByteArray(Charsets.UTF_8)))
 
-        if(!runCommand) {
-            val parser = Parser(code, debug, filename)
-            if (filename == null)
-                filename = "code.wiles"
+        if(!clArgs.isRunCommand) {
+            val parser = Parser(clArgs.code, clArgs.isDebug, clArgs.filename)
             exceptions.addAll(parser.getExceptions())
             val result = parser.getResults()
 
-            if (debug) {
+            if (clArgs.isDebug) {
                 print("Syntax tree: ")
                 println(result)
             }
 
             if (exceptions.isNotEmpty()) {
-                exceptionsString.append(getErrorsDisplay(exceptions, parser.input, parser.additionalLines, debug))
+                exceptionsString.append(getErrorsDisplay(exceptions, parser.input, parser.additionalLines,
+                    clArgs.isDebug))
                 return Pair("", exceptionsString.toString())
             }
 
-            val checker = Checker(if (debug) null else parser.json, CheckerContext(0))
+            val checker = Checker(if (clArgs.isDebug) null else parser.json, CheckerContext(0))
             exceptions.addAll(checker.check())
 
-            if (debug) {
+            if (clArgs.isDebug) {
                 print("After checking: ")
                 println(checker.code)
             }
 
-            if (writeCompileFile && exceptions.isEmpty()) {
-                val writer = FileWriter(filename + OBJECT_FILE)
+            if (clArgs.isCompileCommand && exceptions.isEmpty()) {
+                val writer = FileWriter((clArgs.filename ?: "code.wiles") + OBJECT_FILE)
                 writer.write(checker.codeAsJSONString)
                 writer.close()
             }
 
-            exceptionsString.append(getErrorsDisplay(exceptions, parser.input, parser.additionalLines, debug))
+            exceptionsString.append(getErrorsDisplay(exceptions, parser.input, parser.additionalLines, clArgs.isDebug))
 
             interpreterCode = checker.codeAsJSONString
         }
 
         val output = StringBuilder()
-        if(!writeCompileFile && exceptions.isEmpty())
+        if(!clArgs.isCompileCommand && exceptions.isEmpty())
         {
-            val interpreter = Interpreter(interpreterCode, debug, filename!!, InterpreterContext(scanner, output, exceptionsString))
+            val interpreter = Interpreter(interpreterCode, clArgs.isDebug, clArgs.filename!!,
+                InterpreterContext(scanner, output, exceptionsString))
             interpreter.interpret()
         }
         return Pair(output.toString(),exceptionsString.toString())
