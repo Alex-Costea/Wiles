@@ -58,7 +58,7 @@ object JSONService {
             val locationObject = location.asObject()
             val line = Objects.requireNonNull(locationObject[LINE]).asInt()
             val lineIndex = Objects.requireNonNull(locationObject[LINE_INDEX]).asInt()
-            val lineEnd = locationObject[LINE_INDEX]?.asInt()
+            val lineEnd = locationObject[LINE_END]?.asInt()
             val lineEndIndex = locationObject[LINE_END_INDEX]?.asInt()
             val tokenLocation = TokenLocation(line, lineIndex, lineEnd ?: -1, lineEndIndex ?: -1)
             statement.location = tokenLocation

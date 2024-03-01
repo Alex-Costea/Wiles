@@ -1,6 +1,7 @@
 package wiles.shared
 
 import wiles.shared.constants.ErrorMessages.LINE_SYMBOL
+import kotlin.math.min
 
 class TokenLocation(val line: Int,
                     val lineIndex: Int,
@@ -17,8 +18,12 @@ class TokenLocation(val line: Int,
 
     fun displayLocation(input: String, additionalLines: Int): String
     {
-        return  LINE_SYMBOL + input.split("\n")[line+additionalLines-1] +
-                LINE_SYMBOL + " ".repeat(lineIndex-1) + "^"+ LINE_SYMBOL
+        val string = input.split("\n")[line+additionalLines-1] + " "
+        var nrCarats = string.length - lineIndex + 1
+        if(line == lineEnd)
+            nrCarats = min(nrCarats, lineEndIndex - lineIndex)
+        return  LINE_SYMBOL + string +
+                LINE_SYMBOL + " ".repeat(lineIndex-1) + "^".repeat(nrCarats) + LINE_SYMBOL
     }
 
     override fun hashCode(): Int {
