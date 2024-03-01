@@ -27,7 +27,7 @@ object Utils {
         return Character.isWhitespace(c) && (c != 8205)
     }
 
-    val NULL_LOCATION = TokenLocation(-1,-1)
+    val NULL_LOCATION = TokenLocation()
 
     fun <T> statementToString(name : String, type : SyntaxType, components : List<T>) : String
     {

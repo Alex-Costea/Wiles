@@ -15,7 +15,7 @@ class InterpreterTests {
     private fun getVars(code : String) : InterpreterVariableMap
     {
         val interpreter = Interpreter(code, true, "code.wiles",
-            InterpreterContext(Scanner(System.`in`), StringBuilder(), StringBuilder()))
+            InterpreterContext(Scanner(System.`in`), StringBuilder()))
         interpreter.interpret()
         return interpreter.newVars
     }
@@ -1308,220 +1308,279 @@ class InterpreterTests {
             if modulo(i, 3) = 0 do skip
             a := a + i.as_text
         end
-        panic(a)
          */
         val vars2 = getVars("""{
-  "type" : "CODE_BLOCK",
-  "parsed" : true,
-  "components" : [ {
-    "name" : "VARIABLE",
-    "type" : "DECLARATION",
-    "components" : [ {
-      "name" : "STRING",
-      "type" : "TYPE"
-    }, {
-      "name" : "!a",
-      "type" : "TOKEN"
-    }, {
-      "type" : "EXPRESSION",
-      "components" : [ {
-        "name" : "@",
-        "type" : "TOKEN"
-      } ]
-    } ]
-  }, {
-    "name" : "VARIABLE",
-    "type" : "DECLARATION",
-    "components" : [ {
-      "name" : "INT",
-      "type" : "TYPE"
-    }, {
-      "name" : "!i",
-      "type" : "TOKEN"
-    }, {
-      "type" : "EXPRESSION",
-      "components" : [ {
-        "name" : "#10",
-        "type" : "TOKEN"
-      } ]
-    } ]
-  }, {
-    "type" : "WHILE",
-    "components" : [ {
-      "type" : "EXPRESSION",
-      "components" : [ {
-        "name" : "!i",
-        "type" : "TOKEN"
-      }, {
-        "name" : "INT|LARGER|INT",
-        "type" : "TOKEN"
-      }, {
-        "name" : "#0",
-        "type" : "TOKEN"
-      } ]
-    }, {
-      "type" : "CODE_BLOCK",
-      "components" : [ {
-        "type" : "EXPRESSION",
-        "components" : [ {
-          "type" : "EXPRESSION",
-          "components" : [ {
-            "name" : "!i",
-            "type" : "TOKEN"
-          } ]
-        }, {
-          "name" : "ASSIGN",
-          "type" : "TOKEN"
-        }, {
-          "type" : "EXPRESSION",
-          "components" : [ {
-            "name" : "!i",
-            "type" : "TOKEN"
-          }, {
-            "name" : "INT|MINUS|INT",
-            "type" : "TOKEN"
-          }, {
-            "name" : "#1",
-            "type" : "TOKEN"
-          } ]
-        } ]
-      }, {
-        "type" : "IF",
-        "components" : [ {
-          "type" : "EXPRESSION",
-          "components" : [ {
-            "type" : "EXPRESSION",
-            "components" : [ {
-              "name" : "!modulo",
-              "type" : "TOKEN"
-            }, {
-              "name" : "METHOD|APPLY|METHOD_CALL",
-              "type" : "TOKEN"
-            }, {
-              "type" : "METHOD_CALL",
-              "components" : [ {
-                "type" : "EXPRESSION",
-                "components" : [ {
-                  "name" : "!x",
-                  "type" : "TOKEN"
-                }, {
-                  "name" : "ASSIGN",
-                  "type" : "TOKEN"
-                }, {
-                  "type" : "EXPRESSION",
-                  "components" : [ {
-                    "name" : "!i",
-                    "type" : "TOKEN"
-                  } ]
-                } ]
-              }, {
-                "type" : "EXPRESSION",
-                "components" : [ {
-                  "name" : "!y",
-                  "type" : "TOKEN"
-                }, {
-                  "name" : "ASSIGN",
-                  "type" : "TOKEN"
-                }, {
-                  "type" : "EXPRESSION",
-                  "components" : [ {
-                    "name" : "#3",
-                    "type" : "TOKEN"
-                  } ]
-                } ]
-              } ]
-            } ]
-          }, {
-            "name" : "EQUALS",
-            "type" : "TOKEN"
-          }, {
-            "name" : "#0",
-            "type" : "TOKEN"
-          } ]
-        }, {
-          "type" : "CODE_BLOCK",
-          "components" : [ {
-            "type" : "CONTINUE"
-          } ]
-        } ]
-      }, {
-        "type" : "EXPRESSION",
-        "components" : [ {
-          "type" : "EXPRESSION",
-          "components" : [ {
-            "name" : "!a",
-            "type" : "TOKEN"
-          } ]
-        }, {
-          "name" : "ASSIGN",
-          "type" : "TOKEN"
-        }, {
-          "type" : "EXPRESSION",
-          "components" : [ {
-            "name" : "!a",
-            "type" : "TOKEN"
-          }, {
-            "name" : "STRING|PLUS|STRING",
-            "type" : "TOKEN"
-          }, {
-            "type" : "EXPRESSION",
-            "components" : [ {
-              "name" : "!as_text",
-              "type" : "TOKEN"
-            }, {
-              "name" : "METHOD|APPLY|METHOD_CALL",
-              "type" : "TOKEN"
-            }, {
-              "type" : "METHOD_CALL",
-              "components" : [ {
-                "type" : "EXPRESSION",
-                "components" : [ {
-                  "name" : "!elem",
-                  "type" : "TOKEN"
-                }, {
-                  "name" : "ASSIGN",
-                  "type" : "TOKEN"
-                }, {
-                  "type" : "EXPRESSION",
-                  "components" : [ {
-                    "name" : "!i",
-                    "type" : "TOKEN"
-                  } ]
-                } ]
-              } ]
-            } ]
-          } ]
-        } ]
-      } ]
-    } ]
-  }, {
-    "type" : "EXPRESSION",
-    "components" : [ {
-      "name" : "!panic",
-      "type" : "TOKEN"
-    }, {
-      "name" : "METHOD|APPLY|METHOD_CALL",
-      "type" : "TOKEN"
-    }, {
-      "type" : "METHOD_CALL",
-      "components" : [ {
-        "type" : "EXPRESSION",
-        "components" : [ {
-          "name" : "!text",
-          "type" : "TOKEN"
-        }, {
-          "name" : "ASSIGN",
-          "type" : "TOKEN"
-        }, {
-          "type" : "EXPRESSION",
-          "components" : [ {
-            "name" : "!a",
-            "type" : "TOKEN"
-          } ]
-        } ]
-      } ]
-    } ]
-  } ]
+  "parsed": true,
+  "type": "CODE_BLOCK",
+  "components": [
+    {
+      "name": "VARIABLE",
+      "type": "DECLARATION",
+      "components": [
+        {
+          "name": "STRING",
+          "type": "TYPE"
+        },
+        {
+          "name": "!a",
+          "type": "TOKEN"
+        },
+        {
+          "type": "EXPRESSION",
+          "components": [
+            {
+              "name": "@",
+              "type": "TOKEN"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "VARIABLE",
+      "type": "DECLARATION",
+      "components": [
+        {
+          "name": "INT",
+          "type": "TYPE"
+        },
+        {
+          "name": "!i",
+          "type": "TOKEN"
+        },
+        {
+          "type": "EXPRESSION",
+          "components": [
+            {
+              "name": "#10",
+              "type": "TOKEN"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "WHILE",
+      "components": [
+        {
+          "type": "EXPRESSION",
+          "components": [
+            {
+              "name": "!i",
+              "type": "TOKEN"
+            },
+            {
+              "name": "INT|LARGER|INT",
+              "type": "TOKEN"
+            },
+            {
+              "name": "#0",
+              "type": "TOKEN"
+            }
+          ]
+        },
+        {
+          "type": "CODE_BLOCK",
+          "components": [
+            {
+              "type": "EXPRESSION",
+              "components": [
+                {
+                  "type": "EXPRESSION",
+                  "components": [
+                    {
+                      "name": "!i",
+                      "type": "TOKEN"
+                    }
+                  ]
+                },
+                {
+                  "name": "ASSIGN",
+                  "type": "TOKEN"
+                },
+                {
+                  "type": "EXPRESSION",
+                  "components": [
+                    {
+                      "name": "!i",
+                      "type": "TOKEN"
+                    },
+                    {
+                      "name": "INT|MINUS|INT",
+                      "type": "TOKEN"
+                    },
+                    {
+                      "name": "#1",
+                      "type": "TOKEN"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "IF",
+              "components": [
+                {
+                  "type": "EXPRESSION",
+                  "components": [
+                    {
+                      "type": "EXPRESSION",
+                      "components": [
+                        {
+                          "name": "!modulo",
+                          "type": "TOKEN"
+                        },
+                        {
+                          "name": "METHOD|APPLY|METHOD_CALL",
+                          "type": "TOKEN"
+                        },
+                        {
+                          "type": "METHOD_CALL",
+                          "components": [
+                            {
+                              "type": "EXPRESSION",
+                              "components": [
+                                {
+                                  "name": "!x",
+                                  "type": "TOKEN"
+                                },
+                                {
+                                  "name": "ASSIGN",
+                                  "type": "TOKEN"
+                                },
+                                {
+                                  "type": "EXPRESSION",
+                                  "components": [
+                                    {
+                                      "name": "!i",
+                                      "type": "TOKEN"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "EXPRESSION",
+                              "components": [
+                                {
+                                  "name": "!y",
+                                  "type": "TOKEN"
+                                },
+                                {
+                                  "name": "ASSIGN",
+                                  "type": "TOKEN"
+                                },
+                                {
+                                  "type": "EXPRESSION",
+                                  "components": [
+                                    {
+                                      "name": "#3",
+                                      "type": "TOKEN"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "EQUALS",
+                      "type": "TOKEN"
+                    },
+                    {
+                      "name": "#0",
+                      "type": "TOKEN"
+                    }
+                  ]
+                },
+                {
+                  "type": "CODE_BLOCK",
+                  "components": [
+                    {
+                      "type": "CONTINUE"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "EXPRESSION",
+              "components": [
+                {
+                  "type": "EXPRESSION",
+                  "components": [
+                    {
+                      "name": "!a",
+                      "type": "TOKEN"
+                    }
+                  ]
+                },
+                {
+                  "name": "ASSIGN",
+                  "type": "TOKEN"
+                },
+                {
+                  "type": "EXPRESSION",
+                  "components": [
+                    {
+                      "name": "!a",
+                      "type": "TOKEN"
+                    },
+                    {
+                      "name": "STRING|PLUS|STRING",
+                      "type": "TOKEN"
+                    },
+                    {
+                      "type": "EXPRESSION",
+                      "components": [
+                        {
+                          "name": "!as_text",
+                          "type": "TOKEN"
+                        },
+                        {
+                          "name": "METHOD|APPLY|METHOD_CALL",
+                          "type": "TOKEN"
+                        },
+                        {
+                          "type": "METHOD_CALL",
+                          "components": [
+                            {
+                              "type": "EXPRESSION",
+                              "components": [
+                                {
+                                  "name": "!elem",
+                                  "type": "TOKEN"
+                                },
+                                {
+                                  "name": "ASSIGN",
+                                  "type": "TOKEN"
+                                },
+                                {
+                                  "type": "EXPRESSION",
+                                  "components": [
+                                    {
+                                      "name": "!i",
+                                      "type": "TOKEN"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }""")
         assertVar(vars2, "!a", "875421")
     }

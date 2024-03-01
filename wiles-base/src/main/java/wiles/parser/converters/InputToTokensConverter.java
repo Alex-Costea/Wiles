@@ -25,6 +25,7 @@ public class InputToTokensConverter {
     private int index;
     private int lineIndex = -1; //character at index -1 can be considered equivalent to newline
     private int line = 1;
+    private final TokenLocation lastLocation;
 
     private static final HashMap<String, String> ESCAPE_SEQUENCES = new HashMap<>();
 
@@ -35,13 +36,15 @@ public class InputToTokensConverter {
         ESCAPE_SEQUENCES.put("\\d;", "\\$");
     }
 
-    public InputToTokensConverter(@NotNull String input) {
+    public InputToTokensConverter(@NotNull String input, @NotNull TokenLocation lastLocation) {
         arrayChars = input.codePoints().toArray();
+        this.lastLocation = lastLocation;
     }
 
-    public InputToTokensConverter(@NotNull String input, int additionalLines) {
+    public InputToTokensConverter(@NotNull String input, int additionalLines, @NotNull TokenLocation lastLocation) {
         arrayChars = input.codePoints().toArray();
         line -= additionalLines;
+        this.lastLocation = lastLocation;
     }
 
     @NotNull
@@ -58,7 +61,8 @@ public class InputToTokensConverter {
                     }
                     catch(IllegalArgumentException ex)
                     {
-                        throw new StringInvalidException(ErrorMessages.STRING_ESCAPE_INVALID_ERROR, line, getIndexOnCurrentLine());
+                        throw new StringInvalidException(ErrorMessages.STRING_ESCAPE_INVALID_ERROR,
+                                new TokenLocation( line, getIndexOnCurrentLine(), -1, -1));
                     }
                 } else if (Utils.isAlphabetic(arrayChars[index])) //identifier
                 {
@@ -79,6 +83,7 @@ public class InputToTokensConverter {
                     }
                     if (!id.isBlank())
                         tokens.add(createToken(id));
+                    else tokens.add(createToken(""));
                     if (id.equals(Tokens.NEWLINE_ID))
                         addNewLine();
                 }
@@ -87,7 +92,34 @@ public class InputToTokensConverter {
                 tokens.add(createToken(Tokens.ERROR_TOKEN));
             }
         }
-        return tokens;
+        return removeNull(addLocationEnd(tokens));
+    }
+
+    private @NotNull ArrayList<Token> addLocationEnd(ArrayList<Token> tokens)
+    {
+        ArrayList<Token> newTokens = new ArrayList<>();
+        for(int i = 0; i < tokens.size(); i++)
+        {
+            Token token = tokens.get(i);
+            TokenLocation nextLocation;
+            if(i != tokens.size() - 1)
+            {
+                nextLocation = tokens.get(i+1).getLocation();
+            }
+            else{
+                nextLocation = lastLocation;
+            }
+            TokenLocation location = token.getLocation();
+            newTokens.add(new Token(token.getContent(),
+                    new TokenLocation(location.getLine(), location.getLineIndex(),
+                            nextLocation.getLine(), nextLocation.getLineIndex())));
+        }
+        return newTokens;
+    }
+
+    private List<Token> removeNull(ArrayList<Token> tokens)
+    {
+        return tokens.stream().filter(token -> !token.component1().isEmpty()).toList();
     }
 
     private @NotNull String unescape(@NotNull String s) {
@@ -125,7 +157,8 @@ public class InputToTokensConverter {
     @NotNull
     private String readStringLiteral() throws StringInvalidException {
         if (index >= arrayChars.length)
-            throw new StringInvalidException(ErrorMessages.STRING_UNFINISHED_ERROR, line, getIndexOnCurrentLine());
+            throw new StringInvalidException(ErrorMessages.STRING_UNFINISHED_ERROR,
+                    new TokenLocation( line, getIndexOnCurrentLine(), -1, -1));
         StringBuilder sb = createString(true);
         if (index < arrayChars.length && arrayChars[index] == STRING_DELIMITER)
             return Tokens.STRING_START + sb;
@@ -133,7 +166,8 @@ public class InputToTokensConverter {
         //String not properly finished at this point
         if (index < arrayChars.length && arrayChars[index] == '\n') //of the newline token regardless
             index--;
-        throw new StringInvalidException(ErrorMessages.STRING_UNFINISHED_ERROR, line, getIndexOnCurrentLine());
+        throw new StringInvalidException(ErrorMessages.STRING_UNFINISHED_ERROR,
+                new TokenLocation( line, getIndexOnCurrentLine(), -1, -1));
     }
 
     @NotNull
@@ -202,7 +236,7 @@ public class InputToTokensConverter {
 
     @NotNull
     private Token createToken(String token) {
-        return new Token(token, new TokenLocation(line, getIndexOnCurrentLine()));
+        return new Token(token, new TokenLocation(line, getIndexOnCurrentLine(), -1, -1));
     }
 
     private void addNewLine() {

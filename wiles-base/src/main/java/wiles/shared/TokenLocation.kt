@@ -1,9 +1,14 @@
 package wiles.shared
 
 import wiles.shared.constants.ErrorMessages.LINE_SYMBOL
+import kotlin.math.min
 
-class TokenLocation(val line: Int,val  lineIndex: Int) {
-    constructor() : this(-1,-1)
+class TokenLocation(val line: Int,
+                    val lineIndex: Int,
+                    val lineEnd : Int,
+                    val lineEndIndex : Int,
+    ) {
+    constructor() : this(-1,-1, -1, -1)
 
     override fun equals(other: Any?): Boolean {
         if (other is TokenLocation)
@@ -11,10 +16,14 @@ class TokenLocation(val line: Int,val  lineIndex: Int) {
         return false
     }
 
-    fun displayLocation(input: String, additionalLines: Int): String
+    fun displayLocation(input: String): String
     {
-        return  LINE_SYMBOL + input.split("\n")[line+additionalLines-1] +
-                LINE_SYMBOL + " ".repeat(lineIndex-1) + "^"+ LINE_SYMBOL
+        val string = input.split("\n")[line-1] + " "
+        var nrCarats = string.length - lineIndex + 1
+        if(line == lineEnd)
+            nrCarats = min(nrCarats, lineEndIndex - lineIndex)
+        return  LINE_SYMBOL + string +
+                LINE_SYMBOL + " ".repeat(lineIndex-1) + "^".repeat(nrCarats) + LINE_SYMBOL
     }
 
     override fun hashCode(): Int {
@@ -24,6 +33,6 @@ class TokenLocation(val line: Int,val  lineIndex: Int) {
     }
 
     override fun toString(): String {
-        return "TokenLocation(line=$line, lineIndex=$lineIndex)"
+        return "TokenLocation(line=$line, lineIndex=$lineIndex, lineEnd=$lineEnd, lineEndIndex=$lineEndIndex)"
     }
 }

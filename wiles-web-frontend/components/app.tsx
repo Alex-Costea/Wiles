@@ -119,7 +119,7 @@ function App() {
                             <label htmlFor="code">Code:</label>
                         </p>
                         <p>
-                        <ContentEditable id="code" className={"textarea"} tagName={"span"}
+                        <ContentEditable id="code" className={"textarea"} tagName={"span"} spellCheck={false}
                                   onChange={onCodeChange} html={code}/>
                         </p>
                         <p>

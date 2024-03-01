@@ -63,6 +63,4 @@ object ErrorMessages {
     const val UNKNOWN_SYNTAX_TYPE_ERROR = "Unknown syntax type."
     const val IRREGULAR_STATEMENT_ERROR = "Irregular statement found."
     const val CANNOT_GET_LIST_ELEMENT_TYPE_ERROR = "Couldn't get list's element type."
-    const val RED_TEXT_START_ERROR = "\u001B[31m"
-    const val RED_TEXT_END_ERROR = "\u001B[0m"
 }

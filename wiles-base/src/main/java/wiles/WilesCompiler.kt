@@ -4,11 +4,9 @@ import wiles.checker.Checker
 import wiles.checker.data.CheckerContext
 import wiles.interpreter.Interpreter
 import wiles.interpreter.data.InterpreterContext
+import wiles.interpreter.exceptions.PanicException
 import wiles.parser.Parser
-import wiles.shared.AbstractCompilationException
-import wiles.shared.CommandLineArgs
-import wiles.shared.CompilationExceptionsCollection
-import wiles.shared.InternalErrorException
+import wiles.shared.*
 import wiles.shared.constants.CommandLineArguments.CODE_COMMAND
 import wiles.shared.constants.CommandLineArguments.COMPILE_COMMAND
 import wiles.shared.constants.CommandLineArguments.DEBUG_COMMAND
@@ -17,8 +15,6 @@ import wiles.shared.constants.CommandLineArguments.INPUT_COMMAND
 import wiles.shared.constants.CommandLineArguments.RUN_COMMAND
 import wiles.shared.constants.ErrorMessages.COMPILATION_FAILED_ERROR
 import wiles.shared.constants.ErrorMessages.LINE_SYMBOL
-import wiles.shared.constants.ErrorMessages.RED_TEXT_END_ERROR
-import wiles.shared.constants.ErrorMessages.RED_TEXT_START_ERROR
 import wiles.shared.constants.Settings.OBJECT_FILE
 import java.io.ByteArrayInputStream
 import java.io.FileWriter
@@ -28,26 +24,23 @@ import java.util.*
 
 object WilesCompiler {
 
-    private fun getErrorsDisplay(exceptions: CompilationExceptionsCollection, input: String, additionalLines: Int,
-                                 debug : Boolean) : String
+    private fun getErrorsDisplay(exceptions: CompilationExceptionsCollection, input: String, debug : Boolean) : String
     {
         if (exceptions.size > 0)
-            return RED_TEXT_START_ERROR+ run {
+            return run {
                 val optional =
                     exceptions.sortedWith(nullsLast(compareBy<AbstractCompilationException> { it.tokenLocation.line }
                         .thenBy { it.tokenLocation.lineIndex }))
                         .map {
                             LINE_SYMBOL + "Line ${it.tokenLocation.line}: " + it.message +
                                     it.tokenLocation.displayLocation(
-                                        input,
-                                        additionalLines
-                                    ) + (if (debug) "\n" + it.stackTraceToString() else "")
+                                        input) + (if (debug) "\n" + it.stackTraceToString() else "")
                         }
                         .fold("") { a, b -> a + b }
                 if (optional.isEmpty())
                     throw InternalErrorException()
                 COMPILATION_FAILED_ERROR + optional
-            } +RED_TEXT_END_ERROR
+            }
         else return ""
     }
 
@@ -84,7 +77,7 @@ object WilesCompiler {
     }
 
     @JvmStatic
-    fun getOutput(args: Array<String>) : Pair<String,String>
+    fun getOutput(args: Array<String>) : OutputData
     {
         //args
         val exceptions = CompilationExceptionsCollection()
@@ -111,9 +104,10 @@ object WilesCompiler {
             }
 
             if (exceptions.isNotEmpty()) {
-                exceptionsString.append(getErrorsDisplay(exceptions, parser.input, parser.additionalLines,
-                    clArgs.isDebug))
-                return Pair("", exceptionsString.toString())
+                exceptionsString.append(getErrorsDisplay(exceptions, parser.input, clArgs.isDebug))
+                return OutputData(output = "",
+                    exceptionsString = exceptionsString.toString(),
+                    exceptions = exceptions)
             }
 
             val checker = Checker(if (clArgs.isDebug) null else parser.json, CheckerContext(0))
@@ -130,7 +124,7 @@ object WilesCompiler {
                 writer.close()
             }
 
-            exceptionsString.append(getErrorsDisplay(exceptions, parser.input, parser.additionalLines, clArgs.isDebug))
+            exceptionsString.append(getErrorsDisplay(exceptions, parser.input, clArgs.isDebug))
 
             interpreterCode = checker.codeAsJSONString
         }
@@ -140,17 +134,29 @@ object WilesCompiler {
         {
             val interpreter = Interpreter(interpreterCode, clArgs.isDebug,
                 filename = clArgs.filename?: "code.wiles",
-                InterpreterContext(scanner, output, exceptionsString))
-            interpreter.interpret()
+                InterpreterContext(scanner, output))
+            try{
+                interpreter.interpret()
+            }
+            catch (ex : PanicException)
+            {
+                val message = ex.message ?:"A runtime error occurred!"
+                exceptions.addLast(PanicExceptionWithLocation(message, ex.location ?: TokenLocation())
+                )
+                exceptionsString.append(message)
+            }
         }
-        return Pair(output.toString(),exceptionsString.toString())
+        return OutputData(
+            output = output.toString(),
+            exceptionsString = exceptionsString.toString(),
+            exceptions = exceptions)
     }
 
     @Throws(IOException::class)
     @JvmStatic
     fun main(args: Array<String>) {
         val result = getOutput(args)
-        System.err.print(result.second)
-        print(result.first)
+        System.err.print(result.exceptionsString)
+        print(result.output)
     }
 }

@@ -1,5 +1,7 @@
 package WilesWebBackend;
 
-public record CompilationResponse(String response, String errors) {
+import java.util.List;
+
+public record CompilationResponse(String response, String errors, List<Error> errorList) {
 
 }
