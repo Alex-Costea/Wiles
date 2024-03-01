@@ -5,10 +5,7 @@ import wiles.checker.data.CheckerContext
 import wiles.interpreter.Interpreter
 import wiles.interpreter.data.InterpreterContext
 import wiles.parser.Parser
-import wiles.shared.AbstractCompilationException
-import wiles.shared.CommandLineArgs
-import wiles.shared.CompilationExceptionsCollection
-import wiles.shared.InternalErrorException
+import wiles.shared.*
 import wiles.shared.constants.CommandLineArguments.CODE_COMMAND
 import wiles.shared.constants.CommandLineArguments.COMPILE_COMMAND
 import wiles.shared.constants.CommandLineArguments.DEBUG_COMMAND
@@ -84,7 +81,7 @@ object WilesCompiler {
     }
 
     @JvmStatic
-    fun getOutput(args: Array<String>) : Pair<String,String>
+    fun getOutput(args: Array<String>) : OutputData
     {
         //args
         val exceptions = CompilationExceptionsCollection()
@@ -113,7 +110,9 @@ object WilesCompiler {
             if (exceptions.isNotEmpty()) {
                 exceptionsString.append(getErrorsDisplay(exceptions, parser.input, parser.additionalLines,
                     clArgs.isDebug))
-                return Pair("", exceptionsString.toString())
+                return OutputData(output = "",
+                    exceptionsString = exceptionsString.toString(),
+                    exceptions = exceptions)
             }
 
             val checker = Checker(if (clArgs.isDebug) null else parser.json, CheckerContext(0))
@@ -143,14 +142,17 @@ object WilesCompiler {
                 InterpreterContext(scanner, output, exceptionsString))
             interpreter.interpret()
         }
-        return Pair(output.toString(),exceptionsString.toString())
+        return OutputData(
+            output = output.toString(),
+            exceptionsString = exceptionsString.toString(),
+            exceptions = exceptions)
     }
 
     @Throws(IOException::class)
     @JvmStatic
     fun main(args: Array<String>) {
         val result = getOutput(args)
-        System.err.print(result.second)
-        print(result.first)
+        System.err.print(result.exceptionsString)
+        print(result.output)
     }
 }

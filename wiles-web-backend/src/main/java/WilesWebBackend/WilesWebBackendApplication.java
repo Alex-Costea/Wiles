@@ -1,15 +1,15 @@
 package WilesWebBackend;
 
-import kotlin.Pair;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+import wiles.shared.OutputData;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,12 +38,12 @@ public class WilesWebBackendApplication {
 		args.add("--input="+input);
 
 		ExecutorService executor = Executors.newSingleThreadExecutor();
-		Future<Pair<String, String>> future = executor.submit(new WilesTask(args));
+		Future<OutputData> future = executor.submit(new WilesTask(args));
 		try
 		{
 			var result = future.get(10, TimeUnit.SECONDS);
-			String outputText = result.getFirst();
-			String errorsText = result.getSecond();
+			String outputText = result.getOutput();
+			String errorsText = result.getExceptionsString();
 			if(!Objects.equals(errorsText, ""))
 				errorsText = errorsText.substring(5, errorsText.length()-4);
 			return ResponseEntity.ok(new CompilationResponse(outputText, errorsText));
