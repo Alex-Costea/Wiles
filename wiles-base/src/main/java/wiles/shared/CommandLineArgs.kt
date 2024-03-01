@@ -5,5 +5,6 @@ data class CommandLineArgs(
     val isCompileCommand: Boolean,
     val isRunCommand : Boolean,
     val filename : String?,
-    val code : String?
+    val code : String?,
+    val inputText : String?
 )

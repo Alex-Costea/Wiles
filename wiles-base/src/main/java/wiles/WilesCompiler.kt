@@ -52,17 +52,34 @@ object WilesCompiler {
     }
 
     private fun getCommandLine(args: Array<String>): CommandLineArgs {
-        val debug: Boolean = args.contains(DEBUG_COMMAND)
-        val compileCommand = args.contains(COMPILE_COMMAND)
-        val runCommand = args.contains(RUN_COMMAND)
-        val filename = args.lastOrNull{it.startsWith(FILE_COMMAND)}?.split(FILE_COMMAND)?.get(1)
-        val code = args.lastOrNull{it.startsWith(CODE_COMMAND)}?.split(CODE_COMMAND)?.get(1)
+        var debug = false
+        var compileCommand = false
+        var runCommand = false
+        var filename : String? = null
+        var code : String? = null
+        var inputText : String? = null
+        for(arg in args)
+        {
+            if(arg == DEBUG_COMMAND)
+                debug = true
+            if(arg == COMPILE_COMMAND)
+                compileCommand = true
+            if(arg == RUN_COMMAND)
+                runCommand = true
+            if(arg.startsWith(FILE_COMMAND))
+                filename = arg.split(FILE_COMMAND, limit = 2)[1]
+            if(arg.startsWith(CODE_COMMAND))
+                code = arg.split(CODE_COMMAND, limit = 2)[1]
+            if(arg.startsWith(INPUT_COMMAND))
+                inputText = arg.split(INPUT_COMMAND, limit = 2)[1]
+        }
         return CommandLineArgs(
             isDebug = debug,
             isCompileCommand = compileCommand,
             isRunCommand = runCommand,
             filename = filename,
-            code = code
+            code = code,
+            inputText = inputText
         )
     }
 
@@ -79,10 +96,9 @@ object WilesCompiler {
             throw Exception("Invalid arguments!")
 
         //get input
-        val inputText = args.firstOrNull{it.startsWith(INPUT_COMMAND)}?.split(INPUT_COMMAND)?.get(1)
-        val scanner = if(inputText == null)
+        val scanner = if(clArgs.inputText == null)
             Scanner(System.`in`)
-        else Scanner(ByteArrayInputStream(inputText.toByteArray(Charsets.UTF_8)))
+        else Scanner(ByteArrayInputStream(clArgs.inputText.toByteArray(Charsets.UTF_8)))
 
         if(!clArgs.isRunCommand) {
             val parser = Parser(clArgs.code, clArgs.isDebug, clArgs.filename)
@@ -122,7 +138,8 @@ object WilesCompiler {
         val output = StringBuilder()
         if(!clArgs.isCompileCommand && exceptions.isEmpty())
         {
-            val interpreter = Interpreter(interpreterCode, clArgs.isDebug, clArgs.filename!!,
+            val interpreter = Interpreter(interpreterCode, clArgs.isDebug,
+                filename = clArgs.filename?: "code.wiles",
                 InterpreterContext(scanner, output, exceptionsString))
             interpreter.interpret()
         }
