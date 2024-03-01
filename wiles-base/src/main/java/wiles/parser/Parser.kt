@@ -6,7 +6,6 @@ import wiles.shared.*
 import wiles.shared.constants.ErrorMessages.IO_ERROR
 import wiles.shared.constants.Settings.SYNTAX_TREE_FILE
 import java.io.*
-import java.util.*
 import java.util.stream.Collectors
 
 class Parser(content : String?, isDebug : Boolean, filename : String?) {
@@ -16,13 +15,13 @@ class Parser(content : String?, isDebug : Boolean, filename : String?) {
     lateinit var json : String
 
     init{
-        val tokens = sourceToTokens(input)
+        val tokens = sourceToTokens()
         if(isDebug) {
             print("Tokens: ")
             println(tokens.stream().map(Token::content).toList())
         }
 
-        val ast = tokensToAST(tokens, lastLocation(input))
+        val ast = tokensToAST(tokens, lastLocation())
         results = ast
 
         if(isDebug)
@@ -40,7 +39,7 @@ class Parser(content : String?, isDebug : Boolean, filename : String?) {
         return results
     }
 
-    private fun lastLocation(input : String) : TokenLocation
+    private fun lastLocation() : TokenLocation
     {
         val textSplit = input.trimStart().split("\n")
         val lastIndex = textSplit.lastIndex
@@ -63,8 +62,8 @@ class Parser(content : String?, isDebug : Boolean, filename : String?) {
         }
     }
 
-    private fun sourceToTokens(input: String): List<Token> {
-        val converter = wiles.parser.converters.InputToTokensConverter(input, lastLocation(input))
+    private fun sourceToTokens(): List<Token> {
+        val converter = wiles.parser.converters.InputToTokensConverter(input, lastLocation())
         val tokens = converter.convert()
         exceptions.addAll(converter.exceptions)
         return tokens

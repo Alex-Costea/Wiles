@@ -1,16 +1,15 @@
-package wiles.interpreter.exceptions;
+package wiles.interpreter.exceptions
 
-import org.jetbrains.annotations.NotNull;
+import wiles.shared.TokenLocation
 
-public class PanicException extends Exception
-{
-    public PanicException(@NotNull String s)
-    {
-        super(s);
+class PanicException : Exception {
+    var location: TokenLocation?
+
+    constructor(s: String, location: TokenLocation? = null) : super(s) {
+        this.location = location
     }
 
-    public PanicException()
-    {
-        super();
+    constructor(location: TokenLocation? = null) : super() {
+        this.location = location
     }
 }

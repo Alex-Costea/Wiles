@@ -4,6 +4,7 @@ import wiles.checker.Checker
 import wiles.checker.data.CheckerContext
 import wiles.interpreter.Interpreter
 import wiles.interpreter.data.InterpreterContext
+import wiles.interpreter.exceptions.PanicException
 import wiles.parser.Parser
 import wiles.shared.*
 import wiles.shared.constants.CommandLineArguments.CODE_COMMAND
@@ -135,8 +136,17 @@ object WilesCompiler {
         {
             val interpreter = Interpreter(interpreterCode, clArgs.isDebug,
                 filename = clArgs.filename?: "code.wiles",
-                InterpreterContext(scanner, output, exceptionsString))
-            interpreter.interpret()
+                InterpreterContext(scanner, output))
+            try{
+                interpreter.interpret()
+            }
+            catch (ex : PanicException)
+            {
+                val message = ex.message ?:"A runtime error occurred!"
+                exceptions.addLast(PanicExceptionWithLocation(message, ex.location ?: TokenLocation())
+                )
+                exceptionsString.append(message)
+            }
         }
         return OutputData(
             output = output.toString(),

@@ -6,8 +6,6 @@ import wiles.interpreter.exceptions.PanicException
 import wiles.interpreter.services.InterpreterService
 import wiles.shared.JSONService
 import wiles.shared.JSONStatement
-import wiles.shared.constants.ErrorMessages.RED_TEXT_END_ERROR
-import wiles.shared.constants.ErrorMessages.RED_TEXT_START_ERROR
 import wiles.shared.constants.ErrorMessages.STACK_OVERFLOW_ERROR
 import wiles.shared.constants.StandardLibrary.defaultInterpreterVars
 import java.io.File
@@ -31,19 +29,13 @@ class Interpreter(private val code : String?, private val debug : Boolean, priva
 
         val variableMap = InterpreterVariableMap()
         variableMap.putAll(defaultInterpreterVars)
-        try {
-            try
-            {
-                InterpreterService(input, variableMap, context).interpret()
-            }
-            catch (ex : StackOverflowError)
-            {
-                throw PanicException(STACK_OVERFLOW_ERROR)
-            }
-        }
-        catch (ex : PanicException)
+        try
         {
-            context.errors.append("$RED_TEXT_START_ERROR${ex.message?:"A runtime error occurred!"}$RED_TEXT_END_ERROR\n")
+            InterpreterService(input, variableMap, context).interpret()
+        }
+        catch (ex : StackOverflowError)
+        {
+            throw PanicException(STACK_OVERFLOW_ERROR)
         }
 
         if(debug)
