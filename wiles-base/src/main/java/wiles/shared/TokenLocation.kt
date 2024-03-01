@@ -16,9 +16,9 @@ class TokenLocation(val line: Int,
         return false
     }
 
-    fun displayLocation(input: String, additionalLines: Int): String
+    fun displayLocation(input: String): String
     {
-        val string = input.split("\n")[line+additionalLines-1] + " "
+        val string = input.split("\n")[line-1] + " "
         var nrCarats = string.length - lineIndex + 1
         if(line == lineEnd)
             nrCarats = min(nrCarats, lineEndIndex - lineIndex)

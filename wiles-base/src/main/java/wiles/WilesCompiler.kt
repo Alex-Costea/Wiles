@@ -25,8 +25,7 @@ import java.util.*
 
 object WilesCompiler {
 
-    private fun getErrorsDisplay(exceptions: CompilationExceptionsCollection, input: String, additionalLines: Int,
-                                 debug : Boolean) : String
+    private fun getErrorsDisplay(exceptions: CompilationExceptionsCollection, input: String, debug : Boolean) : String
     {
         if (exceptions.size > 0)
             return RED_TEXT_START_ERROR+ run {
@@ -36,9 +35,7 @@ object WilesCompiler {
                         .map {
                             LINE_SYMBOL + "Line ${it.tokenLocation.line}: " + it.message +
                                     it.tokenLocation.displayLocation(
-                                        input,
-                                        additionalLines
-                                    ) + (if (debug) "\n" + it.stackTraceToString() else "")
+                                        input) + (if (debug) "\n" + it.stackTraceToString() else "")
                         }
                         .fold("") { a, b -> a + b }
                 if (optional.isEmpty())
@@ -108,8 +105,7 @@ object WilesCompiler {
             }
 
             if (exceptions.isNotEmpty()) {
-                exceptionsString.append(getErrorsDisplay(exceptions, parser.input, parser.additionalLines,
-                    clArgs.isDebug))
+                exceptionsString.append(getErrorsDisplay(exceptions, parser.input, clArgs.isDebug))
                 return OutputData(output = "",
                     exceptionsString = exceptionsString.toString(),
                     exceptions = exceptions)
@@ -129,7 +125,7 @@ object WilesCompiler {
                 writer.close()
             }
 
-            exceptionsString.append(getErrorsDisplay(exceptions, parser.input, parser.additionalLines, clArgs.isDebug))
+            exceptionsString.append(getErrorsDisplay(exceptions, parser.input, clArgs.isDebug))
 
             interpreterCode = checker.codeAsJSONString
         }

@@ -14,7 +14,6 @@ class Parser(content : String?, isDebug : Boolean, filename : String?) {
     private var results : CodeBlockStatement
     val input = content?:loadFile(filename!!)
     lateinit var json : String
-    var additionalLines = 0
 
     init{
         val tokens = sourceToTokens(input)
@@ -56,7 +55,7 @@ class Parser(content : String?, isDebug : Boolean, filename : String?) {
             val resource : InputStream = File(filename).inputStream()
             resource.use { input = BufferedReader(InputStreamReader(it))
                     .lines().collect(Collectors.joining("\n"))
-                return readStandardLibrary() + input
+                return input
             }
         }
         catch (ex: IOException) {
@@ -64,26 +63,8 @@ class Parser(content : String?, isDebug : Boolean, filename : String?) {
         }
     }
 
-    private fun readStandardLibrary(): String {
-        val classloader = Thread.currentThread().contextClassLoader
-        val input: String
-        try {
-            classloader.getResourceAsStream("additional_code.wiles").use { inputStream ->
-                Objects.requireNonNull(inputStream)
-                input = BufferedReader(InputStreamReader(inputStream!!))
-                    .lines().collect(Collectors.joining("\n"))
-                additionalLines=input.count { it == '\n' }
-                return input
-            }
-        } catch (ex: NullPointerException) {
-            throw InternalErrorException(IO_ERROR)
-        } catch (ex: IOException) {
-            throw InternalErrorException(IO_ERROR)
-        }
-    }
-
     private fun sourceToTokens(input: String): List<Token> {
-        val converter = wiles.parser.converters.InputToTokensConverter(input,additionalLines, lastLocation(input))
+        val converter = wiles.parser.converters.InputToTokensConverter(input, lastLocation(input))
         val tokens = converter.convert()
         exceptions.addAll(converter.exceptions)
         return tokens
