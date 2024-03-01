@@ -31,8 +31,11 @@ body{
     box-sizing: border-box;
 }
 
-textarea {
+textarea, .textarea {
+    display: inline-block;
     font-family: 'Roboto Mono', monospace;
+    text-align: left;
+    font-size: 0.8em;
     resize: none;
     width: 45svw;
     height: 25svh;
@@ -45,6 +48,8 @@ textarea {
     color: black;
     outline:none;
     padding: 0.5em;
+    overflow: auto;
+    white-space: pre;
 }
 
 main{
@@ -57,7 +62,7 @@ main{
     main {
         flex-direction: column;
     }
-    textarea{
+    textarea, .textarea{
         width: 75svw;
     }
 }

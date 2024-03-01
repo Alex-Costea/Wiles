@@ -1,6 +1,7 @@
-import {Dispatch, useEffect, useReducer} from "react";
+import {Dispatch, FormEvent, useEffect, useReducer} from "react";
 import Cookies from 'js-cookie';
 import Image from 'next/image'
+import ContentEditable, {ContentEditableEvent} from "react-contenteditable";
 
 interface responseFormat{
     response : string, errors : string
@@ -68,7 +69,7 @@ function App() {
         return Cookies.get("XSRF-TOKEN")!
     }
 
-    function Submit(e : any)
+    function Submit(e : FormEvent<HTMLFormElement>)
     {
         e.preventDefault()
         GetXSRF().then(xsrf => {
@@ -91,6 +92,18 @@ function App() {
         })
     }
 
+    function onCodeChange(e : ContentEditableEvent)
+    {
+        const value = e.target.value
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(
+            `<div id="elem"></div>`, "text/html")
+        const element =  doc.getElementById("elem")!
+        element.innerHTML = value
+        const newValue = element.innerText
+        setCode(newValue)
+    }
+
     return (
         <div className="App">
             <div className={"background"}>
@@ -106,8 +119,8 @@ function App() {
                             <label htmlFor="code">Code:</label>
                         </p>
                         <p>
-                        <textarea id="code" spellCheck={false} value={code}
-                                  onInput={e => setCode((e.target as HTMLTextAreaElement).value)}/>
+                        <ContentEditable id="code" className={"textarea"} tagName={"span"}
+                                  onChange={onCodeChange} html={code}/>
                         </p>
                         <p>
                             <label htmlFor="input">Input:</label>
