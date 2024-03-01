@@ -50,8 +50,6 @@ public class WilesWebBackendApplication {
 			String outputText = result.getOutput();
 			String errorsText = result.getExceptionsString();
 			var errorList = result.getExceptions();
-			if(!Objects.equals(errorsText, ""))
-				errorsText = errorsText.substring(5, errorsText.length()-4);
 			return ResponseEntity.ok(new CompilationResponse(outputText, errorsText, convertToErrorList(errorList)));
 		}
 		catch (TimeoutException | InterruptedException | ExecutionException e)

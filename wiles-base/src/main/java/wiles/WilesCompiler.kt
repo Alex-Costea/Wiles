@@ -15,8 +15,6 @@ import wiles.shared.constants.CommandLineArguments.INPUT_COMMAND
 import wiles.shared.constants.CommandLineArguments.RUN_COMMAND
 import wiles.shared.constants.ErrorMessages.COMPILATION_FAILED_ERROR
 import wiles.shared.constants.ErrorMessages.LINE_SYMBOL
-import wiles.shared.constants.ErrorMessages.RED_TEXT_END_ERROR
-import wiles.shared.constants.ErrorMessages.RED_TEXT_START_ERROR
 import wiles.shared.constants.Settings.OBJECT_FILE
 import java.io.ByteArrayInputStream
 import java.io.FileWriter
@@ -29,7 +27,7 @@ object WilesCompiler {
     private fun getErrorsDisplay(exceptions: CompilationExceptionsCollection, input: String, debug : Boolean) : String
     {
         if (exceptions.size > 0)
-            return RED_TEXT_START_ERROR+ run {
+            return run {
                 val optional =
                     exceptions.sortedWith(nullsLast(compareBy<AbstractCompilationException> { it.tokenLocation.line }
                         .thenBy { it.tokenLocation.lineIndex }))
@@ -42,7 +40,7 @@ object WilesCompiler {
                 if (optional.isEmpty())
                     throw InternalErrorException()
                 COMPILATION_FAILED_ERROR + optional
-            } +RED_TEXT_END_ERROR
+            }
         else return ""
     }
 
