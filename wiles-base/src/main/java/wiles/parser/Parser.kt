@@ -46,7 +46,8 @@ class Parser(content : String?, DEBUG : Boolean, filename : String?) {
         val textSplit = input.trimStart().split("\n")
         val lastIndex = textSplit.lastIndex
         val lastLineLocation = textSplit[lastIndex].length
-        return TokenLocation(lastIndex+1,lastLineLocation+2)
+        return TokenLocation(lastIndex+1,lastLineLocation+2,
+            lastIndex+1,lastLineLocation+2)
     }
 
     private fun loadFile(filename: String): String {

@@ -58,7 +58,8 @@ public class InputToTokensConverter {
                     }
                     catch(IllegalArgumentException ex)
                     {
-                        throw new StringInvalidException(ErrorMessages.STRING_ESCAPE_INVALID_ERROR, line, getIndexOnCurrentLine());
+                        throw new StringInvalidException(ErrorMessages.STRING_ESCAPE_INVALID_ERROR,
+                                new TokenLocation( line, getIndexOnCurrentLine(), -1, -1));
                     }
                 } else if (Utils.isAlphabetic(arrayChars[index])) //identifier
                 {
@@ -125,7 +126,8 @@ public class InputToTokensConverter {
     @NotNull
     private String readStringLiteral() throws StringInvalidException {
         if (index >= arrayChars.length)
-            throw new StringInvalidException(ErrorMessages.STRING_UNFINISHED_ERROR, line, getIndexOnCurrentLine());
+            throw new StringInvalidException(ErrorMessages.STRING_UNFINISHED_ERROR,
+                    new TokenLocation( line, getIndexOnCurrentLine(), -1, -1));
         StringBuilder sb = createString(true);
         if (index < arrayChars.length && arrayChars[index] == STRING_DELIMITER)
             return Tokens.STRING_START + sb;
@@ -133,7 +135,8 @@ public class InputToTokensConverter {
         //String not properly finished at this point
         if (index < arrayChars.length && arrayChars[index] == '\n') //of the newline token regardless
             index--;
-        throw new StringInvalidException(ErrorMessages.STRING_UNFINISHED_ERROR, line, getIndexOnCurrentLine());
+        throw new StringInvalidException(ErrorMessages.STRING_UNFINISHED_ERROR,
+                new TokenLocation( line, getIndexOnCurrentLine(), -1, -1));
     }
 
     @NotNull
@@ -202,7 +205,7 @@ public class InputToTokensConverter {
 
     @NotNull
     private Token createToken(String token) {
-        return new Token(token, new TokenLocation(line, getIndexOnCurrentLine()));
+        return new Token(token, new TokenLocation(line, getIndexOnCurrentLine(), -1, -1));
     }
 
     private void addNewLine() {

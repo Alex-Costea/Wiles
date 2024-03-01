@@ -2,8 +2,12 @@ package wiles.shared
 
 import wiles.shared.constants.ErrorMessages.LINE_SYMBOL
 
-class TokenLocation(val line: Int,val  lineIndex: Int) {
-    constructor() : this(-1,-1)
+class TokenLocation(val line: Int,
+                    val lineIndex: Int,
+                    val lineEnd : Int,
+                    val lineEndIndex : Int,
+    ) {
+    constructor() : this(-1,-1, -1, -1)
 
     override fun equals(other: Any?): Boolean {
         if (other is TokenLocation)
