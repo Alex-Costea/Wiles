@@ -1,8 +1,9 @@
 import {Dispatch, FormEvent, useEffect, useReducer, useRef} from "react";
 import Cookies from 'js-cookie';
-import Image from 'next/image'
 import {ContentEditableEvent} from "react-contenteditable";
 import Field from './field'
+import SubmitCode from "@/components/submitCode";
+import MoreInfo from "@/components/moreInfo";
 
 interface responseFormat{
     response : string, errors : string
@@ -105,33 +106,20 @@ function App() {
 
     const onInputChange = (e: ContentEditableEvent) => setInput((e.target as HTMLTextAreaElement).value)
 
-    return (
-        <div className="App">
-            <div className="background">
-                <Image src="images/background.png"
-                       alt="background" fill={true} priority style={{objectFit: "cover"}}></Image>
-            </div>
-            <header className="App-header">
-                <Image src="logo_pastel.svg" width={500} height={500} className="App-logo" alt="Wiles logo" priority/>
-            </header>
-            <main>
-                <div id="column1">
-                    <form onSubmit={submit}>
-                        <Field label="Code:" id="code" onChange={onCodeChange} innerHTML={code}/>
-                        <Field label="Input:" id="input" onChange={onInputChange} innerHTML={input}/>
-                        <p>
-                            <input type="submit" id="submit" value="Run Code"></input>
-                        </p>
-                    </form>
-                </div>
-                <div id="column2">
-                    <Field label="Output:" id="output" innerHTML={output} disabled/>
-                    <Field label="Errors:" id="errors" innerHTML={errors} disabled/>
-                    <p><a href="https://alex.costea.in/Wiles/">Learn more about Wiles.</a></p>
-                </div>
-            </main>
+    return <main>
+        <div id="column1">
+            <form onSubmit={submit}>
+                <Field label="Code:" id="code" onChange={onCodeChange} innerHTML={code}/>
+                <Field label="Input:" id="input" onChange={onInputChange} innerHTML={input}/>
+                <SubmitCode/>
+            </form>
         </div>
-    );
+        <div id="column2">
+            <Field label="Output:" id="output" innerHTML={output} disabled/>
+            <Field label="Errors:" id="errors" innerHTML={errors} disabled/>
+            <MoreInfo/>
+        </div>
+    </main>
 }
 
 export default App;
