@@ -1,4 +1,4 @@
-import {Dispatch, FormEvent, useEffect, useReducer} from "react";
+import {Dispatch, FormEvent, useEffect, useReducer, useRef} from "react";
 import Cookies from 'js-cookie';
 import Image from 'next/image'
 import {ContentEditableEvent} from "react-contenteditable";
@@ -8,8 +8,11 @@ interface responseFormat{
     response : string, errors : string
 }
 
-function usePersistedState(keyName : string, defaultValue : string)
+function usePersistedState(keyName : string, defaultValue : string) : [string, Dispatch<string>]
 {
+    const keyNameRef = useRef(keyName)
+    const defaultValueRef = useRef(defaultValue)
+
     function persistState(keyName : string)
     {
         return function(_prevState : string, value : string)
@@ -22,18 +25,11 @@ function usePersistedState(keyName : string, defaultValue : string)
     const [state, setState] = useReducer(persistState(keyName),"")
 
     useEffect(()=>{
-        const storedState = window.localStorage.getItem(keyName)
-        if(storedState !== null)
-        {
-            setState(storedState)
-        }
-        else
-        {
-            setState(defaultValue)
-        }
+        const storedState = window.localStorage.getItem(keyNameRef.current)
+        setState(storedState ?? defaultValueRef.current)
     },[])
 
-    return [state, setState] as [string, Dispatch<string>]
+    return [state, setState]
 }
 
 function getDomain()
