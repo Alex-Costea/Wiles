@@ -5,12 +5,12 @@ Wiles supports features such as:
 - Basic operators for arithmetics, boolean logic and comparisons
 - Functions as first-class objects using the `fun` keyword, including support for closures
 - Sum types: `type1 or type2`
-- Support for types such as: integers (`int`), decimal numbers (`decimal`), strings (`text`), booleans (`truth`), lists (`list`), hashmaps (`dict`)
+- Support for types such as: integers (`int`), decimal numbers (`decimal`), strings (`text`), booleans (`truth`), lists (`list`), hashmaps (`dict`), structs (`data`)
 - Pattern matching on types using `when` statements
 - Opt-in nullability using the `?` symbol
-- Opt-out named arguments as mandatory in function calls
+- Opt-out named arguments in function calls
 - Newline as statement terminators, but no significant indentation
-- Type inference in many cases
+- Type inference in many instances
 - Type definitions at compile-time
 - Generics in function definitions
 
@@ -29,7 +29,7 @@ The interpreter is functional and includes the features found in the specificati
 ### Why is the language called Wiles?
 As it is inspired by Pascal, I decided to also name my language after a mathematician, but unlike Pascal, one that is contemporary. As such, it's named after Andrew Wiles, who proved Fermat's Last Theorem.
 
-### Are there plans to make the language object-oriented, or add other more advanced features?
+### Are there plans to add more advanced features to the language?
 This is a one-man project mostly meant for myself to try out making an interpreter, so honestly, it depends on my time and motivation.
 
 ### Will there be a formal specification?
