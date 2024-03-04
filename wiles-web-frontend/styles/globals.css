@@ -31,7 +31,7 @@ body{
     box-sizing: border-box;
 }
 
-textarea, .textarea {
+.field {
     display: inline-block;
     font-family: 'Roboto Mono', monospace;
     text-align: left;
@@ -62,7 +62,7 @@ main{
     main {
         flex-direction: column;
     }
-    textarea, .textarea{
+    .field{
         width: 75svw;
     }
 }
