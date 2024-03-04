@@ -1,7 +1,6 @@
 package wiles
 
 import wiles.checker.Checker
-import wiles.checker.data.CheckerContext
 import wiles.interpreter.Interpreter
 import wiles.interpreter.data.InterpreterContext
 import wiles.interpreter.exceptions.PanicException
@@ -110,7 +109,7 @@ object WilesCompiler {
                     exceptions = exceptions)
             }
 
-            val checker = Checker(if (clArgs.isDebug) null else parser.json, CheckerContext(0))
+            val checker = Checker(if (clArgs.isDebug) null else parser.json)
             exceptions.addAll(checker.check())
 
             if (clArgs.isDebug) {

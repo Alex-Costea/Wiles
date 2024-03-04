@@ -179,7 +179,7 @@ object TypeConstants {
 
     val LIST_OF_STRING = makeList(STRING_TYPE)
 
-    private const val MAYBE_GENERIC_NAME = "!T|maybe"
+    private const val MAYBE_GENERIC_NAME = "!T"
     private val MAYBE_GENERIC_TYPE = makeGeneric(ANYTHING_TYPE, MAYBE_GENERIC_NAME)
     val MAYBE_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
         components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
@@ -194,7 +194,7 @@ object TypeConstants {
         ))
     )
 
-    private const val CONTENT_GENERIC_NAME = "!T|content"
+    private const val CONTENT_GENERIC_NAME = "!T"
     private val CONTENT_GENERIC_TYPE = makeGeneric(ANYTHING_TYPE, CONTENT_GENERIC_NAME)
     val CONTENT_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
         components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
@@ -209,7 +209,7 @@ object TypeConstants {
         ))
     )
 
-    private const val CLONE_GENERIC_NAME = "!T|clone"
+    private const val CLONE_GENERIC_NAME = "!T"
     private val CLONE_GENERIC_TYPE = makeGeneric(ANYTHING_TYPE, CLONE_GENERIC_NAME)
     val CLONE_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
         components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
@@ -231,7 +231,7 @@ object TypeConstants {
         ))
     )
 
-    private const val GET_TYPE_GENERIC_NAME = "!T|type"
+    private const val GET_TYPE_GENERIC_NAME = "!T"
     private val GET_TYPE_GENERIC_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, GET_TYPE_GENERIC_NAME)
     val GET_TYPE_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
         components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
@@ -248,7 +248,7 @@ object TypeConstants {
         ))
     )
 
-    private val RUN_GENERIC_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|run")
+    private val RUN_GENERIC_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T")
     private val RUN_SUBTYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
         components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
             components = mutableListOf(makeGenericDeclaration(RUN_GENERIC_TYPE))
@@ -274,8 +274,8 @@ object TypeConstants {
 
     // CRUD operations
 
-    private val GET_AT_GENERIC_KEY_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|get_at_key")
-    private val GET_AT_GENERIC_VALUE_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|get_at_value")
+    private val GET_AT_GENERIC_KEY_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T_KEY")
+    private val GET_AT_GENERIC_VALUE_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T_VALUE")
     private val GET_AT_COLLECTION_TYPE = makeCollection(
         makeGenericDeclaration(GET_AT_GENERIC_KEY_TYPE),makeGenericDeclaration(GET_AT_GENERIC_VALUE_TYPE))
     val GET_AT_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
@@ -298,8 +298,8 @@ object TypeConstants {
         ))
     )
 
-    private val ADD_GENERIC_KEY_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|add_key")
-    private val ADD_GENERIC_VALUE_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|add_value")
+    private val ADD_GENERIC_KEY_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T_KEY")
+    private val ADD_GENERIC_VALUE_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T_VALUE")
     private val ADD_COLLECTION_TYPE = makeMutable(makeCollection(
         makeGenericDeclaration(ADD_GENERIC_KEY_TYPE),makeGenericDeclaration(ADD_GENERIC_VALUE_TYPE)))
     val ADD_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
@@ -328,8 +328,8 @@ object TypeConstants {
         ))
     )
 
-    private val SET_AT_GENERIC_KEY_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|set_at_key")
-    private val SET_AT_GENERIC_VALUE_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|set_at_value")
+    private val SET_AT_GENERIC_KEY_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T_KEY")
+    private val SET_AT_GENERIC_VALUE_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T_VALUE")
     private val SET_AT_COLLECTION_TYPE = makeMutable(makeCollection(
         makeGenericDeclaration(SET_AT_GENERIC_KEY_TYPE),makeGenericDeclaration(SET_AT_GENERIC_VALUE_TYPE)))
     val SET_AT_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
@@ -358,7 +358,7 @@ object TypeConstants {
         ))
     )
 
-    private val REMOVE_AT_GENERIC_KEY_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|remove_at_key")
+    private val REMOVE_AT_GENERIC_KEY_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T")
     private val REMOVE_AT_COLLECTION_TYPE = makeMutable(makeCollection(
         makeGenericDeclaration(REMOVE_AT_GENERIC_KEY_TYPE), NULLABLE_ANYTHING_TYPE))
     val REMOVE_AT_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
@@ -381,7 +381,7 @@ object TypeConstants {
         ))
     )
 
-    private val GET_KEYS_GENERIC_KEY_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T|get_keys_key")
+    private val GET_KEYS_GENERIC_KEY_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T")
     private val GET_KEYS_COLLECTION_TYPE = makeCollection(
         makeGenericDeclaration(GET_KEYS_GENERIC_KEY_TYPE), NULLABLE_ANYTHING_TYPE)
     val GET_KEYS_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,

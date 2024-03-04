@@ -19,8 +19,7 @@ import wiles.shared.constants.Types.TYPE_TYPE_ID
 class InferFromMethod(details: InferrerDetails) : InferFromStatement(
     InferrerDetails(details.statement,
         details.variables.copy(),
-        details.exceptions,
-        details.context)
+        details.exceptions)
 )
 {
     private val statedType = if(statement.components.getOrNull(0)?.syntaxType == SyntaxType.TYPE)
@@ -91,13 +90,12 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
 
     override fun infer() {
         val genericTypes = hashMapOf<String, JSONStatement>()
-        context.currentFunctionNumber++
         val originalVars = variables.copy()
         for(component in statement.components)
         {
             if(component.syntaxType==SyntaxType.TYPE) {
                 InferFromType(
-                    InferrerDetails(component, variables, exceptions, context),
+                    InferrerDetails(component, variables, exceptions),
                     isTopMostType = false, genericTypes = genericTypes
                 ).infer()
                 continue
@@ -107,13 +105,13 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
             assert(component.syntaxType == SyntaxType.DECLARATION)
 
             val inferrer = InferFromDeclaration(
-                InferrerDetails(component, variables, exceptions, context),
+                InferrerDetails(component, variables, exceptions),
                 inFunction = true, isTopMostType = false, genericTypes = genericTypes
             )
             inferrer.infer()
         }
 
-        createTypes(statement, genericTypes, variables, context)
+        createTypes(statement, genericTypes, variables)
 
         variables.forEach {
             if (!originalVars.containsKey(it.key)) {
@@ -121,11 +119,11 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
             }
         }
 
-        variables.putAll(genericTypes.map { Pair(it.key.split("|")[0],
+        variables.putAll(genericTypes.map { Pair(it.key,
             VariableDetails(JSONStatement(syntaxType = SyntaxType.TYPE, name = TYPE_TYPE_ID,
                 components = mutableListOf(makeGeneric(it.value,it.key))))) })
 
-        val inferrer = InferrerService(InferrerDetails(statement.components.last(), variables, exceptions, context))
+        val inferrer = InferrerService(InferrerDetails(statement.components.last(), variables, exceptions))
         inferrer.infer()
 
         if(exceptions.isNotEmpty())

@@ -8,13 +8,12 @@ import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 class InferFromWhile(details: InferrerDetails) : InferFromStatement(
     InferrerDetails(details.statement,
         details.variables.copy(),
-        details.exceptions,
-        details.context)
+        details.exceptions)
 ) {
     override fun infer() {
         val expression = statement.components[0]
         val inferFromExpression = InferFromExpression(InferrerDetails(expression,
-            variables, exceptions,context))
+            variables, exceptions))
         inferFromExpression.infer()
 
         val expressionType = statement.components[0].components[0]
@@ -24,7 +23,7 @@ class InferFromWhile(details: InferrerDetails) : InferFromStatement(
 
         val codeBlock = statement.components[1]
         val inferFromCodeBlock = InferFromCodeBlock(InferrerDetails(codeBlock,
-            variables, exceptions,context))
+            variables, exceptions))
         inferFromCodeBlock.infer()
 
     }

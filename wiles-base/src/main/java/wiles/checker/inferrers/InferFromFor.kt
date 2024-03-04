@@ -16,15 +16,14 @@ import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 class InferFromFor(details: InferrerDetails) : InferFromStatement(
     InferrerDetails(details.statement,
         details.variables.copy(),
-        details.exceptions,
-        details.context)
+        details.exceptions)
 ) {
 
     private fun checkCorrectType(components : MutableList<JSONStatement>, superType : JSONStatement) : JSONStatement
     {
         components.removeFirst()
         val expression = components[0]
-        InferFromExpression(InferrerDetails(expression, variables, exceptions, context)).infer()
+        InferFromExpression(InferrerDetails(expression, variables, exceptions)).infer()
         val expressionType = components[0].components[0]
 
         if(!isFormerSuperTypeOfLatter(superType, expressionType))
@@ -63,7 +62,7 @@ class InferFromFor(details: InferrerDetails) : InferFromStatement(
 
         val codeBlock = components[0]
         val inferFromCodeBlock = InferFromCodeBlock(InferrerDetails(codeBlock,
-            variables, exceptions, context))
+            variables, exceptions))
         inferFromCodeBlock.infer()
 
         statement.components.add(0,variables[variableName]!!.type)

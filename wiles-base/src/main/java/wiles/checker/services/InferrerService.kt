@@ -18,7 +18,6 @@ class InferrerService(details: InferrerDetails)
     val statement = details.statement
     private val variables = details.variables
     val exceptions = details.exceptions
-    private val context = details.context
 
     fun getType(): JSONStatement {
         if(statement.components.getOrNull(0)?.syntaxType == TYPE)
@@ -29,7 +28,7 @@ class InferrerService(details: InferrerDetails)
 
     fun infer()
     {
-        val details = InferrerDetails(statement, variables, exceptions, context)
+        val details = InferrerDetails(statement, variables, exceptions)
         val inferFromStatement : InferFromStatement
         when (statement.syntaxType)
         {

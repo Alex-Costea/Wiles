@@ -1,6 +1,5 @@
 package wiles.checker
 
-import wiles.checker.data.CheckerContext
 import wiles.checker.data.InferrerDetails
 import wiles.checker.services.InferrerService
 import wiles.shared.*
@@ -10,11 +9,11 @@ import wiles.shared.constants.Tokens.ELSE_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import java.io.File
 
-class Checker(private val jsonCode : String? = null,val context : CheckerContext) {
+class Checker(private val jsonCode : String? = null) {
     val code: JSONStatement = parseSyntaxTreeJson()
     private val inferrer = InferrerService(InferrerDetails(code,
         defaultCheckerVars.copy(),
-        CompilationExceptionsCollection(), context))
+        CompilationExceptionsCollection()))
     lateinit var codeAsJSONString : String
 
     private fun parseSyntaxTreeJson(): JSONStatement {
@@ -55,7 +54,6 @@ class Checker(private val jsonCode : String? = null,val context : CheckerContext
 
     fun check() : CompilationExceptionsCollection
     {
-        context.currentFunctionNumber = 0
         try
         {
             inferrer.infer()
