@@ -258,7 +258,7 @@ write_line("Min found: " + result)
             let a := fun(x : int or text? as T) do nothing
             write_line(a)
         """
-        assertEquals(getOutput(code18),"METHOD(TYPE !nothing; DECLARATION(TYPE GENERIC; (!T|1; TYPE EITHER; (TYPE INT; TYPE EITHER; (TYPE STRING; TYPE !nothing)); DECLARE); !x))\n")
+        assertEquals(getOutput(code18),"METHOD(TYPE !nothing; DECLARATION(TYPE GENERIC; (!T; TYPE EITHER; (TYPE INT; TYPE EITHER; (TYPE STRING; TYPE !nothing)); DECLARE); !x))\n")
 
         val code19="""
             let f := fun(x : int) do write_line(x)
@@ -341,6 +341,14 @@ write_line("Min found: " + result)
     """
         assertEquals(getOutput(code28),"0.3\n" +
                 "10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007\n")
+
+        val code29="""
+            let a := fun(arg x : anything as T) -> T do yield x
+            let b := fun(arg x : anything as T) -> T do yield x
+            write_line(a(1).type)
+            write_line(b("2").type)
+        """
+        assertEquals(getOutput(code29),"TYPE INT\nTYPE STRING\n")
 
     }
 }

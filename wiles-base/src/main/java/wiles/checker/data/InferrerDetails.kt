@@ -5,5 +5,4 @@ import wiles.shared.JSONStatement
 
 data class InferrerDetails(val statement : JSONStatement,
                            val variables : CheckerVariableMap,
-                           val exceptions: CompilationExceptionsCollection,
-                           val context: CheckerContext)
+                           val exceptions: CompilationExceptionsCollection)

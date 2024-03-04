@@ -47,7 +47,7 @@ class InterpretFromMethod(
             }
             funcVars.putAll(genericTypesMap.map {
                 val genericValue = makeGeneric(it.value.statement,it.key)
-                Pair(it.key.split("|")[0], ObjectDetails(genericValue,
+                Pair(it.key, ObjectDetails(genericValue,
                 JSONStatement(syntaxType = SyntaxType.TYPE, name = Types.TYPE_TYPE_ID,
                     components = mutableListOf(genericValue)))) })
             try

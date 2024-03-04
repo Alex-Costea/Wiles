@@ -23,7 +23,7 @@ class InferFromDict(details: InferrerDetails) : InferFromStatement(details) {
                 continue
             assert(component.syntaxType==SyntaxType.EXPRESSION)
             val inferrer = InferFromExpression(
-                InferrerDetails(component, variables, CompilationExceptionsCollection(), context)
+                InferrerDetails(component, variables, CompilationExceptionsCollection())
             )
             inferrer.infer()
             val newType = component.components[0]

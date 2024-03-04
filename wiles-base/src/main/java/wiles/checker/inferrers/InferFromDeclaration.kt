@@ -36,7 +36,7 @@ class InferFromDeclaration(details: InferrerDetails,
         try
         {
             if (default != null) {
-                val inferrer = InferrerService(InferrerDetails(default, variables, exceptions, context))
+                val inferrer = InferrerService(InferrerDetails(default, variables, exceptions))
                 inferrer.infer()
                 inferredType = inferrer.getType()
                 if(inFunction)
@@ -74,7 +74,7 @@ class InferFromDeclaration(details: InferrerDetails,
 
         if(type != null)
         {
-            InferFromType(InferrerDetails(type, variables, exceptions, context),
+            InferFromType(InferrerDetails(type, variables, exceptions),
                 genericTypes, isTopMostType).infer()
             if(inferredType!=null && !isFormerSuperTypeOfLatter(type, inferredType))
                 throw ConflictingTypeDefinitionException(type.getFirstLocation(),
