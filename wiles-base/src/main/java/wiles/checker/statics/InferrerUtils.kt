@@ -271,7 +271,7 @@ object InferrerUtils {
     {
         val name = statement.components.getOrNull(0)?.name
         val type = if(name==null) null
-                   else variableMap?.getOrDefault(name.split("|")[0],null)?.type
+                   else variableMap?.getOrDefault(name,null)?.type
         if(statement.syntaxType == SyntaxType.TYPE && statement.name == GENERIC_ID &&
             (variableMap == null || type?.name != TYPE_TYPE_ID || type.components[0].components[0].name != name))
         {
