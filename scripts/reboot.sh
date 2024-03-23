@@ -1,3 +1,4 @@
+cd ..
 sudo killall -9 java
 git pull
 sh setup_server.sh
