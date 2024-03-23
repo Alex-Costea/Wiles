@@ -10,6 +10,7 @@ import wiles.shared.constants.CommandLineArguments.CODE_COMMAND
 import wiles.shared.constants.CommandLineArguments.COMPILE_COMMAND
 import wiles.shared.constants.CommandLineArguments.DEBUG_COMMAND
 import wiles.shared.constants.CommandLineArguments.FILE_COMMAND
+import wiles.shared.constants.CommandLineArguments.GET_SYNTAX
 import wiles.shared.constants.CommandLineArguments.INPUT_COMMAND
 import wiles.shared.constants.CommandLineArguments.RUN_COMMAND
 import wiles.shared.constants.ErrorMessages.COMPILATION_FAILED_ERROR
@@ -50,6 +51,7 @@ object WilesCompiler {
         var filename : String? = null
         var code : String? = null
         var inputText : String? = null
+        var getSyntax = false
         for(arg in args)
         {
             if(arg == DEBUG_COMMAND)
@@ -58,6 +60,8 @@ object WilesCompiler {
                 compileCommand = true
             if(arg == RUN_COMMAND)
                 runCommand = true
+            if(arg == GET_SYNTAX)
+                getSyntax = true
             if(arg.startsWith(FILE_COMMAND))
                 filename = arg.split(FILE_COMMAND, limit = 2)[1]
             if(arg.startsWith(CODE_COMMAND))
@@ -71,7 +75,8 @@ object WilesCompiler {
             isRunCommand = runCommand,
             filename = filename,
             code = code,
-            inputText = inputText
+            inputText = inputText,
+            getSyntax = getSyntax
         )
     }
 
@@ -115,6 +120,15 @@ object WilesCompiler {
             if (clArgs.isDebug) {
                 print("After checking: ")
                 println(checker.code)
+            }
+
+            if(clArgs.getSyntax)
+            {
+                return OutputData(
+                    output = "",
+                    exceptionsString = exceptionsString.toString(),
+                    exceptions = exceptions,
+                    syntax =  checker.code)
             }
 
             if (clArgs.isCompileCommand && exceptions.isEmpty()) {

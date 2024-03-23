@@ -4,7 +4,6 @@ import wiles.parser.converters.TokensToSyntaxTreeConverter
 import wiles.parser.statements.CodeBlockStatement
 import wiles.shared.*
 import wiles.shared.constants.ErrorMessages.IO_ERROR
-import wiles.shared.constants.Settings.SYNTAX_TREE_FILE
 import java.io.*
 import java.util.stream.Collectors
 
@@ -12,7 +11,7 @@ class Parser(content : String?, isDebug : Boolean, filename : String?) {
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
     private var results : CodeBlockStatement
     val input = content?:loadFile(filename!!)
-    lateinit var json : String
+    var json : String
 
     init{
         val tokens = sourceToTokens()
@@ -24,9 +23,7 @@ class Parser(content : String?, isDebug : Boolean, filename : String?) {
         val ast = tokensToAST(tokens, lastLocation())
         results = ast
 
-        if(isDebug)
-            JSONService.writeValue(File(SYNTAX_TREE_FILE), ast)
-        else json = JSONService.writeValueAsString(ast)
+        json = JSONService.writeValueAsString(ast)
     }
 
     fun getExceptions() : CompilationExceptionsCollection
