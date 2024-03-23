@@ -6,5 +6,5 @@ npm install
 npm run build
 cd ..
 cp -R "wiles-web-frontend/build/" "wiles-web-backend/src/main/resources/static/"
-cd "wiles-web-backend"
+cd "scripts"
 sh update_server.sh
