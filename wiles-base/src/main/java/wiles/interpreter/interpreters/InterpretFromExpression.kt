@@ -25,6 +25,7 @@ import wiles.shared.constants.TypeConstants.DECIMAL_TYPE
 import wiles.shared.constants.TypeConstants.INT_TYPE
 import wiles.shared.constants.TypeConstants.STRING_TYPE
 import wiles.shared.constants.Types.METHOD_CALL_ID
+import java.math.MathContext.DECIMAL128
 import java.util.function.BiFunction
 
 class InterpretFromExpression(statement: JSONStatement, variables: InterpreterVariableMapInterface, context: InterpreterContext)
@@ -42,7 +43,7 @@ class InterpretFromExpression(statement: JSONStatement, variables: InterpreterVa
         }
 
         else if(Predicates.IS_NUMBER_LITERAL.test(name)) {
-            ObjectDetails(name.substring(1).toBigDecimal(), DECIMAL_TYPE)
+            ObjectDetails(name.substring(1).toBigDecimal(mathContext = DECIMAL128), DECIMAL_TYPE)
         }
 
         else if(Predicates.IS_TEXT_LITERAL.test(name)) {

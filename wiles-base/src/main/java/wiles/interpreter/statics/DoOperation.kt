@@ -37,6 +37,7 @@ import wiles.shared.constants.Types.INT_ID
 import wiles.shared.constants.Types.STRING_ID
 import java.math.BigDecimal
 import java.math.BigInteger
+import java.math.MathContext.DECIMAL128
 import java.util.function.BiFunction
 import kotlin.math.pow
 
@@ -56,9 +57,9 @@ object DoOperation {
         Pair("${INT_ID}|${PLUS_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
             (x as BigInteger) + (y as BigInteger)}, INT_TYPE)),
         Pair("${INT_ID}|${PLUS_ID}|${DECIMAL_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as BigInteger).toBigDecimal() + (y as BigDecimal)}, DECIMAL_TYPE)),
+            (x as BigInteger).toBigDecimal(mathContext = DECIMAL128) + (y as BigDecimal)}, DECIMAL_TYPE)),
         Pair("${DECIMAL_ID}|${PLUS_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
-            (y as BigInteger).toBigDecimal() + (x as BigDecimal)}, DECIMAL_TYPE)),
+            (y as BigInteger).toBigDecimal(mathContext = DECIMAL128) + (x as BigDecimal)}, DECIMAL_TYPE)),
         Pair("${DECIMAL_ID}|${PLUS_ID}|${DECIMAL_ID}", createFunction({ x: Any?, y: Any? ->
             (x as BigDecimal) + (y as BigDecimal)}, DECIMAL_TYPE)),
 
@@ -66,9 +67,9 @@ object DoOperation {
         Pair("${INT_ID}|${MINUS_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
             (x as BigInteger) - (y as BigInteger)}, INT_TYPE)),
         Pair("${INT_ID}|${MINUS_ID}|${DECIMAL_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as BigInteger).toBigDecimal() - (y as BigDecimal)}, DECIMAL_TYPE)),
+            (x as BigInteger).toBigDecimal(mathContext = DECIMAL128) - (y as BigDecimal)}, DECIMAL_TYPE)),
         Pair("${DECIMAL_ID}|${MINUS_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
-            -(y as BigInteger).toBigDecimal() + (x as BigDecimal)}, DECIMAL_TYPE)),
+            -(y as BigInteger).toBigDecimal(mathContext = DECIMAL128) + (x as BigDecimal)}, DECIMAL_TYPE)),
         Pair("${DECIMAL_ID}|${MINUS_ID}|${DECIMAL_ID}", createFunction({ x: Any?, y: Any? ->
             (x as BigDecimal) - (y as BigDecimal)}, DECIMAL_TYPE)),
 
@@ -76,9 +77,9 @@ object DoOperation {
         Pair("${INT_ID}|${TIMES_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
             (x as BigInteger) * (y as BigInteger)}, INT_TYPE)),
         Pair("${INT_ID}|${TIMES_ID}|${DECIMAL_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as BigInteger).toBigDecimal() * (y as BigDecimal)}, DECIMAL_TYPE)),
+            (x as BigInteger).toBigDecimal(mathContext = DECIMAL128) * (y as BigDecimal)}, DECIMAL_TYPE)),
         Pair("${DECIMAL_ID}|${TIMES_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
-            (y as BigInteger).toBigDecimal() * (x as BigDecimal)}, DECIMAL_TYPE)),
+            (y as BigInteger).toBigDecimal(mathContext = DECIMAL128) * (x as BigDecimal)}, DECIMAL_TYPE)),
         Pair("${DECIMAL_ID}|${TIMES_ID}|${DECIMAL_ID}", createFunction({ x: Any?, y: Any? ->
             (x as BigDecimal) * (y as BigDecimal)}, DECIMAL_TYPE)),
 
@@ -86,19 +87,19 @@ object DoOperation {
         Pair("${INT_ID}|${DIVIDE_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
             (x as BigInteger) / (y as BigInteger)}, INT_TYPE)),
         Pair("${INT_ID}|${DIVIDE_ID}|${DECIMAL_ID}", createFunction({ x: Any?, y: Any? ->
-            ((x as BigInteger).toBigDecimal()) / (y as BigDecimal)}, DECIMAL_TYPE)),
+            ((x as BigInteger).toBigDecimal(mathContext = DECIMAL128)).divide(y as BigDecimal, DECIMAL128)}, DECIMAL_TYPE)),
         Pair("${DECIMAL_ID}|${DIVIDE_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as BigDecimal) / ((y as BigInteger).toBigDecimal())}, DECIMAL_TYPE)),
+            (x as BigDecimal).divide((y as BigInteger).toBigDecimal(mathContext = DECIMAL128), DECIMAL128)}, DECIMAL_TYPE)),
         Pair("${DECIMAL_ID}|${DIVIDE_ID}|${DECIMAL_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as BigDecimal) / (y as BigDecimal)}, DECIMAL_TYPE)),
+            (x as BigDecimal).divide(y as BigDecimal, DECIMAL128)}, DECIMAL_TYPE)),
 
         //Exponentiation
         Pair("${INT_ID}|${POWER_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
             (x as BigInteger).pow(y as BigInteger) }, INT_TYPE)),
         Pair("${INT_ID}|${POWER_ID}|${DECIMAL_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as BigInteger).toBigDecimal().pow(y as BigDecimal)}, DECIMAL_TYPE)),
+            (x as BigInteger).toBigDecimal(mathContext = DECIMAL128).pow(y as BigDecimal)}, DECIMAL_TYPE)),
         Pair("${DECIMAL_ID}|${POWER_ID}|${INT_ID}", createFunction({ x: Any?, y: Any? ->
-            (x as BigDecimal).pow((y as BigInteger).toBigDecimal())}, DECIMAL_TYPE)),
+            (x as BigDecimal).pow((y as BigInteger).toBigDecimal(mathContext = DECIMAL128))}, DECIMAL_TYPE)),
         Pair("${DECIMAL_ID}|${POWER_ID}|${DECIMAL_ID}", createFunction({ x: Any?, y: Any? ->
             (x as BigDecimal).pow(y as BigDecimal)}, DECIMAL_TYPE)),
 
@@ -148,9 +149,9 @@ object DoOperation {
         Pair("${INT_ID}|${LARGER_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
             (x as BigInteger) > (y as BigInteger)}, BOOLEAN_TYPE)),
         Pair("${INT_ID}|${LARGER_ID}|${DECIMAL_ID}", createFunction({ x : Any?, y : Any? ->
-            (x as BigInteger).toBigDecimal() > (y as BigDecimal)}, BOOLEAN_TYPE)),
+            (x as BigInteger).toBigDecimal(mathContext = DECIMAL128) > (y as BigDecimal)}, BOOLEAN_TYPE)),
         Pair("${DECIMAL_ID}|${LARGER_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
-             (y as BigInteger).toBigDecimal() < (x as BigDecimal)}, BOOLEAN_TYPE)),
+             (y as BigInteger).toBigDecimal(mathContext = DECIMAL128) < (x as BigDecimal)}, BOOLEAN_TYPE)),
         Pair("${DECIMAL_ID}|${LARGER_ID}|${DECIMAL_ID}", createFunction({ x : Any?, y : Any? ->
             (x as BigDecimal) > (y as BigDecimal)}, BOOLEAN_TYPE)),
 
@@ -158,9 +159,9 @@ object DoOperation {
         Pair("${INT_ID}|${LARGER_EQUALS_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
             (x as BigInteger) >= (y as BigInteger)}, BOOLEAN_TYPE)),
         Pair("${INT_ID}|${LARGER_EQUALS_ID}|${DECIMAL_ID}", createFunction({ x : Any?, y : Any? ->
-            (x as BigInteger).toBigDecimal() >= (y as BigDecimal)}, BOOLEAN_TYPE)),
+            (x as BigInteger).toBigDecimal(mathContext = DECIMAL128) >= (y as BigDecimal)}, BOOLEAN_TYPE)),
         Pair("${DECIMAL_ID}|${LARGER_EQUALS_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
-            (y as BigInteger).toBigDecimal() <= (x as BigDecimal)}, BOOLEAN_TYPE)),
+            (y as BigInteger).toBigDecimal(mathContext = DECIMAL128) <= (x as BigDecimal)}, BOOLEAN_TYPE)),
         Pair("${DECIMAL_ID}|${LARGER_EQUALS_ID}|${DECIMAL_ID}", createFunction({ x : Any?, y : Any? ->
             (x as BigDecimal) >= (y as BigDecimal)}, BOOLEAN_TYPE)),
 
@@ -168,9 +169,9 @@ object DoOperation {
         Pair("${INT_ID}|${SMALLER_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
             (x as BigInteger) < (y as BigInteger)}, BOOLEAN_TYPE)),
         Pair("${INT_ID}|${SMALLER_ID}|${DECIMAL_ID}", createFunction({ x : Any?, y : Any? ->
-            (x as BigInteger).toBigDecimal() < (y as BigDecimal)}, BOOLEAN_TYPE)),
+            (x as BigInteger).toBigDecimal(mathContext = DECIMAL128) < (y as BigDecimal)}, BOOLEAN_TYPE)),
         Pair("${DECIMAL_ID}|${SMALLER_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
-             (y as BigInteger).toBigDecimal() > (x as BigDecimal)}, BOOLEAN_TYPE)),
+             (y as BigInteger).toBigDecimal(mathContext = DECIMAL128) > (x as BigDecimal)}, BOOLEAN_TYPE)),
         Pair("${DECIMAL_ID}|${SMALLER_ID}|${DECIMAL_ID}", createFunction({ x : Any?, y : Any? ->
             (x as BigDecimal) < (y as BigDecimal)}, BOOLEAN_TYPE)),
 
@@ -178,9 +179,9 @@ object DoOperation {
         Pair("${INT_ID}|${SMALLER_EQUALS_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
             (x as BigInteger) <= (y as BigInteger)}, BOOLEAN_TYPE)),
         Pair("${INT_ID}|${SMALLER_EQUALS_ID}|${DECIMAL_ID}", createFunction({ x : Any?, y : Any? ->
-            (x as BigInteger).toBigDecimal() <= (y as BigDecimal)}, BOOLEAN_TYPE)),
+            (x as BigInteger).toBigDecimal(mathContext = DECIMAL128) <= (y as BigDecimal)}, BOOLEAN_TYPE)),
         Pair("${DECIMAL_ID}|${SMALLER_EQUALS_ID}|${INT_ID}", createFunction({ x : Any?, y : Any? ->
-            (y as BigInteger).toBigDecimal() >= (x as BigDecimal)}, BOOLEAN_TYPE)),
+            (y as BigInteger).toBigDecimal(mathContext = DECIMAL128) >= (x as BigDecimal)}, BOOLEAN_TYPE)),
         Pair("${DECIMAL_ID}|${SMALLER_EQUALS_ID}|${DECIMAL_ID}", createFunction({ x : Any?, y : Any? ->
             (x as BigDecimal) <= (y as BigDecimal)}, BOOLEAN_TYPE)),
 
@@ -228,5 +229,5 @@ object DoOperation {
 }
 
 private fun BigDecimal.pow(bigDecimal: BigDecimal): BigDecimal {
-    return this.toDouble().pow(bigDecimal.toDouble()).toBigDecimal()
+    return this.toDouble().pow(bigDecimal.toDouble()).toBigDecimal(mathContext = DECIMAL128)
 }

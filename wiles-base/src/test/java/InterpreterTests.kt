@@ -4,6 +4,7 @@ import wiles.interpreter.Interpreter
 import wiles.interpreter.data.InterpreterContext
 import wiles.interpreter.data.InterpreterVariableMap
 import java.math.BigInteger
+import java.math.MathContext.DECIMAL128
 import java.util.*
 
 class InterpreterTests {
@@ -468,7 +469,7 @@ class InterpreterTests {
     } ]
   } ]
 }""")
-        assertVar(vars3,"!a", (0.5).toBigDecimal())
+        assertVar(vars3,"!a", (0.5).toBigDecimal(mathContext = DECIMAL128))
 
         /*
         let var a := true

@@ -350,5 +350,8 @@ write_line("Min found: " + result)
         """
         assertEquals(getOutput(code29),"TYPE INT\nTYPE STRING\n")
 
+        val code30 ="write(1.0 / 3)"
+        assertEquals(getOutput(code30),"0.3333333333333333333333333333333333")
+
     }
 }
