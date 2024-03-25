@@ -114,7 +114,7 @@ object WilesCompiler {
                     exceptions = exceptions)
             }
 
-            val checker = Checker(if (clArgs.isDebug) null else parser.json)
+            val checker = Checker(parser.json)
             exceptions.addAll(checker.check())
 
             if (clArgs.isDebug) {
