@@ -312,23 +312,17 @@ let b := a + 10
 
 - Added functionality for right side of `.` (access operator) to be anything, not just a simple identifier.
 - Added support for a subtype of a function type to have additional parameters, as long as they have default values and, in case of unnamed arguments, at the end of the parameter list. This does not break the Liskov Substitution Principle
-
-**Full Changelog**: https://github.com/Alex-Costea/Wiles/compare/v0.2.10...v0.2.11
-    
+ 
 ## [v0.2.10] - 2023-03-13
 
 - Fixed bug which made expressions like `[1,2,3].size` not work
 - Wrote test for the bug fix
-
-**Full Changelog**: https://github.com/Alex-Costea/Wiles/compare/v0.2.9...v0.2.10
-    
+ 
 ## [v0.2.9] - 2023-03-12
 
 - Additional functionality for the `.` operator: `elem.func(params)` is now equivalent to `func(elem,params)`
 - Bug fixes for `text.size` and `list.size`
-
-**Full Changelog**: https://github.com/Alex-Costea/Wiles/compare/v0.2.8...v0.2.9
-    
+ 
 ## [v0.2.8] - 2023-03-12
 
 **Note: breaking change in compiled file syntax. No breaking change when not using `--compile` and `-run`**
@@ -336,9 +330,7 @@ let b := a + 10
 - Refactoring `true` / `false` / `nothing` into normal tokens
 - Refactor all standard functions into one `StandardLibrary` static class
 - Added `Infinity` and `NaN` identifiers
-
-**Full Changelog**: https://github.com/Alex-Costea/Wiles/compare/v0.2.7...v0.2.8
-    
+ 
 ## [v0.2.7] - 2023-03-12
 
 **Note: breaking change in compiled file syntax. No breaking change when not using `--compile` and `-run`**
@@ -348,25 +340,19 @@ let b := a + 10
 - Text times int operation, for repeating text
 - `as_list` function to convert text into list
 - Additional tests for new functionality
-
-**Full Changelog**: https://github.com/Alex-Costea/Wiles/compare/v0.2.6...v0.2.7
-    
+ 
 ## [v0.2.6] - 2023-03-11
 
 - Make `as_text(elem)` work as well, not just `elem.as_text`
 - Add `text.size` support
 - Make the `size` function handle lists of nullable subtype, e.g. `list[int?]`
-
-**Full Changelog**: https://github.com/Alex-Costea/Wiles/compare/v0.2.5...v0.2.6
-    
+ 
 ## [v0.2.5] - 2023-03-11
 
 - Allow to use `write` and `writeline` with any object, except nothing types
 - Fix bug that made `int?` a subtype of `anything`
 - Write test to check the bug
-
-**Full Changelog**: https://github.com/Alex-Costea/Wiles/compare/v0.2.4...v0.2.5
-    
+ 
 ## [v0.2.4] - 2023-03-11
 
 Fixed issue where:
@@ -375,37 +361,27 @@ Fixed issue where:
     let b := do if true do yield nothing
 
 would get rejected as incorrect by the checker, despite always yielding nothing.
-
-**Full Changelog**: https://github.com/Alex-Costea/Wiles/compare/v0.2.3...v0.2.4
-    
+ 
 ## [v0.2.3] - 2023-03-11
 
 - Panic on arithmetic exceptions and input reading errors, instead of throwing Java exception
-
-**Full Changelog**: https://github.com/Alex-Costea/Wiles/compare/v0.2.2...v0.2.3
-    
+ 
 ## [v0.2.2] - 2023-03-11
 
 **Note: breaking change in compiled file syntax. No breaking change when not using `--compile` and `-run`**
 - Bug fix in getting the type of function literals in interpreter
 - Fix tests and create new test for function literal types
-
-**Full Changelog**: https://github.com/Alex-Costea/Wiles/compare/v0.2.1...v0.2.2
-    
+ 
 ## [v0.2.1] - 2023-03-11
 
 - Bug fix in type checker for list addition
-
-**Full Changelog**: https://github.com/Alex-Costea/Wiles/compare/v0.2...v0.2.1
-    
+ 
 ## [v0.2] - 2023-03-11
 
 **Note: breaking changes from v0.1**
 
 - Support for list concatenation using plus operator. E.g.: `[1,2]` + `[3]` = `[1,2,3]`
 - Remove append to list `+=` operator as duplicate. Should be `add` function once support for generics is added.
-
-**Full Changelog**: https://github.com/Alex-Costea/Wiles/compare/v0.1...v0.2
 
 ## [v0.1] - 2023-03-09
 
