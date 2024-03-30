@@ -7,7 +7,7 @@ Try it out [online](https://wiles.costea.in)!
 
 To use without the backend / frontend functionality:
 
-1. Download one of the [releases](https://github.com/Alex-Costea/Wiles/releases/), or compile the code yourself.
+1. Compile the `wiles-base` package by running the `compile_base.sh` script.
 
 2. Run the function `main` within `wiles.Main`, with the input file as an argument. For instance, when using the JAR file `Wiles.jar`, run the command:
 
@@ -23,12 +23,12 @@ Using the backend and frontend locally.
 Run `setup_server.sh` to set up the backend before running it.
 
 You can either:
-* Run only the backend, which will deploy the frontend statically
-* Run the backend and frontend servers at the same time, by doing `npm run dev` and going to `localhost:3000`.
+* Run only the backend, which will deploy the frontend statically, by running `run_dev.sh` and opening `localhost:8080`.
+* Run the backend and frontend servers at the same time, by also running `npm run dev` and opening `localhost:3000`.
 
 ## Method 4
 
-Run the backend in production mode.
+Deploy the backend online, in production mode.
 
 Pull the repository from GitHub, add the `Wiles.jar` file as described above, and then do:
 

@@ -16,4 +16,4 @@ spring:
     activate:
       on-profile: default
 server:
-  port: '80'
+  port: '8080'

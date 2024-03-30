@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  
 The versions exist as part of the git repository under the form of tags.
 
+These changelogs only apply to the `wiles-base` package. The frontend / backend are not currently versioned.
+
 ## [v2.2.1] - 2024-03-25
 
 - Bug fix (#70): rational division doesn't have enough precision
@@ -44,8 +46,6 @@ Implemented the following:
     
 ## [v1.1.5] - 2024-02-24
 
-**NOTE**: from now on, I will only describe the changes made in `Wiles Base` here.
-
 - Added support for data objects (#37). Syntax `data{field1 := value1, field2 := value2`
 - Added support for data object types. Syntax: `data[field1 : type1, field2 : type2]`
 - Added support for accessing fields of data objects. Syntax: `object.field`
@@ -54,13 +54,8 @@ Implemented the following:
     
 ## [v1.1.4] - 2024-02-03
 
-**Wiles Base**:
-
 - Bug fixes + tests, such as #35 and #36
 - Refactoring
-
-**Wiles Backend & Frontend**:
-- Fully implemented functional web app MVP
     
 ## [v1.1.3] - 2023-07-24
 
