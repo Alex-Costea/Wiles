@@ -1,3 +1,4 @@
+sh compile_base.sh
 cd ..
 rm -d -r "wiles-web-frontend/build/"
 rm -d -r "wiles-web-backend/src/main/resources/static"
