@@ -30,8 +30,6 @@ You can either:
 
 Deploy the backend online, in production mode.
 
-Pull the repository from GitHub, add the `Wiles.jar` file as described above, and then do:
+Pull the repository from GitHub, configure the TLS credentials in `wiles-web-backend`'s `application.yaml` file, and then run the `reboot.sh` script.
 
-`sh reboot.sh`
-
-Note that you'll have to configure the `wiles-web-backend` TLS credentials to use your own keys.
+Use `tmux` to run the script in a session, so that logging out of the terminal will not stop the app.
