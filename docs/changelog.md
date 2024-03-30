@@ -62,7 +62,7 @@ Implemented the following:
 **Wiles Backend & Frontend**:
 - Fully implemented functional web app MVP
     
-## [v.1.1.3] - 2023-07-24
+## [v1.1.3] - 2023-07-24
 
 - Refactoring of existing code, such as moving the compiler into the `Wiles Base` folder
 - Improvements to the Wiles interpreter, such as that a different JVM code can safely run the compilation process multiple times at the same time without any risk of contamination 
@@ -396,8 +396,8 @@ First official release, with the interpreter being functional. Read the readme f
 [v2.1]: https://github.com/Alex-Costea/Wiles/compare/v2.0...v2.1
 [v2.0]: https://github.com/Alex-Costea/Wiles/compare/v1.1.5...v2.0
 [v1.1.5]: https://github.com/Alex-Costea/Wiles/compare/v1.1.4...v1.1.5
-[v1.1.4]: https://github.com/Alex-Costea/Wiles/compare/v.1.1.3...v1.1.4
-[v.1.1.3]: https://github.com/Alex-Costea/Wiles/compare/v1.1.2...v.1.1.3
+[v1.1.4]: https://github.com/Alex-Costea/Wiles/compare/v1.1.3...v1.1.4
+[v1.1.3]: https://github.com/Alex-Costea/Wiles/compare/v1.1.2...v1.1.3
 [v1.1.2]: https://github.com/Alex-Costea/Wiles/compare/v1.1.1...v1.1.2
 [v1.1.1]: https://github.com/Alex-Costea/Wiles/compare/v1.1...v1.1.1
 [v1.1]: https://github.com/Alex-Costea/Wiles/compare/v1.0.3...v1.1
