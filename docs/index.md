@@ -16,6 +16,10 @@ Wiles supports features such as:
 
 The informal specifications can be found [here](specifications.md).
 
+## Changelogs
+
+See [here](changelog.md).
+
 ## How to use
 
 Try it out [online](https://wiles.costea.in)!
