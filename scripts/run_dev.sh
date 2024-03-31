@@ -1,3 +1,4 @@
+sh setup_server.sh
 cd ..
-cd "wiles-web-backend/target"
-sudo --preserve-env=PATH env java -jar Wiles-Web-Backend-0.0.1-SNAPSHOT.jar
+cd wiles-web-backend/target  || exit
+sudo --preserve-env=PATH env java -jar Wiles-Web-Backend-DEVELOPMENT.jar

@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>WilesWebBackend</groupId>
 	<artifactId>Wiles-Web-Backend</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>DEVELOPMENT</version>
 	<name>Wiles-Web-Backend</name>
 	<description>Wiles Web Backend</description>
 	<properties>
