@@ -1,3 +1,4 @@
+#!/bin/sh
 sh compile_base.sh
 cd ..
 rm -d -r wiles-web-frontend/build/

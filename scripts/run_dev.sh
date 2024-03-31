@@ -1,3 +1,4 @@
+#!/bin/sh
 sh setup_server.sh
 cd ..
 cd wiles-web-backend/target  || exit
