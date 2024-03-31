@@ -12,7 +12,7 @@ To use without the backend / frontend functionality:
 2. Run the function `main` within `wiles.Main`, with the input file as an argument. For instance, when using the JAR file `Wiles.jar`, run the command:
 
 ```
-java -jar Wiles.jar example.wiles
+java -jar Wiles.jar --file=example.wiles
 ```
 You can also compile the source code by adding `--compile` as an argument, and run a compiled file using `--run`.
 

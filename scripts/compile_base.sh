@@ -1,4 +1,3 @@
 #!/bin/sh
-cd ..
-cd wiles-base || exit
+cd ../wiles-base || exit
 mvn clean kotlin:compile install
