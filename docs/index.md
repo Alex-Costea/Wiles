@@ -20,6 +20,10 @@ The informal specifications can be found [here](specifications.md).
 
 See [here](changelog.md).
 
+## Open and Resolved Tickets
+
+See [here](tickets.md).
+
 ## How to use
 
 Try it out [online](https://wiles.costea.in)!
