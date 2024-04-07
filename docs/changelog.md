@@ -11,6 +11,8 @@ The versions exist as part of the git repository under the form of tags.
 
 These changelogs only apply to the `wiles-base` package. The frontend / backend are not currently versioned.
 
+See all the open and resolved tickets [here](tickets.md).
+
 ## [v2.2.1] - 2024-03-25
 
 - Bug fix (#70): rational division doesn't have enough precision
@@ -22,7 +24,7 @@ Implemented the following:
 
 - Create Token information mode for Wiles Base API, to be used for syntax highlighting (#57)
 - Generics: stop adding the vertical bars and numbers. E.g.: `T` instead of `T|1` (#61)
-    
+
 ## [v2.1] - 2024-03-01
 
 - The function `getOutput` now returns `OutputData` instead of `Pair<String, String>` inside `Wiles.jar` 
