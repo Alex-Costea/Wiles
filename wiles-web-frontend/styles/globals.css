@@ -101,7 +101,7 @@ main{
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    gap: 50px;
+    column-gap: 50px;
 }
 
 @media (max-width: 500px) {
