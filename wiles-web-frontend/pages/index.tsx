@@ -5,7 +5,7 @@ import Header from "@/components/header";
 
 export default function Home(){
     return (<React.StrictMode>
-        <div>
+        <div id={"document"}>
             <Background/>
             <Header/>
             <App/>

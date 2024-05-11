@@ -1,7 +1,7 @@
 function SubmitCode()
 {
-    return <p>
-        <input type="submit" id="submit" value="Run Code"></input>
+    return <p id={"submitCode"}>
+        <input type="submit" id="submit" form={"form"} value="Run Code"></input>
     </p>
 }
 

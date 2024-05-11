@@ -104,22 +104,30 @@ function App() {
         setCode(newValue)
     }
 
+    function addErrorsToCode(code : string) : string
+    {
+        return code
+    }
+
     const onInputChange = (e: ContentEditableEvent) => setInput((e.target as HTMLTextAreaElement).value)
 
-    return <main>
-        <div id="column1">
-            <form onSubmit={submit}>
-                <Field label="Code:" id="code" onChange={onCodeChange} innerHTML={code}/>
-                <Field label="Input:" id="input" onChange={onInputChange} innerHTML={input}/>
+    return <div id={"App"}>
+            <main>
+                <div id="column1" className={"column"}>
+                    <form onSubmit={submit} className={"form"} id={"form"}>
+                        <Field label="Code:" id="code" onChange={onCodeChange} innerHTML={addErrorsToCode(code)}/>
+                        <Field label="Input:" id="input" onChange={onInputChange} innerHTML={input}/>
+                    </form>
+                </div>
+                <div id="column2" className={"column"}>
+                    <Field label="Output:" id="output" innerHTML={output} disabled/>
+                </div>
+            </main>
+            <div id={"extra"}>
                 <SubmitCode/>
-            </form>
+                <MoreInfo/>
+            </div>
         </div>
-        <div id="column2">
-            <Field label="Output:" id="output" innerHTML={output} disabled/>
-            <Field label="Errors:" id="errors" innerHTML={errors} disabled/>
-            <MoreInfo/>
-        </div>
-    </main>
 }
 
 export default App;
