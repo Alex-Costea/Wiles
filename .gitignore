@@ -89,5 +89,12 @@ syntaxTree.json
 /input.wiles_compiled.json
 /target/classes/StandardLibrary.wiles
 /target/classes/additional_code.wiles
-/.idea/
 input.wiles_compiled.json
+/.idea/compiler.xml
+/.idea/encodings.xml
+/.idea/jarRepositories.xml
+/.idea/kotlinc.xml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/vcs.xml
