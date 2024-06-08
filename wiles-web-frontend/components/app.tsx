@@ -5,8 +5,17 @@ import Field from './field'
 import SubmitCode from "@/components/submitCode";
 import MoreInfo from "@/components/moreInfo";
 
+interface errorLocationFormat {
+    line : number, lineIndex : number, lineEnd : number, lineEndIndex : number
+}
+
+interface errorFormat {
+    message: string,
+    location: errorLocationFormat
+}
+
 interface responseFormat{
-    response : string, errors : string
+    response : string, errorList : errorFormat[]
 }
 
 function usePersistedState(keyName : string, defaultValue : string) : [string, Dispatch<string>]
@@ -64,7 +73,6 @@ async function getXSRF()
 function App() {
 
     const [output, setOutput] = usePersistedState("output", "")
-    const [errors, setErrors] = usePersistedState("errors", "")
     const [code, setCode] = usePersistedState("code",
         'let name := read_line()\nwrite_line("Hello, " + name + "!")')
     const [input, setInput] = usePersistedState("input", "Wiles")
@@ -72,6 +80,7 @@ function App() {
     function submit(e : FormEvent<HTMLFormElement>)
     {
         e.preventDefault()
+        const codeNoAnnotations = getCodeNoAnnotations(code)
         getXSRF().then(xsrf => {
             fetch(`${getDomain()}/run`, {
                 method: 'PUT',
@@ -81,41 +90,83 @@ function App() {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    code: code,
+                    code: codeNoAnnotations,
                     input: input
                 })
             }).then(response => response.json()).then(
                 (response : responseFormat)  => {
                     setOutput(response.response)
-                    setErrors(response.errors)
+                    const errorList = response.errorList
+                    setCode(addErrorsToCode(codeNoAnnotations, errorList))
                 })
         })
     }
 
-    function onCodeChange(e : ContentEditableEvent)
+    function getCodeNoAnnotations(value : string)
     {
-        const value = e.target.value
         const parser = new DOMParser();
         const doc = parser.parseFromString(
             `<div id="elem"></div>`, "text/html")
         const element =  doc.getElementById("elem")!
         element.innerHTML = value
-        const newValue = element.innerText
-        setCode(newValue)
+        return element.innerText
     }
 
-    function addErrorsToCode(code : string) : string
+    function addErrorsToCode(code : string, errorList : errorFormat[]) : string
     {
-        return code
+        let line = 1
+        let lineIndex = 1
+        interface lineValue{
+            line : number, lineIndex : number
+        }
+        let errorStart = new Map<string, string>()
+        let errorEnd = new Map<string, string>()
+        for(let error of errorList)
+        {
+            const lineStart = {line : error.location.line, lineIndex : error.location.lineIndex} as lineValue
+            const lineEnd = {line : error.location.lineEnd, lineIndex : error.location.lineEndIndex} as lineValue
+            errorStart.set(JSON.stringify(lineStart), error.message)
+            errorEnd.set(JSON.stringify(lineEnd), error.message)
+        }
+        let newCode = ""
+        for(let character of code)
+        {
+            const currentLine = JSON.stringify({line : line, lineIndex: lineIndex} as lineValue)
+            if(errorStart.has(currentLine))
+            {
+                const message = errorStart.get(currentLine)!
+                newCode += `<span title="${message}" class="error" contenteditable="true">`
+            }
+            if(errorEnd.has(currentLine))
+            {
+                newCode += `</span>`
+            }
+            newCode += character
+            if(character === "\n")
+            {
+                line += 1
+                lineIndex = 1
+            }
+            else{
+                lineIndex += 1
+            }
+        }
+        return newCode
     }
 
     const onInputChange = (e: ContentEditableEvent) => setInput((e.target as HTMLTextAreaElement).value)
+
+    function onCodeChange(e : ContentEditableEvent)
+    {
+        const value = e.target.value
+        setCode(value)
+    }
 
     return <div id={"App"}>
             <main>
                 <div id="column1" className={"column"}>
                     <form onSubmit={submit} className={"form"} id={"form"}>
-                        <Field label="Code:" id="code" onChange={onCodeChange} innerHTML={addErrorsToCode(code)}/>
+                        <Field label="Code:" id="code" onChange={onCodeChange} innerHTML={code}/>
                         <Field label="Input:" id="input" onChange={onInputChange} innerHTML={input}/>
                     </form>
                 </div>

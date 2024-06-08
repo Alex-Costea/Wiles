@@ -137,3 +137,9 @@ label, a{
     overflow: hidden;
     z-index: -1;
 }
+
+.error
+{
+    text-decoration: underline;
+    text-decoration-color: red;
+}
