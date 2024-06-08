@@ -60,11 +60,11 @@ body{
 }
 
 #column1, #submitCode{
-    flex-grow: 3;
+    flex: 1 0 50%;
 }
 
 #column2, #moreInfo{
-    flex-grow: 2;
+    flex: 1 0 30%;
 }
 
 .form{
@@ -124,11 +124,6 @@ label, a{
     min-height: 5svh;
     font-size: 0.9em;
 }
-
-#errors{
-    color: darkred;
-}
-
 
 .background {
     position: fixed;
