@@ -5,16 +5,16 @@
     filter: drop-shadow(3px 3px 3px rgba(0,0,0,0.7));
 }
 
+*{
+    box-sizing: border-box;
+}
+
 .App-header {
     height: 6em;
     display: flex;
     flex-direction: column;
     align-items: center;
     color: black;
-}
-
-.App-link {
-    color: #61dafb;
 }
 
 body{
@@ -24,7 +24,6 @@ body{
     -moz-osx-font-smoothing: grayscale;
     font-size: 1.1em;
     font-family: 'Roboto', sans-serif;
-    box-sizing: border-box;
     text-align: center;
 }
 
@@ -34,8 +33,8 @@ body{
     text-align: left;
     font-size: 0.8em;
     resize: none;
-    width: 45svw;
-    height: 25svh;
+    width: 100%;
+    height: 100%;
     background: rgba(255, 255, 255, 0.2);
     border-radius: 16px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -49,18 +48,65 @@ body{
     white-space: pre;
 }
 
-main{
+.fieldOuter{
+    height: 100%;
+}
+
+.column{
+    height: 70svh;
+    display: flex;
+    flex-direction: column;
+    min-width: 400px;
+}
+
+#column1, #submitCode{
+    flex: 1 0 50%;
+}
+
+#column2, #moreInfo{
+    flex: 1 0 30%;
+}
+
+.form{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#extra{
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+#App{
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+    flex-wrap: wrap;
+    width: 90%;
 }
 
-@media (max-width: 700px) {
-    main {
-        flex-direction: column;
-    }
-    .field{
-        width: 75svw;
+#document{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+main{
+    width: 100%;
+    flex-basis: 100%;
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    column-gap: 50px;
+}
+
+@media (max-width: 500px) {
+    .column{
+        min-width: 0;
     }
 }
 
@@ -79,15 +125,16 @@ label, a{
     font-size: 0.9em;
 }
 
-#errors{
-    color: darkred;
-}
-
-
 .background {
     position: fixed;
     height: 100vh;
     width: 100vw;
     overflow: hidden;
     z-index: -1;
+}
+
+.error
+{
+    text-decoration: underline;
+    text-decoration-color: red;
 }

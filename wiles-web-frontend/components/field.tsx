@@ -14,7 +14,7 @@ function Field({id, label = "", innerHTML, onChange = () => {}, disabled = false
         <p>
             <label htmlFor={id}>{label}</label>
         </p>
-        <p>
+        <p className={"fieldOuter"}>
             <ContentEditable id={id} className={"field"} tagName={"span"} spellCheck={false}
                              onChange={onChange} html={innerHTML} disabled={disabled}/>
         </p>
