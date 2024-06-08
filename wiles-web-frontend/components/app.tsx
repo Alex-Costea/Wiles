@@ -97,6 +97,7 @@ function App() {
                 (response : responseFormat)  => {
                     setOutput(response.response)
                     const errorList = response.errorList
+                    console.log(errorList)
                     setCode(addErrorsToCode(codeNoAnnotations, errorList))
                 })
         })
@@ -121,21 +122,30 @@ function App() {
         }
         let errorStart = new Map<string, string>()
         let errorEnd = new Map<string, string>()
+        let globalErrors = 0
+        let newCode = ""
         for(let error of errorList)
         {
             const lineStart = {line : error.location.line, lineIndex : error.location.lineIndex} as lineValue
             const lineEnd = {line : error.location.lineEnd, lineIndex : error.location.lineEndIndex} as lineValue
-            errorStart.set(JSON.stringify(lineStart), error.message)
-            errorEnd.set(JSON.stringify(lineEnd), error.message)
+            if(lineStart.line === -1)
+            {
+                globalErrors += 1
+                newCode += `<span title="${error.message}" class="error">`
+            }
+            else
+            {
+                errorStart.set(JSON.stringify(lineStart), error.message)
+                errorEnd.set(JSON.stringify(lineEnd), error.message)
+            }
         }
-        let newCode = ""
         for(let character of code)
         {
             const currentLine = JSON.stringify({line : line, lineIndex: lineIndex} as lineValue)
             if(errorStart.has(currentLine))
             {
                 const message = errorStart.get(currentLine)!
-                newCode += `<span title="${message}" class="error" contenteditable="true">`
+                newCode += `<span title="${message}" class="error">`
             }
             if(errorEnd.has(currentLine))
             {
@@ -150,6 +160,10 @@ function App() {
             else{
                 lineIndex += 1
             }
+        }
+        for(let i = 0; i<globalErrors;i++)
+        {
+            newCode += `</span>`
         }
         return newCode
     }
