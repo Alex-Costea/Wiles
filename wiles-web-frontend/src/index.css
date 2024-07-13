@@ -58,7 +58,7 @@ body{
   height: 70svh;
   display: flex;
   flex-direction: column;
-  min-width: 30svw;
+  min-width: 40svw;
 }
 
 #column1, #submitCode{
