@@ -2,8 +2,8 @@ import {Dispatch, FormEvent, useEffect, useReducer, useRef} from "react";
 import Cookies from 'js-cookie';
 import {ContentEditableEvent} from "react-contenteditable";
 import Field from './field'
-import SubmitCode from "@/components/submitCode";
-import MoreInfo from "@/components/moreInfo";
+import SubmitCode from "./submitCode";
+import MoreInfo from "./moreInfo";
 
 interface errorLocationFormat {
     line : number, lineIndex : number, lineEnd : number, lineEndIndex : number
@@ -120,11 +120,11 @@ function App() {
         interface lineValue{
             line : number, lineIndex : number
         }
-        let errorStart = new Map<string, string>()
-        let errorEnd = new Map<string, string>()
+        const errorStart = new Map<string, string>()
+        const errorEnd = new Map<string, string>()
         let globalErrors = 0
         let newCode = ""
-        for(let error of errorList)
+        for(const error of errorList)
         {
             const lineStart = {line : error.location.line, lineIndex : error.location.lineIndex} as lineValue
             const lineEnd = {line : error.location.lineEnd, lineIndex : error.location.lineEndIndex} as lineValue
@@ -139,7 +139,7 @@ function App() {
                 errorEnd.set(JSON.stringify(lineEnd), error.message)
             }
         }
-        for(let character of code)
+        for(const character of code)
         {
             const currentLine = JSON.stringify({line : line, lineIndex: lineIndex} as lineValue)
             if(errorStart.has(currentLine))
@@ -177,22 +177,22 @@ function App() {
     }
 
     return <div id={"App"}>
-            <main>
-                <div id="column1" className={"column"}>
-                    <form onSubmit={submit} className={"form"} id={"form"}>
-                        <Field label="Code:" id="code" onChange={onCodeChange} innerHTML={code}/>
-                        <Field label="Input:" id="input" onChange={onInputChange} innerHTML={input}/>
-                    </form>
-                </div>
-                <div id="column2" className={"column"}>
-                    <Field label="Output:" id="output" innerHTML={output} disabled/>
-                </div>
-            </main>
-            <div id={"extra"}>
-                <SubmitCode/>
-                <MoreInfo/>
+        <main>
+            <div id="column1" className={"column"}>
+                <form onSubmit={submit} className={"form"} id={"form"}>
+                    <Field label="Code:" id="code" onChange={onCodeChange} innerHTML={code}/>
+                    <Field label="Input:" id="input" onChange={onInputChange} innerHTML={input}/>
+                </form>
             </div>
+            <div id="column2" className={"column"}>
+                <Field label="Output:" id="output" innerHTML={output} disabled/>
+            </div>
+        </main>
+        <div id={"extra"}>
+            <SubmitCode/>
+            <MoreInfo/>
         </div>
+    </div>
 }
 
 export default App;

@@ -21,7 +21,7 @@ public class CORSFilter implements Filter {
         super();
     }
 
-    List<String> allowedOrigins = List.of("https://wiles.costea.in", "https://localhost:3000", "http://localhost:3000");
+    List<String> allowedOrigins = List.of("https://wiles.costea.in", "https://localhost:5173", "http://localhost:5173");
 
     /**
      * Do Filter on every http-request.
