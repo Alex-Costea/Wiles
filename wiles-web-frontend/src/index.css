@@ -25,7 +25,7 @@ body{
   font-size: 1.1em;
   font-family: 'Roboto', sans-serif;
   text-align: center;
-  background-image: url("./assets/background.avif");
+  background: url("./assets/background.avif") no-repeat center center fixed;
   background-size: cover;
 }
 
@@ -58,7 +58,7 @@ body{
   height: 70svh;
   display: flex;
   flex-direction: column;
-  min-width: 400px;
+  min-width: 30svw;
 }
 
 #column1, #submitCode{
@@ -79,6 +79,7 @@ body{
   display: flex;
   justify-content: space-around;
   width: 100%;
+  column-gap: 50px;
 }
 
 #App{
@@ -104,12 +105,6 @@ main{
   flex-direction: row;
   justify-content: space-around;
   column-gap: 50px;
-}
-
-@media (max-width: 500px) {
-  .column{
-    min-width: 0;
-  }
 }
 
 label, a{
