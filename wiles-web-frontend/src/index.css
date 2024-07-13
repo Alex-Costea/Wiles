@@ -1,68 +1,140 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+.App-logo {
+  height: 4.7em;
+  width: auto;
+  pointer-events: none;
+  filter: drop-shadow(3px 3px 3px rgba(0,0,0,0.7));
+}
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+*{
+  box-sizing: border-box;
+}
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
+.App-header {
+  height: 6em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: black;
+}
+
+body{
+  height: 100%;
+  margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-size: 1.1em;
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+.field {
+  display: inline-block;
+  font-family: 'Roboto Mono', monospace;
+  text-align: left;
+  font-size: 0.8em;
+  resize: none;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: black;
+  outline:none;
+  padding: 0.5em;
+  overflow: auto;
+  white-space: pre;
 }
 
-body {
-  margin: 0;
+.fieldOuter{
+  height: 100%;
+}
+
+.column{
+  height: 70svh;
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  flex-direction: column;
+  min-width: 400px;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+#column1, #submitCode{
+  flex: 1 0 50%;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+#column2, #moreInfo{
+  flex: 1 0 30%;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+.form{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#extra{
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+#App{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  width: 90%;
+}
+
+#document{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+main{
+  width: 100%;
+  flex-basis: 100%;
+  flex-wrap: wrap;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  column-gap: 50px;
+}
+
+@media (max-width: 500px) {
+  .column{
+    min-width: 0;
   }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+}
+
+label, a{
+  color: whitesmoke;
+  filter: drop-shadow(2px 4px 6px black);
+}
+#submit{
+  border: none;
+  background: darkgreen;
+  color: whitesmoke;
+  border-radius: 10px;
+  filter: drop-shadow(2px 4px 6px black);
+  min-width: 20svw;
+  min-height: 5svh;
+  font-size: 0.9em;
+}
+
+.background {
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.error
+{
+  text-decoration: underline;
+  text-decoration-color: red;
 }

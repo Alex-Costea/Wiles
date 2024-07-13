@@ -1,7 +1,7 @@
 {
   "name": "wiles-web-frontend",
   "private": true,
-  "version": "0.0.0",
+  "version": "development",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "js-cookie": "^3.0.5",
+    "react-contenteditable" : "^3.3.7"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
@@ -23,6 +25,7 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
     "typescript": "^5.2.2",
-    "vite": "^5.3.1"
+    "vite": "^5.3.1",
+    "@types/js-cookie": "^3.0.6"
   }
 }
