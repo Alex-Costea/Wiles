@@ -25,6 +25,8 @@ body{
   font-size: 1.1em;
   font-family: 'Roboto', sans-serif;
   text-align: center;
+  background-image: url("./assets/background.avif");
+  background-size: cover;
 }
 
 .field {

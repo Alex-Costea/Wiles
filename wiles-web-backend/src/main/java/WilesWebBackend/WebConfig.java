@@ -20,7 +20,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/static/");
 
         registry.addResourceHandler("/images/**")
-                .addResourceLocations("classpath:/static/images/")
+                .addResourceLocations("classpath:/static/assets/")
                 .setCacheControl(CacheControl.maxAge(Duration.ofDays(35)));
     }
 }
