@@ -145,7 +145,7 @@ function App() {
             if(errorStart.has(currentLine))
             {
                 const message = errorStart.get(currentLine)!
-                newCode += `<span title="${message}" class="error">`
+                newCode += `<span aria-invalid="true" aria-errormessage="${message}" class="error">`
             }
             if(errorEnd.has(currentLine))
             {
