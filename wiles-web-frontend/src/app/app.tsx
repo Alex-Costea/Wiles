@@ -98,7 +98,6 @@ function App() {
                 (response : responseFormat)  => {
                     setOutput(response.response)
                     const errorList = response.errorList
-                    console.log(errorList)
                     setCode(addErrorsToCode(codeNoAnnotations, errorList))
                 })
         })
