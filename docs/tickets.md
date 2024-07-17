@@ -54,10 +54,6 @@ Syntax:
 write_line("2 + 3 = $2 + 3;")
 ```
 
-## 59 - Display errors inline in Wiles Web
-
-No description provided.
-
 ## 60 - Types such as `"accepted" or "rejected"`
 
 No description provided.
@@ -78,7 +74,7 @@ Get a character out of a number.
 
 No description provided.
 
-## 73 - Avoid splash of white by making background dark before image load.
+## 74 - Highlight syntax in Wiles Web
 
 No description provided.
 
@@ -293,6 +289,10 @@ New string escaping mechanism with the format `\code;`, to replace the HTML-base
 
 No description provided.
 
+## 59 - Display errors inline in Wiles Web
+
+No description provided.
+
 ## 61 - No description provided.
 
 No description provided.
@@ -300,3 +300,8 @@ No description provided.
 ## 70 - Provide more precision with rational division. E.g.: `write(1.0 / 6)`
 
 No description provided.
+
+## 73 - Avoid splash of white by making background dark before image load.
+
+No description provided.
+
