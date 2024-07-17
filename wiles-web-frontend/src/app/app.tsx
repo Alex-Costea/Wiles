@@ -131,7 +131,7 @@ function App() {
             if(lineStart.line === -1)
             {
                 globalErrors += 1
-                newCode += `<span title="${error.message}" class="error">`
+                newCode += `<span aria-invalid="true" aria-errormessage="${error.message}" class="error">`
             }
             else
             {
