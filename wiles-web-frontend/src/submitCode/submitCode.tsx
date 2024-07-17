@@ -1,3 +1,5 @@
+import './submitCode.css';
+
 function SubmitCode()
 {
     return <p id={"submitCode"}>

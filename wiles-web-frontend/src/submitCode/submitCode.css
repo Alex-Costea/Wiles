@@ -1,0 +1,15 @@
+#submitCode{
+    flex: 1 0 30%;
+    min-width: 40svw;
+}
+
+#submit{
+    border: none;
+    background: darkgreen;
+    color: whitesmoke;
+    border-radius: 10px;
+    filter: drop-shadow(2px 4px 6px black);
+    min-width: 20svw;
+    min-height: 5svh;
+    font-size: 0.9em;
+}

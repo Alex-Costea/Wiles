@@ -1,5 +1,6 @@
 import React from "react";
 import ContentEditable, {ContentEditableEvent} from "react-contenteditable";
+import './field.css';
 
 interface FieldProps {
     id : string,

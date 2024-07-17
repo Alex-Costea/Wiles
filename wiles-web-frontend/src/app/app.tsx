@@ -1,9 +1,10 @@
 import {Dispatch, FormEvent, useEffect, useReducer, useRef} from "react";
 import Cookies from 'js-cookie';
 import {ContentEditableEvent} from "react-contenteditable";
-import Field from './field'
-import SubmitCode from "./submitCode";
-import MoreInfo from "./moreInfo";
+import Field from '../field/field.tsx'
+import SubmitCode from "../submitCode/submitCode.tsx";
+import MoreInfo from "../moreInfo/moreInfo.tsx";
+import './app.css';
 
 interface errorLocationFormat {
     line : number, lineIndex : number, lineEnd : number, lineEndIndex : number
@@ -181,10 +182,10 @@ function App() {
             <div id="column1" className={"column"}>
                 <form onSubmit={submit} className={"form"} id={"form"}>
                     <Field label="Code:" id="code" onChange={onCodeChange} innerHTML={code}/>
-                    <Field label="Input:" id="input" onChange={onInputChange} innerHTML={input}/>
                 </form>
             </div>
             <div id="column2" className={"column"}>
+                <Field label="Input:" id="input" onChange={onInputChange} innerHTML={input}/>
                 <Field label="Output:" id="output" innerHTML={output} disabled/>
             </div>
         </main>

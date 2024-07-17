@@ -1,0 +1,55 @@
+.column{
+    height: 70svh;
+    display: flex;
+    flex-direction: column;
+    min-width: 40svw;
+}
+
+#column1, #submitCode{
+    flex: 1 0 30%;
+}
+
+#column2, #moreInfo{
+    flex: 1 0 50%;
+}
+
+#submitCode, #moreInfo{
+    min-width: 40svw;
+}
+
+#extra{
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    column-gap: 50px;
+}
+
+#App{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    width: 90%;
+}
+
+main{
+    width: 100%;
+    flex-basis: 100%;
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    column-gap: 50px;
+}
+
+.form{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.error
+{
+    text-decoration: underline;
+    text-decoration-color: red;
+}
