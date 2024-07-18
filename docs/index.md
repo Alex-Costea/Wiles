@@ -54,7 +54,7 @@ or
 ```
 ### FizzBuzz
 ```
-for i from 1 to 100
+for i from 1 to 101
 begin
     let var text := ""
     if modulo(i, 3) = 0 do
