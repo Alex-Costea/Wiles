@@ -73,17 +73,17 @@ main{
 }
 
 .syntax_number{
-    color: purple;
+    color: #4D1D46;
 }
 
 .syntax_string{
-    color: darkgreen;
+    color: #DC7049;
 }
 
 .syntax_token{
-    color: royalblue;
+    color: #35506E;
 }
 
 .syntax_identifier{
-    color: orangered;
+    color: #52494c;
 }

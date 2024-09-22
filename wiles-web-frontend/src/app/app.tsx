@@ -185,6 +185,7 @@ function App() {
         const syntaxStart = new Map<string, string>()
         const syntaxEnd = new Map<string, string>()
         const syntaxCode = JSON.parse(await getSyntax(code)) as syntaxFormat[]
+        console.log(syntaxCode)
         for(const syntax of syntaxCode)
         {
             const type = syntax.type.toLowerCase()
@@ -197,6 +198,14 @@ function App() {
         for(const character of code)
         {
             const currentLine = JSON.stringify({line : line, lineIndex: lineIndex} as lineValue)
+            if(syntaxEnd.has(currentLine))
+            {
+                newCode += `</span>`
+            }
+            if(errorEnd.has(currentLine))
+            {
+                newCode += `</span>`
+            }
             if(errorStart.has(currentLine))
             {
                 const message = errorStart.get(currentLine)!
@@ -206,14 +215,6 @@ function App() {
             {
                 const syntax = syntaxStart.get(currentLine)!
                 newCode += `<span class="syntax_${syntax}">`
-            }
-            if(syntaxEnd.has(currentLine))
-            {
-                newCode += `</span>`
-            }
-            if(errorEnd.has(currentLine))
-            {
-                newCode += `</span>`
             }
             newCode += character
             if(character === "\n")
