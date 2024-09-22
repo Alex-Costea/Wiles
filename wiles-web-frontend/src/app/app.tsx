@@ -82,6 +82,28 @@ function App() {
         'let name := read_line()\nwrite_line("Hello, " + name + "!")')
     const [input, setInput] = usePersistedState("input", "Wiles")
 
+    function getSyntax(code : string)
+    {
+        getXSRF().then(xsrf =>
+        {
+            const codeNoAnnotations = getCodeNoAnnotations(code)
+            fetch(`${getDomain()}/syntax`, {
+                method: 'PUT',
+                headers: {
+                    'X-XSRF-TOKEN' : xsrf,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    code: codeNoAnnotations,
+                    input: input
+                })
+            }).then(response => response.text()).then((response => {
+                console.log(response)
+            }))
+        })
+    }
+
     function submit(e : FormEvent<HTMLFormElement>)
     {
         e.preventDefault()
@@ -187,6 +209,7 @@ function App() {
     {
         const value = e.target.value
         setCode(value)
+        getSyntax(value)
     }
 
     return <div id={"App"}>
