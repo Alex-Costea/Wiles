@@ -6,13 +6,13 @@ import SubmitCode from "../submitCode/submitCode.tsx";
 import MoreInfo from "../moreInfo/moreInfo.tsx";
 import './app.css';
 
-interface errorLocationFormat {
+interface locationFormat {
     line : number, lineIndex : number, lineEnd : number, lineEndIndex : number
 }
 
 interface errorFormat {
     message: string,
-    location: errorLocationFormat
+    location: locationFormat
 }
 
 interface responseFormat{
@@ -21,6 +21,10 @@ interface responseFormat{
 
 interface lineValue{
     line : number, lineIndex : number
+}
+
+interface syntaxFormat{
+    type: string, location: locationFormat
 }
 
 function usePersistedState(keyName : string, defaultValue : string) : [string, Dispatch<string>]
@@ -82,6 +86,26 @@ function App() {
         'let name := read_line()\nwrite_line("Hello, " + name + "!")')
     const [input, setInput] = usePersistedState("input", "Wiles")
 
+    async function getSyntax(code: string) : Promise<string> {
+        return (await getXSRF().then(xsrf => {
+            const codeNoAnnotations = getCodeNoAnnotations(code)
+            return fetch(`${getDomain()}/syntax`, {
+                method: 'PUT',
+                headers: {
+                    'X-XSRF-TOKEN': xsrf,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    code: codeNoAnnotations,
+                    input: input
+                })
+            }).then(response => response.text()).then((response => {
+                return response
+            }))
+        }))!
+    }
+
     function submit(e : FormEvent<HTMLFormElement>)
     {
         e.preventDefault()
@@ -99,16 +123,14 @@ function App() {
                     input: input
                 })
             }).then(response => response.json()).then(
-                (response : responseFormat)  => {
+                async (response: responseFormat) => {
                     let output = response.response
                     const errorList = response.errorList
                     const annotatedCode = addAnnotationsToCode(codeNoAnnotations, errorList)
-                    setCode(annotatedCode)
+                    setCode(await annotatedCode)
                     const globalErrors = getGlobalErrors(errorList)
-                    if(globalErrors.length > 0)
-                    {
-                        for(const error of globalErrors)
-                        {
+                    if (globalErrors.length > 0) {
+                        for (const error of globalErrors) {
                             output += `<span class="globalError">` + error.message + `</span>\n`
                         }
                     }
@@ -140,13 +162,15 @@ function App() {
         return element.innerText
     }
 
-    function addAnnotationsToCode(code : string, errorList : errorFormat[]) : string
+    async function addAnnotationsToCode(code : string, errorList : errorFormat[]) : Promise<string>
     {
         let line = 1
         let lineIndex = 1
+        let newCode = ""
+
+        //get errors
         const errorStart = new Map<string, string>()
         const errorEnd = new Map<string, string>()
-        let newCode = ""
         for(const error of errorList)
         {
             const lineStart = {line : error.location.line, lineIndex : error.location.lineIndex} as lineValue
@@ -156,17 +180,41 @@ function App() {
                 errorEnd.set(JSON.stringify(lineEnd), error.message)
             }
         }
+
+        //get syntax
+        const syntaxStart = new Map<string, string>()
+        const syntaxEnd = new Map<string, string>()
+        const syntaxCode = JSON.parse(await getSyntax(code)) as syntaxFormat[]
+        console.log(syntaxCode)
+        for(const syntax of syntaxCode)
+        {
+            const type = syntax.type.toLowerCase()
+            const lineStart = {line : syntax.location.line, lineIndex : syntax.location.lineIndex} as lineValue
+            const lineEnd = {line : syntax.location.lineEnd, lineIndex : syntax.location.lineEndIndex} as lineValue
+            syntaxStart.set(JSON.stringify(lineStart), type)
+            syntaxEnd.set(JSON.stringify(lineEnd), type)
+        }
+
         for(const character of code)
         {
             const currentLine = JSON.stringify({line : line, lineIndex: lineIndex} as lineValue)
+            if(syntaxEnd.has(currentLine))
+            {
+                newCode += `</span>`
+            }
+            if(errorEnd.has(currentLine))
+            {
+                newCode += `</span>`
+            }
             if(errorStart.has(currentLine))
             {
                 const message = errorStart.get(currentLine)!
                 newCode += `<span aria-invalid="true" aria-errormessage="${message}" class="error">`
             }
-            if(errorEnd.has(currentLine))
+            if(syntaxStart.has(currentLine))
             {
-                newCode += `</span>`
+                const syntax = syntaxStart.get(currentLine)!
+                newCode += `<span class="syntax_${syntax}">`
             }
             newCode += character
             if(character === "\n")
