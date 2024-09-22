@@ -28,7 +28,7 @@ class InferFromMethodCall(details: InferrerDetails) : InferFromStatement(details
             InferFromExpression(InferrerDetails(expressionToInfer,variables, exceptions)).infer()
         }
         val type = METHOD_CALL_TYPE.copyRemovingLocation()
-        type.components.add(statement.copyRemovingLocation())
+        type.components.add(statement.copy())
         statement.components.clear()
         statement.components.add(type)
     }

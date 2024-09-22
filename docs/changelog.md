@@ -13,6 +13,10 @@ These changelogs only apply to the `wiles-base` package. The frontend / backend 
 
 See all the open and resolved tickets [here](tickets.md).
 
+## [v2.2.2] - 2024-09-22
+
+- Bug fix for syntax highlighting 
+
 ## [v2.2.1] - 2024-03-25
 
 - Bug fix (#70): rational division doesn't have enough precision
@@ -388,6 +392,7 @@ would get rejected as incorrect by the checker, despite always yielding nothing.
 
 First official release, with the interpreter being functional. Read the readme for details.
 
+[v2.2.2]: https://github.com/Alex-Costea/Wiles/compare/v2.2.1...v2.2.2
 [v2.2.1]: https://github.com/Alex-Costea/Wiles/compare/v2.2...v2.2.1
 [v2.2]: https://github.com/Alex-Costea/Wiles/compare/v2.1...v2.2
 [v2.1]: https://github.com/Alex-Costea/Wiles/compare/v2.0...v2.1
