@@ -71,3 +71,19 @@ main{
 .globalError{
     color: darkred;
 }
+
+.syntax_number{
+    color: purple;
+}
+
+.syntax_string{
+    color: darkgreen;
+}
+
+.syntax_token{
+    color: royalblue;
+}
+
+.syntax_identifier{
+    color: orangered;
+}
