@@ -19,6 +19,10 @@ interface responseFormat{
     response : string, errorList : errorFormat[]
 }
 
+interface lineValue{
+    line : number, lineIndex : number
+}
+
 function usePersistedState(keyName : string, defaultValue : string) : [string, Dispatch<string>]
 {
     const keyNameRef = useRef(keyName)
@@ -96,11 +100,34 @@ function App() {
                 })
             }).then(response => response.json()).then(
                 (response : responseFormat)  => {
-                    setOutput(response.response)
+                    let output = response.response
                     const errorList = response.errorList
-                    setCode(addErrorsToCode(codeNoAnnotations, errorList))
+                    const annotatedCode = addAnnotationsToCode(codeNoAnnotations, errorList)
+                    setCode(annotatedCode)
+                    const globalErrors = getGlobalErrors(errorList)
+                    if(globalErrors.length > 0)
+                    {
+                        for(const error of globalErrors)
+                        {
+                            output += `<span class="globalError">` + error.message + `</span>\n`
+                        }
+                    }
+                    setOutput(output)
                 })
         })
+    }
+
+    function getGlobalErrors(errorList : errorFormat[]) : errorFormat[]
+    {
+        let globalErrors : errorFormat[] = []
+        for(const error of errorList)
+        {
+            const lineStart = {line : error.location.line, lineIndex : error.location.lineIndex} as lineValue
+            if (lineStart.line === -1) {
+                globalErrors.push(error)
+            }
+        }
+        return globalErrors
     }
 
     function getCodeNoAnnotations(value : string)
@@ -113,28 +140,18 @@ function App() {
         return element.innerText
     }
 
-    function addErrorsToCode(code : string, errorList : errorFormat[]) : string
+    function addAnnotationsToCode(code : string, errorList : errorFormat[]) : string
     {
         let line = 1
         let lineIndex = 1
-        interface lineValue{
-            line : number, lineIndex : number
-        }
         const errorStart = new Map<string, string>()
         const errorEnd = new Map<string, string>()
-        let globalErrors = 0
         let newCode = ""
         for(const error of errorList)
         {
             const lineStart = {line : error.location.line, lineIndex : error.location.lineIndex} as lineValue
             const lineEnd = {line : error.location.lineEnd, lineIndex : error.location.lineEndIndex} as lineValue
-            if(lineStart.line === -1)
-            {
-                globalErrors += 1
-                newCode += `<span aria-invalid="true" aria-errormessage="${error.message}" class="error">`
-            }
-            else
-            {
+            if (lineStart.line !== -1) {
                 errorStart.set(JSON.stringify(lineStart), error.message)
                 errorEnd.set(JSON.stringify(lineEnd), error.message)
             }
@@ -160,10 +177,6 @@ function App() {
             else{
                 lineIndex += 1
             }
-        }
-        for(let i = 0; i<globalErrors;i++)
-        {
-            newCode += `</span>`
         }
         return newCode
     }

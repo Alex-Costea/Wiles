@@ -67,3 +67,7 @@ main{
     white-space: pre-wrap;
     overflow-wrap: break-word;
 }
+
+.globalError{
+    color: darkred;
+}
