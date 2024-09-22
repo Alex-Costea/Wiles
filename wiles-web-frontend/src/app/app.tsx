@@ -82,15 +82,13 @@ function App() {
         'let name := read_line()\nwrite_line("Hello, " + name + "!")')
     const [input, setInput] = usePersistedState("input", "Wiles")
 
-    function getSyntax(code : string)
-    {
-        getXSRF().then(xsrf =>
-        {
+    async function getSyntax(code: string) : Promise<string> {
+        return (await getXSRF().then(xsrf => {
             const codeNoAnnotations = getCodeNoAnnotations(code)
-            fetch(`${getDomain()}/syntax`, {
+            return fetch(`${getDomain()}/syntax`, {
                 method: 'PUT',
                 headers: {
-                    'X-XSRF-TOKEN' : xsrf,
+                    'X-XSRF-TOKEN': xsrf,
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
@@ -99,9 +97,9 @@ function App() {
                     input: input
                 })
             }).then(response => response.text()).then((response => {
-                console.log(response)
+                return response
             }))
-        })
+        }))!
     }
 
     function submit(e : FormEvent<HTMLFormElement>)
@@ -121,16 +119,14 @@ function App() {
                     input: input
                 })
             }).then(response => response.json()).then(
-                (response : responseFormat)  => {
+                async (response: responseFormat) => {
                     let output = response.response
                     const errorList = response.errorList
                     const annotatedCode = addAnnotationsToCode(codeNoAnnotations, errorList)
-                    setCode(annotatedCode)
+                    setCode(await annotatedCode)
                     const globalErrors = getGlobalErrors(errorList)
-                    if(globalErrors.length > 0)
-                    {
-                        for(const error of globalErrors)
-                        {
+                    if (globalErrors.length > 0) {
+                        for (const error of globalErrors) {
                             output += `<span class="globalError">` + error.message + `</span>\n`
                         }
                     }
@@ -162,13 +158,15 @@ function App() {
         return element.innerText
     }
 
-    function addAnnotationsToCode(code : string, errorList : errorFormat[]) : string
+    async function addAnnotationsToCode(code : string, errorList : errorFormat[]) : Promise<string>
     {
         let line = 1
         let lineIndex = 1
         const errorStart = new Map<string, string>()
         const errorEnd = new Map<string, string>()
         let newCode = ""
+        const syntax = await getSyntax(code)
+        console.log(syntax)
         for(const error of errorList)
         {
             const lineStart = {line : error.location.line, lineIndex : error.location.lineIndex} as lineValue
@@ -209,7 +207,6 @@ function App() {
     {
         const value = e.target.value
         setCode(value)
-        getSyntax(value)
     }
 
     return <div id={"App"}>
