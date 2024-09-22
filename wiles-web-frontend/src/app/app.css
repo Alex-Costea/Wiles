@@ -77,7 +77,7 @@ main{
 }
 
 .syntax_string{
-    color: #DC7049;
+    color: #8f4731;
 }
 
 .syntax_token{
@@ -85,5 +85,5 @@ main{
 }
 
 .syntax_identifier{
-    color: #52494c;
+    color: #254D26;
 }
