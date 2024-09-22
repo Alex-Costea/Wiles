@@ -41,6 +41,8 @@ public class WilesWebBackendApplication {
 				return "STRING";
 			else if(statement.getName().startsWith("#"))
 				return "NUMBER";
+			else if (statement.getName().contains("|"))
+				return "NONE";
 			else return "TOKEN";
 		}
 		else return syntaxName;
