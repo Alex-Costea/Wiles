@@ -353,5 +353,21 @@ write_line("Min found: " + result)
         val code30 ="write(1.0 / 3)"
         assertEquals(getOutput(code30),"0.3333333333333333333333333333333333")
 
+        val code31 ="""
+            typedef tree := data[value : int, left : tree?, right : tree?]
+            let my_tree_left := data{value := 123}
+            let my_tree_right := data{value := 345}
+            let my_tree := data{
+               value := 999, 
+               left := my_tree_left, 
+               right := my_tree_right
+            }
+            write_line(my_tree)
+            write_line(my_tree.type)
+        """
+        assertEquals(getOutput(code31), """{value -> 999, left -> {value -> 123}, right -> {value -> 345}}
+TYPE DATA; (!value; TYPE INT; !left; TYPE DATA; (!value; TYPE INT); !right; TYPE DATA; (!value; TYPE INT))
+""")
+
     }
 }
