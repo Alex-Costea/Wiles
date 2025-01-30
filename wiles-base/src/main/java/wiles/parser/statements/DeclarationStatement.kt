@@ -13,9 +13,10 @@ import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.TYPE_ANNOTATION_ID
 import wiles.shared.constants.Tokens.VARIABLE_ID
 
-class DeclarationStatement(context: ParserContext,
-                           private val isParam: Boolean = false,
-                           private val allowGenerics : Boolean = false)
+class DeclarationStatement(
+    context: ParserContext,
+    private val isParam: Boolean = false
+)
     : AbstractStatement(context) {
     private var left: TokenStatement? = null
     private var typeStatement : TypeAnnotationStatement? = null
@@ -51,7 +52,7 @@ class DeclarationStatement(context: ParserContext,
                 .withErrorMessage(IDENTIFIER_EXPECTED_ERROR)),context)
 
             if(transmitter.expectMaybe(tokenOf(TYPE_ANNOTATION_ID)).isPresent) {
-                typeStatement = TypeAnnotationStatement(context,allowGenerics)
+                typeStatement = TypeAnnotationStatement(context)
                 typeStatement!!.process().throwFirstIfExists()
                 if(transmitter.expectMaybe(tokenOf(ASSIGN_ID).dontIgnoreNewLine()).isPresent)
                     readRight()

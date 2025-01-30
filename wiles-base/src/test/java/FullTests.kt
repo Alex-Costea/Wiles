@@ -73,7 +73,7 @@ class FullTests {
             
 typedef number := int or decimal
 
-let min := fun(list : list[number as T]) -> T?
+let min := fun(list : list[number]) -> number?
 begin
     if list.size = 0 do yield nothing
     let var min_value := list.get(0)
@@ -254,12 +254,6 @@ write_line("Min found: " + result)
         """
         assertEquals(getOutput(code17),"987654321")
 
-        val code18 = """
-            let a := fun(x : int or text? as T) do nothing
-            write_line(a)
-        """
-        assertEquals(getOutput(code18),"METHOD(TYPE !nothing; DECLARATION(TYPE GENERIC; (!T; TYPE EITHER; (TYPE INT; TYPE EITHER; (TYPE STRING; TYPE !nothing)); DECLARE); !x))\n")
-
         val code19="""
             let f := fun(x : int) do write_line(x)
 
@@ -341,14 +335,6 @@ write_line("Min found: " + result)
     """
         assertEquals(getOutput(code28),"0.3\n" +
                 "10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007\n")
-
-        val code29="""
-            let a := fun(arg x : anything as T) -> T do yield x
-            let b := fun(arg x : anything as T) -> T do yield x
-            write_line(a(1).type)
-            write_line(b("2").type)
-        """
-        assertEquals(getOutput(code29),"TYPE INT\nTYPE STRING\n")
 
         val code30 ="write(1.0 / 3)"
         assertEquals(getOutput(code30),"0.3333333333333333333333333333333333")

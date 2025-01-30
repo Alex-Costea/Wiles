@@ -13,7 +13,6 @@ import wiles.shared.constants.ErrorMessages.TYPE_EXPECTED_ERROR
 import wiles.shared.constants.Predicates.IS_CONTAINED_IN
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens
-import wiles.shared.constants.Tokens.AS_ID
 import wiles.shared.constants.Tokens.BRACKET_END_ID
 import wiles.shared.constants.Tokens.BRACKET_START_ID
 import wiles.shared.constants.Tokens.DATA_ID
@@ -21,15 +20,13 @@ import wiles.shared.constants.Tokens.MAYBE_ID
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.SEPARATOR_ID
-import wiles.shared.constants.Types.ALLOWS_GENERICS
 import wiles.shared.constants.Types.EITHER_ID
-import wiles.shared.constants.Types.GENERIC_ID
 import wiles.shared.constants.Types.MAX_NR_TYPES
 import wiles.shared.constants.Types.MIN_NR_TYPES
 import wiles.shared.constants.Types.REQUIRES_SUBTYPE
 import wiles.shared.constants.Types.TYPES
 
-class TypeAnnotationStatement(context: ParserContext, private val allowGenerics : Boolean = false)
+class TypeAnnotationStatement(context: ParserContext)
     : AbstractStatement(context) {
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
     private val subtypes : ArrayList<AbstractStatement> = ArrayList()
@@ -67,7 +64,7 @@ class TypeAnnotationStatement(context: ParserContext, private val allowGenerics 
                 for(i in 1..(max?:Int.MAX_VALUE)) {
                     if(transmitter.expectMaybe(tokenOf(BRACKET_END_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
                         break
-                    val subType = TypeAnnotationStatement(context, allowGenerics = ALLOWS_GENERICS.contains(name))
+                    val subType = TypeAnnotationStatement(context)
                     subType.process().throwFirstIfExists()
                     subtypes.add(subType)
                     if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break
@@ -112,22 +109,6 @@ class TypeAnnotationStatement(context: ParserContext, private val allowGenerics 
                 val newStatement = createNewEitherStatement()
                 newStatement.process().throwFirstIfExists()
                 subtypes.add(newStatement)
-            }
-            if(allowGenerics && transmitter.expectMaybe(tokenOf(AS_ID).dontIgnoreNewLine()).isPresent)
-            {
-                val oldName = name
-                name = GENERIC_ID
-
-                val component1 = TypeAnnotationStatement(context)
-                component1.name = oldName
-                component1.location = location
-                component1.subtypes.addAll(subtypes)
-                subtypes.clear()
-                subtypes.add(component1)
-
-                val identifier = transmitter.expect(tokenOf(IS_IDENTIFIER).withErrorMessage(IDENTIFIER_EXPECTED_ERROR))
-                val tokenStatement = TokenStatement(identifier,context)
-                subtypes.add(0,tokenStatement)
             }
         } catch (e: AbstractCompilationException) {
             exceptions.add(e)

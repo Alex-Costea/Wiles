@@ -65,7 +65,6 @@ object Tokens {
     const val MUTABLE_ID = "MUTABLE"
     const val WHEN_ID = "WHEN"
     const val IS_ID = "IS"
-    const val AS_ID = "AS"
     const val TYPEDEF_ID = "TYPEDEF"
     const val DATA_ID = "DATA"
 
@@ -121,7 +120,6 @@ object Tokens {
         KEYWORDS["is"] = IS_ID
         KEYWORDS["mut"] = MUTABLE_ID
         KEYWORDS["arg"] = ANON_ARG_ID
-        KEYWORDS["as"] = AS_ID
         KEYWORDS["typedef"] = TYPEDEF_ID
         KEYWORDS["data"] = DATA_ID
 

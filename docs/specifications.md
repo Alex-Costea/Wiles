@@ -75,9 +75,9 @@
 - Type: `mut[type]`, always subtype of `type`
 - Make an immutable collection into a mutable type with `mut` prefix operator
 
-### Generics in functions
-- Example: `fun(x : list[anything as T]) -> T`, will return the same type as the list's components type
-- Declare using the `as` keyword
+### Generics
+
+WIP, To be determined.
 
 ### Standard library
 - `write`, `write_line`: write object to the command line
