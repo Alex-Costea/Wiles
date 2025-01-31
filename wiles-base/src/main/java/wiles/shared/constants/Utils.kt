@@ -28,6 +28,16 @@ object Utils {
 
     val NULL_LOCATION = TokenLocation()
 
+    private fun escapeName(name : String) : String
+    {
+        if(name.isEmpty()) return name
+        if(!name.startsWith('@')) return name
+        var stringValue = name.substring(1)
+        stringValue = stringValue.replace("\\","\\\\")
+        stringValue = stringValue.replace("'","\\'")
+        return "'$stringValue'"
+    }
+
     fun <T> statementToString(name : String, type : SyntaxType, components : List<T>) : String
     {
         val hasComponents = components.isNotEmpty()
@@ -35,7 +45,7 @@ object Utils {
         val hasName = name.isNotEmpty()
         return ((if(!isToken) "$type" else "") +
                 (if(hasName) " " else "") +
-                name+
+                escapeName(name)+
                 (if(hasName) " " else "") +
                 (if(hasComponents) "(" else "") +
                 (if(!hasComponents) "" else components.joinToString(", ")+")")).trim()

@@ -265,7 +265,7 @@ class SyntaxTreeConverterTests {
     @Test
     fun forTest()
     {
-        assertResults(null,"CODE_BLOCK(FOR(!i, IN, EXPRESSION(!list), FROM, EXPRESSION(#1), TO, EXPRESSION(#100), CODE_BLOCK(EXPRESSION(!write_line, APPLY, METHOD_CALL(EXPRESSION(@hello!))))))",
+        assertResults(null,"CODE_BLOCK(FOR(!i, IN, EXPRESSION(!list), FROM, EXPRESSION(#1), TO, EXPRESSION(#100), CODE_BLOCK(EXPRESSION(!write_line, APPLY, METHOD_CALL(EXPRESSION('hello!'))))))",
             FOR_ID, "!i", IN_ID, "!list", FROM_ID, "#1", TO_ID, "#100", NEWLINE_ID, START_BLOCK_ID, NEWLINE_ID, "!write_line", PAREN_START_ID, "@hello!", PAREN_END_ID, NEWLINE_ID, END_BLOCK_ID)
         assertResults(null, "CODE_BLOCK(FOR(!i, CODE_BLOCK(EXPRESSION(!nothing))))",
             FOR_ID, "!i", DO_ID, NOTHING_ID)
@@ -359,6 +359,14 @@ class SyntaxTreeConverterTests {
             DECLARE_ID, "!a", TYPE_ANNOTATION_ID, "!true", OR_ID, "!false", ASSIGN_ID, "#17", NEWLINE_ID,
             DECLARE_ID, "!a", TYPE_ANNOTATION_ID, "!either", BRACKET_START_ID, "#1", SEPARATOR_ID, "#2",
             BRACKET_END_ID, ASSIGN_ID, "#17")
+    }
+
+    @Test
+    fun textTest()
+    {
+        // write_line("It's a beautiful day! but i still feel sad :-\b; sorry")
+        assertResults(null,"CODE_BLOCK(EXPRESSION(!write_line, APPLY, METHOD_CALL(EXPRESSION('It\\'s a beautiful day! but i still feel sad :-\\\\ sorry'))))",
+            "!write_line", PAREN_START_ID, "@It's a beautiful day! but i still feel sad :-\\ sorry", PAREN_END_ID, TERMINATOR_ID)
     }
 
     private class CreateConverter(tokens: List<String>) {
