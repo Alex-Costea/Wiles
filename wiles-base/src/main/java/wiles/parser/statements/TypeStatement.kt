@@ -100,24 +100,24 @@ class TypeStatement(context: ParserContext)
                     subtypes.addAll(classComponents)
                     transmitter.expect(tokenOf(BRACKET_END_ID))
                 }
-                if(transmitter.expectMaybe(tokenOf(MAYBE_ID).dontIgnoreNewLine()).isPresent)
-                {
-                    val newStatement = createNewEitherStatement()
-                    newStatement.name = NOTHING_ID
-                    subtypes.add(newStatement)
-                }
-                if(transmitter.expectMaybe(tokenOf(Tokens.OR_ID).dontIgnoreNewLine()).isPresent)
-                {
-                    val newStatement = createNewEitherStatement()
-                    newStatement.process().throwFirstIfExists()
-                    subtypes.add(newStatement)
-                }
             }
             else{
                 val expression = DefaultExpression(context)
-                expression.process()
+                expression.process().throwFirstIfExists()
                 name = SyntaxType.EXPRESSION.toString()
                 this.subtypes.addAll(expression.getComponents())
+            }
+            if(transmitter.expectMaybe(tokenOf(MAYBE_ID).dontIgnoreNewLine()).isPresent)
+            {
+                val newStatement = createNewEitherStatement()
+                newStatement.name = NOTHING_ID
+                subtypes.add(newStatement)
+            }
+            if(transmitter.expectMaybe(tokenOf(Tokens.OR_ID).dontIgnoreNewLine()).isPresent)
+            {
+                val newStatement = createNewEitherStatement()
+                newStatement.process().throwFirstIfExists()
+                subtypes.add(newStatement)
             }
         } catch (e: AbstractCompilationException) {
             exceptions.add(e)

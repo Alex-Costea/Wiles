@@ -348,6 +348,17 @@ class SyntaxTreeConverterTests {
             DECLARE_ID, "!my_type", ASSIGN_ID, TYPE_ID,
             PAREN_START_ID, "!list", BRACKET_START_ID, "!int", OR_ID, "!text", BRACKET_END_ID, MAYBE_ID, PAREN_END_ID,
             NEWLINE_ID, DECLARE_ID, "!a", TYPE_ANNOTATION_ID, "#1", PLUS_ID, "#2", TIMES_ID, "#3", ASSIGN_ID, "#123")
+
+        /*
+        let a : 17? := 17
+        let a : true or false := 17
+        let a : either[1,2] := 17
+         */
+        assertResults(null, "CODE_BLOCK(DECLARATION(TYPE EITHER; (TYPE EXPRESSION; (#17); TYPE !nothing); !a; EXPRESSION(#17)); DECLARATION(TYPE EXPRESSION; (!true; OR; !false); !a; EXPRESSION(#17)); DECLARATION(TYPE EITHER; (TYPE EXPRESSION; (#1); TYPE EXPRESSION; (#2)); !a; EXPRESSION(#17)))",
+            DECLARE_ID, "!a", TYPE_ANNOTATION_ID, "#17", MAYBE_ID, ASSIGN_ID, "#17", NEWLINE_ID,
+            DECLARE_ID, "!a", TYPE_ANNOTATION_ID, "!true", OR_ID, "!false", ASSIGN_ID, "#17", NEWLINE_ID,
+            DECLARE_ID, "!a", TYPE_ANNOTATION_ID, "!either", BRACKET_START_ID, "#1", SEPARATOR_ID, "#2",
+            BRACKET_END_ID, ASSIGN_ID, "#17")
     }
 
     private class CreateConverter(tokens: List<String>) {
