@@ -6,31 +6,20 @@ import wiles.interpreter.data.InterpreterContext
 import wiles.interpreter.data.InterpreterVariableMap
 import wiles.interpreter.data.ObjectDetails
 import wiles.interpreter.exceptions.PanicException
-import wiles.interpreter.statics.InterpreterConstants.toIntOrNull
-import wiles.shared.InternalErrorException
-import wiles.shared.JSONStatement
-import wiles.shared.SyntaxType
-import wiles.shared.constants.ErrorMessages.CANNOT_READ_INT_ERROR
 import wiles.shared.constants.ErrorMessages.CANNOT_READ_DECIMAL_ERROR
+import wiles.shared.constants.ErrorMessages.CANNOT_READ_INT_ERROR
 import wiles.shared.constants.ErrorMessages.CANNOT_READ_TEXT_ERROR
 import wiles.shared.constants.ErrorMessages.CANNOT_READ_TRUTH_ERROR
 import wiles.shared.constants.Tokens.FALSE_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.TRUE_ID
-import wiles.shared.constants.TypeConstants.ADD_TYPE
 import wiles.shared.constants.TypeConstants.AS_LIST_TYPE
 import wiles.shared.constants.TypeConstants.AS_TEXT_TYPE
 import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
-import wiles.shared.constants.TypeConstants.CLONE_TYPE
-import wiles.shared.constants.TypeConstants.CONTENT_TYPE
 import wiles.shared.constants.TypeConstants.DECIMAL_TYPE
-import wiles.shared.constants.TypeConstants.GET_AT_TYPE
-import wiles.shared.constants.TypeConstants.GET_KEYS_TYPE
-import wiles.shared.constants.TypeConstants.GET_TYPE_TYPE
 import wiles.shared.constants.TypeConstants.IGNORE_TYPE
 import wiles.shared.constants.TypeConstants.INT_TYPE
 import wiles.shared.constants.TypeConstants.LIST_OF_STRING
-import wiles.shared.constants.TypeConstants.MAYBE_TYPE
 import wiles.shared.constants.TypeConstants.MODULO_TYPE
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
 import wiles.shared.constants.TypeConstants.PANIC_TYPE
@@ -38,14 +27,10 @@ import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_BOOL_TYPE
 import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_DECIMAL_TYPE
 import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_INT_TYPE
 import wiles.shared.constants.TypeConstants.READ_NOTHING_RETURN_STRING_TYPE
-import wiles.shared.constants.TypeConstants.REMOVE_AT_TYPE
-import wiles.shared.constants.TypeConstants.RUN_TYPE
-import wiles.shared.constants.TypeConstants.SET_AT_TYPE
 import wiles.shared.constants.TypeConstants.SIZE_TYPE
 import wiles.shared.constants.TypeConstants.STRING_TYPE
 import wiles.shared.constants.TypeConstants.WRITELINE_TYPE
 import wiles.shared.constants.TypeConstants.WRITE_TYPE
-import wiles.shared.constants.Types.TYPE_TYPE_ID
 import java.math.BigInteger
 import java.util.function.BiFunction
 
@@ -64,18 +49,20 @@ object StandardLibrary {
     private const val READ_TRUTH = "!read_truth"
     private const val AS_TEXT = "!as_text"
     private const val AS_LIST = "!as_list"
+
+    //CANCELLED for now
+/*
     private const val MAYBE = "!maybe"
     private const val CONTENT = "!content"
     private const val RUN = "!run"
     private const val GET_TYPE = "!type"
     private const val CLONE = "!clone"
     private const val GET_KEYS = "!keys"
-
-    //CRUD
     private const val GET = "!get"
     private const val ADD = "!add"
     private const val SET_AT = "!update"
     private const val REMOVE_AT = "!remove"
+*/
 
     val defaultCheckerVars = CheckerVariableMap(
         hashMapOf(
@@ -94,6 +81,7 @@ object StandardLibrary {
             Pair(READ_TRUTH, VariableDetails(READ_NOTHING_RETURN_BOOL_TYPE)),
             Pair(AS_TEXT, VariableDetails(AS_TEXT_TYPE)),
             Pair(AS_LIST, VariableDetails(AS_LIST_TYPE)),
+/*
             Pair(MAYBE, VariableDetails(MAYBE_TYPE)),
             Pair(CONTENT, VariableDetails(CONTENT_TYPE)),
             Pair(RUN, VariableDetails(RUN_TYPE)),
@@ -104,6 +92,7 @@ object StandardLibrary {
             Pair(REMOVE_AT, VariableDetails(REMOVE_AT_TYPE)),
             Pair(GET, VariableDetails(GET_AT_TYPE)),
             Pair(GET_KEYS, VariableDetails(GET_KEYS_TYPE)),
+*/
         )
     )
 
@@ -123,62 +112,63 @@ object StandardLibrary {
         NOTHING_REF
     }, defaultCheckerVars[WRITELINE]!!.type)
 
-    private val PANIC_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ it, context ->
+    private val PANIC_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ it, _ ->
         val value = it["!text"]?.value as String?
         value?:throw PanicException()
         throw PanicException(value)
     }, defaultCheckerVars[PANIC]!!.type)
 
-    private val IGNORE_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ it, context ->
+    private val IGNORE_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ _, _ ->
         NOTHING_REF}, defaultCheckerVars[IGNORE]!!.type)
 
-    private val MODULO_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ it, context ->
+    private val MODULO_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ it, _ ->
         val x = it["!x"]!!.value as BigInteger
         val y =it["!y"]!!.value as BigInteger
         ObjectDetails(x % y, INT_TYPE)
     }, defaultCheckerVars[MODULO]!!.type)
 
-    private val SIZE_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ it, context ->
+    private val SIZE_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ it, _ ->
         val value = it["!elem"]!!.value
         if(value is Collection<*>)
             ObjectDetails(value.size.toBigInteger(), INT_TYPE)
         else ObjectDetails((value as String).length.toBigInteger(), INT_TYPE)
     }, defaultCheckerVars[SIZE]!!.type)
 
-    private val AS_TEXT_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ it, context ->
+    private val AS_TEXT_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ it, _ ->
         ObjectDetails(it["!elem"]!!.toString(), STRING_TYPE)
     }, defaultCheckerVars[AS_TEXT]!!.type)
 
-    private val READ_INT_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ it, context ->
+    private val READ_INT_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ _, context ->
         if(!context.input.hasNextBigInteger())
             throw PanicException(CANNOT_READ_INT_ERROR)
         ObjectDetails(context.input.nextBigInteger(), INT_TYPE)
     }, defaultCheckerVars[READ_INT]!!.type)
 
-    private val READ_LINE_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ it, context ->
+    private val READ_LINE_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ _, context ->
         if(!context.input.hasNextLine())
             throw PanicException(CANNOT_READ_TEXT_ERROR)
         ObjectDetails(context.input.nextLine(), STRING_TYPE)
     }, defaultCheckerVars[READ_LINE]!!.type)
 
-    private val READ_DECIMAL_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ it, context ->
+    private val READ_DECIMAL_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ _, context ->
         if(!context.input.hasNextBigDecimal())
             throw PanicException(CANNOT_READ_DECIMAL_ERROR)
         ObjectDetails(context.input.nextBigDecimal(), DECIMAL_TYPE)
     }, defaultCheckerVars[READ_DECIMAL]!!.type)
 
-    private val READ_TRUTH_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ it, context ->
+    private val READ_TRUTH_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ _, context ->
         if(!context.input.hasNextBoolean())
             throw PanicException(CANNOT_READ_TRUTH_ERROR)
         ObjectDetails(context.input.nextBoolean(), BOOLEAN_TYPE)
     }, defaultCheckerVars[READ_TRUTH]!!.type)
 
-    private val AS_LIST_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ map, context ->
+    private val AS_LIST_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ map, _ ->
         val elem = (map["!elem"]!!.value as String)
         ObjectDetails(elem.toMutableList().map {
             ObjectDetails(it.toString(), STRING_TYPE) }, LIST_OF_STRING)
     }, defaultCheckerVars[READ_LINE]!!.type)
 
+/*
     private val MAYBE_REF = ObjectDetails(BiFunction<InterpreterVariableMap, InterpreterContext, ObjectDetails>{ map, context ->
         map["!elem"]!!
     }, defaultCheckerVars[MAYBE]!!.type)
@@ -302,6 +292,7 @@ object StandardLibrary {
         val type = map["!collection"]!!.getType()
         ObjectDetails(type = type, value = collection.keys.toMutableList())
     }, defaultCheckerVars[GET_KEYS]!!.type)
+*/
 
     init{
         defaultInterpreterVars[NOTHING_ID] = NOTHING_REF
@@ -319,6 +310,7 @@ object StandardLibrary {
         defaultInterpreterVars[READ_TRUTH] = READ_TRUTH_REF
         defaultInterpreterVars[AS_TEXT] = AS_TEXT_REF
         defaultInterpreterVars[AS_LIST] = AS_LIST_REF
+/*
         defaultInterpreterVars[MAYBE] = MAYBE_REF
         defaultInterpreterVars[CONTENT] = CONTENT_REF
         defaultInterpreterVars[RUN] = RUN_REF
@@ -329,5 +321,6 @@ object StandardLibrary {
         defaultInterpreterVars[REMOVE_AT] = REMOVE_AT_REF
         defaultInterpreterVars[GET] = GET_AT_REF
         defaultInterpreterVars[GET_KEYS] = GET_KEYS_REF
+*/
     }
 }

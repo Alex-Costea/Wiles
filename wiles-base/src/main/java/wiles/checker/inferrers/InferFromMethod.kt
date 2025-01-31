@@ -7,7 +7,6 @@ import wiles.checker.exceptions.InferenceFailException
 import wiles.checker.exceptions.ReturnNotGuaranteedException
 import wiles.checker.services.InferrerService
 import wiles.checker.statics.InferrerUtils.createTypes
-import wiles.checker.statics.InferrerUtils.makeGeneric
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens
@@ -121,7 +120,7 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
 
         variables.putAll(genericTypes.map { Pair(it.key,
             VariableDetails(JSONStatement(syntaxType = SyntaxType.TYPE, name = TYPE_TYPE_ID,
-                components = mutableListOf(makeGeneric(it.value,it.key))))) })
+                components = mutableListOf(it.value)))) })
 
         val inferrer = InferrerService(InferrerDetails(statement.components.last(), variables, exceptions))
         inferrer.infer()
@@ -134,7 +133,7 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
         val inferredType = inferredType
         if(statedType!=null) {
             if(inferredType!=null) {
-                if (!isFormerSuperTypeOfLatter(statedType, inferredType, unboxGenerics = true))
+                if (!isFormerSuperTypeOfLatter(statedType, inferredType))
                     throw ConflictingTypeDefinitionException(statement.components[0].getFirstLocation(),
                         statedType.toString(),inferredType.toString())
             }

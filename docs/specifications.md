@@ -73,7 +73,7 @@
 
 ### Mutable types
 - Type: `mut[type]`, always subtype of `type`
-- Make an immutable collection into a mutable type with `mut` prefix operator
+- Make an immutable collection into a mutable collection with `mut` prefix operator
 
 ### Generics
 

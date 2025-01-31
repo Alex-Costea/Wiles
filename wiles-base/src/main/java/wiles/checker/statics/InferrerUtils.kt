@@ -1,7 +1,6 @@
 package wiles.checker.statics
 
 import wiles.checker.data.CheckerVariableMap
-import wiles.checker.data.GenericTypesMap
 import wiles.checker.data.VariableDetails
 import wiles.checker.exceptions.*
 import wiles.shared.InternalErrorException
@@ -34,11 +33,9 @@ import wiles.shared.constants.TypeUtils.makeTypeUnmutable
 import wiles.shared.constants.TypeUtils.removeEmptyEither
 import wiles.shared.constants.Types.DECIMAL_ID
 import wiles.shared.constants.Types.EITHER_ID
-import wiles.shared.constants.Types.GENERIC_ID
 import wiles.shared.constants.Types.INT_ID
 import wiles.shared.constants.Types.LIST_ID
 import wiles.shared.constants.Types.STRING_ID
-import wiles.shared.constants.Types.TYPE_TYPE_ID
 
 object InferrerUtils {
     fun inferTypeFromLiteral(token : JSONStatement,
@@ -68,16 +65,6 @@ object InferrerUtils {
         throw InternalErrorException(NOT_ONE_TOKEN_ERROR)
     }
 
-    private fun checkStatementContainsReference(statement1 : JSONStatement, statement2 : JSONStatement)
-    {
-        if(statement1 === statement2)
-            throw RecursiveTypeDefinitionException(statement1.getFirstLocation())
-        for(component in statement1.components)
-        {
-            checkStatementContainsReference(component,statement2)
-        }
-    }
-
     fun createTypes(
         type: JSONStatement,
         typeNames: MutableMap<String, JSONStatement>,
@@ -85,20 +72,14 @@ object InferrerUtils {
     )
     {
         val name = type.name
-        if(type.name == GENERIC_ID)
-        {
-            if(variables.containsKey(type.components[0].name))
-                throw VariableAlreadyDeclaredException(type.components[0].getFirstLocation())
-            type.components.add(JSONStatement(name = Tokens.DECLARE_ID, syntaxType = SyntaxType.TOKEN))
-            createTypes(type.components[1], typeNames, variables)
-            return
-        }
-        else if(type.syntaxType == SyntaxType.CODE_BLOCK)
+        if(type.syntaxType == SyntaxType.CODE_BLOCK)
         {
             return
         }
         else if(typeNames.containsKey(name))
         {
+            TODO("What is done here?")
+            /*
             val newType = typeNames[name]!!
             checkStatementContainsReference(newType, type)
             assert(type.components.isEmpty())
@@ -106,6 +87,7 @@ object InferrerUtils {
             type.components.add(newType)
             type.name = GENERIC_ID
             return
+            */
         }
         else if(type.syntaxType == SyntaxType.TYPE && IS_IDENTIFIER.test(type.name)) {
             if(type.name == NOTHING_ID)
@@ -137,39 +119,8 @@ object InferrerUtils {
             components = mutableListOf(type.copyRemovingLocation(), NOTHING_TYPE))
     }
 
-    fun makeGeneric(type: JSONStatement, name : String) : JSONStatement
-    {
-        return JSONStatement(name = GENERIC_ID,
-            syntaxType = SyntaxType.TYPE,
-            components = mutableListOf(
-                JSONStatement(syntaxType = SyntaxType.TOKEN, name = name),
-                type.copyRemovingLocation()))
-    }
-
-    fun makeGenericDeclaration(type: JSONStatement) : JSONStatement
-    {
-        val copy = type.copy()
-        copy.components.add(JSONStatement(name = Tokens.DECLARE_ID, syntaxType = SyntaxType.TOKEN))
-        return copy
-    }
-
-    fun specifyGenericTypesForFunction(statement : JSONStatement, genericTypes: GenericTypesMap)
-    {
-        if(statement.syntaxType == SyntaxType.TYPE && statement.name == GENERIC_ID)
-        {
-            val name = statement.components[0].name
-            if(genericTypes.containsKey(name))
-            {
-                statement.components[1] = genericTypes[name]!!.statement
-            }
-            return
-        }
-        for(component in statement.components)
-            specifyGenericTypesForFunction(component, genericTypes)
-    }
-
     fun getFunctionArguments(methodType : JSONStatement, methodCallType : JSONStatement,
-                             location: TokenLocation, genericTypes : GenericTypesMap)
+                             location: TokenLocation)
         : Map<String,Pair<JSONStatement,Boolean>>
     {
         // statement, does it need name addition
@@ -209,12 +160,12 @@ object InferrerUtils {
                 unnamedArgsInMethod[name]?.first ?:
                 throw CannotCallMethodException(location,NO_MATCH_FOR_ERROR.format(name.drop(1)))
             val subType = component.component2()
-            if(isFormerSuperTypeOfLatter(superType, subType, genericTypes = genericTypes)) {
+            if(isFormerSuperTypeOfLatter(superType, subType)) {
                 namedArgsInMethod.remove(name)
                 unnamedArgsInMethod.remove(name)
             }
             else throw CannotCallMethodException(location,CONFLICTING_TYPES_FOR_IDENTIFIER_ERROR
-                .format(clarifyGenericType(superType, genericTypes),subType,name.drop(1)))
+                .format(superType,subType,name.drop(1)))
         }
 
         val namedArgsUnmatched = namedArgsInMethod.filter { !it.component2().second }
@@ -234,9 +185,9 @@ object InferrerUtils {
 
             finalCallArgumentsMap[name] = Pair(component.value,true)
 
-            if(!isFormerSuperTypeOfLatter(superType, subType, genericTypes = genericTypes))
+            if(!isFormerSuperTypeOfLatter(superType, subType))
                 throw CannotCallMethodException(location, CONFLICTING_TYPES_FOR_IDENTIFIER_ERROR
-                    .format(clarifyGenericType(superType, genericTypes),subType,name.drop(1)))
+                    .format(superType,subType,name.drop(1)))
         }
 
         val unnamedArgsUnmatched = unnamedArgsInMethodList.filter { !it.component2().second }
@@ -245,43 +196,6 @@ object InferrerUtils {
                 unnamedArgsUnmatched.first().first.drop(1)))
 
         return finalCallArgumentsMap
-    }
-
-    private fun clarifyGenericType(statement: JSONStatement, genericTypes: GenericTypesMap): JSONStatement {
-        return clarifyGenericTypeComponent(statement.copyRemovingLocation(), genericTypes)
-    }
-
-    private fun clarifyGenericTypeComponent(statement: JSONStatement, genericTypes: GenericTypesMap) : JSONStatement
-    {
-        val name = statement.components.getOrNull(0)?.name
-        if(statement.name == GENERIC_ID && name in genericTypes.keys)
-        {
-            val newType = genericTypes[name]!!.statement.copyRemovingLocation()
-            statement.name = newType.name
-            statement.syntaxType = newType.syntaxType
-            statement.location = null
-            statement.components = newType.components
-        }
-        for(component in statement.components)
-            clarifyGenericTypeComponent(component, genericTypes)
-        return statement
-    }
-
-    fun unGenerify(statement : JSONStatement, variableMap: CheckerVariableMap? = null) : JSONStatement
-    {
-        val name = statement.components.getOrNull(0)?.name
-        val type = if(name==null) null
-                   else variableMap?.getOrDefault(name,null)?.type
-        if(statement.syntaxType == SyntaxType.TYPE && statement.name == GENERIC_ID &&
-            (variableMap == null || type?.name != TYPE_TYPE_ID || type.components[0].components[0].name != name))
-        {
-            statement.name = statement.components[1].name
-            statement.location = statement.components[1].location
-            statement.components = statement.components[1].components
-        }
-        for(component in statement.components)
-            unGenerify(component)
-        return statement
     }
 
     fun getElementTypeFromListType(statement: JSONStatement) : JSONStatement

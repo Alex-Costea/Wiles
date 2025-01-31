@@ -29,7 +29,6 @@ import wiles.shared.constants.TypeConstants.BOOLEAN_TYPE
 import wiles.shared.constants.TypeConstants.DECIMAL_TYPE
 import wiles.shared.constants.TypeConstants.INT_TYPE
 import wiles.shared.constants.TypeConstants.STRING_TYPE
-import wiles.shared.constants.TypeUtils.makeTypeUngeneric
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.BOOLEAN_ID
 import wiles.shared.constants.Types.DECIMAL_ID
@@ -209,9 +208,9 @@ object DoOperation {
         return if(middle.contains(ANYTHING_ID)) {
             val operationNameSplit = middle.split("|").toMutableList()
             if (operationNameSplit[0] == ANYTHING_ID)
-                operationNameSplit[0] = makeTypeUngeneric(left.getType()).name
+                operationNameSplit[0] = left.getType().name
             if (operationNameSplit[2] == ANYTHING_ID)
-                operationNameSplit[2] = makeTypeUngeneric(right.getType()).name
+                operationNameSplit[2] = right.getType().name
 
             val operation = operationNameSplit[0] + "|" + operationNameSplit[1] + "|" + operationNameSplit[2]
             operationMap[operation]?.apply(leftValue, rightValue)
@@ -219,9 +218,9 @@ object DoOperation {
         }
         else if(middle == ACCESS_ID)
         {
-            val rightValue = ObjectDetails(right.value, STRING_TYPE)
-            val leftValue = (left.value as LinkedHashMap<*, *>)
-            (leftValue[rightValue]) as ObjectDetails
+            val rightValue1 = ObjectDetails(right.value, STRING_TYPE)
+            val leftValue1 = (left.value as LinkedHashMap<*, *>)
+            (leftValue1[rightValue1]) as ObjectDetails
         }
         else (operationMap[middle]?:throw InternalErrorException(CANNOT_PERFORM_OPERATION_ERROR
             .format(left, middle, right))).apply(leftValue, rightValue)

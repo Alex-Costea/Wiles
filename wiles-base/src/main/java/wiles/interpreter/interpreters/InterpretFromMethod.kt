@@ -1,7 +1,5 @@
 package wiles.interpreter.interpreters
 
-import wiles.checker.data.GenericTypesMap
-import wiles.checker.statics.InferrerUtils.makeGeneric
 import wiles.interpreter.data.*
 import wiles.interpreter.exceptions.ReturnSignal
 import wiles.shared.JSONStatement
@@ -9,7 +7,6 @@ import wiles.shared.SyntaxType
 import wiles.shared.constants.StandardLibrary.NOTHING_REF
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
-import wiles.shared.constants.Types
 import java.util.function.BiFunction
 
 class InterpretFromMethod(
@@ -36,20 +33,14 @@ class InterpretFromMethod(
             innerVars.putAll(uniqueFunctionDeclarationVars)
             innerVars.putAll(givenVars)
             val funcVars = ComplexInterpreterVariableMap(innerVars, variables)
-            val genericTypesMap = GenericTypesMap()
             for(component in type.components)
             {
                 if(component.syntaxType == SyntaxType.TYPE)
                     continue
                 val name = component.components[1].name
                 val superType = component.components[0]
-                require(isFormerSuperTypeOfLatter(superType,funcVars[name]!!.getType(), genericTypes = genericTypesMap))
+                require(isFormerSuperTypeOfLatter(superType,funcVars[name]!!.getType()))
             }
-            funcVars.putAll(genericTypesMap.map {
-                val genericValue = makeGeneric(it.value.statement,it.key)
-                Pair(it.key, ObjectDetails(genericValue,
-                JSONStatement(syntaxType = SyntaxType.TYPE, name = Types.TYPE_TYPE_ID,
-                    components = mutableListOf(genericValue)))) })
             try
             {
                 val interpreter = InterpretFromCodeBlock(codeBlock, funcVars, context)

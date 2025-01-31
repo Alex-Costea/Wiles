@@ -1,13 +1,11 @@
 package wiles.checker.inferrers
 
 import wiles.checker.data.InferrerDetails
-import wiles.checker.exceptions.GenericAlreadyDefinedException
 import wiles.checker.statics.InferrerUtils.createTypes
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
-import wiles.shared.constants.Types.GENERIC_ID
 import wiles.shared.constants.Types.REQUIRES_SUBTYPE
 
 class InferFromType(details: InferrerDetails,
@@ -15,16 +13,6 @@ class InferFromType(details: InferrerDetails,
                     private val isTopMostType : Boolean = false)
     : InferFromStatement(details) {
     override fun infer() {
-        if(statement.name == GENERIC_ID)
-        {
-            InferFromType(InferrerDetails(statement.components[1],variables,exceptions),
-                genericTypes,false).infer()
-            val name = statement.components[0].name
-            if(genericTypes.containsKey(name))
-                throw GenericAlreadyDefinedException(statement.getFirstLocation())
-            genericTypes[name] = statement.components[1]
-        }
-
         if(statement.name==METHOD_ID)
         {
             val method = statement.components[0]

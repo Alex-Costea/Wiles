@@ -1,6 +1,5 @@
 package wiles.checker.inferrers
 
-import wiles.checker.data.GenericTypesMap
 import wiles.checker.data.InferrerDetails
 import wiles.checker.exceptions.CannotModifyException
 import wiles.checker.exceptions.ExpectedIdentifierException
@@ -10,8 +9,6 @@ import wiles.checker.statics.InferrerUtils
 import wiles.checker.statics.InferrerUtils.addIfNecessary
 import wiles.checker.statics.InferrerUtils.createComponents
 import wiles.checker.statics.InferrerUtils.inferTypeFromLiteral
-import wiles.checker.statics.InferrerUtils.specifyGenericTypesForFunction
-import wiles.checker.statics.InferrerUtils.unGenerify
 import wiles.checker.statics.SimpleTypeGenerator.getSimpleTypes
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.InternalErrorException
@@ -38,7 +35,6 @@ import wiles.shared.constants.TypeConstants.NOTHING_TOKEN
 import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 import wiles.shared.constants.TypeUtils.makeList
 import wiles.shared.constants.TypeUtils.makeMethod
-import wiles.shared.constants.TypeUtils.makeTypeUngeneric
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.BOOLEAN_ID
 import wiles.shared.constants.Types.DECIMAL_ID
@@ -58,12 +54,8 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
         assert(middle.syntaxType == SyntaxType.TOKEN)
         assert(right.syntaxType == SyntaxType.TYPE)
 
-        val unboxedLeft = makeTypeUngeneric(left)
-        val unboxedRight = makeTypeUngeneric(right)
-
-        val leftComponents = createComponents(unboxedLeft,middle.name)
-
-        val rightComponents = createComponents(unboxedRight,middle.name)
+        val leftComponents = createComponents(left,middle.name)
+        val rightComponents = createComponents(right,middle.name)
 
         val resultingTypes : MutableList<JSONStatement> = mutableListOf()
         var isValid = true
@@ -71,16 +63,12 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
         {
             for(newRight in rightComponents)
             {
-                var unboxedNewLeft = makeTypeUngeneric(newLeft)
                 val type = getSimpleTypes(Triple(newLeft, middle, newRight)) ?:
-                    if(unboxedNewLeft.name == METHOD_ID &&
+                    if(newLeft.name == METHOD_ID &&
                             middle == TypeConstants.APPLY_OPERATION &&
                             newRight.name == METHOD_CALL_ID) {
-                        val genericTypes = GenericTypesMap()
-                        val result = InferrerUtils.getFunctionArguments(unboxedNewLeft, newRight,
-                            middle.getFirstLocation(), genericTypes)
-                        unboxedNewLeft = unboxedNewLeft.copy()
-                        specifyGenericTypesForFunction(unboxedNewLeft, genericTypes)
+                        val result = InferrerUtils.getFunctionArguments(newLeft, newRight,
+                            middle.getFirstLocation())
                         val newResult = result.map {
                             if(it.value.second)
                                 JSONStatement(syntaxType = SyntaxType.EXPRESSION,
@@ -95,7 +83,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
                         newRight.components[0].components = newResult
 
                         //return
-                        unGenerify(unboxedNewLeft.components[0].components[0].copy(), variables)
+                        newLeft.components[0].components[0].copy()
                     } else null
 
                 if(type != null) {
@@ -105,12 +93,12 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
             }
         }
         if(!isValid)
-            throw WrongOperationException(middle.getFirstLocation(),unboxedLeft.toString(),unboxedRight.toString())
+            throw WrongOperationException(middle.getFirstLocation(),left.toString(),right.toString())
         if(resultingTypes.isNotEmpty())
         {
-            var leftText : String = if(leftComponents.size == 1) makeTypeUngeneric(leftComponents[0]).name else ANYTHING_ID
+            var leftText : String = if(leftComponents.size == 1) leftComponents[0].name else ANYTHING_ID
             if(leftText !in VALID_NAMED) leftText = ANYTHING_ID
-            var rightText : String = if(rightComponents.size == 1) makeTypeUngeneric(rightComponents[0]).name else ANYTHING_ID
+            var rightText : String = if(rightComponents.size == 1) rightComponents[0].name else ANYTHING_ID
             if(rightText !in VALID_NAMED) rightText = ANYTHING_ID
             operationName = if(middle.name in listOf(ASSIGN_ID, MUTABLE_ID,
                     AND_ID, OR_ID, EQUALS_ID, NOT_EQUAL_ID)) middle.name
@@ -119,7 +107,7 @@ class InferFromExpression(details: InferrerDetails) : InferFromStatement(details
                 resultingTypes[0]
             else JSONStatement(name = EITHER_ID, syntaxType = SyntaxType.TYPE, components = resultingTypes)
         }
-        throw WrongOperationException(middle.getFirstLocation(),unboxedLeft.toString(),unboxedRight.toString())
+        throw WrongOperationException(middle.getFirstLocation(), left.toString(), right.toString())
     }
 
     override fun infer() {

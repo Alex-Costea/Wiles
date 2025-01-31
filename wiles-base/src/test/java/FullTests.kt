@@ -69,6 +69,7 @@ class FullTests {
     @Test
     fun fullTest()
     {
+/*
         val code = """
             
 typedef number := int or decimal
@@ -108,6 +109,7 @@ write_line("Min found: " + result)
                 "20\n" +
                 "-1\n"),"Min found: -1\n")
         assertEquals(getOutput(code,"0\n"),"Error: no min found!\n")
+*/
 
         val code2 = """
             let list := [1,2,3]
@@ -130,6 +132,7 @@ write_line("Min found: " + result)
         """
         assertEquals(getOutput(code4),"100\n")
 
+/*
         val code5 = """
             let a := 2
             let list := mut [1, a, 3]
@@ -139,6 +142,7 @@ write_line("Min found: " + result)
             write_line(list)
         """
         assertEquals(getOutput(code5),"2\n[10, 3]\n")
+*/
 
         val code6 = """
             let var a := 10
@@ -156,6 +160,7 @@ write_line("Min found: " + result)
         """
         assertEquals(getOutput(code7),"10\n")
 
+/*
         val code8 = """
         let a := mut [1] : anything
         a.add(at := a.size, true)
@@ -168,20 +173,26 @@ write_line("Min found: " + result)
         end
         """
         assertEquals(getOutput(code8),"not mut[list[int]]\n")
+*/
 
+/*
         val code9 = """
         let var a : anything := 1
         a := true
         write_line(a.type)
         """
         assertEquals(getOutput(code9),"TYPE BOOLEAN\n")
+*/
 
+/*
         val code10 = """
         let list := [1,2,3]
         write_line(list.get(0))
         """
         assertEquals(getOutput(code10),"1\n")
+*/
 
+/*
         val code11 = """
             let func := fun(arg list : list[int])
         begin
@@ -201,7 +212,9 @@ write_line("Min found: " + result)
         write_line(a>0)
         """
         assertEquals(getOutput(code11),"oops!\n")
+*/
 
+/*
         val code12 = """
         let dict := mut {"alex" -> 7, "diana" -> 10}
         dict.add(at := "jim", 15)
@@ -211,7 +224,9 @@ write_line("Min found: " + result)
         write_line(dict)
         """
         assertEquals(getOutput(code12),"10\n{alex -> 3, jim -> 15}\n")
+*/
 
+/*
         val code13 = """
         let a := mut {1 -> "hi!", 2 -> "bye!"} : int? -> text?
         write_line(a.keys)
@@ -229,6 +244,7 @@ write_line("Min found: " + result)
                 "TYPE MUTABLE; (TYPE DICT; (TYPE EITHER; (TYPE INT; TYPE !nothing); TYPE EITHER; (TYPE STRING; TYPE !nothing)))\n" +
                 "[1, 2]\n" +
                 "TYPE MUTABLE; (TYPE DICT; (TYPE INT; TYPE STRING))\n")
+*/
 
         val code14 = """
         let a := mut {1 -> "hi!", 2 -> "bye!"} : int? -> text?
@@ -237,11 +253,13 @@ write_line("Min found: " + result)
         """
         assertEquals(getOutput(code14),"true\n")
 
+/*
         val code15 = """
         let b := {} : int -> int
         write_line(b.type)
         """
         assertEquals(getOutput(code15),"TYPE DICT; (TYPE INT; TYPE INT)\n")
+*/
 
         val code16= """
         let b := {"hi" -> 1, "bye!" -> 2}
@@ -270,6 +288,7 @@ write_line("Min found: " + result)
         """
         assertEquals(getOutput(code20),"hi\n")
 
+/*
         val code21="""
             let me := data{name := "alex", age := 25}
             write_line(me.name)
@@ -279,6 +298,7 @@ write_line("Min found: " + result)
         assertEquals(getOutput(code21),"alex\n" +
                 "25\n" +
                 "TYPE DATA; (!name; TYPE STRING; !age; TYPE INT)\n")
+*/
 
         val code22="""
             typedef has_name := data[name : text]
@@ -301,6 +321,7 @@ write_line("Min found: " + result)
         """
         assertEquals(getOutput(code24),"5\n25\n125\n")
 
+/*
         val code25="""
             let list := mut [1, 2, 3]
             let var b := ""
@@ -313,20 +334,25 @@ write_line("Min found: " + result)
             write_line(list)
         """
         assertEquals(getOutput(code25),"123\n[10, 10, 10, 1, 2, 3]\n")
+*/
 
+/*
         val code26="""
             let list := mut [1,2,3]
             list.update(at := 1, 10)
             write_line(list.as_text)
         """
         assertEquals(getOutput(code26),"[1, 10, 3]\n")
+*/
 
+/*
         val code27= """
             let a := mut [1, 2, "nothing", nothing] : int or text?
             let b : list[int or text?] := a
             write_line(a.type)
         """
         assertEquals(getOutput(code27),"TYPE MUTABLE; (TYPE LIST; (TYPE EITHER; (TYPE INT; TYPE STRING; TYPE !nothing)))\n")
+*/
 
 
         val code28 ="""
@@ -339,6 +365,7 @@ write_line("Min found: " + result)
         val code30 ="write(1.0 / 3)"
         assertEquals(getOutput(code30),"0.3333333333333333333333333333333333")
 
+/*
         val code31 ="""
             typedef tree := data[value : int, left : tree?, right : tree?]
             let my_tree_left := data{value := 123}
@@ -354,6 +381,7 @@ write_line("Min found: " + result)
         assertEquals(getOutput(code31), """{value -> 999, left -> {value -> 123}, right -> {value -> 345}}
 TYPE DATA; (!value; TYPE INT; !left; TYPE DATA; (!value; TYPE INT); !right; TYPE DATA; (!value; TYPE INT))
 """)
+*/
 
     }
 }

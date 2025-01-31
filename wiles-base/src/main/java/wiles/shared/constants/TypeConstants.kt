@@ -1,7 +1,5 @@
 package wiles.shared.constants
 
-import wiles.checker.statics.InferrerUtils.makeGeneric
-import wiles.checker.statics.InferrerUtils.makeGenericDeclaration
 import wiles.checker.statics.InferrerUtils.makeNullable
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
@@ -9,7 +7,6 @@ import wiles.shared.constants.Tokens.ANON_ARG_ID
 import wiles.shared.constants.Tokens.DATA_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.STRING_START
-import wiles.shared.constants.Tokens.TRUE_ID
 import wiles.shared.constants.TypeUtils.makeCollection
 import wiles.shared.constants.TypeUtils.makeEither
 import wiles.shared.constants.TypeUtils.makeList
@@ -18,7 +15,6 @@ import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.EITHER_ID
 import wiles.shared.constants.Types.METHOD_CALL_ID
 import wiles.shared.constants.Types.STRING_ID
-import wiles.shared.constants.Types.TYPE_TYPE_ID
 import wiles.shared.constants.Types.UNIVERSAL_SUBTYPE_ID
 
 object TypeConstants {
@@ -179,224 +175,10 @@ object TypeConstants {
 
     val LIST_OF_STRING = makeList(STRING_TYPE)
 
-    private const val MAYBE_GENERIC_NAME = "!T"
-    private val MAYBE_GENERIC_TYPE = makeGeneric(ANYTHING_TYPE, MAYBE_GENERIC_NAME)
-    val MAYBE_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
-        components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
-            components = mutableListOf(makeNullable(MAYBE_GENERIC_TYPE),
-                JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
-                    components = mutableListOf(
-                        makeGenericDeclaration(MAYBE_GENERIC_TYPE),
-                        JSONStatement(name = "!elem", syntaxType = SyntaxType.TOKEN)
-                    )
-                ),
-            )
-        ))
-    )
-
-    private const val CONTENT_GENERIC_NAME = "!T"
-    private val CONTENT_GENERIC_TYPE = makeGeneric(ANYTHING_TYPE, CONTENT_GENERIC_NAME)
-    val CONTENT_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
-        components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
-            components = mutableListOf(makeGenericDeclaration(CONTENT_GENERIC_TYPE),
-                JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
-                    components = mutableListOf(
-                        makeNullable(CONTENT_GENERIC_TYPE),
-                        JSONStatement(name = "!elem", syntaxType = SyntaxType.TOKEN)
-                    )
-                ),
-            )
-        ))
-    )
-
-    private const val CLONE_GENERIC_NAME = "!T"
-    private val CLONE_GENERIC_TYPE = makeGeneric(ANYTHING_TYPE, CLONE_GENERIC_NAME)
-    val CLONE_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
-        components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
-            components = mutableListOf(CLONE_GENERIC_TYPE,
-                JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
-                    components = mutableListOf(
-                        makeGenericDeclaration(CLONE_GENERIC_TYPE),
-                        JSONStatement(name = "!elem", syntaxType = SyntaxType.TOKEN)
-                    )),
-                    JSONStatement(syntaxType = SyntaxType.DECLARATION,
-                        components = mutableListOf(
-                            BOOLEAN_TYPE,
-                            JSONStatement(name = "!deep", syntaxType = SyntaxType.TOKEN),
-                            JSONStatement(syntaxType = SyntaxType.EXPRESSION, components =
-                                mutableListOf(JSONStatement(name = TRUE_ID, syntaxType = SyntaxType.TOKEN)))
-                        ),
-                ),
-            )
-        ))
-    )
-
-    private const val GET_TYPE_GENERIC_NAME = "!T"
-    private val GET_TYPE_GENERIC_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, GET_TYPE_GENERIC_NAME)
-    val GET_TYPE_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
-        components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
-            components = mutableListOf(
-                JSONStatement(name = TYPE_TYPE_ID, syntaxType = SyntaxType.TYPE,
-                    components = mutableListOf(GET_TYPE_GENERIC_TYPE)),
-                JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
-                    components = mutableListOf(
-                        makeGenericDeclaration(GET_TYPE_GENERIC_TYPE),
-                        JSONStatement(name = "!elem", syntaxType = SyntaxType.TOKEN)
-                    )
-                ),
-            )
-        ))
-    )
-
-    private val RUN_GENERIC_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T")
-    private val RUN_SUBTYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
-        components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
-            components = mutableListOf(makeGenericDeclaration(RUN_GENERIC_TYPE))
-        ))
-    )
-    val RUN_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
-        components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
-            components = mutableListOf(RUN_GENERIC_TYPE,
-                JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
-                    components = mutableListOf(
-                        RUN_SUBTYPE,
-                        JSONStatement(name = "!func", syntaxType = SyntaxType.TOKEN)
-                    )
-                )
-            )
-        ))
-    )
-
     val AS_TEXT_TYPE = Utils.createFunctionType(Pair(NULLABLE_ANYTHING_TYPE, STRING_TYPE))
     val AS_LIST_TYPE = Utils.createFunctionType(Pair(STRING_TYPE, LIST_OF_STRING))
     val SIZE_TYPE = Utils.createFunctionType(Pair(makeEither(mutableListOf(STRING_TYPE, LIST_OF_ANYTHING_TYPE)),
         INT_TYPE))
-
-    // CRUD operations
-
-    private val GET_AT_GENERIC_KEY_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T_KEY")
-    private val GET_AT_GENERIC_VALUE_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T_VALUE")
-    private val GET_AT_COLLECTION_TYPE = makeCollection(
-        makeGenericDeclaration(GET_AT_GENERIC_KEY_TYPE),makeGenericDeclaration(GET_AT_GENERIC_VALUE_TYPE))
-    val GET_AT_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
-        components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
-            components = mutableListOf(
-                GET_AT_GENERIC_VALUE_TYPE,
-                JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
-                    components = mutableListOf(
-                        GET_AT_COLLECTION_TYPE,
-                        JSONStatement(name = "!collection", syntaxType = SyntaxType.TOKEN)
-                    )
-                ),
-                JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
-                    components = mutableListOf(
-                        GET_AT_GENERIC_KEY_TYPE,
-                        JSONStatement(name = "!at", syntaxType = SyntaxType.TOKEN),
-                    )
-                )
-            )
-        ))
-    )
-
-    private val ADD_GENERIC_KEY_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T_KEY")
-    private val ADD_GENERIC_VALUE_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T_VALUE")
-    private val ADD_COLLECTION_TYPE = makeMutable(makeCollection(
-        makeGenericDeclaration(ADD_GENERIC_KEY_TYPE),makeGenericDeclaration(ADD_GENERIC_VALUE_TYPE)))
-    val ADD_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
-        components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
-            components = mutableListOf(
-                NOTHING_TYPE,
-                JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
-                    components = mutableListOf(
-                        ADD_COLLECTION_TYPE,
-                        JSONStatement(name = "!collection", syntaxType = SyntaxType.TOKEN)
-                    )
-                ),
-                JSONStatement(syntaxType = SyntaxType.DECLARATION,
-                    components = mutableListOf(
-                        ADD_GENERIC_KEY_TYPE,
-                        JSONStatement(name = "!at", syntaxType = SyntaxType.TOKEN),
-                        )
-                ),
-                JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
-                    components = mutableListOf(
-                        ADD_GENERIC_VALUE_TYPE,
-                        JSONStatement(name = "!value", syntaxType = SyntaxType.TOKEN)
-                    )
-                ),
-            )
-        ))
-    )
-
-    private val SET_AT_GENERIC_KEY_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T_KEY")
-    private val SET_AT_GENERIC_VALUE_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T_VALUE")
-    private val SET_AT_COLLECTION_TYPE = makeMutable(makeCollection(
-        makeGenericDeclaration(SET_AT_GENERIC_KEY_TYPE),makeGenericDeclaration(SET_AT_GENERIC_VALUE_TYPE)))
-    val SET_AT_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
-        components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
-            components = mutableListOf(
-                NOTHING_TYPE,
-                JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
-                    components = mutableListOf(
-                        SET_AT_COLLECTION_TYPE,
-                        JSONStatement(name = "!collection", syntaxType = SyntaxType.TOKEN)
-                    )
-                ),
-                JSONStatement(syntaxType = SyntaxType.DECLARATION,
-                    components = mutableListOf(
-                        SET_AT_GENERIC_KEY_TYPE,
-                        JSONStatement(name = "!at", syntaxType = SyntaxType.TOKEN),
-                    )
-                ),
-                JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
-                    components = mutableListOf(
-                        SET_AT_GENERIC_VALUE_TYPE,
-                        JSONStatement(name = "!value", syntaxType = SyntaxType.TOKEN)
-                    )
-                ),
-            )
-        ))
-    )
-
-    private val REMOVE_AT_GENERIC_KEY_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T")
-    private val REMOVE_AT_COLLECTION_TYPE = makeMutable(makeCollection(
-        makeGenericDeclaration(REMOVE_AT_GENERIC_KEY_TYPE), NULLABLE_ANYTHING_TYPE))
-    val REMOVE_AT_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
-        components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
-            components = mutableListOf(
-                NOTHING_TYPE,
-                JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
-                    components = mutableListOf(
-                        REMOVE_AT_COLLECTION_TYPE,
-                        JSONStatement(name = "!collection", syntaxType = SyntaxType.TOKEN)
-                    )
-                ),
-                JSONStatement(syntaxType = SyntaxType.DECLARATION,
-                    components = mutableListOf(
-                        REMOVE_AT_GENERIC_KEY_TYPE,
-                        JSONStatement(name = "!at", syntaxType = SyntaxType.TOKEN),
-                    )
-                ),
-            )
-        ))
-    )
-
-    private val GET_KEYS_GENERIC_KEY_TYPE = makeGeneric(NULLABLE_ANYTHING_TYPE, "!T")
-    private val GET_KEYS_COLLECTION_TYPE = makeCollection(
-        makeGenericDeclaration(GET_KEYS_GENERIC_KEY_TYPE), NULLABLE_ANYTHING_TYPE)
-    val GET_KEYS_TYPE = JSONStatement(name = Tokens.METHOD_ID, syntaxType = SyntaxType.TYPE,
-        components = mutableListOf(JSONStatement(syntaxType = SyntaxType.METHOD,
-            components = mutableListOf(
-                makeList(GET_KEYS_GENERIC_KEY_TYPE),
-                JSONStatement(name = ANON_ARG_ID, syntaxType = SyntaxType.DECLARATION,
-                    components = mutableListOf(
-                        GET_KEYS_COLLECTION_TYPE,
-                        JSONStatement(name = "!collection", syntaxType = SyntaxType.TOKEN)
-                    )
-                )
-            )
-        ))
-    )
 
     val COLLECTION_OF_NULLABLE_ANYTHING = makeCollection(
         NULLABLE_ANYTHING_TYPE, NULLABLE_ANYTHING_TYPE)

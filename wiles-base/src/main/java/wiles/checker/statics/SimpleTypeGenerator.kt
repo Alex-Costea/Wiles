@@ -27,7 +27,6 @@ import wiles.shared.constants.TypeConstants.UNARY_MINUS_OPERATION
 import wiles.shared.constants.TypeConstants.UNARY_PLUS_OPERATION
 import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 import wiles.shared.constants.TypeUtils.makeMutable
-import wiles.shared.constants.TypeUtils.makeTypeUngeneric
 
 object SimpleTypeGenerator {
 
@@ -119,7 +118,7 @@ object SimpleTypeGenerator {
 
     fun getSimpleTypes(triple : Triple<JSONStatement, JSONStatement, JSONStatement>) : JSONStatement?
     {
-        val newTriple = Triple(makeTypeUngeneric(triple.first), triple.second, makeTypeUngeneric(triple.third))
+        val newTriple = Triple(triple.first, triple.second, triple.third)
 
         if((newTriple.second.name == EQUALS_ID || newTriple.second.name == NOT_EQUAL_ID)
                    && (isFormerSuperTypeOfLatter(NOTHING_TYPE, newTriple.first)

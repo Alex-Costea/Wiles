@@ -6,7 +6,6 @@ import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.exceptions.InferenceFailException
 import wiles.checker.exceptions.VariableAlreadyDeclaredException
 import wiles.checker.services.InferrerService
-import wiles.checker.statics.InferrerUtils.unGenerify
 import wiles.shared.AbstractCompilationException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType.*
@@ -40,7 +39,7 @@ class InferFromDeclaration(details: InferrerDetails,
                 inferrer.infer()
                 inferredType = inferrer.getType()
                 if(inFunction)
-                    inferredType = unGenerify(inferredType.copy())
+                    inferredType = inferredType.copy()
             }
         }
         catch (ex : AbstractCompilationException)
@@ -74,8 +73,10 @@ class InferFromDeclaration(details: InferrerDetails,
 
         if(type != null)
         {
-            InferFromType(InferrerDetails(type, variables, exceptions),
-                genericTypes, isTopMostType).infer()
+            InferFromType(
+                InferrerDetails(type, variables, exceptions),
+                genericTypes, isTopMostType
+            ).infer()
             if(inferredType!=null && !isFormerSuperTypeOfLatter(type, inferredType))
                 throw ConflictingTypeDefinitionException(type.getFirstLocation(),
                     type.toString(),inferredType.toString())
