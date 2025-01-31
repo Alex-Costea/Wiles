@@ -32,10 +32,13 @@ object Utils {
 
     val NULL_LOCATION = TokenLocation()
 
-    private fun escapeName(name : String) : String
+    private fun escapeName(name: String, isToken: Boolean) : String
     {
         if(name.startsWith(IDENTIFIER_START) || name.startsWith(NUM_START)) return name
-        if(!name.startsWith(STRING_START)) return KEYWORD_START + name
+        if(!name.startsWith(STRING_START)) {
+            if(isToken) return KEYWORD_START + name
+            return name
+        }
         var stringValue = name.substring(1)
         stringValue = stringValue.replace("\\","\\\\")
         stringValue = stringValue.replace("'","\\'")
@@ -49,7 +52,7 @@ object Utils {
         val hasName = name.isNotEmpty()
         return ((if(!isToken) "$type" else "") +
                 (if(hasName) " " else "") +
-                (if(isToken) escapeName(name) else name)+
+                escapeName(name, isToken)+
                 (if(hasName) " " else "") +
                 (if(hasComponents) "(" else "") +
                 (if(!hasComponents) "" else components.joinToString(", ")+")")).trim()
