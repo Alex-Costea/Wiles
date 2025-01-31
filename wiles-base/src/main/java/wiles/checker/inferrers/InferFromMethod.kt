@@ -1,7 +1,6 @@
 package wiles.checker.inferrers
 
 import wiles.checker.data.InferrerDetails
-import wiles.checker.data.VariableDetails
 import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.exceptions.InferenceFailException
 import wiles.checker.exceptions.ReturnNotGuaranteedException
@@ -13,7 +12,6 @@ import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.ELSE_ID
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
 import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
-import wiles.shared.constants.Types.TYPE_TYPE_ID
 
 class InferFromMethod(details: InferrerDetails) : InferFromStatement(
     InferrerDetails(details.statement,
@@ -88,15 +86,12 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
     }
 
     override fun infer() {
-        val genericTypes = hashMapOf<String, JSONStatement>()
         val originalVars = variables.copy()
         for(component in statement.components)
         {
             if(component.syntaxType==SyntaxType.TYPE) {
                 InferFromType(
-                    InferrerDetails(component, variables, exceptions),
-                    isTopMostType = false, genericTypes = genericTypes
-                ).infer()
+                    InferrerDetails(component, variables, exceptions)).infer()
                 continue
             }
             if(component.syntaxType==SyntaxType.CODE_BLOCK)
@@ -105,22 +100,18 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
 
             val inferrer = InferFromDeclaration(
                 InferrerDetails(component, variables, exceptions),
-                inFunction = true, isTopMostType = false, genericTypes = genericTypes
+                inFunction = true
             )
             inferrer.infer()
         }
 
-        createTypes(statement, genericTypes, variables)
+        createTypes(statement, variables)
 
         variables.forEach {
             if (!originalVars.containsKey(it.key)) {
                 it.value.initialized = true
             }
         }
-
-        variables.putAll(genericTypes.map { Pair(it.key,
-            VariableDetails(JSONStatement(syntaxType = SyntaxType.TYPE, name = TYPE_TYPE_ID,
-                components = mutableListOf(it.value)))) })
 
         val inferrer = InferrerService(InferrerDetails(statement.components.last(), variables, exceptions))
         inferrer.infer()

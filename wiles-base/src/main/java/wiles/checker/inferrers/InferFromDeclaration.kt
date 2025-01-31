@@ -15,10 +15,10 @@ import wiles.shared.constants.TypeConstants.ERROR_TYPE
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
 import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
 
-class InferFromDeclaration(details: InferrerDetails,
-                           private val inFunction: Boolean = false,
-                           private val genericTypes : MutableMap<String,JSONStatement> = mutableMapOf(),
-                           private val isTopMostType : Boolean = true)
+class InferFromDeclaration(
+    details: InferrerDetails,
+    private val inFunction: Boolean = false
+)
     : InferFromStatement(details)
 {
     override fun infer() {
@@ -73,10 +73,7 @@ class InferFromDeclaration(details: InferrerDetails,
 
         if(type != null)
         {
-            InferFromType(
-                InferrerDetails(type, variables, exceptions),
-                genericTypes, isTopMostType
-            ).infer()
+            InferFromType(InferrerDetails(type, variables, exceptions)).infer()
             if(inferredType!=null && !isFormerSuperTypeOfLatter(type, inferredType))
                 throw ConflictingTypeDefinitionException(type.getFirstLocation(),
                     type.toString(),inferredType.toString())

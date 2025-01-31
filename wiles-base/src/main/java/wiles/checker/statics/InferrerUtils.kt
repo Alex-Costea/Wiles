@@ -67,27 +67,12 @@ object InferrerUtils {
 
     fun createTypes(
         type: JSONStatement,
-        typeNames: MutableMap<String, JSONStatement>,
         variables: CheckerVariableMap,
     )
     {
-        val name = type.name
         if(type.syntaxType == SyntaxType.CODE_BLOCK)
         {
             return
-        }
-        else if(typeNames.containsKey(name))
-        {
-            TODO("What is done here?")
-            /*
-            val newType = typeNames[name]!!
-            checkStatementContainsReference(newType, type)
-            assert(type.components.isEmpty())
-            type.components.add(JSONStatement(name = name, syntaxType = SyntaxType.TOKEN))
-            type.components.add(newType)
-            type.name = GENERIC_ID
-            return
-            */
         }
         else if(type.syntaxType == SyntaxType.TYPE && IS_IDENTIFIER.test(type.name)) {
             if(type.name == NOTHING_ID)
@@ -107,7 +92,7 @@ object InferrerUtils {
         {
             for(component in type.components)
             {
-                createTypes(component, typeNames, variables)
+                createTypes(component, variables)
             }
         }
     }

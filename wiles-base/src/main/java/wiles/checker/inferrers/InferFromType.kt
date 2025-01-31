@@ -2,15 +2,12 @@ package wiles.checker.inferrers
 
 import wiles.checker.data.InferrerDetails
 import wiles.checker.statics.InferrerUtils.createTypes
-import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
 import wiles.shared.constants.Types.REQUIRES_SUBTYPE
 
-class InferFromType(details: InferrerDetails,
-                    private val genericTypes : MutableMap<String,JSONStatement> = mutableMapOf(),
-                    private val isTopMostType : Boolean = false)
+class InferFromType(details: InferrerDetails)
     : InferFromStatement(details) {
     override fun infer() {
         if(statement.name==METHOD_ID)
@@ -20,12 +17,12 @@ class InferFromType(details: InferrerDetails,
             {
                 if(component.syntaxType == SyntaxType.DECLARATION)
                 {
-                    InferFromDeclaration(InferrerDetails(component, variables.copy(), exceptions),
-                        genericTypes = genericTypes, isTopMostType = false).infer()
+                    InferFromDeclaration(
+                        InferrerDetails(component, variables.copy(), exceptions)
+                    ).infer()
                 }
                 else if(component.syntaxType == SyntaxType.TYPE)
-                    InferFromType(InferrerDetails(component,variables,exceptions),
-                        genericTypes).infer()
+                    InferFromType(InferrerDetails(component,variables,exceptions)).infer()
             }
             if(method.components.getOrNull(0)?.syntaxType != SyntaxType.TYPE)
                 method.components.add(0,NOTHING_TYPE)
@@ -34,11 +31,9 @@ class InferFromType(details: InferrerDetails,
         {
             for(component in statement.components)
             {
-                InferFromType(InferrerDetails(component,variables,exceptions), genericTypes).infer()
+                InferFromType(InferrerDetails(component,variables,exceptions)).infer()
             }
         }
-        if(isTopMostType) {
-            createTypes(statement, genericTypes, variables)
-        }
+        createTypes(statement, variables)
     }
 }

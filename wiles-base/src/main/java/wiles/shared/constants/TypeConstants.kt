@@ -38,8 +38,6 @@ object TypeConstants {
 
     val NOTHING_TOKEN = JSONStatement(syntaxType = SyntaxType.TOKEN, name = NOTHING_ID)
 
-    val NULLABLE_STRING = makeNullable(STRING_TYPE)
-
     val MUTABLE_NULLABLE_ANYTHING = makeMutable(NULLABLE_ANYTHING_TYPE)
 
     val PLUS_OPERATION = JSONStatement(syntaxType = SyntaxType.TOKEN, name = Tokens.PLUS_ID)
@@ -52,8 +50,6 @@ object TypeConstants {
     val AND_OPERATION = JSONStatement(syntaxType = SyntaxType.TOKEN, name = Tokens.AND_ID)
     val OR_OPERATION = JSONStatement(syntaxType = SyntaxType.TOKEN, name = Tokens.OR_ID)
     val NOT_OPERATION = JSONStatement(syntaxType = SyntaxType.TOKEN, name = Tokens.NOT_ID)
-    val EQUALS_OPERATION = JSONStatement(syntaxType = SyntaxType.TOKEN, name = Tokens.EQUALS_ID)
-    val NOT_EQUAL_OPERATION = JSONStatement(syntaxType = SyntaxType.TOKEN, name = Tokens.NOT_EQUAL_ID)
     val LARGER_OPERATION = JSONStatement(syntaxType = SyntaxType.TOKEN, name = Tokens.LARGER_ID)
     val LARGER_EQUALS_OPERATION = JSONStatement(syntaxType = SyntaxType.TOKEN, name = Tokens.LARGER_EQUALS_ID)
     val SMALLER_OPERATION = JSONStatement(syntaxType = SyntaxType.TOKEN, name = Tokens.SMALLER_ID)
