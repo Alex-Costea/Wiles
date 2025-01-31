@@ -2,7 +2,9 @@ package wiles.checker.statics
 
 import wiles.checker.data.CheckerVariableMap
 import wiles.checker.data.VariableDetails
-import wiles.checker.exceptions.*
+import wiles.checker.exceptions.CannotCallMethodException
+import wiles.checker.exceptions.UnknownIdentifierException
+import wiles.checker.exceptions.UsedBeforeInitializationException
 import wiles.shared.InternalErrorException
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
@@ -22,8 +24,6 @@ import wiles.shared.constants.Tokens.ANON_ARG_ID
 import wiles.shared.constants.Tokens.APPLY_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
-import wiles.shared.constants.Tokens.NOTHING_ID
-import wiles.shared.constants.Tokens.TYPEDEF_ID
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
 import wiles.shared.constants.TypeUtils
 import wiles.shared.constants.TypeUtils.isFormerSuperTypeOfLatter
@@ -63,38 +63,6 @@ object InferrerUtils {
                 components = value.type.components.map { it.copyRemovingLocation() }.toMutableList())
         }
         throw InternalErrorException(NOT_ONE_TOKEN_ERROR)
-    }
-
-    fun createTypes(
-        type: JSONStatement,
-        variables: CheckerVariableMap,
-    )
-    {
-        if(type.syntaxType == SyntaxType.CODE_BLOCK)
-        {
-            return
-        }
-        else if(type.syntaxType == SyntaxType.TYPE && IS_IDENTIFIER.test(type.name)) {
-            if(type.name == NOTHING_ID)
-                return
-            val nameOfTypeDef = type.name + "|" + TYPEDEF_ID
-            if(variables.containsKey(nameOfTypeDef))
-            {
-                val newType = variables[nameOfTypeDef]!!.type.components[0]
-                type.name = newType.name
-                type.syntaxType = newType.syntaxType
-                type.components = newType.components
-                return
-            }
-            else throw UnknownTypeException(type.getFirstLocation())
-        }
-        if(type.components.isNotEmpty())
-        {
-            for(component in type.components)
-            {
-                createTypes(component, variables)
-            }
-        }
     }
 
     fun makeNullable(type: JSONStatement) : JSONStatement

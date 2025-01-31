@@ -1,7 +1,6 @@
 package wiles.checker.inferrers
 
 import wiles.checker.data.InferrerDetails
-import wiles.checker.statics.InferrerUtils.createTypes
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.METHOD_ID
 import wiles.shared.constants.TypeConstants.NOTHING_TYPE
@@ -34,6 +33,5 @@ class InferFromType(details: InferrerDetails)
                 InferFromType(InferrerDetails(component,variables,exceptions)).infer()
             }
         }
-        createTypes(statement, variables)
     }
 }

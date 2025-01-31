@@ -5,7 +5,6 @@ import wiles.checker.exceptions.ConflictingTypeDefinitionException
 import wiles.checker.exceptions.InferenceFailException
 import wiles.checker.exceptions.ReturnNotGuaranteedException
 import wiles.checker.services.InferrerService
-import wiles.checker.statics.InferrerUtils.createTypes
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens
@@ -104,8 +103,6 @@ class InferFromMethod(details: InferrerDetails) : InferFromStatement(
             )
             inferrer.infer()
         }
-
-        createTypes(statement, variables)
 
         variables.forEach {
             if (!originalVars.containsKey(it.key)) {
