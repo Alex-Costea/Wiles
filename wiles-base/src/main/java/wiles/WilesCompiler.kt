@@ -110,7 +110,7 @@ object WilesCompiler {
         val result = parser.getResults()
 
         if (clArgs.isDebug) {
-            print("Syntax tree: ")
+            println("Syntax tree: ")
             println(result)
         }
 

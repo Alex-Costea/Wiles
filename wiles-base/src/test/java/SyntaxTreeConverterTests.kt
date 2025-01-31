@@ -58,11 +58,16 @@ import wiles.shared.constants.Utils.NULL_LOCATION
 
 @Testable
 class SyntaxTreeConverterTests {
+    private fun trimAll(string: String) : String
+    {
+        return string.replace("\n"," ").replace(" ","")
+    }
+
     private fun assertResults(exceptions: CompilationExceptionsCollection?, expectedResult: String?, vararg tokens: String) {
         val exceptionList = exceptions ?: CompilationExceptionsCollection()
         val converter = CreateConverter(tokens.asList())
         Assertions.assertEquals(exceptionList, converter.exceptions)
-        expectedResult?.let{Assertions.assertEquals(expectedResult, converter.result)}
+        expectedResult?.let{Assertions.assertEquals(trimAll(expectedResult), trimAll(converter.result))}
     }
 
     private fun createExceptions(vararg list: AbstractCompilationException): CompilationExceptionsCollection {

@@ -1,5 +1,6 @@
 package wiles.shared.constants
 
+import wiles.parser.statements.AbstractStatement
 import wiles.shared.SyntaxType
 import wiles.shared.TokenLocation
 import wiles.shared.constants.Chars.DIGIT_SEPARATOR
@@ -45,16 +46,21 @@ object Utils {
         return "'$stringValue'"
     }
 
-    fun <T> statementToString(name : String, type : SyntaxType, components : List<T>) : String
+    fun statementToString(statement: AbstractStatement) : String
     {
+        val components = statement.getComponents()
         val hasComponents = components.isNotEmpty()
+        val name = statement.name
+        val type = statement.syntaxType
         val isToken = (type == SyntaxType.TOKEN)
         val hasName = name.isNotEmpty()
+        val componentStrings = statement.getComponents().map { "\n$it".replace("\n","\n    ") }
         return ((if(!isToken) "$type" else "") +
-                (if(hasName) " " else "") +
-                escapeName(name, isToken)+
-                (if(hasName) " " else "") +
-                (if(hasComponents) "(" else "") +
-                (if(!hasComponents) "" else components.joinToString(", ")+")")).trim()
+                (if(hasName && !isToken) " " else "") +
+                escapeName(name, isToken) +
+                (if(hasName && !isToken) " " else "") +
+                (if(hasComponents) "\n(" else "") +
+                (if(!hasComponents) "" else componentStrings.joinToString(", ")
+                        + "\n)"))
     }
 }

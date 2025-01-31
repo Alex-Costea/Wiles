@@ -22,7 +22,7 @@ abstract class AbstractStatement(val context: ParserContext) : StatementInterfac
     abstract fun process(): CompilationExceptionsCollection
 
     override fun toString(): String {
-        return Utils.statementToString(name,syntaxType,getComponents())
+        return Utils.statementToString(this)
     }
 
     abstract override fun getComponents(): MutableList<AbstractStatement>

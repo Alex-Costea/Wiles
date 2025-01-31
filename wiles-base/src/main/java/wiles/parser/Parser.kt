@@ -3,14 +3,12 @@ package wiles.parser
 import wiles.parser.converters.TokensToSyntaxTreeConverter
 import wiles.parser.statements.CodeBlockStatement
 import wiles.shared.CompilationExceptionsCollection
-import wiles.shared.JSONService
 import wiles.shared.Token
 import wiles.shared.TokenLocation
 
 class Parser(val input : String, isDebug : Boolean) {
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
     private var results : CodeBlockStatement
-    var json : String
 
     init{
         val tokens = sourceToTokens()
@@ -21,8 +19,6 @@ class Parser(val input : String, isDebug : Boolean) {
 
         val ast = tokensToAST(tokens, lastLocation())
         results = ast
-
-        json = JSONService.writeValueAsString(ast)
     }
 
     fun getExceptions() : CompilationExceptionsCollection
