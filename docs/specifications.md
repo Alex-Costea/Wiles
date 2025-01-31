@@ -17,6 +17,7 @@
 - Dict literal: `{ ⟪key -> value,⟫ } ⟨: key_type -> value_type⟩`
 - Data literal: `data{ ⟪identifier := value,⟫ }`
 - Functions literals: `⟨fun (⟪param1 ⟨: type⟩ ⟨:= default_value⟩,⟫)⟩ ⟨-> return_type⟩⟩ [block]`
+- Type literals `type [typeinfo]`
 
 ### Types
 - Nothing: only valid value is `nothing`
@@ -32,7 +33,6 @@
 
 ### Statements
 - Value: `let ⟨var⟩ name ⟨: type⟩ ⟨:= value⟩` (`var` makes it a variable, type can be inferred)
-- Type definition: `typedef name := type` (can be used at compile time for inference, supports recursive types)
 - Assignment: `name := value`
 - Simple conditional: `if [condition] [block]`
 - Complex conditional: `if begin; ⟪clause;⟫ end`
@@ -94,7 +94,7 @@ WIP, To be determined.
 - `collection.remove(arg value, at)` : remove an element from the mutable collection at the index
 - `collection.update(arg value, at)` : set element of mutable collection at index
 - `collection.get(arg at)` : get element of collection at index, panic if it doesn't exist
-- `type` : get type of object at runtime
+- `type_of` : get type of object at runtime
 - `clone(⟨deep := [boolean]⟩)` : clone object, deeply by default
 - `content` : get content of variable. panics if the value is `nothing`
 - `keys` : get the keys of a dictionary

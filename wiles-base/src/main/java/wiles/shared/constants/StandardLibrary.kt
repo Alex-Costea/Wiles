@@ -55,7 +55,7 @@ object StandardLibrary {
     private const val MAYBE = "!maybe"
     private const val CONTENT = "!content"
     private const val RUN = "!run"
-    private const val GET_TYPE = "!type"
+    private const val GET_TYPE = "!type_of"
     private const val CLONE = "!clone"
     private const val GET_KEYS = "!keys"
     private const val GET = "!get"
