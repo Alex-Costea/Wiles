@@ -1,9 +1,5 @@
 package wiles
 
-import wiles.checker.Checker
-import wiles.interpreter.Interpreter
-import wiles.interpreter.data.InterpreterContext
-import wiles.interpreter.exceptions.PanicException
 import wiles.parser.Parser
 import wiles.shared.*
 import wiles.shared.constants.CommandLineArguments.CODE_COMMAND
@@ -15,9 +11,7 @@ import wiles.shared.constants.CommandLineArguments.INPUT_COMMAND
 import wiles.shared.constants.CommandLineArguments.RUN_COMMAND
 import wiles.shared.constants.ErrorMessages.COMPILATION_FAILED_ERROR
 import wiles.shared.constants.ErrorMessages.LINE_SYMBOL
-import wiles.shared.constants.Settings.OBJECT_FILE
 import java.io.ByteArrayInputStream
-import java.io.FileWriter
 import java.io.IOException
 import java.util.*
 
@@ -114,7 +108,7 @@ object WilesCompiler {
                     exceptions = exceptions)
             }
 
-            val checker = Checker(parser.json)
+            /*val checker = Checker(parser.json)
             exceptions.addAll(checker.check())
 
             if (clArgs.isDebug) {
@@ -139,11 +133,11 @@ object WilesCompiler {
 
             exceptionsString.append(getErrorsDisplay(exceptions, parser.input, clArgs.isDebug))
 
-            interpreterCode = checker.codeAsJSONString
+            interpreterCode = checker.codeAsJSONString*/
         }
 
         val output = StringBuilder()
-        if(!clArgs.isCompileCommand && exceptions.isEmpty())
+/*        if(!clArgs.isCompileCommand && exceptions.isEmpty())
         {
             val interpreter = Interpreter(interpreterCode, clArgs.isDebug,
                 filename = clArgs.filename?: "code.wiles",
@@ -158,7 +152,7 @@ object WilesCompiler {
                 )
                 exceptionsString.append(message)
             }
-        }
+        }*/
         return OutputData(
             output = output.toString(),
             exceptionsString = exceptionsString.toString(),

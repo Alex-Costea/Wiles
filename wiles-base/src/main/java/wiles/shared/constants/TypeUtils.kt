@@ -5,8 +5,10 @@ import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.DATA_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.TypeConstants.INT_TYPE
+import wiles.shared.constants.TypeConstants.NOTHING_TYPE
 import wiles.shared.constants.Types.COLLECTION_ID
 import wiles.shared.constants.Types.DICT_ID
+import wiles.shared.constants.Types.EITHER_ID
 import wiles.shared.constants.Types.LIST_ID
 
 object TypeUtils {
@@ -351,5 +353,12 @@ object TypeUtils {
         return JSONStatement(name = Types.EITHER_ID,
             syntaxType = SyntaxType.TYPE,
             components = types.map { it.copyRemovingLocation() }.toMutableList())
+    }
+
+    fun makeNullable(type: JSONStatement) : JSONStatement
+    {
+        return JSONStatement(name = EITHER_ID,
+            syntaxType = SyntaxType.TYPE,
+            components = mutableListOf(type.copyRemovingLocation(), NOTHING_TYPE))
     }
 }

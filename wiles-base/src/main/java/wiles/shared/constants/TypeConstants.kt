@@ -1,6 +1,5 @@
 package wiles.shared.constants
 
-import wiles.checker.statics.InferrerUtils.makeNullable
 import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.ANON_ARG_ID
@@ -11,6 +10,7 @@ import wiles.shared.constants.TypeUtils.makeCollection
 import wiles.shared.constants.TypeUtils.makeEither
 import wiles.shared.constants.TypeUtils.makeList
 import wiles.shared.constants.TypeUtils.makeMutable
+import wiles.shared.constants.TypeUtils.makeNullable
 import wiles.shared.constants.Types.ANYTHING_ID
 import wiles.shared.constants.Types.EITHER_ID
 import wiles.shared.constants.Types.METHOD_CALL_ID
