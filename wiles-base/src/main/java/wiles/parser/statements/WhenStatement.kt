@@ -35,7 +35,7 @@ class WhenStatement(context: ParserContext) : AbstractStatement(context) {
                 val expectMaybeElse = transmitter.expectMaybe(tokenOf(Tokens.ELSE_ID))
                 val isDefaultCondition = expectMaybeElse.isPresent
                 if(!isDefaultCondition) transmitter.expect(tokenOf(Tokens.IS_ID))
-                type = if(!isDefaultCondition) TypeAnnotationStatement(context)
+                type = if(!isDefaultCondition) TypeStatement(context)
                 else TokenStatement(expectMaybeElse.get(),context)
                 body = CodeBlockStatement(context)
                 exceptions.addAll(type.process())

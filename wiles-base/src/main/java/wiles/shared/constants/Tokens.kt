@@ -66,6 +66,7 @@ object Tokens {
     const val WHEN_ID = "WHEN"
     const val IS_ID = "IS"
     const val DATA_ID = "DATA"
+    const val TYPE_ID = "TYPE"
 
     const val TRUE_ID = "!true"
     const val FALSE_ID = "!false"
@@ -120,6 +121,7 @@ object Tokens {
         KEYWORDS["mut"] = MUTABLE_ID
         KEYWORDS["arg"] = ANON_ARG_ID
         KEYWORDS["data"] = DATA_ID
+        KEYWORDS["type"] = TYPE_ID
 
         SYMBOLS["+"] = PLUS_ID
         SYMBOLS["-"] = MINUS_ID

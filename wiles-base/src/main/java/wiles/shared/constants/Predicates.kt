@@ -17,6 +17,7 @@ import wiles.shared.constants.Tokens.PAREN_START_ID
 import wiles.shared.constants.Tokens.STARTING_OPERATORS
 import wiles.shared.constants.Tokens.START_BLOCK_ID
 import wiles.shared.constants.Tokens.TERMINATORS
+import wiles.shared.constants.Tokens.TYPE_ID
 import java.util.function.Predicate
 
 object Predicates {
@@ -33,8 +34,9 @@ object Predicates {
     @JvmField
     val STARTS_AS_TOKEN = Predicate { content : String ->
         IS_LITERAL.test(content) || content == PAREN_START_ID || content == Tokens.PAREN_END_ID ||
-                content == BRACKET_START_ID || content == BRACE_START_ID || content == DO_ID || content == DATA_ID
-                || content == START_BLOCK_ID || STARTING_OPERATORS.contains(content) || content == METHOD_ID }
+                content == TYPE_ID || content == BRACKET_START_ID || content == BRACE_START_ID ||
+                content == DO_ID || content == DATA_ID || content == START_BLOCK_ID ||
+                STARTING_OPERATORS.contains(content) || content == METHOD_ID }
 
     @JvmField
     val EXPECT_OPERATOR = tokenOf(IS_CONTAINED_IN.invoke(INFIX_OPERATORS)).withErrorMessage(INVALID_EXPRESSION_ERROR)
@@ -63,7 +65,7 @@ object Predicates {
 
     @JvmField
     val START_OF_EXPRESSION = tokenOf(IS_CONTAINED_IN(STARTING_OPERATORS)).or(IS_LITERAL).or(BRACE_START_ID)
-        .or(PAREN_START_ID).or(BRACKET_START_ID).or(METHOD_ID).or(DO_ID).or(START_BLOCK_ID).or(DATA_ID)
+        .or(PAREN_START_ID).or(BRACKET_START_ID).or(METHOD_ID).or(DO_ID).or(START_BLOCK_ID).or(DATA_ID).or(TYPE_ID)
         .withErrorMessage(EXPRESSION_EXPECTED_ERROR).removeWhen(WhenRemoveToken.Never).freeze()
 
     @JvmField

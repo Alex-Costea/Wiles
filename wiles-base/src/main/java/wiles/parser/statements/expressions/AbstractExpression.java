@@ -31,7 +31,7 @@ public abstract class AbstractExpression extends AbstractStatement {
     @NotNull
     private final StatementFactory SpecialStatementFactory = new StatementFactory().setContext(getContext())
             .addType(StatementFactoryTypes.LIST_STATEMENT).addType(StatementFactoryTypes.DICT_STATEMENT)
-            .addType(StatementFactoryTypes.DATA_STATEMENT);
+            .addType(StatementFactoryTypes.DATA_STATEMENT).addType(StatementFactoryTypes.TYPE_LITERAL);
     protected boolean isInner = false;
 
     protected AbstractExpression(@NotNull ParserContext context) {

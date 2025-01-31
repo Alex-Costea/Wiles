@@ -17,7 +17,7 @@
 - Dict literal: `{ ⟪key -> value,⟫ } ⟨: key_type -> value_type⟩`
 - Data literal: `data{ ⟪identifier := value,⟫ }`
 - Functions literals: `⟨fun (⟪param1 ⟨: type⟩ ⟨:= default_value⟩,⟫)⟩ ⟨-> return_type⟩⟩ [block]`
-- Type literals `type [typeinfo]`
+- Type literals `type([type_info])`
 
 ### Types
 - Nothing: only valid value is `nothing`
@@ -30,6 +30,7 @@
 - List: `list[type]`
 - Dict: `dict[key_type, value_type]`
 - Data: `data[⟪key : type,⟫]`
+- Expressions: `expression`
 
 ### Statements
 - Value: `let ⟨var⟩ name ⟨: type⟩ ⟨:= value⟩` (`var` makes it a variable, type can be inferred)

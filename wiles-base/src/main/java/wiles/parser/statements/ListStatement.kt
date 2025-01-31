@@ -31,7 +31,7 @@ class ListStatement(context: ParserContext) : AbstractStatement(context) {
             }
             location = transmitter.expect(tokenOf(BRACKET_END_ID)).location
             if(transmitter.expectMaybe(tokenOf(Tokens.TYPE_ANNOTATION_ID).dontIgnoreNewLine()).isPresent) {
-                val typeStatement = TypeAnnotationStatement(context)
+                val typeStatement = TypeStatement(context)
                 typeStatement.process().throwFirstIfExists()
                 components.add(0,typeStatement)
             }

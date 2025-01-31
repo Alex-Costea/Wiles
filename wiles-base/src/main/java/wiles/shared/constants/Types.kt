@@ -17,9 +17,7 @@ object Types {
     const val LIST_ID = "LIST"
     const val EITHER_ID = "EITHER"
     const val ANYTHING_ID = "ANYTHING"
-    const val METHOD_CALL_ID = "METHOD_CALL"
     const val TYPE_TYPE_ID = "TYPE_TYPE"
-    const val UNIVERSAL_SUBTYPE_ID = "UNIVERSAL_SUBTYPE"
     const val COLLECTION_ID = "COLLECTION"
     const val DICT_ID = "DICT"
 

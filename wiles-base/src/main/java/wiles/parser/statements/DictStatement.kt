@@ -40,15 +40,15 @@ class DictStatement(context: ParserContext) : AbstractStatement(context) {
             }
             location = transmitter.expect(tokenOf(BRACE_END_ID)).location
             if(transmitter.expectMaybe(tokenOf(TYPE_ANNOTATION_ID).dontIgnoreNewLine()).isPresent) {
-                val typeStatement1 = TypeAnnotationStatement(context)
+                val typeStatement1 = TypeStatement(context)
                 typeStatement1.process().throwFirstIfExists()
 
                 transmitter.expect(tokenOf(RIGHT_ARROW_ID))
 
-                val typeStatement2 = TypeAnnotationStatement(context)
+                val typeStatement2 = TypeStatement(context)
                 typeStatement2.process().throwFirstIfExists()
 
-                val finalTypeStatement = TypeAnnotationStatement(context)
+                val finalTypeStatement = TypeStatement(context)
                 finalTypeStatement.name = DICT_ID
                 finalTypeStatement.getComponents().add(typeStatement1)
                 finalTypeStatement.getComponents().add(typeStatement2)

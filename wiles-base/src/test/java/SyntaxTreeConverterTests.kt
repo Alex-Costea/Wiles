@@ -6,7 +6,6 @@ import wiles.parser.converters.TokensToSyntaxTreeConverter
 import wiles.parser.exceptions.TokenExpectedException
 import wiles.parser.exceptions.UnexpectedEndException
 import wiles.parser.exceptions.UnexpectedTokenException
-import wiles.parser.statements.AbstractStatement
 import wiles.shared.AbstractCompilationException
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.Token
@@ -52,6 +51,7 @@ import wiles.shared.constants.Tokens.TIMES_ID
 import wiles.shared.constants.Tokens.TO_ID
 import wiles.shared.constants.Tokens.TRUE_ID
 import wiles.shared.constants.Tokens.TYPE_ANNOTATION_ID
+import wiles.shared.constants.Tokens.TYPE_ID
 import wiles.shared.constants.Tokens.WHEN_ID
 import wiles.shared.constants.Tokens.WHILE_ID
 import wiles.shared.constants.Utils.NULL_LOCATION
@@ -337,16 +337,24 @@ class SyntaxTreeConverterTests {
             BRACKET_END_ID, TYPE_ANNOTATION_ID, "!int")
     }
 
-    private class CreateConverter(tokens: List<String>) {
-        var converter: TokensToSyntaxTreeConverter
-        var exceptions: CompilationExceptionsCollection
-        var tree: AbstractStatement
+    @Test
+    fun typeLiteralsTest()
+    {
+        /*
+              let my_type := type(list[int or text]?)
+              let a : 1 + 2 * 3 := 123
+         */
+        assertResults(null,"CODE_BLOCK(DECLARATION(!my_type; EXPRESSION(TYPE_LITERAL EITHER; (TYPE LIST; (TYPE EITHER; (TYPE INT; TYPE STRING)); TYPE !nothing))); DECLARATION(TYPE EXPRESSION; (#1; PLUS; EXPRESSION(#2; TIMES; #3)); !a; EXPRESSION(#123)))",
+            DECLARE_ID, "!my_type", ASSIGN_ID, TYPE_ID,
+            PAREN_START_ID, "!list", BRACKET_START_ID, "!int", OR_ID, "!text", BRACKET_END_ID, MAYBE_ID, PAREN_END_ID,
+            NEWLINE_ID, DECLARE_ID, "!a", TYPE_ANNOTATION_ID, "#1", PLUS_ID, "#2", TIMES_ID, "#3", ASSIGN_ID, "#123")
+    }
 
-        init {
-            converter = TokensToSyntaxTreeConverter(tokens.map { content-> Token(content, NULL_LOCATION) }, NULL_LOCATION)
-            tree = converter.convert()
-            exceptions = converter.exceptions
-        }
+    private class CreateConverter(tokens: List<String>) {
+        var converter  =
+            TokensToSyntaxTreeConverter(tokens.map { content-> Token(content, NULL_LOCATION) }, NULL_LOCATION)
+        var exceptions = converter.exceptions
+        var tree = converter.convert()
 
 
         val result: String

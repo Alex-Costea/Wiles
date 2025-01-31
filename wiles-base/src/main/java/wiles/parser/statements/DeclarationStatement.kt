@@ -19,7 +19,7 @@ class DeclarationStatement(
 )
     : AbstractStatement(context) {
     private var left: TokenStatement? = null
-    private var typeStatement : TypeAnnotationStatement? = null
+    private var typeStatement : TypeStatement? = null
     private var right: DefaultExpression? = null
     private val exceptions = CompilationExceptionsCollection()
 
@@ -52,7 +52,7 @@ class DeclarationStatement(
                 .withErrorMessage(IDENTIFIER_EXPECTED_ERROR)),context)
 
             if(transmitter.expectMaybe(tokenOf(TYPE_ANNOTATION_ID)).isPresent) {
-                typeStatement = TypeAnnotationStatement(context)
+                typeStatement = TypeStatement(context)
                 typeStatement!!.process().throwFirstIfExists()
                 if(transmitter.expectMaybe(tokenOf(ASSIGN_ID).dontIgnoreNewLine()).isPresent)
                     readRight()

@@ -26,7 +26,7 @@ import wiles.shared.constants.Types.MIN_NR_TYPES
 import wiles.shared.constants.Types.REQUIRES_SUBTYPE
 import wiles.shared.constants.Types.TYPES
 
-class TypeAnnotationStatement(context: ParserContext)
+class TypeStatement(context: ParserContext)
     : AbstractStatement(context) {
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
     private val subtypes : ArrayList<AbstractStatement> = ArrayList()
@@ -37,23 +37,23 @@ class TypeAnnotationStatement(context: ParserContext)
         return subtypes
     }
 
-    private fun createNewEitherStatement(): TypeAnnotationStatement {
+    private fun createNewEitherStatement(): TypeStatement {
         val oldName = name
         name = EITHER_ID
 
-        val component1 = TypeAnnotationStatement(context)
+        val component1 = TypeStatement(context)
         component1.name = oldName
         component1.location = location
         component1.subtypes.addAll(subtypes)
         subtypes.clear()
         subtypes.add(component1)
 
-        return TypeAnnotationStatement(context)
+        return TypeStatement(context)
     }
 
     override fun process(): CompilationExceptionsCollection {
         try {
-            val tokenMaybe = transmitter.expectMaybe(tokenOf(IS_CONTAINED_IN(TYPES.keys).or(IS_IDENTIFIER)))
+            val tokenMaybe = transmitter.expectMaybe(tokenOf(IS_CONTAINED_IN(TYPES.keys)))
             if(tokenMaybe.isPresent)
             {
                 val (content,location) = tokenMaybe.get()
@@ -66,7 +66,7 @@ class TypeAnnotationStatement(context: ParserContext)
                     for(i in 1..(max?:Int.MAX_VALUE)) {
                         if(transmitter.expectMaybe(tokenOf(BRACKET_END_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
                             break
-                        val subType = TypeAnnotationStatement(context)
+                        val subType = TypeStatement(context)
                         subType.process().throwFirstIfExists()
                         subtypes.add(subType)
                         if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break
@@ -91,7 +91,7 @@ class TypeAnnotationStatement(context: ParserContext)
                             tokenOf(IS_IDENTIFIER)
                                 .withErrorMessage(IDENTIFIER_EXPECTED_ERROR)),context)
                         transmitter.expect(tokenOf(Tokens.TYPE_ANNOTATION_ID))
-                        val right = TypeAnnotationStatement(context)
+                        val right = TypeStatement(context)
                         right.process().throwFirstIfExists()
                         classComponents.add(left)
                         classComponents.add(right)
@@ -117,9 +117,8 @@ class TypeAnnotationStatement(context: ParserContext)
                 val expression = DefaultExpression(context)
                 expression.process()
                 name = SyntaxType.EXPRESSION.toString()
-                this.subtypes.add(expression)
+                this.subtypes.addAll(expression.getComponents())
             }
-
         } catch (e: AbstractCompilationException) {
             exceptions.add(e)
         }
