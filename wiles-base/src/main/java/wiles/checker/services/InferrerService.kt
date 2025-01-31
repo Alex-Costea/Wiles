@@ -48,7 +48,6 @@ class InferrerService(details: InferrerDetails)
             WHEN -> inferFromStatement = InferFromWhen(details)
             FOR -> inferFromStatement = InferFromFor(details)
             WHILE -> inferFromStatement = InferFromWhile(details)
-            TYPEDEF -> inferFromStatement = InferFromTypeDef(details)
             DICT -> inferFromStatement = InferFromDict(details)
             DATA -> inferFromStatement = InferFromData(details)
 

@@ -1,7 +1,7 @@
 package wiles.parser.statements
 
-import wiles.parser.builders.ParserContext
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
+import wiles.parser.builders.ParserContext
 import wiles.parser.builders.StatementFactory
 import wiles.parser.enums.StatementFactoryTypes
 import wiles.parser.enums.WhenRemoveToken
@@ -28,7 +28,6 @@ class CodeBlockStatement(context: ParserContext) : AbstractStatement(context) {
             .addType(StatementFactoryTypes.RETURN_STATEMENT)
             .addType(StatementFactoryTypes.CONTINUE_STATEMENT)
             .addType(StatementFactoryTypes.WHEN_STATEMENT)
-            .addType(StatementFactoryTypes.TYPE_DEFINITION_STATEMENT)
     }
 
     private val components: MutableList<AbstractStatement> = ArrayList()

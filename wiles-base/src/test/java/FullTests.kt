@@ -118,11 +118,11 @@ write_line("Min found: " + result)
 """
         assertEquals(getOutput(code2),"10\n")
 
-        val code3 = """
+/*        val code3 = """
             typedef integer := int
             let a : integer := 10
             write_line(integer)"""
-        assertEquals(getOutput(code3),"TYPE INT\n")
+        assertEquals(getOutput(code3),"TYPE INT\n")*/
 
         val code4 = """
             let var a := 10
@@ -281,12 +281,12 @@ write_line("Min found: " + result)
         """
         assertEquals(getOutput(code19),"10\n")
 
-        val code20 ="""
+/*        val code20 ="""
             typedef int2 := int
             let x := 2
             when x is int2 do write_line("hi")
         """
-        assertEquals(getOutput(code20),"hi\n")
+        assertEquals(getOutput(code20),"hi\n")*/
 
 /*
         val code21="""
@@ -300,12 +300,12 @@ write_line("Min found: " + result)
                 "TYPE DATA; (!name; TYPE STRING; !age; TYPE INT)\n")
 */
 
-        val code22="""
+/*        val code22="""
             typedef has_name := data[name : text]
             let me : has_name := data{name := "alex", age := 25}
             when me is has_name do write_line(me)
         """
-        assertEquals(getOutput(code22),"{name -> alex, age -> 25}\n")
+        assertEquals(getOutput(code22),"{name -> alex, age -> 25}\n")*/
 
         val code23="""
             let x := data{y := 2 + 3}

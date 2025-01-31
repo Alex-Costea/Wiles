@@ -25,7 +25,6 @@ class InterpreterService(
             SyntaxType.BREAK -> InterpretFromBreak(statement, variables, context)
             SyntaxType.CONTINUE -> InterpretFromContinue(statement, variables, context)
             SyntaxType.FOR -> InterpretFromFor(statement, variables, context)
-            SyntaxType.TYPEDEF -> InterpretFromTypeDef(statement, variables, context)
 
             SyntaxType.METHOD, SyntaxType.LIST, SyntaxType.TOKEN, SyntaxType.DICT, SyntaxType.DATA,
                 SyntaxType.TYPE, SyntaxType.METHOD_CALL, null -> throw InternalErrorException()

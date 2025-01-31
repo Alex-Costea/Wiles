@@ -602,7 +602,8 @@ class CheckerTests {
   } ]
 }""", "CODE_BLOCK(DECLARATION(!a; EXPRESSION(!b)))")
 
-        checkResult(createExceptions(UnknownTypeException(NULL_LOCATION)),
+        //let a : fake
+/*        checkResult(createExceptions(UnknownTypeException(NULL_LOCATION)),
             """{
   "parsed" : true,
   "type" : "CODE_BLOCK",
@@ -624,7 +625,7 @@ class CheckerTests {
       }
     } ]
   } ]
-}""", "CODE_BLOCK(DECLARATION(TYPE !fake; !a))")
+}""", "CODE_BLOCK(DECLARATION(TYPE !fake; !a))")*/
         }
 
     @Test
