@@ -41,8 +41,10 @@ object Utils {
             return name
         }
         var stringValue = name.substring(1)
-        stringValue = stringValue.replace("\\","\\\\")
-        stringValue = stringValue.replace("'","\\'")
+        stringValue = stringValue.replace("\\","\\b")
+        stringValue = stringValue.replace("'","\\q")
+        stringValue = stringValue.replace("\n","\\n")
+        stringValue = stringValue.replace(" ","\\s")
         return "'$stringValue'"
     }
 
@@ -56,7 +58,7 @@ object Utils {
         val hasName = name.isNotEmpty()
         val componentStrings = statement.getComponents().map { "\n$it".replace("\n","\n    ") }
         return ((if(!isToken) "$type" else "") +
-                (if(hasName && !isToken) " " else "") +
+                (if(hasName && !isToken) ": " else "") +
                 escapeName(name, isToken) +
                 (if(hasName && !isToken) " " else "") +
                 (if(hasComponents) "\n(" else "") +
