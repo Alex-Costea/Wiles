@@ -32,7 +32,7 @@
 
 ### Statements
 - Value: `let ⟨var⟩ name ⟨: type⟩ ⟨:= value⟩` (`var` makes it a variable, type can be inferred)
-- Type definition: `typedef name := type` (can be used at compile time for inference, supports recursive types)
+- Type definition: `typedef name := type` (can be used at compile time for inference)
 - Assignment: `name := value`
 - Simple conditional: `if [condition] [block]`
 - Complex conditional: `if begin; ⟪clause;⟫ end`

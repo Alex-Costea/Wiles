@@ -11,7 +11,7 @@ Wiles supports features such as:
 - Opt-out named arguments in function calls
 - Newline as statement terminators, but no significant indentation
 - Type inference in many instances
-- Type definitions, including recursive types, at compile-time
+- Type definitions at compile-time
 - Generics in function definitions
 
 The informal specifications can be found [here](specifications.md).
