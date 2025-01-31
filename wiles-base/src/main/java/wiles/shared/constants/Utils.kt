@@ -1,6 +1,5 @@
 package wiles.shared.constants
 
-import wiles.shared.JSONStatement
 import wiles.shared.SyntaxType
 import wiles.shared.TokenLocation
 import wiles.shared.constants.Chars.DIGIT_SEPARATOR
@@ -36,23 +35,9 @@ object Utils {
         val hasName = name.isNotEmpty()
         return ((if(!isToken) "$type" else "") +
                 (if(hasName) " " else "") +
-                (name + (if(hasComponents && name.isNotEmpty()) "; " else ""))+
+                name+
+                (if(hasName) " " else "") +
                 (if(hasComponents) "(" else "") +
-                (if(!hasComponents) "" else components.joinToString("; ")+")")).trim()
-    }
-
-    fun createFunctionType(variableType: Pair<JSONStatement, JSONStatement>): JSONStatement
-    {
-        return JSONStatement(syntaxType = SyntaxType.TYPE, name = Tokens.METHOD_ID,
-            components = mutableListOf(
-                JSONStatement(syntaxType = SyntaxType.METHOD,
-                    components = mutableListOf(
-                        variableType.second,
-                        JSONStatement(syntaxType = SyntaxType.DECLARATION, name = Tokens.ANON_ARG_ID,
-                            components = mutableListOf(variableType.first,
-                                JSONStatement(syntaxType = SyntaxType.TOKEN, name = "!elem")
-                            )),
-                    ))
-            ))
+                (if(!hasComponents) "" else components.joinToString(", ")+")")).trim()
     }
 }
