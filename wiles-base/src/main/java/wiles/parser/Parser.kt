@@ -2,15 +2,14 @@ package wiles.parser
 
 import wiles.parser.converters.TokensToSyntaxTreeConverter
 import wiles.parser.statements.CodeBlockStatement
-import wiles.shared.*
-import wiles.shared.constants.ErrorMessages.IO_ERROR
-import java.io.*
-import java.util.stream.Collectors
+import wiles.shared.CompilationExceptionsCollection
+import wiles.shared.JSONService
+import wiles.shared.Token
+import wiles.shared.TokenLocation
 
-class Parser(content : String?, isDebug : Boolean, filename : String?) {
+class Parser(val input : String, isDebug : Boolean) {
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
     private var results : CodeBlockStatement
-    val input = content?:loadFile(filename!!)
     var json : String
 
     init{
@@ -43,20 +42,6 @@ class Parser(content : String?, isDebug : Boolean, filename : String?) {
         val lastLineLocation = textSplit[lastIndex].length
         return TokenLocation(lastIndex+1,lastLineLocation+1,
             lastIndex+1,lastLineLocation+2)
-    }
-
-    private fun loadFile(filename: String): String {
-        val input: String
-        try {
-            val resource : InputStream = File(filename).inputStream()
-            resource.use { input = BufferedReader(InputStreamReader(it))
-                    .lines().collect(Collectors.joining("\n"))
-                return input
-            }
-        }
-        catch (ex: IOException) {
-            throw InternalErrorException(IO_ERROR + ex.message)
-        }
     }
 
     private fun sourceToTokens(): List<Token> {

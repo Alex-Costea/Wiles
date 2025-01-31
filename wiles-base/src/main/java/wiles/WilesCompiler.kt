@@ -1,19 +1,15 @@
 package wiles
 
+import org.apache.commons.cli.*
 import wiles.parser.Parser
 import wiles.shared.*
-import wiles.shared.constants.CommandLineArguments.CODE_COMMAND
-import wiles.shared.constants.CommandLineArguments.COMPILE_COMMAND
-import wiles.shared.constants.CommandLineArguments.DEBUG_COMMAND
-import wiles.shared.constants.CommandLineArguments.FILE_COMMAND
-import wiles.shared.constants.CommandLineArguments.GET_SYNTAX
-import wiles.shared.constants.CommandLineArguments.INPUT_COMMAND
-import wiles.shared.constants.CommandLineArguments.RUN_COMMAND
 import wiles.shared.constants.ErrorMessages.COMPILATION_FAILED_ERROR
+import wiles.shared.constants.ErrorMessages.IO_ERROR
 import wiles.shared.constants.ErrorMessages.LINE_SYMBOL
-import java.io.ByteArrayInputStream
-import java.io.IOException
+import java.io.*
 import java.util.*
+import java.util.stream.Collectors
+import kotlin.system.exitProcess
 
 
 object WilesCompiler {
@@ -38,40 +34,62 @@ object WilesCompiler {
         else return ""
     }
 
-    private fun getCommandLine(args: Array<String>): CommandLineArgs {
-        var debug = false
-        var compileCommand = false
-        var runCommand = false
-        var filename : String? = null
-        var code : String? = null
-        var inputText : String? = null
-        var getSyntax = false
-        for(arg in args)
-        {
-            if(arg == DEBUG_COMMAND)
-                debug = true
-            if(arg == COMPILE_COMMAND)
-                compileCommand = true
-            if(arg == RUN_COMMAND)
-                runCommand = true
-            if(arg == GET_SYNTAX)
-                getSyntax = true
-            if(arg.startsWith(FILE_COMMAND))
-                filename = arg.split(FILE_COMMAND, limit = 2)[1]
-            if(arg.startsWith(CODE_COMMAND))
-                code = arg.split(CODE_COMMAND, limit = 2)[1]
-            if(arg.startsWith(INPUT_COMMAND))
-                inputText = arg.split(INPUT_COMMAND, limit = 2)[1]
+    private fun loadFile(filename: String): String {
+        val input: String
+        try {
+            val resource : InputStream = File(filename).inputStream()
+            resource.use { input = BufferedReader(InputStreamReader(it))
+                .lines().collect(Collectors.joining("\n"))
+                return input
+            }
         }
-        return CommandLineArgs(
-            isDebug = debug,
-            isCompileCommand = compileCommand,
-            isRunCommand = runCommand,
-            filename = filename,
-            code = code,
-            inputText = inputText,
-            getSyntax = getSyntax
-        )
+        catch (ex: IOException) {
+            throw InternalErrorException(IO_ERROR + ex.message)
+        }
+    }
+
+    data class ProgramArgs(
+        val isDebug: Boolean,
+        val code: String,
+        val input: String?
+    )
+
+    private fun getCommandLine(args: Array<String>): ProgramArgs {
+        val help = Option.builder("help").longOpt("help")
+            .desc("Print this message").build()
+
+        val debug = Option.builder("debug").longOpt("debug")
+            .desc("Run in debug mode, which displays additional logs.").build()
+
+        val file = Option.builder("file").longOpt("file").hasArg()
+            .desc("File that contains the code to be executed").type(String.Companion::class.java).build()
+
+        val input = Option.builder("input").longOpt("input").hasArg()
+            .desc("Input to be used by IO").type(String.Companion::class.java).build()
+
+        val options = Options().addOption(debug).addOption(file).addOption(input).addOption(help)
+        val parser = DefaultParser()
+        val formatter = HelpFormatter()
+        try{
+            val line = parser.parse(options, args)
+            val helpValue = line.hasOption(help)
+            if(helpValue)
+            {
+                formatter.printHelp("java -jar Wiles.jar",options)
+                exitProcess(0)
+            }
+            val debugValue = line.hasOption(debug)
+            val fileValue = line.getParsedOptionValue<String>(file)
+            val inputValue = line.getParsedOptionValue<String?>(input)
+            val code = loadFile(fileValue)
+            return ProgramArgs(isDebug = debugValue, code = code, input = inputValue)
+        }
+        catch (ex : ParseException)
+        {
+            println("Argument parsing error.")
+            formatter.printHelp("java -jar Wiles.jar",options)
+            exitProcess(0)
+        }
     }
 
     @JvmStatic
@@ -79,80 +97,31 @@ object WilesCompiler {
     {
         //args
         val exceptions = CompilationExceptionsCollection()
-        var interpreterCode : String? = null
         val exceptionsString = StringBuilder()
         val clArgs = getCommandLine(args)
 
-        if(clArgs.filename == null && clArgs.code == null)
-            throw Exception("Invalid arguments!")
-
         //get input
-        val scanner = if(clArgs.inputText == null)
+        val scanner = if(clArgs.input == null)
             Scanner(System.`in`)
-        else Scanner(ByteArrayInputStream(clArgs.inputText.toByteArray(Charsets.UTF_8)))
+        else Scanner(ByteArrayInputStream(clArgs.input.toByteArray(Charsets.UTF_8)))
 
-        if(!clArgs.isRunCommand) {
-            val parser = Parser(clArgs.code, clArgs.isDebug, clArgs.filename)
-            exceptions.addAll(parser.getExceptions())
-            val result = parser.getResults()
+        val parser = Parser(clArgs.code, clArgs.isDebug)
+        exceptions.addAll(parser.getExceptions())
+        val result = parser.getResults()
 
-            if (clArgs.isDebug) {
-                print("Syntax tree: ")
-                println(result)
-            }
+        if (clArgs.isDebug) {
+            print("Syntax tree: ")
+            println(result)
+        }
 
-            if (exceptions.isNotEmpty()) {
-                exceptionsString.append(getErrorsDisplay(exceptions, parser.input, clArgs.isDebug))
-                return OutputData(output = "",
-                    exceptionsString = exceptionsString.toString(),
-                    exceptions = exceptions)
-            }
-
-            /*val checker = Checker(parser.json)
-            exceptions.addAll(checker.check())
-
-            if (clArgs.isDebug) {
-                print("After checking: ")
-                println(checker.code)
-            }
-
-            if(clArgs.getSyntax)
-            {
-                return OutputData(
-                    output = "",
-                    exceptionsString = exceptionsString.toString(),
-                    exceptions = exceptions,
-                    syntax =  checker.code)
-            }
-
-            if (clArgs.isCompileCommand && exceptions.isEmpty()) {
-                val writer = FileWriter((clArgs.filename ?: "code.wiles") + OBJECT_FILE)
-                writer.write(checker.codeAsJSONString)
-                writer.close()
-            }
-
+        if (exceptions.isNotEmpty()) {
             exceptionsString.append(getErrorsDisplay(exceptions, parser.input, clArgs.isDebug))
-
-            interpreterCode = checker.codeAsJSONString*/
+            return OutputData(output = "",
+                exceptionsString = exceptionsString.toString(),
+                exceptions = exceptions)
         }
 
         val output = StringBuilder()
-/*        if(!clArgs.isCompileCommand && exceptions.isEmpty())
-        {
-            val interpreter = Interpreter(interpreterCode, clArgs.isDebug,
-                filename = clArgs.filename?: "code.wiles",
-                InterpreterContext(scanner, output))
-            try{
-                interpreter.interpret()
-            }
-            catch (ex : PanicException)
-            {
-                val message = ex.message ?:"A runtime error occurred!"
-                exceptions.addLast(PanicExceptionWithLocation(message, ex.location ?: TokenLocation())
-                )
-                exceptionsString.append(message)
-            }
-        }*/
         return OutputData(
             output = output.toString(),
             exceptionsString = exceptionsString.toString(),

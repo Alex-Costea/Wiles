@@ -1,9 +1,5 @@
 
 import org.junit.jupiter.api.Test
-import wiles.WilesCompiler.main
-import wiles.shared.constants.CommandLineArguments
-import java.io.ByteArrayOutputStream
-import java.io.PrintStream
 import kotlin.test.assertEquals
 
 
@@ -13,6 +9,8 @@ class FullTests {
     private val systemOut = System.out
     private fun getOutput(code : String, input : String? = null) : String
     {
+        TODO("Reworking the Full Tests")
+/*
         val baos = ByteArrayOutputStream()
         val outputStream = PrintStream(baos)
         System.setOut(outputStream)
@@ -24,6 +22,7 @@ class FullTests {
         System.setIn(systemIn)
         System.setOut(systemOut)
         return baos.toString("UTF-8")
+*/
     }
 
     @Test
