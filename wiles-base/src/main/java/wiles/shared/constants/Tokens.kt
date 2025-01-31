@@ -33,6 +33,7 @@ object Tokens {
     const val IDENTIFIER_START = "!"
     const val STRING_START = "@"
     const val NUM_START = "#"
+    const val KEYWORD_START = "%"
     const val TYPE_ANNOTATION_ID = "TYPE_ANNOTATION"
     const val SEPARATOR_ID = "SEPARATOR"
     const val DO_ID = "DO"

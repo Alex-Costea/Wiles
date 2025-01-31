@@ -3,6 +3,10 @@ package wiles.shared.constants
 import wiles.shared.SyntaxType
 import wiles.shared.TokenLocation
 import wiles.shared.constants.Chars.DIGIT_SEPARATOR
+import wiles.shared.constants.Tokens.IDENTIFIER_START
+import wiles.shared.constants.Tokens.KEYWORD_START
+import wiles.shared.constants.Tokens.NUM_START
+import wiles.shared.constants.Tokens.STRING_START
 
 object Utils {
     @JvmStatic
@@ -30,8 +34,8 @@ object Utils {
 
     private fun escapeName(name : String) : String
     {
-        if(name.isEmpty()) return name
-        if(!name.startsWith('@')) return name
+        if(name.startsWith(IDENTIFIER_START) || name.startsWith(NUM_START)) return name
+        if(!name.startsWith(STRING_START)) return KEYWORD_START + name
         var stringValue = name.substring(1)
         stringValue = stringValue.replace("\\","\\\\")
         stringValue = stringValue.replace("'","\\'")
@@ -45,7 +49,7 @@ object Utils {
         val hasName = name.isNotEmpty()
         return ((if(!isToken) "$type" else "") +
                 (if(hasName) " " else "") +
-                escapeName(name)+
+                (if(isToken) escapeName(name) else name)+
                 (if(hasName) " " else "") +
                 (if(hasComponents) "(" else "") +
                 (if(!hasComponents) "" else components.joinToString(", ")+")")).trim()
