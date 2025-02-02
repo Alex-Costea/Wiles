@@ -60,7 +60,7 @@ import wiles.shared.constants.Utils.NULL_LOCATION
 class SyntaxTreeConverterTests {
     private fun trimAll(string: String) : String
     {
-        return string.replace("\n"," ").replace(" ","")
+        return string.replace("[\\r\\n]+| |\\[.*]".toRegex(),"")
     }
 
     private fun assertResults(exceptions: CompilationExceptionsCollection?, expectedResult: String?, vararg tokens: String) {
@@ -70,8 +70,6 @@ class SyntaxTreeConverterTests {
         expectedResult?.let{
             val expected = trimAll(expectedResult)
             val got = trimAll(converter.result)
-            println(expected)
-            println(got)
             Assertions.assertEquals(expected, got)
         }
     }

@@ -48,6 +48,11 @@ object Utils {
         return "'$stringValue'"
     }
 
+    private fun getLocation(location: TokenLocation?) : String{
+        location ?: return ""
+        return " [${location.line}, ${location.lineIndex}, ${location.lineEnd}, ${location.lineEndIndex}]"
+    }
+
     fun statementToString(statement: AbstractStatement) : String
     {
         val components = statement.getComponents()
@@ -60,6 +65,7 @@ object Utils {
         return ((if(!isToken) "$type" else "") +
                 (if(hasName && !isToken) ": " else "") +
                 escapeName(name, isToken) +
+                getLocation(statement.location) +
                 (if(hasName && !isToken) " " else "") +
                 (if(hasComponents) "\n(" else "") +
                 (if(!hasComponents) "" else componentStrings.joinToString(", ")
