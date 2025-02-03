@@ -8,7 +8,7 @@ import wiles.shared.AbstractCompilationException
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.BRACE_END_ID
-import wiles.shared.constants.Tokens.RIGHT_ARROW_ID
+import wiles.shared.constants.Tokens.RETURN_TYPE_ID
 import wiles.shared.constants.Tokens.SEPARATOR_ID
 import wiles.shared.constants.Tokens.TYPE_ANNOTATION_ID
 import wiles.shared.constants.Types.DICT_ID
@@ -30,7 +30,7 @@ class DictStatement(context: ParserContext) : AbstractStatement(context) {
                 newComp1.process().throwFirstIfExists()
                 components.add(newComp1)
 
-                transmitter.expect(tokenOf(RIGHT_ARROW_ID))
+                transmitter.expect(tokenOf(RETURN_TYPE_ID))
 
                 val newComp2 = InnerDefaultExpression(context)
                 newComp2.process().throwFirstIfExists()
@@ -43,7 +43,7 @@ class DictStatement(context: ParserContext) : AbstractStatement(context) {
                 val typeStatement1 = TypeStatement(context)
                 typeStatement1.process().throwFirstIfExists()
 
-                transmitter.expect(tokenOf(RIGHT_ARROW_ID))
+                transmitter.expect(tokenOf(RETURN_TYPE_ID))
 
                 val typeStatement2 = TypeStatement(context)
                 typeStatement2.process().throwFirstIfExists()

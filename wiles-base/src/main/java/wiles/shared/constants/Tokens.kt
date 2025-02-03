@@ -36,7 +36,7 @@ object Tokens {
     const val TYPE_ANNOTATION_ID = "TYPE_ANNOTATION"
     const val SEPARATOR_ID = "SEPARATOR"
     const val DO_ID = "DO"
-    const val RIGHT_ARROW_ID = "RIGHT_ARROW"
+    const val RETURN_TYPE_ID = "RETURN_TYPE"
     const val DECLARE_ID = "DECLARE"
     const val EQUALS_ID = "EQUALS"
     const val LARGER_ID = "LARGER"
@@ -92,7 +92,7 @@ object Tokens {
 
     @JvmField
     val NEW_STATEMENT_START_KEYWORDS = setOf(
-        DECLARE_ID, ELSE_ID, CONTINUE_ID, IS_ID, RETURN_ID, WHILE_ID, RIGHT_ARROW_ID,
+        DECLARE_ID, ELSE_ID, CONTINUE_ID, IS_ID, RETURN_ID, WHILE_ID, RETURN_TYPE_ID,
         BREAK_ID, FOR_ID, DO_ID, START_BLOCK_ID, END_BLOCK_ID, BRACKET_END_ID, PAREN_END_ID, MAYBE_ID,
         SEPARATOR_ID, IN_ID, FROM_ID, TO_ID, ASSIGN_ID, TERMINATOR_ID, NEWLINE_ID, IF_ID, BRACE_END_ID
     )
@@ -146,7 +146,7 @@ object Tokens {
         SYMBOLS["."] = ACCESS_ID
         SYMBOLS[":"] = TYPE_ANNOTATION_ID
         SYMBOLS[";"] = TERMINATOR_ID
-        SYMBOLS["->"] = RIGHT_ARROW_ID
+        SYMBOLS["->"] = RETURN_TYPE_ID
         SYMBOLS["?"] = MAYBE_ID
         SYMBOLS["~"] = MUTABLE_ID
         SYMBOLS["\\"] = CONTINUE_LINE_ID
