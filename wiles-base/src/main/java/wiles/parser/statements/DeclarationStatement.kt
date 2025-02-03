@@ -17,7 +17,7 @@ import wiles.shared.constants.Tokens.ANON_ARG_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.CONST_ID
 import wiles.shared.constants.Tokens.GLOBAL_ID
-import wiles.shared.constants.Tokens.TYPE_ANNOTATION_ID
+import wiles.shared.constants.Tokens.ANNOTATE_ID
 import wiles.shared.constants.Tokens.VARIABLE_ID
 
 class DeclarationStatement(
@@ -72,7 +72,7 @@ class DeclarationStatement(
             this.left = TokenStatement(transmitter.expect(tokenOf(IS_IDENTIFIER)
                 .withErrorMessage(IDENTIFIER_EXPECTED_ERROR)),context)
 
-            if(transmitter.expectMaybe(tokenOf(TYPE_ANNOTATION_ID)).isPresent) {
+            if(transmitter.expectMaybe(tokenOf(ANNOTATE_ID)).isPresent) {
                 typeStatement = TypeStatement(context)
                 typeStatement!!.process().throwFirstIfExists()
                 if(nameStrings.contains(GLOBAL_ID))

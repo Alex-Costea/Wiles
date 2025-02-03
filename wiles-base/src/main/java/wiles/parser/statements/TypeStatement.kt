@@ -90,7 +90,7 @@ class TypeStatement(context: ParserContext)
                         val left = TokenStatement(transmitter.expect(
                             tokenOf(IS_IDENTIFIER)
                                 .withErrorMessage(IDENTIFIER_EXPECTED_ERROR)),context)
-                        transmitter.expect(tokenOf(Tokens.TYPE_ANNOTATION_ID))
+                        transmitter.expect(tokenOf(Tokens.ANNOTATE_ID))
                         val right = TypeStatement(context)
                         right.process().throwFirstIfExists()
                         classComponents.add(left)

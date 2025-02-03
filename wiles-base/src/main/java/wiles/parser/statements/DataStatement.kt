@@ -11,6 +11,7 @@ import wiles.shared.Token
 import wiles.shared.constants.ErrorMessages
 import wiles.shared.constants.Predicates
 import wiles.shared.constants.Tokens
+import wiles.shared.constants.Tokens.ANNOTATE_ID
 
 class DataStatement(context: ParserContext) : AbstractStatement(context) {
     override val syntaxType = SyntaxType.DATA
@@ -39,7 +40,7 @@ class DataStatement(context: ParserContext) : AbstractStatement(context) {
                     .withErrorMessage(ErrorMessages.IDENTIFIER_EXPECTED_ERROR)),context)
                 components.add(convertIdentifierToString(newComp1))
 
-                transmitter.expect(ExpectParamsBuilder.tokenOf(Tokens.ASSIGN_ID))
+                transmitter.expect(ExpectParamsBuilder.tokenOf(ANNOTATE_ID))
 
                 val newComp2 = InnerDefaultExpression(context)
                 newComp2.process().throwFirstIfExists()

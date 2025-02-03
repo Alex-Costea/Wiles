@@ -30,7 +30,7 @@ class ListStatement(context: ParserContext) : AbstractStatement(context) {
                 if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break
             }
             location = transmitter.expect(tokenOf(BRACKET_END_ID)).location
-            if(transmitter.expectMaybe(tokenOf(Tokens.TYPE_ANNOTATION_ID).dontIgnoreNewLine()).isPresent) {
+            if(transmitter.expectMaybe(tokenOf(Tokens.ANNOTATE_ID).dontIgnoreNewLine()).isPresent) {
                 val typeStatement = TypeStatement(context)
                 typeStatement.process().throwFirstIfExists()
                 components.add(0,typeStatement)

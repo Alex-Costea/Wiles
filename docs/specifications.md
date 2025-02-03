@@ -14,8 +14,8 @@
   - `\d;` is dollar (reserved for future use)
 - Boolean: `true` and `false`
 - List literal: `[⟪value,⟫] ⟨: type⟩`
-- Dict literal: `{ ⟪key -> value,⟫ } ⟨: key_type -> value_type⟩`
-- Data literal: `data{ ⟪identifier := value,⟫ }`
+- Dict literal: `{ ⟪key -> value,⟫ } ⟨: key_type : value_type⟩`
+- Data literal: `data{ ⟪identifier : value,⟫ }`
 - Functions literals: `⟨fun (⟪param1 ⟨: type⟩ ⟨:= default_value⟩,⟫)⟩ ⟨-> return_type⟩⟩ [block]`
 - Type literals `type([type_info])`
 
@@ -39,10 +39,6 @@
 - Simple conditional: `if [condition] [block]`
 - Complex conditional: `if begin; ⟪clause;⟫ end`
     - Normal clause: `[condition] [block]`
-    - Default clause: `default [block]`
-- Simple conditional type cast: `when [object] is [type] do [block]`
-- Complex conditional type cast: `when [object] begin; ⟪clause;⟫ end`
-    - Normal clause: `is [type] [block]`
     - Default clause: `default [block]`
 - For loop: `for x ⟨in list⟩ ⟨from a⟩ ⟨to b⟩ [block]`
     - `from` value is inclusive, `to` value is exclusive
@@ -74,8 +70,8 @@
 - Named parameters can be in any order. Unnamed parameters are matched in order of appearance.
 
 ### Mutable types
-- Type: `mut[type]`, always subtype of `type`
-- Make an immutable collection into a mutable collection with `mut` prefix operator
+- Type: `~[type]`, always subtype of `type`
+- Make an immutable collection into a mutable collection with `~` prefix operator
 
 ### Generics
 
