@@ -24,7 +24,7 @@ import wiles.shared.constants.Tokens.DECLARE_ID
 import wiles.shared.constants.Tokens.DO_ID
 import wiles.shared.constants.Tokens.FOR_ID
 import wiles.shared.constants.Tokens.IF_ID
-import wiles.shared.constants.Tokens.METHOD_ID
+import wiles.shared.constants.Tokens.FUNC_ID
 import wiles.shared.constants.Tokens.RETURN_ID
 import wiles.shared.constants.Tokens.START_BLOCK_ID
 import wiles.shared.constants.Tokens.TYPE_ID
@@ -74,7 +74,7 @@ class StatementFactory {
         init {
             params[StatementFactoryTypes.TOP_LEVEL_EXPRESSION] = START_OF_EXPRESSION
             params[StatementFactoryTypes.DECLARATION_STATEMENT] = tokenOf(DECLARE_ID)
-            params[StatementFactoryTypes.METHOD_STATEMENT] = tokenOf(METHOD_ID).or(DO_ID).or(START_BLOCK_ID)
+            params[StatementFactoryTypes.FUNC_STATEMENT] = tokenOf(FUNC_ID).or(DO_ID).or(START_BLOCK_ID)
                 .removeWhen(WhenRemoveToken.Never)
             params[StatementFactoryTypes.RETURN_STATEMENT] = tokenOf(RETURN_ID)
             params[StatementFactoryTypes.IF_STATEMENT] = tokenOf(IF_ID).removeWhen(WhenRemoveToken.Never)
@@ -92,7 +92,7 @@ class StatementFactory {
                 Function { context: ParserContext -> DefaultExpression(context) }
             createObject[StatementFactoryTypes.DECLARATION_STATEMENT] =
                 Function { context: ParserContext -> DeclarationStatement(context) }
-            createObject[StatementFactoryTypes.METHOD_STATEMENT] =
+            createObject[StatementFactoryTypes.FUNC_STATEMENT] =
                 Function { context: ParserContext -> MethodStatement(context) }
             createObject[StatementFactoryTypes.RETURN_STATEMENT] =
                 Function { context: ParserContext -> ReturnStatement(context) }

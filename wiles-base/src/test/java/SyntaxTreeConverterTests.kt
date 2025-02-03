@@ -36,7 +36,7 @@ import wiles.shared.constants.Tokens.IN_ID
 import wiles.shared.constants.Tokens.IS_ID
 import wiles.shared.constants.Tokens.LARGER_ID
 import wiles.shared.constants.Tokens.MAYBE_ID
-import wiles.shared.constants.Tokens.METHOD_ID
+import wiles.shared.constants.Tokens.FUNC_ID
 import wiles.shared.constants.Tokens.MINUS_ID
 import wiles.shared.constants.Tokens.NEWLINE_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
@@ -86,13 +86,13 @@ class SyntaxTreeConverterTests {
 
     @Test
     fun newlineTests() {
-        assertResults(null, "CODE_BLOCK(DECLARATION(!a, EXPRESSION(METHOD(CODE_BLOCK))))",
-                DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
-        assertResults(null, "CODE_BLOCK(DECLARATION(!a, EXPRESSION(METHOD(CODE_BLOCK))))",
+        assertResults(null, "CODE_BLOCK(DECLARATION(!a, EXPRESSION(FUNC(CODE_BLOCK))))",
+                DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
+        assertResults(null, "CODE_BLOCK(DECLARATION(!a, EXPRESSION(FUNC(CODE_BLOCK))))",
                 NEWLINE_ID, NEWLINE_ID,
-                DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
-        assertResults(null, "CODE_BLOCK(DECLARATION(!a, EXPRESSION(METHOD(CODE_BLOCK))))",
-                DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID,
+                DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
+        assertResults(null, "CODE_BLOCK(DECLARATION(!a, EXPRESSION(FUNC(CODE_BLOCK))))",
+                DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID,
                 NEWLINE_ID, PAREN_END_ID,
                 NEWLINE_ID, START_BLOCK_ID,
                 NEWLINE_ID, END_BLOCK_ID)
@@ -100,12 +100,12 @@ class SyntaxTreeConverterTests {
 
     @Test
     fun expressionsTest() {
-        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(METHOD(CODE_BLOCK(EXPRESSION(EXPRESSION(!b), %ASSIGN, EXPRESSION(!c)))))))",
-                DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID,
+        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(CODE_BLOCK(EXPRESSION(EXPRESSION(!b), %ASSIGN, EXPRESSION(!c)))))))",
+                DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID,
                 PAREN_START_ID, PAREN_END_ID, START_BLOCK_ID, TERMINATOR_ID,
                 "!b", ASSIGN_ID, "!c", TERMINATOR_ID, END_BLOCK_ID)
-        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(METHOD(CODE_BLOCK(EXPRESSION(EXPRESSION(!b), %ASSIGN, EXPRESSION(#3)))))))",
-            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID,
+        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(CODE_BLOCK(EXPRESSION(EXPRESSION(!b), %ASSIGN, EXPRESSION(#3)))))))",
+            DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID,
             PAREN_START_ID, PAREN_END_ID, START_BLOCK_ID, TERMINATOR_ID,
             "!b", ASSIGN_ID, "#3", TERMINATOR_ID, END_BLOCK_ID)
         assertResults(null, "CODE_BLOCK(EXPRESSION(EXPRESSION(!b, %PLUS, #3), %MINUS, #5))",
@@ -158,56 +158,56 @@ class SyntaxTreeConverterTests {
     fun programExceptionsTest() {
         assertResults(createExceptions(UnexpectedEndException(TOKEN_EXPECTED_ERROR.format(END_BLOCK_ID), NULL_LOCATION)),
             null,
-            DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, START_BLOCK_ID)
+            DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, START_BLOCK_ID)
         assertResults(createExceptions(TokenExpectedException(END_OF_STATEMENT_EXPECTED_ERROR, NULL_LOCATION)),
             null,
-            DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, NEWLINE_ID,
+            DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, NEWLINE_ID,
             START_BLOCK_ID, NEWLINE_ID, "!a", PLUS_ID, "!b", DECLARE_ID, NEWLINE_ID, END_BLOCK_ID)
         assertResults(createExceptions(UnexpectedEndException(TOKEN_EXPECTED_ERROR.format(END_BLOCK_ID), NULL_LOCATION)),
                 null,
-            DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, START_BLOCK_ID, TERMINATOR_ID)
+            DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, START_BLOCK_ID, TERMINATOR_ID)
         assertResults(createExceptions(UnexpectedEndException(TOKEN_EXPECTED_ERROR.format(PAREN_END_ID), NULL_LOCATION)),
                 null,
-            DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID)
+            DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID)
         assertResults(createExceptions(TokenExpectedException(INVALID_EXPRESSION_ERROR, NULL_LOCATION),TokenExpectedException(
-            END_OF_STATEMENT_EXPECTED_ERROR, NULL_LOCATION)),"CODE_BLOCK(DECLARATION(!main, EXPRESSION(METHOD(CODE_BLOCK(EXPRESSION, EXPRESSION(!a, %PLUS, !b))))))",
-            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, NEWLINE_ID,
+            END_OF_STATEMENT_EXPECTED_ERROR, NULL_LOCATION)),"CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(CODE_BLOCK(EXPRESSION, EXPRESSION(!a, %PLUS, !b))))))",
+            DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, NEWLINE_ID,
             START_BLOCK_ID, NEWLINE_ID, "!a", TIMES_ID, TIMES_ID, "!b", NEWLINE_ID, "!a", PLUS_ID, "!b",
             DECLARE_ID, "!c", ASSIGN_ID, "!d", NEWLINE_ID, END_BLOCK_ID)
         assertResults(createExceptions(UnexpectedTokenException(INVALID_STATEMENT_ERROR, NULL_LOCATION)),
-        "CODE_BLOCK(DECLARATION(!a, EXPRESSION(METHOD(CODE_BLOCK))), EXPRESSION(!a, %PLUS, !b))",
-            DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, DO_ID, CONTINUE_ID
+        "CODE_BLOCK(DECLARATION(!a, EXPRESSION(FUNC(CODE_BLOCK))), EXPRESSION(!a, %PLUS, !b))",
+            DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, DO_ID, CONTINUE_ID
             , NEWLINE_ID, "!a", PLUS_ID, "!b")
     }
 
     @Test
     fun methodTest() {
-        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(METHOD(TYPE: INT, CODE_BLOCK))))",
-            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, RIGHT_ARROW_ID, "!int",
+        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(TYPE: INT, CODE_BLOCK))))",
+            DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, RIGHT_ARROW_ID, "!int",
                 START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
-        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(METHOD(TYPE: INT, DECLARATION(TYPE: INT, !a), CODE_BLOCK))))",
-            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, PAREN_START_ID, "!a", TYPE_ANNOTATION_ID, "!int", PAREN_END_ID,
+        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(TYPE: INT, DECLARATION(TYPE: INT, !a), CODE_BLOCK))))",
+            DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, "!a", TYPE_ANNOTATION_ID, "!int", PAREN_END_ID,
             RIGHT_ARROW_ID, "!int", START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
-        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(METHOD(TYPE: INT, DECLARATION(TYPE: INT, !a), DECLARATION(TYPE: STRING, !b), CODE_BLOCK))))",
-            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, PAREN_START_ID, "!a", TYPE_ANNOTATION_ID, "!int",
+        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(TYPE: INT, DECLARATION(TYPE: INT, !a), DECLARATION(TYPE: STRING, !b), CODE_BLOCK))))",
+            DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, "!a", TYPE_ANNOTATION_ID, "!int",
                 SEPARATOR_ID, "!b", TYPE_ANNOTATION_ID, "!text", PAREN_END_ID, RIGHT_ARROW_ID, "!int", START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
-        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(METHOD(TYPE: INT, DECLARATION(TYPE: !nothing, !a), CODE_BLOCK))))",
-            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, PAREN_START_ID, "!a", TYPE_ANNOTATION_ID, NOTHING_ID, PAREN_END_ID,
+        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(TYPE: INT, DECLARATION(TYPE: !nothing, !a), CODE_BLOCK))))",
+            DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, "!a", TYPE_ANNOTATION_ID, NOTHING_ID, PAREN_END_ID,
             RIGHT_ARROW_ID, "!int", START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
-        assertResults(null, "CODE_BLOCK(DECLARATION(!a, EXPRESSION(METHOD(CODE_BLOCK(EXPRESSION(!nothing))))))",
-            DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, DO_ID, NOTHING_ID)
-        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(METHOD(CODE_BLOCK(EXPRESSION(EXPRESSION(!b), %ASSIGN, EXPRESSION(#3)))))))",
-            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, DO_ID,
+        assertResults(null, "CODE_BLOCK(DECLARATION(!a, EXPRESSION(FUNC(CODE_BLOCK(EXPRESSION(!nothing))))))",
+            DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, DO_ID, NOTHING_ID)
+        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(CODE_BLOCK(EXPRESSION(EXPRESSION(!b), %ASSIGN, EXPRESSION(#3)))))))",
+            DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, DO_ID,
              "!b", ASSIGN_ID, "#3")
-        assertResults(null, "CODE_BLOCK(DECLARATION(!product, EXPRESSION(METHOD(TYPE: INT, DECLARATION(TYPE: INT, !a), DECLARATION(TYPE: INT, !b), CODE_BLOCK(EXPRESSION(EXPRESSION(!product), %ASSIGN, EXPRESSION(!a, %TIMES, !b)))))))",
-            DECLARE_ID, "!product", ASSIGN_ID, METHOD_ID, PAREN_START_ID, "!a", TYPE_ANNOTATION_ID, "!int",
+        assertResults(null, "CODE_BLOCK(DECLARATION(!product, EXPRESSION(FUNC(TYPE: INT, DECLARATION(TYPE: INT, !a), DECLARATION(TYPE: INT, !b), CODE_BLOCK(EXPRESSION(EXPRESSION(!product), %ASSIGN, EXPRESSION(!a, %TIMES, !b)))))))",
+            DECLARE_ID, "!product", ASSIGN_ID, FUNC_ID, PAREN_START_ID, "!a", TYPE_ANNOTATION_ID, "!int",
                 SEPARATOR_ID, "!b", TYPE_ANNOTATION_ID, "!int", PAREN_END_ID, RIGHT_ARROW_ID, "!int", NEWLINE_ID,
                 DO_ID,  "!product", ASSIGN_ID, "!a", TIMES_ID, "!b")
-        assertResults(null,"CODE_BLOCK(DECLARATION(!main, EXPRESSION(METHOD(DECLARATION(TYPE: INT, !args), CODE_BLOCK(EXPRESSION(!nothing))))))",
-            DECLARE_ID, "!main", ASSIGN_ID, METHOD_ID, PAREN_START_ID, "!args", TYPE_ANNOTATION_ID, "!int", PAREN_END_ID, DO_ID, NOTHING_ID)
-        assertResults(null,"CODE_BLOCK(DECLARATION(!a, EXPRESSION(METHOD(CODE_BLOCK(DECLARATION(!b, EXPRESSION(METHOD(CODE_BLOCK(EXPRESSION(!nothing))))))))))",
-            DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, NEWLINE_ID, START_BLOCK_ID, NEWLINE_ID, DECLARE_ID,
-            "!b", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, DO_ID, NOTHING_ID, NEWLINE_ID, END_BLOCK_ID, NEWLINE_ID, NEWLINE_ID, NEWLINE_ID)
+        assertResults(null,"CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(DECLARATION(TYPE: INT, !args), CODE_BLOCK(EXPRESSION(!nothing))))))",
+            DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, "!args", TYPE_ANNOTATION_ID, "!int", PAREN_END_ID, DO_ID, NOTHING_ID)
+        assertResults(null,"CODE_BLOCK(DECLARATION(!a, EXPRESSION(FUNC(CODE_BLOCK(DECLARATION(!b, EXPRESSION(FUNC(CODE_BLOCK(EXPRESSION(!nothing))))))))))",
+            DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, NEWLINE_ID, START_BLOCK_ID, NEWLINE_ID, DECLARE_ID,
+            "!b", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, DO_ID, NOTHING_ID, NEWLINE_ID, END_BLOCK_ID, NEWLINE_ID, NEWLINE_ID, NEWLINE_ID)
     }
 
     @Test
@@ -232,8 +232,8 @@ class SyntaxTreeConverterTests {
     @Test
     fun returnTest()
     {
-        assertResults(null,"CODE_BLOCK(DECLARATION(!a, EXPRESSION(METHOD(TYPE: INT, CODE_BLOCK(RETURN(EXPRESSION(#10)))))))",
-            DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, RIGHT_ARROW_ID, "!int",
+        assertResults(null,"CODE_BLOCK(DECLARATION(!a, EXPRESSION(FUNC(TYPE: INT, CODE_BLOCK(RETURN(EXPRESSION(#10)))))))",
+            DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, RIGHT_ARROW_ID, "!int",
             START_BLOCK_ID, NEWLINE_ID, RETURN_ID, "#10", NEWLINE_ID, END_BLOCK_ID)
         assertResults(createExceptions(UnexpectedTokenException(INVALID_STATEMENT_ERROR, NULL_LOCATION)),null,
             RETURN_ID, "#10")
@@ -255,8 +255,8 @@ class SyntaxTreeConverterTests {
         assertResults(null, "CODE_BLOCK(IF(EXPRESSION(!true), CODE_BLOCK(EXPRESSION(!nothing))), EXPRESSION(!nothing))",
             IF_ID, TRUE_ID, DO_ID, NOTHING_ID, NEWLINE_ID, NOTHING_ID)
 
-        assertResults(null, "CODE_BLOCK(DECLARATION(!a, EXPRESSION(METHOD(CODE_BLOCK(IF(EXPRESSION(!true), CODE_BLOCK(RETURN(EXPRESSION(#1))), %ELSE, CODE_BLOCK(RETURN(EXPRESSION(#2)))))))), IF(EXPRESSION(!true), CODE_BLOCK(EXPRESSION(!nothing))), EXPRESSION(!nothing))",
-            DECLARE_ID, "!a", ASSIGN_ID, METHOD_ID, PAREN_START_ID, PAREN_END_ID, DO_ID, NEWLINE_ID,
+        assertResults(null, "CODE_BLOCK(DECLARATION(!a, EXPRESSION(FUNC(CODE_BLOCK(IF(EXPRESSION(!true), CODE_BLOCK(RETURN(EXPRESSION(#1))), %ELSE, CODE_BLOCK(RETURN(EXPRESSION(#2)))))))), IF(EXPRESSION(!true), CODE_BLOCK(EXPRESSION(!nothing))), EXPRESSION(!nothing))",
+            DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, DO_ID, NEWLINE_ID,
             IF_ID, START_BLOCK_ID, TRUE_ID, DO_ID, RETURN_ID, "#1", NEWLINE_ID,
             ELSE_ID, DO_ID, RETURN_ID, "#2", NEWLINE_ID, END_BLOCK_ID, NEWLINE_ID,
             IF_ID, TRUE_ID, DO_ID, NOTHING_ID, NEWLINE_ID, NOTHING_ID)
@@ -278,7 +278,7 @@ class SyntaxTreeConverterTests {
     @Test
     fun forTest()
     {
-        assertResults(null,"CODE_BLOCK(FOR(!i, %IN, EXPRESSION(!list), %FROM, EXPRESSION(#1), %TO, EXPRESSION(#100), CODE_BLOCK(EXPRESSION(!write_line, %APPLY, METHOD_CALL(EXPRESSION('hello!'))))))",
+        assertResults(null,"CODE_BLOCK(FOR(!i, %IN, EXPRESSION(!list), %FROM, EXPRESSION(#1), %TO, EXPRESSION(#100), CODE_BLOCK(EXPRESSION(!write_line, %APPLY, FUNC_CALL(EXPRESSION('hello!'))))))",
             FOR_ID, "!i", IN_ID, "!list", FROM_ID, "#1", TO_ID, "#100", NEWLINE_ID, START_BLOCK_ID, NEWLINE_ID, "!write_line", PAREN_START_ID, "@hello!", PAREN_END_ID, NEWLINE_ID, END_BLOCK_ID)
         assertResults(null, "CODE_BLOCK(FOR(!i, CODE_BLOCK(EXPRESSION(!nothing))))",
             FOR_ID, "!i", DO_ID, NOTHING_ID)
@@ -302,7 +302,7 @@ class SyntaxTreeConverterTests {
             "CODE_BLOCK", CONTINUE_ID)
         assertResults(createExceptions(TokenExpectedException(INVALID_STATEMENT_ERROR, NULL_LOCATION),
                                        TokenExpectedException(INVALID_STATEMENT_ERROR, NULL_LOCATION)),
-            "CODE_BLOCK(WHILE(EXPRESSION(!true), CODE_BLOCK(EXPRESSION(METHOD(CODE_BLOCK)), EXPRESSION(METHOD(CODE_BLOCK)))))",
+            "CODE_BLOCK(WHILE(EXPRESSION(!true), CODE_BLOCK(EXPRESSION(FUNC(CODE_BLOCK)), EXPRESSION(FUNC(CODE_BLOCK)))))",
             WHILE_ID, TRUE_ID, START_BLOCK_ID, NEWLINE_ID, DO_ID, BREAK_ID,
             NEWLINE_ID, DO_ID, CONTINUE_ID, NEWLINE_ID, END_BLOCK_ID)
     }
@@ -310,21 +310,21 @@ class SyntaxTreeConverterTests {
     @Test
     fun methodCallTest()
     {
-        assertResults(null,"CODE_BLOCK(EXPRESSION(!a, %PLUS, EXPRESSION(!b, %APPLY, METHOD_CALL)))",
+        assertResults(null,"CODE_BLOCK(EXPRESSION(!a, %PLUS, EXPRESSION(!b, %APPLY, FUNC_CALL)))",
             "!a", PLUS_ID, "!b", PAREN_START_ID, PAREN_END_ID)
-        assertResults(null,"CODE_BLOCK(EXPRESSION(!min, %APPLY, METHOD_CALL(EXPRESSION(EXPRESSION(!list), %ASSIGN, EXPRESSION(!a)))))",
+        assertResults(null,"CODE_BLOCK(EXPRESSION(!min, %APPLY, FUNC_CALL(EXPRESSION(EXPRESSION(!list), %ASSIGN, EXPRESSION(!a)))))",
             "!min", PAREN_START_ID, "!list", ASSIGN_ID, "!a", PAREN_END_ID)
-        assertResults(null, "CODE_BLOCK(EXPRESSION(!call, %APPLY, METHOD_CALL(EXPRESSION(EXPRESSION(!a), %ASSIGN, EXPRESSION(!b, %PLUS, !c)), EXPRESSION(!d), EXPRESSION(!e, %EQUALS, !f))))",
+        assertResults(null, "CODE_BLOCK(EXPRESSION(!call, %APPLY, FUNC_CALL(EXPRESSION(EXPRESSION(!a), %ASSIGN, EXPRESSION(!b, %PLUS, !c)), EXPRESSION(!d), EXPRESSION(!e, %EQUALS, !f))))",
             "!call", PAREN_START_ID, "!a", ASSIGN_ID, "!b", PLUS_ID, "!c", SEPARATOR_ID, "!d", SEPARATOR_ID, "!e", EQUALS_ID, "!f", PAREN_END_ID)
     }
 
     @Test
     fun typesTest()
     {
-        assertResults(null, "CODE_BLOCK(DECLARATION(TYPE: METHOD (METHOD), !a))",
-            DECLARE_ID, "!a", TYPE_ANNOTATION_ID, METHOD_ID, BRACKET_START_ID, BRACKET_END_ID)
-        assertResults(null,"CODE_BLOCK(DECLARATION(TYPE: METHOD (METHOD(TYPE: BOOLEAN, DECLARATION(TYPE: INT, !a), DECLARATION(TYPE: STRING, !b))), !func))",
-            DECLARE_ID, "!func", TYPE_ANNOTATION_ID, METHOD_ID, BRACKET_START_ID, "!a", TYPE_ANNOTATION_ID, "!int", SEPARATOR_ID,
+        assertResults(null, "CODE_BLOCK(DECLARATION(TYPE: FUNC (FUNC), !a))",
+            DECLARE_ID, "!a", TYPE_ANNOTATION_ID, FUNC_ID, BRACKET_START_ID, BRACKET_END_ID)
+        assertResults(null,"CODE_BLOCK(DECLARATION(TYPE: FUNC (FUNC(TYPE: BOOLEAN, DECLARATION(TYPE: INT, !a), DECLARATION(TYPE: STRING, !b))), !func))",
+            DECLARE_ID, "!func", TYPE_ANNOTATION_ID, FUNC_ID, BRACKET_START_ID, "!a", TYPE_ANNOTATION_ID, "!int", SEPARATOR_ID,
             "!b", TYPE_ANNOTATION_ID, "!text", SEPARATOR_ID, RIGHT_ARROW_ID, "!truth", BRACKET_END_ID)
         assertResults(null,"CODE_BLOCK(DECLARATION(TYPE: EITHER (TYPE: INT, TYPE: !nothing), !a), DECLARATION(TYPE: EITHER (TYPE: INT, TYPE: !nothing), !b))",
             DECLARE_ID, "!a", TYPE_ANNOTATION_ID, "!int", MAYBE_ID, NEWLINE_ID,
@@ -431,7 +431,7 @@ class SyntaxTreeConverterTests {
     fun textTest()
     {
         // write_line("It's a beautiful day! but i still feel sad :-\b; sorry")
-        assertResults(null,"CODE_BLOCK(EXPRESSION(!write_line, %APPLY, METHOD_CALL(EXPRESSION('It\\qs\\sa\\sbeautiful\\sday!\\sbut\\si\\sstill\\sfeel\\ssad\\s:-\\b\\ssorry\\s-_-\\noh\\swell'))))",
+        assertResults(null,"CODE_BLOCK(EXPRESSION(!write_line, %APPLY, FUNC_CALL(EXPRESSION('It\\qs\\sa\\sbeautiful\\sday!\\sbut\\si\\sstill\\sfeel\\ssad\\s:-\\b\\ssorry\\s-_-\\noh\\swell'))))",
             "!write_line", PAREN_START_ID, "@It's a beautiful day! but i still feel sad :-\\ sorry -_-\noh well", PAREN_END_ID, TERMINATOR_ID)
     }
 

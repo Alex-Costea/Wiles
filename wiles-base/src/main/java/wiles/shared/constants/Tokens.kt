@@ -17,7 +17,7 @@ object Tokens {
     const val BRACKET_END_ID = "BRACKET_END"
     const val BRACE_START_ID = "BRACE_START"
     const val BRACE_END_ID = "BRACE_END"
-    const val METHOD_ID = "METHOD"
+    const val FUNC_ID = "FUNC"
     const val TERMINATOR_ID = "TERMINATOR"
     const val CONTINUE_LINE_ID = "CONTINUE_LINE"
     const val PLUS_ID = "PLUS"
@@ -98,7 +98,7 @@ object Tokens {
     )
 
     init {
-        KEYWORDS["fun"] = METHOD_ID
+        KEYWORDS["fun"] = FUNC_ID
         KEYWORDS["let"] = DECLARE_ID
         KEYWORDS["var"] = VARIABLE_ID
         KEYWORDS["if"] = IF_ID

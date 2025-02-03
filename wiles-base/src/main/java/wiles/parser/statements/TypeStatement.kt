@@ -17,7 +17,7 @@ import wiles.shared.constants.Tokens.BRACKET_END_ID
 import wiles.shared.constants.Tokens.BRACKET_START_ID
 import wiles.shared.constants.Tokens.DATA_ID
 import wiles.shared.constants.Tokens.MAYBE_ID
-import wiles.shared.constants.Tokens.METHOD_ID
+import wiles.shared.constants.Tokens.FUNC_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.SEPARATOR_ID
 import wiles.shared.constants.Types.EITHER_ID
@@ -75,7 +75,7 @@ class TypeStatement(context: ParserContext)
                         throw TokenExpectedException(NOT_ENOUGH_TYPES_ERROR,location)
                     transmitter.expect(tokenOf(BRACKET_END_ID))
                 }
-                if(name == METHOD_ID) {
+                if(name == FUNC_ID) {
                     transmitter.expect(tokenOf(BRACKET_START_ID))
                     val funStatement = MethodStatement(context, true)
                     funStatement.process().throwFirstIfExists()

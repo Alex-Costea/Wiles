@@ -3,7 +3,7 @@ package wiles.shared.constants
 import wiles.shared.constants.Tokens.CONST_ID
 import wiles.shared.constants.Tokens.DATA_ID
 import wiles.shared.constants.Tokens.MAYBE_ID
-import wiles.shared.constants.Tokens.METHOD_ID
+import wiles.shared.constants.Tokens.FUNC_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 
@@ -41,7 +41,7 @@ object Types {
         TYPES["!either"] = EITHER_ID
         TYPES[NOTHING_ID] = NOTHING_ID
         TYPES[MAYBE_ID] = MAYBE_ID
-        TYPES[METHOD_ID] = METHOD_ID
+        TYPES[FUNC_ID] = FUNC_ID
         TYPES[MUTABLE_ID] = MUTABLE_ID
         TYPES[DATA_ID] = DATA_ID
         TYPES[CONST_ID] = CONST_ID

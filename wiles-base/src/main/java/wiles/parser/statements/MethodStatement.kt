@@ -9,7 +9,7 @@ import wiles.shared.SyntaxType
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.ANON_ARG_ID
 import wiles.shared.constants.Tokens.DO_ID
-import wiles.shared.constants.Tokens.METHOD_ID
+import wiles.shared.constants.Tokens.FUNC_ID
 import wiles.shared.constants.Tokens.PAREN_END_ID
 import wiles.shared.constants.Tokens.PAREN_START_ID
 import wiles.shared.constants.Tokens.RIGHT_ARROW_ID
@@ -26,7 +26,7 @@ class MethodStatement(oldContext : ParserContext, private val isTypeDeclaration:
     private var methodBody: CodeBlockStatement = CodeBlockStatement(context)
 
     override val syntaxType: SyntaxType
-        get() = SyntaxType.METHOD
+        get() = SyntaxType.FUNC
 
     override fun getComponents(): MutableList<AbstractStatement> {
         val components = ArrayList<AbstractStatement>()
@@ -56,7 +56,7 @@ class MethodStatement(oldContext : ParserContext, private val isTypeDeclaration:
             val startWithCodeBlock = transmitter.expectMaybe(tokenOf(DO_ID).or(START_BLOCK_ID).removeWhen(WhenRemoveToken.Never))
             if(startWithCodeBlock.isEmpty) {
                 if(!isTypeDeclaration) {
-                    location = transmitter.expect(tokenOf(METHOD_ID)).location
+                    location = transmitter.expect(tokenOf(FUNC_ID)).location
                 }
 
                 //Params

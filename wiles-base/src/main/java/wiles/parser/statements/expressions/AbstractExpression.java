@@ -77,7 +77,7 @@ public abstract class AbstractExpression extends AbstractStatement {
 
     protected Optional<AbstractStatement> handleSpecialStatements(){
         try {
-            SpecialStatementFactory.addType(StatementFactoryTypes.METHOD_STATEMENT);
+            SpecialStatementFactory.addType(StatementFactoryTypes.FUNC_STATEMENT);
             return Optional.of(SpecialStatementFactory.create());
         } catch (AbstractCompilationException e) {
             return Optional.empty();
