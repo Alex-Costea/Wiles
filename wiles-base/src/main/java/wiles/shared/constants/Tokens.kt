@@ -1,7 +1,6 @@
 package wiles.shared.constants
 
 import wiles.shared.InternalErrorException
-import wiles.shared.constants.Chars.CONTINUE_LINE
 import wiles.shared.constants.ErrorMessages.MAX_SYMBOL_TOO_LARGE_ERROR
 import wiles.shared.constants.Settings.MAX_SYMBOL_LENGTH
 import java.util.*
@@ -121,7 +120,6 @@ object Tokens {
         KEYWORDS["end"] = END_BLOCK_ID
         KEYWORDS["when"] = WHEN_ID
         KEYWORDS["is"] = IS_ID
-        KEYWORDS["mut"] = MUTABLE_ID
         KEYWORDS["arg"] = ANON_ARG_ID
         KEYWORDS["data"] = DATA_ID
         KEYWORDS["type"] = TYPE_ID
@@ -152,7 +150,8 @@ object Tokens {
         SYMBOLS[";"] = TERMINATOR_ID
         SYMBOLS["->"] = RIGHT_ARROW_ID
         SYMBOLS["?"] = MAYBE_ID
-        SYMBOLS["" + CONTINUE_LINE] = CONTINUE_LINE_ID
+        SYMBOLS["~"] = MUTABLE_ID
+        SYMBOLS["\\"] = CONTINUE_LINE_ID
         SYMBOLS["\n"] = NEWLINE_ID
 
         TOKENS = hashMapOf()
