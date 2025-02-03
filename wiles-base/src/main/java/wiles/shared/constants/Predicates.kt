@@ -5,8 +5,8 @@ import wiles.parser.enums.WhenRemoveToken
 import wiles.shared.constants.ErrorMessages.EXPRESSION_EXPECTED_ERROR
 import wiles.shared.constants.ErrorMessages.INTERNAL_ERROR
 import wiles.shared.constants.ErrorMessages.INVALID_EXPRESSION_ERROR
-import wiles.shared.constants.Tokens.ANGLE_BRACKET_START_ID
-import wiles.shared.constants.Tokens.BRACE_START_ID
+import wiles.shared.constants.Tokens.DATA_START_ID
+import wiles.shared.constants.Tokens.DICT_START_ID
 import wiles.shared.constants.Tokens.BRACKET_START_ID
 import wiles.shared.constants.Tokens.DO_ID
 import wiles.shared.constants.Tokens.FUNC_ID
@@ -34,8 +34,8 @@ object Predicates {
     @JvmField
     val STARTS_AS_TOKEN = Predicate { content : String ->
         IS_LITERAL.test(content) || content == PAREN_START_ID || content == Tokens.PAREN_END_ID ||
-                content == TYPE_ID || content == BRACKET_START_ID || content == BRACE_START_ID ||
-                content == DO_ID || content == ANGLE_BRACKET_START_ID || content == START_BLOCK_ID ||
+                content == TYPE_ID || content == BRACKET_START_ID || content == DICT_START_ID ||
+                content == DO_ID || content == DATA_START_ID || content == START_BLOCK_ID ||
                 STARTING_OPERATORS.contains(content) || content == FUNC_ID }
 
     @JvmField
@@ -64,8 +64,8 @@ object Predicates {
         .withErrorMessage(INTERNAL_ERROR).removeWhen(WhenRemoveToken.WhenFound).freeze()
 
     @JvmField
-    val START_OF_EXPRESSION = tokenOf(IS_CONTAINED_IN(STARTING_OPERATORS)).or(IS_LITERAL).or(BRACE_START_ID)
-        .or(PAREN_START_ID).or(BRACKET_START_ID).or(FUNC_ID).or(DO_ID).or(START_BLOCK_ID).or(ANGLE_BRACKET_START_ID)
+    val START_OF_EXPRESSION = tokenOf(IS_CONTAINED_IN(STARTING_OPERATORS)).or(IS_LITERAL).or(DICT_START_ID)
+        .or(PAREN_START_ID).or(BRACKET_START_ID).or(FUNC_ID).or(DO_ID).or(START_BLOCK_ID).or(DATA_START_ID)
         .or(TYPE_ID).withErrorMessage(EXPRESSION_EXPECTED_ERROR).removeWhen(WhenRemoveToken.Never).freeze()
 
     @JvmField

@@ -7,12 +7,12 @@ import wiles.shared.AbstractCompilationException
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
+import wiles.shared.constants.Tokens.ANNOTATE_ID
 import wiles.shared.constants.Tokens.ANON_ARG_ID
 import wiles.shared.constants.Tokens.DO_ID
 import wiles.shared.constants.Tokens.FUNC_ID
 import wiles.shared.constants.Tokens.PAREN_END_ID
 import wiles.shared.constants.Tokens.PAREN_START_ID
-import wiles.shared.constants.Tokens.RETURN_TYPE_ID
 import wiles.shared.constants.Tokens.SEPARATOR_ID
 import wiles.shared.constants.Tokens.START_BLOCK_ID
 
@@ -69,7 +69,7 @@ class MethodStatement(oldContext : ParserContext, private val isTypeDeclaration:
                 }
 
                 //Return type
-                if (transmitter.expectMaybe(tokenOf(RETURN_TYPE_ID).dontIgnoreNewLine()).isPresent) {
+                if (transmitter.expectMaybe(tokenOf(ANNOTATE_ID).dontIgnoreNewLine()).isPresent) {
                     returnType = TypeStatement(context)
                     exceptions.addAll(returnType!!.process())
                 }

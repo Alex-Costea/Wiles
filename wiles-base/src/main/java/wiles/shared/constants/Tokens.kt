@@ -15,10 +15,10 @@ object Tokens {
     const val PAREN_END_ID = "PAREN_END"
     const val BRACKET_START_ID = "BRACKET_START"
     const val BRACKET_END_ID = "BRACKET_END"
-    const val BRACE_START_ID = "BRACE_START"
-    const val BRACE_END_ID = "BRACE_END"
-    const val ANGLE_BRACKET_START_ID = "ANGLE_BRACKET_START"
-    const val ANGLE_BRACKET_END_ID = "ANGLE_BRACKET_END"
+    const val DICT_START_ID = "DICT_START"
+    const val DICT_END_ID = "DICT_END"
+    const val DATA_START_ID = "DATA_START"
+    const val DATA_END_ID = "DATA_END"
     const val FUNC_ID = "FUNC"
     const val TERMINATOR_ID = "TERMINATOR"
     const val CONTINUE_LINE_ID = "CONTINUE_LINE"
@@ -38,7 +38,6 @@ object Tokens {
     const val ANNOTATE_ID = "ANNOTATE"
     const val SEPARATOR_ID = "SEPARATOR"
     const val DO_ID = "DO"
-    const val RETURN_TYPE_ID = "RETURN_TYPE"
     const val DECLARE_ID = "DECLARE"
     const val EQUALS_ID = "EQUALS"
     const val LARGER_ID = "LARGER"
@@ -93,9 +92,9 @@ object Tokens {
 
     @JvmField
     val KEYWORDS_INDICATING_NEW_EXPRESSION = setOf(
-        DECLARE_ID, ELSE_ID, CONTINUE_ID, IS_ID, RETURN_ID, WHILE_ID, RETURN_TYPE_ID, ANNOTATE_ID, ANGLE_BRACKET_END_ID,
+        DECLARE_ID, ELSE_ID, CONTINUE_ID, IS_ID, RETURN_ID, WHILE_ID, ANNOTATE_ID, DATA_END_ID,
         BREAK_ID, FOR_ID, DO_ID, START_BLOCK_ID, END_BLOCK_ID, BRACKET_END_ID, PAREN_END_ID, MAYBE_ID,
-        SEPARATOR_ID, IN_ID, FROM_ID, TO_ID, ASSIGN_ID, TERMINATOR_ID, NEWLINE_ID, IF_ID, BRACE_END_ID
+        SEPARATOR_ID, IN_ID, FROM_ID, TO_ID, ASSIGN_ID, TERMINATOR_ID, NEWLINE_ID, IF_ID, DICT_END_ID
     )
 
     init {
@@ -140,15 +139,14 @@ object Tokens {
         SYMBOLS[")"] = PAREN_END_ID
         SYMBOLS["["] = BRACKET_START_ID
         SYMBOLS["]"] = BRACKET_END_ID
-        SYMBOLS["{"] = BRACE_START_ID
-        SYMBOLS["}"] = BRACE_END_ID
-        SYMBOLS["<<"] = ANGLE_BRACKET_START_ID
-        SYMBOLS[">>"] = ANGLE_BRACKET_END_ID
+        SYMBOLS["{"] = DICT_START_ID
+        SYMBOLS["}"] = DICT_END_ID
+        SYMBOLS["<<"] = DATA_START_ID
+        SYMBOLS[">>"] = DATA_END_ID
         SYMBOLS[","] = SEPARATOR_ID
         SYMBOLS["."] = ACCESS_ID
         SYMBOLS[":"] = ANNOTATE_ID
         SYMBOLS[";"] = TERMINATOR_ID
-        SYMBOLS["->"] = RETURN_TYPE_ID
         SYMBOLS["?"] = MAYBE_ID
         SYMBOLS["~"] = MUTABLE_ID
         SYMBOLS["\\"] = CONTINUE_LINE_ID

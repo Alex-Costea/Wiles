@@ -47,7 +47,6 @@ import wiles.shared.constants.Tokens.PAREN_START_ID
 import wiles.shared.constants.Tokens.PLUS_ID
 import wiles.shared.constants.Tokens.POWER_ID
 import wiles.shared.constants.Tokens.RETURN_ID
-import wiles.shared.constants.Tokens.RETURN_TYPE_ID
 import wiles.shared.constants.Tokens.SEPARATOR_ID
 import wiles.shared.constants.Tokens.START_BLOCK_ID
 import wiles.shared.constants.Tokens.TERMINATOR_ID
@@ -182,17 +181,17 @@ class SyntaxTreeConverterTests {
     @Test
     fun methodTest() {
         assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(TYPE: INT, CODE_BLOCK))))",
-            DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, RETURN_TYPE_ID, "!int",
+            DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, ANNOTATE_ID, "!int",
                 START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
         assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(TYPE: INT, DECLARATION(TYPE: INT, !a), CODE_BLOCK))))",
             DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, "!a", ANNOTATE_ID, "!int", PAREN_END_ID,
-            RETURN_TYPE_ID, "!int", START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
+            ANNOTATE_ID, "!int", START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
         assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(TYPE: INT, DECLARATION(TYPE: INT, !a), DECLARATION(TYPE: STRING, !b), CODE_BLOCK))))",
             DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, "!a", ANNOTATE_ID, "!int",
-                SEPARATOR_ID, "!b", ANNOTATE_ID, "!text", PAREN_END_ID, RETURN_TYPE_ID, "!int", START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
+                SEPARATOR_ID, "!b", ANNOTATE_ID, "!text", PAREN_END_ID, ANNOTATE_ID, "!int", START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
         assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(TYPE: INT, DECLARATION(TYPE: !nothing, !a), CODE_BLOCK))))",
             DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, "!a", ANNOTATE_ID, NOTHING_ID, PAREN_END_ID,
-            RETURN_TYPE_ID, "!int", START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
+            ANNOTATE_ID, "!int", START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
         assertResults(null, "CODE_BLOCK(DECLARATION(!a, EXPRESSION(FUNC(CODE_BLOCK(EXPRESSION(!nothing))))))",
             DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, DO_ID, NOTHING_ID)
         assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(CODE_BLOCK(EXPRESSION(EXPRESSION(!b), %ASSIGN, EXPRESSION(#3)))))))",
@@ -200,7 +199,7 @@ class SyntaxTreeConverterTests {
              "!b", ASSIGN_ID, "#3")
         assertResults(null, "CODE_BLOCK(DECLARATION(!product, EXPRESSION(FUNC(TYPE: INT, DECLARATION(TYPE: INT, !a), DECLARATION(TYPE: INT, !b), CODE_BLOCK(EXPRESSION(EXPRESSION(!product), %ASSIGN, EXPRESSION(!a, %TIMES, !b)))))))",
             DECLARE_ID, "!product", ASSIGN_ID, FUNC_ID, PAREN_START_ID, "!a", ANNOTATE_ID, "!int",
-                SEPARATOR_ID, "!b", ANNOTATE_ID, "!int", PAREN_END_ID, RETURN_TYPE_ID, "!int", NEWLINE_ID,
+                SEPARATOR_ID, "!b", ANNOTATE_ID, "!int", PAREN_END_ID, ANNOTATE_ID, "!int", NEWLINE_ID,
                 DO_ID,  "!product", ASSIGN_ID, "!a", TIMES_ID, "!b")
         assertResults(null,"CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(DECLARATION(TYPE: INT, !args), CODE_BLOCK(EXPRESSION(!nothing))))))",
             DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, "!args", ANNOTATE_ID, "!int", PAREN_END_ID, DO_ID, NOTHING_ID)
@@ -232,7 +231,7 @@ class SyntaxTreeConverterTests {
     fun returnTest()
     {
         assertResults(null,"CODE_BLOCK(DECLARATION(!a, EXPRESSION(FUNC(TYPE: INT, CODE_BLOCK(RETURN(EXPRESSION(#10)))))))",
-            DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, RETURN_TYPE_ID, "!int",
+            DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, ANNOTATE_ID, "!int",
             START_BLOCK_ID, NEWLINE_ID, RETURN_ID, "#10", NEWLINE_ID, END_BLOCK_ID)
         assertResults(createExceptions(UnexpectedTokenException(INVALID_STATEMENT_ERROR, NULL_LOCATION)),null,
             RETURN_ID, "#10")
@@ -324,7 +323,7 @@ class SyntaxTreeConverterTests {
             DECLARE_ID, "!a", ANNOTATE_ID, FUNC_ID, BRACKET_START_ID, BRACKET_END_ID)
         assertResults(null,"CODE_BLOCK(DECLARATION(TYPE: FUNC (FUNC(TYPE: BOOLEAN, DECLARATION(TYPE: INT, !a), DECLARATION(TYPE: STRING, !b))), !func))",
             DECLARE_ID, "!func", ANNOTATE_ID, FUNC_ID, BRACKET_START_ID, "!a", ANNOTATE_ID, "!int", SEPARATOR_ID,
-            "!b", ANNOTATE_ID, "!text", SEPARATOR_ID, RETURN_TYPE_ID, "!truth", BRACKET_END_ID)
+            "!b", ANNOTATE_ID, "!text", SEPARATOR_ID, ANNOTATE_ID, "!truth", BRACKET_END_ID)
         assertResults(null,"CODE_BLOCK(DECLARATION(TYPE: EITHER (TYPE: INT, TYPE: !nothing), !a), DECLARATION(TYPE: EITHER (TYPE: INT, TYPE: !nothing), !b))",
             DECLARE_ID, "!a", ANNOTATE_ID, "!int", MAYBE_ID, NEWLINE_ID,
             DECLARE_ID, "!b", ANNOTATE_ID, "!int", OR_ID, NOTHING_ID)

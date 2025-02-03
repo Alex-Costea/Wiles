@@ -32,7 +32,7 @@ class DataStatement(context: ParserContext) : AbstractStatement(context) {
     override fun process(): CompilationExceptionsCollection {
         val errors = CompilationExceptionsCollection()
         try{
-            while(transmitter.expectMaybe(ExpectParamsBuilder.tokenOf(Tokens.ANGLE_BRACKET_END_ID).removeWhen(WhenRemoveToken.Never)).isEmpty)
+            while(transmitter.expectMaybe(ExpectParamsBuilder.tokenOf(Tokens.DATA_END_ID).removeWhen(WhenRemoveToken.Never)).isEmpty)
             {
                 val newComp1 = TokenStatement(transmitter.expect(
                     ExpectParamsBuilder.tokenOf(Predicates.IS_IDENTIFIER)
@@ -47,7 +47,7 @@ class DataStatement(context: ParserContext) : AbstractStatement(context) {
 
                 if (transmitter.expectMaybe(ExpectParamsBuilder.tokenOf(Tokens.SEPARATOR_ID)).isEmpty) break
             }
-            location = transmitter.expect(ExpectParamsBuilder.tokenOf(Tokens.ANGLE_BRACKET_END_ID)).location
+            location = transmitter.expect(ExpectParamsBuilder.tokenOf(Tokens.DATA_END_ID)).location
         }
         catch(ex : AbstractCompilationException)
         {

@@ -8,8 +8,7 @@ import wiles.shared.AbstractCompilationException
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.ANNOTATE_ID
-import wiles.shared.constants.Tokens.BRACE_END_ID
-import wiles.shared.constants.Tokens.RETURN_TYPE_ID
+import wiles.shared.constants.Tokens.DICT_END_ID
 import wiles.shared.constants.Tokens.SEPARATOR_ID
 import wiles.shared.constants.Types.DICT_ID
 
@@ -24,7 +23,7 @@ class DictStatement(context: ParserContext) : AbstractStatement(context) {
     override fun process(): CompilationExceptionsCollection {
         val errors = CompilationExceptionsCollection()
         try{
-            while(transmitter.expectMaybe(tokenOf(BRACE_END_ID).removeWhen(WhenRemoveToken.Never)).isEmpty)
+            while(transmitter.expectMaybe(tokenOf(DICT_END_ID).removeWhen(WhenRemoveToken.Never)).isEmpty)
             {
                 val newComp1 = InnerDefaultExpression(context)
                 newComp1.process().throwFirstIfExists()
@@ -38,12 +37,12 @@ class DictStatement(context: ParserContext) : AbstractStatement(context) {
 
                 if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break
             }
-            location = transmitter.expect(tokenOf(BRACE_END_ID)).location
+            location = transmitter.expect(tokenOf(DICT_END_ID)).location
             if(transmitter.expectMaybe(tokenOf(ANNOTATE_ID).dontIgnoreNewLine()).isPresent) {
                 val typeStatement1 = TypeStatement(context)
                 typeStatement1.process().throwFirstIfExists()
 
-                transmitter.expect(tokenOf(RETURN_TYPE_ID))
+                transmitter.expect(tokenOf(ANNOTATE_ID))
 
                 val typeStatement2 = TypeStatement(context)
                 typeStatement2.process().throwFirstIfExists()
