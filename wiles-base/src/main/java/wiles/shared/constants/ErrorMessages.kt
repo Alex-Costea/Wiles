@@ -18,6 +18,8 @@ object ErrorMessages {
     const val NOT_ENOUGH_TYPES_ERROR = "Not enough types have been specified."
     const val END_OF_STATEMENT_EXPECTED_ERROR = "Expected end of statement. " +
             "Please use the ';' symbol or start a new line."
+    const val CONST_CANT_BE_VAR_ERROR = "This value cannot be both constant and variable at the same time."
+    const val EXPECTED_GLOBAL_VALUE_ERROR = "Global values must be immediately initialized."
     const val WRONG_ARGUMENTS_ERROR = "The function cannot be called with these arguments. Reason: "
     const val NO_MATCH_FOR_ERROR = "Nothing matches the \"%s\" identifier name."
     const val CANNOT_MODIFY_IMMUTABLE_ERROR = "Cannot modify an immutable value."

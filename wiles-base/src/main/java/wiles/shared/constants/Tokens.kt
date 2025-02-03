@@ -68,6 +68,8 @@ object Tokens {
     const val IS_ID = "IS"
     const val DATA_ID = "DATA"
     const val TYPE_ID = "TYPE"
+    const val CONST_ID = "CONST"
+    const val GLOBAL_ID = "GLOBAL"
 
     const val TRUE_ID = "!true"
     const val FALSE_ID = "!false"
@@ -123,6 +125,8 @@ object Tokens {
         KEYWORDS["arg"] = ANON_ARG_ID
         KEYWORDS["data"] = DATA_ID
         KEYWORDS["type"] = TYPE_ID
+        KEYWORDS["const"] = CONST_ID
+        KEYWORDS["def"] = GLOBAL_ID
 
         SYMBOLS["+"] = PLUS_ID
         SYMBOLS["-"] = MINUS_ID

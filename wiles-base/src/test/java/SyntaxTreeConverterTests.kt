@@ -9,7 +9,9 @@ import wiles.parser.exceptions.UnexpectedTokenException
 import wiles.shared.AbstractCompilationException
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.Token
+import wiles.shared.constants.ErrorMessages.CONST_CANT_BE_VAR_ERROR
 import wiles.shared.constants.ErrorMessages.END_OF_STATEMENT_EXPECTED_ERROR
+import wiles.shared.constants.ErrorMessages.EXPECTED_GLOBAL_VALUE_ERROR
 import wiles.shared.constants.ErrorMessages.EXPRESSION_EXPECTED_ERROR
 import wiles.shared.constants.ErrorMessages.EXPRESSION_UNFINISHED_ERROR
 import wiles.shared.constants.ErrorMessages.INVALID_EXPRESSION_ERROR
@@ -19,6 +21,7 @@ import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.BRACKET_END_ID
 import wiles.shared.constants.Tokens.BRACKET_START_ID
 import wiles.shared.constants.Tokens.BREAK_ID
+import wiles.shared.constants.Tokens.CONST_ID
 import wiles.shared.constants.Tokens.CONTINUE_ID
 import wiles.shared.constants.Tokens.DECLARE_ID
 import wiles.shared.constants.Tokens.DO_ID
@@ -27,6 +30,7 @@ import wiles.shared.constants.Tokens.END_BLOCK_ID
 import wiles.shared.constants.Tokens.EQUALS_ID
 import wiles.shared.constants.Tokens.FOR_ID
 import wiles.shared.constants.Tokens.FROM_ID
+import wiles.shared.constants.Tokens.GLOBAL_ID
 import wiles.shared.constants.Tokens.IF_ID
 import wiles.shared.constants.Tokens.IN_ID
 import wiles.shared.constants.Tokens.IS_ID
@@ -52,6 +56,7 @@ import wiles.shared.constants.Tokens.TO_ID
 import wiles.shared.constants.Tokens.TRUE_ID
 import wiles.shared.constants.Tokens.TYPE_ANNOTATION_ID
 import wiles.shared.constants.Tokens.TYPE_ID
+import wiles.shared.constants.Tokens.VARIABLE_ID
 import wiles.shared.constants.Tokens.WHEN_ID
 import wiles.shared.constants.Tokens.WHILE_ID
 import wiles.shared.constants.Utils.NULL_LOCATION
@@ -368,6 +373,69 @@ class SyntaxTreeConverterTests {
             DECLARE_ID, "!a", TYPE_ANNOTATION_ID, "!true", OR_ID, "!false", ASSIGN_ID, "#17", NEWLINE_ID,
             DECLARE_ID, "!a", TYPE_ANNOTATION_ID, "!either", BRACKET_START_ID, "#1", SEPARATOR_ID, "#2",
             BRACKET_END_ID, ASSIGN_ID, "#17")
+    }
+
+    @Test
+    fun constTest(){
+        //let const a : const[int] := 123
+        assertResults(null,"""
+        CODE_BLOCK(
+            DECLARATION: CONST 
+            (
+                TYPE: CONST [1, 15, 1, 20] 
+                (
+                    TYPE: INT [1, 21, 1, 24] 
+                ), 
+                !a [1, 11, 1, 12], 
+                EXPRESSION
+                (
+                    #123 [1, 29, 1, 32]
+                )
+            )
+        )
+""", DECLARE_ID, CONST_ID, "!a", TYPE_ANNOTATION_ID, CONST_ID, BRACKET_START_ID, "!int", BRACKET_END_ID, ASSIGN_ID, "#123")
+
+        //let const var a : const[int] := 123
+        assertResults(createExceptions(UnexpectedTokenException(CONST_CANT_BE_VAR_ERROR, NULL_LOCATION)),
+            """
+                CODE_BLOCK
+                (
+                    DECLARATION
+                )
+        """, DECLARE_ID, CONST_ID, VARIABLE_ID, "!a",
+            TYPE_ANNOTATION_ID, CONST_ID, BRACKET_START_ID, "!int", BRACKET_END_ID, ASSIGN_ID, "#123")
+    }
+
+    @Test
+    fun globalDeclarationTest()
+    {
+        // let def a := 234
+        assertResults(null,"""
+            CODE_BLOCK
+            (
+                DECLARATION: GLOBAL
+                (
+                    !a [1, 12, 1, 13], 
+                    EXPRESSION
+                    (
+                        #234 [1, 17, 1, 20]
+                    )
+                )
+            )
+        """, DECLARE_ID, GLOBAL_ID, "!a", ASSIGN_ID, "#234")
+
+        //let def a : int
+        assertResults(createExceptions(TokenExpectedException(EXPECTED_GLOBAL_VALUE_ERROR, NULL_LOCATION)),
+            """
+                CODE_BLOCK
+                (
+                    DECLARATION: GLOBAL
+                    (
+                        TYPE: INT [1, 16, 1, 19] , 
+                        !a [1, 12, 1, 13]
+                    )
+                )
+            """, DECLARE_ID, GLOBAL_ID, "!a", TYPE_ANNOTATION_ID, "!int")
     }
 
     @Test
