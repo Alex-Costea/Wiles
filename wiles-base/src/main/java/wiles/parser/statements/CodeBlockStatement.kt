@@ -27,7 +27,6 @@ class CodeBlockStatement(context: ParserContext) : AbstractStatement(context) {
             .addType(StatementFactoryTypes.BREAK_STATEMENT)
             .addType(StatementFactoryTypes.RETURN_STATEMENT)
             .addType(StatementFactoryTypes.CONTINUE_STATEMENT)
-            .addType(StatementFactoryTypes.WHEN_STATEMENT)
     }
 
     private val components: MutableList<AbstractStatement> = ArrayList()

@@ -63,7 +63,6 @@ object Tokens {
     const val WHILE_ID = "WHILE"
     const val ANON_ARG_ID = "ANON_ARG"
     const val MUTABLE_ID = "MUTABLE"
-    const val WHEN_ID = "WHEN"
     const val IS_ID = "IS"
     const val DATA_ID = "DATA"
     const val TYPE_ID = "TYPE"
@@ -93,7 +92,7 @@ object Tokens {
 
     @JvmField
     val NEW_STATEMENT_START_KEYWORDS = setOf(
-        DECLARE_ID, ELSE_ID, CONTINUE_ID, IS_ID, WHEN_ID, RETURN_ID, WHILE_ID, RIGHT_ARROW_ID,
+        DECLARE_ID, ELSE_ID, CONTINUE_ID, IS_ID, RETURN_ID, WHILE_ID, RIGHT_ARROW_ID,
         BREAK_ID, FOR_ID, DO_ID, START_BLOCK_ID, END_BLOCK_ID, BRACKET_END_ID, PAREN_END_ID, MAYBE_ID,
         SEPARATOR_ID, IN_ID, FROM_ID, TO_ID, ASSIGN_ID, TERMINATOR_ID, NEWLINE_ID, IF_ID, BRACE_END_ID
     )
@@ -118,7 +117,6 @@ object Tokens {
         KEYWORDS["do"] = DO_ID
         KEYWORDS["begin"] = START_BLOCK_ID
         KEYWORDS["end"] = END_BLOCK_ID
-        KEYWORDS["when"] = WHEN_ID
         KEYWORDS["is"] = IS_ID
         KEYWORDS["arg"] = ANON_ARG_ID
         KEYWORDS["data"] = DATA_ID

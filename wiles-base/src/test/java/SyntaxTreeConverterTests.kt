@@ -57,7 +57,6 @@ import wiles.shared.constants.Tokens.TRUE_ID
 import wiles.shared.constants.Tokens.TYPE_ANNOTATION_ID
 import wiles.shared.constants.Tokens.TYPE_ID
 import wiles.shared.constants.Tokens.VARIABLE_ID
-import wiles.shared.constants.Tokens.WHEN_ID
 import wiles.shared.constants.Tokens.WHILE_ID
 import wiles.shared.constants.Utils.NULL_LOCATION
 
@@ -330,16 +329,6 @@ class SyntaxTreeConverterTests {
         assertResults(null,"CODE_BLOCK(DECLARATION(TYPE: EITHER (TYPE: INT, TYPE: !nothing), !a), DECLARATION(TYPE: EITHER (TYPE: INT, TYPE: !nothing), !b))",
             DECLARE_ID, "!a", TYPE_ANNOTATION_ID, "!int", MAYBE_ID, NEWLINE_ID,
             DECLARE_ID, "!b", TYPE_ANNOTATION_ID, "!int", OR_ID, NOTHING_ID)
-    }
-
-    @Test
-    fun whenTests()
-    {
-        assertResults(null,"CODE_BLOCK(WHEN(EXPRESSION(!a), TYPE: INT, CODE_BLOCK(EXPRESSION(!nothing)), TYPE: STRING, CODE_BLOCK(EXPRESSION(!nothing)), %ELSE, CODE_BLOCK(EXPRESSION(!nothing))))",
-            WHEN_ID, "!a", START_BLOCK_ID, NEWLINE_ID,
-            IS_ID, "!int", DO_ID, NOTHING_ID, NEWLINE_ID,
-            IS_ID, "!text", DO_ID, NOTHING_ID, NEWLINE_ID,
-            ELSE_ID, DO_ID, NOTHING_ID, NEWLINE_ID, END_BLOCK_ID)
     }
 
     @Test
