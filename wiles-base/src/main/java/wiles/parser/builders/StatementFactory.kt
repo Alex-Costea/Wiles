@@ -15,16 +15,16 @@ import wiles.shared.constants.ErrorMessages.INVALID_STATEMENT_ERROR
 import wiles.shared.constants.ErrorMessages.NOT_YET_IMPLEMENTED_ERROR
 import wiles.shared.constants.Predicates.ANYTHING
 import wiles.shared.constants.Predicates.START_OF_EXPRESSION
+import wiles.shared.constants.Tokens.ANGLE_BRACKET_START_ID
 import wiles.shared.constants.Tokens.BRACE_START_ID
 import wiles.shared.constants.Tokens.BRACKET_START_ID
 import wiles.shared.constants.Tokens.BREAK_ID
 import wiles.shared.constants.Tokens.CONTINUE_ID
-import wiles.shared.constants.Tokens.DATA_ID
 import wiles.shared.constants.Tokens.DECLARE_ID
 import wiles.shared.constants.Tokens.DO_ID
 import wiles.shared.constants.Tokens.FOR_ID
-import wiles.shared.constants.Tokens.IF_ID
 import wiles.shared.constants.Tokens.FUNC_ID
+import wiles.shared.constants.Tokens.IF_ID
 import wiles.shared.constants.Tokens.RETURN_ID
 import wiles.shared.constants.Tokens.START_BLOCK_ID
 import wiles.shared.constants.Tokens.TYPE_ID
@@ -84,7 +84,7 @@ class StatementFactory {
             params[StatementFactoryTypes.LIST_STATEMENT] = tokenOf(BRACKET_START_ID)
             params[StatementFactoryTypes.FOR_STATEMENT] = tokenOf(FOR_ID)
             params[StatementFactoryTypes.DICT_STATEMENT] = tokenOf(BRACE_START_ID)
-            params[StatementFactoryTypes.DATA_STATEMENT] = tokenOf(DATA_ID)
+            params[StatementFactoryTypes.DATA_STATEMENT] = tokenOf(ANGLE_BRACKET_START_ID)
             params[StatementFactoryTypes.TYPE_LITERAL] = tokenOf(TYPE_ID)
             createObject[StatementFactoryTypes.TOP_LEVEL_EXPRESSION] =
                 Function { context: ParserContext -> TopLevelExpression(context) }

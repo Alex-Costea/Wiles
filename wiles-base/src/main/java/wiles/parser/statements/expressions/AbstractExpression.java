@@ -56,7 +56,7 @@ public abstract class AbstractExpression extends AbstractStatement {
     }
 
     protected boolean handleToken(@NotNull Token token) throws AbstractCompilationException {
-        return NEW_STATEMENT_START_KEYWORDS.contains(token.getContent());
+        return KEYWORDS_INDICATING_NEW_EXPRESSION.contains(token.getContent());
     }
 
     protected void setComponents(@NotNull PrecedenceProcessor precedenceProcessor)

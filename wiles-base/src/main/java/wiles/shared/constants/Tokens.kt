@@ -17,6 +17,8 @@ object Tokens {
     const val BRACKET_END_ID = "BRACKET_END"
     const val BRACE_START_ID = "BRACE_START"
     const val BRACE_END_ID = "BRACE_END"
+    const val ANGLE_BRACKET_START_ID = "ANGLE_BRACKET_START"
+    const val ANGLE_BRACKET_END_ID = "ANGLE_BRACKET_END"
     const val FUNC_ID = "FUNC"
     const val TERMINATOR_ID = "TERMINATOR"
     const val CONTINUE_LINE_ID = "CONTINUE_LINE"
@@ -64,7 +66,6 @@ object Tokens {
     const val ANON_ARG_ID = "ANON_ARG"
     const val MUTABLE_ID = "MUTABLE"
     const val IS_ID = "IS"
-    const val DATA_ID = "DATA"
     const val TYPE_ID = "TYPE"
     const val CONST_ID = "CONST"
     const val GLOBAL_ID = "GLOBAL"
@@ -91,8 +92,8 @@ object Tokens {
     val TERMINATORS = setOf(NEWLINE_ID, TERMINATOR_ID)
 
     @JvmField
-    val NEW_STATEMENT_START_KEYWORDS = setOf(
-        DECLARE_ID, ELSE_ID, CONTINUE_ID, IS_ID, RETURN_ID, WHILE_ID, RETURN_TYPE_ID, ANNOTATE_ID,
+    val KEYWORDS_INDICATING_NEW_EXPRESSION = setOf(
+        DECLARE_ID, ELSE_ID, CONTINUE_ID, IS_ID, RETURN_ID, WHILE_ID, RETURN_TYPE_ID, ANNOTATE_ID, ANGLE_BRACKET_END_ID,
         BREAK_ID, FOR_ID, DO_ID, START_BLOCK_ID, END_BLOCK_ID, BRACKET_END_ID, PAREN_END_ID, MAYBE_ID,
         SEPARATOR_ID, IN_ID, FROM_ID, TO_ID, ASSIGN_ID, TERMINATOR_ID, NEWLINE_ID, IF_ID, BRACE_END_ID
     )
@@ -119,7 +120,6 @@ object Tokens {
         KEYWORDS["end"] = END_BLOCK_ID
         KEYWORDS["is"] = IS_ID
         KEYWORDS["arg"] = ANON_ARG_ID
-        KEYWORDS["data"] = DATA_ID
         KEYWORDS["type"] = TYPE_ID
         KEYWORDS["const"] = CONST_ID
         KEYWORDS["def"] = GLOBAL_ID
@@ -142,6 +142,8 @@ object Tokens {
         SYMBOLS["]"] = BRACKET_END_ID
         SYMBOLS["{"] = BRACE_START_ID
         SYMBOLS["}"] = BRACE_END_ID
+        SYMBOLS["<<"] = ANGLE_BRACKET_START_ID
+        SYMBOLS[">>"] = ANGLE_BRACKET_END_ID
         SYMBOLS[","] = SEPARATOR_ID
         SYMBOLS["."] = ACCESS_ID
         SYMBOLS[":"] = ANNOTATE_ID

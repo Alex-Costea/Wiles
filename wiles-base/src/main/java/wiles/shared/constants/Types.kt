@@ -1,9 +1,8 @@
 package wiles.shared.constants
 
 import wiles.shared.constants.Tokens.CONST_ID
-import wiles.shared.constants.Tokens.DATA_ID
-import wiles.shared.constants.Tokens.MAYBE_ID
 import wiles.shared.constants.Tokens.FUNC_ID
+import wiles.shared.constants.Tokens.MAYBE_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 
@@ -21,6 +20,7 @@ object Types {
     const val TYPE_TYPE_ID = "TYPE_TYPE"
     const val COLLECTION_ID = "COLLECTION"
     const val DICT_ID = "DICT"
+    const val DATA_ID = "DATA"
 
     val REQUIRES_SUBTYPE = setOf(LIST_ID, MUTABLE_ID, TYPE_TYPE_ID, COLLECTION_ID, DICT_ID, EITHER_ID, CONST_ID)
     val MAX_NR_TYPES = hashMapOf(Pair(LIST_ID,1),Pair(MUTABLE_ID,1),Pair(TYPE_TYPE_ID,1),Pair(COLLECTION_ID,2)
@@ -39,11 +39,11 @@ object Types {
         TYPES["!collection"] = COLLECTION_ID
         TYPES["!dict"] = DICT_ID
         TYPES["!either"] = EITHER_ID
+        TYPES["!data"] = DATA_ID
         TYPES[NOTHING_ID] = NOTHING_ID
         TYPES[MAYBE_ID] = MAYBE_ID
         TYPES[FUNC_ID] = FUNC_ID
         TYPES[MUTABLE_ID] = MUTABLE_ID
-        TYPES[DATA_ID] = DATA_ID
         TYPES[CONST_ID] = CONST_ID
     }
 }

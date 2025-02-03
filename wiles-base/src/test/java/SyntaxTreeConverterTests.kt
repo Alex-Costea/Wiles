@@ -435,7 +435,11 @@ class SyntaxTreeConverterTests {
     }
 
     @Test
-    fun dictDataTest(){
+    fun dictTest(){
+        TODO("Add tests")
+    }
+    @Test
+    fun dataTest(){
         TODO("Add tests")
     }
 

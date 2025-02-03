@@ -15,11 +15,11 @@ import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.BRACKET_END_ID
 import wiles.shared.constants.Tokens.BRACKET_START_ID
-import wiles.shared.constants.Tokens.DATA_ID
-import wiles.shared.constants.Tokens.MAYBE_ID
 import wiles.shared.constants.Tokens.FUNC_ID
+import wiles.shared.constants.Tokens.MAYBE_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.SEPARATOR_ID
+import wiles.shared.constants.Types.DATA_ID
 import wiles.shared.constants.Types.EITHER_ID
 import wiles.shared.constants.Types.MAX_NR_TYPES
 import wiles.shared.constants.Types.MIN_NR_TYPES
