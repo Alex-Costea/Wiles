@@ -80,7 +80,7 @@ object Tokens {
     const val STRING_ID = "STRING"
     const val DECIMAL_ID = "DECIMAL"
     const val LIST_ID = "LIST"
-    const val EITHER_ID = "EITHER"
+    const val UNION_ID = "UNION"
     const val ANYTHING_ID = "ANYTHING"
     const val TYPE_TYPE_ID = "TYPE_TYPE"
     const val COLLECTION_ID = "COLLECTION"
@@ -96,7 +96,7 @@ object Tokens {
     val INFIX_OPERATORS = setOf(
         PLUS_ID, MINUS_ID, TIMES_ID, DIVIDE_ID, POWER_ID,
         EQUALS_ID, LARGER_ID, SMALLER_ID, LARGER_EQUALS_ID, SMALLER_EQUALS_ID, NOT_EQUAL_ID,
-        AND_ID, OR_ID, APPLY_ID, ACCESS_ID
+        AND_ID, OR_ID, APPLY_ID, ACCESS_ID, UNION_ID
     )
     @JvmField
     val PREFIX_OPERATORS = setOf(UNARY_PLUS_ID, UNARY_MINUS_ID, NOT_ID, MUTABLE_ID)
@@ -111,13 +111,13 @@ object Tokens {
     @JvmField
     val TERMINATORS = setOf(NEWLINE_ID, TERMINATOR_ID)
 
-    val TYPES = setOf(BOOLEAN_ID, INT_ID, STRING_ID, DECIMAL_ID, LIST_ID, EITHER_ID, ANYTHING_ID, TYPE_TYPE_ID,
+    val TYPES = setOf(BOOLEAN_ID, INT_ID, STRING_ID, DECIMAL_ID, LIST_ID, ANYTHING_ID, TYPE_TYPE_ID,
         COLLECTION_ID, DICT_ID, DATA_ID, MUTABLE_TYPE_ID, FUNC_TYPE_ID, CONST_ID)
-    val REQUIRES_SUBTYPE = setOf(LIST_ID, MUTABLE_TYPE_ID, TYPE_TYPE_ID, COLLECTION_ID, DICT_ID, EITHER_ID, CONST_ID)
+    val REQUIRES_SUBTYPE = setOf(LIST_ID, MUTABLE_TYPE_ID, TYPE_TYPE_ID, COLLECTION_ID, DICT_ID, CONST_ID)
     val MAX_NR_TYPES = hashMapOf(Pair(LIST_ID,1),Pair(MUTABLE_TYPE_ID,1),Pair(TYPE_TYPE_ID,1),Pair(COLLECTION_ID,2)
         ,Pair(DICT_ID,2), Pair(CONST_ID, 1))
     val MIN_NR_TYPES = hashMapOf(Pair(LIST_ID,1),Pair(MUTABLE_TYPE_ID,1), Pair(CONST_ID, 1),
-        Pair(TYPE_TYPE_ID,1),Pair(COLLECTION_ID,2),Pair(DICT_ID,2), Pair(EITHER_ID, 2))
+        Pair(TYPE_TYPE_ID,1),Pair(COLLECTION_ID,2),Pair(DICT_ID,2))
 
 
     @JvmField
@@ -160,7 +160,6 @@ object Tokens {
         KEYWORDS["type"] = TYPE_TYPE_ID
         KEYWORDS["collection"] = COLLECTION_ID
         KEYWORDS["dict"] = DICT_ID
-        KEYWORDS["either"] = EITHER_ID
         KEYWORDS["data"] = DATA_ID
         KEYWORDS["mutable"] = MUTABLE_TYPE_ID
         KEYWORDS["func"] = FUNC_TYPE_ID
@@ -191,6 +190,7 @@ object Tokens {
         SYMBOLS[";"] = TERMINATOR_ID
         SYMBOLS["?"] = MAYBE_ID
         SYMBOLS["~"] = MUTABLE_ID
+        SYMBOLS["|"] = UNION_ID
         SYMBOLS["\\"] = CONTINUE_LINE_ID
         SYMBOLS["\n"] = NEWLINE_ID
 

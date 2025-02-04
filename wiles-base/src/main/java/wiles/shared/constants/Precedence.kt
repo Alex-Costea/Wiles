@@ -18,6 +18,7 @@ import wiles.shared.constants.Tokens.POWER_ID
 import wiles.shared.constants.Tokens.SMALLER_EQUALS_ID
 import wiles.shared.constants.Tokens.SMALLER_ID
 import wiles.shared.constants.Tokens.TIMES_ID
+import wiles.shared.constants.Tokens.UNION_ID
 import wiles.shared.constants.Tokens.UNARY_MINUS_ID
 import wiles.shared.constants.Tokens.UNARY_PLUS_ID
 
@@ -27,6 +28,7 @@ object Precedence {
     val RIGHT_TO_LEFT : Set<Byte>
 
     init {
+        PRECEDENCE[UNION_ID] = -6
         PRECEDENCE[OR_ID] = -5
         PRECEDENCE[AND_ID] = -4
         PRECEDENCE[NOT_ID] = -3

@@ -27,7 +27,6 @@ import wiles.shared.constants.Tokens.CONST_ID
 import wiles.shared.constants.Tokens.CONTINUE_ID
 import wiles.shared.constants.Tokens.DECLARE_ID
 import wiles.shared.constants.Tokens.DO_ID
-import wiles.shared.constants.Tokens.EITHER_ID
 import wiles.shared.constants.Tokens.ELSE_ID
 import wiles.shared.constants.Tokens.END_BLOCK_ID
 import wiles.shared.constants.Tokens.EQUALS_ID
@@ -59,6 +58,7 @@ import wiles.shared.constants.Tokens.TERMINATOR_ID
 import wiles.shared.constants.Tokens.TIMES_ID
 import wiles.shared.constants.Tokens.TO_ID
 import wiles.shared.constants.Tokens.TRUE_ID
+import wiles.shared.constants.Tokens.UNION_ID
 import wiles.shared.constants.Tokens.VARIABLE_ID
 import wiles.shared.constants.Tokens.WHILE_ID
 import wiles.shared.constants.Utils.NULL_LOCATION
@@ -366,7 +366,7 @@ class SyntaxTreeConverterTests {
 
         /*
             let a : int?
-            let b : int or nothing
+            let b : int | nothing
             let c : either[int, nothing]
          */
         assertResults(null,"""
@@ -386,27 +386,14 @@ class SyntaxTreeConverterTests {
                     TYPEDEF
                     (
                         TYPE: INT [2, 9, 2, 12] , 
-                        %OR [2, 13, 2, 15], 
+                        %UNION [2, 13, 2, 15], 
                         !nothing [2, 16, 2, 23]
                     ), 
                     !b [2, 5, 2, 6]
-                ), 
-                DECLARATION
-                (
-                    TYPEDEF
-                    (
-                        TYPE: EITHER [3, 9, 3, 15] 
-                        (
-                            TYPE: INT [3, 16, 3, 19] , 
-                            !nothing [3, 21, 3, 28]
-                        )
-                    ), 
-                    !c [3, 5, 3, 6]
                 )
             )
         """,DECLARE_ID, "!a", ANNOTATE_ID, INT_ID, MAYBE_ID, NEWLINE_ID,
-            DECLARE_ID, "!b", ANNOTATE_ID, INT_ID, OR_ID, NOTHING_ID, NEWLINE_ID,
-            DECLARE_ID, "!c", ANNOTATE_ID, EITHER_ID, BRACKET_START_ID, INT_ID, SEPARATOR_ID, NOTHING_ID, BRACKET_END_ID)
+            DECLARE_ID, "!b", ANNOTATE_ID, INT_ID, UNION_ID, NOTHING_ID, NEWLINE_ID)
     }
 
     @Test
@@ -422,23 +409,22 @@ class SyntaxTreeConverterTests {
     fun typeLiteralsTest()
     {
         /*
-              let my_TYPE := list[int or text]?
+              let my_TYPE := list[int | text]?
               let a : 1 + 2 * 3 := 123
          */
-        assertResults(null,"CODE_BLOCK(DECLARATION(!my_type,EXPRESSION(%MAYBE,TYPE:LIST(EXPRESSION(TYPE:INT,%OR,TYPE:STRING)))),DECLARATION(TYPEDEF(#1,%PLUS,EXPRESSION(#2,%TIMES,#3)),!a,EXPRESSION(#123)))",
+        assertResults(null,"CODE_BLOCK(DECLARATION(!my_type,EXPRESSION(%MAYBE,TYPE:LIST(EXPRESSION(TYPE:INT,%UNION,TYPE:STRING)))),DECLARATION(TYPEDEF(#1,%PLUS,EXPRESSION(#2,%TIMES,#3)),!a,EXPRESSION(#123)))",
             DECLARE_ID, "!my_type", ASSIGN_ID,
-            LIST_ID, BRACKET_START_ID, INT_ID, OR_ID, STRING_ID, BRACKET_END_ID, MAYBE_ID, NEWLINE_ID,
+            LIST_ID, BRACKET_START_ID, INT_ID, UNION_ID, STRING_ID, BRACKET_END_ID, MAYBE_ID, NEWLINE_ID,
             DECLARE_ID, "!a", ANNOTATE_ID, "#1", PLUS_ID, "#2", TIMES_ID, "#3", ASSIGN_ID, "#123")
 
         /*
-                let a : int or text
+                let a : int | text
                 let a : list[int]
                 let a : list[7 + 8]
-                let a : list[int or text]
-                let a : list[int? or text]?
+                let a : list[int | text]
+                let a : list[int? | text]?
                 let a : 17? := 17
-                let a : true or false := 17
-                let a : either[1,2] := 17
+                let a : true | false := 17
          */
         assertResults(null, """
             CODE_BLOCK
@@ -448,7 +434,7 @@ class SyntaxTreeConverterTests {
                     TYPEDEF
                     (
                         TYPE: INT [1, 9, 1, 12] , 
-                        %OR [1, 13, 1, 15], 
+                        %UNION [1, 13, 1, 15], 
                         TYPE: STRING [1, 16, 1, 20] 
                     ), 
                     !a [1, 5, 1, 6]
@@ -489,7 +475,7 @@ class SyntaxTreeConverterTests {
                             EXPRESSION 
                             (
                                 TYPE: INT [4, 14, 4, 17] , 
-                                %OR [4, 18, 4, 20], 
+                                %UNION [4, 18, 4, 20], 
                                 TYPE: STRING [4, 21, 4, 25] 
                             )
                         )
@@ -510,7 +496,7 @@ class SyntaxTreeConverterTests {
                                     %MAYBE [5, 17, 5, 18], 
                                     TYPE: INT [5, 14, 5, 17] 
                                 ), 
-                                %OR [5, 19, 5, 21], 
+                                %UNION [5, 19, 5, 21], 
                                 TYPE: STRING [5, 22, 5, 26] 
                             )
                         )
@@ -535,7 +521,7 @@ class SyntaxTreeConverterTests {
                     TYPEDEF
                     (
                         !true [7, 9, 7, 13], 
-                        %OR [7, 14, 7, 16], 
+                        %UNION [7, 14, 7, 16], 
                         !false [7, 17, 7, 22]
                     ), 
                     !a [7, 5, 7, 6], 
@@ -543,32 +529,15 @@ class SyntaxTreeConverterTests {
                     (
                         #17 [7, 26, 7, 28]
                     )
-                ), 
-                DECLARATION
-                (
-                    TYPEDEF
-                    (
-                        TYPE: EITHER [8, 9, 8, 15] 
-                        (
-                            #1 [8, 16, 8, 17], 
-                            #2 [8, 18, 8, 19]
-                        )
-                    ), 
-                    !a [8, 5, 8, 6], 
-                    EXPRESSION
-                    (
-                        #17 [8, 24, 8, 26]
-                    )
                 )
             )
-        """, DECLARE_ID, "!a", ANNOTATE_ID, INT_ID, OR_ID, STRING_ID, NEWLINE_ID,
+        """, DECLARE_ID, "!a", ANNOTATE_ID, INT_ID, UNION_ID, STRING_ID, NEWLINE_ID,
             DECLARE_ID, "!a", ANNOTATE_ID, LIST_ID, BRACKET_START_ID, INT_ID, BRACKET_END_ID, NEWLINE_ID,
             DECLARE_ID, "!a", ANNOTATE_ID, LIST_ID, BRACKET_START_ID, "#7", PLUS_ID, "#8", BRACKET_END_ID, NEWLINE_ID,
-            DECLARE_ID, "!a", ANNOTATE_ID, LIST_ID, BRACKET_START_ID, INT_ID, OR_ID, STRING_ID, BRACKET_END_ID, NEWLINE_ID,
-            DECLARE_ID, "!a", ANNOTATE_ID, LIST_ID, BRACKET_START_ID, INT_ID, MAYBE_ID, OR_ID, STRING_ID, BRACKET_END_ID, MAYBE_ID, NEWLINE_ID,
+            DECLARE_ID, "!a", ANNOTATE_ID, LIST_ID, BRACKET_START_ID, INT_ID, UNION_ID, STRING_ID, BRACKET_END_ID, NEWLINE_ID,
+            DECLARE_ID, "!a", ANNOTATE_ID, LIST_ID, BRACKET_START_ID, INT_ID, MAYBE_ID, UNION_ID, STRING_ID, BRACKET_END_ID, MAYBE_ID, NEWLINE_ID,
             DECLARE_ID, "!a", ANNOTATE_ID, "#17", MAYBE_ID, ASSIGN_ID, "#17", NEWLINE_ID,
-            DECLARE_ID, "!a", ANNOTATE_ID, "!true", OR_ID, "!false", ASSIGN_ID, "#17", NEWLINE_ID,
-            DECLARE_ID, "!a", ANNOTATE_ID, EITHER_ID, BRACKET_START_ID, "#1", SEPARATOR_ID, "#2", BRACKET_END_ID, ASSIGN_ID, "#17")
+            DECLARE_ID, "!a", ANNOTATE_ID, "!true", UNION_ID, "!false", ASSIGN_ID, "#17", NEWLINE_ID)
     }
 
     @Test
