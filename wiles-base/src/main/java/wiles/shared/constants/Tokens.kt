@@ -74,7 +74,6 @@ object Tokens {
     const val NOTHING_ID = "!nothing"
 
     //types
-    const val BOOLEAN_ID = "BOOLEAN"
     const val FUNC_TYPE_ID = "FUNC_TYPE"
     const val INT_ID = "INT"
     const val STRING_ID = "STRING"
@@ -111,7 +110,7 @@ object Tokens {
     @JvmField
     val TERMINATORS = setOf(NEWLINE_ID, TERMINATOR_ID)
 
-    val TYPES = setOf(BOOLEAN_ID, INT_ID, STRING_ID, DECIMAL_ID, LIST_ID, ANYTHING_ID, TYPE_TYPE_ID,
+    val TYPES = setOf(INT_ID, STRING_ID, DECIMAL_ID, LIST_ID, ANYTHING_ID, TYPE_TYPE_ID,
         COLLECTION_ID, DICT_ID, DATA_ID, MUTABLE_TYPE_ID, FUNC_TYPE_ID, CONST_ID)
     val REQUIRES_SUBTYPE = setOf(LIST_ID, MUTABLE_TYPE_ID, TYPE_TYPE_ID, COLLECTION_ID, DICT_ID, CONST_ID)
     val MAX_NR_TYPES = hashMapOf(Pair(LIST_ID,1),Pair(MUTABLE_TYPE_ID,1),Pair(TYPE_TYPE_ID,1),Pair(COLLECTION_ID,2)
@@ -151,7 +150,6 @@ object Tokens {
         KEYWORDS["arg"] = ANON_ARG_ID
         KEYWORDS["const"] = CONST_ID
         KEYWORDS["def"] = GLOBAL_ID
-        KEYWORDS["truth"] = BOOLEAN_ID
         KEYWORDS["int"] = INT_ID
         KEYWORDS["text"] = STRING_ID
         KEYWORDS["decimal"] = DECIMAL_ID

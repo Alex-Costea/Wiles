@@ -19,17 +19,18 @@ import wiles.shared.constants.ErrorMessages.INVALID_STATEMENT_ERROR
 import wiles.shared.constants.ErrorMessages.TOKEN_EXPECTED_ERROR
 import wiles.shared.constants.Tokens.ANNOTATE_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
-import wiles.shared.constants.Tokens.BOOLEAN_ID
 import wiles.shared.constants.Tokens.BRACKET_END_ID
 import wiles.shared.constants.Tokens.BRACKET_START_ID
 import wiles.shared.constants.Tokens.BREAK_ID
 import wiles.shared.constants.Tokens.CONST_ID
 import wiles.shared.constants.Tokens.CONTINUE_ID
+import wiles.shared.constants.Tokens.DECIMAL_ID
 import wiles.shared.constants.Tokens.DECLARE_ID
 import wiles.shared.constants.Tokens.DO_ID
 import wiles.shared.constants.Tokens.ELSE_ID
 import wiles.shared.constants.Tokens.END_BLOCK_ID
 import wiles.shared.constants.Tokens.EQUALS_ID
+import wiles.shared.constants.Tokens.FALSE_ID
 import wiles.shared.constants.Tokens.FOR_ID
 import wiles.shared.constants.Tokens.FROM_ID
 import wiles.shared.constants.Tokens.FUNC_ID
@@ -326,7 +327,7 @@ class SyntaxTreeConverterTests {
     {
         assertResults(null, "CODE_BLOCK(DECLARATION(TYPEDEF(TYPE: FUNC_TYPE), !a))",
             DECLARE_ID, "!a", ANNOTATE_ID, FUNC_TYPE_ID, BRACKET_START_ID, BRACKET_END_ID)
-        // let fn : func[a : int, b : string, : boolean]
+        // let fn : func[a : int, b : string, : decimal]
         assertResults(null,"""
             CODE_BLOCK
             (
@@ -338,7 +339,7 @@ class SyntaxTreeConverterTests {
                         (
                             TYPEDEF
                             (
-                                TYPE: BOOLEAN [1, 36, 1, 41] 
+                                TYPE: DECIMAL [1, 36, 1, 41] 
                             ), 
                             DECLARATION
                             (
@@ -362,7 +363,7 @@ class SyntaxTreeConverterTests {
                 )
             )
         """, DECLARE_ID, "!fn", ANNOTATE_ID, FUNC_TYPE_ID, BRACKET_START_ID, "!a", ANNOTATE_ID, INT_ID, SEPARATOR_ID,
-            "!b", ANNOTATE_ID, STRING_ID, SEPARATOR_ID, ANNOTATE_ID, BOOLEAN_ID, BRACKET_END_ID)
+            "!b", ANNOTATE_ID, STRING_ID, SEPARATOR_ID, ANNOTATE_ID, DECIMAL_ID, BRACKET_END_ID)
 
         /*
             let a : int?
@@ -537,7 +538,24 @@ class SyntaxTreeConverterTests {
             DECLARE_ID, "!a", ANNOTATE_ID, LIST_ID, BRACKET_START_ID, INT_ID, UNION_ID, STRING_ID, BRACKET_END_ID, NEWLINE_ID,
             DECLARE_ID, "!a", ANNOTATE_ID, LIST_ID, BRACKET_START_ID, INT_ID, MAYBE_ID, UNION_ID, STRING_ID, BRACKET_END_ID, MAYBE_ID, NEWLINE_ID,
             DECLARE_ID, "!a", ANNOTATE_ID, "#17", MAYBE_ID, ASSIGN_ID, "#17", NEWLINE_ID,
-            DECLARE_ID, "!a", ANNOTATE_ID, "!true", UNION_ID, "!false", ASSIGN_ID, "#17", NEWLINE_ID)
+            DECLARE_ID, "!a", ANNOTATE_ID, TRUE_ID, UNION_ID, FALSE_ID, ASSIGN_ID, "#17", NEWLINE_ID)
+
+        // let def const truth := true | false
+        assertResults(null,"""
+            CODE_BLOCK
+            (
+                DECLARATION: GLOBAL; CONST 
+                (
+                    !truth [1, 15, 1, 20], 
+                    EXPRESSION
+                    (
+                        !true [1, 24, 1, 28], 
+                        %UNION [1, 29, 1, 30], 
+                        !false [1, 31, 1, 36]
+                    )
+                )
+            )
+        """, DECLARE_ID, GLOBAL_ID, CONST_ID, "!truth", ASSIGN_ID, TRUE_ID, UNION_ID, FALSE_ID)
     }
 
     @Test
