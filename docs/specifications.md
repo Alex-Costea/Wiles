@@ -90,7 +90,7 @@ WIP, To be determined.
 - `collection.remove(arg value, at)` : remove an element from the mutable collection at the index
 - `collection.update(arg value, at)` : set element of mutable collection at index
 - `collection.get(arg at)` : get element of collection at index, panic if it doesn't exist
-- `type_of` : get type of object at runtime
+- `type` : get type of object at runtime
 - `clone(⟨deep := [boolean]⟩)` : clone object, deeply by default
 - `content` : get content of variable. panics if the value is `nothing`
 - `keys` : get the keys of a dictionary

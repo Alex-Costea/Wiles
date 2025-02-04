@@ -64,14 +64,15 @@ object Tokens {
     const val WHILE_ID = "WHILE"
     const val ANON_ARG_ID = "ANON_ARG"
     const val MUTABLE_ID = "MUTABLE"
-    const val IS_ID = "IS"
     const val CONST_ID = "CONST"
     const val GLOBAL_ID = "GLOBAL"
+    const val UNION_ID = "UNION"
 
     //literals
     const val TRUE_ID = "!true"
     const val FALSE_ID = "!false"
     const val NOTHING_ID = "!nothing"
+    const val ANYTHING_ID = "!anything"
 
     //types
     const val FUNC_TYPE_ID = "FUNC_TYPE"
@@ -79,9 +80,6 @@ object Tokens {
     const val STRING_ID = "STRING"
     const val DECIMAL_ID = "DECIMAL"
     const val LIST_ID = "LIST"
-    const val UNION_ID = "UNION"
-    const val ANYTHING_ID = "ANYTHING"
-    const val TYPE_TYPE_ID = "TYPE_TYPE"
     const val COLLECTION_ID = "COLLECTION"
     const val DICT_ID = "DICT"
     const val DATA_ID = "DATA"
@@ -110,18 +108,18 @@ object Tokens {
     @JvmField
     val TERMINATORS = setOf(NEWLINE_ID, TERMINATOR_ID)
 
-    val TYPES = setOf(INT_ID, STRING_ID, DECIMAL_ID, LIST_ID, ANYTHING_ID, TYPE_TYPE_ID,
+    val TYPES = setOf(INT_ID, STRING_ID, DECIMAL_ID, LIST_ID,
         COLLECTION_ID, DICT_ID, DATA_ID, MUTABLE_TYPE_ID, FUNC_TYPE_ID, CONST_ID)
-    val REQUIRES_SUBTYPE = setOf(LIST_ID, MUTABLE_TYPE_ID, TYPE_TYPE_ID, COLLECTION_ID, DICT_ID, CONST_ID)
-    val MAX_NR_TYPES = hashMapOf(Pair(LIST_ID,1),Pair(MUTABLE_TYPE_ID,1),Pair(TYPE_TYPE_ID,1),Pair(COLLECTION_ID,2)
+    val REQUIRES_SUBTYPE = setOf(LIST_ID, MUTABLE_TYPE_ID, COLLECTION_ID, DICT_ID, CONST_ID)
+    val MAX_NR_TYPES = hashMapOf(Pair(LIST_ID,1),Pair(MUTABLE_TYPE_ID,1),Pair(COLLECTION_ID,2)
         ,Pair(DICT_ID,2), Pair(CONST_ID, 1))
-    val MIN_NR_TYPES = hashMapOf(Pair(LIST_ID,1),Pair(MUTABLE_TYPE_ID,1), Pair(CONST_ID, 1),
-        Pair(TYPE_TYPE_ID,1),Pair(COLLECTION_ID,2),Pair(DICT_ID,2))
+    val MIN_NR_TYPES = hashMapOf(Pair(LIST_ID,1),Pair(MUTABLE_TYPE_ID,1), Pair(CONST_ID, 1)
+        ,Pair(COLLECTION_ID,2),Pair(DICT_ID,2))
 
 
     @JvmField
     val KEYWORDS_INDICATING_NEW_EXPRESSION = setOf(
-        DECLARE_ID, ELSE_ID, CONTINUE_ID, IS_ID, RETURN_ID, WHILE_ID, ANNOTATE_ID, DATA_END_ID,
+        DECLARE_ID, ELSE_ID, CONTINUE_ID, RETURN_ID, WHILE_ID, ANNOTATE_ID, DATA_END_ID,
         BREAK_ID, FOR_ID, DO_ID, START_BLOCK_ID, END_BLOCK_ID, BRACKET_END_ID, PAREN_END_ID,
         SEPARATOR_ID, IN_ID, FROM_ID, TO_ID, ASSIGN_ID, TERMINATOR_ID, NEWLINE_ID, IF_ID, DICT_END_ID
     )
@@ -146,16 +144,15 @@ object Tokens {
         KEYWORDS["do"] = DO_ID
         KEYWORDS["begin"] = START_BLOCK_ID
         KEYWORDS["end"] = END_BLOCK_ID
-        KEYWORDS["is"] = IS_ID
         KEYWORDS["arg"] = ANON_ARG_ID
         KEYWORDS["const"] = CONST_ID
         KEYWORDS["def"] = GLOBAL_ID
+
         KEYWORDS["int"] = INT_ID
         KEYWORDS["text"] = STRING_ID
         KEYWORDS["decimal"] = DECIMAL_ID
         KEYWORDS["list"] = LIST_ID
         KEYWORDS["anything"] = ANYTHING_ID
-        KEYWORDS["type"] = TYPE_TYPE_ID
         KEYWORDS["collection"] = COLLECTION_ID
         KEYWORDS["dict"] = DICT_ID
         KEYWORDS["data"] = DATA_ID
