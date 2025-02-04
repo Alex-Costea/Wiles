@@ -31,6 +31,12 @@ class TypeStatement (context: ParserContext)
     override val syntaxType: SyntaxType
         get() = SyntaxType.TYPE
 
+    private fun getInnerType(): AbstractStatement {
+        val subType = TypeStatement(context)
+        subType.process().throwFirstIfExists()
+        return subType
+    }
+
     override fun process(): CompilationExceptionsCollection {
         transmitter.expectMaybe(tokenOf(TYPE_ID))
         try {
@@ -47,9 +53,7 @@ class TypeStatement (context: ParserContext)
                     for(i in 1..(max?:Int.MAX_VALUE)) {
                         if(transmitter.expectMaybe(tokenOf(BRACKET_END_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
                             break
-                        val subType = TypeStatement(context)
-                        subType.process().throwFirstIfExists()
-                        subtypes.add(subType)
+                        subtypes.add(getInnerType())
                         if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break
                     }
                     if(subtypes.size < (MIN_NR_TYPES[name] ?: Int.MAX_VALUE))
@@ -72,10 +76,8 @@ class TypeStatement (context: ParserContext)
                             tokenOf(IS_IDENTIFIER)
                                 .withErrorMessage(IDENTIFIER_EXPECTED_ERROR)),context)
                         transmitter.expect(tokenOf(Tokens.ANNOTATE_ID))
-                        val right = TypeStatement(context)
-                        right.process().throwFirstIfExists()
                         classComponents.add(left)
-                        classComponents.add(right)
+                        classComponents.add(getInnerType())
                         if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break
                     }
                     subtypes.addAll(classComponents)
