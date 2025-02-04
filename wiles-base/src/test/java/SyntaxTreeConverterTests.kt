@@ -43,6 +43,8 @@ import wiles.shared.constants.Tokens.LARGER_ID
 import wiles.shared.constants.Tokens.LIST_ID
 import wiles.shared.constants.Tokens.MAYBE_ID
 import wiles.shared.constants.Tokens.MINUS_ID
+import wiles.shared.constants.Tokens.MUTABLE_ID
+import wiles.shared.constants.Tokens.MUTABLE_TYPE_ID
 import wiles.shared.constants.Tokens.NEWLINE_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.NOT_ID
@@ -637,6 +639,51 @@ class SyntaxTreeConverterTests {
     @Test
     fun dataTest(){
         TODO("Add tests")
+    }
+
+    @Test
+    fun mutableTest()
+    {
+        assertResults(null,"""
+            CODE_BLOCK
+            (
+                DECLARATION
+                (
+                    !a [1, 5, 1, 6], 
+                    EXPRESSION
+                    (
+                        LIST [1, 14, 1, 15]
+                        (
+                            EXPRESSION
+                            (
+                                #123 [1, 11, 1, 14]
+                            )
+                        )
+                    )
+                ), 
+                DECLARATION
+                (
+                    TYPEDEF
+                    (
+                        TYPE: MUTABLE_TYPE [2, 9, 2, 16] 
+                        (
+                            TYPE: LIST [2, 17, 2, 21] 
+                            (
+                                TYPE: INT [2, 22, 2, 25] 
+                            )
+                        )
+                    ), 
+                    !b [2, 5, 2, 6], 
+                    EXPRESSION
+                    (
+                        %MUTABLE [2, 31, 2, 32], 
+                        !a [2, 32, 2, 33]
+                    )
+                )
+            )
+        """, DECLARE_ID, "!a", ASSIGN_ID, BRACKET_START_ID, "#123", BRACKET_END_ID, NEWLINE_ID,
+            DECLARE_ID, "!b", ANNOTATE_ID, MUTABLE_TYPE_ID, BRACKET_START_ID, LIST_ID, BRACKET_START_ID, INT_ID,
+            BRACKET_END_ID, BRACKET_END_ID, ASSIGN_ID, MUTABLE_ID, "!a")
     }
 
     private class CreateConverter(tokens: List<String>) {

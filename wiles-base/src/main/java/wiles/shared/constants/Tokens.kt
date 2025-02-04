@@ -85,7 +85,7 @@ object Tokens {
     const val COLLECTION_ID = "COLLECTION"
     const val DICT_ID = "DICT"
     const val DATA_ID = "DATA"
-    const val MUTABLE_TYPE_ID = "MUTABLE"
+    const val MUTABLE_TYPE_ID = "MUTABLE_TYPE"
 
     private val KEYWORDS: HashMap<String, String> = HashMap()
     private val SYMBOLS: HashMap<String, String> = HashMap()
