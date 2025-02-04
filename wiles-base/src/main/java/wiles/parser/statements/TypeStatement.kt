@@ -17,9 +17,7 @@ import wiles.shared.constants.Tokens.BRACKET_END_ID
 import wiles.shared.constants.Tokens.BRACKET_START_ID
 import wiles.shared.constants.Tokens.DATA_ID
 import wiles.shared.constants.Tokens.FUNC_TYPE_ID
-import wiles.shared.constants.Tokens.MAX_NR_TYPES
-import wiles.shared.constants.Tokens.MIN_NR_TYPES
-import wiles.shared.constants.Tokens.REQUIRES_SUBTYPE
+import wiles.shared.constants.Tokens.NR_TYPES
 import wiles.shared.constants.Tokens.SEPARATOR_ID
 import wiles.shared.constants.Tokens.TYPES
 
@@ -46,17 +44,17 @@ class TypeStatement (context: ParserContext)
                 val (content,location) = tokenMaybe.get()
                 this.location=location
                 name = content
-                if(REQUIRES_SUBTYPE.contains(name))
+                if(NR_TYPES.containsKey(name))
                 {
                     transmitter.expect(tokenOf(BRACKET_START_ID))
-                    val max : Int? = MAX_NR_TYPES[name]
+                    val max : Int? = NR_TYPES[name]
                     for(i in 1..(max?:Int.MAX_VALUE)) {
                         if(transmitter.expectMaybe(tokenOf(BRACKET_END_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
                             break
                         subtypes.add(getInnerType())
                         if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break
                     }
-                    if(subtypes.size < (MIN_NR_TYPES[name] ?: Int.MAX_VALUE))
+                    if(subtypes.size < (NR_TYPES[name] ?: Int.MAX_VALUE))
                         throw TokenExpectedException(NOT_ENOUGH_TYPES_ERROR,location)
                     transmitter.expect(tokenOf(BRACKET_END_ID))
                 }

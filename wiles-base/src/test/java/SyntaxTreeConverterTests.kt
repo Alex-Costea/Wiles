@@ -18,6 +18,7 @@ import wiles.shared.constants.ErrorMessages.INVALID_EXPRESSION_ERROR
 import wiles.shared.constants.ErrorMessages.INVALID_STATEMENT_ERROR
 import wiles.shared.constants.ErrorMessages.TOKEN_EXPECTED_ERROR
 import wiles.shared.constants.Tokens.ANNOTATE_ID
+import wiles.shared.constants.Tokens.ANYTHING_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.BRACKET_END_ID
 import wiles.shared.constants.Tokens.BRACKET_START_ID
@@ -422,7 +423,7 @@ class SyntaxTreeConverterTests {
 
         /*
                 let a : int | text
-                let a : list[int]
+                let a : list[anything]
                 let a : list[7 + 8]
                 let a : list[int | text]
                 let a : list[int? | text]?
@@ -448,7 +449,7 @@ class SyntaxTreeConverterTests {
                     (
                         TYPE: LIST [2, 9, 2, 13] 
                         (
-                            TYPE: INT [2, 14, 2, 17] 
+                            !anything [2, 14, 2, 17] 
                         )
                     ), 
                     !a [2, 5, 2, 6]
@@ -535,7 +536,7 @@ class SyntaxTreeConverterTests {
                 )
             )
         """, DECLARE_ID, "!a", ANNOTATE_ID, INT_ID, UNION_ID, STRING_ID, NEWLINE_ID,
-            DECLARE_ID, "!a", ANNOTATE_ID, LIST_ID, BRACKET_START_ID, INT_ID, BRACKET_END_ID, NEWLINE_ID,
+            DECLARE_ID, "!a", ANNOTATE_ID, LIST_ID, BRACKET_START_ID, ANYTHING_ID, BRACKET_END_ID, NEWLINE_ID,
             DECLARE_ID, "!a", ANNOTATE_ID, LIST_ID, BRACKET_START_ID, "#7", PLUS_ID, "#8", BRACKET_END_ID, NEWLINE_ID,
             DECLARE_ID, "!a", ANNOTATE_ID, LIST_ID, BRACKET_START_ID, INT_ID, UNION_ID, STRING_ID, BRACKET_END_ID, NEWLINE_ID,
             DECLARE_ID, "!a", ANNOTATE_ID, LIST_ID, BRACKET_START_ID, INT_ID, MAYBE_ID, UNION_ID, STRING_ID, BRACKET_END_ID, MAYBE_ID, NEWLINE_ID,

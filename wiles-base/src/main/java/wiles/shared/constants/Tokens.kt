@@ -80,7 +80,6 @@ object Tokens {
     const val STRING_ID = "STRING"
     const val DECIMAL_ID = "DECIMAL"
     const val LIST_ID = "LIST"
-    const val COLLECTION_ID = "COLLECTION"
     const val DICT_ID = "DICT"
     const val DATA_ID = "DATA"
     const val MUTABLE_TYPE_ID = "MUTABLE_TYPE"
@@ -109,12 +108,8 @@ object Tokens {
     val TERMINATORS = setOf(NEWLINE_ID, TERMINATOR_ID)
 
     val TYPES = setOf(INT_ID, STRING_ID, DECIMAL_ID, LIST_ID,
-        COLLECTION_ID, DICT_ID, DATA_ID, MUTABLE_TYPE_ID, FUNC_TYPE_ID, CONST_ID)
-    val REQUIRES_SUBTYPE = setOf(LIST_ID, MUTABLE_TYPE_ID, COLLECTION_ID, DICT_ID, CONST_ID)
-    val MAX_NR_TYPES = hashMapOf(Pair(LIST_ID,1),Pair(MUTABLE_TYPE_ID,1),Pair(COLLECTION_ID,2)
-        ,Pair(DICT_ID,2), Pair(CONST_ID, 1))
-    val MIN_NR_TYPES = hashMapOf(Pair(LIST_ID,1),Pair(MUTABLE_TYPE_ID,1), Pair(CONST_ID, 1)
-        ,Pair(COLLECTION_ID,2),Pair(DICT_ID,2))
+         DICT_ID, DATA_ID, MUTABLE_TYPE_ID, FUNC_TYPE_ID, CONST_ID)
+    val NR_TYPES = hashMapOf(Pair(LIST_ID, 1), Pair(MUTABLE_TYPE_ID, 1), Pair(CONST_ID, 1), Pair(DICT_ID, 2))
 
 
     @JvmField
@@ -153,7 +148,6 @@ object Tokens {
         KEYWORDS["decimal"] = DECIMAL_ID
         KEYWORDS["list"] = LIST_ID
         KEYWORDS["anything"] = ANYTHING_ID
-        KEYWORDS["collection"] = COLLECTION_ID
         KEYWORDS["dict"] = DICT_ID
         KEYWORDS["data"] = DATA_ID
         KEYWORDS["mutable"] = MUTABLE_TYPE_ID
