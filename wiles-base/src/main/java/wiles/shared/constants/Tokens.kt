@@ -65,7 +65,6 @@ object Tokens {
     const val ANON_ARG_ID = "ANON_ARG"
     const val MUTABLE_ID = "MUTABLE"
     const val IS_ID = "IS"
-    const val TYPE_ID = "TYPE"
     const val CONST_ID = "CONST"
     const val GLOBAL_ID = "GLOBAL"
 
@@ -150,7 +149,6 @@ object Tokens {
         KEYWORDS["end"] = END_BLOCK_ID
         KEYWORDS["is"] = IS_ID
         KEYWORDS["arg"] = ANON_ARG_ID
-        KEYWORDS["type"] = TYPE_ID
         KEYWORDS["const"] = CONST_ID
         KEYWORDS["def"] = GLOBAL_ID
         KEYWORDS["truth"] = BOOLEAN_ID

@@ -22,7 +22,6 @@ import wiles.shared.constants.Tokens.MIN_NR_TYPES
 import wiles.shared.constants.Tokens.REQUIRES_SUBTYPE
 import wiles.shared.constants.Tokens.SEPARATOR_ID
 import wiles.shared.constants.Tokens.TYPES
-import wiles.shared.constants.Tokens.TYPE_ID
 
 class TypeStatement (context: ParserContext)
     : AbstractStatement(context) {
@@ -34,17 +33,12 @@ class TypeStatement (context: ParserContext)
     private fun getInnerType(): AbstractStatement {
         val expression = DefaultExpression(context)
         expression.process().throwFirstIfExists()
-        expression.name = SyntaxType.EXPRESSION.toString()
         if(expression.getComponents().size == 1)
             return expression.right!!
-        val typeStatement = TypeStatement(context)
-        typeStatement.name = expression.name
-        typeStatement.getComponents().addAll(expression.getComponents())
-        return typeStatement
+        return expression
     }
 
     override fun process(): CompilationExceptionsCollection {
-        transmitter.expectMaybe(tokenOf(TYPE_ID))
         try {
             val tokenMaybe = transmitter.expectMaybe(tokenOf(IS_CONTAINED_IN(TYPES)))
             if(tokenMaybe.isPresent)

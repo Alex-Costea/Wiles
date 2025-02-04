@@ -425,7 +425,7 @@ class SyntaxTreeConverterTests {
               let my_TYPE := list[int or text]?
               let a : 1 + 2 * 3 := 123
          */
-        assertResults(null,"CODE_BLOCK(DECLARATION(!my_type,EXPRESSION(%MAYBE,TYPE:LIST(TYPE:EXPRESSION(TYPE:INT,%OR,TYPE:STRING)))),DECLARATION(TYPEDEF(#1,%PLUS,EXPRESSION(#2,%TIMES,#3)),!a,EXPRESSION(#123)))",
+        assertResults(null,"CODE_BLOCK(DECLARATION(!my_type,EXPRESSION(%MAYBE,TYPE:LIST(EXPRESSION(TYPE:INT,%OR,TYPE:STRING)))),DECLARATION(TYPEDEF(#1,%PLUS,EXPRESSION(#2,%TIMES,#3)),!a,EXPRESSION(#123)))",
             DECLARE_ID, "!my_type", ASSIGN_ID,
             LIST_ID, BRACKET_START_ID, INT_ID, OR_ID, STRING_ID, BRACKET_END_ID, MAYBE_ID, NEWLINE_ID,
             DECLARE_ID, "!a", ANNOTATE_ID, "#1", PLUS_ID, "#2", TIMES_ID, "#3", ASSIGN_ID, "#123")
@@ -470,7 +470,7 @@ class SyntaxTreeConverterTests {
                     (
                         TYPE: LIST [3, 9, 3, 13] 
                         (
-                            TYPE: EXPRESSION 
+                            EXPRESSION 
                             (
                                 #7 [3, 14, 3, 15], 
                                 %PLUS [3, 16, 3, 17], 
@@ -486,7 +486,7 @@ class SyntaxTreeConverterTests {
                     (
                         TYPE: LIST [4, 9, 4, 13] 
                         (
-                            TYPE: EXPRESSION 
+                            EXPRESSION 
                             (
                                 TYPE: INT [4, 14, 4, 17] , 
                                 %OR [4, 18, 4, 20], 
@@ -503,7 +503,7 @@ class SyntaxTreeConverterTests {
                         %MAYBE [5, 27, 5, 28], 
                         TYPE: LIST [5, 9, 5, 13] 
                         (
-                            TYPE: EXPRESSION 
+                            EXPRESSION 
                             (
                                 EXPRESSION
                                 (

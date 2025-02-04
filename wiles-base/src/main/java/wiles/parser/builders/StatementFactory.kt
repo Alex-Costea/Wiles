@@ -29,7 +29,6 @@ import wiles.shared.constants.Tokens.IF_ID
 import wiles.shared.constants.Tokens.RETURN_ID
 import wiles.shared.constants.Tokens.START_BLOCK_ID
 import wiles.shared.constants.Tokens.TYPES
-import wiles.shared.constants.Tokens.TYPE_ID
 import wiles.shared.constants.Tokens.WHILE_ID
 import java.util.function.Function
 
@@ -87,8 +86,8 @@ class StatementFactory {
             params[StatementFactoryTypes.FOR_STATEMENT] = tokenOf(FOR_ID)
             params[StatementFactoryTypes.DICT_STATEMENT] = tokenOf(DICT_START_ID)
             params[StatementFactoryTypes.DATA_STATEMENT] = tokenOf(DATA_START_ID)
-            params[StatementFactoryTypes.TYPE_LITERAL] = tokenOf(TYPE_ID)
-                .or(IS_CONTAINED_IN(TYPES)).removeWhen(WhenRemoveToken.Never)
+            params[StatementFactoryTypes.TYPE_LITERAL] = tokenOf(IS_CONTAINED_IN(TYPES))
+                .removeWhen(WhenRemoveToken.Never)
             createObject[StatementFactoryTypes.TOP_LEVEL_EXPRESSION] =
                 Function { context: ParserContext -> TopLevelExpression(context) }
             createObject[StatementFactoryTypes.DEFAULT_EXPRESSION_NO_CODE_BLOCK] =
