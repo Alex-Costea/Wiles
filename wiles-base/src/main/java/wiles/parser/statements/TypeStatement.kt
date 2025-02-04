@@ -60,7 +60,7 @@ class TypeStatement (context: ParserContext)
                     transmitter.expect(tokenOf(BRACKET_START_ID))
                     val funStatement = MethodStatement(context, true)
                     funStatement.process().throwFirstIfExists()
-                    subtypes.add(funStatement)
+                    subtypes.addAll(funStatement.getComponents())
                     transmitter.expect(tokenOf(BRACKET_END_ID))
                 }
                 if(name == DATA_ID) {
