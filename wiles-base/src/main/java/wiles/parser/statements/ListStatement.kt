@@ -4,7 +4,7 @@ import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.builders.ParserContext
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.statements.expressions.InnerDefaultExpression
-import wiles.parser.statements.expressions.TypeExpression
+import wiles.parser.statements.expressions.TypeDefExpression
 import wiles.shared.AbstractCompilationException
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.SyntaxType
@@ -32,7 +32,7 @@ class ListStatement(context: ParserContext) : AbstractStatement(context) {
             }
             location = transmitter.expect(tokenOf(BRACKET_END_ID)).location
             if(transmitter.expectMaybe(tokenOf(Tokens.ANNOTATE_ID).dontIgnoreNewLine()).isPresent) {
-                val typeStatement = TypeExpression(context)
+                val typeStatement = TypeDefExpression(context)
                 typeStatement.process().throwFirstIfExists()
                 components.add(0,typeStatement)
             }

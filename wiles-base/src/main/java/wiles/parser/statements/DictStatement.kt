@@ -4,7 +4,7 @@ import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.builders.ParserContext
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.statements.expressions.InnerDefaultExpression
-import wiles.parser.statements.expressions.TypeExpression
+import wiles.parser.statements.expressions.TypeDefExpression
 import wiles.shared.AbstractCompilationException
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.SyntaxType
@@ -40,15 +40,15 @@ class DictStatement(context: ParserContext) : AbstractStatement(context) {
             }
             location = transmitter.expect(tokenOf(DICT_END_ID)).location
             if(transmitter.expectMaybe(tokenOf(ANNOTATE_ID).dontIgnoreNewLine()).isPresent) {
-                val typeStatement1 = TypeExpression(context)
+                val typeStatement1 = TypeDefExpression(context)
                 typeStatement1.process().throwFirstIfExists()
 
                 transmitter.expect(tokenOf(ANNOTATE_ID))
 
-                val typeStatement2 = TypeExpression(context)
+                val typeStatement2 = TypeDefExpression(context)
                 typeStatement2.process().throwFirstIfExists()
 
-                val finalTypeStatement = TypeExpression(context)
+                val finalTypeStatement = TypeDefExpression(context)
                 finalTypeStatement.name = DICT_ID
                 finalTypeStatement.getComponents().add(typeStatement1)
                 finalTypeStatement.getComponents().add(typeStatement2)

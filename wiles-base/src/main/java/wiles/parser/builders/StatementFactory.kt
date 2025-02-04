@@ -116,7 +116,7 @@ class StatementFactory {
             createObject[StatementFactoryTypes.DATA_STATEMENT] =
                 Function { context : ParserContext -> DataStatement(context) }
             createObject[StatementFactoryTypes.TYPE_LITERAL] =
-                Function { context : ParserContext -> TypeLiteralStatement(context) }
+                Function { context : ParserContext -> TypeStatement(context) }
         }
     }
 }

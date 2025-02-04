@@ -24,7 +24,7 @@ import wiles.shared.constants.Tokens.SEPARATOR_ID
 import wiles.shared.constants.Tokens.TYPES
 import wiles.shared.constants.Tokens.TYPE_ID
 
-class TypeLiteralStatement (context: ParserContext)
+class TypeStatement (context: ParserContext)
     : AbstractStatement(context) {
     private val subtypes : ArrayList<AbstractStatement> = ArrayList()
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
@@ -47,7 +47,7 @@ class TypeLiteralStatement (context: ParserContext)
                     for(i in 1..(max?:Int.MAX_VALUE)) {
                         if(transmitter.expectMaybe(tokenOf(BRACKET_END_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
                             break
-                        val subType = TypeLiteralStatement(context)
+                        val subType = TypeStatement(context)
                         subType.process().throwFirstIfExists()
                         subtypes.add(subType)
                         if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break
@@ -72,7 +72,7 @@ class TypeLiteralStatement (context: ParserContext)
                             tokenOf(IS_IDENTIFIER)
                                 .withErrorMessage(IDENTIFIER_EXPECTED_ERROR)),context)
                         transmitter.expect(tokenOf(Tokens.ANNOTATE_ID))
-                        val right = TypeLiteralStatement(context)
+                        val right = TypeStatement(context)
                         right.process().throwFirstIfExists()
                         classComponents.add(left)
                         classComponents.add(right)

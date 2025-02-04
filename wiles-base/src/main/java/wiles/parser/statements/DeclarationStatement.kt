@@ -5,7 +5,7 @@ import wiles.parser.builders.ParserContext
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.exceptions.UnexpectedTokenException
 import wiles.parser.statements.expressions.DefaultExpression
-import wiles.parser.statements.expressions.TypeExpression
+import wiles.parser.statements.expressions.TypeDefExpression
 import wiles.shared.AbstractCompilationException
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.SyntaxType
@@ -27,7 +27,7 @@ class DeclarationStatement(
 )
     : AbstractStatement(context) {
     private var left: TokenStatement? = null
-    private var typeStatement : TypeExpression? = null
+    private var typeStatement : TypeDefExpression? = null
     private var right: DefaultExpression? = null
     private val exceptions = CompilationExceptionsCollection()
 
@@ -74,7 +74,7 @@ class DeclarationStatement(
                 .withErrorMessage(IDENTIFIER_EXPECTED_ERROR)),context)
 
             if(transmitter.expectMaybe(tokenOf(ANNOTATE_ID)).isPresent) {
-                typeStatement = TypeExpression(context)
+                typeStatement = TypeDefExpression(context)
                 typeStatement!!.process().throwFirstIfExists()
                 if(nameStrings.contains(GLOBAL_ID))
                 {
