@@ -5,6 +5,7 @@ import wiles.parser.builders.ParserContext
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.exceptions.UnexpectedTokenException
 import wiles.parser.statements.expressions.DefaultExpression
+import wiles.parser.statements.expressions.TypeExpression
 import wiles.shared.AbstractCompilationException
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.SyntaxType
@@ -13,11 +14,11 @@ import wiles.shared.constants.ErrorMessages.CONST_CANT_BE_VAR_ERROR
 import wiles.shared.constants.ErrorMessages.EXPECTED_GLOBAL_VALUE_ERROR
 import wiles.shared.constants.ErrorMessages.IDENTIFIER_EXPECTED_ERROR
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
+import wiles.shared.constants.Tokens.ANNOTATE_ID
 import wiles.shared.constants.Tokens.ANON_ARG_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.CONST_ID
 import wiles.shared.constants.Tokens.GLOBAL_ID
-import wiles.shared.constants.Tokens.ANNOTATE_ID
 import wiles.shared.constants.Tokens.VARIABLE_ID
 
 class DeclarationStatement(
@@ -26,7 +27,7 @@ class DeclarationStatement(
 )
     : AbstractStatement(context) {
     private var left: TokenStatement? = null
-    private var typeStatement : TypeStatement? = null
+    private var typeStatement : TypeExpression? = null
     private var right: DefaultExpression? = null
     private val exceptions = CompilationExceptionsCollection()
 
@@ -73,7 +74,7 @@ class DeclarationStatement(
                 .withErrorMessage(IDENTIFIER_EXPECTED_ERROR)),context)
 
             if(transmitter.expectMaybe(tokenOf(ANNOTATE_ID)).isPresent) {
-                typeStatement = TypeStatement(context)
+                typeStatement = TypeExpression(context)
                 typeStatement!!.process().throwFirstIfExists()
                 if(nameStrings.contains(GLOBAL_ID))
                 {

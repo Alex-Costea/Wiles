@@ -3,6 +3,7 @@ package wiles.parser.statements
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.builders.ParserContext
 import wiles.parser.enums.WhenRemoveToken
+import wiles.parser.statements.expressions.TypeExpression
 import wiles.shared.AbstractCompilationException
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.SyntaxType
@@ -22,7 +23,7 @@ class MethodStatement(oldContext : ParserContext, private val isTypeDeclaration:
     private val parameters: MutableList<DeclarationStatement> = ArrayList()
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
 
-    private var returnType: TypeStatement? = null
+    private var returnType: TypeExpression? = null
     private var methodBody: CodeBlockStatement = CodeBlockStatement(context)
 
     override val syntaxType: SyntaxType
@@ -70,7 +71,7 @@ class MethodStatement(oldContext : ParserContext, private val isTypeDeclaration:
 
                 //Return type
                 if (transmitter.expectMaybe(tokenOf(ANNOTATE_ID).dontIgnoreNewLine()).isPresent) {
-                    returnType = TypeStatement(context)
+                    returnType = TypeExpression(context)
                     exceptions.addAll(returnType!!.process())
                 }
             }

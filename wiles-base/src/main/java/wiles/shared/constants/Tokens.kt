@@ -69,9 +69,25 @@ object Tokens {
     const val CONST_ID = "CONST"
     const val GLOBAL_ID = "GLOBAL"
 
+    //literals
     const val TRUE_ID = "!true"
     const val FALSE_ID = "!false"
     const val NOTHING_ID = "!nothing"
+
+    //types
+    const val BOOLEAN_ID = "BOOLEAN"
+    const val FUNC_TYPE_ID = "FUNC_TYPE"
+    const val INT_ID = "INT"
+    const val STRING_ID = "STRING"
+    const val DECIMAL_ID = "DECIMAL"
+    const val LIST_ID = "LIST"
+    const val EITHER_ID = "EITHER"
+    const val ANYTHING_ID = "ANYTHING"
+    const val TYPE_TYPE_ID = "TYPE_TYPE"
+    const val COLLECTION_ID = "COLLECTION"
+    const val DICT_ID = "DICT"
+    const val DATA_ID = "DATA"
+    const val MUTABLE_TYPE_ID = "MUTABLE"
 
     private val KEYWORDS: HashMap<String, String> = HashMap()
     private val SYMBOLS: HashMap<String, String> = HashMap()
@@ -95,6 +111,15 @@ object Tokens {
     val STARTING_OPERATORS = setOf(PLUS_ID, MINUS_ID, NOT_ID, MUTABLE_ID)
     @JvmField
     val TERMINATORS = setOf(NEWLINE_ID, TERMINATOR_ID)
+
+    val TYPES = setOf(BOOLEAN_ID, INT_ID, STRING_ID, DECIMAL_ID, LIST_ID, EITHER_ID, ANYTHING_ID, TYPE_TYPE_ID,
+        COLLECTION_ID, DICT_ID, DATA_ID, MUTABLE_TYPE_ID, FUNC_TYPE_ID, CONST_ID)
+    val REQUIRES_SUBTYPE = setOf(LIST_ID, MUTABLE_TYPE_ID, TYPE_TYPE_ID, COLLECTION_ID, DICT_ID, EITHER_ID, CONST_ID)
+    val MAX_NR_TYPES = hashMapOf(Pair(LIST_ID,1),Pair(MUTABLE_TYPE_ID,1),Pair(TYPE_TYPE_ID,1),Pair(COLLECTION_ID,2)
+        ,Pair(DICT_ID,2), Pair(CONST_ID, 1))
+    val MIN_NR_TYPES = hashMapOf(Pair(LIST_ID,1),Pair(MUTABLE_TYPE_ID,1), Pair(CONST_ID, 1),
+        Pair(TYPE_TYPE_ID,1),Pair(COLLECTION_ID,2),Pair(DICT_ID,2), Pair(EITHER_ID, 2))
+
 
     @JvmField
     val KEYWORDS_INDICATING_NEW_EXPRESSION = setOf(
@@ -128,6 +153,19 @@ object Tokens {
         KEYWORDS["type"] = TYPE_ID
         KEYWORDS["const"] = CONST_ID
         KEYWORDS["def"] = GLOBAL_ID
+        KEYWORDS["truth"] = BOOLEAN_ID
+        KEYWORDS["int"] = INT_ID
+        KEYWORDS["text"] = STRING_ID
+        KEYWORDS["decimal"] = DECIMAL_ID
+        KEYWORDS["list"] = LIST_ID
+        KEYWORDS["anything"] = ANYTHING_ID
+        KEYWORDS["type"] = TYPE_TYPE_ID
+        KEYWORDS["collection"] = COLLECTION_ID
+        KEYWORDS["dict"] = DICT_ID
+        KEYWORDS["either"] = EITHER_ID
+        KEYWORDS["data"] = DATA_ID
+        KEYWORDS["mutable"] = MUTABLE_TYPE_ID
+        KEYWORDS["func"] = FUNC_TYPE_ID
 
         SYMBOLS["+"] = PLUS_ID
         SYMBOLS["-"] = MINUS_ID
