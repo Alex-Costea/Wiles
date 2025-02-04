@@ -40,6 +40,7 @@ import wiles.shared.constants.Tokens.IF_ID
 import wiles.shared.constants.Tokens.INT_ID
 import wiles.shared.constants.Tokens.IN_ID
 import wiles.shared.constants.Tokens.LARGER_ID
+import wiles.shared.constants.Tokens.LIST_ID
 import wiles.shared.constants.Tokens.MAYBE_ID
 import wiles.shared.constants.Tokens.MINUS_ID
 import wiles.shared.constants.Tokens.NEWLINE_ID
@@ -58,7 +59,6 @@ import wiles.shared.constants.Tokens.TERMINATOR_ID
 import wiles.shared.constants.Tokens.TIMES_ID
 import wiles.shared.constants.Tokens.TO_ID
 import wiles.shared.constants.Tokens.TRUE_ID
-import wiles.shared.constants.Tokens.TYPE_ID
 import wiles.shared.constants.Tokens.VARIABLE_ID
 import wiles.shared.constants.Tokens.WHILE_ID
 import wiles.shared.constants.Utils.NULL_LOCATION
@@ -398,10 +398,7 @@ class SyntaxTreeConverterTests {
                         TYPE: EITHER [3, 9, 3, 15] 
                         (
                             TYPE: INT [3, 16, 3, 19] , 
-                            TYPE: EXPRESSION 
-                            (
-                                !nothing [3, 21, 3, 28]
-                            )
+                            !nothing [3, 21, 3, 28]
                         )
                     ), 
                     !c [3, 5, 3, 6]
@@ -425,92 +422,153 @@ class SyntaxTreeConverterTests {
     fun typeLiteralsTest()
     {
         /*
-              let my_TYPE := type(list[int or text]?)
+              let my_TYPE := list[int or text]?
               let a : 1 + 2 * 3 := 123
          */
-        assertResults(null,"CODE_BLOCK(DECLARATION(!my_type, EXPRESSION(TYPE_LITERAL: EITHER (TYPE: LIST (TYPE: EITHER (TYPEDEF(TYPE: INT), TYPEDEF(TYPE: STRING))), TYPEDEF(!nothing)))), DECLARATION(TYPE: EXPRESSION (#1, %PLUS, EXPRESSION(#2, %TIMES, #3)), !a, EXPRESSION(#123)))",
-            DECLARE_ID, "!my_type", ASSIGN_ID, TYPE_ID,
-            PAREN_START_ID, "!list", BRACKET_START_ID, INT_ID, OR_ID, STRING_ID, BRACKET_END_ID, MAYBE_ID, PAREN_END_ID,
-            NEWLINE_ID, DECLARE_ID, "!a", ANNOTATE_ID, "#1", PLUS_ID, "#2", TIMES_ID, "#3", ASSIGN_ID, "#123")
+        assertResults(null,"CODE_BLOCK(DECLARATION(!my_type,EXPRESSION(%MAYBE,TYPE:LIST(TYPE:EXPRESSION(TYPE:INT,%OR,TYPE:STRING)))),DECLARATION(TYPEDEF(#1,%PLUS,EXPRESSION(#2,%TIMES,#3)),!a,EXPRESSION(#123)))",
+            DECLARE_ID, "!my_type", ASSIGN_ID,
+            LIST_ID, BRACKET_START_ID, INT_ID, OR_ID, STRING_ID, BRACKET_END_ID, MAYBE_ID, NEWLINE_ID,
+            DECLARE_ID, "!a", ANNOTATE_ID, "#1", PLUS_ID, "#2", TIMES_ID, "#3", ASSIGN_ID, "#123")
 
         /*
-            let a : 17? := 17
-            let a : type(17)? := 17
-            let a : true or false := 17
-            let a : either[1,2] := 17
+                let a : int or text
+                let a : list[int]
+                let a : list[7 + 8]
+                let a : list[int or text]
+                let a : list[int? or text]?
+                let a : 17? := 17
+                let a : true or false := 17
+                let a : either[1,2] := 17
          */
-        assertResults(null,
-            """
+        assertResults(null, """
             CODE_BLOCK
             (
                 DECLARATION
                 (
-                    TYPE: EXPRESSION 
+                    TYPEDEF
                     (
-                        %MAYBE [1, 11, 1, 12], 
-                        #17 [1, 9, 1, 11]
+                        TYPE: INT [1, 9, 1, 12] , 
+                        %OR [1, 13, 1, 15], 
+                        TYPE: STRING [1, 16, 1, 20] 
                     ), 
-                    !a [1, 5, 1, 6], 
-                    EXPRESSION
-                    (
-                        #17 [1, 16, 1, 18]
-                    )
+                    !a [1, 5, 1, 6]
                 ), 
                 DECLARATION
                 (
-                    TYPE: EXPRESSION 
+                    TYPEDEF
                     (
-                        %MAYBE [2, 17, 2, 18], 
-                        TYPE_LITERAL: EXPRESSION 
+                        TYPE: LIST [2, 9, 2, 13] 
                         (
-                            #17 [2, 14, 2, 16]
+                            TYPE: INT [2, 14, 2, 17] 
                         )
                     ), 
-                    !a [2, 5, 2, 6], 
-                    EXPRESSION
-                    (
-                        #17 [2, 22, 2, 24]
-                    )
+                    !a [2, 5, 2, 6]
                 ), 
                 DECLARATION
                 (
-                    TYPE: EXPRESSION 
+                    TYPEDEF
                     (
-                        !true [3, 9, 3, 13], 
-                        %OR [3, 14, 3, 16], 
-                        !false [3, 17, 3, 22]
-                    ), 
-                    !a [3, 5, 3, 6], 
-                    EXPRESSION
-                    (
-                        #17 [3, 26, 3, 28]
-                    )
-                ), 
-                DECLARATION
-                (
-                    TYPE: EITHER [4, 9, 4, 15] 
-                    (
-                        TYPE: EXPRESSION 
+                        TYPE: LIST [3, 9, 3, 13] 
                         (
-                            #1 [4, 16, 4, 17]
-                        ), 
-                        TYPE: EXPRESSION 
-                        (
-                            #2 [4, 18, 4, 19]
+                            TYPE: EXPRESSION 
+                            (
+                                #7 [3, 14, 3, 15], 
+                                %PLUS [3, 16, 3, 17], 
+                                #8 [3, 18, 3, 19]
+                            )
                         )
                     ), 
-                    !a [4, 5, 4, 6], 
+                    !a [3, 5, 3, 6]
+                ), 
+                DECLARATION
+                (
+                    TYPEDEF
+                    (
+                        TYPE: LIST [4, 9, 4, 13] 
+                        (
+                            TYPE: EXPRESSION 
+                            (
+                                TYPE: INT [4, 14, 4, 17] , 
+                                %OR [4, 18, 4, 20], 
+                                TYPE: STRING [4, 21, 4, 25] 
+                            )
+                        )
+                    ), 
+                    !a [4, 5, 4, 6]
+                ), 
+                DECLARATION
+                (
+                    TYPEDEF
+                    (
+                        %MAYBE [5, 27, 5, 28], 
+                        TYPE: LIST [5, 9, 5, 13] 
+                        (
+                            TYPE: EXPRESSION 
+                            (
+                                EXPRESSION
+                                (
+                                    %MAYBE [5, 17, 5, 18], 
+                                    TYPE: INT [5, 14, 5, 17] 
+                                ), 
+                                %OR [5, 19, 5, 21], 
+                                TYPE: STRING [5, 22, 5, 26] 
+                            )
+                        )
+                    ), 
+                    !a [5, 5, 5, 6]
+                ), 
+                DECLARATION
+                (
+                    TYPEDEF
+                    (
+                        %MAYBE [6, 11, 6, 12], 
+                        #17 [6, 9, 6, 11]
+                    ), 
+                    !a [6, 5, 6, 6], 
                     EXPRESSION
                     (
-                        #17 [4, 24, 4, 26]
+                        #17 [6, 16, 6, 18]
+                    )
+                ), 
+                DECLARATION
+                (
+                    TYPEDEF
+                    (
+                        !true [7, 9, 7, 13], 
+                        %OR [7, 14, 7, 16], 
+                        !false [7, 17, 7, 22]
+                    ), 
+                    !a [7, 5, 7, 6], 
+                    EXPRESSION
+                    (
+                        #17 [7, 26, 7, 28]
+                    )
+                ), 
+                DECLARATION
+                (
+                    TYPEDEF
+                    (
+                        TYPE: EITHER [8, 9, 8, 15] 
+                        (
+                            #1 [8, 16, 8, 17], 
+                            #2 [8, 18, 8, 19]
+                        )
+                    ), 
+                    !a [8, 5, 8, 6], 
+                    EXPRESSION
+                    (
+                        #17 [8, 24, 8, 26]
                     )
                 )
-            )""",
+            )
+        """, DECLARE_ID, "!a", ANNOTATE_ID, INT_ID, OR_ID, STRING_ID, NEWLINE_ID,
+            DECLARE_ID, "!a", ANNOTATE_ID, LIST_ID, BRACKET_START_ID, INT_ID, BRACKET_END_ID, NEWLINE_ID,
+            DECLARE_ID, "!a", ANNOTATE_ID, LIST_ID, BRACKET_START_ID, "#7", PLUS_ID, "#8", BRACKET_END_ID, NEWLINE_ID,
+            DECLARE_ID, "!a", ANNOTATE_ID, LIST_ID, BRACKET_START_ID, INT_ID, OR_ID, STRING_ID, BRACKET_END_ID, NEWLINE_ID,
+            DECLARE_ID, "!a", ANNOTATE_ID, LIST_ID, BRACKET_START_ID, INT_ID, MAYBE_ID, OR_ID, STRING_ID, BRACKET_END_ID, MAYBE_ID, NEWLINE_ID,
             DECLARE_ID, "!a", ANNOTATE_ID, "#17", MAYBE_ID, ASSIGN_ID, "#17", NEWLINE_ID,
-            DECLARE_ID, "!a", ANNOTATE_ID, TYPE_ID, PAREN_START_ID, "#17", PAREN_END_ID, MAYBE_ID, ASSIGN_ID, "#17", NEWLINE_ID,
             DECLARE_ID, "!a", ANNOTATE_ID, "!true", OR_ID, "!false", ASSIGN_ID, "#17", NEWLINE_ID,
-            DECLARE_ID, "!a", ANNOTATE_ID, "!either", BRACKET_START_ID, "#1", SEPARATOR_ID, "#2",
-            BRACKET_END_ID, ASSIGN_ID, "#17")
+            DECLARE_ID, "!a", ANNOTATE_ID, EITHER_ID, BRACKET_START_ID, "#1", SEPARATOR_ID, "#2", BRACKET_END_ID, ASSIGN_ID, "#17")
     }
 
     @Test

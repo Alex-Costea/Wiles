@@ -32,9 +32,15 @@ class TypeStatement (context: ParserContext)
         get() = SyntaxType.TYPE
 
     private fun getInnerType(): AbstractStatement {
-        val subType = TypeStatement(context)
-        subType.process().throwFirstIfExists()
-        return subType
+        val expression = DefaultExpression(context)
+        expression.process().throwFirstIfExists()
+        expression.name = SyntaxType.EXPRESSION.toString()
+        if(expression.getComponents().size == 1)
+            return expression.right!!
+        val typeStatement = TypeStatement(context)
+        typeStatement.name = expression.name
+        typeStatement.getComponents().addAll(expression.getComponents())
+        return typeStatement
     }
 
     override fun process(): CompilationExceptionsCollection {
@@ -85,9 +91,8 @@ class TypeStatement (context: ParserContext)
                 }
             }
             else{
-                val expression = DefaultExpression(context)
-                expression.process().throwFirstIfExists()
-                name = SyntaxType.EXPRESSION.toString()
+                val expression = getInnerType()
+                this.name = expression.name
                 this.subtypes.addAll(expression.getComponents())
             }
         } catch (e: AbstractCompilationException) {
