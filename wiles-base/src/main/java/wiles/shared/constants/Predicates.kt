@@ -5,12 +5,12 @@ import wiles.parser.enums.WhenRemoveToken
 import wiles.shared.constants.ErrorMessages.EXPRESSION_EXPECTED_ERROR
 import wiles.shared.constants.ErrorMessages.INTERNAL_ERROR
 import wiles.shared.constants.ErrorMessages.INVALID_EXPRESSION_ERROR
+import wiles.shared.constants.Tokens.BRACKET_START_ID
 import wiles.shared.constants.Tokens.DATA_START_ID
 import wiles.shared.constants.Tokens.DICT_START_ID
-import wiles.shared.constants.Tokens.BRACKET_START_ID
 import wiles.shared.constants.Tokens.DO_ID
 import wiles.shared.constants.Tokens.FUNC_ID
-import wiles.shared.constants.Tokens.INFIX_OPERATORS
+import wiles.shared.constants.Tokens.INFIX_SUFFIX_OPERATORS
 import wiles.shared.constants.Tokens.KEYWORDS_INDICATING_NEW_EXPRESSION
 import wiles.shared.constants.Tokens.NEWLINE_ID
 import wiles.shared.constants.Tokens.PAREN_START_ID
@@ -39,8 +39,8 @@ object Predicates {
                 STARTING_OPERATORS.contains(content) || content == FUNC_ID }
 
     @JvmField
-    val EXPECT_OPERATOR = tokenOf(IS_CONTAINED_IN.invoke(INFIX_OPERATORS)).withErrorMessage(INVALID_EXPRESSION_ERROR)
-        .removeWhen(WhenRemoveToken.Always).freeze()
+    val EXPECT_OPERATOR = tokenOf(IS_CONTAINED_IN.invoke(INFIX_SUFFIX_OPERATORS))
+        .withErrorMessage(INVALID_EXPRESSION_ERROR).removeWhen(WhenRemoveToken.Always).freeze()
 
     @JvmField
     val EXPECT_TOKEN = tokenOf(IS_CONTAINED_IN.invoke(STARTING_OPERATORS)).or(IS_LITERAL)

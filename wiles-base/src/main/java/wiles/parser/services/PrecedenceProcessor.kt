@@ -4,19 +4,20 @@ import wiles.parser.builders.ParserContext
 import wiles.parser.statements.AbstractStatement
 import wiles.parser.statements.TokenStatement
 import wiles.parser.statements.expressions.BinaryExpression
-import wiles.shared.constants.Tokens.INFIX_OPERATORS
+import wiles.shared.InternalErrorException
 import wiles.shared.constants.ErrorMessages.OPERATOR_EXPECTED_ERROR
 import wiles.shared.constants.Precedence.PRECEDENCE
-import wiles.shared.constants.Tokens.PREFIX_OPERATORS
 import wiles.shared.constants.Precedence.RIGHT_TO_LEFT
-import wiles.shared.InternalErrorException
+import wiles.shared.constants.Tokens.ALL_OPERATORS
+import wiles.shared.constants.Tokens.INFIX_OPERATORS
+import wiles.shared.constants.Tokens.PREFIX_OPERATORS
 import java.lang.Byte.MIN_VALUE
 import java.util.*
 
 class PrecedenceProcessor(private val context : ParserContext) {
 
     private val stack : LinkedList<AbstractStatement> = LinkedList()
-    private fun isOperator(content : String) = (INFIX_OPERATORS.contains(content) || PREFIX_OPERATORS.contains(content))
+    private fun isOperator(content : String) = (ALL_OPERATORS.contains(content))
 
     private fun checkPrecedence(currentPrecedence: Byte,lastPrecedence : Byte) =
         currentPrecedence < lastPrecedence
@@ -25,12 +26,15 @@ class PrecedenceProcessor(private val context : ParserContext) {
     private fun processStack(currentPrecedence : Byte)
     {
         var token1 : AbstractStatement? = null
-        val token2 = stack.removeLast()
+        var token2 = stack.removeLast()
         if(stack.isEmpty())
             return
-        val operation = stack.removeLast() as TokenStatement
-        if(!isOperator(operation.name))
-            throw InternalErrorException()
+        var operation = stack.removeLast()
+        if(isOperator(token2.name))
+        {
+            operation = token2.also { token2 = operation } as TokenStatement
+        }
+        else operation = operation as TokenStatement
         if(INFIX_OPERATORS.contains(operation.name))
             token1=stack.removeLast()
 

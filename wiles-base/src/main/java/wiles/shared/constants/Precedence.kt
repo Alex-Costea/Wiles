@@ -7,6 +7,7 @@ import wiles.shared.constants.Tokens.DIVIDE_ID
 import wiles.shared.constants.Tokens.EQUALS_ID
 import wiles.shared.constants.Tokens.LARGER_EQUALS_ID
 import wiles.shared.constants.Tokens.LARGER_ID
+import wiles.shared.constants.Tokens.MAYBE_ID
 import wiles.shared.constants.Tokens.MINUS_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Tokens.NOT_EQUAL_ID
@@ -45,6 +46,7 @@ object Precedence {
         PRECEDENCE[POWER_ID] = 3
         PRECEDENCE[ACCESS_ID] = 4
         PRECEDENCE[APPLY_ID] = 5
+        PRECEDENCE[MAYBE_ID] = 6
 
         RIGHT_TO_LEFT = setOf(PRECEDENCE[NOT_ID]!!, PRECEDENCE[UNARY_PLUS_ID]!!, PRECEDENCE[POWER_ID]!!)
     }

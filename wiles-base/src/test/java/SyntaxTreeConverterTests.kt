@@ -351,12 +351,80 @@ class SyntaxTreeConverterTests {
             NEWLINE_ID, DECLARE_ID, "!a", ANNOTATE_ID, "#1", PLUS_ID, "#2", TIMES_ID, "#3", ASSIGN_ID, "#123")
 
         /*
-        let a : 17? := 17
-        let a : true or false := 17
-        let a : either[1,2] := 17
+            let a : 17? := 17
+            let a : type(17)? := 17
+            let a : true or false := 17
+            let a : either[1,2] := 17
          */
-        assertResults(null, "CODE_BLOCK(DECLARATION(TYPE: EITHER (TYPE: EXPRESSION (#17), TYPE: !nothing), !a, EXPRESSION(#17)), DECLARATION(TYPE: EXPRESSION (!true, %OR, !false), !a, EXPRESSION(#17)), DECLARATION(TYPE: EITHER (TYPE: EXPRESSION (#1), TYPE: EXPRESSION (#2)), !a, EXPRESSION(#17)))",
+        assertResults(null,
+            """
+            CODE_BLOCK
+            (
+                DECLARATION
+                (
+                    TYPE: EXPRESSION 
+                    (
+                        %MAYBE [1, 11, 1, 12], 
+                        #17 [1, 9, 1, 11]
+                    ), 
+                    !a [1, 5, 1, 6], 
+                    EXPRESSION
+                    (
+                        #17 [1, 16, 1, 18]
+                    )
+                ), 
+                DECLARATION
+                (
+                    TYPE: EXPRESSION 
+                    (
+                        %MAYBE [2, 17, 2, 18], 
+                        TYPE_LITERAL: EXPRESSION 
+                        (
+                            #17 [2, 14, 2, 16]
+                        )
+                    ), 
+                    !a [2, 5, 2, 6], 
+                    EXPRESSION
+                    (
+                        #17 [2, 22, 2, 24]
+                    )
+                ), 
+                DECLARATION
+                (
+                    TYPE: EXPRESSION 
+                    (
+                        !true [3, 9, 3, 13], 
+                        %OR [3, 14, 3, 16], 
+                        !false [3, 17, 3, 22]
+                    ), 
+                    !a [3, 5, 3, 6], 
+                    EXPRESSION
+                    (
+                        #17 [3, 26, 3, 28]
+                    )
+                ), 
+                DECLARATION
+                (
+                    TYPE: EITHER [4, 9, 4, 15] 
+                    (
+                        TYPE: EXPRESSION 
+                        (
+                            #1 [4, 16, 4, 17]
+                        ), 
+                        TYPE: EXPRESSION 
+                        (
+                            #2 [4, 18, 4, 19]
+                        )
+                    ), 
+                    !a [4, 5, 4, 6], 
+                    EXPRESSION
+                    (
+                        #17 [4, 24, 4, 26]
+                    )
+                )
+            )""",
             DECLARE_ID, "!a", ANNOTATE_ID, "#17", MAYBE_ID, ASSIGN_ID, "#17", NEWLINE_ID,
+            DECLARE_ID, "!a", ANNOTATE_ID, TYPE_ID, PAREN_START_ID, "#17", PAREN_END_ID, MAYBE_ID, ASSIGN_ID, "#17", NEWLINE_ID,
             DECLARE_ID, "!a", ANNOTATE_ID, "!true", OR_ID, "!false", ASSIGN_ID, "#17", NEWLINE_ID,
             DECLARE_ID, "!a", ANNOTATE_ID, "!either", BRACKET_START_ID, "#1", SEPARATOR_ID, "#2",
             BRACKET_END_ID, ASSIGN_ID, "#17")

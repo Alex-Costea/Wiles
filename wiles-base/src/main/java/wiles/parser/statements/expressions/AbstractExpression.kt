@@ -28,6 +28,7 @@ import wiles.shared.constants.Tokens.KEYWORDS_INDICATING_NEW_EXPRESSION
 import wiles.shared.constants.Tokens.PAREN_END_ID
 import wiles.shared.constants.Tokens.PAREN_START_ID
 import wiles.shared.constants.Tokens.STARTING_OPERATORS
+import wiles.shared.constants.Tokens.SUFFIX_OPERATORS
 import wiles.shared.constants.Tokens.UNARY_ID
 import java.util.*
 
@@ -148,7 +149,18 @@ abstract class AbstractExpression protected constructor(context: ParserContext) 
                     }
                 }
 
-                //Handle unary operators
+                //Handle suffix unary operators
+                if(expectNext == ExpectNext.OPERATOR)
+                {
+                    maybeTempToken = transmitter.expectMaybe(tokenOf(IS_CONTAINED_IN.invoke(SUFFIX_OPERATORS)))
+                    if(maybeTempToken.isPresent) {
+                        mainCurrentToken = maybeTempToken.get()
+                        precedenceProcessor.add(TokenStatement(mainCurrentToken, context))
+                        continue
+                    }
+                }
+
+                //Handle prefix unary operators
                 if (expectNext == ExpectNext.TOKEN) {
                     maybeTempToken = transmitter.expectMaybe(tokenOf(IS_CONTAINED_IN.invoke(STARTING_OPERATORS)))
                     if (maybeTempToken.isPresent) {

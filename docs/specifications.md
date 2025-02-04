@@ -27,7 +27,6 @@
 - Floating point: `decimal` (equivalent to `BigDecimal`)
 - Function type: like function literals, but no function body and put between square brackets (ex: `fun[x : int, -> int]`)
 - Sum types: `type1 or type2`, or `either[type1, type2, ⟪types,⟫]`
-  - Note that the `or` syntax can't be used within expressions to refer to sum types, as it is parsed as boolean `or`. Use `either` in that case
 - List: `list[type]`
 - Dict: `dict[key_type, value_type]`
 - Data: `data[⟪key : type,⟫]`
@@ -61,7 +60,7 @@
 - `()` (order of operations, function access)
 - `[]` (list literals, subcomponents in type definitions)
 - `,` (separator between elements)
-- `?` (syntactic sugar for `type? = type or nothing`)
+- `?` (makes types and values nullable)
 
 ### Named parameters
 - Function calling with named parameters by default: `my_function(a := 1, b := 10)`
@@ -87,7 +86,6 @@ WIP, To be determined.
 - `as_text`: convert object to text
 - `read_line`, `read_truth`, `read_int`, `read_rational`: read an object from the command line
 - `run`: runs the function given as argument
-- `maybe` : makes a nullable type out of non-nullable object
 - `collection.add(arg value, at)` : add an element to a mutable collection
 - `collection.remove(arg value, at)` : remove an element from the mutable collection at the index
 - `collection.update(arg value, at)` : set element of mutable collection at index
