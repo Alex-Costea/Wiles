@@ -16,15 +16,16 @@ import wiles.shared.constants.Tokens.PAREN_END_ID
 import wiles.shared.constants.Tokens.PAREN_START_ID
 import wiles.shared.constants.Tokens.SEPARATOR_ID
 import wiles.shared.constants.Tokens.START_BLOCK_ID
+import wiles.shared.constants.Tokens.TYPE_ID
 
-class MethodStatement(oldContext : ParserContext, private val isTypeDeclaration: Boolean = false)
+class MethodStatement(oldContext : ParserContext)
     : AbstractStatement(oldContext.setWithinMethod(true).setWithinLoop(false)) {
 
     private val parameters: MutableList<DeclarationStatement> = ArrayList()
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
 
     private var returnType: TypeDefExpression? = null
-    private var methodBody: CodeBlockStatement = CodeBlockStatement(context)
+    private val methodBody: CodeBlockStatement = CodeBlockStatement(context)
 
     override val syntaxType: SyntaxType
         get() = SyntaxType.FUNC
@@ -34,8 +35,7 @@ class MethodStatement(oldContext : ParserContext, private val isTypeDeclaration:
         if(returnType != null)
             components.add(returnType!!)
         components.addAll(parameters)
-        if(!isTypeDeclaration)
-            components.add(methodBody)
+        components.add(methodBody)
         return components
     }
 
@@ -48,26 +48,18 @@ class MethodStatement(oldContext : ParserContext, private val isTypeDeclaration:
             parameters.add(parameterStatement)
             if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break
         }
-        if(!isTypeDeclaration)
-            transmitter.expect(tokenOf(PAREN_END_ID))
+        transmitter.expect(tokenOf(PAREN_END_ID))
     }
 
     override fun process(): CompilationExceptionsCollection {
         try {
             val startWithCodeBlock = transmitter.expectMaybe(tokenOf(DO_ID).or(START_BLOCK_ID).removeWhen(WhenRemoveToken.Never))
             if(startWithCodeBlock.isEmpty) {
-                if(!isTypeDeclaration) {
-                    location = transmitter.expect(tokenOf(FUNC_ID)).location
-                }
+                location = transmitter.expect(tokenOf(FUNC_ID)).location
 
                 //Params
-                if(!isTypeDeclaration) {
-                    transmitter.expect(tokenOf(PAREN_START_ID))
-                    readParams()
-                }
-                else {
-                    readParams()
-                }
+                transmitter.expect(tokenOf(PAREN_START_ID))
+                readParams()
 
                 //Return type
                 if (transmitter.expectMaybe(tokenOf(ANNOTATE_ID).dontIgnoreNewLine()).isPresent) {
@@ -77,8 +69,9 @@ class MethodStatement(oldContext : ParserContext, private val isTypeDeclaration:
             }
             else location = startWithCodeBlock.get().location
             //Read body
-            if(!isTypeDeclaration)
+            if(transmitter.expectMaybe(tokenOf(DO_ID).or(START_BLOCK_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
                 exceptions.addAll(methodBody.process())
+            else name = TYPE_ID
         } catch (ex: AbstractCompilationException) {
             exceptions.add(ex)
         }

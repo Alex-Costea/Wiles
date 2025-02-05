@@ -67,6 +67,7 @@ object Tokens {
     const val CONST_ID = "CONST"
     const val GLOBAL_ID = "GLOBAL"
     const val UNION_ID = "UNION"
+    val TYPE_ID = "TYPE"
 
     //literals
     const val TRUE_ID = "!true"
@@ -81,8 +82,6 @@ object Tokens {
     const val DICT_ID = "!dict"
     const val DATA_ID = "!data"
     const val MUTABLE_TYPE_ID = "!mutable"
-
-    //types
 
     private val KEYWORDS: HashMap<String, String> = HashMap()
     private val SYMBOLS: HashMap<String, String> = HashMap()
@@ -109,8 +108,6 @@ object Tokens {
 
     val TYPES = setOf(INT_ID, STRING_ID, DECIMAL_ID, LIST_ID,
          DICT_ID, DATA_ID, MUTABLE_TYPE_ID, FUNC_TYPE_ID, CONST_ID)
-    val NR_TYPES = hashMapOf(Pair(LIST_ID, 1), Pair(MUTABLE_TYPE_ID, 1), Pair(CONST_ID, 1), Pair(DICT_ID, 2))
-
 
     @JvmField
     val KEYWORDS_INDICATING_NEW_EXPRESSION = setOf(

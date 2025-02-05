@@ -14,7 +14,6 @@ import wiles.shared.constants.ErrorMessages.INTERNAL_ERROR
 import wiles.shared.constants.ErrorMessages.INVALID_STATEMENT_ERROR
 import wiles.shared.constants.ErrorMessages.NOT_YET_IMPLEMENTED_ERROR
 import wiles.shared.constants.Predicates.ANYTHING
-import wiles.shared.constants.Predicates.IS_CONTAINED_IN
 import wiles.shared.constants.Predicates.START_OF_EXPRESSION
 import wiles.shared.constants.Tokens.BRACKET_START_ID
 import wiles.shared.constants.Tokens.BREAK_ID
@@ -28,7 +27,6 @@ import wiles.shared.constants.Tokens.FUNC_ID
 import wiles.shared.constants.Tokens.IF_ID
 import wiles.shared.constants.Tokens.RETURN_ID
 import wiles.shared.constants.Tokens.START_BLOCK_ID
-import wiles.shared.constants.Tokens.TYPES
 import wiles.shared.constants.Tokens.WHILE_ID
 import java.util.function.Function
 
@@ -86,7 +84,6 @@ class StatementFactory {
             params[StatementFactoryTypes.FOR_STATEMENT] = tokenOf(FOR_ID)
             params[StatementFactoryTypes.DICT_STATEMENT] = tokenOf(DICT_START_ID)
             params[StatementFactoryTypes.DATA_STATEMENT] = tokenOf(DATA_START_ID)
-            params[StatementFactoryTypes.TYPE_LITERAL] = tokenOf(IS_CONTAINED_IN(TYPES))
                 .removeWhen(WhenRemoveToken.Never)
             createObject[StatementFactoryTypes.TOP_LEVEL_EXPRESSION] =
                 Function { context: ParserContext -> TopLevelExpression(context) }
@@ -114,8 +111,6 @@ class StatementFactory {
                 Function { context : ParserContext -> DictStatement(context) }
             createObject[StatementFactoryTypes.DATA_STATEMENT] =
                 Function { context : ParserContext -> DataStatement(context) }
-            createObject[StatementFactoryTypes.TYPE_LITERAL] =
-                Function { context : ParserContext -> TypeStatement(context) }
         }
     }
 }
