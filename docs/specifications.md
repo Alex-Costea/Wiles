@@ -17,7 +17,7 @@
 - Dict literal: `{ ⟪key -> value,⟫ } ⟨: key_type : value_type⟩`
 - Data literal: `data<< ⟪identifier : value,⟫ >>` (identifier can also be const string)
 - Functions literals: `⟨fun (⟪param1 ⟨: type⟩ ⟨:= default_value⟩,⟫)⟩ ⟨-> return_type⟩⟩ [block]`
-- Type literals `type([type_info])`
+- Type literals `type⟨(type_info)⟩`
 
 ### Types
 - Nothing: only valid value is `nothing`

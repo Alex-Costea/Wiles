@@ -73,16 +73,16 @@ object Tokens {
     const val FALSE_ID = "!false"
     const val NOTHING_ID = "!nothing"
     const val ANYTHING_ID = "!anything"
+    const val FUNC_TYPE_ID = "!func"
+    const val INT_ID = "!int"
+    const val STRING_ID = "!text"
+    const val DECIMAL_ID = "!decimal"
+    const val LIST_ID = "!list"
+    const val DICT_ID = "!dict"
+    const val DATA_ID = "!data"
+    const val MUTABLE_TYPE_ID = "!mutable"
 
     //types
-    const val FUNC_TYPE_ID = "FUNC_TYPE"
-    const val INT_ID = "INT"
-    const val STRING_ID = "STRING"
-    const val DECIMAL_ID = "DECIMAL"
-    const val LIST_ID = "LIST"
-    const val DICT_ID = "DICT"
-    const val DATA_ID = "DATA"
-    const val MUTABLE_TYPE_ID = "MUTABLE_TYPE"
 
     private val KEYWORDS: HashMap<String, String> = HashMap()
     private val SYMBOLS: HashMap<String, String> = HashMap()

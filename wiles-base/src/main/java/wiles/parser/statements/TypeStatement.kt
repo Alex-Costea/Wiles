@@ -13,11 +13,11 @@ import wiles.shared.constants.ErrorMessages.NOT_ENOUGH_TYPES_ERROR
 import wiles.shared.constants.Predicates.IS_CONTAINED_IN
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens
-import wiles.shared.constants.Tokens.BRACKET_END_ID
-import wiles.shared.constants.Tokens.BRACKET_START_ID
 import wiles.shared.constants.Tokens.DATA_ID
 import wiles.shared.constants.Tokens.FUNC_TYPE_ID
 import wiles.shared.constants.Tokens.NR_TYPES
+import wiles.shared.constants.Tokens.PAREN_END_ID
+import wiles.shared.constants.Tokens.PAREN_START_ID
 import wiles.shared.constants.Tokens.SEPARATOR_ID
 import wiles.shared.constants.Tokens.TYPES
 
@@ -46,29 +46,29 @@ class TypeStatement (context: ParserContext)
                 name = content
                 if(NR_TYPES.containsKey(name))
                 {
-                    transmitter.expect(tokenOf(BRACKET_START_ID))
+                    transmitter.expect(tokenOf(PAREN_START_ID))
                     val max : Int? = NR_TYPES[name]
                     for(i in 1..(max?:Int.MAX_VALUE)) {
-                        if(transmitter.expectMaybe(tokenOf(BRACKET_END_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
+                        if(transmitter.expectMaybe(tokenOf(PAREN_END_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
                             break
                         subtypes.add(getInnerType())
                         if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break
                     }
                     if(subtypes.size < (NR_TYPES[name] ?: Int.MAX_VALUE))
                         throw TokenExpectedException(NOT_ENOUGH_TYPES_ERROR,location)
-                    transmitter.expect(tokenOf(BRACKET_END_ID))
+                    transmitter.expect(tokenOf(PAREN_END_ID))
                 }
                 if(name == FUNC_TYPE_ID) {
-                    transmitter.expect(tokenOf(BRACKET_START_ID))
+                    transmitter.expect(tokenOf(PAREN_START_ID))
                     val funStatement = MethodStatement(context, true)
                     funStatement.process().throwFirstIfExists()
                     subtypes.addAll(funStatement.getComponents())
-                    transmitter.expect(tokenOf(BRACKET_END_ID))
+                    transmitter.expect(tokenOf(PAREN_END_ID))
                 }
                 if(name == DATA_ID) {
-                    transmitter.expect(tokenOf(BRACKET_START_ID))
+                    transmitter.expect(tokenOf(PAREN_START_ID))
                     val classComponents : ArrayList<AbstractStatement> = arrayListOf()
-                    while(transmitter.expectMaybe(tokenOf(BRACKET_END_ID).removeWhen(WhenRemoveToken.Never)).isEmpty)
+                    while(transmitter.expectMaybe(tokenOf(PAREN_END_ID).removeWhen(WhenRemoveToken.Never)).isEmpty)
                     {
                         val left = TokenStatement(transmitter.expect(
                             tokenOf(IS_IDENTIFIER)
@@ -79,7 +79,7 @@ class TypeStatement (context: ParserContext)
                         if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break
                     }
                     subtypes.addAll(classComponents)
-                    transmitter.expect(tokenOf(BRACKET_END_ID))
+                    transmitter.expect(tokenOf(PAREN_END_ID))
                 }
             }
             else{
