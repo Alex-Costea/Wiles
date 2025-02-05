@@ -6,6 +6,7 @@ import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.statements.expressions.TypeDefExpression
 import wiles.shared.AbstractCompilationException
 import wiles.shared.CompilationExceptionsCollection
+import wiles.shared.DeclarationType
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.ANNOTATE_ID
@@ -43,7 +44,7 @@ class MethodStatement(oldContext : ParserContext)
     {
         while(transmitter.expectMaybe(tokenOf(IS_IDENTIFIER).or(ANON_ARG_ID)
                 .removeWhen(WhenRemoveToken.Never)).isPresent) {
-            val parameterStatement = DeclarationStatement(context, isParam = true)
+            val parameterStatement = DeclarationStatement(context, DeclarationType.FUNC_PARAM)
             exceptions.addAll(parameterStatement.process())
             parameters.add(parameterStatement)
             if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break

@@ -3,15 +3,11 @@ package wiles.parser.statements
 import wiles.parser.builders.ExpectParamsBuilder
 import wiles.parser.builders.ParserContext
 import wiles.parser.enums.WhenRemoveToken
-import wiles.parser.statements.expressions.InnerDefaultExpression
 import wiles.shared.AbstractCompilationException
 import wiles.shared.CompilationExceptionsCollection
+import wiles.shared.DeclarationType
 import wiles.shared.SyntaxType
-import wiles.shared.Token
-import wiles.shared.constants.ErrorMessages
-import wiles.shared.constants.Predicates
 import wiles.shared.constants.Tokens
-import wiles.shared.constants.Tokens.ANNOTATE_ID
 
 class DataStatement(context: ParserContext) : AbstractStatement(context) {
     override val syntaxType = SyntaxType.DATA
@@ -21,29 +17,14 @@ class DataStatement(context: ParserContext) : AbstractStatement(context) {
         return components
     }
 
-    private fun convertIdentifierToString(tokenStatement: TokenStatement) : InnerDefaultExpression {
-        val name = tokenStatement.token.content
-        val expression = InnerDefaultExpression(context)
-        val newToken = Token(Tokens.STRING_START + name.substring(1), tokenStatement.token.location)
-        expression.right = TokenStatement(newToken, context)
-        return expression
-    }
-
     override fun process(): CompilationExceptionsCollection {
         val errors = CompilationExceptionsCollection()
         try{
             while(transmitter.expectMaybe(ExpectParamsBuilder.tokenOf(Tokens.DATA_END_ID).removeWhen(WhenRemoveToken.Never)).isEmpty)
             {
-                val newComp1 = TokenStatement(transmitter.expect(
-                    ExpectParamsBuilder.tokenOf(Predicates.IS_IDENTIFIER)
-                    .withErrorMessage(ErrorMessages.IDENTIFIER_EXPECTED_ERROR)),context)
-                components.add(convertIdentifierToString(newComp1))
-
-                transmitter.expect(ExpectParamsBuilder.tokenOf(ANNOTATE_ID))
-
-                val newComp2 = InnerDefaultExpression(context)
-                newComp2.process().throwFirstIfExists()
-                components.add(newComp2)
+                val comp = DeclarationStatement(context, DeclarationType.DATA_PARAM)
+                comp.process().throwFirstIfExists()
+                components.add(comp)
 
                 if (transmitter.expectMaybe(ExpectParamsBuilder.tokenOf(Tokens.SEPARATOR_ID)).isEmpty) break
             }

@@ -74,7 +74,6 @@ object Tokens {
     const val FALSE_ID = "!false"
     const val NOTHING_ID = "!nothing"
     const val ANYTHING_ID = "!anything"
-    const val FUNC_TYPE_ID = "!func"
     const val INT_ID = "!int"
     const val STRING_ID = "!text"
     const val DECIMAL_ID = "!decimal"
@@ -105,9 +104,6 @@ object Tokens {
     val STARTING_OPERATORS = setOf(PLUS_ID, MINUS_ID, NOT_ID, MUTABLE_ID)
     @JvmField
     val TERMINATORS = setOf(NEWLINE_ID, TERMINATOR_ID)
-
-    val TYPES = setOf(INT_ID, STRING_ID, DECIMAL_ID, LIST_ID,
-         DICT_ID, DATA_ID, MUTABLE_TYPE_ID, FUNC_TYPE_ID, CONST_ID)
 
     @JvmField
     val KEYWORDS_INDICATING_NEW_EXPRESSION = setOf(
@@ -148,7 +144,6 @@ object Tokens {
         KEYWORDS["dict"] = DICT_ID
         KEYWORDS["data"] = DATA_ID
         KEYWORDS["mutable"] = MUTABLE_TYPE_ID
-        KEYWORDS["func"] = FUNC_TYPE_ID
 
         SYMBOLS["+"] = PLUS_ID
         SYMBOLS["-"] = MINUS_ID

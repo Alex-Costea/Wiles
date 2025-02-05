@@ -9,6 +9,7 @@ import wiles.parser.statements.*
 import wiles.parser.statements.expressions.DefaultExpression
 import wiles.parser.statements.expressions.TopLevelExpression
 import wiles.shared.AbstractCompilationException
+import wiles.shared.DeclarationType
 import wiles.shared.InternalErrorException
 import wiles.shared.constants.ErrorMessages.INTERNAL_ERROR
 import wiles.shared.constants.ErrorMessages.INVALID_STATEMENT_ERROR
@@ -84,13 +85,12 @@ class StatementFactory {
             params[StatementFactoryTypes.FOR_STATEMENT] = tokenOf(FOR_ID)
             params[StatementFactoryTypes.DICT_STATEMENT] = tokenOf(DICT_START_ID)
             params[StatementFactoryTypes.DATA_STATEMENT] = tokenOf(DATA_START_ID)
-                .removeWhen(WhenRemoveToken.Never)
             createObject[StatementFactoryTypes.TOP_LEVEL_EXPRESSION] =
                 Function { context: ParserContext -> TopLevelExpression(context) }
             createObject[StatementFactoryTypes.DEFAULT_EXPRESSION_NO_CODE_BLOCK] =
                 Function { context: ParserContext -> DefaultExpression(context) }
             createObject[StatementFactoryTypes.DECLARATION_STATEMENT] =
-                Function { context: ParserContext -> DeclarationStatement(context) }
+                Function { context: ParserContext -> DeclarationStatement(context, DeclarationType.TOP_LEVEL) }
             createObject[StatementFactoryTypes.FUNC_STATEMENT] =
                 Function { context: ParserContext -> MethodStatement(context) }
             createObject[StatementFactoryTypes.RETURN_STATEMENT] =
