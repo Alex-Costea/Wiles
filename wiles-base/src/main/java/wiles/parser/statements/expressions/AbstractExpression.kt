@@ -72,6 +72,7 @@ abstract class AbstractExpression protected constructor(context: ParserContext) 
             this.syntaxType = SyntaxType.TOKEN
             this.name = newRight.name
             this.right = null
+            this.location = newRight.getFirstLocation()
         }
     }
 
