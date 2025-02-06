@@ -48,8 +48,7 @@ abstract class AbstractExpression protected constructor(context: ParserContext) 
     @JvmField
     protected var isInner: Boolean = false
 
-    override val syntaxType: SyntaxType
-        get() = SyntaxType.EXPRESSION
+    override var syntaxType: SyntaxType = SyntaxType.EXPRESSION
 
     override fun getComponents(): MutableList<AbstractStatement> {
         val components = ArrayList<AbstractStatement>()
@@ -63,6 +62,19 @@ abstract class AbstractExpression protected constructor(context: ParserContext) 
     @Throws(AbstractCompilationException::class)
     protected open fun handleToken(token: Token): Boolean {
         return KEYWORDS_INDICATING_NEW_EXPRESSION.contains(token.content)
+    }
+
+    private fun flatten()
+    {
+        if(syntaxType != SyntaxType.EXPRESSION)
+            return
+        val newRight = right
+        if(left == null && operation == null && newRight?.syntaxType == SyntaxType.TOKEN)
+        {
+            this.syntaxType = SyntaxType.TOKEN
+            this.name = newRight.name
+            this.right = null
+        }
     }
 
     protected open fun setComponents(precedenceProcessor: PrecedenceProcessor) {
@@ -192,6 +204,7 @@ abstract class AbstractExpression protected constructor(context: ParserContext) 
                 transmitter.lastLocation
             )
             setComponents(precedenceProcessor)
+            flatten()
         } catch (ex: AbstractCompilationException) {
             exceptions.add(ex)
         }

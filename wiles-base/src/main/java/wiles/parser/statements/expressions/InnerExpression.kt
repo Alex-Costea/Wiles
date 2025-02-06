@@ -1,30 +1,24 @@
-package wiles.parser.statements.expressions;
+package wiles.parser.statements.expressions
 
-import wiles.parser.builders.ParserContext;
-import wiles.shared.Token;
-import org.jetbrains.annotations.NotNull;
-import wiles.parser.exceptions.TokenExpectedException;
-import wiles.parser.exceptions.UnexpectedEndException;
+import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
+import wiles.parser.builders.ParserContext
+import wiles.parser.exceptions.TokenExpectedException
+import wiles.parser.exceptions.UnexpectedEndException
+import wiles.shared.Token
+import wiles.shared.constants.ErrorMessages.INTERNAL_ERROR
+import wiles.shared.constants.Tokens.PAREN_END_ID
 
-import static wiles.parser.builders.ExpectParamsBuilder.tokenOf;
-import static wiles.shared.constants.ErrorMessages.INTERNAL_ERROR;
-import static wiles.shared.constants.Tokens.PAREN_END_ID;
-
-public class InnerExpression extends AbstractExpression {
-    public InnerExpression(@NotNull ParserContext oldContext) {
-        super(oldContext.setWithinInnerExpression(true));
-    }
-    {
-        isInner = true;
+class InnerExpression(oldContext: ParserContext) : AbstractExpression(oldContext.setWithinInnerExpression(true)) {
+    init {
+        isInner = true
     }
 
-    @Override
-    protected boolean handleToken(@NotNull Token token) throws TokenExpectedException, UnexpectedEndException {
-        if(token.getContent().equals(PAREN_END_ID)) {
-            transmitter.expect(tokenOf(PAREN_END_ID).withErrorMessage(INTERNAL_ERROR));
-            return true;
+    @Throws(TokenExpectedException::class, UnexpectedEndException::class)
+    override fun handleToken(token: Token): Boolean {
+        if (token.content == PAREN_END_ID) {
+            transmitter.expect(tokenOf(PAREN_END_ID).withErrorMessage(INTERNAL_ERROR))
+            return true
         }
-        return false;
+        return false
     }
-
 }

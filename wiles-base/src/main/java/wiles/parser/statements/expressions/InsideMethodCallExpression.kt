@@ -1,42 +1,37 @@
-package wiles.parser.statements.expressions;
+package wiles.parser.statements.expressions
 
-import org.jetbrains.annotations.NotNull;
-import wiles.parser.builders.ParserContext;
-import wiles.parser.services.PrecedenceProcessor;
-import wiles.parser.statements.TokenStatement;
-import wiles.shared.AbstractCompilationException;
-import wiles.shared.Token;
+import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
+import wiles.parser.builders.ParserContext
+import wiles.parser.services.PrecedenceProcessor
+import wiles.parser.statements.TokenStatement
+import wiles.shared.AbstractCompilationException
+import wiles.shared.Token
+import wiles.shared.constants.Tokens.ASSIGN_ID
 
-import static wiles.parser.builders.ExpectParamsBuilder.tokenOf;
-import static wiles.shared.constants.Tokens.ASSIGN_ID;
+class InsideMethodCallExpression(oldContext: ParserContext) :
+    AbstractExpression(oldContext.setWithinInnerExpression(true)) {
+    protected var isAssignment: Boolean = false
 
-public class InsideMethodCallExpression extends AbstractExpression{
-
-    protected boolean isAssignment=false;
-
-    public InsideMethodCallExpression(@NotNull ParserContext oldContext) {
-        super(oldContext.setWithinInnerExpression(true));
-    }
-    {
-        isInner = true;
+    init {
+        isInner = true
     }
 
-    protected void setComponents(@NotNull PrecedenceProcessor precedenceProcessor) {
-        if(isAssignment)
-            this.left = precedenceProcessor.getResult();
-        else super.setComponents(precedenceProcessor);
+
+    override fun setComponents(precedenceProcessor: PrecedenceProcessor) {
+        if (isAssignment) this.left = precedenceProcessor.getResult()
+        else super.setComponents(precedenceProcessor)
     }
 
-    @Override
-    protected boolean handleToken(@NotNull Token token) throws AbstractCompilationException {
-        if (token.getContent().equals(ASSIGN_ID)) {
-            operation = new TokenStatement(transmitter.expect(tokenOf(ASSIGN_ID)), getContext());
-            var new_right = new InnerDefaultExpression(getContext());
-            exceptions.addAll(new_right.process());
-            right = new_right;
-            isAssignment = true;
-            return true;
+    @Throws(AbstractCompilationException::class)
+    override fun handleToken(token: Token): Boolean {
+        if (token.content == ASSIGN_ID) {
+            operation = TokenStatement(transmitter.expect(tokenOf(ASSIGN_ID)), context)
+            val new_right = InnerDefaultExpression(context)
+            exceptions.addAll(new_right.process())
+            right = new_right
+            isAssignment = true
+            return true
         }
-        return super.handleToken(token);
+        return super.handleToken(token)
     }
 }

@@ -118,10 +118,6 @@ class CodeBlockStatement(context: ParserContext) : AbstractStatement(context) {
         } catch (ex: AbstractCompilationException) {
             exceptions.add(ex)
         }
-        if(context.isOutermost)
-        {
-
-        }
         return exceptions
     }
 }

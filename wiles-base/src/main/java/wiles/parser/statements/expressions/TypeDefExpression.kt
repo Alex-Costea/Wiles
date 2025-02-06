@@ -5,5 +5,5 @@ import wiles.shared.SyntaxType
 
 class TypeDefExpression(context: ParserContext) : AbstractExpression(context)
 {
-    override val syntaxType = SyntaxType.TYPEDEF
+    override var syntaxType = SyntaxType.TYPEDEF
 }
