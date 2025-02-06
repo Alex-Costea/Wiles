@@ -14,7 +14,7 @@
   - `\d;` is dollar (reserved for future use)
 - Boolean: `true` and `false`
 - List literal: `[⟪value,⟫] ⟨: type⟩`
-- Dict literal: `{ ⟪key : value,⟫ } ⟨: key_type : value_type⟩`
+- Dict literal: `{ ⟪key -> value,⟫ } ⟨: key_type -> value_type⟩`
 - Data literal: `data<< ⟪[declaration],⟫ >>` (identifier can also be const string)
 - Functions literals: `⟨fun (⟪param1 ⟨: type⟩ ⟨:= default_value⟩,⟫)⟩ ⟨-> return_type⟩⟩ [block]`
 

@@ -683,27 +683,25 @@ CODE_BLOCK
 
     @Test
     fun dictTest(){
-        //let a : dict(int,text) := {1 : "hi", 2 : "bye!"}
+        // let a := {1 -> "hi", 2 -> "bye!"} : int -> text
         assertResults(null,"""
             CODE_BLOCK
             (
                 DECLARATION
                 (
-                    TYPEDEF
-                    (
-                        %APPLY [1, 13, 1, 14], 
-                        !dict [1, 9, 1, 13], 
-                        FUNC_CALL
-                        (
-                            !int, 
-                            !text
-                        )
-                    ), 
                     !a [1, 5, 1, 6], 
                     EXPRESSION
                     (
-                        DICT [1, 48, 1, 49]
+                        DICT [1, 33, 1, 34]
                         (
+                            TYPEDEF: KEY
+                            (
+                                !int [1, 37, 1, 40]
+                            ), 
+                            TYPEDEF: VALUE
+                            (
+                                !text [1, 44, 1, 48]
+                            ), 
                             #1, 
                             'hi', 
                             #2, 
@@ -712,9 +710,10 @@ CODE_BLOCK
                     )
                 )
             )
-        """, DECLARE_ID, "!a", ANNOTATE_ID, "!dict", PAREN_START_ID, "!int", SEPARATOR_ID, "!text", PAREN_END_ID,
-            ASSIGN_ID, DICT_START_ID, "#1", ANNOTATE_ID, "@hi", SEPARATOR_ID, "#2", ANNOTATE_ID, "@bye!", DICT_END_ID)
+        """, DECLARE_ID, "!a", ASSIGN_ID, DICT_START_ID, "#1", YIELDS_ID, "@hi", SEPARATOR_ID,
+            "#2", YIELDS_ID, "@bye!", DICT_END_ID, ANNOTATE_ID, "!int", YIELDS_ID, "!text")
     }
+
     @Test
     fun dataTest(){
         // let a := << name := "alex", age  := 26 >>
