@@ -50,9 +50,9 @@ abstract class AbstractExpression protected constructor(context: ParserContext) 
 
     override fun getComponents(): MutableList<AbstractStatement> {
         val components = ArrayList<AbstractStatement>()
-        if (left != null) components.add(left!!)
         if (operation != null) components.add(operation!!)
         else assert(left == null)
+        if (left != null) components.add(left!!)
         if (right != null) components.add(right!!)
         return components
     }

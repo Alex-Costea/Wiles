@@ -107,22 +107,22 @@ class SyntaxTreeConverterTests {
 
     @Test
     fun expressionsTest() {
-        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(CODE_BLOCK(EXPRESSION(!b, %ASSIGN, !c))))))",
+        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(CODE_BLOCK(EXPRESSION(%ASSIGN, !b, !c))))))",
                 DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID,
                 PAREN_START_ID, PAREN_END_ID, START_BLOCK_ID, TERMINATOR_ID,
                 "!b", ASSIGN_ID, "!c", TERMINATOR_ID, END_BLOCK_ID)
-        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(CODE_BLOCK(EXPRESSION(!b, %ASSIGN, #3))))))",
+        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(CODE_BLOCK(EXPRESSION(%ASSIGN, !b, #3))))))",
             DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID,
             PAREN_START_ID, PAREN_END_ID, START_BLOCK_ID, TERMINATOR_ID,
             "!b", ASSIGN_ID, "#3", TERMINATOR_ID, END_BLOCK_ID)
-        assertResults(null, "CODE_BLOCK(EXPRESSION(EXPRESSION(!b, %PLUS, #3), %MINUS, #5))",
+        assertResults(null, "CODE_BLOCK(EXPRESSION(%MINUS, EXPRESSION(%PLUS, !b, #3), #5))",
                 "!b", PLUS_ID, "#3", MINUS_ID, "#5")
-        assertResults(null, "CODE_BLOCK(EXPRESSION(!a, %PLUS, !b), EXPRESSION(%UNARY_PLUS, !c), EXPRESSION(EXPRESSION(!a, %PLUS, !b), %PLUS, !c))",
+        assertResults(null, "CODE_BLOCK(EXPRESSION(%PLUS,!a,!b),EXPRESSION(%UNARY_PLUS,!c),EXPRESSION(%PLUS,EXPRESSION(%PLUS,!a,!b),!c))",
                 "!a", PLUS_ID, "!b", NEWLINE_ID, PLUS_ID, "!c", NEWLINE_ID, NEWLINE_ID,
                 "!a", PLUS_ID, NEWLINE_ID, "!b", PLUS_ID, "!c")
-        assertResults(null, "CODE_BLOCK(EXPRESSION(EXPRESSION(!b, %PLUS, #3), %MINUS, #5))",
+        assertResults(null, "CODE_BLOCK(EXPRESSION(%MINUS, EXPRESSION(%PLUS, !b, #3), #5))",
                 "!b", PLUS_ID, "#3", MINUS_ID, "#5")
-        assertResults(null, "CODE_BLOCK(EXPRESSION(!c, %ASSIGN, EXPRESSION(EXPRESSION(%UNARY_MINUS, #10), %PLUS, EXPRESSION(%UNARY_PLUS, EXPRESSION(%UNARY_PLUS, #10)))))",
+        assertResults(null, "CODE_BLOCK(EXPRESSION(%ASSIGN,!c,EXPRESSION(%PLUS,EXPRESSION(%UNARY_MINUS,#10),EXPRESSION(%UNARY_PLUS,EXPRESSION(%UNARY_PLUS,#10)))))",
                 "!c", ASSIGN_ID, MINUS_ID, "#10", PLUS_ID, NEWLINE_ID, PLUS_ID, PAREN_START_ID, PLUS_ID, "#10", PAREN_END_ID)
     }
 
@@ -148,16 +148,16 @@ class SyntaxTreeConverterTests {
 
     @Test
     fun bracketsTests() {
-        assertResults(null, "CODE_BLOCK(EXPRESSION(!a, %PLUS, EXPRESSION(EXPRESSION(!b, %PLUS, !c), %PLUS, !d)))",
+        assertResults(null, "CODE_BLOCK(EXPRESSION(%PLUS,!a,EXPRESSION(%PLUS,EXPRESSION(%PLUS,!b,!c),!d)))",
                 "!a", PLUS_ID, PAREN_START_ID, PAREN_START_ID, "!b", PLUS_ID, "!c",
                 PAREN_END_ID, PLUS_ID, "!d", PAREN_END_ID)
-        assertResults(null, "CODE_BLOCK(EXPRESSION(!a, %PLUS, EXPRESSION(!b, %PLUS, !c)))",
+        assertResults(null, "CODE_BLOCK(EXPRESSION(%PLUS,!a,EXPRESSION(%PLUS,!b,!c)))",
                 "!a", PLUS_ID, PAREN_START_ID, NEWLINE_ID, "!b", PLUS_ID, "!c", PAREN_END_ID)
-        assertResults(null, "CODE_BLOCK(EXPRESSION(!a, %PLUS, EXPRESSION(!b, %PLUS, !c)))",
+        assertResults(null, "CODE_BLOCK(EXPRESSION(%PLUS,!a,EXPRESSION(%PLUS,!b,!c)))",
                 "!a", PLUS_ID, NEWLINE_ID, PAREN_START_ID, "!b", PLUS_ID, "!c", PAREN_END_ID)
-        assertResults(null, "CODE_BLOCK(EXPRESSION(!a, %PLUS, !b))",
+        assertResults(null, "CODE_BLOCK(EXPRESSION(%PLUS,!a,!b))",
             PAREN_START_ID, "!a", PLUS_ID, "!b", PAREN_END_ID)
-        assertResults(null, "CODE_BLOCK(EXPRESSION(EXPRESSION(!a, %PLUS, !b), %PLUS, !c))",
+        assertResults(null, "CODE_BLOCK(EXPRESSION(%PLUS,EXPRESSION(%PLUS,!a,!b),!c))",
                 PAREN_START_ID, "!a", PLUS_ID, "!b", PAREN_END_ID, PLUS_ID, "!c")
     }
 
@@ -177,12 +177,12 @@ class SyntaxTreeConverterTests {
                 null,
             DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID)
         assertResults(createExceptions(TokenExpectedException(INVALID_EXPRESSION_ERROR, NULL_LOCATION),TokenExpectedException(
-            END_OF_STATEMENT_EXPECTED_ERROR, NULL_LOCATION)),"CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(CODE_BLOCK(EXPRESSION, EXPRESSION(!a, %PLUS, !b))))))",
+            END_OF_STATEMENT_EXPECTED_ERROR, NULL_LOCATION)),"CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(CODE_BLOCK(EXPRESSION, EXPRESSION(%PLUS, !a, !b))))))",
             DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, NEWLINE_ID,
             START_BLOCK_ID, NEWLINE_ID, "!a", TIMES_ID, TIMES_ID, "!b", NEWLINE_ID, "!a", PLUS_ID, "!b",
             DECLARE_ID, "!c", ASSIGN_ID, "!d", NEWLINE_ID, END_BLOCK_ID)
         assertResults(createExceptions(UnexpectedTokenException(INVALID_STATEMENT_ERROR, NULL_LOCATION)),
-        "CODE_BLOCK(DECLARATION(!a, EXPRESSION(FUNC(CODE_BLOCK))), EXPRESSION(!a, %PLUS, !b))",
+        "CODE_BLOCK(DECLARATION(!a, EXPRESSION(FUNC(CODE_BLOCK))), EXPRESSION(%PLUS, !a, !b))",
             DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, DO_ID, CONTINUE_ID
             , NEWLINE_ID, "!a", PLUS_ID, "!b")
     }
@@ -203,10 +203,10 @@ class SyntaxTreeConverterTests {
             YIELDS_ID, INT_ID, START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
         assertResults(null, "CODE_BLOCK(DECLARATION(!a, EXPRESSION(FUNC(CODE_BLOCK(!nothing)))))",
             DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, DO_ID, NOTHING_ID)
-        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(CODE_BLOCK(EXPRESSION(!b, %ASSIGN, #3))))))",
+        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(CODE_BLOCK(EXPRESSION(%ASSIGN, !b, #3))))))",
             DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, DO_ID,
              "!b", ASSIGN_ID, "#3")
-        assertResults(null, "CODE_BLOCK(DECLARATION(!product, EXPRESSION(FUNC(TYPEDEF(!int), DECLARATION(TYPEDEF(!int), !a), DECLARATION(TYPEDEF(!int), !b), CODE_BLOCK(EXPRESSION(!product, %ASSIGN, EXPRESSION(!a, %TIMES, !b)))))))",
+        assertResults(null, "CODE_BLOCK(DECLARATION(!product, EXPRESSION(FUNC(TYPEDEF(!int), DECLARATION(TYPEDEF(!int), !a), DECLARATION(TYPEDEF(!int), !b), CODE_BLOCK(EXPRESSION(%ASSIGN, !product, EXPRESSION(%TIMES, !a, !b)))))))",
             DECLARE_ID, "!product", ASSIGN_ID, FUNC_ID, PAREN_START_ID, "!a", ANNOTATE_ID, INT_ID,
                 SEPARATOR_ID, "!b", ANNOTATE_ID, INT_ID, PAREN_END_ID, YIELDS_ID, INT_ID, NEWLINE_ID,
                 DO_ID,  "!product", ASSIGN_ID, "!a", TIMES_ID, "!b")
@@ -220,19 +220,19 @@ class SyntaxTreeConverterTests {
     @Test
     fun orderOfOperationsTest()
     {
-        assertResults(null,"CODE_BLOCK(EXPRESSION(!a, %OR, EXPRESSION(EXPRESSION(!b, %PLUS, !c), %LARGER, !d)))",
+        assertResults(null,"CODE_BLOCK(EXPRESSION(%OR,!a,EXPRESSION(%LARGER,EXPRESSION(%PLUS,!b,!c),!d)))",
             "!a", OR_ID, "!b", PLUS_ID, "!c", LARGER_ID, "!d")
 
-        assertResults(null,"CODE_BLOCK(EXPRESSION(%NOT, EXPRESSION(EXPRESSION(!a, %PLUS, !b), %EQUALS, #10)))",
+        assertResults(null,"CODE_BLOCK(EXPRESSION(%NOT,EXPRESSION(%EQUALS,EXPRESSION(%PLUS,!a,!b),#10)))",
         NOT_ID,"!a", PLUS_ID,"!b", EQUALS_ID, "#10")
 
-        assertResults(null,"CODE_BLOCK(EXPRESSION(EXPRESSION(!a, %TIMES, EXPRESSION(!b, %POWER, #2)), %PLUS, #10))",
+        assertResults(null,"CODE_BLOCK(EXPRESSION(%PLUS,EXPRESSION(%TIMES,!a,EXPRESSION(%POWER,!b,#2)),#10))",
             "!a", TIMES_ID, "!b", POWER_ID, "#2", PLUS_ID, "#10")
 
-        assertResults(null,"CODE_BLOCK(EXPRESSION(EXPRESSION(!a, %POWER, EXPRESSION(!b, %POWER, #2)), %PLUS, #10))",
+        assertResults(null,"CODE_BLOCK(EXPRESSION(%PLUS,EXPRESSION(%POWER,!a,EXPRESSION(%POWER,!b,#2)),#10))",
             "!a", POWER_ID, "!b", POWER_ID, "#2", PLUS_ID, "#10")
 
-        assertResults(null,"CODE_BLOCK(EXPRESSION(EXPRESSION(%NOT, EXPRESSION(%NOT, EXPRESSION(!a, %EQUALS, !b))), %OR, !c))",
+        assertResults(null,"CODE_BLOCK(EXPRESSION(%OR,EXPRESSION(%NOT,EXPRESSION(%NOT,EXPRESSION(%EQUALS,!a,!b))),!c))",
             NOT_ID, NOT_ID, "!a", EQUALS_ID, "!b", OR_ID, "!c")
     }
 
@@ -268,16 +268,16 @@ class SyntaxTreeConverterTests {
             ELSE_ID, DO_ID, RETURN_ID, "#2", NEWLINE_ID, END_BLOCK_ID, NEWLINE_ID,
             IF_ID, TRUE_ID, DO_ID, NOTHING_ID, NEWLINE_ID, NOTHING_ID)
 
-        assertResults(null,"CODE_BLOCK(IF(EXPRESSION(!a, %LARGER, #10), CODE_BLOCK(!nothing), EXPRESSION(!a, %LARGER, #0), CODE_BLOCK(!nothing), %ELSE, CODE_BLOCK(!nothing)))",
+        assertResults(null,"CODE_BLOCK(IF(EXPRESSION(%LARGER, !a, #10), CODE_BLOCK(!nothing), EXPRESSION(%LARGER, !a, #0), CODE_BLOCK(!nothing), %ELSE, CODE_BLOCK(!nothing)))",
             IF_ID, START_BLOCK_ID, NEWLINE_ID, "!a", LARGER_ID, "#10", DO_ID, NOTHING_ID, NEWLINE_ID, "!a", LARGER_ID, "#0",
             DO_ID, NOTHING_ID, NEWLINE_ID, ELSE_ID, DO_ID, NOTHING_ID, NEWLINE_ID, END_BLOCK_ID)
 
-        assertResults(null,"CODE_BLOCK(IF(EXPRESSION(!a, %LARGER, #0), CODE_BLOCK(!nothing), %ELSE, CODE_BLOCK(IF(EXPRESSION(!a, %LARGER, #10), CODE_BLOCK(!nothing)))), EXPRESSION(!a, %ASSIGN, !b))",
+        assertResults(null,"CODE_BLOCK(IF(EXPRESSION(%LARGER, !a, #0), CODE_BLOCK(!nothing), %ELSE, CODE_BLOCK(IF(EXPRESSION(%LARGER, !a, #10), CODE_BLOCK(!nothing)))), EXPRESSION(%ASSIGN, !a, !b))",
             IF_ID, START_BLOCK_ID, NEWLINE_ID, "!a", LARGER_ID, "#0", DO_ID, NOTHING_ID, NEWLINE_ID,
             ELSE_ID, DO_ID, IF_ID, "!a", LARGER_ID, "#10", DO_ID, NOTHING_ID,NEWLINE_ID, END_BLOCK_ID,
             NEWLINE_ID, "!a", ASSIGN_ID, "!b")
 
-        assertResults(null,"CODE_BLOCK(IF(EXPRESSION(!a, %LARGER, #10), CODE_BLOCK(!nothing), EXPRESSION(!a, %LARGER, #0), CODE_BLOCK(!nothing)))",
+        assertResults(null,"CODE_BLOCK(IF(EXPRESSION(%LARGER, !a, #10), CODE_BLOCK(!nothing), EXPRESSION(%LARGER, !a, #0), CODE_BLOCK(!nothing)))",
             IF_ID, START_BLOCK_ID, NEWLINE_ID, "!a", LARGER_ID, "#10", DO_ID, NOTHING_ID, NEWLINE_ID,
             "!a", LARGER_ID, "#0", DO_ID, NOTHING_ID, NEWLINE_ID,NEWLINE_ID, END_BLOCK_ID)
     }
@@ -285,7 +285,7 @@ class SyntaxTreeConverterTests {
     @Test
     fun forTest()
     {
-        assertResults(null,"CODE_BLOCK(FOR(!i, %IN, !my_list, %FROM, #1, %TO, #100, CODE_BLOCK(EXPRESSION(!write_line, %APPLY, FUNC_CALL('hello!')))))",
+        assertResults(null,"CODE_BLOCK(FOR(!i, %IN, !my_list, %FROM, #1, %TO, #100, CODE_BLOCK(EXPRESSION(%APPLY, !write_line, FUNC_CALL('hello!')))))",
             FOR_ID, "!i", IN_ID, "!my_list", FROM_ID, "#1", TO_ID, "#100", NEWLINE_ID, START_BLOCK_ID, NEWLINE_ID, "!write_line", PAREN_START_ID, "@hello!", PAREN_END_ID, NEWLINE_ID, END_BLOCK_ID)
         assertResults(null, "CODE_BLOCK(FOR(!i, CODE_BLOCK(!nothing)))",
             FOR_ID, "!i", DO_ID, NOTHING_ID)
@@ -317,11 +317,11 @@ class SyntaxTreeConverterTests {
     @Test
     fun methodCallTest()
     {
-        assertResults(null,"CODE_BLOCK(EXPRESSION(!a, %PLUS, EXPRESSION(!b, %APPLY, FUNC_CALL)))",
+        assertResults(null,"CODE_BLOCK(EXPRESSION(%PLUS, !a, EXPRESSION(%APPLY, !b, FUNC_CALL)))",
             "!a", PLUS_ID, "!b", PAREN_START_ID, PAREN_END_ID)
-        assertResults(null,"CODE_BLOCK(EXPRESSION(!min, %APPLY, FUNC_CALL(EXPRESSION(EXPRESSION(!my_list), %ASSIGN, !a))))",
+        assertResults(null,"CODE_BLOCK(EXPRESSION(%APPLY, !min, FUNC_CALL(EXPRESSION(%ASSIGN, EXPRESSION(!my_list), !a))))",
             "!min", PAREN_START_ID, "!my_list", ASSIGN_ID, "!a", PAREN_END_ID)
-        assertResults(null, "CODE_BLOCK(EXPRESSION(!call, %APPLY, FUNC_CALL(EXPRESSION(EXPRESSION(!a), %ASSIGN, EXPRESSION(!b, %PLUS, !c)), !d, EXPRESSION(!e, %EQUALS, !f))))",
+        assertResults(null, "CODE_BLOCK(EXPRESSION(%APPLY, !call, FUNC_CALL(EXPRESSION(%ASSIGN, EXPRESSION(!a), EXPRESSION(%PLUS, !b, !c)), !d, EXPRESSION(%EQUALS, !e, !f))))",
             "!call", PAREN_START_ID, "!a", ASSIGN_ID, "!b", PLUS_ID, "!c", SEPARATOR_ID, "!d", SEPARATOR_ID, "!e", EQUALS_ID, "!f", PAREN_END_ID)
     }
 
@@ -390,8 +390,8 @@ class SyntaxTreeConverterTests {
                 (
                     TYPEDEF
                     (
-                        !int [2, 9, 2, 12] , 
                         %UNION [2, 13, 2, 15], 
+                        !int [2, 9, 2, 12] , 
                         !nothing [2, 16, 2, 23]
                     ), 
                     !b [2, 5, 2, 6]
@@ -428,14 +428,14 @@ CODE_BLOCK
             %MAYBE [1, 32, 1, 33], 
             EXPRESSION
             (
-                !list [1, 16, 1, 20], 
                 %APPLY [1, 20, 1, 21], 
+                !list [1, 16, 1, 20], 
                 FUNC_CALL
                 (
                     EXPRESSION
                     (
-                        !int [1, 21, 1, 24], 
                         %UNION [1, 25, 1, 26], 
+                        !int [1, 21, 1, 24], 
                         !text [1, 27, 1, 31]
                     )
                 )
@@ -446,12 +446,12 @@ CODE_BLOCK
     (
         TYPEDEF
         (
-            #1 [2, 9, 2, 10], 
             %PLUS [2, 11, 2, 12], 
+            #1 [2, 9, 2, 10], 
             EXPRESSION
             (
-                #2 [2, 13, 2, 14], 
                 %TIMES [2, 15, 2, 16], 
+                #2 [2, 13, 2, 14],  
                 #3 [2, 17, 2, 18]
             )
         ), 
@@ -480,8 +480,8 @@ CODE_BLOCK
                 (
                     TYPEDEF
                     (
-                        !int [1, 9, 1, 12], 
                         %UNION [1, 13, 1, 14], 
+                        !int [1, 9, 1, 12], 
                         !text [1, 15, 1, 19]
                     ), 
                     !a [1, 5, 1, 6]
@@ -490,8 +490,8 @@ CODE_BLOCK
                 (
                     TYPEDEF
                     (
-                        !list [2, 9, 2, 13], 
                         %APPLY [2, 13, 2, 14], 
+                        !list [2, 9, 2, 13], 
                         FUNC_CALL
                         (
                             !anything [2, 14, 2, 22]
@@ -503,14 +503,14 @@ CODE_BLOCK
                 (
                     TYPEDEF
                     (
-                        !list [3, 9, 3, 13], 
                         %APPLY [3, 13, 3, 14], 
+                        !list [3, 9, 3, 13], 
                         FUNC_CALL
                         (
                             EXPRESSION
                             (
-                                #7 [3, 14, 3, 15], 
                                 %PLUS [3, 16, 3, 17], 
+                                #7 [3, 14, 3, 15], 
                                 #8 [3, 18, 3, 19]
                             )
                         )
@@ -521,14 +521,14 @@ CODE_BLOCK
                 (
                     TYPEDEF
                     (
-                        !list [4, 9, 4, 13], 
                         %APPLY [4, 13, 4, 14], 
+                        !list [4, 9, 4, 13], 
                         FUNC_CALL
                         (
                             EXPRESSION
                             (
-                                !int [4, 14, 4, 17], 
                                 %UNION [4, 18, 4, 19], 
+                                !int [4, 14, 4, 17], 
                                 !text [4, 20, 4, 24]
                             )
                         )
@@ -542,18 +542,18 @@ CODE_BLOCK
                         %MAYBE [5, 26, 5, 27], 
                         EXPRESSION
                         (
-                            !list [5, 9, 5, 13], 
                             %APPLY [5, 13, 5, 14], 
+                            !list [5, 9, 5, 13], 
                             FUNC_CALL
                             (
                                 EXPRESSION
                                 (
+                                    %UNION [5, 19, 5, 20], 
                                     EXPRESSION
                                     (
                                         %MAYBE [5, 17, 5, 18], 
                                         !int [5, 14, 5, 17]
                                     ), 
-                                    %UNION [5, 19, 5, 20], 
                                     !text [5, 21, 5, 25]
                                 )
                             )
@@ -575,8 +575,8 @@ CODE_BLOCK
                 (
                     TYPEDEF
                     (
-                        !true [7, 9, 7, 13], 
                         %UNION [7, 14, 7, 15], 
+                        !true [7, 9, 7, 13], 
                         !false [7, 16, 7, 21]
                     ), 
                     !a [7, 5, 7, 6], 
@@ -600,8 +600,8 @@ CODE_BLOCK
                     !truth [1, 15, 1, 20], 
                     EXPRESSION
                     (
-                        !true [1, 24, 1, 28], 
                         %UNION [1, 29, 1, 30], 
+                        !true [1, 24, 1, 28], 
                         !false [1, 31, 1, 36]
                     )
                 )
@@ -617,7 +617,9 @@ CODE_BLOCK
             DECLARATION: !const 
             (
                 TYPEDEF(
-                    !const,%APPLY,FUNC_CALL(!int)
+                    %APPLY,
+                    !const,
+                    FUNC_CALL(!int)
                 ),
                 !a [1, 11, 1, 12], 
                 #123 [1, 29, 1, 32]
@@ -669,7 +671,7 @@ CODE_BLOCK
     fun textTest()
     {
         // write_line("It's a beautiful day! but i still feel sad :-\b; sorry")
-        assertResults(null,"CODE_BLOCK(EXPRESSION(!write_line, %APPLY, FUNC_CALL('It\\qs\\sa\\sbeautiful\\sday!\\sbut\\si\\sstill\\sfeel\\ssad\\s:-\\b\\ssorry\\s-_-\\noh\\swell')))",
+        assertResults(null,"CODE_BLOCK(EXPRESSION(%APPLY, !write_line, FUNC_CALL('It\\qs\\sa\\sbeautiful\\sday!\\sbut\\si\\sstill\\sfeel\\ssad\\s:-\\b\\ssorry\\s-_-\\noh\\swell')))",
             "!write_line", PAREN_START_ID, "@It's a beautiful day! but i still feel sad :-\\ sorry -_-\noh well", PAREN_END_ID, TERMINATOR_ID)
     }
 
@@ -707,14 +709,14 @@ CODE_BLOCK
                 (
                     TYPEDEF
                     (
-                        !mutable [2, 9, 2, 16], 
                         %APPLY [2, 16, 2, 17], 
+                        !mutable [2, 9, 2, 16], 
                         FUNC_CALL
                         (
                             EXPRESSION
                             (
-                                !list [2, 17, 2, 21], 
                                 %APPLY [2, 21, 2, 22], 
+                                !list [2, 17, 2, 21], 
                                 FUNC_CALL
                                 (
                                     !int [2, 22, 2, 25]
