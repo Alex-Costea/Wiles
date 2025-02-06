@@ -8,7 +8,6 @@ interface StatementInterface {
     var name: String
 
     val syntaxType: SyntaxType?
-    var parsed: Boolean?
     fun getFirstLocation() : TokenLocation
     {
         val location = location

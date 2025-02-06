@@ -32,8 +32,6 @@ class CodeBlockStatement(context: ParserContext) : AbstractStatement(context) {
     private val components: MutableList<AbstractStatement> = ArrayList()
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
 
-    override var parsed: Boolean? = null
-
     override val syntaxType: SyntaxType
         get() = SyntaxType.CODE_BLOCK
 
@@ -121,7 +119,9 @@ class CodeBlockStatement(context: ParserContext) : AbstractStatement(context) {
             exceptions.add(ex)
         }
         if(context.isOutermost)
-            parsed = exceptions.isEmpty()
+        {
+
+        }
         return exceptions
     }
 }
