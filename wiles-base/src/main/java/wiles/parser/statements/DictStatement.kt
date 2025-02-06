@@ -39,20 +39,27 @@ class DictStatement(context: ParserContext) : AbstractStatement(context) {
                 if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break
             }
             location = transmitter.expect(tokenOf(DICT_END_ID)).location
+
+            var typeStatement1 : TypeDefExpression? = null
+            var typeStatement2 : TypeDefExpression? = null
+
             if(transmitter.expectMaybe(tokenOf(ANNOTATE_ID).dontIgnoreNewLine()).isPresent) {
-                val typeStatement1 = TypeDefExpression(context)
+                typeStatement1 = TypeDefExpression(context)
                 typeStatement1.process().throwFirstIfExists()
                 typeStatement1.name = "KEY"
+            }
 
-                transmitter.expect(tokenOf(YIELDS_ID))
-
-                val typeStatement2 = TypeDefExpression(context)
+            if(transmitter.expectMaybe(tokenOf(YIELDS_ID).dontIgnoreNewLine()).isPresent) {
+                typeStatement2 = TypeDefExpression(context)
                 typeStatement2.process().throwFirstIfExists()
                 typeStatement2.name = "VALUE"
-
-                components.add(0,typeStatement1)
-                components.add(1,typeStatement2)
             }
+
+            if(typeStatement2 != null)
+                components.add(0, typeStatement2)
+
+            if(typeStatement1 != null)
+                components.add(0, typeStatement1)
         }
         catch(ex : AbstractCompilationException)
         {

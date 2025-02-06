@@ -711,7 +711,61 @@ CODE_BLOCK
                 )
             )
         """, DECLARE_ID, "!a", ASSIGN_ID, DICT_START_ID, "#1", YIELDS_ID, "@hi", SEPARATOR_ID,
-            "#2", YIELDS_ID, "@bye!", DICT_END_ID, ANNOTATE_ID, "!int", YIELDS_ID, "!text")
+            "#2", YIELDS_ID, "@bye!", DICT_END_ID, ANNOTATE_ID, INT_ID, YIELDS_ID, STRING_ID)
+
+        /*
+        {} : int -> text
+        {} : int
+        {} -> text
+        {}
+         */
+        assertResults(null,"""
+            CODE_BLOCK
+            (
+                EXPRESSION
+                (
+                    DICT [1, 2, 1, 3]
+                    (
+                        TYPEDEF: KEY 
+                        (
+                            !int [1, 6, 1, 9]
+                        ), 
+                        TYPEDEF: VALUE 
+                        (
+                            !text [1, 13, 1, 17]
+                        )
+                    )
+                ), 
+                EXPRESSION
+                (
+                    DICT [2, 2, 2, 3]
+                    (
+                        TYPEDEF: KEY 
+                        (
+                            !int [2, 6, 2, 9]
+                        )
+                    )
+                ), 
+                EXPRESSION
+                (
+                    DICT [3, 2, 3, 3]
+                    (
+                        TYPEDEF: VALUE 
+                        (
+                            !text [3, 7, 3, 11]
+                        )
+                    )
+                ), 
+                EXPRESSION
+                (
+                    DICT [4, 2, 4, 3]
+                )
+            )
+""",
+            DICT_START_ID, DICT_END_ID, ANNOTATE_ID, INT_ID, YIELDS_ID, STRING_ID, NEWLINE_ID,
+            DICT_START_ID, DICT_END_ID, ANNOTATE_ID, INT_ID, NEWLINE_ID,
+            DICT_START_ID, DICT_END_ID, YIELDS_ID, STRING_ID, NEWLINE_ID,
+            DICT_START_ID, DICT_END_ID)
     }
 
     @Test
