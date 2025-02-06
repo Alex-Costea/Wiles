@@ -25,8 +25,12 @@ import wiles.shared.constants.Tokens.BRACKET_START_ID
 import wiles.shared.constants.Tokens.BREAK_ID
 import wiles.shared.constants.Tokens.CONST_ID
 import wiles.shared.constants.Tokens.CONTINUE_ID
+import wiles.shared.constants.Tokens.DATA_END_ID
+import wiles.shared.constants.Tokens.DATA_START_ID
 import wiles.shared.constants.Tokens.DECIMAL_ID
 import wiles.shared.constants.Tokens.DECLARE_ID
+import wiles.shared.constants.Tokens.DICT_END_ID
+import wiles.shared.constants.Tokens.DICT_START_ID
 import wiles.shared.constants.Tokens.DO_ID
 import wiles.shared.constants.Tokens.ELSE_ID
 import wiles.shared.constants.Tokens.END_BLOCK_ID
@@ -677,11 +681,66 @@ CODE_BLOCK
 
     @Test
     fun dictTest(){
-        TODO("Add tests")
+        //let a : dict(int,text) := {1 : "hi", 2 : "bye!"}
+        assertResults(null,"""
+            CODE_BLOCK
+            (
+                DECLARATION
+                (
+                    TYPEDEF
+                    (
+                        %APPLY [1, 13, 1, 14], 
+                        !dict [1, 9, 1, 13], 
+                        FUNC_CALL
+                        (
+                            !int, 
+                            !text
+                        )
+                    ), 
+                    !a [1, 5, 1, 6], 
+                    EXPRESSION
+                    (
+                        DICT [1, 48, 1, 49]
+                        (
+                            #1, 
+                            'hi', 
+                            #2, 
+                            'bye!'
+                        )
+                    )
+                )
+            )
+        """, DECLARE_ID, "!a", ANNOTATE_ID, "!dict", PAREN_START_ID, "!int", SEPARATOR_ID, "!text", PAREN_END_ID,
+            ASSIGN_ID, DICT_START_ID, "#1", ANNOTATE_ID, "@hi", SEPARATOR_ID, "#2", ANNOTATE_ID, "@bye!", DICT_END_ID)
     }
     @Test
     fun dataTest(){
-        TODO("Add tests")
+        // let a := << name := "alex", age  := 26 >>
+        assertResults(null,"""
+            CODE_BLOCK
+            (
+                DECLARATION
+                (
+                    !a [1, 5, 1, 6], 
+                    EXPRESSION
+                    (
+                        DATA [1, 40, 1, 42]
+                        (
+                            DECLARATION
+                            (
+                                !name [1, 13, 1, 17], 
+                                'alex'
+                            ), 
+                            DECLARATION
+                            (
+                                !age [1, 29, 1, 32], 
+                                #26
+                            )
+                        )
+                    )
+                )
+            )""", DECLARE_ID, "!a", ASSIGN_ID, DATA_START_ID, "!name", ASSIGN_ID, "@alex", SEPARATOR_ID,
+            "!age", ASSIGN_ID, "#26", DATA_END_ID)
     }
 
     @Test
