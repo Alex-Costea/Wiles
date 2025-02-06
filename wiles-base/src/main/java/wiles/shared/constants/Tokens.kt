@@ -81,7 +81,8 @@ object Tokens {
     const val DICT_ID = "!dict"
     const val DATA_ID = "!data"
     const val MUTABLE_TYPE_ID = "!mutable"
-    const val CONST_ID = "!const"
+    const val CONST_ID = "CONST"
+    const val CONST_TYPE_ID = "!constant"
 
     private val KEYWORDS: HashMap<String, String> = HashMap()
     private val SYMBOLS: HashMap<String, String> = HashMap()
@@ -134,8 +135,8 @@ object Tokens {
         KEYWORDS["begin"] = START_BLOCK_ID
         KEYWORDS["end"] = END_BLOCK_ID
         KEYWORDS["arg"] = ANON_ARG_ID
-        KEYWORDS["const"] = CONST_ID
         KEYWORDS["def"] = GLOBAL_ID
+        KEYWORDS["const"] = CONST_ID
 
         KEYWORDS["int"] = INT_ID
         KEYWORDS["text"] = STRING_ID
@@ -145,6 +146,7 @@ object Tokens {
         KEYWORDS["dict"] = DICT_ID
         KEYWORDS["data"] = DATA_ID
         KEYWORDS["mutable"] = MUTABLE_TYPE_ID
+        KEYWORDS["constant"] = CONST_TYPE_ID
 
         SYMBOLS["+"] = PLUS_ID
         SYMBOLS["-"] = MINUS_ID

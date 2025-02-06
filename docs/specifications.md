@@ -15,9 +15,8 @@
 - Boolean: `true` and `false`
 - List literal: `[⟪value,⟫] ⟨: type⟩`
 - Dict literal: `{ ⟪key : value,⟫ } ⟨: key_type : value_type⟩`
-- Data literal: `data<< ⟪identifier := value,⟫ >>` (identifier can also be const string)
+- Data literal: `data<< ⟪[declaration],⟫ >>` (identifier can also be const string)
 - Functions literals: `⟨fun (⟪param1 ⟨: type⟩ ⟨:= default_value⟩,⟫)⟩ ⟨-> return_type⟩⟩ [block]`
-- Type literals `type⟨(type_info)⟩`
 
 ### Types
 - Nothing: only valid value is `nothing`
@@ -25,15 +24,20 @@
 - Boolean: `truth`
 - String: `text`
 - Floating point: `decimal` (equivalent to `BigDecimal`)
-- Function type: like function literals, but no function body and put between square brackets (ex: `fun[x : int, -> int]`)
+- Function type: like function literals, but with no function body
 - Sum types: `type1 | type2`
-- List: `list[type]`
-- Dict: `dict[key_type, value_type]`
-- Data: `data[⟪key : type,⟫]`
-- Expressions: `expression`
+- List: `list(type)`
+- Constant: `constant(type)`
+- Dict: `dict(key_type, value_type)`
+- Mutable type: `mutable(type)`
+- Expressions (any const expression is a valid type)
 
 ### Statements
-- Value: `let ⟨var⟩ name ⟨: type⟩ ⟨:= value⟩` (`var` makes it a variable, type can be inferred)
+- Declaration: `let ⟨def⟩ ⟨var⟩ ⟨const⟩ name ⟨: type⟩ ⟨:= value⟩`
+  - `let` can be skipped if it starts with `def`
+  - `var` makes it a variable
+  - `def` makes it global scope
+  - `const` makes it a compile time constant
 - Assignment: `name := value`
 - Simple conditional: `if [condition] [block]`
 - Complex conditional: `if begin; ⟪clause;⟫ end`
@@ -61,6 +65,9 @@
 - `[]` (list literals, subcomponents in type definitions)
 - `,` (separator between elements)
 - `?` (makes types and values nullable)
+- `|` (`type1 | type2` is the sum type of `type1` and `type2`)
+- `~` (make an immutable collection mutable)
+
 
 ### Named parameters
 - Function calling with named parameters by default: `my_function(a := 1, b := 10)`
@@ -68,11 +75,7 @@
 - You always have the ability to specify unnamed parameters by name
 - Named parameters can be in any order. Unnamed parameters are matched in order of appearance.
 
-### Mutable types
-- Type: `~[type]`, always subtype of `type`
-- Make an immutable collection into a mutable collection with `~` prefix operator
-
-### Generics
+### Compile time execution
 
 WIP, To be determined.
 
@@ -100,7 +103,6 @@ WIP, To be determined.
 - Language is statically, strongly typed with some type inference
 - Comment using `#`
 - `\` can be used to continue a line after a newline
-- Types are not reserved keywords and can be used as variable names
 - Top level expressions must be of type `nothing`
 - Trailing commas are valid but not necessary
 - Pass by reference to object

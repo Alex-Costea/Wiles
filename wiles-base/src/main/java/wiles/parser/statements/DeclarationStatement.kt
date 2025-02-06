@@ -16,6 +16,7 @@ import wiles.shared.constants.Tokens.ANNOTATE_ID
 import wiles.shared.constants.Tokens.ANON_ARG_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.CONST_ID
+import wiles.shared.constants.Tokens.DECLARE_ID
 import wiles.shared.constants.Tokens.GLOBAL_ID
 import wiles.shared.constants.Tokens.VARIABLE_ID
 
@@ -49,6 +50,7 @@ class DeclarationStatement(
 
     override fun process(): CompilationExceptionsCollection {
         try {
+            transmitter.expectMaybe(tokenOf(DECLARE_ID))
             val expectParams = when(isParam){
                 DeclarationType.FUNC_PARAM -> tokenOf(ANON_ARG_ID).or(CONST_ID)
                 DeclarationType.TOP_LEVEL -> tokenOf(VARIABLE_ID).or(CONST_ID).or(GLOBAL_ID)

@@ -24,6 +24,7 @@ import wiles.shared.constants.Tokens.BRACKET_END_ID
 import wiles.shared.constants.Tokens.BRACKET_START_ID
 import wiles.shared.constants.Tokens.BREAK_ID
 import wiles.shared.constants.Tokens.CONST_ID
+import wiles.shared.constants.Tokens.CONST_TYPE_ID
 import wiles.shared.constants.Tokens.CONTINUE_ID
 import wiles.shared.constants.Tokens.DATA_END_ID
 import wiles.shared.constants.Tokens.DATA_START_ID
@@ -599,7 +600,7 @@ CODE_BLOCK
         assertResults(null,"""
             CODE_BLOCK
             (
-                DECLARATION: GLOBAL; !const 
+                DECLARATION: GLOBAL; CONST
                 (
                     !truth [1, 15, 1, 20], 
                     EXPRESSION
@@ -615,23 +616,23 @@ CODE_BLOCK
 
     @Test
     fun constTest(){
-        //let const a : const(int) := 123
+        //let const a : constant(int) := 123
         assertResults(null,"""
         CODE_BLOCK(
-            DECLARATION: !const 
+            DECLARATION: CONST
             (
                 TYPEDEF(
                     %APPLY,
-                    !const,
+                    !constant,
                     FUNC_CALL(!int)
                 ),
                 !a [1, 11, 1, 12], 
                 #123 [1, 29, 1, 32]
             )
         )
-""", DECLARE_ID, CONST_ID, "!a", ANNOTATE_ID, CONST_ID, PAREN_START_ID, INT_ID, PAREN_END_ID, ASSIGN_ID, "#123")
+""", DECLARE_ID, CONST_ID, "!a", ANNOTATE_ID, CONST_TYPE_ID, PAREN_START_ID, INT_ID, PAREN_END_ID, ASSIGN_ID, "#123")
 
-        //let const var a : const[int] := 123
+        //let const var a : constant(int) := 123
         assertResults(createExceptions(UnexpectedTokenException(CONST_CANT_BE_VAR_ERROR, NULL_LOCATION)),
             """
                 CODE_BLOCK
@@ -639,13 +640,13 @@ CODE_BLOCK
                     DECLARATION
                 )
         """, DECLARE_ID, CONST_ID, VARIABLE_ID, "!a",
-            ANNOTATE_ID, CONST_ID, PAREN_START_ID, INT_ID, PAREN_END_ID, ASSIGN_ID, "#123")
+            ANNOTATE_ID, CONST_TYPE_ID, PAREN_START_ID, INT_ID, PAREN_END_ID, ASSIGN_ID, "#123")
     }
 
     @Test
     fun globalDeclarationTest()
     {
-        // let def a := 234
+        //def a := 234
         assertResults(null,"""
             CODE_BLOCK
             (
@@ -655,7 +656,7 @@ CODE_BLOCK
                     #234 [1, 17, 1, 20]
                 )
             )
-        """, DECLARE_ID, GLOBAL_ID, "!a", ASSIGN_ID, "#234")
+        """, GLOBAL_ID, "!a", ASSIGN_ID, "#234")
 
         //let def a : int
         assertResults(createExceptions(TokenExpectedException(EXPECTED_GLOBAL_VALUE_ERROR, NULL_LOCATION)),
@@ -669,6 +670,7 @@ CODE_BLOCK
                     )
                 )
             """, DECLARE_ID, GLOBAL_ID, "!a", ANNOTATE_ID, INT_ID)
+
     }
 
     @Test
