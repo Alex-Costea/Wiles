@@ -64,10 +64,10 @@ object Tokens {
     const val WHILE_ID = "WHILE"
     const val ANON_ARG_ID = "ANON_ARG"
     const val MUTABLE_ID = "MUTABLE"
-    const val CONST_ID = "CONST"
     const val GLOBAL_ID = "GLOBAL"
     const val UNION_ID = "UNION"
-    val TYPE_ID = "TYPE"
+    const val TYPE_ID = "TYPE"
+    const val YIELDS_ID = "YIELDS"
 
     //literals
     const val TRUE_ID = "!true"
@@ -81,6 +81,7 @@ object Tokens {
     const val DICT_ID = "!dict"
     const val DATA_ID = "!data"
     const val MUTABLE_TYPE_ID = "!mutable"
+    const val CONST_ID = "!const"
 
     private val KEYWORDS: HashMap<String, String> = HashMap()
     private val SYMBOLS: HashMap<String, String> = HashMap()
@@ -172,6 +173,7 @@ object Tokens {
         SYMBOLS["?"] = MAYBE_ID
         SYMBOLS["~"] = MUTABLE_ID
         SYMBOLS["|"] = UNION_ID
+        SYMBOLS["->"] = YIELDS_ID
         SYMBOLS["\\"] = CONTINUE_LINE_ID
         SYMBOLS["\n"] = NEWLINE_ID
 

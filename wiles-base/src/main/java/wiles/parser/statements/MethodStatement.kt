@@ -9,7 +9,6 @@ import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.DeclarationType
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
-import wiles.shared.constants.Tokens.ANNOTATE_ID
 import wiles.shared.constants.Tokens.ANON_ARG_ID
 import wiles.shared.constants.Tokens.DO_ID
 import wiles.shared.constants.Tokens.FUNC_ID
@@ -18,6 +17,7 @@ import wiles.shared.constants.Tokens.PAREN_START_ID
 import wiles.shared.constants.Tokens.SEPARATOR_ID
 import wiles.shared.constants.Tokens.START_BLOCK_ID
 import wiles.shared.constants.Tokens.TYPE_ID
+import wiles.shared.constants.Tokens.YIELDS_ID
 
 class MethodStatement(oldContext : ParserContext)
     : AbstractStatement(oldContext.setWithinMethod(true).setWithinLoop(false)) {
@@ -36,7 +36,8 @@ class MethodStatement(oldContext : ParserContext)
         if(returnType != null)
             components.add(returnType!!)
         components.addAll(parameters)
-        components.add(methodBody)
+        if(name != TYPE_ID)
+            components.add(methodBody)
         return components
     }
 
@@ -63,7 +64,7 @@ class MethodStatement(oldContext : ParserContext)
                 readParams()
 
                 //Return type
-                if (transmitter.expectMaybe(tokenOf(ANNOTATE_ID).dontIgnoreNewLine()).isPresent) {
+                if (transmitter.expectMaybe(tokenOf(YIELDS_ID).dontIgnoreNewLine()).isPresent) {
                     returnType = TypeDefExpression(context)
                     exceptions.addAll(returnType!!.process())
                 }

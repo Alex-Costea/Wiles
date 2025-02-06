@@ -35,7 +35,6 @@ import wiles.shared.constants.Tokens.FALSE_ID
 import wiles.shared.constants.Tokens.FOR_ID
 import wiles.shared.constants.Tokens.FROM_ID
 import wiles.shared.constants.Tokens.FUNC_ID
-import wiles.shared.constants.Tokens.FUNC_TYPE_ID
 import wiles.shared.constants.Tokens.GLOBAL_ID
 import wiles.shared.constants.Tokens.IF_ID
 import wiles.shared.constants.Tokens.INT_ID
@@ -65,6 +64,7 @@ import wiles.shared.constants.Tokens.TRUE_ID
 import wiles.shared.constants.Tokens.UNION_ID
 import wiles.shared.constants.Tokens.VARIABLE_ID
 import wiles.shared.constants.Tokens.WHILE_ID
+import wiles.shared.constants.Tokens.YIELDS_ID
 import wiles.shared.constants.Utils.NULL_LOCATION
 
 @Testable
@@ -189,28 +189,28 @@ class SyntaxTreeConverterTests {
 
     @Test
     fun methodTest() {
-        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(TYPEDEF(TYPE: !int), CODE_BLOCK))))",
-            DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, ANNOTATE_ID, INT_ID,
+        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(TYPEDEF(!int), CODE_BLOCK))))",
+            DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, YIELDS_ID, INT_ID,
                 START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
-        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(TYPEDEF(TYPE: !int), DECLARATION(TYPEDEF(TYPE: !int), !a), CODE_BLOCK))))",
+        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(TYPEDEF(!int), DECLARATION(TYPEDEF(!int), !a), CODE_BLOCK))))",
             DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, "!a", ANNOTATE_ID, INT_ID, PAREN_END_ID,
-            ANNOTATE_ID, INT_ID, START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
-        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(TYPEDEF(TYPE: !int), DECLARATION(TYPEDEF(TYPE: !int), !a), DECLARATION(TYPEDEF(TYPE: !text), !b), CODE_BLOCK))))",
+            YIELDS_ID, INT_ID, START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
+        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(TYPEDEF(!int), DECLARATION(TYPEDEF(!int), !a), DECLARATION(TYPEDEF(!text), !b), CODE_BLOCK))))",
             DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, "!a", ANNOTATE_ID, INT_ID,
-                SEPARATOR_ID, "!b", ANNOTATE_ID, STRING_ID, PAREN_END_ID, ANNOTATE_ID, INT_ID, START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
-        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(TYPEDEF(TYPE: !int), DECLARATION(TYPEDEF(!nothing), !a), CODE_BLOCK))))",
+                SEPARATOR_ID, "!b", ANNOTATE_ID, STRING_ID, PAREN_END_ID, YIELDS_ID, INT_ID, START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
+        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(TYPEDEF(!int), DECLARATION(TYPEDEF(!nothing), !a), CODE_BLOCK))))",
             DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, "!a", ANNOTATE_ID, NOTHING_ID, PAREN_END_ID,
-            ANNOTATE_ID, INT_ID, START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
+            YIELDS_ID, INT_ID, START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
         assertResults(null, "CODE_BLOCK(DECLARATION(!a, EXPRESSION(FUNC(CODE_BLOCK(EXPRESSION(!nothing))))))",
             DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, DO_ID, NOTHING_ID)
         assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(CODE_BLOCK(EXPRESSION(EXPRESSION(!b), %ASSIGN, EXPRESSION(#3)))))))",
             DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, DO_ID,
              "!b", ASSIGN_ID, "#3")
-        assertResults(null, "CODE_BLOCK(DECLARATION(!product, EXPRESSION(FUNC(TYPEDEF(TYPE: !int), DECLARATION(TYPEDEF(TYPE: !int), !a), DECLARATION(TYPEDEF(TYPE: !int), !b), CODE_BLOCK(EXPRESSION(EXPRESSION(!product), %ASSIGN, EXPRESSION(!a, %TIMES, !b)))))))",
+        assertResults(null, "CODE_BLOCK(DECLARATION(!product, EXPRESSION(FUNC(TYPEDEF(!int), DECLARATION(TYPEDEF(!int), !a), DECLARATION(TYPEDEF(!int), !b), CODE_BLOCK(EXPRESSION(EXPRESSION(!product), %ASSIGN, EXPRESSION(!a, %TIMES, !b)))))))",
             DECLARE_ID, "!product", ASSIGN_ID, FUNC_ID, PAREN_START_ID, "!a", ANNOTATE_ID, INT_ID,
-                SEPARATOR_ID, "!b", ANNOTATE_ID, INT_ID, PAREN_END_ID, ANNOTATE_ID, INT_ID, NEWLINE_ID,
+                SEPARATOR_ID, "!b", ANNOTATE_ID, INT_ID, PAREN_END_ID, YIELDS_ID, INT_ID, NEWLINE_ID,
                 DO_ID,  "!product", ASSIGN_ID, "!a", TIMES_ID, "!b")
-        assertResults(null,"CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(DECLARATION(TYPEDEF(TYPE: !int), !args), CODE_BLOCK(EXPRESSION(!nothing))))))",
+        assertResults(null,"CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(DECLARATION(TYPEDEF(!int), !args), CODE_BLOCK(EXPRESSION(!nothing))))))",
             DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, "!args", ANNOTATE_ID, INT_ID, PAREN_END_ID, DO_ID, NOTHING_ID)
         assertResults(null,"CODE_BLOCK(DECLARATION(!a, EXPRESSION(FUNC(CODE_BLOCK(DECLARATION(!b, EXPRESSION(FUNC(CODE_BLOCK(EXPRESSION(!nothing))))))))))",
             DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, NEWLINE_ID, START_BLOCK_ID, NEWLINE_ID, DECLARE_ID,
@@ -239,8 +239,8 @@ class SyntaxTreeConverterTests {
     @Test
     fun returnTest()
     {
-        assertResults(null,"CODE_BLOCK(DECLARATION(!a, EXPRESSION(FUNC(TYPEDEF(TYPE: !int), CODE_BLOCK(RETURN(EXPRESSION(#10)))))))",
-            DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, ANNOTATE_ID, INT_ID,
+        assertResults(null,"CODE_BLOCK(DECLARATION(!a, EXPRESSION(FUNC(TYPEDEF(!int), CODE_BLOCK(RETURN(EXPRESSION(#10)))))))",
+            DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, YIELDS_ID, INT_ID,
             START_BLOCK_ID, NEWLINE_ID, RETURN_ID, "#10", NEWLINE_ID, END_BLOCK_ID)
         assertResults(createExceptions(UnexpectedTokenException(INVALID_STATEMENT_ERROR, NULL_LOCATION)),null,
             RETURN_ID, "#10")
@@ -249,10 +249,10 @@ class SyntaxTreeConverterTests {
     @Test
     fun declarationsTest()
     {
-        assertResults(null,"CODE_BLOCK(DECLARATION(TYPEDEF(TYPE: !int), !a, EXPRESSION(#10)))",
+        assertResults(null,"CODE_BLOCK(DECLARATION(TYPEDEF(!int), !a, EXPRESSION(#10)))",
             DECLARE_ID, "!a", ANNOTATE_ID, INT_ID, ASSIGN_ID, "#10")
         assertResults(createExceptions(UnexpectedEndException(TOKEN_EXPECTED_ERROR.format(ASSIGN_ID), NULL_LOCATION)),
-            "CODE_BLOCK(DECLARATION(TYPEDEF(TYPE: !int), !a, EXPRESSION(#2)), DECLARATION(!a, EXPRESSION(#2)), DECLARATION(TYPEDEF(TYPE: !int), !a), DECLARATION(!a))",
+            "CODE_BLOCK(DECLARATION(TYPEDEF(!int), !a, EXPRESSION(#2)), DECLARATION(!a, EXPRESSION(#2)), DECLARATION(TYPEDEF(!int), !a), DECLARATION(!a))",
             DECLARE_ID, "!a", ANNOTATE_ID, INT_ID, ASSIGN_ID, "#2", NEWLINE_ID, DECLARE_ID, "!a", ASSIGN_ID, "#2", NEWLINE_ID, DECLARE_ID, "!a", ANNOTATE_ID, INT_ID, NEWLINE_ID, DECLARE_ID, "!a")
     }
 
@@ -328,9 +328,10 @@ class SyntaxTreeConverterTests {
     @Test
     fun typesTest()
     {
-        assertResults(null, "CODE_BLOCK(DECLARATION(TYPEDEF(TYPE: !func), !a))",
-            DECLARE_ID, "!a", ANNOTATE_ID, FUNC_TYPE_ID, PAREN_START_ID, PAREN_END_ID)
-        // let fn : func[a : int, b : string, : decimal]
+        // let a : fun()
+        assertResults(null, "CODE_BLOCK(DECLARATION(TYPEDEF(FUNC: TYPE), !a))",
+            DECLARE_ID, "!a", ANNOTATE_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID)
+        // let fn : func[a : int, b : string] -> decimal
         assertResults(null,"""
             CODE_BLOCK
             (
@@ -338,17 +339,17 @@ class SyntaxTreeConverterTests {
                 (
                     TYPEDEF
                     (
-                        TYPE: !func [1, 10, 1, 14] 
+                        FUNC:TYPE
                         (
                             TYPEDEF
                             (
-                                TYPE: !decimal [1, 36, 1, 41] 
+                                !decimal [1, 36, 1, 41] 
                             ), 
                             DECLARATION
                             (
                                 TYPEDEF
                                 (
-                                    TYPE: !int [1, 19, 1, 22] 
+                                    !int [1, 19, 1, 22] 
                                 ), 
                                 !a [1, 15, 1, 16]
                             ), 
@@ -356,7 +357,7 @@ class SyntaxTreeConverterTests {
                             (
                                 TYPEDEF
                                 (
-                                    TYPE: !text [1, 28, 1, 32] 
+                                    !text [1, 28, 1, 32] 
                                 ), 
                                 !b [1, 24, 1, 25]
                             )
@@ -365,8 +366,8 @@ class SyntaxTreeConverterTests {
                     !fn [1, 5, 1, 7]
                 )
             )
-        """, DECLARE_ID, "!fn", ANNOTATE_ID, FUNC_TYPE_ID, PAREN_START_ID, "!a", ANNOTATE_ID, INT_ID, SEPARATOR_ID,
-            "!b", ANNOTATE_ID, STRING_ID, SEPARATOR_ID, ANNOTATE_ID, DECIMAL_ID, PAREN_END_ID)
+        """, DECLARE_ID, "!fn", ANNOTATE_ID, FUNC_ID, PAREN_START_ID, "!a", ANNOTATE_ID, INT_ID, SEPARATOR_ID,
+            "!b", ANNOTATE_ID, STRING_ID, PAREN_END_ID, YIELDS_ID, DECIMAL_ID)
 
         /*
             let a : int?
@@ -381,7 +382,7 @@ class SyntaxTreeConverterTests {
                     TYPEDEF
                     (
                         %MAYBE [1, 12, 1, 13], 
-                        TYPE: !int [1, 9, 1, 12] 
+                        !int [1, 9, 1, 12] 
                     ), 
                     !a [1, 5, 1, 6]
                 ), 
@@ -389,7 +390,7 @@ class SyntaxTreeConverterTests {
                 (
                     TYPEDEF
                     (
-                        TYPE: !int [2, 9, 2, 12] , 
+                        !int [2, 9, 2, 12] , 
                         %UNION [2, 13, 2, 15], 
                         !nothing [2, 16, 2, 23]
                     ), 
@@ -403,7 +404,7 @@ class SyntaxTreeConverterTests {
     @Test
     fun listTest()
     {
-        assertResults(null,"CODE_BLOCK(DECLARATION(!a, EXPRESSION(LIST(TYPEDEF(TYPE: !int), EXPRESSION(#1), EXPRESSION(#2), EXPRESSION(#3)))))",
+        assertResults(null,"CODE_BLOCK(DECLARATION(!a, EXPRESSION(LIST(TYPEDEF(!int), EXPRESSION(#1), EXPRESSION(#2), EXPRESSION(#3)))))",
             DECLARE_ID, "!a", ASSIGN_ID, BRACKET_START_ID,
             "#1", SEPARATOR_ID, "#2", SEPARATOR_ID, "#3", SEPARATOR_ID,
             BRACKET_END_ID, ANNOTATE_ID, INT_ID)
@@ -413,10 +414,55 @@ class SyntaxTreeConverterTests {
     fun typeLiteralsTest()
     {
         /*
-              let my_TYPE := list[int | text]?
+              let my_type := list[int | text]?
               let a : 1 + 2 * 3 := 123
          */
-        assertResults(null,"CODE_BLOCK(DECLARATION(!my_type,EXPRESSION(%MAYBE,TYPE:!list(EXPRESSION(TYPE:!int,%UNION,TYPE:!text)))),DECLARATION(TYPEDEF(#1,%PLUS,EXPRESSION(#2,%TIMES,#3)),!a,EXPRESSION(#123)))",
+        assertResults(null,"""
+CODE_BLOCK
+(
+    DECLARATION
+    (
+        !my_type [1, 5, 1, 12], 
+        EXPRESSION
+        (
+            %MAYBE [1, 32, 1, 33], 
+            EXPRESSION
+            (
+                !list [1, 16, 1, 20], 
+                %APPLY [1, 20, 1, 21], 
+                FUNC_CALL
+                (
+                    EXPRESSION
+                    (
+                        !int [1, 21, 1, 24], 
+                        %UNION [1, 25, 1, 26], 
+                        !text [1, 27, 1, 31]
+                    )
+                )
+            )
+        )
+    ), 
+    DECLARATION
+    (
+        TYPEDEF
+        (
+            #1 [2, 9, 2, 10], 
+            %PLUS [2, 11, 2, 12], 
+            EXPRESSION
+            (
+                #2 [2, 13, 2, 14], 
+                %TIMES [2, 15, 2, 16], 
+                #3 [2, 17, 2, 18]
+            )
+        ), 
+        !a [2, 5, 2, 6], 
+        EXPRESSION
+        (
+            #123 [2, 22, 2, 25]
+        )
+    )
+)
+        """,
             DECLARE_ID, "!my_type", ASSIGN_ID,
             LIST_ID, PAREN_START_ID, INT_ID, UNION_ID, STRING_ID, PAREN_END_ID, MAYBE_ID, NEWLINE_ID,
             DECLARE_ID, "!a", ANNOTATE_ID, "#1", PLUS_ID, "#2", TIMES_ID, "#3", ASSIGN_ID, "#123")
@@ -437,9 +483,9 @@ class SyntaxTreeConverterTests {
                 (
                     TYPEDEF
                     (
-                        TYPE: !int [1, 9, 1, 12] , 
-                        %UNION [1, 13, 1, 15], 
-                        TYPE: !text [1, 16, 1, 20] 
+                        !int [1, 9, 1, 12], 
+                        %UNION [1, 13, 1, 14], 
+                        !text [1, 15, 1, 19]
                     ), 
                     !a [1, 5, 1, 6]
                 ), 
@@ -447,9 +493,14 @@ class SyntaxTreeConverterTests {
                 (
                     TYPEDEF
                     (
-                        TYPE: !list [2, 9, 2, 13] 
+                        !list [2, 9, 2, 13], 
+                        %APPLY [2, 13, 2, 14], 
+                        FUNC_CALL
                         (
-                            !anything [2, 14, 2, 17] 
+                            EXPRESSION
+                            (
+                                !anything [2, 14, 2, 22]
+                            )
                         )
                     ), 
                     !a [2, 5, 2, 6]
@@ -458,9 +509,11 @@ class SyntaxTreeConverterTests {
                 (
                     TYPEDEF
                     (
-                        TYPE: !list [3, 9, 3, 13] 
+                        !list [3, 9, 3, 13], 
+                        %APPLY [3, 13, 3, 14], 
+                        FUNC_CALL
                         (
-                            EXPRESSION 
+                            EXPRESSION
                             (
                                 #7 [3, 14, 3, 15], 
                                 %PLUS [3, 16, 3, 17], 
@@ -474,13 +527,15 @@ class SyntaxTreeConverterTests {
                 (
                     TYPEDEF
                     (
-                        TYPE: !list [4, 9, 4, 13] 
+                        !list [4, 9, 4, 13], 
+                        %APPLY [4, 13, 4, 14], 
+                        FUNC_CALL
                         (
-                            EXPRESSION 
+                            EXPRESSION
                             (
-                                TYPE: !int [4, 14, 4, 17] , 
-                                %UNION [4, 18, 4, 20], 
-                                TYPE: !text [4, 21, 4, 25] 
+                                !int [4, 14, 4, 17], 
+                                %UNION [4, 18, 4, 19], 
+                                !text [4, 20, 4, 24]
                             )
                         )
                     ), 
@@ -490,18 +545,23 @@ class SyntaxTreeConverterTests {
                 (
                     TYPEDEF
                     (
-                        %MAYBE [5, 27, 5, 28], 
-                        TYPE: !list [5, 9, 5, 13] 
+                        %MAYBE [5, 26, 5, 27], 
+                        EXPRESSION
                         (
-                            EXPRESSION 
+                            !list [5, 9, 5, 13], 
+                            %APPLY [5, 13, 5, 14], 
+                            FUNC_CALL
                             (
                                 EXPRESSION
                                 (
-                                    %MAYBE [5, 17, 5, 18], 
-                                    TYPE: !int [5, 14, 5, 17] 
-                                ), 
-                                %UNION [5, 19, 5, 21], 
-                                TYPE: !text [5, 22, 5, 26] 
+                                    EXPRESSION
+                                    (
+                                        %MAYBE [5, 17, 5, 18], 
+                                        !int [5, 14, 5, 17]
+                                    ), 
+                                    %UNION [5, 19, 5, 20], 
+                                    !text [5, 21, 5, 25]
+                                )
                             )
                         )
                     ), 
@@ -525,13 +585,13 @@ class SyntaxTreeConverterTests {
                     TYPEDEF
                     (
                         !true [7, 9, 7, 13], 
-                        %UNION [7, 14, 7, 16], 
-                        !false [7, 17, 7, 22]
+                        %UNION [7, 14, 7, 15], 
+                        !false [7, 16, 7, 21]
                     ), 
                     !a [7, 5, 7, 6], 
                     EXPRESSION
                     (
-                        #17 [7, 26, 7, 28]
+                        #17 [7, 25, 7, 27]
                     )
                 )
             )
@@ -547,7 +607,7 @@ class SyntaxTreeConverterTests {
         assertResults(null,"""
             CODE_BLOCK
             (
-                DECLARATION: GLOBAL; CONST 
+                DECLARATION: GLOBAL; !const 
                 (
                     !truth [1, 15, 1, 20], 
                     EXPRESSION
@@ -563,15 +623,13 @@ class SyntaxTreeConverterTests {
 
     @Test
     fun constTest(){
-        //let const a : const[int] := 123
+        //let const a : const(int) := 123
         assertResults(null,"""
         CODE_BLOCK(
-            DECLARATION: CONST 
+            DECLARATION: !const 
             (
                 TYPEDEF(
-                    TYPE: CONST(
-                        TYPE: !int
-                    )
+                    !const,%APPLY,FUNC_CALL(EXPRESSION(!int))
                 ),
                 !a [1, 11, 1, 12], 
                 EXPRESSION
@@ -618,7 +676,7 @@ class SyntaxTreeConverterTests {
                 (
                     DECLARATION: GLOBAL
                     (
-                        TYPEDEF(TYPE: !int) [1, 16, 1, 19] , 
+                        TYPEDEF(!int) [1, 16, 1, 19] , 
                         !a [1, 12, 1, 13]
                     )
                 )
@@ -645,6 +703,10 @@ class SyntaxTreeConverterTests {
     @Test
     fun mutableTest()
     {
+        /*
+            let a := [123]
+            let b : mutable(list(int)) := a
+         */
         assertResults(null,"""
             CODE_BLOCK
             (
@@ -666,11 +728,21 @@ class SyntaxTreeConverterTests {
                 (
                     TYPEDEF
                     (
-                        TYPE: !mutable [2, 9, 2, 16] 
+                        !mutable [2, 9, 2, 16], 
+                        %APPLY [2, 16, 2, 17], 
+                        FUNC_CALL
                         (
-                            TYPE: !list [2, 17, 2, 21] 
+                            EXPRESSION
                             (
-                                TYPE: !int [2, 22, 2, 25] 
+                                !list [2, 17, 2, 21], 
+                                %APPLY [2, 21, 2, 22], 
+                                FUNC_CALL
+                                (
+                                    EXPRESSION
+                                    (
+                                        !int [2, 22, 2, 25]
+                                    )
+                                )
                             )
                         )
                     ), 
