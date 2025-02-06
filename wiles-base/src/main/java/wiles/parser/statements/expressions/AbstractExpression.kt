@@ -45,8 +45,6 @@ abstract class AbstractExpression protected constructor(context: ParserContext) 
     private val specialStatementFactory = StatementFactory().setContext(context)
         .addType(StatementFactoryTypes.LIST_STATEMENT).addType(StatementFactoryTypes.DICT_STATEMENT)
         .addType(StatementFactoryTypes.DATA_STATEMENT).addType(StatementFactoryTypes.FUNC_STATEMENT)
-    @JvmField
-    protected var isInner: Boolean = false
 
     override var syntaxType: SyntaxType = SyntaxType.EXPRESSION
 

@@ -9,10 +9,6 @@ import wiles.shared.constants.ErrorMessages.INTERNAL_ERROR
 import wiles.shared.constants.Tokens.PAREN_END_ID
 
 class InnerExpression(oldContext: ParserContext) : AbstractExpression(oldContext.setWithinInnerExpression(true)) {
-    init {
-        isInner = true
-    }
-
     @Throws(TokenExpectedException::class, UnexpectedEndException::class)
     override fun handleToken(token: Token): Boolean {
         if (token.content == PAREN_END_ID) {

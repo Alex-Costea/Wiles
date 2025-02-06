@@ -107,11 +107,11 @@ class SyntaxTreeConverterTests {
 
     @Test
     fun expressionsTest() {
-        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(CODE_BLOCK(EXPRESSION(EXPRESSION(!b), %ASSIGN, !c))))))",
+        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(CODE_BLOCK(EXPRESSION(!b, %ASSIGN, !c))))))",
                 DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID,
                 PAREN_START_ID, PAREN_END_ID, START_BLOCK_ID, TERMINATOR_ID,
                 "!b", ASSIGN_ID, "!c", TERMINATOR_ID, END_BLOCK_ID)
-        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(CODE_BLOCK(EXPRESSION(EXPRESSION(!b), %ASSIGN, #3))))))",
+        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(CODE_BLOCK(EXPRESSION(!b, %ASSIGN, #3))))))",
             DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID,
             PAREN_START_ID, PAREN_END_ID, START_BLOCK_ID, TERMINATOR_ID,
             "!b", ASSIGN_ID, "#3", TERMINATOR_ID, END_BLOCK_ID)
@@ -122,7 +122,7 @@ class SyntaxTreeConverterTests {
                 "!a", PLUS_ID, NEWLINE_ID, "!b", PLUS_ID, "!c")
         assertResults(null, "CODE_BLOCK(EXPRESSION(EXPRESSION(!b, %PLUS, #3), %MINUS, #5))",
                 "!b", PLUS_ID, "#3", MINUS_ID, "#5")
-        assertResults(null, "CODE_BLOCK(EXPRESSION(EXPRESSION(!c), %ASSIGN, EXPRESSION(EXPRESSION(%UNARY_MINUS, #10), %PLUS, EXPRESSION(%UNARY_PLUS, EXPRESSION(%UNARY_PLUS, #10)))))",
+        assertResults(null, "CODE_BLOCK(EXPRESSION(!c, %ASSIGN, EXPRESSION(EXPRESSION(%UNARY_MINUS, #10), %PLUS, EXPRESSION(%UNARY_PLUS, EXPRESSION(%UNARY_PLUS, #10)))))",
                 "!c", ASSIGN_ID, MINUS_ID, "#10", PLUS_ID, NEWLINE_ID, PLUS_ID, PAREN_START_ID, PLUS_ID, "#10", PAREN_END_ID)
     }
 
@@ -203,10 +203,10 @@ class SyntaxTreeConverterTests {
             YIELDS_ID, INT_ID, START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
         assertResults(null, "CODE_BLOCK(DECLARATION(!a, EXPRESSION(FUNC(CODE_BLOCK(!nothing)))))",
             DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, DO_ID, NOTHING_ID)
-        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(CODE_BLOCK(EXPRESSION(EXPRESSION(!b), %ASSIGN, #3))))))",
+        assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(CODE_BLOCK(EXPRESSION(!b, %ASSIGN, #3))))))",
             DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, DO_ID,
              "!b", ASSIGN_ID, "#3")
-        assertResults(null, "CODE_BLOCK(DECLARATION(!product, EXPRESSION(FUNC(TYPEDEF(!int), DECLARATION(TYPEDEF(!int), !a), DECLARATION(TYPEDEF(!int), !b), CODE_BLOCK(EXPRESSION(EXPRESSION(!product), %ASSIGN, EXPRESSION(!a, %TIMES, !b)))))))",
+        assertResults(null, "CODE_BLOCK(DECLARATION(!product, EXPRESSION(FUNC(TYPEDEF(!int), DECLARATION(TYPEDEF(!int), !a), DECLARATION(TYPEDEF(!int), !b), CODE_BLOCK(EXPRESSION(!product, %ASSIGN, EXPRESSION(!a, %TIMES, !b)))))))",
             DECLARE_ID, "!product", ASSIGN_ID, FUNC_ID, PAREN_START_ID, "!a", ANNOTATE_ID, INT_ID,
                 SEPARATOR_ID, "!b", ANNOTATE_ID, INT_ID, PAREN_END_ID, YIELDS_ID, INT_ID, NEWLINE_ID,
                 DO_ID,  "!product", ASSIGN_ID, "!a", TIMES_ID, "!b")
@@ -272,7 +272,7 @@ class SyntaxTreeConverterTests {
             IF_ID, START_BLOCK_ID, NEWLINE_ID, "!a", LARGER_ID, "#10", DO_ID, NOTHING_ID, NEWLINE_ID, "!a", LARGER_ID, "#0",
             DO_ID, NOTHING_ID, NEWLINE_ID, ELSE_ID, DO_ID, NOTHING_ID, NEWLINE_ID, END_BLOCK_ID)
 
-        assertResults(null,"CODE_BLOCK(IF(EXPRESSION(!a, %LARGER, #0), CODE_BLOCK(!nothing), %ELSE, CODE_BLOCK(IF(EXPRESSION(!a, %LARGER, #10), CODE_BLOCK(!nothing)))), EXPRESSION(EXPRESSION(!a), %ASSIGN, !b))",
+        assertResults(null,"CODE_BLOCK(IF(EXPRESSION(!a, %LARGER, #0), CODE_BLOCK(!nothing), %ELSE, CODE_BLOCK(IF(EXPRESSION(!a, %LARGER, #10), CODE_BLOCK(!nothing)))), EXPRESSION(!a, %ASSIGN, !b))",
             IF_ID, START_BLOCK_ID, NEWLINE_ID, "!a", LARGER_ID, "#0", DO_ID, NOTHING_ID, NEWLINE_ID,
             ELSE_ID, DO_ID, IF_ID, "!a", LARGER_ID, "#10", DO_ID, NOTHING_ID,NEWLINE_ID, END_BLOCK_ID,
             NEWLINE_ID, "!a", ASSIGN_ID, "!b")

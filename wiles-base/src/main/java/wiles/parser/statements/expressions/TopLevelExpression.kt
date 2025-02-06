@@ -10,10 +10,17 @@ import wiles.shared.constants.ErrorMessages.INTERNAL_ERROR
 import wiles.shared.constants.Tokens.ASSIGN_ID
 
 class TopLevelExpression(context: ParserContext) : AbstractExpression(context) {
-    var isAssignment: Boolean = false
+    private var isAssignment: Boolean = false
 
     override fun setComponents(precedenceProcessor: PrecedenceProcessor) {
-        if (isAssignment) this.left = precedenceProcessor.getResult()
+        if (isAssignment) {
+            var newLeft = precedenceProcessor.getResult()
+            if(newLeft is AbstractExpression && newLeft.getComponents().size == 1)
+            {
+                newLeft = newLeft.right!!
+            }
+            this.left = newLeft
+        }
         else super.setComponents(precedenceProcessor)
     }
 

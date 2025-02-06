@@ -3,7 +3,7 @@ package wiles.parser.statements
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.builders.ParserContext
 import wiles.parser.enums.WhenRemoveToken
-import wiles.parser.statements.expressions.InnerDefaultExpression
+import wiles.parser.statements.expressions.DefaultExpression
 import wiles.parser.statements.expressions.TypeDefExpression
 import wiles.shared.AbstractCompilationException
 import wiles.shared.CompilationExceptionsCollection
@@ -26,13 +26,13 @@ class DictStatement(context: ParserContext) : AbstractStatement(context) {
         try{
             while(transmitter.expectMaybe(tokenOf(DICT_END_ID).removeWhen(WhenRemoveToken.Never)).isEmpty)
             {
-                val newComp1 = InnerDefaultExpression(context)
+                val newComp1 = DefaultExpression(context)
                 newComp1.process().throwFirstIfExists()
                 components.add(newComp1)
 
                 transmitter.expect(tokenOf(ANNOTATE_ID))
 
-                val newComp2 = InnerDefaultExpression(context)
+                val newComp2 = DefaultExpression(context)
                 newComp2.process().throwFirstIfExists()
                 components.add(newComp2)
 

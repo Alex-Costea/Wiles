@@ -10,12 +10,7 @@ import wiles.shared.constants.Tokens.ASSIGN_ID
 
 class InsideMethodCallExpression(oldContext: ParserContext) :
     AbstractExpression(oldContext.setWithinInnerExpression(true)) {
-    protected var isAssignment: Boolean = false
-
-    init {
-        isInner = true
-    }
-
+    private var isAssignment: Boolean = false
 
     override fun setComponents(precedenceProcessor: PrecedenceProcessor) {
         if (isAssignment) this.left = precedenceProcessor.getResult()
@@ -26,9 +21,9 @@ class InsideMethodCallExpression(oldContext: ParserContext) :
     override fun handleToken(token: Token): Boolean {
         if (token.content == ASSIGN_ID) {
             operation = TokenStatement(transmitter.expect(tokenOf(ASSIGN_ID)), context)
-            val new_right = InnerDefaultExpression(context)
-            exceptions.addAll(new_right.process())
-            right = new_right
+            val newRight = DefaultExpression(context)
+            exceptions.addAll(newRight.process())
+            right = newRight
             isAssignment = true
             return true
         }

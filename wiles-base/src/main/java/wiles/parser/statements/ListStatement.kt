@@ -3,7 +3,7 @@ package wiles.parser.statements
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.builders.ParserContext
 import wiles.parser.enums.WhenRemoveToken
-import wiles.parser.statements.expressions.InnerDefaultExpression
+import wiles.parser.statements.expressions.DefaultExpression
 import wiles.parser.statements.expressions.TypeDefExpression
 import wiles.shared.AbstractCompilationException
 import wiles.shared.CompilationExceptionsCollection
@@ -25,7 +25,7 @@ class ListStatement(context: ParserContext) : AbstractStatement(context) {
         try{
             while(transmitter.expectMaybe(tokenOf(BRACKET_END_ID).removeWhen(WhenRemoveToken.Never)).isEmpty)
             {
-                val newComp = InnerDefaultExpression(context)
+                val newComp = DefaultExpression(context)
                 newComp.process().throwFirstIfExists()
                 components.add(newComp)
                 if (transmitter.expectMaybe(tokenOf(SEPARATOR_ID)).isEmpty) break
