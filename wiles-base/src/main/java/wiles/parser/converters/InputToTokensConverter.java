@@ -65,7 +65,7 @@ public class InputToTokensConverter {
                     tokens.add(createToken(readNumeralLiteral()));
                 } else if (arrayChars[index] == COMMENT_START) //operator
                 {
-                    readComment();
+                    createComment();
                 } else {
                     String id = readSymbol();
                     int size = tokens.size();
@@ -134,16 +134,12 @@ public class InputToTokensConverter {
                 Matcher.quoteReplacement(unescapeGroup(matcher.group()))));
     }
 
-    public StringBuilder createString(boolean isNotComment) {
+    public StringBuilder createString() {
         int currentIndex = index + 1;
         @NotNull
         StringBuilder sb = new StringBuilder();
         while (currentIndex < arrayChars.length) {
-            if (!isNotComment & arrayChars[currentIndex] == '\n') {
-                currentIndex--;
-                break;
-            }
-            if (isNotComment && arrayChars[currentIndex] == STRING_DELIMITER)
+            if (arrayChars[currentIndex] == STRING_DELIMITER)
                 break;
             sb.appendCodePoint(arrayChars[currentIndex]);
             if (currentIndex + 1 == arrayChars.length)
@@ -154,12 +150,26 @@ public class InputToTokensConverter {
         return sb;
     }
 
+    public void createComment() {
+        int currentIndex = index + 1;
+        while (currentIndex < arrayChars.length) {
+            if (arrayChars[currentIndex] == '\n') {
+                currentIndex--;
+                break;
+            }
+            if (currentIndex + 1 == arrayChars.length)
+                break;
+            currentIndex++;
+        }
+        index = currentIndex;
+    }
+
     @NotNull
     private String readStringLiteral() throws StringInvalidException {
         if (index >= arrayChars.length)
             throw new StringInvalidException(ErrorMessages.STRING_UNFINISHED_ERROR,
                     new TokenLocation( line, getIndexOnCurrentLine(), -1, -1));
-        StringBuilder sb = createString(true);
+        StringBuilder sb = createString();
         if (index < arrayChars.length && arrayChars[index] == STRING_DELIMITER)
             return Tokens.STRING_START + sb;
 
@@ -228,10 +238,6 @@ public class InputToTokensConverter {
             token = sb.toString();
         }
         return token;
-    }
-
-    private void readComment() {
-        createString(false);
     }
 
     @NotNull
