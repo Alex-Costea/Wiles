@@ -43,7 +43,7 @@ class Parser(val input : String, isDebug : Boolean) {
     private fun sourceToTokens(): List<Token> {
         val converter = wiles.parser.converters.InputToTokensConverter(input, lastLocation())
         val tokens = converter.convert()
-        exceptions.addAll(converter.exceptions)
+        exceptions.addAll(converter.getExceptions())
         return tokens
     }
 

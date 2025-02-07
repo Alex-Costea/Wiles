@@ -1,267 +1,248 @@
-package wiles.parser.converters;
+package wiles.parser.converters
 
-import org.jetbrains.annotations.NotNull;
-import org.unbescape.html.HtmlEscape;
-import wiles.parser.exceptions.StringInvalidException;
-import wiles.shared.AbstractCompilationException;
-import wiles.shared.CompilationExceptionsCollection;
-import wiles.shared.Token;
-import wiles.shared.TokenLocation;
-import wiles.shared.constants.ErrorMessages;
-import wiles.shared.constants.Settings;
-import wiles.shared.constants.Tokens;
-import wiles.shared.constants.Utils;
+import org.unbescape.html.HtmlEscape
+import wiles.parser.exceptions.StringInvalidException
+import wiles.shared.AbstractCompilationException
+import wiles.shared.CompilationExceptionsCollection
+import wiles.shared.Token
+import wiles.shared.TokenLocation
+import wiles.shared.constants.Chars.COMMENT_START
+import wiles.shared.constants.Chars.DECIMAL_DELIMITER
+import wiles.shared.constants.Chars.STRING_DELIMITER
+import wiles.shared.constants.ErrorMessages
+import wiles.shared.constants.Settings
+import wiles.shared.constants.Tokens
+import wiles.shared.constants.Utils.isAlphabetic
+import wiles.shared.constants.Utils.isAlphanumeric
+import wiles.shared.constants.Utils.isDigit
+import wiles.shared.constants.Utils.isWhitespace
+import java.util.function.Function
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+class InputToTokensConverter(input: String, private val lastLocation: TokenLocation) {
+    private val arrayChars: IntArray = input.codePoints().toArray()
+    private val exceptions = CompilationExceptionsCollection()
+    private var originalIndex = 0
+    private var index = 0
+    private var lineIndex = -1 //character at index -1 can be considered equivalent to newline
+    private var line = 1
 
-import static wiles.shared.constants.Chars.*;
-import static wiles.shared.constants.Utils.isAlphanumeric;
-import static wiles.shared.constants.Utils.isWhitespace;
-
-public class InputToTokensConverter {
-    private final int[] arrayChars;
-    @NotNull
-    private final CompilationExceptionsCollection exceptions = new CompilationExceptionsCollection();
-    private int originalIndex;
-    private int index;
-    private int lineIndex = -1; //character at index -1 can be considered equivalent to newline
-    private int line = 1;
-    private final TokenLocation lastLocation;
-
-    private static final HashMap<String, String> ESCAPE_SEQUENCES = new HashMap<>();
-
-    static {
-        ESCAPE_SEQUENCES.put("\\q;", "\"");
-        ESCAPE_SEQUENCES.put("\\n;", "\n");
-        ESCAPE_SEQUENCES.put("\\x;", "\\");
-        ESCAPE_SEQUENCES.put("\\c;", "$");
-        ESCAPE_SEQUENCES.put("\\e;", ";");
-    }
-
-    public InputToTokensConverter(@NotNull String input, @NotNull TokenLocation lastLocation) {
-        arrayChars = input.codePoints().toArray();
-        this.lastLocation = lastLocation;
-    }
-
-    @NotNull
-    public List<Token> convert() {
-        @NotNull
-        var tokens = new ArrayList<Token>();
-        for (index = 0; index < arrayChars.length; index++) {
+    fun convert(): List<Token> {
+        val tokens = ArrayList<Token>()
+        index = 0
+        while (index < arrayChars.size) {
             try {
-                originalIndex = index;
-                if (arrayChars[index] == STRING_DELIMITER) //string literal
+                originalIndex = index
+                if (arrayChars[index] == STRING_DELIMITER.code)  //string literal
                 {
-                    var string = readStringLiteral();
-                    var unescaped = unescape(string);
-                    tokens.add(createToken(unescaped));
-                } else if (Utils.isAlphabetic(arrayChars[index])) //identifier
+                    val string = readStringLiteral()
+                    val unescaped = unescape(string)
+                    tokens.add(createToken(unescaped))
+                } else if (isAlphabetic(arrayChars[index]))  //identifier
                 {
-                    tokens.add(createToken(readIdentifier()));
-                } else if (Utils.isDigit(arrayChars[index])) //numeral literal
+                    tokens.add(createToken(readIdentifier()))
+                } else if (isDigit(arrayChars[index]))  //numeral literal
                 {
-                    tokens.add(createToken(readNumeralLiteral()));
-                } else if (arrayChars[index] == COMMENT_START) //operator
+                    tokens.add(createToken(readNumeralLiteral()))
+                } else if (arrayChars[index] == COMMENT_START.code)  //operator
                 {
-                    createComment();
+                    createComment()
                 } else {
-                    String id = readSymbol();
-                    int size = tokens.size();
-                    if (size > 0 && id.equals(Tokens.NEWLINE_ID) && tokens.get(size - 1).getContent().equals(Tokens.CONTINUE_LINE_ID)) {
-                        tokens.remove(size - 1);
-                        addNewLine();
-                        continue; // backslash followed by newline is ignored
+                    val id = readSymbol()
+                    val size = tokens.size
+                    if (size > 0 && id == Tokens.NEWLINE_ID && tokens[size - 1].content == Tokens.CONTINUE_LINE_ID) {
+                        tokens.removeAt(size - 1)
+                        addNewLine()
+                        index++
+                        continue  // backslash followed by newline is ignored
                     }
-                    if (!id.isBlank())
-                        tokens.add(createToken(id));
-                    else tokens.add(createToken(""));
-                    if (id.equals(Tokens.NEWLINE_ID))
-                        addNewLine();
+                    if (id.isNotBlank()) tokens.add(createToken(id))
+                    else tokens.add(createToken(""))
+                    if (id == Tokens.NEWLINE_ID) addNewLine()
                 }
-            } catch (AbstractCompilationException ex) {
-                exceptions.add(ex);
-                tokens.add(createToken(Tokens.ERROR_TOKEN));
+            } catch (ex: AbstractCompilationException) {
+                exceptions.add(ex)
+                tokens.add(createToken(Tokens.ERROR_TOKEN))
             }
+            index++
         }
-        return removeNull(addLocationEnd(tokens));
+        return removeNull(addLocationEnd(tokens))
     }
 
-    private @NotNull ArrayList<Token> addLocationEnd(ArrayList<Token> tokens)
-    {
-        ArrayList<Token> newTokens = new ArrayList<>();
-        for(int i = 0; i < tokens.size(); i++)
-        {
-            Token token = tokens.get(i);
-            TokenLocation nextLocation;
-            if(i != tokens.size() - 1)
-            {
-                nextLocation = tokens.get(i+1).getLocation();
+    private fun addLocationEnd(tokens: ArrayList<Token>): ArrayList<Token> {
+        val newTokens = ArrayList<Token>()
+        for (i in tokens.indices) {
+            val token = tokens[i]
+            val nextLocation = if (i != tokens.size - 1) {
+                tokens[i + 1].location
+            } else {
+                lastLocation
             }
-            else{
-                nextLocation = lastLocation;
+            val location = token.location
+            newTokens.add(
+                Token(
+                    token.content,
+                    TokenLocation(
+                        location.line, location.lineIndex,
+                        nextLocation.line, nextLocation.lineIndex
+                    )
+                )
+            )
+        }
+        return newTokens
+    }
+
+    private fun removeNull(tokens: ArrayList<Token>): List<Token> {
+        return tokens.stream().filter { token: Token -> token.content.isNotEmpty() }.toList()
+    }
+
+    private fun unescapeGroup(match: String): String {
+        val newMatch = if (match[match.length - 1] == ';') match else "$match;"
+        if (ESCAPE_SEQUENCES.containsKey(newMatch)) return ESCAPE_SEQUENCES[newMatch]!!
+        val htmlMatch = HtmlEscape.unescapeHtml("&" + newMatch.substring(1))
+        if (htmlMatch.length > 1) return match
+        return htmlMatch
+    }
+
+    private fun unescape(s: String): String {
+        val pattern = Pattern.compile("\\$.*?;|\\\\#?\\w+;|\\\\\\w")
+        val matcher = pattern.matcher(s)
+        return matcher.replaceAll((Function {
+            Matcher.quoteReplacement(
+                unescapeGroup(
+                    matcher.group()
+                )
+            )
+        }))
+    }
+
+    private fun createString(): StringBuilder {
+        var currentIndex = index + 1
+        val sb = StringBuilder()
+        while (currentIndex < arrayChars.size) {
+            if (arrayChars[currentIndex] == STRING_DELIMITER.code) break
+            sb.appendCodePoint(arrayChars[currentIndex])
+            if (currentIndex + 1 == arrayChars.size) break
+            currentIndex++
+        }
+        index = currentIndex
+        return sb
+    }
+
+    private fun createComment() {
+        var currentIndex = index + 1
+        while (currentIndex < arrayChars.size) {
+            if (arrayChars[currentIndex] == '\n'.code) {
+                currentIndex--
+                break
             }
-            TokenLocation location = token.getLocation();
-            newTokens.add(new Token(token.getContent(),
-                    new TokenLocation(location.getLine(), location.getLineIndex(),
-                            nextLocation.getLine(), nextLocation.getLineIndex())));
+            if (currentIndex + 1 == arrayChars.size) break
+            currentIndex++
         }
-        return newTokens;
+        index = currentIndex
     }
 
-    private List<Token> removeNull(ArrayList<Token> tokens)
-    {
-        return tokens.stream().filter(token -> !token.component1().isEmpty()).toList();
-    }
-
-    private @NotNull String unescapeGroup(@NotNull final String match)
-    {
-        final String newMatch = match.charAt(match.length() - 1) == ';' ? match : match + ";";
-        if (ESCAPE_SEQUENCES.containsKey(newMatch))
-            return ESCAPE_SEQUENCES.get(newMatch);
-        final String htmlMatch = HtmlEscape.unescapeHtml("&" + newMatch.substring(1));
-        if(htmlMatch.length() > 1)
-            return match;
-        return htmlMatch;
-
-    }
-
-    private @NotNull String unescape(@NotNull String s) {
-        Pattern pattern = Pattern.compile("\\$.*?;|\\\\#?\\w+;|\\\\\\w");
-        Matcher matcher = pattern.matcher(s);
-        return matcher.replaceAll((matchResult ->
-                Matcher.quoteReplacement(unescapeGroup(matcher.group()))));
-    }
-
-    public StringBuilder createString() {
-        int currentIndex = index + 1;
-        @NotNull
-        StringBuilder sb = new StringBuilder();
-        while (currentIndex < arrayChars.length) {
-            if (arrayChars[currentIndex] == STRING_DELIMITER)
-                break;
-            sb.appendCodePoint(arrayChars[currentIndex]);
-            if (currentIndex + 1 == arrayChars.length)
-                break;
-            currentIndex++;
-        }
-        index = currentIndex;
-        return sb;
-    }
-
-    public void createComment() {
-        int currentIndex = index + 1;
-        while (currentIndex < arrayChars.length) {
-            if (arrayChars[currentIndex] == '\n') {
-                currentIndex--;
-                break;
-            }
-            if (currentIndex + 1 == arrayChars.length)
-                break;
-            currentIndex++;
-        }
-        index = currentIndex;
-    }
-
-    @NotNull
-    private String readStringLiteral() throws StringInvalidException {
-        if (index >= arrayChars.length)
-            throw new StringInvalidException(ErrorMessages.STRING_UNFINISHED_ERROR,
-                    new TokenLocation( line, getIndexOnCurrentLine(), -1, -1));
-        StringBuilder sb = createString();
-        if (index < arrayChars.length && arrayChars[index] == STRING_DELIMITER)
-            return Tokens.STRING_START + sb;
+    @Throws(StringInvalidException::class)
+    private fun readStringLiteral(): String {
+        if (index >= arrayChars.size) throw StringInvalidException(
+            ErrorMessages.STRING_UNFINISHED_ERROR,
+            TokenLocation(line, indexOnCurrentLine, -1, -1)
+        )
+        val sb = createString()
+        if (index < arrayChars.size && arrayChars[index] == STRING_DELIMITER.code) return Tokens.STRING_START + sb
 
         //String not properly finished at this point
-        if (index < arrayChars.length && arrayChars[index] == '\n') //of the newline token regardless
-            index--;
-        throw new StringInvalidException(ErrorMessages.STRING_UNFINISHED_ERROR,
-                new TokenLocation( line, getIndexOnCurrentLine(), -1, -1));
+        if (index < arrayChars.size && arrayChars[index] == '\n'.code)  //of the newline token regardless
+            index--
+        throw StringInvalidException(
+            ErrorMessages.STRING_UNFINISHED_ERROR,
+            TokenLocation(line, indexOnCurrentLine, -1, -1)
+        )
     }
 
-    @NotNull
-    private String readIdentifier() {
-        int currentIndex = index;
-        @NotNull
-        StringBuilder sb = new StringBuilder();
-        while (currentIndex < arrayChars.length && isAlphanumeric(arrayChars[currentIndex])) {
-            sb.appendCodePoint(arrayChars[currentIndex]);
-            currentIndex++;
+    private fun readIdentifier(): String {
+        var currentIndex = index
+        val sb = StringBuilder()
+        while (currentIndex < arrayChars.size && isAlphanumeric(arrayChars[currentIndex])) {
+            sb.appendCodePoint(arrayChars[currentIndex])
+            currentIndex++
         }
-        index = currentIndex - 1;
-        return Tokens.TOKENS.getOrDefault(sb.toString(), Tokens.IDENTIFIER_START + sb);
+        index = currentIndex - 1
+        return Tokens.TOKENS.getOrDefault(sb.toString(), Tokens.IDENTIFIER_START + sb)
     }
 
-    @NotNull
-    private String readNumeralLiteral() {
-        int currentIndex = index;
-        @NotNull
-        StringBuilder sb = new StringBuilder(Tokens.NUM_START);
-        boolean delimiterAlreadyFound = false;
-        while (currentIndex < arrayChars.length && (Utils.isDigit(arrayChars[currentIndex]) ||
-                //first delimiter found, and not as the last digit
-                (!delimiterAlreadyFound && arrayChars[currentIndex] == DECIMAL_DELIMITER &&
-                        currentIndex + 1 < arrayChars.length && Utils.isDigit(arrayChars[currentIndex + 1])))) {
-            sb.appendCodePoint(arrayChars[currentIndex]);
-            if (arrayChars[currentIndex] == DECIMAL_DELIMITER)
-                delimiterAlreadyFound = true;
-            currentIndex++;
+    private fun readNumeralLiteral(): String {
+        var currentIndex = index
+        val sb = StringBuilder(Tokens.NUM_START)
+        var delimiterAlreadyFound = false
+        while (currentIndex < arrayChars.size && (isDigit(arrayChars[currentIndex]) ||  //first delimiter found, and not as the last digit
+                    (!delimiterAlreadyFound && arrayChars[currentIndex] == DECIMAL_DELIMITER.code && currentIndex + 1 < arrayChars.size && isDigit(
+                        arrayChars[currentIndex + 1]
+                    )))
+        ) {
+            sb.appendCodePoint(arrayChars[currentIndex])
+            if (arrayChars[currentIndex] == DECIMAL_DELIMITER.code) delimiterAlreadyFound = true
+            currentIndex++
         }
-        index = currentIndex - 1;
-        return sb.toString();
+        index = currentIndex - 1
+        return sb.toString()
     }
 
-    @NotNull
-    private String readSymbol() {
-        int currentIndex = index;
-        int operatorFoundIndex = index;
-        @NotNull
-        StringBuilder sb = new StringBuilder();
-        String token = null;
+    private fun readSymbol(): String {
+        var currentIndex = index
+        var operatorFoundIndex = index
+        val sb = StringBuilder()
+        var token: String? = null
         while (!isAlphanumeric(arrayChars[currentIndex]) && currentIndex - index < Settings.MAX_SYMBOL_LENGTH) {
-            sb.appendCodePoint(arrayChars[currentIndex]);
-            String tempId = Tokens.TOKENS.get(sb.toString());
+            sb.appendCodePoint(arrayChars[currentIndex])
+            val tempId = Tokens.TOKENS[sb.toString()]
             if (tempId != null) {
-                token = tempId;
-                operatorFoundIndex = currentIndex;
+                token = tempId
+                operatorFoundIndex = currentIndex
             }
-            currentIndex++;
-            if (isWhitespace(arrayChars[currentIndex-1]) ||
-                    currentIndex == arrayChars.length ||
-                    arrayChars[currentIndex] == '\n')
-                break;
+            currentIndex++
+            if (isWhitespace(arrayChars[currentIndex - 1]) || currentIndex == arrayChars.size || arrayChars[currentIndex] == '\n'.code) break
         }
-        index = operatorFoundIndex;
+        index = operatorFoundIndex
         if (token == null) {
-            index = currentIndex - 1;
-            token = sb.toString();
+            index = currentIndex - 1
+            token = sb.toString()
         }
-        return token;
+        return token
     }
 
-    @NotNull
-    private Token createToken(String token) {
-        return new Token(token, new TokenLocation(line, getIndexOnCurrentLine(), -1, -1));
+    private fun createToken(token: String): Token {
+        return Token(token, TokenLocation(line, indexOnCurrentLine, -1, -1))
     }
 
-    private void addNewLine() {
-        line++;
-        lineIndex = index;
+    private fun addNewLine() {
+        line++
+        lineIndex = index
     }
 
-    private int getIndexOnCurrentLine() {
-        return originalIndex - lineIndex;
+    private val indexOnCurrentLine: Int
+        get() = originalIndex - lineIndex
+
+
+    @Throws(AbstractCompilationException::class)
+    fun throwExceptionIfExists(exceptionIndex: Int) {
+        if (exceptions.size > exceptionIndex) throw exceptions[exceptionIndex]
     }
 
-
-    public void throwExceptionIfExists(int exceptionIndex) throws AbstractCompilationException {
-        if (exceptions.size() > exceptionIndex)
-            throw exceptions.get(exceptionIndex);
+    fun getExceptions(): CompilationExceptionsCollection {
+        return exceptions.clone() as CompilationExceptionsCollection
     }
 
-    @NotNull
-    public CompilationExceptionsCollection getExceptions() {
-        return (CompilationExceptionsCollection) exceptions.clone();
+    companion object {
+        private val ESCAPE_SEQUENCES = HashMap<String, String>()
+
+        init {
+            ESCAPE_SEQUENCES["\\q;"] = "\""
+            ESCAPE_SEQUENCES["\\n;"] = "\n"
+            ESCAPE_SEQUENCES["\\x;"] = "\\"
+            ESCAPE_SEQUENCES["\\c;"] = "$"
+            ESCAPE_SEQUENCES["\\e;"] = ";"
+        }
     }
 }
