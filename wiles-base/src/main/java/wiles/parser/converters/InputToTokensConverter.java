@@ -128,7 +128,7 @@ public class InputToTokensConverter {
     }
 
     private @NotNull String unescape(@NotNull String s) {
-        Pattern pattern = Pattern.compile("\\$.*?;|\\\\#?\\w*?;|\\\\[\\w\\\\;$]");
+        Pattern pattern = Pattern.compile("\\$.*?;|\\\\#?\\w+;|\\\\\\w");
         Matcher matcher = pattern.matcher(s);
         return matcher.replaceAll((matchResult ->
                 Matcher.quoteReplacement(unescapeGroup(matcher.group()))));
