@@ -100,6 +100,16 @@ class InputToTokensConverter(input: String, private val lastLocation: TokenLocat
     private fun unescapeGroup(match: String): String {
         val newMatch = if (match[match.length - 1] == ';') match else "$match;"
         if (ESCAPE_SEQUENCES.containsKey(newMatch)) return ESCAPE_SEQUENCES[newMatch]!!
+        if(newMatch[1].uppercaseChar() == 'U')
+        {
+            try{
+                val unicodeValue = match.substring(2, newMatch.length - 1).toInt(16)
+                val chars = Character.toChars(unicodeValue)
+                val newString = String(chars)
+                return newString
+            }
+            catch (_: NumberFormatException) { }
+        }
         val htmlMatch = HtmlEscape.unescapeHtml("&" + newMatch.substring(1))
         if (htmlMatch.length > 1) return match
         return htmlMatch

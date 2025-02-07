@@ -97,6 +97,7 @@ class TokenConverterTests {
         tokenConverterEquals("\"Welcome to your Wiles\\copy; free tri\\#xE1;l!\\NewLine;Purchase a license for only 999\\#8364;!\"",
             arrayOf("@Welcome to your Wiles© free triál!\nPurchase a license for only 999€!"))
         tokenConverterEquals("\"\\#xzzzz; \\u\\u;\"", arrayOf("@\\#xzzzz; \\u\\u;"))
+        tokenConverterEquals("\"\\U0001F600;\\Upsilon;\"", arrayOf("@\uD83D\uDE00Υ"))
     }
 
     @Test
