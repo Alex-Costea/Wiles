@@ -16,6 +16,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static wiles.shared.constants.Chars.*;
+import static wiles.shared.constants.Utils.isAlphanumeric;
+import static wiles.shared.constants.Utils.isWhitespace;
 
 public class InputToTokensConverter {
     private final int[] arrayChars;
@@ -30,20 +32,15 @@ public class InputToTokensConverter {
     private static final HashMap<String, String> ESCAPE_SEQUENCES = new HashMap<>();
 
     static {
-        ESCAPE_SEQUENCES.put("\\q;", "\"");
-        ESCAPE_SEQUENCES.put("\\n;", "\n");
-        ESCAPE_SEQUENCES.put("\\b;", "\\\\");
-        ESCAPE_SEQUENCES.put("\\d;", "\\$");
+        ESCAPE_SEQUENCES.put("\\q", "\"");
+        ESCAPE_SEQUENCES.put("\\n", "\n");
+        ESCAPE_SEQUENCES.put("\\b", "\\");
+        ESCAPE_SEQUENCES.put("\\d", "$");
+        ESCAPE_SEQUENCES.put("\\s", ";");
     }
 
     public InputToTokensConverter(@NotNull String input, @NotNull TokenLocation lastLocation) {
         arrayChars = input.codePoints().toArray();
-        this.lastLocation = lastLocation;
-    }
-
-    public InputToTokensConverter(@NotNull String input, int additionalLines, @NotNull TokenLocation lastLocation) {
-        arrayChars = input.codePoints().toArray();
-        line -= additionalLines;
         this.lastLocation = lastLocation;
     }
 
@@ -57,7 +54,9 @@ public class InputToTokensConverter {
                 if (arrayChars[index] == STRING_DELIMITER) //string literal
                 {
                     try {
-                        tokens.add(createToken(unescape(readStringLiteral())));
+                        var string = readStringLiteral();
+                        var unescaped = unescape(string);
+                        tokens.add(createToken(unescaped));
                     }
                     catch(IllegalArgumentException ex)
                     {
@@ -122,16 +121,29 @@ public class InputToTokensConverter {
         return tokens.stream().filter(token -> !token.component1().isEmpty()).toList();
     }
 
+    private @NotNull String unescapeGroup(@NotNull String match)
+    {
+        int lastCharIndex = match.length() - 1;
+        if(match.charAt(lastCharIndex) == ';')
+            match = match.substring(0, lastCharIndex);
+        if(!ESCAPE_SEQUENCES.containsKey(match)) {
+            if(match.length() == 2 && match.charAt(0) == '\\') {
+                var myChar = match.charAt(1);
+                if(isAlphanumeric(myChar) || isWhitespace(myChar))
+                    throw new IllegalArgumentException();
+                return String.valueOf(myChar);
+            }
+            throw new IllegalArgumentException();
+        }
+        return ESCAPE_SEQUENCES.get(match);
+
+    }
+
     private @NotNull String unescape(@NotNull String s) {
-        Pattern pattern = Pattern.compile("\\$|(\\\\.*?;)|\\\\(?![^;]*;)");
+        Pattern pattern = Pattern.compile("\\$.*?;|\\\\#?\\w*?;|\\\\\\w");
         Matcher matcher = pattern.matcher(s);
         return matcher.replaceAll((matchResult ->
-            {
-                String matchString = matchResult.group();
-                if(!ESCAPE_SEQUENCES.containsKey(matchString))
-                    throw new IllegalArgumentException();
-                return ESCAPE_SEQUENCES.get(matchString);
-            }));
+                Matcher.quoteReplacement(unescapeGroup(matcher.group()))));
     }
 
     public StringBuilder createString(boolean isNotComment) {
@@ -175,7 +187,7 @@ public class InputToTokensConverter {
         int currentIndex = index;
         @NotNull
         StringBuilder sb = new StringBuilder();
-        while (currentIndex < arrayChars.length && Utils.isAlphanumeric(arrayChars[currentIndex])) {
+        while (currentIndex < arrayChars.length && isAlphanumeric(arrayChars[currentIndex])) {
             sb.appendCodePoint(arrayChars[currentIndex]);
             currentIndex++;
         }
@@ -209,7 +221,7 @@ public class InputToTokensConverter {
         @NotNull
         StringBuilder sb = new StringBuilder();
         String token = null;
-        while (!Utils.isAlphanumeric(arrayChars[currentIndex]) && currentIndex - index < Settings.MAX_SYMBOL_LENGTH) {
+        while (!isAlphanumeric(arrayChars[currentIndex]) && currentIndex - index < Settings.MAX_SYMBOL_LENGTH) {
             sb.appendCodePoint(arrayChars[currentIndex]);
             String tempId = Tokens.TOKENS.get(sb.toString());
             if (tempId != null) {
@@ -217,7 +229,7 @@ public class InputToTokensConverter {
                 operatorFoundIndex = currentIndex;
             }
             currentIndex++;
-            if (Utils.isWhitespace(arrayChars[currentIndex-1]) ||
+            if (isWhitespace(arrayChars[currentIndex-1]) ||
                     currentIndex == arrayChars.length ||
                     arrayChars[currentIndex] == '\n')
                 break;

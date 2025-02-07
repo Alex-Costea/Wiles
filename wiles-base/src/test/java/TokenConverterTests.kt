@@ -85,15 +85,16 @@ class TokenConverterTests {
         tokenConverterThrows(0, "\"abc", StringInvalidException::class.java, STRING_UNFINISHED_ERROR)
         tokenConverterEquals("\"\"\"\"", arrayOf("@", "@"))
         tokenConverterThrows(0, "\"\"\"\"\"", StringInvalidException::class.java, STRING_UNFINISHED_ERROR)
-        tokenConverterEquals("\"Hello world!\\n;My name is \\q;Alex\\q;\\n;This is a backslash: \\b;\\n;You write it as such: \\b;b;\"",
-            arrayOf("@Hello world!\n" +
-                    "My name is \"Alex\"\n" +
-                    "This is a backslash: \\\n" +
-                    "You write it as such: \\b;"))
-        tokenConverterEquals("\"multiline\nstring\\d;\"", arrayOf("@multiline\nstring$"))
-        tokenConverterThrows(0,"\"This is a backslash : \\. Cool, right?\"",
-            StringInvalidException::class.java, null, null)
-        tokenConverterThrows(0,"\"Dollar: $\"",
+        tokenConverterEquals("\"Hello, world.\\n\"", arrayOf("@Hello, world.\n"))
+        tokenConverterEquals("\"Hello, world.\\n;\"", arrayOf("@Hello, world.\n"))
+        tokenConverterEquals("\"Hello, world\\n\\s\"", arrayOf("@Hello, world\n;"))
+        tokenConverterEquals("\"My name is \\qAlex\\q. Ugly right :-\\b\"",
+            arrayOf("@My name is \"Alex\". Ugly right :-\\"))
+        tokenConverterEquals("\"I got lots of \\d;\\d\\d;\\d!!!\"",
+            arrayOf("@I got lots of \$\$\$\$!!!"))
+        tokenConverterEquals("\"This is a backslash: \\. This is a dollar sign: \$. cool right?\"",
+            arrayOf("@This is a backslash: \\. This is a dollar sign: \$. cool right?"))
+        tokenConverterThrows(0,"\"Unknown escaped sequence: \\u\"",
             StringInvalidException::class.java, null, null)
     }
 
