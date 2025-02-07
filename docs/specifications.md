@@ -7,12 +7,13 @@
 - `nothing`
 - Integer: `12345`
 - Floating: `12345.6`
-- String: `"abc"`. Can be multiline, includes escape sequences.
+- String: `"abc"`. Can be multiline, includes escape sequences. Escape sequences:
   - `\n`, `\n;` is newline
   - `\b`, `\b;` is `\`
   - `\q`, `\q;` is `"`
   - `\s`, `\s;` is `;`
   - `\d`, `\d;` is `$`
+  - `\[content];` is equivalent to HTML `&[content];`
   - `$[content];` is reserved but not yet in use.
 - Boolean: `true` and `false`
 - List literal: `[⟪value,⟫] ⟨: type⟩`

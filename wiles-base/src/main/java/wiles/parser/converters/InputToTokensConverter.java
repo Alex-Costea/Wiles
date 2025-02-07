@@ -1,6 +1,7 @@
 package wiles.parser.converters;
 
 import org.jetbrains.annotations.NotNull;
+import org.unbescape.html.HtmlEscape;
 import wiles.parser.exceptions.StringInvalidException;
 import wiles.shared.AbstractCompilationException;
 import wiles.shared.CompilationExceptionsCollection;
@@ -133,7 +134,11 @@ public class InputToTokensConverter {
                     throw new IllegalArgumentException();
                 return String.valueOf(myChar);
             }
-            throw new IllegalArgumentException();
+            match = "&" + match.substring(1) + ";";
+            var htmlMatch = HtmlEscape.unescapeHtml(match);
+            if(htmlMatch.length() > 1)
+                throw new IllegalArgumentException();
+            return htmlMatch;
         }
         return ESCAPE_SEQUENCES.get(match);
 
