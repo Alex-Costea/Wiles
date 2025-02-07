@@ -109,6 +109,7 @@ class InputToTokensConverter(input: String, private val lastLocation: TokenLocat
                 return newString
             }
             catch (_: NumberFormatException) { }
+            catch (_: IllegalArgumentException) { }
         }
         val htmlMatch = HtmlEscape.unescapeHtml("&" + newMatch.substring(1))
         if (htmlMatch.length > 1) return match
