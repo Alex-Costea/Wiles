@@ -35,9 +35,9 @@ public class InputToTokensConverter {
     static {
         ESCAPE_SEQUENCES.put("\\q;", "\"");
         ESCAPE_SEQUENCES.put("\\n;", "\n");
-        ESCAPE_SEQUENCES.put("\\b;", "\\");
-        ESCAPE_SEQUENCES.put("\\d;", "$");
-        ESCAPE_SEQUENCES.put("\\s;", ";");
+        ESCAPE_SEQUENCES.put("\\x;", "\\");
+        ESCAPE_SEQUENCES.put("\\c;", "$");
+        ESCAPE_SEQUENCES.put("\\e;", ";");
     }
 
     public InputToTokensConverter(@NotNull String input, @NotNull TokenLocation lastLocation) {
@@ -128,7 +128,7 @@ public class InputToTokensConverter {
     }
 
     private @NotNull String unescape(@NotNull String s) {
-        Pattern pattern = Pattern.compile("\\$.*?;|\\\\#?\\w*?;|\\\\\\w");
+        Pattern pattern = Pattern.compile("\\$.*?;|\\\\#?\\w*?;|\\\\[\\w\\\\;$]");
         Matcher matcher = pattern.matcher(s);
         return matcher.replaceAll((matchResult ->
                 Matcher.quoteReplacement(unescapeGroup(matcher.group()))));

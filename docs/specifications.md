@@ -14,8 +14,8 @@
   - `\s`, `\s;` is `;`
   - `\d`, `\d;` is `$`
   - `\[content];` is equivalent to HTML `&[content];`
-  - `$[content];` is reserved but not yet in use.
   - Escaping is forgiving: if it can't be escaped, it's considered literal.
+  - `$[content];` is reserved but not yet in use.
 - Boolean: `true` and `false`
 - List literal: `[⟪value,⟫] ⟨: type⟩`
 - Dict literal: `{ ⟪key -> value,⟫ } ⟨: key_type -> value_type⟩`
