@@ -16,7 +16,7 @@
   - `\e` is `;`
   - The above sequences can be optionally finalized with `;`. E.g.: `\n;`
   - `\[content];` is equivalent to HTML `&[content];`
-  - `\U[hex]` converts it to the Unicode character corresponding to the hex
+  - `\U[hex];` converts it to the Unicode character corresponding to the hex
   - `$[content];` is reserved but not yet in use.
 - Boolean: `true` and `false`
 - List literal: `[⟪value,⟫] ⟨: type⟩`
