@@ -33,11 +33,11 @@ public class InputToTokensConverter {
     private static final HashMap<String, String> ESCAPE_SEQUENCES = new HashMap<>();
 
     static {
-        ESCAPE_SEQUENCES.put("\\q", "\"");
-        ESCAPE_SEQUENCES.put("\\n", "\n");
-        ESCAPE_SEQUENCES.put("\\b", "\\");
-        ESCAPE_SEQUENCES.put("\\d", "$");
-        ESCAPE_SEQUENCES.put("\\s", ";");
+        ESCAPE_SEQUENCES.put("\\q;", "\"");
+        ESCAPE_SEQUENCES.put("\\n;", "\n");
+        ESCAPE_SEQUENCES.put("\\b;", "\\");
+        ESCAPE_SEQUENCES.put("\\d;", "$");
+        ESCAPE_SEQUENCES.put("\\s;", ";");
     }
 
     public InputToTokensConverter(@NotNull String input, @NotNull TokenLocation lastLocation) {
@@ -54,16 +54,9 @@ public class InputToTokensConverter {
                 originalIndex = index;
                 if (arrayChars[index] == STRING_DELIMITER) //string literal
                 {
-                    try {
-                        var string = readStringLiteral();
-                        var unescaped = unescape(string);
-                        tokens.add(createToken(unescaped));
-                    }
-                    catch(IllegalArgumentException ex)
-                    {
-                        throw new StringInvalidException(ErrorMessages.STRING_ESCAPE_INVALID_ERROR,
-                                new TokenLocation( line, getIndexOnCurrentLine(), -1, -1));
-                    }
+                    var string = readStringLiteral();
+                    var unescaped = unescape(string);
+                    tokens.add(createToken(unescaped));
                 } else if (Utils.isAlphabetic(arrayChars[index])) //identifier
                 {
                     tokens.add(createToken(readIdentifier()));
@@ -122,25 +115,15 @@ public class InputToTokensConverter {
         return tokens.stream().filter(token -> !token.component1().isEmpty()).toList();
     }
 
-    private @NotNull String unescapeGroup(@NotNull String match)
+    private @NotNull String unescapeGroup(@NotNull final String match)
     {
-        int lastCharIndex = match.length() - 1;
-        if(match.charAt(lastCharIndex) == ';')
-            match = match.substring(0, lastCharIndex);
-        if(!ESCAPE_SEQUENCES.containsKey(match)) {
-            if(match.length() == 2 && match.charAt(0) == '\\') {
-                var myChar = match.charAt(1);
-                if(isAlphanumeric(myChar) || isWhitespace(myChar))
-                    throw new IllegalArgumentException();
-                return String.valueOf(myChar);
-            }
-            match = "&" + match.substring(1) + ";";
-            var htmlMatch = HtmlEscape.unescapeHtml(match);
-            if(htmlMatch.length() > 1)
-                throw new IllegalArgumentException();
-            return htmlMatch;
-        }
-        return ESCAPE_SEQUENCES.get(match);
+        final String newMatch = match.charAt(match.length() - 1) == ';' ? match : match + ";";
+        if (ESCAPE_SEQUENCES.containsKey(newMatch))
+            return ESCAPE_SEQUENCES.get(newMatch);
+        final String htmlMatch = HtmlEscape.unescapeHtml("&" + newMatch.substring(1));
+        if(htmlMatch.length() > 1)
+            return match;
+        return htmlMatch;
 
     }
 

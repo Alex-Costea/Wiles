@@ -94,10 +94,9 @@ class TokenConverterTests {
             arrayOf("@I got lots of \$\$\$\$!!!"))
         tokenConverterEquals("\"This is a backslash: \\. This is a dollar sign: \$. cool right?\"",
             arrayOf("@This is a backslash: \\. This is a dollar sign: \$. cool right?"))
-        tokenConverterThrows(0,"\"Unknown escaped sequence: \\u\"",
-            StringInvalidException::class.java, null, null)
         tokenConverterEquals("\"Welcome to your Wiles\\copy; free tri\\#xE1;l!\\NewLine;Purchase a license for only 999\\#8364;!\"",
             arrayOf("@Welcome to your Wiles© free triál!\nPurchase a license for only 999€!"))
+        tokenConverterEquals("\"\\#xzzzz; \\u\\u;\"", arrayOf("@\\#xzzzz; \\u\\u;"))
     }
 
     @Test
