@@ -59,8 +59,6 @@ object Tokens {
     const val CONTINUE_ID = "CONTINUE"
     const val FOR_ID = "FOR"
     const val IN_ID = "IN"
-    const val FROM_ID = "FROM"
-    const val TO_ID = "TO"
     const val WHILE_ID = "WHILE"
     const val ANON_ARG_ID = "ANON_ARG"
     const val MUTABLE_ID = "MUTABLE"
@@ -68,6 +66,7 @@ object Tokens {
     const val UNION_ID = "UNION"
     const val TYPE_ID = "TYPE"
     const val YIELDS_ID = "YIELDS"
+    const val CONST_ID = "CONST"
 
     //literals
     const val TRUE_ID = "!true"
@@ -81,8 +80,8 @@ object Tokens {
     const val DICT_ID = "!dict"
     const val DATA_ID = "!data"
     const val MUTABLE_TYPE_ID = "!mutable"
-    const val CONST_ID = "CONST"
     const val CONST_TYPE_ID = "!constant"
+    const val RANGE_ID = "!range"
 
     private val KEYWORDS: HashMap<String, String> = HashMap()
     private val SYMBOLS: HashMap<String, String> = HashMap()
@@ -111,7 +110,7 @@ object Tokens {
     val KEYWORDS_INDICATING_NEW_EXPRESSION = setOf(
         DECLARE_ID, ELSE_ID, CONTINUE_ID, RETURN_ID, WHILE_ID, ANNOTATE_ID, DATA_END_ID, YIELDS_ID,
         BREAK_ID, FOR_ID, DO_ID, START_BLOCK_ID, END_BLOCK_ID, BRACKET_END_ID, PAREN_END_ID,
-        SEPARATOR_ID, IN_ID, FROM_ID, TO_ID, ASSIGN_ID, TERMINATOR_ID, NEWLINE_ID, IF_ID, DICT_END_ID
+        SEPARATOR_ID, IN_ID, ASSIGN_ID, TERMINATOR_ID, NEWLINE_ID, IF_ID, DICT_END_ID
     )
 
     init {
@@ -122,8 +121,6 @@ object Tokens {
         KEYWORDS["default"] = ELSE_ID
         KEYWORDS["for"] = FOR_ID
         KEYWORDS["in"] = IN_ID
-        KEYWORDS["from"] = FROM_ID
-        KEYWORDS["to"] = TO_ID
         KEYWORDS["while"] = WHILE_ID
         KEYWORDS["and"] = AND_ID
         KEYWORDS["or"] = OR_ID
@@ -147,6 +144,7 @@ object Tokens {
         KEYWORDS["data"] = DATA_ID
         KEYWORDS["mutable"] = MUTABLE_TYPE_ID
         KEYWORDS["constant"] = CONST_TYPE_ID
+        KEYWORDS["range"] = RANGE_ID
 
         SYMBOLS["+"] = PLUS_ID
         SYMBOLS["-"] = MINUS_ID

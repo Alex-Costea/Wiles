@@ -38,7 +38,6 @@ import wiles.shared.constants.Tokens.END_BLOCK_ID
 import wiles.shared.constants.Tokens.EQUALS_ID
 import wiles.shared.constants.Tokens.FALSE_ID
 import wiles.shared.constants.Tokens.FOR_ID
-import wiles.shared.constants.Tokens.FROM_ID
 import wiles.shared.constants.Tokens.FUNC_ID
 import wiles.shared.constants.Tokens.GLOBAL_ID
 import wiles.shared.constants.Tokens.IF_ID
@@ -64,7 +63,6 @@ import wiles.shared.constants.Tokens.START_BLOCK_ID
 import wiles.shared.constants.Tokens.STRING_ID
 import wiles.shared.constants.Tokens.TERMINATOR_ID
 import wiles.shared.constants.Tokens.TIMES_ID
-import wiles.shared.constants.Tokens.TO_ID
 import wiles.shared.constants.Tokens.TRUE_ID
 import wiles.shared.constants.Tokens.UNION_ID
 import wiles.shared.constants.Tokens.VARIABLE_ID
@@ -290,10 +288,8 @@ class SyntaxTreeConverterTests {
     @Test
     fun forTest()
     {
-        assertResults(null,"CODE_BLOCK(FOR(!i, %IN, !my_list, %FROM, #1, %TO, #100, CODE_BLOCK(EXPRESSION(%APPLY, !write_line, FUNC_CALL('hello!')))))",
-            FOR_ID, "!i", IN_ID, "!my_list", FROM_ID, "#1", TO_ID, "#100", NEWLINE_ID, START_BLOCK_ID, NEWLINE_ID, "!write_line", PAREN_START_ID, "@hello!", PAREN_END_ID, NEWLINE_ID, END_BLOCK_ID)
-        assertResults(null, "CODE_BLOCK(FOR(!i, CODE_BLOCK(!nothing)))",
-            FOR_ID, "!i", DO_ID, NOTHING_ID)
+        assertResults(null,"CODE_BLOCK(FOR(!i, %IN, !my_list, CODE_BLOCK(EXPRESSION(%APPLY, !write_line, FUNC_CALL('hello!')))))",
+            FOR_ID, "!i", IN_ID, "!my_list", NEWLINE_ID, START_BLOCK_ID, NEWLINE_ID, "!write_line", PAREN_START_ID, "@hello!", PAREN_END_ID, NEWLINE_ID, END_BLOCK_ID)
     }
 
     @Test

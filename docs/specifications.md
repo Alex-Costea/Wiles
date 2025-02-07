@@ -43,9 +43,7 @@
 - Complex conditional: `if begin; ⟪clause;⟫ end`
     - Normal clause: `[condition] [block]`
     - Default clause: `default [block]`
-- For loop: `for x ⟨in list⟩ ⟨from a⟩ ⟨to b⟩ [block]`
-    - `from` value is inclusive, `to` value is exclusive
-    - if `in` statement is included, it will iterate through the list, by default ending at last element
+- For loop: `for x in [list/range] [block]`
 - While loop: `while condition [block]`
 - Code block: `do [operation]` or `begin; ⟪operation;⟫ end`
 - Yield: `yield [expression]` (return equivalent)
@@ -97,6 +95,7 @@ WIP, To be determined.
 - `clone(⟨deep := [boolean]⟩)` : clone object, deeply by default
 - `content` : get content of variable. panics if the value is `nothing`
 - `keys` : get the keys of a dictionary
+- `range(⟨from := [value],⟩ ⟨to := [value],⟩ ⟨step := [value]⟩)`
 
 ### Miscellaneous
 - `;` can be specified or inferred from newline
