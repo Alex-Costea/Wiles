@@ -57,19 +57,17 @@
 ### Symbols
 - `+`, `-`, `*`, `/`, `^` (power)
 - `+` (text concatenation)
-- `*` (repeat text)
 - `and`, `or`, `not` (not bitwise!)
 - `=`, `>`, `>=`, `<`, `<=`, `=/=`
 - `:=` (assign, declare or name parameters)
-- `.` (`b.a⟨ ( ⟪ param ⟫ ) ⟩` is `a(b,⟨⟪ param ⟫⟩ )`, also used for field access on data)
+- `.` (field access on data)
 - `:` (type annotation)
 - `()` (order of operations, function access)
-- `[]` (list literals, subcomponents in type definitions)
+- `[]` (list literals, list access)
 - `,` (separator between elements)
 - `?` (makes types and values nullable)
 - `|` (`type1 | type2` is the sum type of `type1` and `type2`)
 - `~` (make an immutable collection mutable)
-
 
 ### Named parameters
 - Function calling with named parameters by default: `my_function(a := 1, b := 10)`
@@ -79,26 +77,25 @@
 
 ### Compile time execution
 
-WIP, To be determined.
+- Using `const` keyword
+- WIP
 
-### Standard library
+### Collections
+
+- Get element: `list[index]`, `dict[key]`
+- Set/add element: `list[index] := value`, `dict[key] := value`
+  - Add as last element: `list.push(value)`
+- Remove element: `list.remove(index)`, `dict.remove(key)`
+- Size: `list.size`, `dict.size`
+- Get dict keys: `dict.keys`
+
+### Standard library (inlined)
 - `write`, `write_line`: write object to the command line
 - `panic`: print an error message and exit
-- `ignore`: ignore the value
 - `modulo(x,y)`: calculate the modulo
-- `size`: size of list/text
-- `as_list` : convert text into list
+- `as_list` : convert text into list of chars
 - `as_text`: convert object to text
 - `read_line`, `read_truth`, `read_int`, `read_rational`: read an object from the command line
-- `run`: runs the function given as argument
-- `collection.add(arg value, at)` : add an element to a mutable collection
-- `collection.remove(arg value, at)` : remove an element from the mutable collection at the index
-- `collection.update(arg value, at)` : set element of mutable collection at index
-- `collection.get(arg at)` : get element of collection at index, panic if it doesn't exist
-- `type` : get type of object at runtime
-- `clone(⟨deep := [boolean]⟩)` : clone object, deeply by default
-- `content` : get content of variable. panics if the value is `nothing`
-- `keys` : get the keys of a dictionary
 - `range(⟨from := [value],⟩ ⟨to := [value],⟩ ⟨step := [value]⟩)`
 
 ### Miscellaneous
