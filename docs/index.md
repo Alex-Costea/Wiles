@@ -4,17 +4,17 @@ Wiles supports features such as:
 - `if`, `for` (including foreach functionality), `while`
 - Basic operators for arithmetics, boolean logic and comparisons
 - Functions as first-class objects using the `fun` keyword, including support for closures
-- Sum types: `type1 or type2`
+- Sum types: `type1 | type2`
 - Support for types such as: integers (`int`), decimal numbers (`decimal`), strings (`text`), booleans (`truth`), lists (`list`), hashmaps (`dict`), structs (`data`)
-- Pattern matching on types using `when` statements
 - Opt-in nullability using the `?` symbol
 - Opt-out named arguments in function calls
 - Newline as statement terminators, but no significant indentation
-- Type inference in many instances
+- Type inference
 - Type literals
 - Compile time execution
 
-The informal specifications can be found [here](specifications.md).
+Full tutorials on Wiles functionality can be found [here](tutorial.md).
+Note that it presupposes some level of familiarity with basic programming.
 
 ## Changelogs
 
@@ -28,7 +28,7 @@ See [here](tickets.md).
 
 Try it out [online](https://wiles.costea.in)!
 
-For other methods of using it, go [here](how_to_run.md).
+For other methods of using it, go [here](tutorial.md).
 
 ## FAQ
 ### What is the state of the project right now?
@@ -45,16 +45,12 @@ Unless this project blows up, probably not. Languages much bigger and widely use
 
 ## Examples
 ### Hello World
-```
+```wiles
 write_line("Hello, world!")
-```
-or
-```
-"Hello, world!".write_line
 ```
 ### FizzBuzz
 ```
-for i from 1 to 101
+for i in range(1, 101)
 begin
     let var text := ""
     if modulo(i, 3) = 0 do
@@ -68,32 +64,4 @@ end
 ```
 ### Minimum value
 
-```
-typedef number := int or decimal
-
-let min := fun(list : list[number as T]) -> T?
-begin
-    if list.size = 0 do yield nothing
-    let var min_value := list.get(0)
-    for x in list from 1 do
-        if x < min_value do
-            min_value := x
-    yield min_value
-end
-
-let read_list := begin
-    let list := mut [] : int
-    write("list size: ")
-    let list_size := read_int()
-    for i from 0 to list_size
-    begin
-        write("Element " + i + ": ")
-        list.add(at := i, read_int())
-    end
-    yield list
-end
-
-let result := min(list := read_list())
-when result is nothing do panic("Error: no min found!")
-write_line("Min found: " + result)
-```
+TODO: update
