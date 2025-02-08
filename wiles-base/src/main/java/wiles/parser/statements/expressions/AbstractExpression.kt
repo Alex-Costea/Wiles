@@ -23,6 +23,8 @@ import wiles.shared.constants.Predicates.IS_CONTAINED_IN
 import wiles.shared.constants.Predicates.STARTS_AS_TOKEN
 import wiles.shared.constants.Predicates.START_OF_EXPRESSION
 import wiles.shared.constants.Tokens.APPLY_ID
+import wiles.shared.constants.Tokens.AT_KEY_ID
+import wiles.shared.constants.Tokens.BRACKET_START_ID
 import wiles.shared.constants.Tokens.INFIX_OPERATORS
 import wiles.shared.constants.Tokens.KEYWORDS_INDICATING_NEW_EXPRESSION
 import wiles.shared.constants.Tokens.PAREN_END_ID
@@ -127,12 +129,7 @@ abstract class AbstractExpression protected constructor(context: ParserContext) 
                 if (maybeTempToken.isPresent) {
                     if (expectNext == ExpectNext.OPERATOR) { //Method call
                         precedenceProcessor.add(
-                            TokenStatement(
-                                Token(
-                                    APPLY_ID, maybeTempToken.get()
-                                        .location
-                                ), context
-                            )
+                            TokenStatement(Token(APPLY_ID, maybeTempToken.get().location), context)
                         )
                         val newExpression = MethodCallStatement(context)
                         newExpression.process().throwFirstIfExists()
@@ -147,7 +144,24 @@ abstract class AbstractExpression protected constructor(context: ParserContext) 
                     continue
                 }
 
-                //Special statements
+                // Handle list operations
+                if(expectNext == ExpectNext.OPERATOR)
+                {
+                    maybeTempToken = transmitter.expectMaybe(tokenOf(BRACKET_START_ID))
+                    if(maybeTempToken.isPresent)
+                    {
+                        precedenceProcessor.add(
+                            TokenStatement(Token(AT_KEY_ID, maybeTempToken.get().location), context)
+                        )
+                        val newExpression = InnerBracketExpression(context)
+                        newExpression.process().throwFirstIfExists()
+                        precedenceProcessor.add(newExpression)
+                        expectNext = ExpectNext.OPERATOR
+                        continue
+                    }
+                }
+
+                // Special statements
                 if (expectNext == ExpectNext.TOKEN) {
                     val maybeStatement = handleSpecialStatements()
                     if (maybeStatement.isPresent) {

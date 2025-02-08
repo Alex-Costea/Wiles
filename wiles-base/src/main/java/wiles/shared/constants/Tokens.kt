@@ -49,6 +49,7 @@ object Tokens {
     const val ACCESS_ID = "ACCESS"
     const val AND_ID = "AND"
     const val APPLY_ID = "APPLY"
+    const val AT_KEY_ID = "AT_KEY"
     const val OR_ID = "OR"
     const val NOT_ID = "NOT"
     const val MAYBE_ID = "MAYBE"
@@ -92,7 +93,7 @@ object Tokens {
     val INFIX_OPERATORS = setOf(
         PLUS_ID, MINUS_ID, TIMES_ID, DIVIDE_ID, POWER_ID,
         EQUALS_ID, LARGER_ID, SMALLER_ID, LARGER_EQUALS_ID, SMALLER_EQUALS_ID, NOT_EQUAL_ID,
-        AND_ID, OR_ID, APPLY_ID, ACCESS_ID, UNION_ID
+        AND_ID, OR_ID, APPLY_ID, ACCESS_ID, UNION_ID, AT_KEY_ID
     )
     @JvmField
     val PREFIX_OPERATORS = setOf(UNARY_PLUS_ID, UNARY_MINUS_ID, NOT_ID, MUTABLE_ID)
