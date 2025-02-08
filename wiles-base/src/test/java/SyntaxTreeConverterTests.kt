@@ -64,6 +64,7 @@ import wiles.shared.constants.Tokens.STRING_ID
 import wiles.shared.constants.Tokens.TERMINATOR_ID
 import wiles.shared.constants.Tokens.TIMES_ID
 import wiles.shared.constants.Tokens.TRUE_ID
+import wiles.shared.constants.Tokens.TYPE_ID
 import wiles.shared.constants.Tokens.UNION_ID
 import wiles.shared.constants.Tokens.VARIABLE_ID
 import wiles.shared.constants.Tokens.WHILE_ID
@@ -637,6 +638,43 @@ CODE_BLOCK
                 )
         """, DECLARE_ID, CONST_ID, VARIABLE_ID, "!a",
             ANNOTATE_ID, CONST_TYPE_ID, PAREN_START_ID, INT_ID, PAREN_END_ID, ASSIGN_ID, "#123")
+
+        //def const a := fun(const a : type) -> type do yield a
+        assertResults(null,"""
+            CODE_BLOCK
+            (
+                DECLARATION: GLOBAL; CONST 
+                (
+                    !a [1, 11, 1, 12], 
+                    EXPRESSION
+                    (
+                        FUNC [1, 16, 1, 19]
+                        (
+                            TYPEDEF
+                            (
+                                !type [1, 39, 1, 43]
+                            ), 
+                            DECLARATION: CONST 
+                            (
+                                TYPEDEF
+                                (
+                                    !type [1, 30, 1, 34]
+                                ), 
+                                !a [1, 26, 1, 27]
+                            ), 
+                            CODE_BLOCK
+                            (
+                                RETURN
+                                (
+                                    !a [1, 53, 1, 54]
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        """, GLOBAL_ID, CONST_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, CONST_ID, "!a", ANNOTATE_ID, TYPE_ID,
+            PAREN_END_ID, YIELDS_ID, TYPE_ID, DO_ID, RETURN_ID, "!a")
     }
 
     @Test

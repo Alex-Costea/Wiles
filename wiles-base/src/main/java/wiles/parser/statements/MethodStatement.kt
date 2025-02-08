@@ -10,6 +10,7 @@ import wiles.shared.DeclarationType
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.ANON_ARG_ID
+import wiles.shared.constants.Tokens.CONST_ID
 import wiles.shared.constants.Tokens.DO_ID
 import wiles.shared.constants.Tokens.FUNC_ID
 import wiles.shared.constants.Tokens.PAREN_END_ID
@@ -43,7 +44,7 @@ class MethodStatement(oldContext : ParserContext)
 
     private fun readParams()
     {
-        while(transmitter.expectMaybe(tokenOf(IS_IDENTIFIER).or(ANON_ARG_ID)
+        while(transmitter.expectMaybe(tokenOf(IS_IDENTIFIER).or(ANON_ARG_ID).or(CONST_ID)
                 .removeWhen(WhenRemoveToken.Never)).isPresent) {
             val parameterStatement = DeclarationStatement(context, DeclarationType.FUNC_PARAM)
             exceptions.addAll(parameterStatement.process())
