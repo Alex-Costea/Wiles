@@ -330,7 +330,7 @@ class SyntaxTreeConverterTests {
     fun typesTest()
     {
         // let a : fun()
-        assertResults(null, "CODE_BLOCK(DECLARATION(TYPEDEF(FUNC: TYPE), !a))",
+        assertResults(null, "CODE_BLOCK(DECLARATION(TYPEDEF(FUNC: !type), !a))",
             DECLARE_ID, "!a", ANNOTATE_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID)
         // let fn : func[a : int, b : string] -> decimal
         assertResults(null,"""
@@ -340,7 +340,7 @@ class SyntaxTreeConverterTests {
                 (
                     TYPEDEF
                     (
-                        FUNC:TYPE
+                        FUNC:!type
                         (
                             TYPEDEF
                             (

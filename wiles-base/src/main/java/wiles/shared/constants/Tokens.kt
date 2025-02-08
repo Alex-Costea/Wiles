@@ -64,7 +64,6 @@ object Tokens {
     const val MUTABLE_ID = "MUTABLE"
     const val GLOBAL_ID = "GLOBAL"
     const val UNION_ID = "UNION"
-    const val TYPE_ID = "TYPE"
     const val YIELDS_ID = "YIELDS"
     const val CONST_ID = "CONST"
 
@@ -82,6 +81,7 @@ object Tokens {
     const val MUTABLE_TYPE_ID = "!mutable"
     const val CONST_TYPE_ID = "!constant"
     const val RANGE_ID = "!range"
+    const val TYPE_ID = "!type"
 
     private val KEYWORDS: HashMap<String, String> = HashMap()
     private val SYMBOLS: HashMap<String, String> = HashMap()
@@ -145,6 +145,7 @@ object Tokens {
         KEYWORDS["mutable"] = MUTABLE_TYPE_ID
         KEYWORDS["constant"] = CONST_TYPE_ID
         KEYWORDS["range"] = RANGE_ID
+        KEYWORDS["type"] = TYPE_ID
 
         SYMBOLS["+"] = PLUS_ID
         SYMBOLS["-"] = MINUS_ID
