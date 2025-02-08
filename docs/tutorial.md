@@ -129,7 +129,7 @@ Just write them as-is:
 write_line(123)
 ```
 
-No need to worry about limits—integers in Wiles internally `BigInteger`, so they can be arbitrarily large:
+No need to worry about limits—integers in Wiles internally use `BigInteger`, so they can be arbitrarily large:
 
 ```wiles
 write_line(123456789123456789123456789123456789)
@@ -201,3 +201,84 @@ Use `^` for exponentiation:
 write_line(2 ^ 10)  # Outputs 1024
 ```
 
+Note the order of operations:
+
+```wiles
+write_line(-2 ^ 10)  # Outputs -1024
+write_line((-2) ^ 10)  # Outputs -1024
+```
+
+## Concatenation
+
+When you use the `+` operator between a string and any other type, it will result in string concatenation:
+
+```wiles
+write_line("I have " + 100 + " dollars in cash!")
+```
+
+## Declarations and Assignments
+
+To declare a value, use the following syntax:
+
+```wiles
+let value := 123
+```
+
+In this case, `value` is constant, meaning it can't be reassigned.
+If you want to make it a variable, use the keyword `var`:
+
+```wiles
+let var value := 123
+write_line(value) # Outputs 123
+value := 456
+write_line(value) # Outputs 456
+```
+
+In this example, `value` is first assigned to be `123`, and then reassigned to `456`, 
+which is done by using the syntax `value := new_value`.
+
+Wiles is a strongly typed language. In the examples above, the type of `value` is inferred automatically.
+To explicitly declare the type, use `:` followed by the type (in this case, `int`):
+
+```wiles
+let value : int := 123
+```
+
+We will go into more detail about types later.
+
+Note that the identifier doesn't have to be immediately initialized. However, it must be initialized before being used. 
+This also means the type cannot be inferred in such cases:
+
+```wiles
+let value : int
+write_line("I don't know what value is!")
+value := 123
+write_line("Now I do! It is " + value)
+```
+
+You can also store strings in an identifier:
+
+```wiles
+let name := read_line()
+write_line("Hello, " + name)
+```
+
+Here, `read_line()` reads a line of input, stores it in `name` (which is automatically inferred to be of type `text`),
+and then concatenates and displays it.
+
+Note that even when the identifier represents a variable, its type can't be changed once it’s set.
+For example, this won't compile:
+
+```wiles
+let var value := 123 # value is of type int
+value := "Alex" # Compile Error! value is int, not text
+```
+
+To make this code compile, you need to specify that `value` can hold any type of value. 
+You can do this by annotating its type as `anything`:
+
+```wiles
+let var value : anything := 123
+value := "Alex"
+write_line("The value is:" + value)
+```
