@@ -847,6 +847,27 @@ CODE_BLOCK
             PAREN_END_ID, PAREN_END_ID, ASSIGN_ID, MUTABLE_ID, "!a")
     }
 
+    @Test
+    fun innerMethodTest()
+    {
+        //(begin; nothing; end)
+        assertResults(null,"""
+            CODE_BLOCK
+            (
+                EXPRESSION
+                (
+                    FUNC [1, 2, 1, 7]
+                    (
+                        CODE_BLOCK
+                        (
+                            !nothing [1, 9, 1, 16]
+                        )
+                    )
+                )
+            )""",
+            PAREN_START_ID, START_BLOCK_ID, TERMINATOR_ID, NOTHING_ID, TERMINATOR_ID, END_BLOCK_ID, PAREN_END_ID)
+    }
+
     private class CreateConverter(tokens: List<String>) {
         var converter  =
             TokensToSyntaxTreeConverter(tokens.map { content-> Token(content, NULL_LOCATION) }, NULL_LOCATION)
