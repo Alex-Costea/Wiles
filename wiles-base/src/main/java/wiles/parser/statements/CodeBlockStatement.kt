@@ -16,7 +16,7 @@ import wiles.shared.constants.Tokens.DO_ID
 import wiles.shared.constants.Tokens.END_BLOCK_ID
 import wiles.shared.constants.Tokens.START_BLOCK_ID
 
-class CodeBlockStatement(context: ParserContext) : AbstractStatement(context) {
+open class CodeBlockStatement(context: ParserContext) : AbstractStatement(context) {
     companion object{
         val statementFactory = StatementFactory()
             .addType(StatementFactoryTypes.TOP_LEVEL_EXPRESSION)
@@ -30,7 +30,7 @@ class CodeBlockStatement(context: ParserContext) : AbstractStatement(context) {
     }
 
     private val components: MutableList<AbstractStatement> = ArrayList()
-    private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
+    protected val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
 
     override val syntaxType: SyntaxType
         get() = SyntaxType.CODE_BLOCK
@@ -47,12 +47,11 @@ class CodeBlockStatement(context: ParserContext) : AbstractStatement(context) {
         catch (ignored: UnexpectedEndException) { }
     }
 
-    private fun readOneStatement(doExpression : Boolean = false) {
+    protected fun readOneStatement(doExpression : Boolean = false) {
         val statement : AbstractStatement
         try
         {
-            val newContext = context.setOutermost(false)
-            statement = statementFactory.setContext(newContext).create()
+            statement = statementFactory.setContext(context).create()
         }
         catch (ex : AbstractCompilationException)
         {
@@ -87,29 +86,26 @@ class CodeBlockStatement(context: ParserContext) : AbstractStatement(context) {
 
     override fun process(): CompilationExceptionsCollection {
         try {
-            if (!context.isOutermost && transmitter.expectMaybe(tokenOf(DO_ID)).isPresent) {
+            if (transmitter.expectMaybe(tokenOf(DO_ID)).isPresent) {
                 while(transmitter.expectMaybe(EXPECT_TERMINATOR).isPresent)
                     Unit
                 readOneStatement(true)
             }
             else {
-                if (!context.isOutermost) {
-                    transmitter.expect(tokenOf(START_BLOCK_ID))
-                    try {
-                        transmitter.expect(EXPECT_TERMINATOR)
-                    }
-                    catch(_ : UnexpectedEndException){}
+                transmitter.expect(tokenOf(START_BLOCK_ID))
+                try {
+                    transmitter.expect(EXPECT_TERMINATOR)
                 }
+                catch(_ : UnexpectedEndException){}
                 while (!transmitter.tokensExhausted()) {
-                    if (!context.isOutermost && transmitter.expectMaybe(tokenOf(END_BLOCK_ID)
-                            .removeWhen(WhenRemoveToken.Never)).isPresent)
+                    if (transmitter.expectMaybe(tokenOf(END_BLOCK_ID)
+                            .removeWhen(WhenRemoveToken.Never)).isPresent
+                    )
                         break
                     if (transmitter.expectMaybe(EXPECT_TERMINATOR).isPresent) continue
                     readOneStatement()
                 }
-                if (!context.isOutermost) {
-                    transmitter.expect(tokenOf(END_BLOCK_ID))
-                }
+                transmitter.expect(tokenOf(END_BLOCK_ID))
             }
         } catch (ex: AbstractCompilationException) {
             exceptions.add(ex)
