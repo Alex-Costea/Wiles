@@ -55,7 +55,7 @@ object Tokens {
     const val MAYBE_ID = "MAYBE"
     const val RETURN_ID = "RETURN"
     const val IF_ID = "IF"
-    const val DEFAULT_ID = "ELSE"
+    const val DEFAULT_ID = "DEFAULT"
     const val BREAK_ID = "BREAK"
     const val CONTINUE_ID = "CONTINUE"
     const val FOR_ID = "FOR"
