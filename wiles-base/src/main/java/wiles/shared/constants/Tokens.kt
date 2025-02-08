@@ -55,7 +55,7 @@ object Tokens {
     const val MAYBE_ID = "MAYBE"
     const val RETURN_ID = "RETURN"
     const val IF_ID = "IF"
-    const val ELSE_ID = "ELSE"
+    const val DEFAULT_ID = "ELSE"
     const val BREAK_ID = "BREAK"
     const val CONTINUE_ID = "CONTINUE"
     const val FOR_ID = "FOR"
@@ -78,7 +78,6 @@ object Tokens {
     const val DECIMAL_ID = "!decimal"
     const val LIST_ID = "!list"
     const val DICT_ID = "!dict"
-    const val DATA_ID = "!data"
     const val MUTABLE_TYPE_ID = "!mutable"
     const val CONST_TYPE_ID = "!constant"
     const val RANGE_ID = "!range"
@@ -110,7 +109,7 @@ object Tokens {
 
     @JvmField
     val KEYWORDS_INDICATING_NEW_EXPRESSION = setOf(
-        DECLARE_ID, ELSE_ID, CONTINUE_ID, RETURN_ID, WHILE_ID, ANNOTATE_ID, DATA_END_ID, YIELDS_ID,
+        DECLARE_ID, DEFAULT_ID, CONTINUE_ID, RETURN_ID, WHILE_ID, ANNOTATE_ID, DATA_END_ID, YIELDS_ID,
         BREAK_ID, FOR_ID, DO_ID, START_BLOCK_ID, END_BLOCK_ID, BRACKET_END_ID, PAREN_END_ID,
         SEPARATOR_ID, IN_ID, ASSIGN_ID, TERMINATOR_ID, NEWLINE_ID, IF_ID, DICT_END_ID
     )
@@ -120,7 +119,7 @@ object Tokens {
         KEYWORDS["let"] = DECLARE_ID
         KEYWORDS["var"] = VARIABLE_ID
         KEYWORDS["if"] = IF_ID
-        KEYWORDS["default"] = ELSE_ID
+        KEYWORDS["default"] = DEFAULT_ID
         KEYWORDS["for"] = FOR_ID
         KEYWORDS["in"] = IN_ID
         KEYWORDS["while"] = WHILE_ID
@@ -143,7 +142,6 @@ object Tokens {
         KEYWORDS["list"] = LIST_ID
         KEYWORDS["anything"] = ANYTHING_ID
         KEYWORDS["dict"] = DICT_ID
-        KEYWORDS["data"] = DATA_ID
         KEYWORDS["mutable"] = MUTABLE_TYPE_ID
         KEYWORDS["constant"] = CONST_TYPE_ID
         KEYWORDS["range"] = RANGE_ID

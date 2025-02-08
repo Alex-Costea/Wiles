@@ -7,7 +7,7 @@ import wiles.shared.AbstractCompilationException
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens
-import wiles.shared.constants.Tokens.ELSE_ID
+import wiles.shared.constants.Tokens.DEFAULT_ID
 import wiles.shared.constants.Tokens.END_BLOCK_ID
 import wiles.shared.constants.Tokens.IF_ID
 
@@ -34,7 +34,7 @@ class IfStatement(context: ParserContext) : AbstractStatement(context) {
                 val body : AbstractStatement
                 if(!isOnlyOne && transmitter.expectMaybe(tokenOf(END_BLOCK_ID)).isPresent)
                     break
-                val expectMaybeElse = transmitter.expectMaybe(tokenOf(ELSE_ID))
+                val expectMaybeElse = transmitter.expectMaybe(tokenOf(DEFAULT_ID))
                 val isDefaultCondition = expectMaybeElse.isPresent
                 condition = if(!isDefaultCondition) DefaultExpression(context)
                             else TokenStatement(expectMaybeElse.get(),context)
