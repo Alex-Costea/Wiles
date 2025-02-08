@@ -207,7 +207,7 @@ Note the order of operations:
 
 ```wiles
 write_line(-2 ^ 10)  # Outputs -1024
-write_line((-2) ^ 10)  # Outputs -1024
+write_line((-2) ^ 10)  # Outputs 1024
 ```
 
 ### Concatenation
