@@ -30,10 +30,10 @@ import wiles.shared.constants.Tokens.DATA_END_ID
 import wiles.shared.constants.Tokens.DATA_START_ID
 import wiles.shared.constants.Tokens.DECIMAL_ID
 import wiles.shared.constants.Tokens.DECLARE_ID
+import wiles.shared.constants.Tokens.DEFAULT_ID
 import wiles.shared.constants.Tokens.DICT_END_ID
 import wiles.shared.constants.Tokens.DICT_START_ID
 import wiles.shared.constants.Tokens.DO_ID
-import wiles.shared.constants.Tokens.DEFAULT_ID
 import wiles.shared.constants.Tokens.END_BLOCK_ID
 import wiles.shared.constants.Tokens.EQUALS_ID
 import wiles.shared.constants.Tokens.FALSE_ID
@@ -858,6 +858,40 @@ CODE_BLOCK
                 )
             )""", DECLARE_ID, "!a", ASSIGN_ID, DATA_START_ID, "!name", ASSIGN_ID, "@alex", SEPARATOR_ID,
             "!age", ASSIGN_ID, "#26", DATA_END_ID)
+
+        //let a : <<default b := 456>> := <<b := 123>>
+        assertResults(null,"""
+            CODE_BLOCK
+            (
+                DECLARATION
+                (
+                    TYPEDEF
+                    (
+                        DATA [1, 27, 1, 29]
+                        (
+                            DECLARATION: DEFAULT 
+                            (
+                                !b [1, 19, 1, 20], 
+                                #456 [1, 24, 1, 27]
+                            )
+                        )
+                    ), 
+                    !a [1, 5, 1, 6], 
+                    EXPRESSION
+                    (
+                        DATA [1, 43, 1, 45]
+                        (
+                            DECLARATION
+                            (
+                                !b [1, 35, 1, 36], 
+                                #123 [1, 40, 1, 43]
+                            )
+                        )
+                    )
+                )
+            )
+        """, DECLARE_ID, "!a", ANNOTATE_ID, DATA_START_ID, DEFAULT_ID, "!b", ASSIGN_ID, "#456", DATA_END_ID, ASSIGN_ID,
+            DATA_START_ID, "!b", ASSIGN_ID, "#123", DATA_END_ID)
     }
 
     @Test
