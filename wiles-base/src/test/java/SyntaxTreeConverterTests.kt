@@ -74,7 +74,7 @@ import wiles.shared.constants.Utils.NULL_LOCATION
 class SyntaxTreeConverterTests {
     private fun trimAll(string: String) : String
     {
-        return string.replace("[\\r\\n]+| |\\[.*]".toRegex(),"")
+        return string.replace("[\\r\\n ]|\\[.*]".toRegex(),"")
     }
 
     private fun assertResults(exceptions: CompilationExceptionsCollection?, expectedResult: String?, vararg tokens: String) {
@@ -672,8 +672,8 @@ CODE_BLOCK
     @Test
     fun textTest()
     {
-        // write_line("It's a beautiful day! but i still feel sad :-\b; sorry")
-        assertResults(null,"CODE_BLOCK(EXPRESSION(%APPLY, !write_line, FUNC_CALL('It\\qs\\sa\\sbeautiful\\sday!\\sbut\\si\\sstill\\sfeel\\ssad\\s:-\\b\\ssorry\\s-_-\\noh\\swell')))",
+        // write_line("It's a beautiful day! but i still feel sad :-\b sorry -__\n;oh well")
+        assertResults(null,"CODE_BLOCK(EXPRESSION(%APPLY, !write_line, FUNC_CALL('It\\as\\wa\\wbeautiful\\wday!\\wbut\\wi\\wstill\\wfeel\\wsad\\w:-\\b\\wsorry\\w-_-\\noh\\wwell')))",
             "!write_line", PAREN_START_ID, "@It's a beautiful day! but i still feel sad :-\\ sorry -_-\noh well", PAREN_END_ID, TERMINATOR_ID)
     }
 

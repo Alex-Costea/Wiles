@@ -42,9 +42,9 @@ object Utils {
         }
         var stringValue = name.substring(1)
         stringValue = stringValue.replace("\\","\\b")
-        stringValue = stringValue.replace("'","\\q")
+        stringValue = stringValue.replace("'","\\a")
         stringValue = stringValue.replace("\n","\\n")
-        stringValue = stringValue.replace(" ","\\s")
+        stringValue = stringValue.replace(" ","\\w")
         return "'$stringValue'"
     }
 

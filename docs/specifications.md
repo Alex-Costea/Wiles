@@ -10,11 +10,10 @@
 - String: `"abc"`. Can be multiline, supports full unicode, includes escape sequences.
   - Escaping is forgiving: if it can't be escaped, it's taken literally.
   - `\[content];` is equivalent to HTML `&[content];`
-  - Custom one-letter escape sequences:
+  - Common one-letter escape sequences:
     - `\q` for `"`
     - `\n` for newline
     - `\b` for `\`
-    - `\s` for `;`
     - Take optional ending semicolon, `\n;` equivalent to `\n`
   - `\U[hex];` converts it to the Unicode character corresponding to the hexadecimal representation
 - Boolean: `true` and `false`

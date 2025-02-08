@@ -253,6 +253,8 @@ class InputToTokensConverter(input: String, private val lastLocation: TokenLocat
             ESCAPE_SEQUENCES["\\n;"] = "\n"
             ESCAPE_SEQUENCES["\\b;"] = "\\"
             ESCAPE_SEQUENCES["\\s;"] = ";"
+            ESCAPE_SEQUENCES["\\w;"] = " "
+            ESCAPE_SEQUENCES["\\a;"] = "'"
         }
     }
 }
