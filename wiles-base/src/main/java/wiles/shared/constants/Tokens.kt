@@ -82,6 +82,7 @@ object Tokens {
     const val CONST_TYPE_ID = "!constant"
     const val RANGE_ID = "!range"
     const val TYPE_ID = "!type"
+    const val INFINITY_ID = "!Infinity"
 
     private val KEYWORDS: HashMap<String, String> = HashMap()
     private val SYMBOLS: HashMap<String, String> = HashMap()
@@ -146,6 +147,7 @@ object Tokens {
         KEYWORDS["constant"] = CONST_TYPE_ID
         KEYWORDS["range"] = RANGE_ID
         KEYWORDS["type"] = TYPE_ID
+        KEYWORDS["Infinity"] = INFINITY_ID
 
         SYMBOLS["+"] = PLUS_ID
         SYMBOLS["-"] = MINUS_ID
