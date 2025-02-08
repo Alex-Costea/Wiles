@@ -411,3 +411,28 @@ if begin
     default do write_line("I don't know who you are, " + name)
 end
 ```
+---
+
+## Code Blocks
+
+As mentioned earlier, the simplest code block starts with `do`, followed by a single operation:
+
+```wiles
+let number := read_int()
+if number > 100 do write_line("Your number " + number + " is big enough!")
+```
+
+In this example, `read_int` reads an integer from the input, and the code block is simply `do write_line(...)`.
+
+### Complex Code Blocks
+
+For more complex code blocks, you start with `begin`, followed by a series of statements separated by newlines or `;`, 
+and end with the keyword `end`. Just like with complex conditionals, it's a good idea to use indentation for clarity.
+
+```wiles
+let number := read_int()
+if number > 100 begin
+    write_line("Your number " + number + " is big enough!")
+    write_line("If it was 10 times bigger, it'd be " + number * 10)
+end
+```
