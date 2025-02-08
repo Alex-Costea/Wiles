@@ -1,176 +1,203 @@
 # Tutorial (WIP)
 
-## How to set up Wiles
+## How to Set Up Wiles
 
-### Method 1
+### Method 1: Try It Online
 
-Try it out [online](https://wiles.costea.in)!
+You can experiment with Wiles right now! Just visit [this link](https://wiles.costea.in) and start coding.
 
-### Method 2
+### Method 2: Run Without Backend/Frontend
 
-To use without the backend / frontend functionality:
+If you only need the core functionality, follow these steps:
 
 1. Compile the `wiles-base` package by running the `compile_base.sh` script.
+2. Execute the `main` function inside `wiles.Main`, passing your input file as an argument.
 
-2. Run the function `main` within `wiles.Main`, with the input file as an argument. 
-For instance, when using the JAR file `Wiles.jar`, run the command:
+For example, if you're using the `Wiles.jar` file, run:
 
 ```sh
 java -jar Wiles.jar -file example.wiles
 ```
 
-Use `-help` to get all the options.
+Need more options? Use `-help` to see all available commands.
 
-### Method 3
+### Method 3: Run Backend and Frontend Locally
 
-Using the backend and frontend locally.
+If you want the full experience, you can run both the backend and frontend on your machine. Choose one of these methods:
 
-You can either:
-* Run only the backend, which will deploy the frontend statically, by running `run_dev.sh` and opening `localhost:8080`.
-* Run the backend and frontend servers at the same time, by also running `npm run dev` and opening `localhost:3000`.
+- Run only the backend (which serves a static frontend) by executing `run_dev.sh`,
+then open `localhost:8080` in your browser.
+- Run both the backend and frontend servers at the same time by also running `npm run dev`,
+then open `localhost:3000`.
+
+---
 
 ## Hello World in Wiles
 
-Here is a basic Hello World program:
+Here's a simple "Hello, World!" program:
 
 ```wiles
-# print "Hello World" to output
+# Print "Hello, world!" to output
 write_line("Hello, world!")
 ```
 
-From here, we can see a couple features immediately:
-- There is no need for a main function. You can just jump right in!
-- Comments start with `#` and end on newline
-- String literals are defined by writing the string between `"` characters.
-- Functions are called with arguments in the format of `func(args)`
-- `write_line` takes a string and prints it to output, adding a newline character. For no newline, use `write`!
-- Statements are delimitated by newlines. To write two statements on one line, use `;`
+A few things to note right away:
+- No need for a `main` function—just write your code and go!
+- Comments start with `#` and continue until the end of the line.
+- Strings are enclosed in `""`.
+- Functions are called in `func(args)` format.
+- `write_line` prints a string followed by a newline. For no newline, use `write`.
+- Statements are separated by newlines. To put multiple statements on one line, use `;`.
+
+---
 
 ## String Formatting
 
-To start things off, note that strings can be multiline by default:
+### Multiline Strings
+
+Strings can span multiple lines by default:
 
 ```wiles
 write_line("This is line 1.
 This is line 2.")
 ```
 
-Also note that they support Unicode by default:
+### Unicode Support
+
+Unicode works out of the box:
 
 ```wiles
 write_line("Îmi place când aplicațiile acceptă Unicode. 😊")
 ```
 
-On string escaping, note that escaping is forgiving by default.
-Meaning, escaping errors are treated as just regular text.
-The most basic escaped encodings are `\n` for newline, `\q` for double quotes and `\b` for backslash:
+### Escaping Characters
+
+Escaping is forgiving—if something isn't recognized, it just stays as-is. Here are the most common escapes:
+
+- `\n` → Newline
+- `\q` → Double quotes `"`
+- `\b` → Backslash `\`
+
+Example:
 
 ```wiles
 write_line("Hello!\nMy name is \qAlex\q. Here's my favorite emoticon: \bo/")
 ```
 
-Will display:
+Output:
 
 ```
 Hello!
 My name is "Alex". Here's my favorite emoticon: \o/
 ```
 
-Furthermore, Wiles supports HTML5-like character escaping, except starting with `\` instead of `&`:
+### HTML5-Like Escapes
+
+Wiles supports HTML5-style character escaping, but with `\` instead of `&`:
 
 ```wiles
 write_line("I owe my friend 100\euro;. I'll send it on Paypal\trade;")
 ```
 
-Will display:
+Output:
 
-```wiles
+```
 I owe my friend €100. I'll send it on Paypal™
 ```
 
-It can also be used to display Unicode characters without an entity name:
+You can also use Unicode character codes:
 
 ```wiles
 write_line("\#x1F1F7;\#x1F1F4;")
 ```
 
-Will display:
+Output:
 
 ```
 🇷🇴
 ```
 
+---
+
 ## Numbers
 
 ### Integers
 
-Integer literals are as simple as writing them out:
+Just write them as-is:
 
 ```wiles
 write_line(123)
 ```
 
-Note that there are no maximum or minimum values for integers. Internally, they are of type `BigInteger`:
+No need to worry about limits—integers in Wiles internally `BigInteger`, so they can be arbitrarily large:
 
 ```wiles
-write_line(123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789)
+write_line(123456789123456789123456789123456789)
 ```
 
-To use negative integers, use the negative sign. This is technically a unary minus operator:
+For negative numbers, use `-` (which is technically a unary minus operator):
 
 ```wiles
 write_line(-123)
 ```
 
-### Rational numbers
+### Rational Numbers
 
-Just use a period:
+Just use a decimal point:
 
 ```wiles
 write_line(3.1415)
 ```
 
-There's also a specific identifier for infinity, which is a valid rational value. It can be negated as usual.
+Wiles also supports `Infinity`, which can be negated as usual:
 
 ```wiles
 write_line(Infinity)
 write_line(-Infinity)
 ```
 
-Rational numbers in Wiles correspond to `BigDecimal` with **[INSERT NR HERE]** digits of significance.
+Under the hood, rational numbers internally use `BigDecimal` in `DECIMAL128` mode.
 
-### Number operations
+### Math Operations
 
-You probably know addition, subtraction, multiplication and division from math. They work the same here.
-Note the order of operation also works as expected.
-
-```wiles
-write_line(5 + 3 * 5)
-```
-
-You can use parentheses to change the default order of operations:
+Basic arithmetic works like you'd expect:
 
 ```wiles
-write_line((5 + 3) * 5)
+write_line(5 + 3 * 5)  # Outputs 20
 ```
 
-Minus and (if you need that for whatever reason) plus can also be unary operations:
+Use parentheses to control order of operations:
 
 ```wiles
-write(+10 - -10)
+write_line((5 + 3) * 5)  # Outputs 40
 ```
 
-One thing to note is that division between two integers results in integer division.
-In order to do rational division, make at least one a rational.
+Unary operators (`-` and, if you need it for whatever reason, `+`) work too:
 
 ```wiles
-write_line(4 / 3) #will print 1
-write_line(4 / 3.0) #will print 1.333333333333333333333333333333333
-write_line(4.0 / 3) #will print 1.333333333333333333333333333333333
+write(+10 - -10)  # Outputs 20
 ```
 
-Exponentiation also works as you would expect. The symbol used for it is `^`:
+#### Integer vs Rational Division
+
+Integer division returns an integer result:
 
 ```wiles
-write_line(2 ^ 10)
+write_line(4 / 3)  # Outputs 1
 ```
+
+To get a rational result, make at least one number a decimal:
+
+```wiles
+write_line(4 / 3.0)  # Outputs 1.333333333333...
+write_line(4.0 / 3)  # Outputs 1.333333333333...
+```
+
+#### Exponentiation
+
+Use `^` for exponentiation:
+
+```wiles
+write_line(2 ^ 10)  # Outputs 1024
+```
+
