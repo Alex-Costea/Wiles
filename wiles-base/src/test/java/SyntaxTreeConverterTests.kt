@@ -410,6 +410,34 @@ class SyntaxTreeConverterTests {
             DECLARE_ID, "!a", ASSIGN_ID, BRACKET_START_ID,
             "#1", SEPARATOR_ID, "#2", SEPARATOR_ID, "#3", SEPARATOR_ID,
             BRACKET_END_ID, ANNOTATE_ID, INT_ID)
+
+        // a[1] := a[2] + 123
+        assertResults(null, """
+            CODE_BLOCK
+            (
+                EXPRESSION
+                (
+                    %ASSIGN [1, 6, 1, 8], 
+                    EXPRESSION
+                    (
+                        %AT_KEY [1, 2, 1, 3], 
+                        !a [1, 1, 1, 2], 
+                        #1 [1, 3, 1, 4]
+                    ), 
+                    EXPRESSION
+                    (
+                        %PLUS [1, 14, 1, 15], 
+                        EXPRESSION
+                        (
+                            %AT_KEY [1, 10, 1, 11], 
+                            !a [1, 9, 1, 10], 
+                            #2 [1, 11, 1, 12]
+                        ), 
+                        #123 [1, 16, 1, 19]
+                    )
+                )
+            )""", "!a", BRACKET_START_ID, "#1", BRACKET_END_ID, ASSIGN_ID, "!a",
+            BRACKET_START_ID, "#2", BRACKET_END_ID, PLUS_ID, "#123")
     }
 
     @Test
