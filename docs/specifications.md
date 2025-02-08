@@ -7,17 +7,16 @@
 - `nothing`
 - Integer: `12345`
 - Floating: `12345.6`
-- String: `"abc"`. Can be multiline, includes escape sequences.
+- String: `"abc"`. Can be multiline, supports full unicode, includes escape sequences.
   - Escaping is forgiving: if it can't be escaped, it's taken literally.
-  - `\q` is `"`
-  - `\n` is newline
-  - `\x` is `\`
-  - `\c` is `$`
-  - `\e` is `;`
-  - The above sequences can be optionally finalized with `;`. E.g.: `\n;`
   - `\[content];` is equivalent to HTML `&[content];`
-  - `\U[hex];` converts it to the Unicode character corresponding to the hex
-  - `$[content];` is reserved but not yet in use.
+  - Custom one-letter escape sequences:
+    - `\q` for `"`
+    - `\n` for newline
+    - `\b` for `\`
+    - `\s` for `;`
+    - Take optional ending semicolon, `\n;` equivalent to `\n`
+  - `\U[hex];` converts it to the Unicode character corresponding to the hexadecimal representation
 - Boolean: `true` and `false`
 - List literal: `[⟪value,⟫] ⟨: type⟩`
 - Dict literal: `{ ⟪key -> value,⟫ } ⟨: key_type -> value_type⟩`

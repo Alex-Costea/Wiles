@@ -87,11 +87,9 @@ class TokenConverterTests {
         tokenConverterThrows(0, "\"\"\"\"\"", StringInvalidException::class.java, STRING_UNFINISHED_ERROR)
         tokenConverterEquals("\"Hello, world.\\n\"", arrayOf("@Hello, world.\n"))
         tokenConverterEquals("\"Hello, world.\\n;\"", arrayOf("@Hello, world.\n"))
-        tokenConverterEquals("\"Hello, world\\n\\e\"", arrayOf("@Hello, world\n;"))
-        tokenConverterEquals("\"My name is \\qAlex\\q. Ugly right :-\\x\"",
+        tokenConverterEquals("\"Hello, world\\n\\s\"", arrayOf("@Hello, world\n;"))
+        tokenConverterEquals("\"My name is \\qAlex\\q. Ugly right :-\\b\"",
             arrayOf("@My name is \"Alex\". Ugly right :-\\"))
-        tokenConverterEquals("\"I got lots of \\c;\\c\\c;\\c!!!\"",
-            arrayOf("@I got lots of \$\$\$\$!!!"))
         tokenConverterEquals("\"This is a backslash: \\. This is a dollar sign: \$. cool right?\"",
             arrayOf("@This is a backslash: \\. This is a dollar sign: \$. cool right?"))
         tokenConverterEquals("\"Welcome to your Wiles\\copy; free tri\\#xE1;l!\\NewLine;Purchase a license for only 999\\#8364;!\"",

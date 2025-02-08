@@ -117,7 +117,7 @@ class InputToTokensConverter(input: String, private val lastLocation: TokenLocat
     }
 
     private fun unescape(s: String): String {
-        val pattern = Pattern.compile("\\$.*?;|\\\\#?\\w+;|\\\\\\w")
+        val pattern = Pattern.compile("\\\\#?\\w+;|\\\\\\w")
         val matcher = pattern.matcher(s)
         return matcher.replaceAll((Function {
             Matcher.quoteReplacement(
@@ -251,9 +251,8 @@ class InputToTokensConverter(input: String, private val lastLocation: TokenLocat
         init {
             ESCAPE_SEQUENCES["\\q;"] = "\""
             ESCAPE_SEQUENCES["\\n;"] = "\n"
-            ESCAPE_SEQUENCES["\\x;"] = "\\"
-            ESCAPE_SEQUENCES["\\c;"] = "$"
-            ESCAPE_SEQUENCES["\\e;"] = ";"
+            ESCAPE_SEQUENCES["\\b;"] = "\\"
+            ESCAPE_SEQUENCES["\\s;"] = ";"
         }
     }
 }
