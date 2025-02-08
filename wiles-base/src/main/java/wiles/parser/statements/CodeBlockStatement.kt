@@ -51,9 +51,7 @@ class CodeBlockStatement(context: ParserContext) : AbstractStatement(context) {
         val statement : AbstractStatement
         try
         {
-            var newContext = context.setOutermost(false)
-            if(!doExpression)
-                newContext = newContext.setWithinInnerExpression(false)
+            val newContext = context.setOutermost(false)
             statement = statementFactory.setContext(newContext).create()
         }
         catch (ex : AbstractCompilationException)
@@ -69,7 +67,7 @@ class CodeBlockStatement(context: ParserContext) : AbstractStatement(context) {
             components.add(statement)
         }
         else try {
-            if(!(doExpression && context.isWithinInnerExpression))
+            if(!doExpression)
                 expectTerminator()
         }
         catch(ex : AbstractCompilationException)
@@ -111,8 +109,6 @@ class CodeBlockStatement(context: ParserContext) : AbstractStatement(context) {
                 }
                 if (!context.isOutermost) {
                     transmitter.expect(tokenOf(END_BLOCK_ID))
-                    if(!context.isWithinInnerExpression)
-                        expectTerminator()
                 }
             }
         } catch (ex: AbstractCompilationException) {

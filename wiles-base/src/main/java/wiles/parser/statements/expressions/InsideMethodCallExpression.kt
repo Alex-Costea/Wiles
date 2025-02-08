@@ -8,8 +8,7 @@ import wiles.shared.AbstractCompilationException
 import wiles.shared.Token
 import wiles.shared.constants.Tokens.ASSIGN_ID
 
-class InsideMethodCallExpression(oldContext: ParserContext) :
-    AbstractExpression(oldContext.setWithinInnerExpression(true)) {
+class InsideMethodCallExpression(oldContext: ParserContext) : AbstractExpression(oldContext) {
     private var isAssignment: Boolean = false
 
     override fun setComponents(precedenceProcessor: PrecedenceProcessor) {

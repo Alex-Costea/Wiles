@@ -10,9 +10,6 @@ class ParserContext(val transmitter: TokenTransmitter) {
     var isWithinLoop = false
     private set
 
-    var isWithinInnerExpression = false
-        private set
-
     fun setOutermost(to:Boolean) : ParserContext
     {
         if(isOutermost == to)
@@ -40,18 +37,9 @@ class ParserContext(val transmitter: TokenTransmitter) {
         return x
     }
 
-    fun setWithinInnerExpression(to:Boolean) : ParserContext
-    {
-        if(isWithinInnerExpression == to)
-            return this
-        val x = clone()
-        x.isWithinInnerExpression = to
-        return x
-    }
-
     private fun clone(): ParserContext {
         return ParserContext(transmitter)
             .setOutermost(isOutermost).setWithinLoop(isWithinLoop)
-            .setWithinMethod(isWithinMethod).setWithinInnerExpression(isWithinInnerExpression)
+            .setWithinMethod(isWithinMethod)
     }
 }

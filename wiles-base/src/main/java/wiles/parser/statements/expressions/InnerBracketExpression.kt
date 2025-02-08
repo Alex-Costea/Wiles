@@ -8,7 +8,7 @@ import wiles.shared.Token
 import wiles.shared.constants.ErrorMessages.INTERNAL_ERROR
 import wiles.shared.constants.Tokens.BRACKET_END_ID
 
-class InnerBracketExpression(oldContext: ParserContext) : AbstractExpression(oldContext.setWithinInnerExpression(true)) {
+class InnerBracketExpression(context: ParserContext) : AbstractExpression(context) {
     @Throws(TokenExpectedException::class, UnexpectedEndException::class)
     override fun handleToken(token: Token): Boolean {
         if (token.content == BRACKET_END_ID) {
