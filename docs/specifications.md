@@ -10,12 +10,12 @@
 - String: `"abc"`. Can be multiline, supports full unicode, includes escape sequences.
   - Escaping is forgiving: if it can't be escaped, it's taken literally.
   - `\[content];` is equivalent to HTML `&[content];`
-  - Common one-letter escape sequences:
+    - Includes support for entities (e.g. `\beta;`) and code points (e.g. `\#x1F600;`)
+  - Support for one-letter escape sequences:
     - `\q` for `"`
     - `\n` for newline
     - `\b` for `\`
     - Take optional ending semicolon, `\n;` equivalent to `\n`
-  - `\U[hex];` converts it to the Unicode character corresponding to the hexadecimal representation
 - Boolean: `true` and `false`
 - List literal: `[⟪value,⟫] ⟨: type⟩`
 - Dict literal: `{ ⟪key -> value,⟫ } ⟨: key_type -> value_type⟩`
