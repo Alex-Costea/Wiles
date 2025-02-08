@@ -79,7 +79,7 @@ My name is "Alex". Here's my favorite emoticon: \o/
 Furthermore, Wiles supports HTML5-like character escaping, except starting with `\` instead of `&`:
 
 ```wiles
-write_line("I owe my friend 100\euro;. I'll send it on Paypal&trade;")
+write_line("I owe my friend 100\euro;. I'll send it on Paypal\trade;")
 ```
 
 Will display:
@@ -124,7 +124,7 @@ write_line(-123)
 
 ### Rational numbers
 
-Just use a comma:
+Just use a period:
 
 ```wiles
 write_line(3.1415)
