@@ -303,7 +303,7 @@ write_line("The value is:" + value)
 
 ---
 
-# Truth Values and Operations
+## Truth Values and Operations
 
 Truth values, also known as Booleans, represent either `true` or `false`. They are of type `truth`.
 
@@ -364,4 +364,50 @@ write_line(true or false) # outputs true
 write_line(false or false) # outputs false
 write_line(not true) # outputs false
 write_line(not false) # outputs true
+```
+
+---
+
+## Conditionals
+
+Conditionals run a block of commands if they receive a `true` value.
+The basic syntax looks like this: `if [condition] [codeblock]`:
+
+```wiles
+let name := read_line()
+if name = "Alex" do write_line("Hi Alex, welcome back!")
+```
+
+We'll dive deeper into code blocks later, but the simplest format is `do [operation]`.
+
+### Complex conditionals
+
+The example above shows a basic conditional. But you can also have more complex conditionals, 
+where the block corresponding to the first `true` value gets executed. Here's how it's written:
+
+```wiles
+let name := read_line()
+if begin
+    name = "Alex" do write_line("Hi Alex, welcome back!")
+    name = "Cameron" do write_line("Hi Cameron, how's it going?")
+end
+```
+
+The general syntax for complex conditionals is `if begin`, 
+followed by a list of conditions (separated by newlines or `;`), and ending with `end`.
+
+Note that the indentation (the spaces at the start of lines between `begin` and `end`) is optional
+but recommended for readability.
+
+### Default clause
+
+You can also add a `default` condition at the end, which will run no matter what:
+
+```wiles
+let name := read_line()
+if begin
+    name = "Alex" do write_line("Hi Alex, welcome back!")
+    name = "Cameron" do write_line("Hi Cameron, how's it going?")
+    default do write_line("I don't know who you are, " + name)
+end
 ```
