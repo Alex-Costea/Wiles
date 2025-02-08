@@ -44,18 +44,18 @@ write_line("Hello, world!")
 A few things to note right away:
 - No need for a `main` function—just write your code and go!
 - Comments start with `#` and continue until the end of the line.
-- Strings are enclosed in `""`.
+- Texts (also known as strings) are enclosed in `""`.
 - Functions are called in `func(args)` format.
-- `write_line` prints a string followed by a newline. For no newline, use `write`.
+- `write_line` prints a text followed by a newline. For no newline, use `write`.
 - Statements are separated by newlines. To put multiple statements on one line, use `;`.
 
 ---
 
-## Strings
+## Texts
 
-### Multiline Strings
+### Multiline Text
 
-Strings can span multiple lines by default:
+Text can span multiple lines by default:
 
 ```wiles
 write_line("This is line 1.
@@ -180,7 +180,7 @@ Unary operators (`-` and, if you need it for whatever reason, `+`) work too:
 write(+10 - -10)  # Outputs 20
 ```
 
-#### Integer vs Rational Division
+### Integer vs Rational Division
 
 Integer division returns an integer result:
 
@@ -195,7 +195,7 @@ write_line(4 / 3.0)  # Outputs 1.333333333333...
 write_line(4.0 / 3)  # Outputs 1.333333333333...
 ```
 
-#### Exponentiation
+### Exponentiation
 
 Use `^` for exponentiation:
 
@@ -212,10 +212,17 @@ write_line((-2) ^ 10)  # Outputs 1024
 
 ### Concatenation
 
-When you use the `+` operator between a string and any other type, it will result in string concatenation:
+When you use the `+` operator between a text and any other type, it will result in text concatenation, meaning,
+the two values will be combined into a new text:
 
 ```wiles
 write_line("I have " + 100 + " dollars in cash!")
+```
+
+Output:
+
+```
+I have 100 dollars in cash!
 ```
 
 ---
@@ -292,4 +299,69 @@ You can do this by annotating its type as `anything`:
 let var value : anything := 123
 value := "Alex"
 write_line("The value is:" + value)
+```
+
+---
+
+# Truth Values and Operations
+
+Truth values, also known as Booleans, represent either `true` or `false`. They are of type `truth`.
+
+```wiles
+let value1 := true
+let value2 : truth := false
+write_line(value1) # Outputs true
+write_line(value2) # Outputs false
+```
+
+### Equality Operations
+
+The equality operations `=` (equals) and `=/=` (not equals) return a truth value:
+
+```wiles
+write_line(1 = 1) # outputs true
+write_line(1 = 2) # outputs false
+write_line(1 =/= 1) # outputs false
+write_line(1 =/= 2) # outputs true
+```
+
+These operations can be used with all object types, including `text` and even `truth` itself:
+
+```wiles
+write_line("abc" = "abc") # outputs true
+write_line(true =/= false) # outputs true
+```
+
+### Comparison Operations
+
+For numbers (whether `int`, `decimal`, or a mix of both),
+you can also use the comparison operators `>` (greater than), `>=` (greater than or equal to),
+`<` (less than), and `<=` (less than or equal to):
+
+```wiles
+write_line(1 < 1) # outputs false
+write_line(1 <= 1) # outputs true
+write_line(1 > 1) # outputs false
+write_line(1 >= 1) # outputs true
+write_line(1 < 1.5) # outputs true
+write_line(1 <= 1.5) # outputs true
+write_line(1 > 1.5) # outputs false
+write_line(1 >= 1.5) # outputs false
+```
+
+### Truth Value Operations
+
+You can also perform operations on truth values themselves: `and`, `or`, and `not`.
+
+- `and` returns `true` only if both values are `true`.
+- `or` returns `true` if at least one of the two values is `true`.
+- `not` works on a single value and returns `true` only if that value is `false`.
+
+```wiles
+write_line(true and true) # outputs true
+write_line(true and false) # outputs false
+write_line(true or false) # outputs true
+write_line(false or false) # outputs false
+write_line(not true) # outputs false
+write_line(not false) # outputs true
 ```
