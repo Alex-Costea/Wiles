@@ -51,7 +51,7 @@ A few things to note right away:
 
 ---
 
-## String Formatting
+## Strings
 
 ### Multiline Strings
 
@@ -158,7 +158,9 @@ write_line(-Infinity)
 
 Under the hood, rational numbers internally use `BigDecimal` in `DECIMAL128` mode.
 
-### Math Operations
+---
+
+## Basic Operations
 
 Basic arithmetic works like you'd expect:
 
@@ -208,13 +210,15 @@ write_line(-2 ^ 10)  # Outputs -1024
 write_line((-2) ^ 10)  # Outputs -1024
 ```
 
-## Concatenation
+### Concatenation
 
 When you use the `+` operator between a string and any other type, it will result in string concatenation:
 
 ```wiles
 write_line("I have " + 100 + " dollars in cash!")
 ```
+
+---
 
 ## Declarations and Assignments
 
@@ -224,7 +228,7 @@ To declare a value, use the following syntax:
 let value := 123
 ```
 
-In this case, `value` is constant, meaning it can't be reassigned.
+In this case, `value` is constant, meaning it can't be reassigned.  
 If you want to make it a variable, use the keyword `var`:
 
 ```wiles
@@ -234,17 +238,20 @@ value := 456
 write_line(value) # Outputs 456
 ```
 
-In this example, `value` is first assigned to be `123`, and then reassigned to `456`, 
-which is done by using the syntax `value := new_value`.
+In this example, `value` is first assigned to be `123`, and then reassigned to `456`, which is done by using the syntax `value := new_value`.
 
-Wiles is a strongly typed language. In the examples above, the type of `value` is inferred automatically.
-To explicitly declare the type, use `:` followed by the type (in this case, `int`):
+### Type Inference and Explicit Types
+
+Wiles is a strongly typed language. In the examples above, the type of `value` is inferred 
+automatically. To explicitly declare the type, use `:` followed by the type (in this case, `int`):
 
 ```wiles
 let value : int := 123
 ```
 
 We will go into more detail about types later.
+
+### Initialization
 
 Note that the identifier doesn't have to be immediately initialized. However, it must be initialized before being used. 
 This also means the type cannot be inferred in such cases:
@@ -256,6 +263,8 @@ value := 123
 write_line("Now I do! It is " + value)
 ```
 
+### Storing and Manipulating Strings
+
 You can also store strings in an identifier:
 
 ```wiles
@@ -265,6 +274,8 @@ write_line("Hello, " + name)
 
 Here, `read_line()` reads a line of input, stores it in `name` (which is automatically inferred to be of type `text`),
 and then concatenates and displays it.
+
+### Type Safety and Flexibility
 
 Note that even when the identifier represents a variable, its type can't be changed once it’s set.
 For example, this won't compile:
