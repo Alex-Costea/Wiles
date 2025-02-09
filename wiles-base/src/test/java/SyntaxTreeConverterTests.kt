@@ -25,7 +25,6 @@ import wiles.shared.constants.Tokens.BRACKET_END_ID
 import wiles.shared.constants.Tokens.BRACKET_START_ID
 import wiles.shared.constants.Tokens.BREAK_ID
 import wiles.shared.constants.Tokens.CONST_ID
-import wiles.shared.constants.Tokens.CONST_TYPE_ID
 import wiles.shared.constants.Tokens.CONTINUE_ID
 import wiles.shared.constants.Tokens.DATA_END_ID
 import wiles.shared.constants.Tokens.DATA_START_ID
@@ -642,31 +641,28 @@ CODE_BLOCK
 
     @Test
     fun constTest(){
-        //let const a : constant(int) := 123
+        //let const a : int := 123
         assertResults(null,"""
         CODE_BLOCK(
             DECLARATION: CONST
             (
                 TYPEDEF(
-                    %APPLY,
-                    !constant,
-                    FUNC_CALL(!int)
+                   !int
                 ),
                 !a [1, 11, 1, 12], 
                 #123 [1, 29, 1, 32]
             )
         )
-""", DECLARE_ID, CONST_ID, "!a", ANNOTATE_ID, CONST_TYPE_ID, PAREN_START_ID, INT_ID, PAREN_END_ID, ASSIGN_ID, "#123")
+""", DECLARE_ID, CONST_ID, "!a", ANNOTATE_ID,  INT_ID, ASSIGN_ID, "#123")
 
-        //let const var a : constant(int) := 123
+        //let const var a : int := 123
         assertResults(createExceptions(UnexpectedTokenException(CONST_CANT_BE_VAR_ERROR, NULL_LOCATION)),
             """
                 CODE_BLOCK
                 (
                     DECLARATION
                 )
-        """, DECLARE_ID, CONST_ID, VARIABLE_ID, "!a",
-            ANNOTATE_ID, CONST_TYPE_ID, PAREN_START_ID, INT_ID, PAREN_END_ID, ASSIGN_ID, "#123")
+        """, DECLARE_ID, CONST_ID, VARIABLE_ID, "!a", ANNOTATE_ID, INT_ID, ASSIGN_ID, "#123")
 
         //def const a := fun(const a : type) -> type do yield a
         assertResults(null,"""

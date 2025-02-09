@@ -79,7 +79,6 @@ object Tokens {
     const val LIST_ID = "!list"
     const val DICT_ID = "!dict"
     const val MUTABLE_TYPE_ID = "!mutable"
-    const val CONST_TYPE_ID = "!constant"
     const val RANGE_ID = "!range"
     const val TYPE_ID = "!type"
     const val INFINITY_ID = "!Infinity"
@@ -143,7 +142,6 @@ object Tokens {
         KEYWORDS["anything"] = ANYTHING_ID
         KEYWORDS["dict"] = DICT_ID
         KEYWORDS["mutable"] = MUTABLE_TYPE_ID
-        KEYWORDS["constant"] = CONST_TYPE_ID
         KEYWORDS["range"] = RANGE_ID
         KEYWORDS["type"] = TYPE_ID
         KEYWORDS["Infinity"] = INFINITY_ID
