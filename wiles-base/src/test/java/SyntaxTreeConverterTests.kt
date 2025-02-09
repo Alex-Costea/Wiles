@@ -48,7 +48,7 @@ import wiles.shared.constants.Tokens.LIST_ID
 import wiles.shared.constants.Tokens.MAYBE_ID
 import wiles.shared.constants.Tokens.MINUS_ID
 import wiles.shared.constants.Tokens.MUTABLE_ID
-import wiles.shared.constants.Tokens.MUTABLE_TYPE_ID
+import wiles.shared.constants.Tokens.MUTIFY_ID
 import wiles.shared.constants.Tokens.NEWLINE_ID
 import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.NOT_ID
@@ -1056,14 +1056,14 @@ CODE_BLOCK
                     !b [2, 5, 2, 6], 
                     EXPRESSION
                     (
-                        %MUTABLE [2, 31, 2, 32], 
+                        %MUTIFY [2, 31, 2, 32], 
                         !a [2, 32, 2, 33]
                     )
                 )
             )
         """, DECLARE_ID, "!a", ASSIGN_ID, BRACKET_START_ID, "#123", BRACKET_END_ID, NEWLINE_ID,
-            DECLARE_ID, "!b", ANNOTATE_ID, MUTABLE_TYPE_ID, PAREN_START_ID, LIST_ID, PAREN_START_ID, INT_ID,
-            PAREN_END_ID, PAREN_END_ID, ASSIGN_ID, MUTABLE_ID, "!a")
+            DECLARE_ID, "!b", ANNOTATE_ID, MUTABLE_ID, PAREN_START_ID, LIST_ID, PAREN_START_ID, INT_ID,
+            PAREN_END_ID, PAREN_END_ID, ASSIGN_ID, MUTIFY_ID, "!a")
     }
 
     @Test

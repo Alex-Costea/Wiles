@@ -62,7 +62,7 @@ object Tokens {
     const val IN_ID = "IN"
     const val WHILE_ID = "WHILE"
     const val ANON_ARG_ID = "ANON_ARG"
-    const val MUTABLE_ID = "MUTABLE"
+    const val MUTIFY_ID = "MUTIFY"
     const val GLOBAL_ID = "GLOBAL"
     const val UNION_ID = "UNION"
     const val YIELDS_ID = "YIELDS"
@@ -78,7 +78,7 @@ object Tokens {
     const val DECIMAL_ID = "!decimal"
     const val LIST_ID = "!list"
     const val DICT_ID = "!dict"
-    const val MUTABLE_TYPE_ID = "!mutable"
+    const val MUTABLE_ID = "!mutable"
     const val RANGE_ID = "!range"
     const val TYPE_ID = "!type"
     const val INFINITY_ID = "!Infinity"
@@ -94,7 +94,7 @@ object Tokens {
         AND_ID, OR_ID, APPLY_ID, ACCESS_ID, UNION_ID, AT_KEY_ID
     )
     @JvmField
-    val PREFIX_OPERATORS = setOf(UNARY_PLUS_ID, UNARY_MINUS_ID, NOT_ID, MUTABLE_ID)
+    val PREFIX_OPERATORS = setOf(UNARY_PLUS_ID, UNARY_MINUS_ID, NOT_ID, MUTIFY_ID)
     @JvmField
     val SUFFIX_OPERATORS = setOf(MAYBE_ID)
     @JvmField
@@ -102,7 +102,7 @@ object Tokens {
     @JvmField
     val ALL_OPERATORS = PREFIX_OPERATORS + INFIX_SUFFIX_OPERATORS
     @JvmField
-    val STARTING_OPERATORS = setOf(PLUS_ID, MINUS_ID, NOT_ID, MUTABLE_ID)
+    val STARTING_OPERATORS = setOf(PLUS_ID, MINUS_ID, NOT_ID, MUTIFY_ID)
     @JvmField
     val TERMINATORS = setOf(NEWLINE_ID, TERMINATOR_ID)
 
@@ -141,7 +141,7 @@ object Tokens {
         KEYWORDS["list"] = LIST_ID
         KEYWORDS["anything"] = ANYTHING_ID
         KEYWORDS["dict"] = DICT_ID
-        KEYWORDS["mutable"] = MUTABLE_TYPE_ID
+        KEYWORDS["mutable"] = MUTABLE_ID
         KEYWORDS["range"] = RANGE_ID
         KEYWORDS["type"] = TYPE_ID
         KEYWORDS["Infinity"] = INFINITY_ID
@@ -171,7 +171,7 @@ object Tokens {
         SYMBOLS[":"] = ANNOTATE_ID
         SYMBOLS[";"] = TERMINATOR_ID
         SYMBOLS["?"] = MAYBE_ID
-        SYMBOLS["~"] = MUTABLE_ID
+        SYMBOLS["~"] = MUTIFY_ID
         SYMBOLS["|"] = UNION_ID
         SYMBOLS["->"] = YIELDS_ID
         SYMBOLS["\\"] = CONTINUE_LINE_ID
