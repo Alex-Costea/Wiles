@@ -8,7 +8,7 @@ import wiles.parser.statements.expressions.DefaultExpression
 import wiles.parser.statements.expressions.TypeDefExpression
 import wiles.shared.*
 import wiles.shared.constants.ErrorMessages.CONST_CANT_BE_VAR_ERROR
-import wiles.shared.constants.ErrorMessages.EXPECTED_GLOBAL_VALUE_ERROR
+import wiles.shared.constants.ErrorMessages.EXPECTED_INITIALIZATION_ERROR
 import wiles.shared.constants.ErrorMessages.IDENTIFIER_EXPECTED_ERROR
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.ANNOTATE_ID
@@ -64,7 +64,6 @@ class DeclarationStatement(
             }
 
             val nameStrings = nameTokens.map { it.content }
-            val contradictory = listOf(CONST_ID, VARIABLE_ID)
             if(nameStrings.containsAll(contradictory))
             {
                 throw UnexpectedTokenException(CONST_CANT_BE_VAR_ERROR,
@@ -79,9 +78,9 @@ class DeclarationStatement(
             if(transmitter.expectMaybe(tokenOf(ANNOTATE_ID)).isPresent) {
                 typeStatement = TypeDefExpression(context)
                 typeStatement!!.process().throwFirstIfExists()
-                if(nameStrings.contains(GLOBAL_ID))
+                if(nameStrings.any{ it == GLOBAL_ID || it == DEFAULT_ID})
                 {
-                    transmitter.expect(tokenOf(ASSIGN_ID).withErrorMessage(EXPECTED_GLOBAL_VALUE_ERROR))
+                    transmitter.expect(tokenOf(ASSIGN_ID).withErrorMessage(EXPECTED_INITIALIZATION_ERROR))
                     readRight()
                 }
                 else if(transmitter.expectMaybe(tokenOf(ASSIGN_ID).dontIgnoreNewLine()).isPresent)
@@ -96,5 +95,9 @@ class DeclarationStatement(
             exceptions.add(ex)
         }
         return exceptions
+    }
+
+    companion object {
+        val contradictory = listOf(CONST_ID, VARIABLE_ID)
     }
 }
