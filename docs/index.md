@@ -28,7 +28,7 @@ See [here](tickets.md).
 
 Try it out [online](https://wiles.costea.in)!
 
-For other methods of using it, go [here](tutorial.md).
+For other methods of using it, go [here](setup.md).
 
 ## FAQ
 ### What is the state of the project right now?
