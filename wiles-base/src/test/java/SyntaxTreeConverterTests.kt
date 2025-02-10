@@ -57,6 +57,7 @@ import wiles.shared.constants.Tokens.PAREN_END_ID
 import wiles.shared.constants.Tokens.PAREN_START_ID
 import wiles.shared.constants.Tokens.PLUS_ID
 import wiles.shared.constants.Tokens.POWER_ID
+import wiles.shared.constants.Tokens.RANGIFY_ID
 import wiles.shared.constants.Tokens.RETURN_ID
 import wiles.shared.constants.Tokens.SEPARATOR_ID
 import wiles.shared.constants.Tokens.START_BLOCK_ID
@@ -1085,6 +1086,31 @@ CODE_BLOCK
                 )
             )""",
             PAREN_START_ID, START_BLOCK_ID, TERMINATOR_ID, NOTHING_ID, TERMINATOR_ID, END_BLOCK_ID, PAREN_END_ID)
+    }
+
+    @Test
+    fun rangifyTest()
+    {
+        //let a := 1 + 2 ... 3
+        assertResults(null,"""
+            CODE_BLOCK
+            (
+                DECLARATION
+                (
+                    !a [1, 5, 1, 6], 
+                    EXPRESSION
+                    (
+                        %RANGIFY [1, 16, 1, 19], 
+                        EXPRESSION
+                        (
+                            %PLUS [1, 12, 1, 13], 
+                            #1 [1, 10, 1, 11], 
+                            #2 [1, 14, 1, 15]
+                        ), 
+                        #3 [1, 20, 1, 21]
+                    )
+                )
+            )""", DECLARE_ID, "!a", ASSIGN_ID, "#1", PLUS_ID, "#2", RANGIFY_ID, "#3")
     }
 
     private class CreateConverter(tokens: List<String>) {

@@ -67,6 +67,7 @@ object Tokens {
     const val UNION_ID = "UNION"
     const val YIELDS_ID = "YIELDS"
     const val CONST_ID = "CONST"
+    const val RANGIFY_ID = "RANGIFY"
 
     //literals
     const val TRUE_ID = "!true"
@@ -89,7 +90,7 @@ object Tokens {
     val TOKENS: HashMap<String, String>
     @JvmField
     val INFIX_OPERATORS = setOf(
-        PLUS_ID, MINUS_ID, TIMES_ID, DIVIDE_ID, POWER_ID,
+        PLUS_ID, MINUS_ID, TIMES_ID, DIVIDE_ID, POWER_ID, RANGIFY_ID,
         EQUALS_ID, LARGER_ID, SMALLER_ID, LARGER_EQUALS_ID, SMALLER_EQUALS_ID, NOT_EQUAL_ID,
         AND_ID, OR_ID, APPLY_ID, ACCESS_ID, UNION_ID, AT_KEY_ID
     )
@@ -174,6 +175,7 @@ object Tokens {
         SYMBOLS["~"] = MUTIFY_ID
         SYMBOLS["|"] = UNION_ID
         SYMBOLS["->"] = YIELDS_ID
+        SYMBOLS["..."] = RANGIFY_ID
         SYMBOLS["\\"] = CONTINUE_LINE_ID
         SYMBOLS["\n"] = NEWLINE_ID
 

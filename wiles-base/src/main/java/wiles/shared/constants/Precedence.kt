@@ -16,6 +16,7 @@ import wiles.shared.constants.Tokens.NOT_ID
 import wiles.shared.constants.Tokens.OR_ID
 import wiles.shared.constants.Tokens.PLUS_ID
 import wiles.shared.constants.Tokens.POWER_ID
+import wiles.shared.constants.Tokens.RANGIFY_ID
 import wiles.shared.constants.Tokens.SMALLER_EQUALS_ID
 import wiles.shared.constants.Tokens.SMALLER_ID
 import wiles.shared.constants.Tokens.TIMES_ID
@@ -39,13 +40,14 @@ object Precedence {
         PRECEDENCE[SMALLER_ID] = -1
         PRECEDENCE[LARGER_EQUALS_ID] = -1
         PRECEDENCE[SMALLER_EQUALS_ID] = -1
+        PRECEDENCE[RANGIFY_ID] = -1
         PRECEDENCE[PLUS_ID] = 0
         PRECEDENCE[MINUS_ID] = 0
         PRECEDENCE[UNARY_PLUS_ID] = 1
         PRECEDENCE[UNARY_MINUS_ID] = 1
+        PRECEDENCE[MUTIFY_ID] = 1
         PRECEDENCE[TIMES_ID] = 2
         PRECEDENCE[DIVIDE_ID] = 2
-        PRECEDENCE[MUTIFY_ID] = 2
         PRECEDENCE[POWER_ID] = 3
         PRECEDENCE[MAYBE_ID] = 4
         PRECEDENCE[ACCESS_ID] = 5
