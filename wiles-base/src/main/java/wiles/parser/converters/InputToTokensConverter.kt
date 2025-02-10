@@ -66,7 +66,7 @@ class InputToTokensConverter(input: String, private val lastLocation: TokenLocat
             }
             index++
         }
-        return removeNull(addLocationEnd(tokens))
+        return removeEmpty(addLocationEnd(tokens))
     }
 
     private fun addLocationEnd(tokens: ArrayList<Token>): ArrayList<Token> {
@@ -92,7 +92,7 @@ class InputToTokensConverter(input: String, private val lastLocation: TokenLocat
         return newTokens
     }
 
-    private fun removeNull(tokens: ArrayList<Token>): List<Token> {
+    private fun removeEmpty(tokens: ArrayList<Token>): List<Token> {
         return tokens.stream().filter { token: Token -> token.content.isNotEmpty() }.toList()
     }
 
