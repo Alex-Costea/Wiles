@@ -84,7 +84,6 @@
 
 - Get element: `list[index]`, `dict[key]`
 - Set/add element: `list[index] := value`, `dict[key] := value`
-  - Add as last element: `list.push(value)`
 - Remove element: `list.remove(index)`, `dict.remove(key)`
 - Size: `list.size`, `dict.size`
 - Get dict keys: `dict.keys`

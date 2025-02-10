@@ -252,7 +252,7 @@ and then concatenates and displays it.
 
 ### Type Safety and Flexibility
 
-Note that even when the identifier represents a variable, its type can't be changed once it’s set.
+Note that even when the identifier represents a variable, its type can't be changed once it's set.
 For example, this won't compile:
 
 ```wiles
@@ -403,4 +403,71 @@ if number > 100 begin
     write_line("Your number " + number + " is big enough!")
     write_line("If it was 10 times bigger, it'd be " + number * 10)
 end
+```
+
+---
+
+## Lists
+
+A list is a data structure that holds multiple elements. Example:
+
+```wiles
+let my_list := [1, 2, 3] : int
+```  
+
+The syntax is `[elem1, elem2, ...] : type`. You can include a trailing comma if you want.  
+If all elements are the same type, the type annotation can be skipped:
+
+```wiles
+let my_list := [1, 2, 3]
+```  
+
+But if the elements have different types, you **must** specify a type.  
+For example, to allow any type of object:
+
+```wiles
+let my_list := [1, false, "hi!"] : anything
+```  
+
+### Accessing List Elements
+
+To get an element from a list, use `list[index]`:
+
+```wiles
+let my_list := [1, 2, 3]
+write_line(my_list[0]) # Outputs 1
+```  
+
+Lists in Wiles (like most languages) are **zero-based**, meaning the first element is at index `0`.
+
+### Modifying Lists
+
+By default, lists are **immutable**—once created, they can't be changed.  
+But if you need a **mutable** list, use the `~` operator:
+
+```wiles
+let my_list := ~[1, 2, 3]
+my_list[0] := 4
+write_line(my_list) # Outputs [4, 2, 3]
+my_list[3] := 1
+write_line(my_list) # Outputs [4, 2, 3, 1]
+```  
+
+### List Functions
+
+You can remove an element at a specific index like this:
+
+```wiles
+let my_list := ~[1, 2, 3]
+my_list.remove(1)
+write_line(my_list) # Outputs [1, 3]
+```  
+
+The syntax is `list.remove(index)`. We'll cover the `.` operator in more detail later.
+
+To get a list's size, use `.size` (works for both mutable and immutable lists):
+
+```wiles
+let my_list := [1, 2, 3]
+write_line(my_list.size) # Outputs 3
 ```
