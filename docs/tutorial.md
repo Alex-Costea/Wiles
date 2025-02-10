@@ -471,3 +471,31 @@ To get a list's size, use `.size` (works for both mutable and immutable lists):
 let my_list := [1, 2, 3]
 write_line(my_list.size) # Outputs 3
 ```
+
+---
+
+## For Statement
+
+To loop through a list, use the `for` statement. The syntax is `for elem in list [codeblock]`. Example:
+
+```wiles
+for x in [1, 2, 3] do
+    write_line("Current element: " + x)
+```  
+
+### Iterating Over Ranges
+
+You can also loop through a range of numbers using the `...` operator:
+
+```wiles
+for i in 0...100 do
+    write_line("Current i: " + i) # Outputs numbers from 0 to 99
+```  
+
+The syntax is `x...y`, where `x` is the starting value (inclusive) and `y` is the ending value (exclusive).  
+If `y` is smaller than `x`, the range counts **backward**:
+
+```wiles
+for i in 99...-1 do
+    write_line("Current i: " + i) # Outputs numbers from 99 to 0
+```

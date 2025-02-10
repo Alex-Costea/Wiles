@@ -68,6 +68,7 @@
 - `?` (makes types and values nullable)
 - `|` (`type1 | type2` is the sum type of `type1` and `type2`)
 - `~` (make an immutable collection mutable)
+- `...` (ranges)
 
 ### Named parameters
 - Function calling with named parameters by default: `my_function(a := 1, b := 10)`
@@ -95,7 +96,6 @@
 - `as_list` : convert text into list of chars
 - `as_text`: convert object to text
 - `read_line`, `read_truth`, `read_int`, `read_rational`: read an object from the command line
-- `range(⟨from := [value],⟩ ⟨to := [value],⟩ ⟨step := [value]⟩)`
 
 ### Miscellaneous
 - `;` can be specified or inferred from newline
