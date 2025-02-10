@@ -93,10 +93,6 @@ open class CodeBlockStatement(context: ParserContext) : AbstractStatement(contex
             }
             else {
                 transmitter.expect(tokenOf(START_BLOCK_ID))
-                try {
-                    transmitter.expect(EXPECT_TERMINATOR)
-                }
-                catch(_ : UnexpectedEndException){}
                 while (!transmitter.tokensExhausted()) {
                     if (transmitter.expectMaybe(tokenOf(END_BLOCK_ID)
                             .removeWhen(WhenRemoveToken.Never)).isPresent

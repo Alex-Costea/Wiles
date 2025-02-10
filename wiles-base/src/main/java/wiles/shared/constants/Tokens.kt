@@ -2,11 +2,17 @@ package wiles.shared.constants
 
 import wiles.shared.InternalErrorException
 import wiles.shared.constants.ErrorMessages.MAX_SYMBOL_TOO_LARGE_ERROR
-import wiles.shared.constants.Settings.MAX_SYMBOL_LENGTH
 import java.util.*
 import kotlin.streams.toList
 
 object Tokens {
+    const val MAX_SYMBOL_LENGTH = 3
+
+    const val IDENTIFIER_START = "!"
+    const val STRING_START = "@"
+    const val NUM_START = "#"
+    const val KEYWORD_START = "%"
+
     const val ERROR_TOKEN = "ERROR_TOKEN"
     const val START_BLOCK_ID = "START_BLOCK"
     const val END_BLOCK_ID = "END_BLOCK"
@@ -31,10 +37,6 @@ object Tokens {
     const val DIVIDE_ID = "DIVIDE"
     const val POWER_ID = "POWER"
     const val ASSIGN_ID = "ASSIGN"
-    const val IDENTIFIER_START = "!"
-    const val STRING_START = "@"
-    const val NUM_START = "#"
-    const val KEYWORD_START = "%"
     const val ANNOTATE_ID = "ANNOTATE"
     const val SEPARATOR_ID = "SEPARATOR"
     const val DO_ID = "DO"

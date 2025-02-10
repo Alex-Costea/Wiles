@@ -10,7 +10,6 @@ import wiles.shared.constants.Chars.COMMENT_START
 import wiles.shared.constants.Chars.DECIMAL_DELIMITER
 import wiles.shared.constants.Chars.STRING_DELIMITER
 import wiles.shared.constants.ErrorMessages
-import wiles.shared.constants.Settings
 import wiles.shared.constants.Tokens
 import wiles.shared.constants.Utils.isAlphabetic
 import wiles.shared.constants.Utils.isAlphanumeric
@@ -195,7 +194,7 @@ class InputToTokensConverter(input: String, private val lastLocation: TokenLocat
         var operatorFoundIndex = index
         val sb = StringBuilder()
         var token: String? = null
-        while (!isAlphanumeric(arrayChars[currentIndex]) && currentIndex - index < Settings.MAX_SYMBOL_LENGTH) {
+        while (!isAlphanumeric(arrayChars[currentIndex]) && currentIndex - index < Tokens.MAX_SYMBOL_LENGTH) {
             sb.appendCodePoint(arrayChars[currentIndex])
             val tempId = Tokens.TOKENS[sb.toString()]
             if (tempId != null) {

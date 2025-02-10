@@ -7,11 +7,11 @@ import wiles.parser.exceptions.StringInvalidException
 import wiles.shared.AbstractCompilationException
 import wiles.shared.Token
 import wiles.shared.constants.ErrorMessages.STRING_UNFINISHED_ERROR
-import wiles.shared.constants.Settings.MAX_SYMBOL_LENGTH
 import wiles.shared.constants.Tokens.ACCESS_ID
 import wiles.shared.constants.Tokens.BREAK_ID
 import wiles.shared.constants.Tokens.DO_ID
 import wiles.shared.constants.Tokens.END_BLOCK_ID
+import wiles.shared.constants.Tokens.MAX_SYMBOL_LENGTH
 import wiles.shared.constants.Tokens.NEWLINE_ID
 import wiles.shared.constants.Tokens.NOT_ID
 import wiles.shared.constants.Tokens.PAREN_END_ID
