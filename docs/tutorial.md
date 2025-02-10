@@ -481,7 +481,7 @@ To loop through a list, use the `for` statement. The syntax is `for elem in list
 ```wiles
 for x in [1, 2, 3] do
     write_line("Current element: " + x)
-```  
+```
 
 ### Iterating Over Ranges
 
@@ -498,4 +498,16 @@ If `y` is smaller than `x`, the range counts **backward**:
 ```wiles
 for i in 99...-1 do
     write_line("Current i: " + i) # Outputs numbers from 99 to 0
+```
+
+### Iterating with Index and Value
+
+In practice, this structure is useful when you need both the index and the value:
+
+```wiles
+for i in 0 ... list.size
+begin
+   let elem := list[i]
+   write_line("i: " + i + "; elem: " + elem)
+end
 ```
