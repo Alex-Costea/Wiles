@@ -514,7 +514,18 @@ end
 
 ---
 
-## While statement
+## While Statement
+
+The `while` statement executes a code block as long as a truth value remains true.
+
+```wiles
+let my_list := [1, 2, 3, 4, 5]
+let var i := 0
+let value_to_find := 4
+while my_list[i] =/= value_to_find do
+    i := i + 1
+write_line("Value found at index " + i)
+```
 
 ---
 
