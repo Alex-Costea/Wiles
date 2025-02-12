@@ -512,6 +512,12 @@ begin
 end
 ```
 
+### `stop` and `skip` statements
+
+---
+
+## While statement
+
 ---
 
 ## Type System
@@ -630,3 +636,27 @@ for optimization purposes, ensuring that certain values are calculated ahead of 
 The keyword `const` cannot be used with variables for obvious reasons.
 It also can't be applied to mutable values, since they allow changes at runtime, 
 conflicting with the compile-time constant requirement.
+
+---
+
+## Functions
+
+---
+
+## Global scope
+
+---
+
+## Dictionaries
+
+---
+
+## Data objects
+
+---
+
+## Standard Library
+
+---
+
+## Miscellaneous
