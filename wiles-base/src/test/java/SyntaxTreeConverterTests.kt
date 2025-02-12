@@ -9,7 +9,6 @@ import wiles.parser.exceptions.UnexpectedTokenException
 import wiles.shared.AbstractCompilationException
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.Token
-import wiles.shared.constants.ErrorMessages.CANT_BE_EITHER_INTERFACE_OR_OBJECT_ERROR
 import wiles.shared.constants.ErrorMessages.CONST_CANT_BE_VAR_ERROR
 import wiles.shared.constants.ErrorMessages.END_OF_STATEMENT_EXPECTED_ERROR
 import wiles.shared.constants.ErrorMessages.EXPECTED_INITIALIZATION_ERROR
@@ -835,7 +834,7 @@ CODE_BLOCK
             )""", DECLARE_ID, "!a", ASSIGN_ID, DATA_START_ID, "!name", ASSIGN_ID, "@alex", SEPARATOR_ID,
             "!age", ASSIGN_ID, "#26", DATA_END_ID)
 
-        //let a : <<default b := 456>> := <<b := 123>>
+        //let a : <<b := 456>> := <<b := 123>>
         assertResults(null,"""
             CODE_BLOCK
             (
@@ -843,9 +842,9 @@ CODE_BLOCK
                 (
                     TYPEDEF
                     (
-                        DATA: !type [1, 27, 1, 29]
+                        DATA [1, 27, 1, 29]
                         (
-                            DECLARATION: DEFAULT 
+                            DECLARATION 
                             (
                                 !b [1, 19, 1, 20], 
                                 #456 [1, 24, 1, 27]
@@ -866,11 +865,11 @@ CODE_BLOCK
                     )
                 )
             )
-        """, DECLARE_ID, "!a", ANNOTATE_ID, DATA_START_ID, DEFAULT_ID, "!b", ASSIGN_ID, "#456", DATA_END_ID, ASSIGN_ID,
+        """, DECLARE_ID, "!a", ANNOTATE_ID, DATA_START_ID, "!b", ASSIGN_ID, "#456", DATA_END_ID, ASSIGN_ID,
             DATA_START_ID, "!b", ASSIGN_ID, "#123", DATA_END_ID)
 
         /*
-            let my_type :=  <<a : text, default b := 456>>
+            let my_type :=  <<a : text, b := 456>>
             let value : my_type := <<a := "hi", b := 123>>
          */
         assertResults(null,"""
@@ -881,7 +880,7 @@ CODE_BLOCK
                     !my_type [1, 5, 1, 12], 
                     EXPRESSION
                     (
-                        DATA: !type [1, 45, 1, 47] 
+                        DATA [1, 45, 1, 47] 
                         (
                             DECLARATION
                             (
@@ -891,7 +890,7 @@ CODE_BLOCK
                                 ), 
                                 !a [1, 19, 1, 20]
                             ), 
-                            DECLARATION: DEFAULT 
+                            DECLARATION 
                             (
                                 !b [1, 37, 1, 38], 
                                 #456 [1, 42, 1, 45]
@@ -925,10 +924,11 @@ CODE_BLOCK
                 )
             )
         """, DECLARE_ID, "!my_type", ASSIGN_ID, DATA_START_ID, "!a", ANNOTATE_ID, "!text", SEPARATOR_ID,
-            DEFAULT_ID, "!b", ASSIGN_ID, "#456", DATA_END_ID, NEWLINE_ID,
+            "!b", ASSIGN_ID, "#456", DATA_END_ID, NEWLINE_ID,
             DECLARE_ID, "!value", ANNOTATE_ID, "!my_type", ASSIGN_ID, DATA_START_ID, "!a", ASSIGN_ID, "@hi",
             SEPARATOR_ID, "!b", ASSIGN_ID, "#123", DATA_END_ID, NEWLINE_ID)
 
+/*
         //<<a := 1, default b := 123>>
         assertResults(createExceptions(TokenExpectedException(CANT_BE_EITHER_INTERFACE_OR_OBJECT_ERROR,NULL_LOCATION)),
             """
@@ -989,6 +989,7 @@ CODE_BLOCK
                     DATA
                 )
             )""", DATA_START_ID, DEFAULT_ID, "!b", ANNOTATE_ID, "!int", DATA_END_ID)
+*/
 
     }
 

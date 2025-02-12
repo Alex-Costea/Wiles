@@ -11,6 +11,7 @@ import wiles.shared.constants.ErrorMessages.CONST_CANT_BE_VAR_ERROR
 import wiles.shared.constants.ErrorMessages.EXPECTED_INITIALIZATION_ERROR
 import wiles.shared.constants.ErrorMessages.IDENTIFIER_EXPECTED_ERROR
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
+import wiles.shared.constants.Predicates.NOTHING
 import wiles.shared.constants.Tokens.ANNOTATE_ID
 import wiles.shared.constants.Tokens.ANON_ARG_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
@@ -54,7 +55,8 @@ class DeclarationStatement(
             val expectParams = when(isParam){
                 DeclarationType.FUNC_PARAM -> tokenOf(ANON_ARG_ID).or(CONST_ID)
                 DeclarationType.TOP_LEVEL -> tokenOf(VARIABLE_ID).or(CONST_ID).or(GLOBAL_ID)
-                DeclarationType.DATA_PARAM -> tokenOf(DEFAULT_ID)
+                //DeclarationType.DATA_PARAM -> tokenOf(DEFAULT_ID)
+                DeclarationType.DATA_PARAM -> tokenOf(NOTHING)
             }
 
             val nameTokens = mutableListOf<Token>()
