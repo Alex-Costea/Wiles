@@ -597,3 +597,32 @@ let d : literal(int) := int # stores the type `int` itself as a value
 
 The `literal` function ensures that the right-hand side is treated as an explicit value rather than a constraint. This 
 prevents confusion when types and values have similar syntax.
+
+---
+
+## Compile-Time Execution with `const`
+
+Wiles supports compile-time execution, allowing values to be computed before runtime for improved type safety. 
+This is especially useful when a value needs to be known at compile time to apply a type annotation.
+
+```wiles
+let a : int := 123  # `int` is known at compile time
+let my_int := int
+let b : my_int := 456  # `my_int` is also known at compile time here
+```
+
+If you want to **explicitly** ensure a value is known at compile time, you can use `const`:
+
+```wiles
+let const my_int := int
+```
+
+This will cause a compile-time error if the value relies on any runtime information. 
+Even a single runtime-dependent piece of data will invalidate the `const`.
+
+Internally, Wiles tracks whether values comply with compile-time execution. 
+If you use stateful functions, like `read_int`, the value will be marked as runtime-only, 
+preventing it from being used in contexts that require compile-time knowledge.
+
+Even when not working with type literals, `const` can still be useful to enforce compile-time execution 
+for optimization purposes, ensuring that certain values are calculated ahead of time for better performance.

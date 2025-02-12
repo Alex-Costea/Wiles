@@ -74,7 +74,8 @@ class StatementFactory {
 
         init {
             params[StatementFactoryTypes.TOP_LEVEL_EXPRESSION] = START_OF_EXPRESSION
-            params[StatementFactoryTypes.DECLARATION_STATEMENT] = tokenOf(DECLARE_ID).or(GLOBAL_ID).removeWhen(WhenRemoveToken.Never)
+            params[StatementFactoryTypes.DECLARATION_STATEMENT] = tokenOf(DECLARE_ID).or(GLOBAL_ID)
+                .removeWhen(WhenRemoveToken.Never)
             params[StatementFactoryTypes.FUNC_STATEMENT] = tokenOf(FUNC_ID).or(DO_ID).or(START_BLOCK_ID)
                 .removeWhen(WhenRemoveToken.Never)
             params[StatementFactoryTypes.RETURN_STATEMENT] = tokenOf(RETURN_ID)
