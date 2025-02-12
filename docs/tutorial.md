@@ -626,3 +626,7 @@ preventing it from being used in contexts that require compile-time knowledge.
 
 Even when not working with type literals, `const` can still be useful to enforce compile-time execution 
 for optimization purposes, ensuring that certain values are calculated ahead of time for better performance.
+
+The keyword `const` cannot be used with variables for obvious reasons.
+It also can't be applied to mutable values, since they allow changes at runtime, 
+conflicting with the compile-time constant requirement.
