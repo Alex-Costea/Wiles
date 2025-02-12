@@ -10,7 +10,7 @@ import wiles.shared.constants.ErrorMessages.IDENTIFIER_EXPECTED_ERROR
 import wiles.shared.constants.Predicates
 import wiles.shared.constants.Tokens.IN_ID
 
-class ForStatement(oldContext: ParserContext) : AbstractStatement(oldContext.setWithinLoop(true)) {
+class ForStatement(oldContext: ParserContext) : AbstractStatement(oldContext) {
     private var identifierStatement : TokenStatement? = null
     private lateinit var inToken : TokenStatement
     private var inExpression : DefaultExpression = DefaultExpression(context)

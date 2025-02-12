@@ -23,9 +23,7 @@ import wiles.shared.constants.Tokens.ANYTHING_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.BRACKET_END_ID
 import wiles.shared.constants.Tokens.BRACKET_START_ID
-import wiles.shared.constants.Tokens.BREAK_ID
 import wiles.shared.constants.Tokens.CONST_ID
-import wiles.shared.constants.Tokens.CONTINUE_ID
 import wiles.shared.constants.Tokens.DATA_END_ID
 import wiles.shared.constants.Tokens.DATA_START_ID
 import wiles.shared.constants.Tokens.DECIMAL_ID
@@ -186,10 +184,6 @@ class SyntaxTreeConverterTests {
             DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, NEWLINE_ID,
             START_BLOCK_ID, NEWLINE_ID, "!a", TIMES_ID, TIMES_ID, "!b", NEWLINE_ID, "!a", PLUS_ID, "!b",
             DECLARE_ID, "!c", ASSIGN_ID, "!d", NEWLINE_ID, END_BLOCK_ID)
-        assertResults(createExceptions(UnexpectedTokenException(INVALID_STATEMENT_ERROR, NULL_LOCATION)),
-        "CODE_BLOCK(DECLARATION(!a, EXPRESSION(FUNC(CODE_BLOCK))), EXPRESSION(%PLUS, !a, !b))",
-            DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, DO_ID, CONTINUE_ID
-            , NEWLINE_ID, "!a", PLUS_ID, "!b")
     }
 
     @Test
@@ -297,24 +291,8 @@ class SyntaxTreeConverterTests {
     @Test
     fun whileTest()
     {
-        assertResults(null,"CODE_BLOCK(WHILE(!true, CODE_BLOCK(CONTINUE)))",
-            WHILE_ID, TRUE_ID, START_BLOCK_ID, NEWLINE_ID, CONTINUE_ID, NEWLINE_ID, END_BLOCK_ID)
-    }
-
-    @Test
-    fun breakContinueErrorTest()
-    {
-        assertResults(null,"CODE_BLOCK(WHILE(!true, CODE_BLOCK(BREAK)))",
-            WHILE_ID, TRUE_ID, DO_ID, BREAK_ID)
-        assertResults(createExceptions(TokenExpectedException(INVALID_STATEMENT_ERROR, NULL_LOCATION)),
-            "CODE_BLOCK", BREAK_ID)
-        assertResults(createExceptions(TokenExpectedException(INVALID_STATEMENT_ERROR, NULL_LOCATION)),
-            "CODE_BLOCK", CONTINUE_ID)
-        assertResults(createExceptions(TokenExpectedException(INVALID_STATEMENT_ERROR, NULL_LOCATION),
-                                       TokenExpectedException(INVALID_STATEMENT_ERROR, NULL_LOCATION)),
-            "CODE_BLOCK(WHILE(!true, CODE_BLOCK(EXPRESSION(FUNC(CODE_BLOCK)), EXPRESSION(FUNC(CODE_BLOCK)))))",
-            WHILE_ID, TRUE_ID, START_BLOCK_ID, NEWLINE_ID, DO_ID, BREAK_ID,
-            NEWLINE_ID, DO_ID, CONTINUE_ID, NEWLINE_ID, END_BLOCK_ID)
+        assertResults(null,"CODE_BLOCK(WHILE(!true, CODE_BLOCK(!nothing)))",
+            WHILE_ID, TRUE_ID, START_BLOCK_ID, NEWLINE_ID, NOTHING_ID, NEWLINE_ID, END_BLOCK_ID)
     }
 
     @Test

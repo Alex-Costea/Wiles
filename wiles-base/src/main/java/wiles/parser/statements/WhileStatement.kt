@@ -1,12 +1,12 @@
 package wiles.parser.statements
 
 import wiles.parser.builders.ParserContext
+import wiles.parser.statements.expressions.DefaultExpression
+import wiles.shared.AbstractCompilationException
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.SyntaxType
-import wiles.shared.AbstractCompilationException
-import wiles.parser.statements.expressions.DefaultExpression
 
-class WhileStatement(oldContext: ParserContext) : AbstractStatement(oldContext.setWithinLoop(true)) {
+class WhileStatement(oldContext: ParserContext) : AbstractStatement(oldContext) {
     private val condition = DefaultExpression(context)
     private val codeBlock = CodeBlockStatement(context)
 

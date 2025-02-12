@@ -512,8 +512,6 @@ begin
 end
 ```
 
-### `stop` and `skip` statements
-
 ---
 
 ## While statement

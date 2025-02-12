@@ -17,8 +17,6 @@ import wiles.shared.constants.ErrorMessages.NOT_YET_IMPLEMENTED_ERROR
 import wiles.shared.constants.Predicates.ANYTHING
 import wiles.shared.constants.Predicates.START_OF_EXPRESSION
 import wiles.shared.constants.Tokens.BRACKET_START_ID
-import wiles.shared.constants.Tokens.BREAK_ID
-import wiles.shared.constants.Tokens.CONTINUE_ID
 import wiles.shared.constants.Tokens.DATA_START_ID
 import wiles.shared.constants.Tokens.DECLARE_ID
 import wiles.shared.constants.Tokens.DICT_START_ID
@@ -56,8 +54,6 @@ class StatementFactory {
     fun create(errorMessage: String = INTERNAL_ERROR): AbstractStatement {
         for (statement in statements) {
             if (!context.isWithinMethod && statement == StatementFactoryTypes.RETURN_STATEMENT) continue
-            if (!context.isWithinLoop && statement == StatementFactoryTypes.CONTINUE_STATEMENT) continue
-            if (!context.isWithinLoop && statement == StatementFactoryTypes.BREAK_STATEMENT) continue
             if (transmitter.expectMaybe(params[statement]!!).isPresent) return createObject[statement]!!.apply(context)
         }
 
@@ -81,8 +77,6 @@ class StatementFactory {
             params[StatementFactoryTypes.RETURN_STATEMENT] = tokenOf(RETURN_ID)
             params[StatementFactoryTypes.IF_STATEMENT] = tokenOf(IF_ID).removeWhen(WhenRemoveToken.Never)
             params[StatementFactoryTypes.WHILE_STATEMENT] = tokenOf(WHILE_ID)
-            params[StatementFactoryTypes.BREAK_STATEMENT] = tokenOf(BREAK_ID)
-            params[StatementFactoryTypes.CONTINUE_STATEMENT] = tokenOf(CONTINUE_ID)
             params[StatementFactoryTypes.LIST_STATEMENT] = tokenOf(BRACKET_START_ID)
             params[StatementFactoryTypes.FOR_STATEMENT] = tokenOf(FOR_ID)
             params[StatementFactoryTypes.DICT_STATEMENT] = tokenOf(DICT_START_ID)
@@ -101,10 +95,6 @@ class StatementFactory {
                 Function { context: ParserContext -> IfStatement(context) }
             createObject[StatementFactoryTypes.WHILE_STATEMENT] =
                 Function { context: ParserContext -> WhileStatement(context) }
-            createObject[StatementFactoryTypes.BREAK_STATEMENT] =
-                Function { context: ParserContext -> BreakStatement(context) }
-            createObject[StatementFactoryTypes.CONTINUE_STATEMENT] =
-                Function { context: ParserContext -> ContinueStatement(context) }
             createObject[StatementFactoryTypes.LIST_STATEMENT] =
                 Function { context : ParserContext -> ListStatement(context) }
             createObject[StatementFactoryTypes.FOR_STATEMENT] =

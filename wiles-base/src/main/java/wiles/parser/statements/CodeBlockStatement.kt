@@ -24,9 +24,7 @@ open class CodeBlockStatement(context: ParserContext) : AbstractStatement(contex
             .addType(StatementFactoryTypes.IF_STATEMENT)
             .addType(StatementFactoryTypes.WHILE_STATEMENT)
             .addType(StatementFactoryTypes.FOR_STATEMENT)
-            .addType(StatementFactoryTypes.BREAK_STATEMENT)
             .addType(StatementFactoryTypes.RETURN_STATEMENT)
-            .addType(StatementFactoryTypes.CONTINUE_STATEMENT)
     }
 
     private val components: MutableList<AbstractStatement> = ArrayList()

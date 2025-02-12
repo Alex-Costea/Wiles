@@ -21,7 +21,7 @@ import wiles.shared.constants.Tokens.TYPE_ID
 import wiles.shared.constants.Tokens.YIELDS_ID
 
 class MethodStatement(oldContext : ParserContext)
-    : AbstractStatement(oldContext.setWithinMethod(true).setWithinLoop(false)) {
+    : AbstractStatement(oldContext.setWithinMethod(true)) {
 
     private val parameters: MutableList<DeclarationStatement> = ArrayList()
     private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()

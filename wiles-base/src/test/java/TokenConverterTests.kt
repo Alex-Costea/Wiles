@@ -8,7 +8,6 @@ import wiles.shared.AbstractCompilationException
 import wiles.shared.Token
 import wiles.shared.constants.ErrorMessages.STRING_UNFINISHED_ERROR
 import wiles.shared.constants.Tokens.ACCESS_ID
-import wiles.shared.constants.Tokens.BREAK_ID
 import wiles.shared.constants.Tokens.DO_ID
 import wiles.shared.constants.Tokens.END_BLOCK_ID
 import wiles.shared.constants.Tokens.MAX_SYMBOL_LENGTH
@@ -106,7 +105,7 @@ class TokenConverterTests {
         tokenConverterEquals("2ab", arrayOf("#2", "!ab"))
         tokenConverterEquals("français", arrayOf("!français"))
         tokenConverterEquals("日本語", arrayOf("!日本語"))
-        tokenConverterEquals("i do not stop the end", arrayOf("!i", DO_ID, NOT_ID, BREAK_ID, "!the", END_BLOCK_ID))
+        tokenConverterEquals("i do not the end", arrayOf("!i", DO_ID, NOT_ID, "!the", END_BLOCK_ID))
     }
 
     @Test

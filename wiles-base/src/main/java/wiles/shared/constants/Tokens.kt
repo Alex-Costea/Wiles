@@ -58,8 +58,6 @@ object Tokens {
     const val RETURN_ID = "RETURN"
     const val IF_ID = "IF"
     const val DEFAULT_ID = "DEFAULT"
-    const val BREAK_ID = "BREAK"
-    const val CONTINUE_ID = "CONTINUE"
     const val FOR_ID = "FOR"
     const val IN_ID = "IN"
     const val WHILE_ID = "WHILE"
@@ -112,8 +110,8 @@ object Tokens {
 
     @JvmField
     val KEYWORDS_INDICATING_NEW_EXPRESSION = setOf(
-        DECLARE_ID, DEFAULT_ID, CONTINUE_ID, RETURN_ID, WHILE_ID, ANNOTATE_ID, DATA_END_ID, YIELDS_ID,
-        BREAK_ID, FOR_ID, DO_ID, START_BLOCK_ID, END_BLOCK_ID, BRACKET_END_ID, PAREN_END_ID,
+        DECLARE_ID, DEFAULT_ID, RETURN_ID, WHILE_ID, ANNOTATE_ID, DATA_END_ID, YIELDS_ID,
+        FOR_ID, DO_ID, START_BLOCK_ID, END_BLOCK_ID, BRACKET_END_ID, PAREN_END_ID,
         SEPARATOR_ID, IN_ID, ASSIGN_ID, TERMINATOR_ID, NEWLINE_ID, IF_ID, DICT_END_ID
     )
 
@@ -129,8 +127,6 @@ object Tokens {
         KEYWORDS["and"] = AND_ID
         KEYWORDS["or"] = OR_ID
         KEYWORDS["not"] = NOT_ID
-        KEYWORDS["stop"] = BREAK_ID
-        KEYWORDS["skip"] = CONTINUE_ID
         KEYWORDS["yield"] = RETURN_ID
         KEYWORDS["do"] = DO_ID
         KEYWORDS["begin"] = START_BLOCK_ID
