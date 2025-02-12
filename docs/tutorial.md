@@ -511,3 +511,89 @@ begin
    write_line("i: " + i + "; elem: " + elem)
 end
 ```
+
+---
+
+## Type System
+
+Wiles is a strongly typed language where every object has both a compile-time type and a runtime type. The compile-time 
+type is determined through type inference or explicit annotations. Here are some common types:
+
+```wiles
+let a : int := 123
+let b : decimal := 123.4
+let c : text := "hello"
+let d : truth := true
+let e : list(int) := [1, 2, 3]
+let f : mutable(list(int)) := ~[1, 2, 3]
+let g : anything := 123 # can hold any compile-time value
+```
+
+### Type Expressions
+
+Types in Wiles are first-class values. This means they can be assigned to variables just like any other value:
+
+```wiles
+let int_synonym : type := int
+let list_of_ints := list(int)
+```
+
+Additionally, `list`, `mutable`, and similar constructs are functions that operate at compile time. Their arguments 
+must also be known at compile time. This will be explored further in the `const` expression.
+
+### Sum Types
+
+Sum types allow a variable to hold multiple possible types, using the `|` operator:
+
+```wiles
+let a : int | decimal := 123
+```
+
+Here, `a` can be either an `int` or a `decimal`, but nothing else.
+
+A common case is `my_type | nothing`, which has a shorthand syntax:
+
+```wiles
+let a : int? := 123
+```
+
+Note that `anything` accepts any value **except** `nothing`. For a truly universal type, use `anything?`.
+
+### Range Types
+
+Range types restrict values to a specific numeric range:
+
+```wiles
+let age : 0 ... 100 := 20
+```
+
+### Literal Value Types
+
+A type can also be a specific literal value, as long as it is known at compile time:
+
+```wiles
+let status : "accepted" := "accepted"
+```
+
+This is particularly useful in combination with sum types:
+
+```wiles
+let statuses := "accepted" | "rejected"
+let status : statuses := "accepted"
+```
+
+### The `literal` Function
+
+In some cases, there may be ambiguity between whether an expression should be interpreted as a type constraint or a 
+literal value. The `literal` function resolves this ambiguity:
+
+```wiles
+let a : 0 ... 100 := 17 # any value between 0 and 100
+let b : literal(0 ... 100) := 0 ... 100 # stores the range itself as a value
+
+let c : int := 123 # any integer value
+let d : literal(int) := int # stores the type `int` itself as a value
+```
+
+The `literal` function ensures that the right-hand side is treated as an explicit value rather than a constraint. This 
+prevents confusion when types and values have similar syntax.

@@ -31,7 +31,6 @@
 - Function type: like function literals, but with no function body
 - Sum types: `type1 | type2`
 - List: `list(type)`
-- Constant: `constant(type)`
 - Dict: `dict(key_type, value_type)`
 - Mutable type: `mutable(type)`
 - Expressions (any const expression is a valid type)
