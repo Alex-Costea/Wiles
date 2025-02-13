@@ -650,6 +650,102 @@ conflicting with the compile-time constant requirement.
 
 ## Functions
 
+In Wiles, functions are first-class values. Let's start with the simplest case, a function that doesn't yield a value:
+
+```wiles
+let greet := fun(name : text)
+    do write_line("Hello, " + name)
+greet(name := "Alex")
+```
+
+The general structure for defining a function is `fun(param1 : type1, param2 : type2, ...) [codeblock]`.
+
+To call a function, use the syntax `func_name(param1 := value1, param2 := value2, ...)`.
+
+### Named vs. Unnamed Parameters
+
+In Wiles, function parameters **must** be explicitly named in the function call. 
+This makes function calls more readable and independent of argument order:
+
+```wiles
+greet(name := "Alex")
+```
+
+However, when argument order is intuitive, you can opt into unnamed parameters using the `arg` keyword:
+
+```wiles
+let greet := fun(arg name : text)
+    do write_line("Hello, " + name)
+greet("Alex")
+```
+
+Even when using `arg`, you can still explicitly name parameters:
+
+```wiles
+greet(name := "Alex")
+```
+
+Unlike named parameters, unnamed parameters are always matched in order.
+
+### Default Values
+
+Function parameters can have default values, allowing them to be omitted in function calls:
+
+```wiles
+let greet := fun(arg name := "Alex")
+    do write_line("Hello, " + name)
+greet() # Greets Alex
+greet("Cameron") # Greets Cameron
+```
+
+Since the type can be inferred from the default value, an explicit type declaration is not required.
+
+### Returning Values
+
+Functions can also return values using `yield`:
+
+```wiles
+let add := fun(arg x : int, arg y : int) -> int
+    do yield x + y
+write_line(add(5, 5)) # 10
+```
+
+The `-> type` syntax specifies the return type. If the return type is clear at compile-time, it can be omitted:
+
+```wiles
+let add := fun(arg x : int, arg y : int)
+    do yield x + y # Can only be `int`
+write_line(add(5, 5)) # 10
+```
+
+If a function does not explicitly return a value, it yields `nothing` by default:
+
+```wiles
+let my_func := fun() do nothing
+let x := my_func()
+write_line(x) # Outputs: nothing
+```
+
+### Function Types
+
+To define a function type, write the function signature without a body:
+
+```wiles
+let my_func : fun(name : text) := fun(name : text)
+    do write_line("Hello, " + name)
+```
+
+Function types also support unnamed parameters, default values, and yielding type definitions.
+
+### No-Parameter Shorthand
+
+If a function takes no parameters, you can define it using only a code block:
+
+```wiles
+let greet := do write_line("Hello, world!")
+greet() # Outputs: Hello, world!
+```
+
 ---
 
 ## Global scope

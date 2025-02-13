@@ -94,6 +94,7 @@
 - `as_list` : convert text into list of chars
 - `as_text`: convert object to text
 - `read_line`, `read_truth`, `read_int`, `read_rational`: read an object from the command line
+- `type_of`: get type of object at runtime
 
 ### Miscellaneous
 - `;` can be specified or inferred from newline
