@@ -812,7 +812,7 @@ end
 ### Data subtyping rules
 
 In order for a data type to be a subtype of another data type:
-- The subtype can add new subvalues, but can't remove them
+- The subtype can add new members, but can't remove them
 - Existing values can get a default definition
 - Existing default definitions can be overriden, but not removed
 
@@ -891,8 +891,8 @@ write_line(my_dict) # Outputs: { 1 : "one!!!", 3 : "three" }
 
 ## Data Objects and Types
 
-Data objects are immutable values that hold multiple sub-values, which are represented as identifiers.
-You can access these sub-values using the `.` operator. For example:
+Data objects are immutable values that hold multiple members, which are represented as identifiers.
+You can access these members using the `.` operator. For example:
 
 ```wiles
 let steve := << name := "Steve", age := 25 >>
@@ -983,9 +983,9 @@ These functions read a value from the input. They are:
 - `read_int`, of type `fun() -> int`
 - `read_decimal`, of type `fun() -> decimal`
 
-### Subvalues of every object
+### Members of every object
 
-All objects, including `nothing`, have these subvalues, which can be accessed using the `.` operator
+All objects, including `nothing`, have these members, which can be accessed using the `.` operator
 
 - `.type` gets an object's **runtime** type
 - `.as_text` gets a textual representation of an object
