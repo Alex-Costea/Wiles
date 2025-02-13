@@ -39,7 +39,7 @@
 - Declaration: `let ⟨def⟩ ⟨var⟩ ⟨const⟩ name ⟨: type⟩ ⟨:= value⟩`
   - `let` can be skipped if it starts with `def`
   - `var` makes it a variable
-  - `def` makes it global scope
+  - `def` makes it level scope
   - `const` makes it a compile time constant
 - Assignment: `name := value`
 - Simple conditional: `if [condition] [block]`

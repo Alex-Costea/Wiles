@@ -748,7 +748,45 @@ greet() # Outputs: Hello, world!
 
 ---
 
-## Global scope
+## Level Scope
+
+Values defined with **level scope** can be accessed from anywhere within the current level or any levels below it,
+but **not** above it. This is achieved by using `def` instead of `let`.
+
+```wiles
+def a := 123
+if 2 > 1 begin
+    def b := 456
+    # both a and b are accessible here
+    write_line(a)
+    write_line(b)
+end
+# only a is accessible here
+write_line(a)
+```
+
+Note that this applies even when the declaration appears **after** its usage. `def` values are evaluated first.
+
+```wiles
+write_line(a) # Outputs 123
+def a := 123
+```
+
+### Recursive Functions
+
+The `def` keyword can also be used to create **recursive functions**. However, when using level scoping, the 
+function's yielded type must be explicitly annotated, including if it's `nothing`:
+
+```wiles
+write_line(factorial(10)) # Outputs 3628800
+
+def factorial(arg x : int) -> int # Explicit annotation required
+begin
+    if x <= 0 do yield 1
+    # Wiles knows the factorial function will yield an int
+    yield x * factorial(x - 1)
+end
+```
 
 ---
 
