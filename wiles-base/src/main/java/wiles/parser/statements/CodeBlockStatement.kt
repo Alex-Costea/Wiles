@@ -7,6 +7,7 @@ import wiles.parser.enums.StatementFactoryTypes
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.exceptions.UnexpectedEndException
 import wiles.shared.AbstractCompilationException
+import wiles.shared.AbstractStatement
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Predicates.EXPECT_TERMINATOR

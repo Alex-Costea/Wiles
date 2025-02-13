@@ -3,10 +3,7 @@ package wiles.parser.statements
 import wiles.parser.builders.ExpectParamsBuilder
 import wiles.parser.builders.ParserContext
 import wiles.parser.enums.WhenRemoveToken
-import wiles.shared.AbstractCompilationException
-import wiles.shared.CompilationExceptionsCollection
-import wiles.shared.DeclarationType
-import wiles.shared.SyntaxType
+import wiles.shared.*
 import wiles.shared.constants.Tokens
 
 class DataStatement(context: ParserContext) : AbstractStatement(context) {

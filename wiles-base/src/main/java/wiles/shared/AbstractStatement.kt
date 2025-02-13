@@ -1,10 +1,6 @@
-package wiles.parser.statements
+package wiles.shared
 
 import wiles.parser.builders.ParserContext
-import wiles.shared.CompilationExceptionsCollection
-import wiles.shared.StatementInterface
-import wiles.shared.SyntaxType
-import wiles.shared.TokenLocation
 import wiles.shared.constants.Utils
 
 abstract class AbstractStatement(val context: ParserContext) : StatementInterface

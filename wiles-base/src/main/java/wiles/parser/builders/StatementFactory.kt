@@ -9,6 +9,7 @@ import wiles.parser.statements.*
 import wiles.parser.statements.expressions.DefaultExpression
 import wiles.parser.statements.expressions.TopLevelExpression
 import wiles.shared.AbstractCompilationException
+import wiles.shared.AbstractStatement
 import wiles.shared.DeclarationType
 import wiles.shared.InternalErrorException
 import wiles.shared.constants.ErrorMessages.INTERNAL_ERROR

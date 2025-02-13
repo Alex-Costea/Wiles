@@ -4,7 +4,7 @@ import wiles.parser.builders.ParserContext
 import wiles.shared.constants.ErrorMessages.CANNOT_BE_PROCESSED_ERROR
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.InternalErrorException
-import wiles.parser.statements.AbstractStatement
+import wiles.shared.AbstractStatement
 import wiles.parser.statements.TokenStatement
 
 class BinaryExpression(

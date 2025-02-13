@@ -4,6 +4,7 @@ import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.builders.ParserContext
 import wiles.parser.statements.expressions.DefaultExpression
 import wiles.shared.AbstractCompilationException
+import wiles.shared.AbstractStatement
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.SyntaxType
 import wiles.shared.constants.ErrorMessages.IDENTIFIER_EXPECTED_ERROR

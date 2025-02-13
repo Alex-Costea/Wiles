@@ -1,6 +1,7 @@
 package wiles.parser.statements
 
 import wiles.parser.builders.ParserContext
+import wiles.shared.AbstractStatement
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.Token
 import wiles.shared.SyntaxType

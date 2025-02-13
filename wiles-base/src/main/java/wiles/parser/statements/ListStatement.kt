@@ -6,6 +6,7 @@ import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.statements.expressions.DefaultExpression
 import wiles.parser.statements.expressions.TypeDefExpression
 import wiles.shared.AbstractCompilationException
+import wiles.shared.AbstractStatement
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens

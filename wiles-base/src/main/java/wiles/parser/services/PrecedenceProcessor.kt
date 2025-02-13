@@ -1,7 +1,7 @@
 package wiles.parser.services
 
 import wiles.parser.builders.ParserContext
-import wiles.parser.statements.AbstractStatement
+import wiles.shared.AbstractStatement
 import wiles.parser.statements.TokenStatement
 import wiles.parser.statements.expressions.BinaryExpression
 import wiles.shared.InternalErrorException

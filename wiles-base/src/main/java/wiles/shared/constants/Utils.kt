@@ -1,6 +1,7 @@
 package wiles.shared.constants
 
-import wiles.parser.statements.AbstractStatement
+import wiles.shared.AbstractStatement
+import wiles.shared.AbstractSyntaxTree
 import wiles.shared.SyntaxType
 import wiles.shared.TokenLocation
 import wiles.shared.constants.Chars.DIGIT_SEPARATOR
@@ -70,5 +71,9 @@ object Utils {
                 (if(hasComponents) "\n(" else "") +
                 (if(!hasComponents) "" else componentStrings.joinToString(", ")
                         + "\n)"))
+    }
+
+    fun convertStatementToSyntaxTree(statement : AbstractStatement) : AbstractSyntaxTree{
+        TODO("convertStatementToSyntaxTree")
     }
 }

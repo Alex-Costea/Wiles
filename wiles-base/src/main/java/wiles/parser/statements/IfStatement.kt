@@ -4,6 +4,7 @@ import wiles.parser.builders.ParserContext
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.statements.expressions.DefaultExpression
 import wiles.shared.AbstractCompilationException
+import wiles.shared.AbstractStatement
 import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens
@@ -13,7 +14,7 @@ import wiles.shared.constants.Tokens.IF_ID
 
 class IfStatement(context: ParserContext) : AbstractStatement(context) {
 
-    private val branches : MutableList<Pair<AbstractStatement,AbstractStatement>> = mutableListOf()
+    private val branches : MutableList<Pair<AbstractStatement, AbstractStatement>> = mutableListOf()
 
     override val syntaxType: SyntaxType
         get() = SyntaxType.IF

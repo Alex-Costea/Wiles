@@ -4,10 +4,7 @@ import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.builders.ParserContext
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.statements.expressions.TypeDefExpression
-import wiles.shared.AbstractCompilationException
-import wiles.shared.CompilationExceptionsCollection
-import wiles.shared.DeclarationType
-import wiles.shared.SyntaxType
+import wiles.shared.*
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.ANON_ARG_ID
 import wiles.shared.constants.Tokens.CONST_ID

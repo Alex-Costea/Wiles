@@ -7,6 +7,7 @@ import wiles.shared.*
 import wiles.shared.constants.ErrorMessages.COMPILATION_FAILED_ERROR
 import wiles.shared.constants.ErrorMessages.IO_ERROR
 import wiles.shared.constants.ErrorMessages.LINE_SYMBOL
+import wiles.shared.constants.Utils.convertStatementToSyntaxTree
 import java.io.*
 import java.util.*
 import java.util.stream.Collectors
@@ -122,7 +123,7 @@ object WilesCompiler {
                 exceptions = exceptions)
         }
 
-        val interpreter = Interpreter(scanner, result.toString())
+        val interpreter = Interpreter(scanner, convertStatementToSyntaxTree(result))
         interpreter.interpret()
         val output = interpreter.getOutput()
         exceptions.addAll(interpreter.getExceptions())

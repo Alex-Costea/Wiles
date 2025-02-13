@@ -7,7 +7,7 @@ import wiles.parser.enums.ExpectNext
 import wiles.parser.enums.StatementFactoryTypes
 import wiles.parser.exceptions.UnexpectedEndException
 import wiles.parser.services.PrecedenceProcessor
-import wiles.parser.statements.AbstractStatement
+import wiles.shared.AbstractStatement
 import wiles.parser.statements.MethodCallStatement
 import wiles.parser.statements.TokenStatement
 import wiles.shared.AbstractCompilationException
