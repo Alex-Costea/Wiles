@@ -788,6 +788,16 @@ begin
 end
 ```
 
+### Function types rules
+
+In order for a function type to be considered a subtype of another, it must adhere to the usual 
+Liskov substitution principles. This means that parameter types can be **broader**, 
+while the yielding type can be **more specific**.
+
+Additionally, new parameters can be added, 
+and existing parameters can be given a default value or have their default value changed. 
+Named parameters can be made unnamed by adding `arg`, but not the other way around.
+
 ---
 
 ## Dictionaries
