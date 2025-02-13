@@ -5,9 +5,9 @@ import wiles.shared.AbstractSyntaxTree
 import wiles.shared.SyntaxType
 
 class ProcessorProgram (
-    val syntax : AbstractSyntaxTree,
-    val context : InterpreterContext
-) : AbstractProcessor {
+    syntax : AbstractSyntaxTree,
+    context : InterpreterContext
+) : AbstractProcessor(syntax, context) {
     override fun process() {
         for(component in syntax.components)
         {

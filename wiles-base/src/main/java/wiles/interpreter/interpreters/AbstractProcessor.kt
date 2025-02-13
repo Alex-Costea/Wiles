@@ -1,5 +1,11 @@
 package wiles.interpreter.interpreters
 
-interface AbstractProcessor {
-    fun process()
+import wiles.interpreter.InterpreterContext
+import wiles.shared.AbstractSyntaxTree
+
+abstract class AbstractProcessor(
+    val syntax : AbstractSyntaxTree,
+    val context : InterpreterContext
+) {
+    abstract fun process()
 }

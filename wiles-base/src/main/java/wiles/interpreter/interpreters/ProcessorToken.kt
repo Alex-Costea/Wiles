@@ -2,14 +2,14 @@ package wiles.interpreter.interpreters
 
 import wiles.interpreter.InterpreterContext
 import wiles.interpreter.Value
-import wiles.interpreter.WilesType
+import wiles.interpreter.types.IntegerType
 import wiles.shared.AbstractSyntaxTree
 import wiles.shared.SyntaxType
 
 class ProcessorToken(
-    val syntax : AbstractSyntaxTree,
-    val context : InterpreterContext
-) : AbstractProcessor {
+    syntax : AbstractSyntaxTree,
+    context : InterpreterContext
+) : AbstractProcessor(syntax, context) {
     lateinit var value : Value
 
     private fun processNr(name: String)
@@ -17,7 +17,7 @@ class ProcessorToken(
         val newName = name.substring(1).replace("_","")
         if(newName.contains("."))
             TODO("No rationals yet")
-        value = Value(newName.toBigInteger(), WilesType())
+        value = Value(newName.toBigInteger(), IntegerType())
     }
 
     override fun process() {

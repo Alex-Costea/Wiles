@@ -8,9 +8,9 @@ import wiles.shared.constants.Tokens.GLOBAL_ID
 import wiles.shared.constants.Tokens.VARIABLE_ID
 
 class ProcessorDeclaration(
-    val syntax : AbstractSyntaxTree,
-    val context : InterpreterContext
-) : AbstractProcessor {
+     syntax : AbstractSyntaxTree,
+     context : InterpreterContext
+) : AbstractProcessor(syntax, context) {
     override fun process() {
         val details = syntax.details
         if(details.contains(VARIABLE_ID) || details.contains(CONST_ID) || details.contains(GLOBAL_ID))
