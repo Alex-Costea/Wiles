@@ -792,6 +792,51 @@ end
 
 ## Dictionaries
 
+Dictionaries are used to map keys to values. 
+Internally, they work like linked hash maps, and as such, the order is guaranteed to remain the same.
+Here's how you define one:
+
+```wiles
+let my_dict := { 1 : "one", 2 : "two" } : int -> text
+write_line(my_dict)
+```
+
+The syntax is `{key1 : value1, key2 : value2, ...} : key_type -> value_type`. 
+Note that the key type, value type, or both can be inferred, like so:
+
+```wiles
+let my_dict := { 1 : "one", 2 : "two" }
+write_line(my_dict)
+```
+
+To access a specific element, use `dict[key]`, just like with lists:
+
+```wiles
+let my_dict := { 1 : "one", 2 : "two" }
+write_line(my_dict[1]) # Outputs: one
+```
+
+You can also grab a dictionary's keys with `dict.keys`. 
+This returns a list of keys, which you can use to iterate over the dictionary:
+
+```wiles
+let my_dict := { 1 : "one", 2 : "two" }
+for key in my_dict.keys do
+    write_line(my_dict[key])
+```
+
+### Mutable Dictionaries
+
+By default, dictionaries are immutable, but you can make them mutable with `~`, similar to how lists work.
+
+```wiles
+let my_dict := ~ { 1 : "one", 2 : "two" }
+my_dict[1] := "one!!!"
+my_dict[3] := "three"
+my_dict.remove(2)
+write_line(my_dict) # Outputs: { 1 : "one!!!", 3 : "three" }
+```
+
 ---
 
 ## Data objects

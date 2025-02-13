@@ -95,6 +95,7 @@
 - `as_text`: convert object to text
 - `read_line`, `read_truth`, `read_int`, `read_rational`: read an object from the command line
 - `type_of`: get type of object at runtime
+- `unmutify`: opposite of ~
 
 ### Miscellaneous
 - `;` can be specified or inferred from newline
