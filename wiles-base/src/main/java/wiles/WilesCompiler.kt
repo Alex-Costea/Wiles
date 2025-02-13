@@ -123,8 +123,7 @@ object WilesCompiler {
                 exceptions = exceptions)
         }
 
-        val interpreter = Interpreter(scanner, convertStatementToSyntaxTree(result))
-        interpreter.interpret()
+        val interpreter = Interpreter(scanner, convertStatementToSyntaxTree(result), clArgs.isDebug)
         val output = interpreter.getOutput()
         exceptions.addAll(interpreter.getExceptions())
         return OutputData(

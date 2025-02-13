@@ -4,13 +4,23 @@ import wiles.shared.AbstractCompilationException
 import wiles.shared.AbstractSyntaxTree
 import java.util.*
 
-class Interpreter(val scanner : Scanner, val syntax : AbstractSyntaxTree) {
+class Interpreter(private val scanner : Scanner?,
+                  private val syntax : AbstractSyntaxTree,
+                  private val debug : Boolean) {
+    val compileMode = scanner == null
+
     fun getOutput(): String {
         TODO("Not yet implemented")
     }
 
-    fun interpret() {
-        println(syntax)
+    fun getIdentifiers() : ValuesMap
+    {
+        TODO("Not yet implemented")
+    }
+
+    init{
+        if(debug)
+            println(syntax)
         TODO("Not yet implemented")
     }
 
