@@ -415,8 +415,7 @@ A list is a data structure that holds multiple elements. Example:
 let my_list := [1, 2, 3] : int
 ```  
 
-The syntax is `[elem1, elem2, ...] : type`. You can include a trailing comma if you want.  
-If all elements are the same type, the type annotation can be skipped:
+The syntax is `[elem1, elem2, ...] : type`. If all elements are the same type, the type annotation can be skipped:
 
 ```wiles
 let my_list := [1, 2, 3]
@@ -613,6 +612,10 @@ let d : literal(int) := int # stores the type `int` itself as a value
 The `literal` function ensures that the right-hand side is treated as an explicit value rather than a constraint. This 
 prevents confusion when types and values have similar syntax.
 
+### The `type` type
+
+TODO
+
 ---
 
 ## Compile-Time Execution with `const`
@@ -803,7 +806,7 @@ Named parameters can be made unnamed by adding `arg`, but not the other way arou
 Function parameters can be marked as `const`, meaning they can only accept values known at compile-time:
 
 ```wiles
-def const mutable_list := fun(const t : type) -> type
+def const mutable_list := fun(const t : type()) -> type()
     do yield mutable(list(t))
 
 let a : mutable_list(int) := ~[1, 2, 3]
@@ -919,6 +922,46 @@ where each node contains references to other nodes of the same type.
 
 ## Standard Library
 
+Here are the functions that come from the standard library, imported by default
+
+### Write to output
+
+The `write` and `write_line` function are of type `fun(arg value : text)`. They write a value to output.
+`write_line` also outputs a newline character at the end.
+
+### Panic
+
+The `panic` function is of type `fun(arg text := "Interpreter error")`. 
+It displays an error message and then ends execution.
+
+### Modulo
+
+The `modulo` function is of type `fun(arg x : int, arg y : int) -> int`. It returns the modulo result.
+
+### Input read functions
+
+These functions read a value from the input. They are: 
+
+- `read_line`, of type `fun() -> text`
+- `read_int`, of type `fun() -> int`
+- `read_decimal`, of type `fun() -> decimal`
+
+### Compile-time type
+
+The `type_of` function returns a value's **compile-time known** type.
+
+### Subvalues of every object
+
+All objects, including `nothing`, have these subvalues, which can be accessed using the `.` operator
+
+- `.type` gets an object's **runtime** type
+- `.as_text` gets a textual representation of an object
+
 ---
 
 ## Miscellaneous
+
+- Trailing commas are always allowed.
+- `\` can be used to continue an expression after a newline. 
+This is usually unnecessary, but it can disambiguate some situations.
+- All top level expressions must be of type `nothing`.
