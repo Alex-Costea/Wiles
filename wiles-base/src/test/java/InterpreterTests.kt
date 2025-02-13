@@ -27,10 +27,12 @@ class InterpreterTests {
         assert(predicate.test(value))
     }
 
+    private fun intOf(x : Long) = BigInteger.valueOf(x)
+
     @Test
     fun test1()
     {
         val values = getValues("let a := 3")
-        assertValue(values, "!a") { it.getObj() == BigInteger.valueOf(3) }
+        assertValue(values, "!a") { it.getObj() == intOf(3) }
     }
 }
