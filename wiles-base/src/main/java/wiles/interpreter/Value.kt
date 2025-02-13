@@ -7,4 +7,9 @@ class Value(
     fun getObj() : Any{
         return obj
     }
+
+    override fun toString(): String {
+        return "Value(obj=$obj, type=$type)"
+    }
+
 }

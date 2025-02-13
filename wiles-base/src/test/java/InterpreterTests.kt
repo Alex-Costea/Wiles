@@ -6,6 +6,7 @@ import wiles.interpreter.Value
 import wiles.interpreter.ValuesMap
 import wiles.parser.Parser
 import wiles.shared.constants.Utils
+import java.math.BigInteger
 import java.util.function.Predicate
 import kotlin.test.assertNotNull
 
@@ -30,6 +31,6 @@ class InterpreterTests {
     fun test1()
     {
         val values = getValues("let a := 3")
-        assertValue(values, "!a") { it.getObj() == 3 }
+        assertValue(values, "!a") { it.getObj() == BigInteger.valueOf(3) }
     }
 }

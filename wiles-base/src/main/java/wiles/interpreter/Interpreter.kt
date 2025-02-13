@@ -1,8 +1,8 @@
 package wiles.interpreter
 
 import wiles.interpreter.interpreters.ProcessorProgram
-import wiles.shared.AbstractCompilationException
 import wiles.shared.AbstractSyntaxTree
+import wiles.shared.CompilationExceptionsCollection
 import java.util.*
 
 class Interpreter(scanner : Scanner?, syntax : AbstractSyntaxTree, debug : Boolean) {
@@ -10,7 +10,8 @@ class Interpreter(scanner : Scanner?, syntax : AbstractSyntaxTree, debug : Boole
     private val values = ValuesMap()
 
     fun getOutput(): String {
-        TODO("Not yet implemented")
+        //TODO
+        return ""
     }
 
     fun getValues() : ValuesMap
@@ -27,9 +28,12 @@ class Interpreter(scanner : Scanner?, syntax : AbstractSyntaxTree, debug : Boole
         val context = InterpreterContext(isRunning, values, debug)
         val interpretFromProgram = ProcessorProgram(syntax, context)
         interpretFromProgram.process()
+        if(debug)
+            println(context.values)
     }
 
-    fun getExceptions(): Collection<AbstractCompilationException> {
-        TODO("Not yet implemented")
+    fun getExceptions(): CompilationExceptionsCollection {
+        //TODO: implement
+        return CompilationExceptionsCollection()
     }
 }

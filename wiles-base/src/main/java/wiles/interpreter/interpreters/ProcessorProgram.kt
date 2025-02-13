@@ -29,6 +29,5 @@ class ProcessorProgram (
             }
             processor.process()
         }
-        TODO("InterpretFromProgram.process")
     }
 }
