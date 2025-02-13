@@ -809,6 +809,13 @@ begin
 end
 ```
 
+### Data subtyping rules
+
+In order for a data type to be a subtype of another data type:
+- The subtype can add new subvalues, but can't remove them
+- Existing values can get a default definition
+- Existing default definitions can be overriden, but not removed
+
 ### Function types rules
 
 In order for a function type to be considered a subtype of another, it must adhere to the usual 
@@ -942,6 +949,18 @@ where each node contains references to other nodes of the same type.
 
 Here are the functions that come from the standard library, imported by default
 
+### Infinity
+
+The value `Infinity` represents infinity.
+
+### Truth values
+
+`true` represents true and `false` represents false.
+
+### Nothing
+
+`nothing` represents a lack of a value.
+
 ### Write to output
 
 The `write` and `write_line` function are of type `fun(arg value : text)`. They write a value to output.
@@ -970,6 +989,28 @@ All objects, including `nothing`, have these subvalues, which can be accessed us
 
 - `.type` gets an object's **runtime** type
 - `.as_text` gets a textual representation of an object
+
+### Size function
+
+For lists, dictionaries and texts, `.size` will yield their size as an integer.
+
+### Remove function
+
+For lists and dictionaries, `.remove(at)` will remove an element at a specific index/key.
+
+### Keys function
+
+For dictionaries, `.keys` will return a list of the keys
+
+### Type definition functions
+
+The following are standalone: `int`, `string`, `decimal`, `anything`, `truth`
+
+The following takes either 0 or 1 types as parameters: `type()`, `type(subtype)`
+
+The following take 1 type as parameter: `list(type)`,  `mutable(type)`, `literal(type)`
+
+The following takes 2 types as parameters: `dict(type1, type2)`
 
 ---
 
