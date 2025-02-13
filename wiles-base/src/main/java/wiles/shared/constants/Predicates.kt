@@ -11,6 +11,7 @@ import wiles.shared.constants.Tokens.DICT_START_ID
 import wiles.shared.constants.Tokens.DO_ID
 import wiles.shared.constants.Tokens.FUNC_ID
 import wiles.shared.constants.Tokens.INFIX_SUFFIX_OPERATORS
+import wiles.shared.constants.Tokens.INTERNAL_ID
 import wiles.shared.constants.Tokens.KEYWORDS_INDICATING_NEW_EXPRESSION
 import wiles.shared.constants.Tokens.NEWLINE_ID
 import wiles.shared.constants.Tokens.PAREN_START_ID
@@ -67,7 +68,7 @@ object Predicates {
 
     @JvmField
     val START_OF_EXPRESSION = tokenOf(IS_CONTAINED_IN(STARTING_OPERATORS)).or(IS_LITERAL).or(DICT_START_ID)
-        .or(PAREN_START_ID).or(BRACKET_START_ID).or(START_BLOCK_ID).or(DATA_START_ID)
+        .or(PAREN_START_ID).or(BRACKET_START_ID).or(START_BLOCK_ID).or(DATA_START_ID).or(INTERNAL_ID)
         .or(FUNC_ID).or(DO_ID).withErrorMessage(EXPRESSION_EXPECTED_ERROR).removeWhen(WhenRemoveToken.Never).freeze()
 
     @JvmField
