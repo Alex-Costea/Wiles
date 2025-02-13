@@ -10,6 +10,7 @@ class Interpreter(val scanner : Scanner, val syntax : AbstractSyntaxTree) {
     }
 
     fun interpret() {
+        println(syntax)
         TODO("Not yet implemented")
     }
 
