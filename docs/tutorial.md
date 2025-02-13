@@ -943,6 +943,7 @@ def tree := <<
 
 This allows the creation of complex structures like trees 
 where each node contains references to other nodes of the same type.
+
 ---
 
 ## Standard Library
