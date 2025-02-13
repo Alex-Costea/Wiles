@@ -798,6 +798,10 @@ Additionally, new parameters can be added,
 and existing parameters can be given a default value or have their default value changed. 
 Named parameters can be made unnamed by adding `arg`, but not the other way around.
 
+### Compile-time arguments in functions
+
+TODO
+
 ---
 
 ## Dictionaries
@@ -849,8 +853,60 @@ write_line(my_dict) # Outputs: { 1 : "one!!!", 3 : "three" }
 
 ---
 
-## Data objects
+## Data Objects and Types
 
+Data objects are immutable values that hold multiple sub-values, which are represented as identifiers.
+You can access these sub-values using the `.` operator. For example:
+
+```wiles
+let steve := << name := "Steve", age := 25 >>
+write_line(steve.name) # Outputs: Steve
+write_line(steve.age) # Outputs: 25
+```
+
+The syntax is `<< declaration1, declaration2, ... >>`. You can also add type definitions to these declarations:
+
+```wiles
+let steve := << name : text? := "Steve", age := 25 >>
+write_line(steve.name) # Outputs: Steve
+write_line(steve.age) # Outputs: 25
+```
+
+### Data Types
+
+The syntax for defining data types is the same. When an identifier is used as a data type,
+the values associated with it are considered **default values**, which can be overridden.
+
+```wiles
+let person_type := <<name : text? := nothing, age : int>>
+
+let greet_person := fun(person : person_type)
+begin
+    if person.name =/= nothing do
+        write("Hi, " + person.name + ". ")
+    write_line("Your age is " + person.age)
+end
+    
+greet_person(<<name := "Steve", age := 25>>)
+greet_person(<<age := 40>>)
+```
+
+If any value is missing, it is treated as a type definition only and not as a complete data object.
+
+### Recursive Data Types
+
+Data types can be recursive using the `def` keyword. For example:
+
+```wiles
+def tree := <<
+    value : int,
+    left : tree?,
+    right: tree?
+>>
+```
+
+This allows the creation of complex structures like trees 
+where each node contains references to other nodes of the same type.
 ---
 
 ## Standard Library
