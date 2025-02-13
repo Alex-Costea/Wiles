@@ -68,6 +68,7 @@ object Tokens {
     const val YIELDS_ID = "YIELDS"
     const val CONST_ID = "CONST"
     const val RANGIFY_ID = "RANGIFY"
+    const val SUBTYPES_ID = "SUBTYPES"
 
     //literals
     const val TRUE_ID = "!true"
@@ -93,7 +94,7 @@ object Tokens {
     val INFIX_OPERATORS = setOf(
         PLUS_ID, MINUS_ID, TIMES_ID, DIVIDE_ID, POWER_ID, RANGIFY_ID,
         EQUALS_ID, LARGER_ID, SMALLER_ID, LARGER_EQUALS_ID, SMALLER_EQUALS_ID, NOT_EQUAL_ID,
-        AND_ID, OR_ID, APPLY_ID, ACCESS_ID, UNION_ID, AT_KEY_ID
+        AND_ID, OR_ID, APPLY_ID, ACCESS_ID, UNION_ID, AT_KEY_ID, SUBTYPES_ID
     )
     @JvmField
     val PREFIX_OPERATORS = setOf(UNARY_PLUS_ID, UNARY_MINUS_ID, NOT_ID, MUTIFY_ID)
@@ -134,6 +135,7 @@ object Tokens {
         KEYWORDS["arg"] = ANON_ARG_ID
         KEYWORDS["def"] = GLOBAL_ID
         KEYWORDS["const"] = CONST_ID
+        KEYWORDS["of"] = SUBTYPES_ID
 
         KEYWORDS["int"] = INT_ID
         KEYWORDS["text"] = STRING_ID

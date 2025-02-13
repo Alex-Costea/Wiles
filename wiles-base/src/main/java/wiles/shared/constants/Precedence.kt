@@ -19,6 +19,7 @@ import wiles.shared.constants.Tokens.POWER_ID
 import wiles.shared.constants.Tokens.RANGIFY_ID
 import wiles.shared.constants.Tokens.SMALLER_EQUALS_ID
 import wiles.shared.constants.Tokens.SMALLER_ID
+import wiles.shared.constants.Tokens.SUBTYPES_ID
 import wiles.shared.constants.Tokens.TIMES_ID
 import wiles.shared.constants.Tokens.UNARY_MINUS_ID
 import wiles.shared.constants.Tokens.UNARY_PLUS_ID
@@ -30,10 +31,11 @@ object Precedence {
     val RIGHT_TO_LEFT : Set<Byte>
 
     init {
-        PRECEDENCE[UNION_ID] = -6
-        PRECEDENCE[OR_ID] = -5
-        PRECEDENCE[AND_ID] = -4
-        PRECEDENCE[NOT_ID] = -3
+        PRECEDENCE[OR_ID] = -7
+        PRECEDENCE[AND_ID] = -6
+        PRECEDENCE[NOT_ID] = -5
+        PRECEDENCE[SUBTYPES_ID] = -4
+        PRECEDENCE[UNION_ID] = -3
         PRECEDENCE[EQUALS_ID] = -2
         PRECEDENCE[NOT_EQUAL_ID] = -2
         PRECEDENCE[LARGER_ID] = -1
@@ -51,8 +53,8 @@ object Precedence {
         PRECEDENCE[POWER_ID] = 3
         PRECEDENCE[MAYBE_ID] = 4
         PRECEDENCE[ACCESS_ID] = 5
-        PRECEDENCE[APPLY_ID] = 6
         PRECEDENCE[AT_KEY_ID] = 6
+        PRECEDENCE[APPLY_ID] = 7
 
         RIGHT_TO_LEFT = setOf(PRECEDENCE[NOT_ID]!!, PRECEDENCE[UNARY_PLUS_ID]!!, PRECEDENCE[POWER_ID]!!)
     }

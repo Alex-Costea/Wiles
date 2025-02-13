@@ -621,6 +621,19 @@ You can also use `type(subtype)` to hold all expressions which are a subtype of 
 let my_type : type(int | text) := int
 ```
 
+### Subtyping operator
+
+You can check whether a type is a subtype of another type using `of`.
+
+```wiles
+let x : int | text := 123
+if begin
+    # .type checks a value's runtime type
+    x.type of int do write_line("x is int")
+    x.type of text do write_line("x is text")
+end
+```
+
 ---
 
 ## Compile-Time Execution with `const`
@@ -950,10 +963,6 @@ These functions read a value from the input. They are:
 - `read_line`, of type `fun() -> text`
 - `read_int`, of type `fun() -> int`
 - `read_decimal`, of type `fun() -> decimal`
-
-### Compile-time type
-
-The `type_of` function returns a value's **compile-time known** type.
 
 ### Subvalues of every object
 

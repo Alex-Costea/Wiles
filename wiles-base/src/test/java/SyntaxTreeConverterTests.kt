@@ -59,6 +59,7 @@ import wiles.shared.constants.Tokens.RETURN_ID
 import wiles.shared.constants.Tokens.SEPARATOR_ID
 import wiles.shared.constants.Tokens.START_BLOCK_ID
 import wiles.shared.constants.Tokens.STRING_ID
+import wiles.shared.constants.Tokens.SUBTYPES_ID
 import wiles.shared.constants.Tokens.TERMINATOR_ID
 import wiles.shared.constants.Tokens.TIMES_ID
 import wiles.shared.constants.Tokens.TRUE_ID
@@ -1090,6 +1091,42 @@ CODE_BLOCK
                     )
                 )
             )""", DECLARE_ID, "!a", ASSIGN_ID, "#1", PLUS_ID, "#2", RANGIFY_ID, "#3")
+    }
+
+    @Test
+    fun subtypesTest()
+    {
+        //int of int | text or text of int | text
+        assertResults(null,"""
+            CODE_BLOCK
+            (
+                EXPRESSION
+                (
+                    %OR [1, 19, 1, 21], 
+                    EXPRESSION
+                    (
+                        %SUBTYPES [1, 5, 1, 7], 
+                        !int [1, 1, 1, 4], 
+                        EXPRESSION
+                        (
+                            %UNION [1, 12, 1, 13], 
+                            !int [1, 8, 1, 11], 
+                            !text [1, 14, 1, 18]
+                        )
+                    ), 
+                    EXPRESSION
+                    (
+                        %SUBTYPES [1, 27, 1, 29], 
+                        !text [1, 22, 1, 26], 
+                        EXPRESSION
+                        (
+                            %UNION [1, 34, 1, 35], 
+                            !int [1, 30, 1, 33], 
+                            !text [1, 36, 1, 40]
+                        )
+                    )
+                )
+            )""", INT_ID, SUBTYPES_ID, INT_ID, UNION_ID, STRING_ID, OR_ID, STRING_ID, SUBTYPES_ID, INT_ID, UNION_ID, STRING_ID)
     }
 
     private class CreateConverter(tokens: List<String>) {
