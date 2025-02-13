@@ -1,47 +1,12 @@
-**Wiles** is a programming language inspired by Kotlin, Pascal and Python. It is designed with readability and type safety as main priorities. This project contains a fully-functional interpreter written in Kotlin and Java for the language, which can also be hosted online.
-
-Wiles supports features such as:
-- `if`, `for` (including foreach functionality), `while`
-- Basic operators for arithmetics, boolean logic and comparisons
-- Functions as first-class objects using the `fun` keyword, including support for closures
-- Sum types: `type1 | type2`
-- Support for types such as: integers (`int`), decimal numbers (`decimal`), strings (`text`), booleans (`truth`), lists (`list`), hashmaps (`dict`), structs (`data`)
-- Opt-in nullability using the `?` symbol
-- Opt-out named arguments in function calls
-- Newline as statement terminators, but no significant indentation
-- Type inference
-- Type literals
-- Compile time execution
+**Wiles** is a programming language
 
 Full tutorials on Wiles functionality can be found [here](tutorial.md).
-Note that it presupposes some level of familiarity with basic programming.
-
-## Changelogs
-
-See [here](changelog.md).
-
-## Open and Resolved Tickets
-
-See [here](tickets.md).
 
 ## How to use
 
 Try it out [online](https://wiles.costea.in)!
 
 For other methods of using it, go [here](setup.md).
-
-## FAQ
-### What is the state of the project right now?
-The interpreter is functional and includes the features found in the specifications. While the code is thoroughly tested automatically, there is no guarantee that bugs won't occur in edge cases.
-
-### Why is the language called Wiles?
-As it is inspired by Pascal, I decided to also name my language after a mathematician, but unlike Pascal, one that is contemporary. As such, it's named after Andrew Wiles, who proved Fermat's Last Theorem.
-
-### Are there plans to add more advanced features to the language?
-This is a one-man project mostly meant for myself to try out making an interpreter, so honestly, it depends on my time and motivation.
-
-### Will there be a formal specification?
-Unless this project blows up, probably not. Languages much bigger and widely used don't have a formal specification, so it doesn't seem like a priority. However, I am working on more thorough specifications.
 
 ## Examples
 ### Hello World
@@ -50,7 +15,7 @@ write_line("Hello, world!")
 ```
 ### FizzBuzz
 ```
-for i in range(1, 101)
+for i in 1...101
 begin
     let var text := ""
     if modulo(i, 3) = 0 do
