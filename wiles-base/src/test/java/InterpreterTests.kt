@@ -16,7 +16,7 @@ class InterpreterTests {
         val results = parser.getResults()
         val syntax = Utils.convertStatementToSyntaxTree(results)
         val interpreter = Interpreter(null, syntax, true)
-        return interpreter.getIdentifiers()
+        return interpreter.getValues()
     }
 
     private fun assertValue(map : ValuesMap, name : String, predicate : Predicate<Value>)
@@ -30,6 +30,6 @@ class InterpreterTests {
     fun test1()
     {
         val values = getValues("let a := 3")
-        assertValue(values, "!a") { it.getValue() == 3 }
+        assertValue(values, "!a") { it.getObj() == 3 }
     }
 }

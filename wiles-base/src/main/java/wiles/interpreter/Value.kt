@@ -1,7 +1,10 @@
 package wiles.interpreter
 
-class Value {
-    fun getValue() : Any{
-        TODO()
+class Value(
+    private var obj: Any,
+    private val type : WilesType
+) {
+    fun getObj() : Any{
+        return obj
     }
 }
