@@ -17,7 +17,6 @@ import wiles.shared.constants.Tokens.PAREN_END_ID
 import wiles.shared.constants.Tokens.PAREN_START_ID
 import wiles.shared.constants.Tokens.SEPARATOR_ID
 import wiles.shared.constants.Tokens.START_BLOCK_ID
-import wiles.shared.constants.Tokens.TYPE_ID
 import wiles.shared.constants.Tokens.YIELDS_ID
 
 class MethodStatement(oldContext : ParserContext)
@@ -28,6 +27,7 @@ class MethodStatement(oldContext : ParserContext)
 
     private var returnType: TypeDefExpression? = null
     private val methodBody: CodeBlockStatement = CodeBlockStatement(context)
+    private var isTypeDefinition = false
 
     override val syntaxType: SyntaxType
         get() = SyntaxType.FUNC
@@ -37,7 +37,7 @@ class MethodStatement(oldContext : ParserContext)
         if(returnType != null)
             components.add(returnType!!)
         components.addAll(parameters)
-        if(name != TYPE_ID)
+        if(!isTypeDefinition)
             components.add(methodBody)
         return components
     }
@@ -74,7 +74,7 @@ class MethodStatement(oldContext : ParserContext)
             //Read body
             if(transmitter.expectMaybe(tokenOf(DO_ID).or(START_BLOCK_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
                 exceptions.addAll(methodBody.process())
-            else name = TYPE_ID
+            else isTypeDefinition = true
         } catch (ex: AbstractCompilationException) {
             exceptions.add(ex)
         }

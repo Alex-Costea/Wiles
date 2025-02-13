@@ -15,7 +15,6 @@ import wiles.shared.constants.Tokens.NEWLINE_ID
 import wiles.shared.constants.Tokens.NOT_ID
 import wiles.shared.constants.Tokens.PAREN_END_ID
 import wiles.shared.constants.Tokens.PLUS_ID
-import wiles.shared.constants.Tokens.TRUE_ID
 import wiles.shared.constants.Tokens.WHILE_ID
 import wiles.shared.constants.Utils.NULL_LOCATION
 import java.util.*
@@ -114,7 +113,7 @@ class TokenConverterTests {
         tokenConverterEquals("while\ttrue do\n" +
                 "\t\twrite_line(\t\"\thi! " +
                 "what's up?\") #this is a comment",
-            arrayOf(WHILE_ID, TRUE_ID, DO_ID, NEWLINE_ID, "!write_line", "PAREN_START",
+            arrayOf(WHILE_ID, "!true", DO_ID, NEWLINE_ID, "!write_line", "PAREN_START",
                 "@\thi! what's up?", PAREN_END_ID))
     }
 }

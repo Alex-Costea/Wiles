@@ -70,22 +70,6 @@ object Tokens {
     const val RANGIFY_ID = "RANGIFY"
     const val SUBTYPES_ID = "SUBTYPES"
 
-    //literals
-    const val TRUE_ID = "!true"
-    const val FALSE_ID = "!false"
-    const val NOTHING_ID = "!nothing"
-    const val ANYTHING_ID = "!anything"
-    const val INT_ID = "!int"
-    const val STRING_ID = "!text"
-    const val DECIMAL_ID = "!decimal"
-    const val LIST_ID = "!list"
-    const val DICT_ID = "!dict"
-    const val MUTABLE_ID = "!mutable"
-    const val RANGE_ID = "!range"
-    const val TYPE_ID = "!type"
-    const val INFINITY_ID = "!Infinity"
-    const val LITERAL_ID = "!literal"
-
     private val KEYWORDS: HashMap<String, String> = HashMap()
     private val SYMBOLS: HashMap<String, String> = HashMap()
     @JvmField
@@ -136,18 +120,6 @@ object Tokens {
         KEYWORDS["def"] = GLOBAL_ID
         KEYWORDS["const"] = CONST_ID
         KEYWORDS["of"] = SUBTYPES_ID
-
-        KEYWORDS["int"] = INT_ID
-        KEYWORDS["text"] = STRING_ID
-        KEYWORDS["decimal"] = DECIMAL_ID
-        KEYWORDS["list"] = LIST_ID
-        KEYWORDS["anything"] = ANYTHING_ID
-        KEYWORDS["dict"] = DICT_ID
-        KEYWORDS["mutable"] = MUTABLE_ID
-        KEYWORDS["range"] = RANGE_ID
-        KEYWORDS["type"] = TYPE_ID
-        KEYWORDS["Infinity"] = INFINITY_ID
-        KEYWORDS["literal"] = LITERAL_ID
 
         SYMBOLS["+"] = PLUS_ID
         SYMBOLS["-"] = MINUS_ID

@@ -18,14 +18,12 @@ import wiles.shared.constants.ErrorMessages.INVALID_EXPRESSION_ERROR
 import wiles.shared.constants.ErrorMessages.INVALID_STATEMENT_ERROR
 import wiles.shared.constants.ErrorMessages.TOKEN_EXPECTED_ERROR
 import wiles.shared.constants.Tokens.ANNOTATE_ID
-import wiles.shared.constants.Tokens.ANYTHING_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.BRACKET_END_ID
 import wiles.shared.constants.Tokens.BRACKET_START_ID
 import wiles.shared.constants.Tokens.CONST_ID
 import wiles.shared.constants.Tokens.DATA_END_ID
 import wiles.shared.constants.Tokens.DATA_START_ID
-import wiles.shared.constants.Tokens.DECIMAL_ID
 import wiles.shared.constants.Tokens.DECLARE_ID
 import wiles.shared.constants.Tokens.DEFAULT_ID
 import wiles.shared.constants.Tokens.DICT_END_ID
@@ -33,21 +31,16 @@ import wiles.shared.constants.Tokens.DICT_START_ID
 import wiles.shared.constants.Tokens.DO_ID
 import wiles.shared.constants.Tokens.END_BLOCK_ID
 import wiles.shared.constants.Tokens.EQUALS_ID
-import wiles.shared.constants.Tokens.FALSE_ID
 import wiles.shared.constants.Tokens.FOR_ID
 import wiles.shared.constants.Tokens.FUNC_ID
 import wiles.shared.constants.Tokens.GLOBAL_ID
 import wiles.shared.constants.Tokens.IF_ID
-import wiles.shared.constants.Tokens.INT_ID
 import wiles.shared.constants.Tokens.IN_ID
 import wiles.shared.constants.Tokens.LARGER_ID
-import wiles.shared.constants.Tokens.LIST_ID
 import wiles.shared.constants.Tokens.MAYBE_ID
 import wiles.shared.constants.Tokens.MINUS_ID
-import wiles.shared.constants.Tokens.MUTABLE_ID
 import wiles.shared.constants.Tokens.MUTIFY_ID
 import wiles.shared.constants.Tokens.NEWLINE_ID
-import wiles.shared.constants.Tokens.NOTHING_ID
 import wiles.shared.constants.Tokens.NOT_ID
 import wiles.shared.constants.Tokens.OR_ID
 import wiles.shared.constants.Tokens.PAREN_END_ID
@@ -58,12 +51,9 @@ import wiles.shared.constants.Tokens.RANGIFY_ID
 import wiles.shared.constants.Tokens.RETURN_ID
 import wiles.shared.constants.Tokens.SEPARATOR_ID
 import wiles.shared.constants.Tokens.START_BLOCK_ID
-import wiles.shared.constants.Tokens.STRING_ID
 import wiles.shared.constants.Tokens.SUBTYPES_ID
 import wiles.shared.constants.Tokens.TERMINATOR_ID
 import wiles.shared.constants.Tokens.TIMES_ID
-import wiles.shared.constants.Tokens.TRUE_ID
-import wiles.shared.constants.Tokens.TYPE_ID
 import wiles.shared.constants.Tokens.UNION_ID
 import wiles.shared.constants.Tokens.VARIABLE_ID
 import wiles.shared.constants.Tokens.WHILE_ID
@@ -189,31 +179,31 @@ class SyntaxTreeConverterTests {
     @Test
     fun methodTest() {
         assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(TYPEDEF(!int), CODE_BLOCK))))",
-            DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, YIELDS_ID, INT_ID,
+            DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, YIELDS_ID, "!int",
                 START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
         assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(TYPEDEF(!int), DECLARATION(TYPEDEF(!int), !a), CODE_BLOCK))))",
-            DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, "!a", ANNOTATE_ID, INT_ID, PAREN_END_ID,
-            YIELDS_ID, INT_ID, START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
+            DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, "!a", ANNOTATE_ID, "!int", PAREN_END_ID,
+            YIELDS_ID, "!int", START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
         assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(TYPEDEF(!int), DECLARATION(TYPEDEF(!int), !a), DECLARATION(TYPEDEF(!text), !b), CODE_BLOCK))))",
-            DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, "!a", ANNOTATE_ID, INT_ID,
-                SEPARATOR_ID, "!b", ANNOTATE_ID, STRING_ID, PAREN_END_ID, YIELDS_ID, INT_ID, START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
+            DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, "!a", ANNOTATE_ID, "!int",
+                SEPARATOR_ID, "!b", ANNOTATE_ID, "!text", PAREN_END_ID, YIELDS_ID, "!int", START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
         assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(TYPEDEF(!int), DECLARATION(TYPEDEF(!nothing), !a), CODE_BLOCK))))",
-            DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, "!a", ANNOTATE_ID, NOTHING_ID, PAREN_END_ID,
-            YIELDS_ID, INT_ID, START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
+            DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, "!a", ANNOTATE_ID, "!nothing", PAREN_END_ID,
+            YIELDS_ID, "!int", START_BLOCK_ID, TERMINATOR_ID, END_BLOCK_ID)
         assertResults(null, "CODE_BLOCK(DECLARATION(!a, EXPRESSION(FUNC(CODE_BLOCK(!nothing)))))",
-            DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, DO_ID, NOTHING_ID)
+            DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, DO_ID, "!nothing")
         assertResults(null, "CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(CODE_BLOCK(EXPRESSION(%ASSIGN, !b, #3))))))",
             DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, DO_ID,
              "!b", ASSIGN_ID, "#3")
         assertResults(null, "CODE_BLOCK(DECLARATION(!product, EXPRESSION(FUNC(TYPEDEF(!int), DECLARATION(TYPEDEF(!int), !a), DECLARATION(TYPEDEF(!int), !b), CODE_BLOCK(EXPRESSION(%ASSIGN, !product, EXPRESSION(%TIMES, !a, !b)))))))",
-            DECLARE_ID, "!product", ASSIGN_ID, FUNC_ID, PAREN_START_ID, "!a", ANNOTATE_ID, INT_ID,
-                SEPARATOR_ID, "!b", ANNOTATE_ID, INT_ID, PAREN_END_ID, YIELDS_ID, INT_ID, NEWLINE_ID,
+            DECLARE_ID, "!product", ASSIGN_ID, FUNC_ID, PAREN_START_ID, "!a", ANNOTATE_ID, "!int",
+                SEPARATOR_ID, "!b", ANNOTATE_ID, "!int", PAREN_END_ID, YIELDS_ID, "!int", NEWLINE_ID,
                 DO_ID,  "!product", ASSIGN_ID, "!a", TIMES_ID, "!b")
         assertResults(null,"CODE_BLOCK(DECLARATION(!main, EXPRESSION(FUNC(DECLARATION(TYPEDEF(!int), !args), CODE_BLOCK(!nothing)))))",
-            DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, "!args", ANNOTATE_ID, INT_ID, PAREN_END_ID, DO_ID, NOTHING_ID)
+            DECLARE_ID, "!main", ASSIGN_ID, FUNC_ID, PAREN_START_ID, "!args", ANNOTATE_ID, "!int", PAREN_END_ID, DO_ID, "!nothing")
         assertResults(null,"CODE_BLOCK(DECLARATION(!a, EXPRESSION(FUNC(CODE_BLOCK(DECLARATION(!b, EXPRESSION(FUNC(CODE_BLOCK(!nothing)))))))))",
             DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, NEWLINE_ID, START_BLOCK_ID, NEWLINE_ID, DECLARE_ID,
-            "!b", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, DO_ID, NOTHING_ID, NEWLINE_ID, END_BLOCK_ID, NEWLINE_ID, NEWLINE_ID, NEWLINE_ID)
+            "!b", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, DO_ID, "!nothing", NEWLINE_ID, END_BLOCK_ID, NEWLINE_ID, NEWLINE_ID, NEWLINE_ID)
     }
 
     @Test
@@ -239,7 +229,7 @@ class SyntaxTreeConverterTests {
     fun returnTest()
     {
         assertResults(null,"CODE_BLOCK(DECLARATION(!a, EXPRESSION(FUNC(TYPEDEF(!int), CODE_BLOCK(RETURN(#10))))))",
-            DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, YIELDS_ID, INT_ID,
+            DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, YIELDS_ID, "!int",
             START_BLOCK_ID, NEWLINE_ID, RETURN_ID, "#10", NEWLINE_ID, END_BLOCK_ID)
         assertResults(createExceptions(UnexpectedTokenException(INVALID_STATEMENT_ERROR, NULL_LOCATION)),null,
             RETURN_ID, "#10")
@@ -249,36 +239,36 @@ class SyntaxTreeConverterTests {
     fun declarationsTest()
     {
         assertResults(null,"CODE_BLOCK(DECLARATION(TYPEDEF(!int), !a, #10))",
-            DECLARE_ID, "!a", ANNOTATE_ID, INT_ID, ASSIGN_ID, "#10")
+            DECLARE_ID, "!a", ANNOTATE_ID, "!int", ASSIGN_ID, "#10")
         assertResults(createExceptions(UnexpectedEndException(TOKEN_EXPECTED_ERROR.format(ASSIGN_ID), NULL_LOCATION)),
             "CODE_BLOCK(DECLARATION(TYPEDEF(!int), !a, #2), DECLARATION(!a, #2), DECLARATION(TYPEDEF(!int), !a), DECLARATION(!a))",
-            DECLARE_ID, "!a", ANNOTATE_ID, INT_ID, ASSIGN_ID, "#2", NEWLINE_ID, DECLARE_ID, "!a", ASSIGN_ID, "#2", NEWLINE_ID, DECLARE_ID, "!a", ANNOTATE_ID, INT_ID, NEWLINE_ID, DECLARE_ID, "!a")
+            DECLARE_ID, "!a", ANNOTATE_ID, "!int", ASSIGN_ID, "#2", NEWLINE_ID, DECLARE_ID, "!a", ASSIGN_ID, "#2", NEWLINE_ID, DECLARE_ID, "!a", ANNOTATE_ID, "!int", NEWLINE_ID, DECLARE_ID, "!a")
     }
 
     @Test
     fun ifTest()
     {
         assertResults(null, "CODE_BLOCK(IF(!true, CODE_BLOCK(!nothing)), !nothing)",
-            IF_ID, TRUE_ID, DO_ID, NOTHING_ID, NEWLINE_ID, NOTHING_ID)
+            IF_ID, "!true", DO_ID, "!nothing", NEWLINE_ID, "!nothing")
 
         assertResults(null, "CODE_BLOCK(DECLARATION(!a, EXPRESSION(FUNC(CODE_BLOCK(IF(!true, CODE_BLOCK(RETURN(#1)), %DEFAULT, CODE_BLOCK(RETURN(#2))))))), IF(!true, CODE_BLOCK(!nothing)), !nothing)",
             DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, DO_ID, NEWLINE_ID,
-            IF_ID, START_BLOCK_ID, TRUE_ID, DO_ID, RETURN_ID, "#1", NEWLINE_ID,
+            IF_ID, START_BLOCK_ID, "!true", DO_ID, RETURN_ID, "#1", NEWLINE_ID,
             DEFAULT_ID, DO_ID, RETURN_ID, "#2", NEWLINE_ID, END_BLOCK_ID, NEWLINE_ID,
-            IF_ID, TRUE_ID, DO_ID, NOTHING_ID, NEWLINE_ID, NOTHING_ID)
+            IF_ID, "!true", DO_ID, "!nothing", NEWLINE_ID, "!nothing")
 
         assertResults(null,"CODE_BLOCK(IF(EXPRESSION(%LARGER, !a, #10), CODE_BLOCK(!nothing), EXPRESSION(%LARGER, !a, #0), CODE_BLOCK(!nothing), %DEFAULT, CODE_BLOCK(!nothing)))",
-            IF_ID, START_BLOCK_ID, NEWLINE_ID, "!a", LARGER_ID, "#10", DO_ID, NOTHING_ID, NEWLINE_ID, "!a", LARGER_ID, "#0",
-            DO_ID, NOTHING_ID, NEWLINE_ID, DEFAULT_ID, DO_ID, NOTHING_ID, NEWLINE_ID, END_BLOCK_ID)
+            IF_ID, START_BLOCK_ID, NEWLINE_ID, "!a", LARGER_ID, "#10", DO_ID, "!nothing", NEWLINE_ID, "!a", LARGER_ID, "#0",
+            DO_ID, "!nothing", NEWLINE_ID, DEFAULT_ID, DO_ID, "!nothing", NEWLINE_ID, END_BLOCK_ID)
 
         assertResults(null,"CODE_BLOCK(IF(EXPRESSION(%LARGER, !a, #0), CODE_BLOCK(!nothing), %DEFAULT, CODE_BLOCK(IF(EXPRESSION(%LARGER, !a, #10), CODE_BLOCK(!nothing)))), EXPRESSION(%ASSIGN, !a, !b))",
-            IF_ID, START_BLOCK_ID, NEWLINE_ID, "!a", LARGER_ID, "#0", DO_ID, NOTHING_ID, NEWLINE_ID,
-            DEFAULT_ID, DO_ID, IF_ID, "!a", LARGER_ID, "#10", DO_ID, NOTHING_ID,NEWLINE_ID, END_BLOCK_ID,
+            IF_ID, START_BLOCK_ID, NEWLINE_ID, "!a", LARGER_ID, "#0", DO_ID, "!nothing", NEWLINE_ID,
+            DEFAULT_ID, DO_ID, IF_ID, "!a", LARGER_ID, "#10", DO_ID, "!nothing",NEWLINE_ID, END_BLOCK_ID,
             NEWLINE_ID, "!a", ASSIGN_ID, "!b")
 
         assertResults(null,"CODE_BLOCK(IF(EXPRESSION(%LARGER, !a, #10), CODE_BLOCK(!nothing), EXPRESSION(%LARGER, !a, #0), CODE_BLOCK(!nothing)))",
-            IF_ID, START_BLOCK_ID, NEWLINE_ID, "!a", LARGER_ID, "#10", DO_ID, NOTHING_ID, NEWLINE_ID,
-            "!a", LARGER_ID, "#0", DO_ID, NOTHING_ID, NEWLINE_ID,NEWLINE_ID, END_BLOCK_ID)
+            IF_ID, START_BLOCK_ID, NEWLINE_ID, "!a", LARGER_ID, "#10", DO_ID, "!nothing", NEWLINE_ID,
+            "!a", LARGER_ID, "#0", DO_ID, "!nothing", NEWLINE_ID,NEWLINE_ID, END_BLOCK_ID)
     }
 
     @Test
@@ -292,7 +282,7 @@ class SyntaxTreeConverterTests {
     fun whileTest()
     {
         assertResults(null,"CODE_BLOCK(WHILE(!true, CODE_BLOCK(!nothing)))",
-            WHILE_ID, TRUE_ID, START_BLOCK_ID, NEWLINE_ID, NOTHING_ID, NEWLINE_ID, END_BLOCK_ID)
+            WHILE_ID, "!true", START_BLOCK_ID, NEWLINE_ID, "!nothing", NEWLINE_ID, END_BLOCK_ID)
     }
 
     @Test
@@ -310,7 +300,7 @@ class SyntaxTreeConverterTests {
     fun typesTest()
     {
         // let a : fun()
-        assertResults(null, "CODE_BLOCK(DECLARATION(TYPEDEF(FUNC: !type), !a))",
+        assertResults(null, "CODE_BLOCK(DECLARATION(TYPEDEF(FUNC), !a))",
             DECLARE_ID, "!a", ANNOTATE_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID)
         // let fn : func[a : int, b : string] -> decimal
         assertResults(null,"""
@@ -320,7 +310,7 @@ class SyntaxTreeConverterTests {
                 (
                     TYPEDEF
                     (
-                        FUNC:!type
+                        FUNC
                         (
                             TYPEDEF
                             (
@@ -347,8 +337,8 @@ class SyntaxTreeConverterTests {
                     !fn [1, 5, 1, 7]
                 )
             )
-        """, DECLARE_ID, "!fn", ANNOTATE_ID, FUNC_ID, PAREN_START_ID, "!a", ANNOTATE_ID, INT_ID, SEPARATOR_ID,
-            "!b", ANNOTATE_ID, STRING_ID, PAREN_END_ID, YIELDS_ID, DECIMAL_ID)
+        """, DECLARE_ID, "!fn", ANNOTATE_ID, FUNC_ID, PAREN_START_ID, "!a", ANNOTATE_ID, "!int", SEPARATOR_ID,
+            "!b", ANNOTATE_ID, "!text", PAREN_END_ID, YIELDS_ID, "!decimal")
 
         /*
             let a : int?
@@ -378,8 +368,8 @@ class SyntaxTreeConverterTests {
                     !b [2, 5, 2, 6]
                 )
             )
-        """,DECLARE_ID, "!a", ANNOTATE_ID, INT_ID, MAYBE_ID, NEWLINE_ID,
-            DECLARE_ID, "!b", ANNOTATE_ID, INT_ID, UNION_ID, NOTHING_ID, NEWLINE_ID)
+        """,DECLARE_ID, "!a", ANNOTATE_ID, "!int", MAYBE_ID, NEWLINE_ID,
+            DECLARE_ID, "!b", ANNOTATE_ID, "!int", UNION_ID, "!nothing", NEWLINE_ID)
     }
 
     @Test
@@ -388,7 +378,7 @@ class SyntaxTreeConverterTests {
         assertResults(null,"CODE_BLOCK(DECLARATION(!a, EXPRESSION(LIST(TYPEDEF(!int), #1, #2, #3))))",
             DECLARE_ID, "!a", ASSIGN_ID, BRACKET_START_ID,
             "#1", SEPARATOR_ID, "#2", SEPARATOR_ID, "#3", SEPARATOR_ID,
-            BRACKET_END_ID, ANNOTATE_ID, INT_ID)
+            BRACKET_END_ID, ANNOTATE_ID, "!int")
 
         // a[1] := a[2] + 123
         assertResults(null, """
@@ -470,7 +460,7 @@ CODE_BLOCK
 )
         """,
             DECLARE_ID, "!my_type", ASSIGN_ID,
-            LIST_ID, PAREN_START_ID, INT_ID, UNION_ID, STRING_ID, PAREN_END_ID, MAYBE_ID, NEWLINE_ID,
+            "!list", PAREN_START_ID, "!int", UNION_ID, "!text", PAREN_END_ID, MAYBE_ID, NEWLINE_ID,
             DECLARE_ID, "!a", ANNOTATE_ID, "#1", PLUS_ID, "#2", TIMES_ID, "#3", ASSIGN_ID, "#123")
 
         /*
@@ -592,13 +582,13 @@ CODE_BLOCK
                     #17 [7, 25, 7, 27]
                 )
             )
-        """, DECLARE_ID, "!a", ANNOTATE_ID, INT_ID, UNION_ID, STRING_ID, NEWLINE_ID,
-            DECLARE_ID, "!a", ANNOTATE_ID, LIST_ID, PAREN_START_ID, ANYTHING_ID, PAREN_END_ID, NEWLINE_ID,
-            DECLARE_ID, "!a", ANNOTATE_ID, LIST_ID, PAREN_START_ID, "#7", PLUS_ID, "#8", PAREN_END_ID, NEWLINE_ID,
-            DECLARE_ID, "!a", ANNOTATE_ID, LIST_ID, PAREN_START_ID, INT_ID, UNION_ID, STRING_ID, PAREN_END_ID, NEWLINE_ID,
-            DECLARE_ID, "!a", ANNOTATE_ID, LIST_ID, PAREN_START_ID, INT_ID, MAYBE_ID, UNION_ID, STRING_ID, PAREN_END_ID, MAYBE_ID, NEWLINE_ID,
+        """, DECLARE_ID, "!a", ANNOTATE_ID, "!int", UNION_ID, "!text", NEWLINE_ID,
+            DECLARE_ID, "!a", ANNOTATE_ID, "!list", PAREN_START_ID, "!anything", PAREN_END_ID, NEWLINE_ID,
+            DECLARE_ID, "!a", ANNOTATE_ID, "!list", PAREN_START_ID, "#7", PLUS_ID, "#8", PAREN_END_ID, NEWLINE_ID,
+            DECLARE_ID, "!a", ANNOTATE_ID, "!list", PAREN_START_ID, "!int", UNION_ID, "!text", PAREN_END_ID, NEWLINE_ID,
+            DECLARE_ID, "!a", ANNOTATE_ID, "!list", PAREN_START_ID, "!int", MAYBE_ID, UNION_ID, "!text", PAREN_END_ID, MAYBE_ID, NEWLINE_ID,
             DECLARE_ID, "!a", ANNOTATE_ID, "#17", MAYBE_ID, ASSIGN_ID, "#17", NEWLINE_ID,
-            DECLARE_ID, "!a", ANNOTATE_ID, TRUE_ID, UNION_ID, FALSE_ID, ASSIGN_ID, "#17", NEWLINE_ID)
+            DECLARE_ID, "!a", ANNOTATE_ID, "!true", UNION_ID, "!false", ASSIGN_ID, "#17", NEWLINE_ID)
 
         // let def const truth := true | false
         assertResults(null,"""
@@ -615,7 +605,7 @@ CODE_BLOCK
                     )
                 )
             )
-        """, DECLARE_ID, GLOBAL_ID, CONST_ID, "!truth", ASSIGN_ID, TRUE_ID, UNION_ID, FALSE_ID)
+        """, DECLARE_ID, GLOBAL_ID, CONST_ID, "!truth", ASSIGN_ID, "!true", UNION_ID, "!false")
     }
 
     @Test
@@ -632,7 +622,7 @@ CODE_BLOCK
                 #123 [1, 29, 1, 32]
             )
         )
-""", DECLARE_ID, CONST_ID, "!a", ANNOTATE_ID,  INT_ID, ASSIGN_ID, "#123")
+""", DECLARE_ID, CONST_ID, "!a", ANNOTATE_ID,  "!int", ASSIGN_ID, "#123")
 
         //let const var a : int := 123
         assertResults(createExceptions(UnexpectedTokenException(CONST_CANT_BE_VAR_ERROR, NULL_LOCATION)),
@@ -641,7 +631,7 @@ CODE_BLOCK
                 (
                     DECLARATION
                 )
-        """, DECLARE_ID, CONST_ID, VARIABLE_ID, "!a", ANNOTATE_ID, INT_ID, ASSIGN_ID, "#123")
+        """, DECLARE_ID, CONST_ID, VARIABLE_ID, "!a", ANNOTATE_ID, "!int", ASSIGN_ID, "#123")
 
         //def const a := fun(const a : type) -> type do yield a
         assertResults(null,"""
@@ -677,8 +667,8 @@ CODE_BLOCK
                     )
                 )
             )
-        """, GLOBAL_ID, CONST_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, CONST_ID, "!a", ANNOTATE_ID, TYPE_ID,
-            PAREN_END_ID, YIELDS_ID, TYPE_ID, DO_ID, RETURN_ID, "!a")
+        """, GLOBAL_ID, CONST_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, CONST_ID, "!a", ANNOTATE_ID, "!type",
+            PAREN_END_ID, YIELDS_ID, "!type", DO_ID, RETURN_ID, "!a")
     }
 
     @Test
@@ -707,7 +697,7 @@ CODE_BLOCK
                         !a [1, 12, 1, 13]
                     )
                 )
-            """, DECLARE_ID, GLOBAL_ID, "!a", ANNOTATE_ID, INT_ID)
+            """, DECLARE_ID, GLOBAL_ID, "!a", ANNOTATE_ID, "!int")
 
     }
 
@@ -749,7 +739,7 @@ CODE_BLOCK
                 )
             )
         """, DECLARE_ID, "!a", ASSIGN_ID, DICT_START_ID, "#1", YIELDS_ID, "@hi", SEPARATOR_ID,
-            "#2", YIELDS_ID, "@bye!", DICT_END_ID, ANNOTATE_ID, INT_ID, YIELDS_ID, STRING_ID)
+            "#2", YIELDS_ID, "@bye!", DICT_END_ID, ANNOTATE_ID, "!int", YIELDS_ID, "!text")
 
         /*
         {} : int -> text
@@ -800,9 +790,9 @@ CODE_BLOCK
                 )
             )
 """,
-            DICT_START_ID, DICT_END_ID, ANNOTATE_ID, INT_ID, YIELDS_ID, STRING_ID, NEWLINE_ID,
-            DICT_START_ID, DICT_END_ID, ANNOTATE_ID, INT_ID, NEWLINE_ID,
-            DICT_START_ID, DICT_END_ID, YIELDS_ID, STRING_ID, NEWLINE_ID,
+            DICT_START_ID, DICT_END_ID, ANNOTATE_ID, "!int", YIELDS_ID, "!text", NEWLINE_ID,
+            DICT_START_ID, DICT_END_ID, ANNOTATE_ID, "!int", NEWLINE_ID,
+            DICT_START_ID, DICT_END_ID, YIELDS_ID, "!text", NEWLINE_ID,
             DICT_START_ID, DICT_END_ID)
     }
 
@@ -1043,7 +1033,7 @@ CODE_BLOCK
                 )
             )
         """, DECLARE_ID, "!a", ASSIGN_ID, BRACKET_START_ID, "#123", BRACKET_END_ID, NEWLINE_ID,
-            DECLARE_ID, "!b", ANNOTATE_ID, MUTABLE_ID, PAREN_START_ID, LIST_ID, PAREN_START_ID, INT_ID,
+            DECLARE_ID, "!b", ANNOTATE_ID, "!mutable", PAREN_START_ID, "!list", PAREN_START_ID, "!int",
             PAREN_END_ID, PAREN_END_ID, ASSIGN_ID, MUTIFY_ID, "!a")
     }
 
@@ -1065,7 +1055,7 @@ CODE_BLOCK
                     )
                 )
             )""",
-            PAREN_START_ID, START_BLOCK_ID, TERMINATOR_ID, NOTHING_ID, TERMINATOR_ID, END_BLOCK_ID, PAREN_END_ID)
+            PAREN_START_ID, START_BLOCK_ID, TERMINATOR_ID, "!nothing", TERMINATOR_ID, END_BLOCK_ID, PAREN_END_ID)
     }
 
     @Test
@@ -1126,7 +1116,7 @@ CODE_BLOCK
                         )
                     )
                 )
-            )""", INT_ID, SUBTYPES_ID, INT_ID, UNION_ID, STRING_ID, OR_ID, STRING_ID, SUBTYPES_ID, INT_ID, UNION_ID, STRING_ID)
+            )""", "!int", SUBTYPES_ID, "!int", UNION_ID, "!text", OR_ID, "!text", SUBTYPES_ID, "!int", UNION_ID, "!text")
     }
 
     private class CreateConverter(tokens: List<String>) {
