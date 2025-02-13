@@ -798,9 +798,17 @@ Additionally, new parameters can be added,
 and existing parameters can be given a default value or have their default value changed. 
 Named parameters can be made unnamed by adding `arg`, but not the other way around.
 
-### Compile-time arguments in functions
+### Compile-time Arguments in Functions
 
-TODO
+Function parameters can be marked as `const`, meaning they can only accept values known at compile-time:
+
+```wiles
+def const mutable_list := fun(const t : type) -> type
+    do yield mutable(list(t))
+
+let a : mutable_list(int) := ~[1, 2, 3]
+let b : mutable_list(text) := ~["hi", "bye"]
+```  
 
 ---
 
