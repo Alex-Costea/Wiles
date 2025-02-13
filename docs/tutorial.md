@@ -614,7 +614,12 @@ prevents confusion when types and values have similar syntax.
 
 ### The `type` type
 
-TODO
+All type expressions are themselves of type `type()`. 
+You can also use `type(subtype)` to hold all expressions which are a subtype of something. For instance:
+
+```wiles
+let my_type : type(int | text) := int
+```
 
 ---
 
@@ -965,3 +970,4 @@ All objects, including `nothing`, have these subvalues, which can be accessed us
 - `\` can be used to continue an expression after a newline. 
 This is usually unnecessary, but it can disambiguate some situations.
 - All top level expressions must be of type `nothing`.
+- Function closures are fully supported.
