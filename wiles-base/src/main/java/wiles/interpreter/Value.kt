@@ -10,6 +10,10 @@ class Value(
         return obj
     }
 
+    fun getType() : AbstractType{
+        return type
+    }
+
     override fun toString(): String {
         return "Value(obj=$obj, type=$type)"
     }

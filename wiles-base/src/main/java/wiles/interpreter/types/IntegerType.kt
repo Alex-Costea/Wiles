@@ -1,7 +1,8 @@
 package wiles.interpreter.types
 
+import wiles.interpreter.WilesTypes
+
 class IntegerType : AbstractType() {
-    override fun toString(): String {
-        return "IntegerType()"
-    }
+    override val typeName: WilesTypes
+        get() = WilesTypes.INT
 }

@@ -17,7 +17,8 @@ class ProcessorToken(
         val newName = name.substring(1).replace("_","")
         if(newName.contains("."))
             TODO("No rationals yet")
-        value = Value(newName.toBigInteger(), IntegerType())
+        val bigInt = newName.toBigInteger()
+        value = Value(bigInt, IntegerType().singletonValueOf(bigInt))
     }
 
     override fun process() {

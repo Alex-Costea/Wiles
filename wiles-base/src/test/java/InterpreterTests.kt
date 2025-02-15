@@ -4,6 +4,8 @@ import org.junit.platform.commons.annotation.Testable
 import wiles.interpreter.Interpreter
 import wiles.interpreter.Value
 import wiles.interpreter.ValuesMap
+import wiles.interpreter.types.AbstractType
+import wiles.interpreter.types.IntegerType
 import wiles.parser.Parser
 import wiles.shared.constants.Utils
 import java.math.BigInteger
@@ -29,10 +31,18 @@ class InterpreterTests {
 
     private fun intOf(x : Long) = BigInteger.valueOf(x)
 
+    private fun objValueEquals(myValue : Value, compared : Any?): Boolean {
+        return myValue.getObj() == compared
+    }
+    private fun objTypeEquals(myValue : Value, compared : AbstractType): Boolean {
+        return myValue.getType().toString() == compared.toString()
+    }
+
     @Test
     fun test1()
     {
         val values = getValues("let a := 3")
-        assertValue(values, "!a") { it.getObj() == intOf(3) }
+        assertValue(values, "!a") { objValueEquals(it, intOf(3)) }
+        assertValue(values, "!a") { objTypeEquals(it,IntegerType().singletonValueOf(intOf(3))) }
     }
 }
