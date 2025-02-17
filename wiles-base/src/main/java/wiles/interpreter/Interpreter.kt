@@ -19,8 +19,7 @@ class Interpreter {
         this.exceptions = WilesExceptionsCollection()
         if (isRunning) {
             val compiler = Interpreter(null, syntax, debug)
-            //TODO: figure out how to use values
-            //values.putAll(compiler.getValues())
+            values.putAll(compiler.getValues().filter { !it.value.isVariable() })
             if (compiler.getExceptions().size > 0) {
                 exceptions.addAll(compiler.getExceptions())
                 return

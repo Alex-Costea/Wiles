@@ -15,8 +15,12 @@ class Value(
         return type
     }
 
+    fun isVariable() : Boolean{
+        return varName != null
+    }
+
     override fun toString(): String {
-        val varNameSection = if(varName != null) ", varName=$varName" else ""
+        val varNameSection = if(isVariable()) ", varName=$varName" else ""
         return "Value(obj=$obj, type=$type$varNameSection)"
     }
 
