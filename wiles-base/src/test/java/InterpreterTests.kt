@@ -78,5 +78,21 @@ class InterpreterTests {
                 TokenLocation(1, 10, 1, 13)))
             assertValue(values, "!a") {objTypeEquals(it, InvalidType())}
         }
+
+        getResults("""
+            let a := 7
+            let b := a
+        """.trimIndent()).let { (values, exceptions) ->
+            {
+                assert(exceptions.isEmpty())
+                val obj = intOf(7)
+                val type = IntegerType().singletonValueOf(obj)
+                assertValue(values, "!a") {objValueEquals(it, obj)}
+                assertValue(values, "!a") {objTypeEquals(it, type)}
+                assertValue(values, "!b") {objValueEquals(it, obj)}
+                assertValue(values, "!b") {objValueEquals(it, type)}
+                assert(values["!a"] === values["!b"])
+            }
+        }
     }
 }

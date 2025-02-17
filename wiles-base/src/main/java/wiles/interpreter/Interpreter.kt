@@ -1,8 +1,8 @@
 package wiles.interpreter
 
 import wiles.interpreter.data.InterpreterContext
-import wiles.interpreter.interpreters.ProcessorProgram
 import wiles.interpreter.data.ValuesMap
+import wiles.interpreter.interpreters.ProcessorProgram
 import wiles.shared.AbstractSyntaxTree
 import wiles.shared.WilesExceptionsCollection
 import java.util.*
@@ -31,8 +31,10 @@ class Interpreter(scanner : Scanner?, syntax : AbstractSyntaxTree, debug : Boole
         val context = InterpreterContext(isRunning, values, debug, exceptions)
         val interpretFromProgram = ProcessorProgram(syntax, context)
         interpretFromProgram.process()
-        if(debug)
+        if(debug) {
+            print("After ${if(isRunning) "interpreting" else "compiling"}: ")
             println(context.values)
+        }
     }
 
     fun getExceptions(): WilesExceptionsCollection {
