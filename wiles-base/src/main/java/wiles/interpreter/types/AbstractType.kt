@@ -1,6 +1,6 @@
 package wiles.interpreter.types
 
-import wiles.interpreter.WilesTypes
+import wiles.interpreter.enums.WilesTypes
 
 abstract class AbstractType {
     private var singletonValue : Any? = null

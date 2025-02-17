@@ -1,4 +1,4 @@
-package wiles.interpreter
+package wiles.interpreter.data
 
 import wiles.shared.WilesExceptionsCollection
 

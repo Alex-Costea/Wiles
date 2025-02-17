@@ -1,4 +1,4 @@
-package wiles.interpreter
+package wiles.interpreter.values
 
 import wiles.interpreter.types.AbstractType
 

@@ -2,13 +2,13 @@
 import org.junit.jupiter.api.Test
 import org.junit.platform.commons.annotation.Testable
 import wiles.interpreter.Interpreter
-import wiles.interpreter.Value
-import wiles.interpreter.ValuesMap
+import wiles.interpreter.data.ValuesMap
 import wiles.interpreter.errors.IdentifierUnknownException
 import wiles.interpreter.types.*
+import wiles.interpreter.values.Value
+import wiles.interpreter.values.WilesDecimal
 import wiles.parser.Parser
 import wiles.shared.TokenLocation
-import wiles.shared.WilesDecimal
 import wiles.shared.WilesExceptionsCollection
 import wiles.shared.constants.Utils
 import java.math.BigInteger

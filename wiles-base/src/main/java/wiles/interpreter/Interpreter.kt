@@ -1,6 +1,8 @@
 package wiles.interpreter
 
+import wiles.interpreter.data.InterpreterContext
 import wiles.interpreter.interpreters.ProcessorProgram
+import wiles.interpreter.data.ValuesMap
 import wiles.shared.AbstractSyntaxTree
 import wiles.shared.WilesExceptionsCollection
 import java.util.*

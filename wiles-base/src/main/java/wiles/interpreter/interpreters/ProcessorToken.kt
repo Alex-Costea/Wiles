@@ -1,7 +1,7 @@
 package wiles.interpreter.interpreters
 
-import wiles.interpreter.InterpreterContext
-import wiles.interpreter.Value
+import wiles.interpreter.data.InterpreterContext
+import wiles.interpreter.values.Value
 import wiles.interpreter.errors.IdentifierUnknownException
 import wiles.interpreter.types.DecimalType
 import wiles.interpreter.types.IntegerType
@@ -10,7 +10,7 @@ import wiles.interpreter.types.StringType
 import wiles.shared.AbstractSyntaxTree
 import wiles.shared.InternalErrorException
 import wiles.shared.SyntaxType
-import wiles.shared.WilesDecimal
+import wiles.interpreter.values.WilesDecimal
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Predicates.IS_LITERAL
 import wiles.shared.constants.Predicates.IS_NUMBER_LITERAL

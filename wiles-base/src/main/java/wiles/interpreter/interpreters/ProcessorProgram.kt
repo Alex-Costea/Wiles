@@ -1,6 +1,6 @@
 package wiles.interpreter.interpreters
 
-import wiles.interpreter.InterpreterContext
+import wiles.interpreter.data.InterpreterContext
 import wiles.shared.AbstractSyntaxTree
 import wiles.shared.SyntaxType
 
