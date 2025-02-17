@@ -50,7 +50,7 @@ class InterpreterTests {
     }
 
     @Test
-    fun declarationsTest()
+    fun basicDeclarationsTest()
     {
         getResults("let a := 3").let { (values, exceptions) ->
             val obj = intOf(3)
@@ -107,6 +107,18 @@ class InterpreterTests {
                 assertValue(values, "!a") {objValueEquals(it, value)}
                 assertValue(values, "!a") { objTypeEquals(it, type)}
             }
+        }
+    }
+
+    @Test
+    fun expressionsTest()
+    {
+        getResults("let a := 2 + 3").let { (values, exceptions) ->
+            assert(exceptions.isEmpty())
+            val value = intOf(5)
+            val type = IntegerType().singletonValueOf(value)
+            assertValue(values, "!a"){objValueEquals(it, value)}
+            assertValue(values, "!a"){objTypeEquals(it, type)}
         }
     }
 }
