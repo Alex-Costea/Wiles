@@ -2,6 +2,7 @@ package wiles.interpreter.interpreters
 
 import wiles.interpreter.data.InterpreterContext
 import wiles.interpreter.errors.IdentifierAlreadyDeclaredException
+import wiles.interpreter.values.Value
 import wiles.shared.AbstractSyntaxTree
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.CONST_ID
@@ -15,7 +16,7 @@ class ProcessorDeclaration(
     override fun process() {
         val details = syntax.details
         val components = syntax.components.toMutableList()
-        if(details.contains(VARIABLE_ID) || details.contains(CONST_ID) || details.contains(GLOBAL_ID))
+        if(details.contains(CONST_ID) || details.contains(GLOBAL_ID))
             TODO("Can't handle these types of declarations yet")
         val typeDef = if(components[0].syntaxType == SyntaxType.TYPEDEF)
             components.removeFirst()
@@ -40,7 +41,10 @@ class ProcessorDeclaration(
         if (context.values[name]?.getType()?.isSingleton() != true) {
             val processorExpression = ProcessorExpression(expression, context)
             processorExpression.process()
-            context.values[name] = processorExpression.value
+            val value = processorExpression.value
+            val varName = if(details.contains(VARIABLE_ID)) name else null
+            val newValue = Value(value.getObj(), value.getType(), varName)
+            context.values[name] = newValue
         }
     }
 }

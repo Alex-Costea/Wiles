@@ -28,23 +28,23 @@ class ProcessorToken(
         if(newName.contains("."))
         {
             val decimal = WilesDecimal(newName)
-            value = Value(decimal, DecimalType().singletonValueOf(decimal))
+            value = Value(decimal, DecimalType().singletonValueOf(decimal), null)
         }
         else{
             val bigInt = newName.toBigInteger()
-            value = Value(bigInt, IntegerType().singletonValueOf(bigInt))
+            value = Value(bigInt, IntegerType().singletonValueOf(bigInt), null)
         }
     }
 
     private fun processText(name: String)
     {
         val newName = name.substring(1)
-        value = Value(newName, StringType().singletonValueOf(newName))
+        value = Value(newName, StringType().singletonValueOf(newName), null)
     }
 
     private fun processIdentifier(name: String) {
         value = context.values.getOrDefault(name, null) ?:
-            Value(null, InvalidType())
+            Value(null, InvalidType(), null)
         if(!context.values.containsKey(name))
         {
             val exception = IdentifierUnknownException(syntax.location!!)

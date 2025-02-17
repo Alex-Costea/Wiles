@@ -14,9 +14,8 @@ class ProcessorProgram (
             val processor : AbstractProcessor = when(component.syntaxType){
                 SyntaxType.DECLARATION -> ProcessorDeclaration(component, context)
                 SyntaxType.FUNC -> TODO()
-                SyntaxType.EXPRESSION -> TODO()
+                SyntaxType.EXPRESSION, SyntaxType.TOKEN -> ProcessorExpression(component, context)
                 SyntaxType.CODE_BLOCK -> TODO()
-                SyntaxType.TOKEN -> TODO()
                 SyntaxType.TYPEDEF -> TODO()
                 SyntaxType.IF -> TODO()
                 SyntaxType.DICT -> TODO()

@@ -19,7 +19,8 @@ class Interpreter {
         this.exceptions = WilesExceptionsCollection()
         if (isRunning) {
             val compiler = Interpreter(null, syntax, debug)
-            values.putAll(compiler.getValues())
+            //TODO: figure out how to use values
+            //values.putAll(compiler.getValues())
             if (compiler.getExceptions().size > 0) {
                 exceptions.addAll(compiler.getExceptions())
                 return

@@ -35,7 +35,7 @@ class ProcessorExpression(
             val right = getValue(syntax.components.getOrNull(2))
             val operand = when(operationType)
             {
-                PLUS_ID -> PlusOperation(left!!, right!!)
+                PLUS_ID -> PlusOperation(left!!, right!!, context)
                 else -> TODO("Unknown operation")
             }
             value = operand.getNewValue()

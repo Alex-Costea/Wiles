@@ -91,7 +91,7 @@ class InterpreterTests {
             assertValue(values, "!a") {objTypeEquals(it, type)}
             assertValue(values, "!b") {objValueEquals(it, obj)}
             assertValue(values, "!b") {objTypeEquals(it, type)}
-            assert(values["!a"] === values["!b"])
+            assert(values["!a"] == values["!b"])
         }
 
         getResults("""
