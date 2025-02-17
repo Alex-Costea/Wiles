@@ -20,7 +20,7 @@ class MethodStatement(oldContext : ParserContext)
     : AbstractStatement(oldContext.setWithinMethod(true)) {
 
     private val parameters: MutableList<DeclarationStatement> = ArrayList()
-    private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
+    private val exceptions: WilesExceptionsCollection = WilesExceptionsCollection()
 
     private var returnType: TypeDefExpression? = null
     private val methodBody: CodeBlockStatement = CodeBlockStatement(context)
@@ -51,7 +51,7 @@ class MethodStatement(oldContext : ParserContext)
         transmitter.expect(tokenOf(PAREN_END_ID))
     }
 
-    override fun process(): CompilationExceptionsCollection {
+    override fun process(): WilesExceptionsCollection {
         try {
             val startWithCodeBlock = transmitter.expectMaybe(tokenOf(DO_ID).or(START_BLOCK_ID).removeWhen(WhenRemoveToken.Never))
             if(startWithCodeBlock.isEmpty) {
@@ -72,7 +72,7 @@ class MethodStatement(oldContext : ParserContext)
             if(transmitter.expectMaybe(tokenOf(DO_ID).or(START_BLOCK_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
                 exceptions.addAll(methodBody.process())
             else isTypeDefinition = true
-        } catch (ex: AbstractCompilationException) {
+        } catch (ex: WilesException) {
             exceptions.add(ex)
         }
         return exceptions

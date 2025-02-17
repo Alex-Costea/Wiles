@@ -2,9 +2,9 @@ package wiles.parser.statements
 
 import wiles.parser.builders.ParserContext
 import wiles.parser.statements.expressions.DefaultExpression
-import wiles.shared.AbstractCompilationException
+import wiles.shared.WilesException
 import wiles.shared.AbstractStatement
-import wiles.shared.CompilationExceptionsCollection
+import wiles.shared.WilesExceptionsCollection
 import wiles.shared.SyntaxType
 
 class WhileStatement(oldContext: ParserContext) : AbstractStatement(oldContext) {
@@ -18,14 +18,14 @@ class WhileStatement(oldContext: ParserContext) : AbstractStatement(oldContext) 
         return mutableListOf(condition,codeBlock)
     }
 
-    override fun process(): CompilationExceptionsCollection {
-        val exceptions = CompilationExceptionsCollection()
+    override fun process(): WilesExceptionsCollection {
+        val exceptions = WilesExceptionsCollection()
         try
         {
             exceptions.addAll(condition.process())
             exceptions.addAll(codeBlock.process())
         }
-        catch (ex : AbstractCompilationException){
+        catch (ex : WilesException){
             exceptions.add(ex)
         }
         return exceptions

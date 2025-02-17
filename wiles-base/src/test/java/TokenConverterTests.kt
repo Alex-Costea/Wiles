@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.api.Test
 import wiles.parser.converters.InputToTokensConverter
 import wiles.parser.exceptions.StringInvalidException
-import wiles.shared.AbstractCompilationException
+import wiles.shared.WilesException
 import wiles.shared.Token
 import wiles.shared.constants.ErrorMessages.STRING_UNFINISHED_ERROR
 import wiles.shared.constants.Tokens.ACCESS_ID
@@ -36,8 +36,8 @@ class TokenConverterTests {
         val x = InputToTokensConverter(input, NULL_LOCATION)
         x.convert()
         val t = if (message != null) Assertions.assertThrows(throwing, { x.throwExceptionIfExists(exceptionIndex) }, message) else Assertions.assertThrows(throwing) { x.throwExceptionIfExists(exceptionIndex) }
-        assert(t is AbstractCompilationException)
-        if (line != null) Assertions.assertEquals(line, Objects.requireNonNull((t as AbstractCompilationException).getTokenLocation()).line)
+        assert(t is WilesException)
+        if (line != null) Assertions.assertEquals(line, Objects.requireNonNull((t as WilesException).getTokenLocation()).line)
     }
 
     @Test

@@ -16,12 +16,12 @@ import kotlin.system.exitProcess
 
 object WilesCompiler {
 
-    private fun getErrorsDisplay(exceptions: CompilationExceptionsCollection, input: String, debug : Boolean) : String
+    private fun getErrorsDisplay(exceptions: WilesExceptionsCollection, input: String, debug : Boolean) : String
     {
         if (exceptions.size > 0)
             return run {
                 val optional =
-                    exceptions.sortedWith(nullsLast(compareBy<AbstractCompilationException> { it.tokenLocation.line }
+                    exceptions.sortedWith(nullsLast(compareBy<WilesException> { it.tokenLocation.line }
                         .thenBy { it.tokenLocation.lineIndex }))
                         .map {
                             LINE_SYMBOL + "Line ${it.tokenLocation.line}: " + it.message +
@@ -98,7 +98,7 @@ object WilesCompiler {
     fun getOutput(args: Array<String>) : OutputData
     {
         //args
-        val exceptions = CompilationExceptionsCollection()
+        val exceptions = WilesExceptionsCollection()
         val exceptionsString = StringBuilder()
         val clArgs = getCommandLine(args)
 
@@ -117,7 +117,7 @@ object WilesCompiler {
         }
 
         if (exceptions.isNotEmpty()) {
-            exceptionsString.append(getErrorsDisplay(exceptions, parser.input, clArgs.isDebug))
+            exceptionsString.append(getErrorsDisplay(exceptions, clArgs.code, clArgs.isDebug))
             return OutputData(output = "",
                 exceptionsString = exceptionsString.toString(),
                 exceptions = exceptions)
@@ -126,6 +126,9 @@ object WilesCompiler {
         val interpreter = Interpreter(scanner, convertStatementToSyntaxTree(result), clArgs.isDebug)
         val output = interpreter.getOutput()
         exceptions.addAll(interpreter.getExceptions())
+        if (exceptions.isNotEmpty()) {
+            exceptionsString.append(getErrorsDisplay(exceptions, clArgs.code, clArgs.isDebug))
+        }
         return OutputData(
             output = output,
             exceptionsString = exceptionsString.toString(),

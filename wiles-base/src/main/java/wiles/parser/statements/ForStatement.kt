@@ -3,9 +3,9 @@ package wiles.parser.statements
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.builders.ParserContext
 import wiles.parser.statements.expressions.DefaultExpression
-import wiles.shared.AbstractCompilationException
+import wiles.shared.WilesException
 import wiles.shared.AbstractStatement
-import wiles.shared.CompilationExceptionsCollection
+import wiles.shared.WilesExceptionsCollection
 import wiles.shared.SyntaxType
 import wiles.shared.constants.ErrorMessages.IDENTIFIER_EXPECTED_ERROR
 import wiles.shared.constants.Predicates
@@ -28,8 +28,8 @@ class ForStatement(oldContext: ParserContext) : AbstractStatement(oldContext) {
         return list
     }
 
-    override fun process(): CompilationExceptionsCollection {
-        val exceptions = CompilationExceptionsCollection()
+    override fun process(): WilesExceptionsCollection {
+        val exceptions = WilesExceptionsCollection()
         try
         {
             identifierStatement = TokenStatement(transmitter.expect(tokenOf(Predicates.IS_IDENTIFIER)
@@ -42,7 +42,7 @@ class ForStatement(oldContext: ParserContext) : AbstractStatement(oldContext) {
 
             exceptions.addAll(codeBlock.process())
         }
-        catch (ex : AbstractCompilationException){
+        catch (ex : WilesException){
             exceptions.add(ex)
         }
         return exceptions

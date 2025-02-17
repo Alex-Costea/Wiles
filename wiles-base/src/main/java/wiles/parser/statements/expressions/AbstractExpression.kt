@@ -10,8 +10,8 @@ import wiles.parser.services.PrecedenceProcessor
 import wiles.shared.AbstractStatement
 import wiles.parser.statements.MethodCallStatement
 import wiles.parser.statements.TokenStatement
-import wiles.shared.AbstractCompilationException
-import wiles.shared.CompilationExceptionsCollection
+import wiles.shared.WilesException
+import wiles.shared.WilesExceptionsCollection
 import wiles.shared.SyntaxType
 import wiles.shared.Token
 import wiles.shared.constants.ErrorMessages.EXPRESSION_UNFINISHED_ERROR
@@ -37,7 +37,7 @@ import java.util.*
 abstract class AbstractExpression protected constructor(context: ParserContext) :
     AbstractStatement(context) {
     @JvmField
-    protected val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
+    protected val exceptions: WilesExceptionsCollection = WilesExceptionsCollection()
     @JvmField
     var left: AbstractStatement? = null
     @JvmField
@@ -59,7 +59,7 @@ abstract class AbstractExpression protected constructor(context: ParserContext) 
         return components
     }
 
-    @Throws(AbstractCompilationException::class)
+    @Throws(WilesException::class)
     protected open fun handleToken(token: Token): Boolean {
         return KEYWORDS_INDICATING_NEW_EXPRESSION.contains(token.content)
     }
@@ -96,12 +96,12 @@ abstract class AbstractExpression protected constructor(context: ParserContext) 
     private fun handleSpecialStatements(): Optional<AbstractStatement> {
         return try {
             Optional.of(specialStatementFactory.create())
-        } catch (e: AbstractCompilationException) {
+        } catch (e: WilesException) {
             Optional.empty()
         }
     }
 
-    override fun process(): CompilationExceptionsCollection {
+    override fun process(): WilesExceptionsCollection {
         try {
             var mainCurrentToken = transmitter.expect(START_OF_EXPRESSION)
             val precedenceProcessor = PrecedenceProcessor(context)
@@ -218,7 +218,7 @@ abstract class AbstractExpression protected constructor(context: ParserContext) 
             )
             setComponents(precedenceProcessor)
             flatten()
-        } catch (ex: AbstractCompilationException) {
+        } catch (ex: WilesException) {
             exceptions.add(ex)
         }
         return exceptions

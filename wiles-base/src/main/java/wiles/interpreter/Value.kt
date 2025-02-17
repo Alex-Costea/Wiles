@@ -3,10 +3,10 @@ package wiles.interpreter
 import wiles.interpreter.types.AbstractType
 
 class Value(
-    private var obj: Any,
-    private val type : AbstractType
+    private var obj: Any?,
+    private val type: AbstractType
 ) {
-    fun getObj() : Any{
+    fun getObj() : Any?{
         return obj
     }
 

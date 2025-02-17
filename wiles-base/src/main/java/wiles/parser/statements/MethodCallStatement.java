@@ -2,10 +2,10 @@ package wiles.parser.statements;
 
 import wiles.parser.builders.ParserContext;
 import wiles.shared.AbstractStatement;
-import wiles.shared.CompilationExceptionsCollection;
+import wiles.shared.WilesExceptionsCollection;
 import wiles.shared.SyntaxType;
 import wiles.parser.enums.WhenRemoveToken;
-import wiles.shared.AbstractCompilationException;
+import wiles.shared.WilesException;
 import wiles.parser.statements.expressions.InsideMethodCallExpression;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,8 +35,8 @@ public class MethodCallStatement extends AbstractStatement {
 
     @NotNull
     @Override
-    public CompilationExceptionsCollection process() {
-        var exceptions = new CompilationExceptionsCollection();
+    public WilesExceptionsCollection process() {
+        var exceptions = new WilesExceptionsCollection();
         try
         {
             while (transmitter.expectMaybe(tokenOf(PAREN_END_ID).removeWhen(WhenRemoveToken.Never)).isEmpty()) {
@@ -47,7 +47,7 @@ public class MethodCallStatement extends AbstractStatement {
             }
             transmitter.expect(tokenOf(PAREN_END_ID));
         }
-        catch (AbstractCompilationException ex)
+        catch (WilesException ex)
         {
             exceptions.add(ex);
         }

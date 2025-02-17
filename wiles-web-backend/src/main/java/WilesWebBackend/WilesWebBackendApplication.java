@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import wiles.shared.CompilationExceptionsCollection;
+import wiles.shared.WilesExceptionsCollection;
 import wiles.shared.JSONStatement;
 import wiles.shared.OutputData;
 

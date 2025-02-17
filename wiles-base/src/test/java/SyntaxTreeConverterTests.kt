@@ -6,8 +6,8 @@ import wiles.parser.converters.TokensToSyntaxTreeConverter
 import wiles.parser.exceptions.TokenExpectedException
 import wiles.parser.exceptions.UnexpectedEndException
 import wiles.parser.exceptions.UnexpectedTokenException
-import wiles.shared.AbstractCompilationException
-import wiles.shared.CompilationExceptionsCollection
+import wiles.shared.WilesException
+import wiles.shared.WilesExceptionsCollection
 import wiles.shared.Token
 import wiles.shared.constants.ErrorMessages.CONST_CANT_BE_VAR_ERROR
 import wiles.shared.constants.ErrorMessages.END_OF_STATEMENT_EXPECTED_ERROR
@@ -67,8 +67,8 @@ class SyntaxTreeConverterTests {
         return string.replace("[\\r\\n ]|\\[.*]".toRegex(),"")
     }
 
-    private fun assertResults(exceptions: CompilationExceptionsCollection?, expectedResult: String?, vararg tokens: String) {
-        val exceptionList = exceptions ?: CompilationExceptionsCollection()
+    private fun assertResults(exceptions: WilesExceptionsCollection?, expectedResult: String?, vararg tokens: String) {
+        val exceptionList = exceptions ?: WilesExceptionsCollection()
         val converter = CreateConverter(tokens.asList())
         Assertions.assertEquals(exceptionList, converter.exceptions)
         expectedResult?.let{
@@ -78,8 +78,8 @@ class SyntaxTreeConverterTests {
         }
     }
 
-    private fun createExceptions(vararg list: AbstractCompilationException): CompilationExceptionsCollection {
-        val exceptions = CompilationExceptionsCollection()
+    private fun createExceptions(vararg list: WilesException): WilesExceptionsCollection {
+        val exceptions = WilesExceptionsCollection()
         exceptions.addAll(listOf(*list))
         return exceptions
     }
@@ -918,70 +918,6 @@ CODE_BLOCK
             "!b", ASSIGN_ID, "#456", DATA_END_ID, NEWLINE_ID,
             DECLARE_ID, "!value", ANNOTATE_ID, "!my_type", ASSIGN_ID, DATA_START_ID, "!a", ASSIGN_ID, "@hi",
             SEPARATOR_ID, "!b", ASSIGN_ID, "#123", DATA_END_ID, NEWLINE_ID)
-
-/*
-        //<<a := 1, default b := 123>>
-        assertResults(createExceptions(TokenExpectedException(CANT_BE_EITHER_INTERFACE_OR_OBJECT_ERROR,NULL_LOCATION)),
-            """
-                CODE_BLOCK
-                (
-                    EXPRESSION
-                    (
-                        DATA [1, 27, 1, 29]
-                        (
-                            DECLARATION
-                            (
-                                !a [1, 3, 1, 4], 
-                                #1 [1, 8, 1, 9]
-                            ), 
-                            DECLARATION: DEFAULT 
-                            (
-                                !b [1, 19, 1, 20], 
-                                #123 [1, 24, 1, 27]
-                            )
-                        )
-                    )
-                )""",
-            DATA_START_ID, "!a", ASSIGN_ID, "#1", SEPARATOR_ID, DEFAULT_ID, "!b", ASSIGN_ID, "#123", DATA_END_ID)
-
-        //<<a := 1, b : int>>
-        assertResults(createExceptions(TokenExpectedException(CANT_BE_EITHER_INTERFACE_OR_OBJECT_ERROR,NULL_LOCATION)),
-            """
-                CODE_BLOCK
-                (
-                    EXPRESSION
-                    (
-                        DATA [1, 18, 1, 20]
-                        (
-                            DECLARATION
-                            (
-                                !a [1, 3, 1, 4], 
-                                #1 [1, 8, 1, 9]
-                            ), 
-                            DECLARATION
-                            (
-                                TYPEDEF
-                                (
-                                    !int [1, 15, 1, 18]
-                                ), 
-                                !b [1, 11, 1, 12]
-                            )
-                        )
-                    )
-                )""",
-            DATA_START_ID, "!a", ASSIGN_ID, "#1", SEPARATOR_ID, "!b", ANNOTATE_ID, "!int", DATA_END_ID)
-
-        // <<default b : int >>
-        assertResults(createExceptions(TokenExpectedException(EXPECTED_INITIALIZATION_ERROR, NULL_LOCATION)), """
-            CODE_BLOCK
-            (
-                EXPRESSION
-                (
-                    DATA
-                )
-            )""", DATA_START_ID, DEFAULT_ID, "!b", ANNOTATE_ID, "!int", DATA_END_ID)
-*/
-
     }
 
     @Test

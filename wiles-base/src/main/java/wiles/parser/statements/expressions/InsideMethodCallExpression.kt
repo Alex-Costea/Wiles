@@ -4,7 +4,7 @@ import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.builders.ParserContext
 import wiles.parser.services.PrecedenceProcessor
 import wiles.parser.statements.TokenStatement
-import wiles.shared.AbstractCompilationException
+import wiles.shared.WilesException
 import wiles.shared.Token
 import wiles.shared.constants.Tokens.ASSIGN_ID
 
@@ -16,7 +16,7 @@ class InsideMethodCallExpression(oldContext: ParserContext) : AbstractExpression
         else super.setComponents(precedenceProcessor)
     }
 
-    @Throws(AbstractCompilationException::class)
+    @Throws(WilesException::class)
     override fun handleToken(token: Token): Boolean {
         if (token.content == ASSIGN_ID) {
             operation = TokenStatement(transmitter.expect(tokenOf(ASSIGN_ID)), context)

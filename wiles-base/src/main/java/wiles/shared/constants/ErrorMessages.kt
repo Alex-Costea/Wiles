@@ -3,6 +3,8 @@ package wiles.shared.constants
 object ErrorMessages {
     const val LINE_SYMBOL = "\n>>> "
     const val COMPILATION_FAILED_ERROR = "${LINE_SYMBOL}COMPILATION FAILED$LINE_SYMBOL"
+
+    // Parsing errors
     const val TOKEN_EXPECTED_ERROR = "The token is missing or incorrect. Did you mean %s?"
     const val IDENTIFIER_EXPECTED_ERROR = "The identifier name is invalid or missing."
     const val EXPRESSION_EXPECTED_ERROR = "The expression is invalid or missing."
@@ -16,8 +18,9 @@ object ErrorMessages {
             "Please use the `;` symbol or start a new line."
     const val CONST_CANT_BE_VAR_ERROR = "This value cannot be both constant and variable at the same time."
     const val EXPECTED_INITIALIZATION_ERROR = "Expected value initialization."
-    const val CANT_BE_EITHER_INTERFACE_OR_OBJECT_ERROR = "This expression can't be either an interface or an object, " +
-            "as it combines initialized and non-initialized declarations."
+
+    // Processing errors
+    const val UNKNOWN_IDENTIFIER_ERROR = "Identifier unknown."
 
     // Internal errors
     const val INTERNAL_ERROR = "An internal error has occurred. "

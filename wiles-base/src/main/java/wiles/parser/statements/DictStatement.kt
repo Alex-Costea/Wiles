@@ -5,9 +5,9 @@ import wiles.parser.builders.ParserContext
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.statements.expressions.DefaultExpression
 import wiles.parser.statements.expressions.TypeDefExpression
-import wiles.shared.AbstractCompilationException
+import wiles.shared.WilesException
 import wiles.shared.AbstractStatement
-import wiles.shared.CompilationExceptionsCollection
+import wiles.shared.WilesExceptionsCollection
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.ANNOTATE_ID
 import wiles.shared.constants.Tokens.DICT_END_ID
@@ -22,8 +22,8 @@ class DictStatement(context: ParserContext) : AbstractStatement(context) {
         return components
     }
 
-    override fun process(): CompilationExceptionsCollection {
-        val errors = CompilationExceptionsCollection()
+    override fun process(): WilesExceptionsCollection {
+        val errors = WilesExceptionsCollection()
         try{
             while(transmitter.expectMaybe(tokenOf(DICT_END_ID).removeWhen(WhenRemoveToken.Never)).isEmpty)
             {
@@ -62,7 +62,7 @@ class DictStatement(context: ParserContext) : AbstractStatement(context) {
             if(typeStatement1 != null)
                 components.add(0, typeStatement1)
         }
-        catch(ex : AbstractCompilationException)
+        catch(ex : WilesException)
         {
             errors.add(ex)
         }

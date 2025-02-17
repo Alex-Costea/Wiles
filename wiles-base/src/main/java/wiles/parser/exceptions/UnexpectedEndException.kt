@@ -1,6 +1,6 @@
 package wiles.parser.exceptions
 
 import wiles.shared.TokenLocation
-import wiles.shared.AbstractCompilationException
+import wiles.shared.WilesException
 
-class UnexpectedEndException(s: String, location: TokenLocation) : AbstractCompilationException(s, location)
+class UnexpectedEndException(s: String, location: TokenLocation) : WilesException(s, location)

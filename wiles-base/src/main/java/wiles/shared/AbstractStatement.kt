@@ -14,7 +14,7 @@ abstract class AbstractStatement(val context: ParserContext) : StatementInterfac
 
     override var location: TokenLocation? = null
 
-    abstract fun process(): CompilationExceptionsCollection
+    abstract fun process(): WilesExceptionsCollection
 
     override fun toString(): String {
         return Utils.statementToString(this)

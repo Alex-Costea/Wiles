@@ -2,12 +2,12 @@ package wiles.parser
 
 import wiles.parser.converters.TokensToSyntaxTreeConverter
 import wiles.parser.statements.CodeBlockStatement
-import wiles.shared.CompilationExceptionsCollection
 import wiles.shared.Token
 import wiles.shared.TokenLocation
+import wiles.shared.WilesExceptionsCollection
 
-class Parser(val input : String, isDebug : Boolean) {
-    private val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
+class Parser(private val input : String, isDebug : Boolean) {
+    private val exceptions: WilesExceptionsCollection = WilesExceptionsCollection()
     private var results : CodeBlockStatement
 
     init{
@@ -21,7 +21,7 @@ class Parser(val input : String, isDebug : Boolean) {
         results = ast
     }
 
-    fun getExceptions() : CompilationExceptionsCollection
+    fun getExceptions() : WilesExceptionsCollection
     {
         return exceptions
     }

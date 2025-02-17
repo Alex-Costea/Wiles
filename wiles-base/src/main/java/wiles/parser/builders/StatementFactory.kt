@@ -8,7 +8,7 @@ import wiles.parser.services.TokenTransmitter
 import wiles.parser.statements.*
 import wiles.parser.statements.expressions.DefaultExpression
 import wiles.parser.statements.expressions.TopLevelExpression
-import wiles.shared.AbstractCompilationException
+import wiles.shared.WilesException
 import wiles.shared.AbstractStatement
 import wiles.shared.DeclarationType
 import wiles.shared.InternalErrorException
@@ -51,7 +51,7 @@ class StatementFactory {
     }
 
     @JvmOverloads
-    @Throws(AbstractCompilationException::class)
+    @Throws(WilesException::class)
     fun create(errorMessage: String = INTERNAL_ERROR): AbstractStatement {
         for (statement in statements) {
             if (!context.isWithinMethod && statement == StatementFactoryTypes.RETURN_STATEMENT) continue

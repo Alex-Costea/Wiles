@@ -29,7 +29,7 @@ class DeclarationStatement(
     private var left: TokenStatement? = null
     private var typeStatement : TypeDefExpression? = null
     private var right: DefaultExpression? = null
-    private val exceptions = CompilationExceptionsCollection()
+    private val exceptions = WilesExceptionsCollection()
 
     override val syntaxType: SyntaxType
         get() = SyntaxType.DECLARATION
@@ -49,7 +49,7 @@ class DeclarationStatement(
         exceptions.addAll(rightExpression.process())
     }
 
-    override fun process(): CompilationExceptionsCollection {
+    override fun process(): WilesExceptionsCollection {
         try {
             transmitter.expectMaybe(tokenOf(DECLARE_ID))
             val expectParams = when(isParam){
@@ -93,7 +93,7 @@ class DeclarationStatement(
                 transmitter.expect(tokenOf(ASSIGN_ID))
                 readRight()
             }
-        } catch (ex: AbstractCompilationException) {
+        } catch (ex: WilesException) {
             exceptions.add(ex)
         }
         return exceptions

@@ -3,9 +3,9 @@ package wiles.parser.statements
 import wiles.parser.builders.ParserContext
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.statements.expressions.DefaultExpression
-import wiles.shared.AbstractCompilationException
+import wiles.shared.WilesException
 import wiles.shared.AbstractStatement
-import wiles.shared.CompilationExceptionsCollection
+import wiles.shared.WilesExceptionsCollection
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.DEFAULT_ID
@@ -23,8 +23,8 @@ class IfStatement(context: ParserContext) : AbstractStatement(context) {
         return branches.flatMap { (x, y) -> listOf(x, y) }.toMutableList()
     }
 
-    override fun process(): CompilationExceptionsCollection {
-        val exceptions = CompilationExceptionsCollection()
+    override fun process(): WilesExceptionsCollection {
+        val exceptions = WilesExceptionsCollection()
         try
         {
             transmitter.expect(tokenOf(IF_ID))
@@ -49,7 +49,7 @@ class IfStatement(context: ParserContext) : AbstractStatement(context) {
                 }
             }
         }
-        catch (ex : AbstractCompilationException){
+        catch (ex : WilesException){
             exceptions.add(ex)
         }
         return exceptions

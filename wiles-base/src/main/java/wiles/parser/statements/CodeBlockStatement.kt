@@ -6,9 +6,9 @@ import wiles.parser.builders.StatementFactory
 import wiles.parser.enums.StatementFactoryTypes
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.exceptions.UnexpectedEndException
-import wiles.shared.AbstractCompilationException
+import wiles.shared.WilesException
 import wiles.shared.AbstractStatement
-import wiles.shared.CompilationExceptionsCollection
+import wiles.shared.WilesExceptionsCollection
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Predicates.EXPECT_TERMINATOR
 import wiles.shared.constants.Predicates.EXPECT_TERMINATOR_DONT_REMOVE
@@ -29,7 +29,7 @@ open class CodeBlockStatement(context: ParserContext) : AbstractStatement(contex
     }
 
     private val components: MutableList<AbstractStatement> = ArrayList()
-    protected val exceptions: CompilationExceptionsCollection = CompilationExceptionsCollection()
+    protected val exceptions: WilesExceptionsCollection = WilesExceptionsCollection()
 
     override val syntaxType: SyntaxType
         get() = SyntaxType.CODE_BLOCK
@@ -52,7 +52,7 @@ open class CodeBlockStatement(context: ParserContext) : AbstractStatement(contex
         {
             statement = statementFactory.setContext(context).create()
         }
-        catch (ex : AbstractCompilationException)
+        catch (ex : WilesException)
         {
             exceptions.add(ex)
             readRestOfLine()
@@ -68,7 +68,7 @@ open class CodeBlockStatement(context: ParserContext) : AbstractStatement(contex
             if(!doExpression)
                 expectTerminator()
         }
-        catch(ex : AbstractCompilationException)
+        catch(ex : WilesException)
         {
             readRestOfLine()
             exceptions.add(ex)
@@ -83,7 +83,7 @@ open class CodeBlockStatement(context: ParserContext) : AbstractStatement(contex
             Unit
     }
 
-    override fun process(): CompilationExceptionsCollection {
+    override fun process(): WilesExceptionsCollection {
         try {
             if (transmitter.expectMaybe(tokenOf(DO_ID)).isPresent) {
                 while(transmitter.expectMaybe(EXPECT_TERMINATOR).isPresent)
@@ -102,7 +102,7 @@ open class CodeBlockStatement(context: ParserContext) : AbstractStatement(contex
                 }
                 transmitter.expect(tokenOf(END_BLOCK_ID))
             }
-        } catch (ex: AbstractCompilationException) {
+        } catch (ex: WilesException) {
             exceptions.add(ex)
         }
         return exceptions

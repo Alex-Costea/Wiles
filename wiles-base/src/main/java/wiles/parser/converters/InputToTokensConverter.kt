@@ -2,8 +2,8 @@ package wiles.parser.converters
 
 import org.unbescape.html.HtmlEscape
 import wiles.parser.exceptions.StringInvalidException
-import wiles.shared.AbstractCompilationException
-import wiles.shared.CompilationExceptionsCollection
+import wiles.shared.WilesException
+import wiles.shared.WilesExceptionsCollection
 import wiles.shared.Token
 import wiles.shared.TokenLocation
 import wiles.shared.constants.Chars.COMMENT_START
@@ -21,7 +21,7 @@ import java.util.regex.Pattern
 
 class InputToTokensConverter(input: String, private val lastLocation: TokenLocation) {
     private val arrayChars: IntArray = input.codePoints().toArray()
-    private val exceptions = CompilationExceptionsCollection()
+    private val exceptions = WilesExceptionsCollection()
     private var originalIndex = 0
     private var index = 0
     private var lineIndex = -1 //character at index -1 can be considered equivalent to newline
@@ -60,7 +60,7 @@ class InputToTokensConverter(input: String, private val lastLocation: TokenLocat
                     else tokens.add(createToken(""))
                     if (id == Tokens.NEWLINE_ID) addNewLine()
                 }
-            } catch (ex: AbstractCompilationException) {
+            } catch (ex: WilesException) {
                 exceptions.add(ex)
                 tokens.add(createToken(Tokens.ERROR_TOKEN))
             }
@@ -225,13 +225,13 @@ class InputToTokensConverter(input: String, private val lastLocation: TokenLocat
         get() = originalIndex - lineIndex
 
 
-    @Throws(AbstractCompilationException::class)
+    @Throws(WilesException::class)
     fun throwExceptionIfExists(exceptionIndex: Int) {
         if (exceptions.size > exceptionIndex) throw exceptions[exceptionIndex]
     }
 
-    fun getExceptions(): CompilationExceptionsCollection {
-        return exceptions.clone() as CompilationExceptionsCollection
+    fun getExceptions(): WilesExceptionsCollection {
+        return exceptions.clone() as WilesExceptionsCollection
     }
 
     companion object {

@@ -5,9 +5,9 @@ import wiles.parser.builders.ParserContext
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.statements.expressions.DefaultExpression
 import wiles.parser.statements.expressions.TypeDefExpression
-import wiles.shared.AbstractCompilationException
+import wiles.shared.WilesException
 import wiles.shared.AbstractStatement
-import wiles.shared.CompilationExceptionsCollection
+import wiles.shared.WilesExceptionsCollection
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.BRACKET_END_ID
@@ -21,8 +21,8 @@ class ListStatement(context: ParserContext) : AbstractStatement(context) {
         return components
     }
 
-    override fun process(): CompilationExceptionsCollection {
-        val errors = CompilationExceptionsCollection()
+    override fun process(): WilesExceptionsCollection {
+        val errors = WilesExceptionsCollection()
         try{
             while(transmitter.expectMaybe(tokenOf(BRACKET_END_ID).removeWhen(WhenRemoveToken.Never)).isEmpty)
             {
@@ -38,7 +38,7 @@ class ListStatement(context: ParserContext) : AbstractStatement(context) {
                 components.add(0,typeStatement)
             }
         }
-        catch(ex : AbstractCompilationException)
+        catch(ex : WilesException)
         {
             errors.add(ex)
         }

@@ -1,9 +1,9 @@
 package wiles.shared
 
-class CompilationExceptionsCollection : ArrayList<AbstractCompilationException>() {
+class WilesExceptionsCollection : ArrayList<WilesException>() {
 
     override fun equals(other: Any?): Boolean {
-        if (other !is CompilationExceptionsCollection)
+        if (other !is WilesExceptionsCollection)
             return false
         if (other.size != size)
             return false

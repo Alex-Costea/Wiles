@@ -2,7 +2,7 @@ package wiles.parser.statements
 
 import wiles.parser.builders.ParserContext
 import wiles.shared.AbstractStatement
-import wiles.shared.CompilationExceptionsCollection
+import wiles.shared.WilesExceptionsCollection
 import wiles.shared.Token
 import wiles.shared.SyntaxType
 
@@ -19,7 +19,7 @@ class TokenStatement(val token: Token, context : ParserContext) : AbstractStatem
         return ArrayList()
     }
 
-    override fun process(): CompilationExceptionsCollection {
-        return CompilationExceptionsCollection()
+    override fun process(): WilesExceptionsCollection {
+        return WilesExceptionsCollection()
     }
 }

@@ -14,30 +14,8 @@ class DataStatement(context: ParserContext) : AbstractStatement(context) {
         return components
     }
 
-/*
-    private fun canBeFunction() : Boolean
-    {
-        var canBeFunction = true
-        var canBeObject = true
-        for(component in components)
-        {
-            if(component.name == DEFAULT_ID) {
-                canBeObject = false
-                continue
-            }
-            val nonTypeDefComponents = component.getComponents().filter { it.syntaxType != SyntaxType.TYPEDEF }
-            if(nonTypeDefComponents.size == 1)
-                canBeObject = false
-            else canBeFunction = false
-        }
-        if(!canBeFunction && !canBeObject)
-            throw TokenExpectedException(CANT_BE_EITHER_INTERFACE_OR_OBJECT_ERROR, this.getFirstLocation())
-        return canBeFunction
-    }
-*/
-
-    override fun process(): CompilationExceptionsCollection {
-        val errors = CompilationExceptionsCollection()
+    override fun process(): WilesExceptionsCollection {
+        val errors = WilesExceptionsCollection()
         try{
             while(transmitter.expectMaybe(ExpectParamsBuilder.tokenOf(Tokens.DATA_END_ID).removeWhen(WhenRemoveToken.Never)).isEmpty)
             {
@@ -48,13 +26,8 @@ class DataStatement(context: ParserContext) : AbstractStatement(context) {
                 if (transmitter.expectMaybe(ExpectParamsBuilder.tokenOf(Tokens.SEPARATOR_ID)).isEmpty) break
             }
             location = transmitter.expect(ExpectParamsBuilder.tokenOf(Tokens.DATA_END_ID)).location
-/*
-            if(canBeFunction()) {
-                name = TYPE_ID
-            }
-*/
         }
-        catch(ex : AbstractCompilationException)
+        catch(ex : WilesException)
         {
             errors.add(ex)
         }
