@@ -21,8 +21,13 @@ class ProcessorDeclaration(
             TODO("No expressions yet!")
         val nameToken = syntax.components[0]
         val valueAST = syntax.components[1]
-        val processorToken = ProcessorToken(valueAST, context)
-        processorToken.process()
-        context.values[nameToken.details[0]] = processorToken.value
+        val name = nameToken.details[0]
+
+        // don't process if value already known at compile time
+        if (context.values[name]?.getType()?.isSingleton() != true) {
+            val processorToken = ProcessorToken(valueAST, context)
+            processorToken.process()
+            context.values[name] = processorToken.value
+        }
     }
 }

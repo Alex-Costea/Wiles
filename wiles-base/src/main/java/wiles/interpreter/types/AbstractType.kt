@@ -13,6 +13,10 @@ abstract class AbstractType {
         return this
     }
 
+    fun isSingleton(): Boolean {
+        return isSingleton
+    }
+
     override fun toString(): String {
         var string = "$typeName("
         if(isSingleton)

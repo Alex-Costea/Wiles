@@ -6,6 +6,7 @@ import wiles.interpreter.Value
 import wiles.interpreter.ValuesMap
 import wiles.interpreter.types.AbstractType
 import wiles.interpreter.types.IntegerType
+import wiles.interpreter.types.StringType
 import wiles.parser.Parser
 import wiles.shared.constants.Utils
 import java.math.BigInteger
@@ -39,10 +40,17 @@ class InterpreterTests {
     }
 
     @Test
-    fun test1()
+    fun declarationsTest()
     {
-        val values = getValues("let a := 3")
-        assertValue(values, "!a") { objValueEquals(it, intOf(3)) }
-        assertValue(values, "!a") { objTypeEquals(it,IntegerType().singletonValueOf(intOf(3))) }
+        getValues("let a := 3").let { values ->
+            val obj = intOf(3)
+            assertValue(values, "!a") { objValueEquals(it, obj) }
+            assertValue(values, "!a") { objTypeEquals(it, IntegerType().singletonValueOf(obj)) }
+        }
+        getValues("""let b := "hello!";""").let { values ->
+            val obj = "hello!"
+            assertValue(values, "!b") { objValueEquals(it, obj) }
+            assertValue(values, "!b") { objTypeEquals(it, StringType().singletonValueOf(obj)) }
+        }
     }
 }

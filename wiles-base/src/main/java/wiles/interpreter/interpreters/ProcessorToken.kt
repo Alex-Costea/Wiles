@@ -3,6 +3,7 @@ package wiles.interpreter.interpreters
 import wiles.interpreter.InterpreterContext
 import wiles.interpreter.Value
 import wiles.interpreter.types.IntegerType
+import wiles.interpreter.types.StringType
 import wiles.shared.AbstractSyntaxTree
 import wiles.shared.SyntaxType
 
@@ -21,11 +22,19 @@ class ProcessorToken(
         value = Value(bigInt, IntegerType().singletonValueOf(bigInt))
     }
 
+    private fun processText(name: String)
+    {
+        val newName = name.substring(1)
+        value = Value(newName, StringType().singletonValueOf(newName))
+    }
+
     override fun process() {
         assert(syntax.syntaxType == SyntaxType.TOKEN)
         val name = syntax.details[0]
         if(name.startsWith("#"))
             processNr(name)
-        else TODO("Can only handle nr")
+        else if(name.startsWith("@"))
+            processText(name)
+        else TODO("Can't handle this token type")
     }
 }
