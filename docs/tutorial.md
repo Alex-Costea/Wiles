@@ -846,6 +846,20 @@ let greet := do write_line("Hello, world!")
 greet() # Outputs: Hello, world!
 ```
 
+### Const parameters
+
+You can define a parameter as `const`, thus ensuring that it is known at compile time. This can be used for 
+generics-like constructs:
+
+
+```wiles
+let add(const T : type(int | rational), x : T, y : T) -> T 
+    do yield x + y
+    
+let a := add(int, 1, 2)
+let b := add(rational, 1.0, 2.0)
+```
+
 ---
 
 ## Level Scope
@@ -1054,6 +1068,11 @@ It displays an error message and then ends execution.
 ### Modulo
 
 The `modulo` function is of type `fun(arg x : int, arg y : int) -> int`. It returns the modulo result.
+
+### Run
+
+The `run` function executes another function that takes no parameters, and returns its value.
+Practically speaking, `run(func)` is the same as `func()`.
 
 ### Input read functions
 
