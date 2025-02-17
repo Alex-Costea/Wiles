@@ -1,5 +1,5 @@
 package wiles.interpreter
 
 enum class WilesTypes {
-    INT, STRING
+    INT, STRING, DECIMAL
 }

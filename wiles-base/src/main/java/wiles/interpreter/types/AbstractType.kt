@@ -24,4 +24,30 @@ abstract class AbstractType {
         string += ")"
         return string
     }
+
+
+
+    fun getValue(): Any? {
+        return singletonValue
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as AbstractType
+
+        if (isSingleton != other.isSingleton) return false
+        if (singletonValue != other.singletonValue) return false
+        if (typeName != other.typeName) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = isSingleton.hashCode()
+        result = 31 * result + (singletonValue?.hashCode() ?: 0)
+        result = 31 * result + typeName.hashCode()
+        return result
+    }
 }

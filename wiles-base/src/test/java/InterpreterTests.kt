@@ -5,9 +5,11 @@ import wiles.interpreter.Interpreter
 import wiles.interpreter.Value
 import wiles.interpreter.ValuesMap
 import wiles.interpreter.types.AbstractType
+import wiles.interpreter.types.DecimalType
 import wiles.interpreter.types.IntegerType
 import wiles.interpreter.types.StringType
 import wiles.parser.Parser
+import wiles.shared.WilesDecimal
 import wiles.shared.constants.Utils
 import java.math.BigInteger
 import java.util.function.Predicate
@@ -33,10 +35,12 @@ class InterpreterTests {
     private fun intOf(x : Long) = BigInteger.valueOf(x)
 
     private fun objValueEquals(myValue : Value, compared : Any?): Boolean {
-        return myValue.getObj() == compared
+        val obj = myValue.getObj()
+        return obj == compared
     }
+
     private fun objTypeEquals(myValue : Value, compared : AbstractType): Boolean {
-        return myValue.getType().toString() == compared.toString()
+        return myValue.getType() == compared
     }
 
     @Test
@@ -47,6 +51,13 @@ class InterpreterTests {
             assertValue(values, "!a") { objValueEquals(it, obj) }
             assertValue(values, "!a") { objTypeEquals(it, IntegerType().singletonValueOf(obj)) }
         }
+
+        getValues("let c := 3.0").let { values ->
+            val obj = WilesDecimal("3.0")
+            assertValue(values, "!c") { objValueEquals(it, obj) }
+            assertValue(values, "!c") { objTypeEquals(it, DecimalType().singletonValueOf(obj)) }
+        }
+
         getValues("""let b := "hello!";""").let { values ->
             val obj = "hello!"
             assertValue(values, "!b") { objValueEquals(it, obj) }

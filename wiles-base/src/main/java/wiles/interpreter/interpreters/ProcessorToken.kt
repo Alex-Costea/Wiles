@@ -2,10 +2,12 @@ package wiles.interpreter.interpreters
 
 import wiles.interpreter.InterpreterContext
 import wiles.interpreter.Value
+import wiles.interpreter.types.DecimalType
 import wiles.interpreter.types.IntegerType
 import wiles.interpreter.types.StringType
 import wiles.shared.AbstractSyntaxTree
 import wiles.shared.SyntaxType
+import wiles.shared.WilesDecimal
 
 class ProcessorToken(
     syntax : AbstractSyntaxTree,
@@ -17,9 +19,14 @@ class ProcessorToken(
     {
         val newName = name.substring(1).replace("_","")
         if(newName.contains("."))
-            TODO("No rationals yet")
-        val bigInt = newName.toBigInteger()
-        value = Value(bigInt, IntegerType().singletonValueOf(bigInt))
+        {
+            val decimal = WilesDecimal(newName)
+            value = Value(decimal, DecimalType().singletonValueOf(decimal))
+        }
+        else{
+            val bigInt = newName.toBigInteger()
+            value = Value(bigInt, IntegerType().singletonValueOf(bigInt))
+        }
     }
 
     private fun processText(name: String)
