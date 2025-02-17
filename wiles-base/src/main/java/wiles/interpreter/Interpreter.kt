@@ -7,10 +7,32 @@ import wiles.shared.AbstractSyntaxTree
 import wiles.shared.WilesExceptionsCollection
 import java.util.*
 
-class Interpreter(scanner : Scanner?, syntax : AbstractSyntaxTree, debug : Boolean) {
-    private val isRunning = scanner != null
-    private val values = ValuesMap()
-    private val exceptions = WilesExceptionsCollection()
+@Suppress("ConvertSecondaryConstructorToPrimary")
+class Interpreter {
+    private val isRunning: Boolean
+    private val values: ValuesMap
+    private val exceptions: WilesExceptionsCollection
+
+    constructor(scanner: Scanner?, syntax: AbstractSyntaxTree, debug: Boolean) {
+        this.isRunning = scanner != null
+        this.values = ValuesMap()
+        this.exceptions = WilesExceptionsCollection()
+        if (isRunning) {
+            val compiler = Interpreter(null, syntax, debug)
+            values.putAll(compiler.getValues())
+            if (compiler.getExceptions().size > 0) {
+                exceptions.addAll(compiler.getExceptions())
+                return
+            }
+        }
+        val context = InterpreterContext(isRunning, values, debug, exceptions)
+        val interpretFromProgram = ProcessorProgram(syntax, context)
+        interpretFromProgram.process()
+        if (debug) {
+            print("After ${if (isRunning) "interpreting" else "compiling"}: ")
+            println(context.values)
+        }
+    }
 
     fun getOutput(): String {
         //TODO
@@ -20,21 +42,6 @@ class Interpreter(scanner : Scanner?, syntax : AbstractSyntaxTree, debug : Boole
     fun getValues() : ValuesMap
     {
         return values
-    }
-
-    init{
-        if(isRunning)
-        {
-            val compiler = Interpreter(null, syntax, debug)
-            values.putAll(compiler.getValues())
-        }
-        val context = InterpreterContext(isRunning, values, debug, exceptions)
-        val interpretFromProgram = ProcessorProgram(syntax, context)
-        interpretFromProgram.process()
-        if(debug) {
-            print("After ${if(isRunning) "interpreting" else "compiling"}: ")
-            println(context.values)
-        }
     }
 
     fun getExceptions(): WilesExceptionsCollection {

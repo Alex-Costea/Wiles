@@ -21,6 +21,7 @@ object ErrorMessages {
 
     // Processing errors
     const val UNKNOWN_IDENTIFIER_ERROR = "Identifier unknown."
+    const val IDENTIFIER_ALREADY_DECLARED_ERROR = "Identifier already declared."
 
     // Internal errors
     const val INTERNAL_ERROR = "An internal error has occurred. "

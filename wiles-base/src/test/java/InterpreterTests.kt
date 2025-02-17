@@ -3,6 +3,7 @@ import org.junit.jupiter.api.Test
 import org.junit.platform.commons.annotation.Testable
 import wiles.interpreter.Interpreter
 import wiles.interpreter.data.ValuesMap
+import wiles.interpreter.errors.IdentifierAlreadyDeclaredException
 import wiles.interpreter.errors.IdentifierUnknownException
 import wiles.interpreter.types.*
 import wiles.interpreter.values.Value
@@ -83,15 +84,28 @@ class InterpreterTests {
             let a := 7
             let b := a
         """.trimIndent()).let { (values, exceptions) ->
+            assert(exceptions.isEmpty())
+            val obj = intOf(7)
+            val type = IntegerType().singletonValueOf(obj)
+            assertValue(values, "!a") {objValueEquals(it, obj)}
+            assertValue(values, "!a") {objTypeEquals(it, type)}
+            assertValue(values, "!b") {objValueEquals(it, obj)}
+            assertValue(values, "!b") {objTypeEquals(it, type)}
+            assert(values["!a"] === values["!b"])
+        }
+
+        getResults("""
+            let a := 2
+            let a := 3
+        """.trimIndent()).let { (values, exceptions) ->
             {
-                assert(exceptions.isEmpty())
-                val obj = intOf(7)
-                val type = IntegerType().singletonValueOf(obj)
-                assertValue(values, "!a") {objValueEquals(it, obj)}
-                assertValue(values, "!a") {objTypeEquals(it, type)}
-                assertValue(values, "!b") {objValueEquals(it, obj)}
-                assertValue(values, "!b") {objValueEquals(it, type)}
-                assert(values["!a"] === values["!b"])
+                assert(exceptions.size == 1)
+                assert(exceptions[0] === IdentifierAlreadyDeclaredException(
+                    TokenLocation(1, 4, 1, 5)))
+                val value = intOf(2)
+                val type = IntegerType().singletonValueOf(value)
+                assertValue(values, "!a") {objValueEquals(it, value)}
+                assertValue(values, "!a") { objTypeEquals(it, type)}
             }
         }
     }

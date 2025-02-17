@@ -1,6 +1,7 @@
 package wiles.interpreter.interpreters
 
 import wiles.interpreter.data.InterpreterContext
+import wiles.interpreter.errors.IdentifierAlreadyDeclaredException
 import wiles.shared.AbstractSyntaxTree
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.CONST_ID
@@ -13,21 +14,33 @@ class ProcessorDeclaration(
 ) : AbstractProcessor(syntax, context) {
     override fun process() {
         val details = syntax.details
+        val components = syntax.components.toMutableList()
         if(details.contains(VARIABLE_ID) || details.contains(CONST_ID) || details.contains(GLOBAL_ID))
             TODO("Can't handle these types of declarations yet")
-        if(syntax.components[0].syntaxType == SyntaxType.TYPEDEF)
-            TODO("No type checking yet!")
-        if(syntax.components.last().syntaxType == SyntaxType.EXPRESSION)
-            TODO("No expressions yet!")
-        val nameToken = syntax.components[0]
-        val valueAST = syntax.components[1]
+        val typeDef = if(components[0].syntaxType == SyntaxType.TYPEDEF)
+            components.removeFirst()
+            else null
+        val nameToken = components[0]
+        val expression = components.getOrNull(1)
         val name = nameToken.details[0]
+
+        if(typeDef != null)
+            TODO("No type checking yet!")
+
+        if(!context.isRunning && context.values.containsKey(name))
+        {
+            context.exceptions.add(IdentifierAlreadyDeclaredException(nameToken.location!!))
+            return
+        }
+
+        if(expression == null)
+            TODO("Handle no expression body")
 
         // don't process if value already known at compile time
         if (context.values[name]?.getType()?.isSingleton() != true) {
-            val processorToken = ProcessorToken(valueAST, context)
-            processorToken.process()
-            context.values[name] = processorToken.value
+            val processorExpression = ProcessorExpression(expression, context)
+            processorExpression.process()
+            context.values[name] = processorExpression.value
         }
     }
 }
