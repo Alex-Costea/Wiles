@@ -4,6 +4,7 @@ import org.junit.platform.commons.annotation.Testable
 import wiles.parser.Parser
 import wiles.processor.Processor
 import wiles.processor.data.ValuesMap
+import wiles.processor.errors.CantBeModifiedException
 import wiles.processor.errors.IdentifierAlreadyDeclaredException
 import wiles.processor.errors.IdentifierUnknownException
 import wiles.processor.types.*
@@ -140,7 +141,17 @@ class ProcessorTests {
             assert(exceptions.size == 1)
             assert(values.isEmpty())
             assert(exceptions[0] == IdentifierUnknownException(
-                TokenLocation(1, 1, 1, 2)))
+                TokenLocation(1, 1, 1, 2)
+            ))
+        }
+
+        getResults("""
+            let a := 123
+            a := 345
+        """.trimIndent()). let { (values, exceptions) ->
+            assertValue(values, "!a") {objValueEquals(it, intOf(123))}
+            assert(exceptions.size == 1)
+            assert(exceptions[0] == CantBeModifiedException(TokenLocation(2, 1, 2, 2)))
         }
     }
 }

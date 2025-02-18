@@ -39,22 +39,22 @@ class ProcessorExpression(
             val right = getValue(syntax.components.getOrNull(2))
             if(context.exceptions.isNotEmpty())
                 return
-            val operand = when(operationType)
-            {
-                PLUS_ID -> PlusOperation(left!!, right!!, context)
-                ASSIGN_ID -> {
-                    val leftComponent = syntax.components[1]
-                    if(leftComponent.syntaxType == SyntaxType.TOKEN) {
-                        val name = leftComponent.details[0]
-                        if(IS_IDENTIFIER.test(name))
-                            AssignmentOperation(left!!, right!!, context, leftComponent)
-                        else TODO("Error: must be nr")
-                    }
-                    else TODO("Handling mutable collections")
-                }
-                else -> TODO("Unknown operation")
-            }
             try{
+                val operand = when(operationType)
+                {
+                    PLUS_ID -> PlusOperation(left!!, right!!, context)
+                    ASSIGN_ID -> {
+                        val leftComponent = syntax.components[1]
+                        if(leftComponent.syntaxType == SyntaxType.TOKEN) {
+                            val name = leftComponent.details[0]
+                            if(IS_IDENTIFIER.test(name))
+                                AssignmentOperation(left!!, right!!, context, leftComponent)
+                            else TODO("CantBeModifiedException")
+                        }
+                        else TODO("Handling mutable collections")
+                    }
+                    else -> TODO("Unknown operation")
+                }
                 value = operand.getNewValue()
             }
             catch (ex : WilesException)
