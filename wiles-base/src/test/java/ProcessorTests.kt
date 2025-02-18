@@ -153,5 +153,14 @@ class ProcessorTests {
             assert(exceptions.size == 1)
             assert(exceptions[0] == CantBeModifiedException(TokenLocation(2, 1, 2, 2)))
         }
+
+        getResults("""
+            17 := 25
+        """.trimIndent()). let { (values, exceptions) ->
+            assert(exceptions.size == 1)
+            assert(values.size == 0)
+            assert(exceptions[0] == CantBeModifiedException(TokenLocation(1, 1, 1, 3)))
+        }
+
     }
 }

@@ -1,6 +1,7 @@
 package wiles.processor.processors
 
 import wiles.processor.data.InterpreterContext
+import wiles.processor.errors.CantBeModifiedException
 import wiles.processor.operations.AssignmentOperation
 import wiles.processor.operations.PlusOperation
 import wiles.processor.values.Value
@@ -49,7 +50,7 @@ class ProcessorExpression(
                             val name = leftComponent.details[0]
                             if(IS_IDENTIFIER.test(name))
                                 AssignmentOperation(left!!, right!!, context, leftComponent)
-                            else TODO("CantBeModifiedException")
+                            else throw CantBeModifiedException(leftComponent.getFirstLocation())
                         }
                         else TODO("Handling mutable collections")
                     }
