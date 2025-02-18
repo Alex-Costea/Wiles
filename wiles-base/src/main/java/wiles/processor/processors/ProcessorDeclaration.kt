@@ -42,8 +42,7 @@ class ProcessorDeclaration(
             val processorExpression = ProcessorExpression(expression, context)
             processorExpression.process()
             val value = processorExpression.value
-            val varName = if(details.contains(VARIABLE_ID)) name else null
-            val newValue = Value(value.getObj(), value.getType().clone(), varName)
+            val newValue = Value(value.getObj(), value.getType().clone(), details.contains(VARIABLE_ID))
             context.values[name] = newValue
         }
     }

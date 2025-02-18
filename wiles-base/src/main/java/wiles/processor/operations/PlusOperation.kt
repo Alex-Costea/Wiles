@@ -16,9 +16,9 @@ class PlusOperation(left: Value, right: Value, context: InterpreterContext) : Ab
                 val rightInt = rightType.getValue() as BigInteger
                 val newInt : BigInteger = leftInt + rightInt
                 val newType = IntegerType().singletonValueOf(newInt)
-                return Value(newInt, newType, null)
+                return Value(newInt, newType, false)
             }
-            else return Value(null, IntegerType(), null)
+            else return Value(null, IntegerType(), false)
         }
         else TODO("Non-int addition operation")
     }

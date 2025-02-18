@@ -42,8 +42,9 @@ class ProcessorExpression(
                 ASSIGN_ID -> {
                     val leftComponent = syntax.components[1]
                     if(leftComponent.syntaxType == SyntaxType.TOKEN) {
-                        if(IS_IDENTIFIER.test(leftComponent.details[0]))
-                            AssignmentOperation(left!!, right!!, context)
+                        val name = leftComponent.details[0]
+                        if(IS_IDENTIFIER.test(name))
+                            AssignmentOperation(left!!, right!!, context, name)
                         else TODO("Error: must be nr")
                     }
                     else TODO("Handling mutable collections")

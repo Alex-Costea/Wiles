@@ -5,7 +5,7 @@ import wiles.processor.types.AbstractType
 class Value(
     private val obj: Any?,
     private val type: AbstractType,
-    private val varName : String?
+    private val isVariable: Boolean
 ) {
     fun getObj() : Any?{
         return obj
@@ -16,16 +16,12 @@ class Value(
     }
 
     fun isVariable() : Boolean{
-        return varName != null
-    }
-
-    fun getVarName() : String? {
-        return varName
+        return isVariable
     }
 
     override fun toString(): String {
-        val varNameSection = if(isVariable()) ", varName=$varName" else ""
-        return "Value(obj=$obj, type=$type$varNameSection)"
+        val isVar = if(isVariable()) ", isVariable" else ""
+        return "Value(obj=$obj, type=$type$isVar)"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -36,7 +32,7 @@ class Value(
 
         if (obj != other.obj) return false
         if (type != other.type) return false
-        if (varName != other.varName) return false
+        if (isVariable != other.isVariable()) return false
 
         return true
     }
@@ -44,7 +40,7 @@ class Value(
     override fun hashCode(): Int {
         var result = obj?.hashCode() ?: 0
         result = 31 * result + type.hashCode()
-        result = 31 * result + (varName?.hashCode() ?: 0)
+        result = 31 * result + isVariable.hashCode()
         return result
     }
 
