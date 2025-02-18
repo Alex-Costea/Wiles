@@ -11,7 +11,7 @@ class AssignmentOperation(left: Value, right: Value, context: InterpreterContext
     : AbstractOperation(left, right, context) {
     override fun getNewValue(): Value {
         val name = leftToken.details[0]
-        val location = leftToken.location!!
+        val location = leftToken.getFirstLocation()
         val leftValue = context.values[name]!!
         if(!leftValue.isVariable()) throw CantBeModifiedException(location)
         //TODO: check if type checking works

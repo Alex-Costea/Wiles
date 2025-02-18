@@ -30,7 +30,7 @@ class ProcessorDeclaration(
 
         if(!context.isRunning && context.values.containsKey(name))
         {
-            context.exceptions.add(IdentifierAlreadyDeclaredException(nameToken.location!!))
+            context.exceptions.add(IdentifierAlreadyDeclaredException(nameToken.getFirstLocation()))
             return
         }
 

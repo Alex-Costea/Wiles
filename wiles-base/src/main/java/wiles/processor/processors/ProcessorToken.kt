@@ -47,7 +47,7 @@ class ProcessorToken(
             Value(null, InvalidType(), false)
         if(!context.values.containsKey(name))
         {
-            val exception = IdentifierUnknownException(syntax.location!!)
+            val exception = IdentifierUnknownException(syntax.getFirstLocation())
             context.exceptions.add(exception)
         }
     }
