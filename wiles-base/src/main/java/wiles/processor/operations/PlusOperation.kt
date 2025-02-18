@@ -10,12 +10,10 @@ class PlusOperation(left: Value, right: Value, context: InterpreterContext) : Ab
     override fun getNewValue(): Value {
         if(leftType.typeName == WilesTypes.INT && rightType.typeName == WilesTypes.INT)
         {
-            if(leftType.isSingleton() && rightType.isSingleton())
+            if(leftObj is BigInteger && rightObj is BigInteger)
             {
-                val leftInt = leftType.getValue() as BigInteger
-                val rightInt = rightType.getValue() as BigInteger
-                val newInt : BigInteger = leftInt + rightInt
-                val newType = IntegerType().singletonValueOf(newInt)
+                val newInt : BigInteger = leftObj + rightObj
+                val newType = IntegerType()
                 return Value(newInt, newType, false)
             }
             else return Value(null, IntegerType(), false)

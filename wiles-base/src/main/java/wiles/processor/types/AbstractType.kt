@@ -21,10 +21,9 @@ abstract class AbstractType {
     }
 
     override fun toString(): String {
-        var string = "$typeName("
+        var string = "$typeName"
         if(isSingleton())
-            string += "singletonValue=$singletonValue,"
-        string += ")"
+            string += "($singletonValue)"
         return string
     }
 

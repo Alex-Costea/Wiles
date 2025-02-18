@@ -15,6 +15,7 @@ class Processor(scanner: Scanner?, val syntax: AbstractSyntaxTree, private val d
     private fun compile(syntax: AbstractSyntaxTree, debug: Boolean)
     {
         val compiler = Processor(null, syntax, debug)
+        compiler.process()
         val compilerValues = compiler.getValues()
         compilerValues.values.forEach { if(it.isVariable()) it.getType().removeSingleton() }
         values.putAll(compilerValues)

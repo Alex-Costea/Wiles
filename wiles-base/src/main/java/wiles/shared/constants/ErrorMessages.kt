@@ -23,6 +23,7 @@ object ErrorMessages {
     const val UNKNOWN_IDENTIFIER_ERROR = "Identifier unknown."
     const val IDENTIFIER_ALREADY_DECLARED_ERROR = "Identifier already declared."
     const val EXPRESSION_CANT_BE_MODIFIED_ERROR = "This expression is not modifiable."
+    const val TYPE_CONFLICT_ERROR = "The supertype %s conflicts with the subtype %s"
 
     // Internal errors
     const val INTERNAL_ERROR = "An internal error has occurred. "

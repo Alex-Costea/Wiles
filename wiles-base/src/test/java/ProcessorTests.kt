@@ -7,6 +7,7 @@ import wiles.processor.data.ValuesMap
 import wiles.processor.errors.CantBeModifiedException
 import wiles.processor.errors.IdentifierAlreadyDeclaredException
 import wiles.processor.errors.IdentifierUnknownException
+import wiles.processor.errors.TypeConflictError
 import wiles.processor.types.*
 import wiles.processor.values.Value
 import wiles.processor.values.WilesDecimal
@@ -57,21 +58,21 @@ class ProcessorTests {
         getResults("let a := 3").let { (values, exceptions) ->
             val obj = intOf(3)
             assertValue(values, "!a") { objValueEquals(it, obj) }
-            assertValue(values, "!a") { objTypeEquals(it, IntegerType().singletonValueOf(obj)) }
+            assertValue(values, "!a") { objTypeEquals(it, IntegerType()) }
             assert(exceptions.isEmpty())
         }
 
         getResults("let c := 3.0").let { (values, exceptions) ->
             val obj = WilesDecimal("3.0")
             assertValue(values, "!c") { objValueEquals(it, obj) }
-            assertValue(values, "!c") { objTypeEquals(it, DecimalType().singletonValueOf(obj)) }
+            assertValue(values, "!c") { objTypeEquals(it, DecimalType()) }
             assert(exceptions.isEmpty())
         }
 
         getResults("""let b := "hello!";""").let { (values, exceptions) ->
             val obj = "hello!"
             assertValue(values, "!b") { objValueEquals(it, obj) }
-            assertValue(values, "!b") { objTypeEquals(it, StringType().singletonValueOf(obj)) }
+            assertValue(values, "!b") { objTypeEquals(it, StringType()) }
             assert(exceptions.isEmpty())
         }
 
@@ -88,11 +89,10 @@ class ProcessorTests {
         """.trimIndent()).let { (values, exceptions) ->
             assert(exceptions.isEmpty())
             val obj = intOf(7)
-            val type = IntegerType().singletonValueOf(obj)
             assertValue(values, "!a") {objValueEquals(it, obj)}
-            assertValue(values, "!a") {objTypeEquals(it, type)}
+            assertValue(values, "!a") {objTypeEquals(it, IntegerType())}
             assertValue(values, "!b") {objValueEquals(it, obj)}
-            assertValue(values, "!b") {objTypeEquals(it, type)}
+            assertValue(values, "!b") {objTypeEquals(it, IntegerType())}
             assert(values["!a"] == values["!b"])
         }
 
@@ -105,9 +105,8 @@ class ProcessorTests {
                 assert(exceptions[0] === IdentifierAlreadyDeclaredException(
                     TokenLocation(1, 4, 1, 5)))
                 val value = intOf(2)
-                val type = IntegerType().singletonValueOf(value)
                 assertValue(values, "!a") {objValueEquals(it, value)}
-                assertValue(values, "!a") { objTypeEquals(it, type)}
+                assertValue(values, "!a") { objTypeEquals(it, IntegerType())}
             }
         }
     }
@@ -118,9 +117,8 @@ class ProcessorTests {
         getResults("let a := 2 + 3").let { (values, exceptions) ->
             assert(exceptions.isEmpty())
             val value = intOf(5)
-            val type = IntegerType().singletonValueOf(value)
             assertValue(values, "!a"){objValueEquals(it, value)}
-            assertValue(values, "!a"){objTypeEquals(it, type)}
+            assertValue(values, "!a"){objTypeEquals(it, IntegerType())}
         }
     }
 
@@ -160,6 +158,16 @@ class ProcessorTests {
             assert(exceptions.size == 1)
             assert(values.size == 0)
             assert(exceptions[0] == CantBeModifiedException(TokenLocation(1, 1, 1, 3)))
+        }
+
+        getResults("""
+            let var a := 1
+            a := "text"
+        """.trimIndent()).let{ (values, exceptions) ->
+            assertValue(values, "!a") { objValueEquals(it, intOf(1))}
+            assert(exceptions.size == 1)
+            assert(exceptions[0] == TypeConflictError( IntegerType(), StringType(),
+                TokenLocation(2, 1, 2, 2)))
         }
 
     }
