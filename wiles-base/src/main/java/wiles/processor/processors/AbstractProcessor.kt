@@ -1,6 +1,6 @@
-package wiles.interpreter.interpreters
+package wiles.processor.processors
 
-import wiles.interpreter.data.InterpreterContext
+import wiles.processor.data.InterpreterContext
 import wiles.shared.AbstractSyntaxTree
 
 abstract class AbstractProcessor(

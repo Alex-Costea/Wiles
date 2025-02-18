@@ -1,6 +1,6 @@
-package wiles.interpreter.types
+package wiles.processor.types
 
-import wiles.interpreter.enums.WilesTypes
+import wiles.processor.enums.WilesTypes
 
 class StringType : AbstractType() {
     override val typeName: WilesTypes

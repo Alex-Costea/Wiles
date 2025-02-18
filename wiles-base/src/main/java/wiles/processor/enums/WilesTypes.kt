@@ -1,4 +1,4 @@
-package wiles.interpreter.enums
+package wiles.processor.enums
 
 enum class WilesTypes {
     INT, STRING, DECIMAL, INVALID,

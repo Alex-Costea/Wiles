@@ -1,6 +1,6 @@
-package wiles.interpreter.values
+package wiles.processor.values
 
-import wiles.interpreter.types.AbstractType
+import wiles.processor.types.AbstractType
 
 class Value(
     private val obj: Any?,

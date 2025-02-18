@@ -1,8 +1,8 @@
-package wiles.interpreter.interpreters
+package wiles.processor.processors
 
-import wiles.interpreter.data.InterpreterContext
-import wiles.interpreter.operations.PlusOperation
-import wiles.interpreter.values.Value
+import wiles.processor.data.InterpreterContext
+import wiles.processor.operations.PlusOperation
+import wiles.processor.values.Value
 import wiles.shared.AbstractSyntaxTree
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.PLUS_ID

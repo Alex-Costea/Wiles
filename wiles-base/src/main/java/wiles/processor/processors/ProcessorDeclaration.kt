@@ -1,8 +1,8 @@
-package wiles.interpreter.interpreters
+package wiles.processor.processors
 
-import wiles.interpreter.data.InterpreterContext
-import wiles.interpreter.errors.IdentifierAlreadyDeclaredException
-import wiles.interpreter.values.Value
+import wiles.processor.data.InterpreterContext
+import wiles.processor.errors.IdentifierAlreadyDeclaredException
+import wiles.processor.values.Value
 import wiles.shared.AbstractSyntaxTree
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.CONST_ID
@@ -43,7 +43,7 @@ class ProcessorDeclaration(
             processorExpression.process()
             val value = processorExpression.value
             val varName = if(details.contains(VARIABLE_ID)) name else null
-            val newValue = Value(value.getObj(), value.getType(), varName)
+            val newValue = Value(value.getObj(), value.getType().clone(), varName)
             context.values[name] = newValue
         }
     }

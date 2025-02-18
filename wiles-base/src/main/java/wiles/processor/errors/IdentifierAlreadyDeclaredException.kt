@@ -1,4 +1,4 @@
-package wiles.interpreter.errors
+package wiles.processor.errors
 
 import wiles.shared.TokenLocation
 import wiles.shared.WilesException

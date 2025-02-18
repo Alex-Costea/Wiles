@@ -1,9 +1,9 @@
-package wiles.interpreter.operations
+package wiles.processor.operations
 
-import wiles.interpreter.data.InterpreterContext
-import wiles.interpreter.enums.WilesTypes
-import wiles.interpreter.types.IntegerType
-import wiles.interpreter.values.Value
+import wiles.processor.data.InterpreterContext
+import wiles.processor.enums.WilesTypes
+import wiles.processor.types.IntegerType
+import wiles.processor.values.Value
 import java.math.BigInteger
 
 class PlusOperation(left: Value, right: Value, context: InterpreterContext) : AbstractOperation(left, right, context) {

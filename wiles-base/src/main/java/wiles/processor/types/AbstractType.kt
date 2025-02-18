@@ -1,6 +1,6 @@
-package wiles.interpreter.types
+package wiles.processor.types
 
-import wiles.interpreter.enums.WilesTypes
+import wiles.processor.enums.WilesTypes
 
 abstract class AbstractType {
     private var singletonValue : Any? = null
@@ -8,6 +8,11 @@ abstract class AbstractType {
 
     fun singletonValueOf(value : Any) : AbstractType{
         singletonValue = value
+        return this
+    }
+
+    fun removeSingleton(): AbstractType {
+        singletonValue = null
         return this
     }
 
@@ -43,6 +48,19 @@ abstract class AbstractType {
         var result = singletonValue.hashCode()
         result = 31 * result + typeName.hashCode()
         return result
+    }
+
+    fun clone() : AbstractType
+    {
+        val newType : AbstractType = when(this.typeName)
+        {
+            WilesTypes.INT -> IntegerType()
+            WilesTypes.STRING -> StringType()
+            WilesTypes.DECIMAL -> DecimalType()
+            WilesTypes.INVALID -> InvalidType()
+        }
+        newType.singletonValue = this.singletonValue
+        return  newType
     }
 
 }

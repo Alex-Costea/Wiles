@@ -1,13 +1,13 @@
-package wiles.interpreter.interpreters
+package wiles.processor.processors
 
-import wiles.interpreter.data.InterpreterContext
-import wiles.interpreter.errors.IdentifierUnknownException
-import wiles.interpreter.types.DecimalType
-import wiles.interpreter.types.IntegerType
-import wiles.interpreter.types.InvalidType
-import wiles.interpreter.types.StringType
-import wiles.interpreter.values.Value
-import wiles.interpreter.values.WilesDecimal
+import wiles.processor.data.InterpreterContext
+import wiles.processor.errors.IdentifierUnknownException
+import wiles.processor.types.DecimalType
+import wiles.processor.types.IntegerType
+import wiles.processor.types.InvalidType
+import wiles.processor.types.StringType
+import wiles.processor.values.Value
+import wiles.processor.values.WilesDecimal
 import wiles.shared.AbstractSyntaxTree
 import wiles.shared.InternalErrorException
 import wiles.shared.SyntaxType

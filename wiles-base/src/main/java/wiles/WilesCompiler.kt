@@ -1,8 +1,8 @@
 package wiles
 
 import org.apache.commons.cli.*
-import wiles.interpreter.Interpreter
 import wiles.parser.Parser
+import wiles.processor.Processor
 import wiles.shared.*
 import wiles.shared.constants.ErrorMessages.COMPILATION_FAILED_ERROR
 import wiles.shared.constants.ErrorMessages.IO_ERROR
@@ -123,9 +123,10 @@ object WilesCompiler {
                 exceptions = exceptions)
         }
 
-        val interpreter = Interpreter(scanner, convertStatementToSyntaxTree(result), clArgs.isDebug)
-        val output = interpreter.getOutput()
-        exceptions.addAll(interpreter.getExceptions())
+        val processor = Processor(scanner, convertStatementToSyntaxTree(result), clArgs.isDebug)
+        processor.process()
+        val output = processor.getOutput()
+        exceptions.addAll(processor.getExceptions())
         if (exceptions.isNotEmpty()) {
             exceptionsString.append(getErrorsDisplay(exceptions, clArgs.code, clArgs.isDebug))
         }

@@ -1,13 +1,13 @@
 
 import org.junit.jupiter.api.Test
 import org.junit.platform.commons.annotation.Testable
-import wiles.interpreter.Interpreter
-import wiles.interpreter.data.ValuesMap
-import wiles.interpreter.errors.IdentifierAlreadyDeclaredException
-import wiles.interpreter.errors.IdentifierUnknownException
-import wiles.interpreter.types.*
-import wiles.interpreter.values.Value
-import wiles.interpreter.values.WilesDecimal
+import wiles.processor.Processor
+import wiles.processor.data.ValuesMap
+import wiles.processor.errors.IdentifierAlreadyDeclaredException
+import wiles.processor.errors.IdentifierUnknownException
+import wiles.processor.types.*
+import wiles.processor.values.Value
+import wiles.processor.values.WilesDecimal
 import wiles.parser.Parser
 import wiles.shared.TokenLocation
 import wiles.shared.WilesExceptionsCollection
@@ -17,17 +17,18 @@ import java.util.function.Predicate
 import kotlin.test.assertNotNull
 
 @Testable
-class InterpreterTests {
-    private fun makeInterpreter(code : String) : Interpreter
+class ProcessorTests {
+    private fun makeInterpreter(code : String) : Processor
     {
         val parser = Parser(code, true)
         val results = parser.getResults()
         val syntax = Utils.convertStatementToSyntaxTree(results)
-        return Interpreter(null, syntax, true)
+        return Processor(null, syntax, true)
     }
     private fun getResults(code : String) : Pair<ValuesMap,WilesExceptionsCollection>
     {
         val interpreter = makeInterpreter(code)
+        interpreter.process()
         return Pair(interpreter.getValues(),interpreter.getExceptions())
     }
 
