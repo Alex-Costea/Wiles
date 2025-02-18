@@ -1,6 +1,8 @@
 package wiles.processor.operations
 
 import wiles.processor.data.InterpreterContext
+import wiles.processor.enums.KnownStatus
+import wiles.processor.enums.VariableStatus
 import wiles.processor.errors.CantBeModifiedException
 import wiles.processor.errors.TypeConflictError
 import wiles.processor.types.NothingType
@@ -20,8 +22,8 @@ class AssignmentOperation(left: Value, right: Value, context: InterpreterContext
             if (!TypeUtils.isFormerSuperTypeOfLatter(leftType, rightType))
                 throw TypeConflictError(leftType, rightType, location)
         }
-        val newValue = Value(right.getObj(), right.getType().clone(), true, right.isKnown())
+        val newValue = Value(right.getObj(), right.getType().clone(), VariableStatus.Var, right.knownStatus())
         context.values[name] = newValue
-        return Value(null, NothingType(), false, isKnown = true)
+        return Value(null, NothingType(), VariableStatus.Val, KnownStatus.Known)
     }
 }

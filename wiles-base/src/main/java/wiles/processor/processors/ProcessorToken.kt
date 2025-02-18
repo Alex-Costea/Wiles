@@ -1,6 +1,8 @@
 package wiles.processor.processors
 
 import wiles.processor.data.InterpreterContext
+import wiles.processor.enums.KnownStatus
+import wiles.processor.enums.VariableStatus
 import wiles.processor.errors.IdentifierUnknownException
 import wiles.processor.types.DecimalType
 import wiles.processor.types.IntegerType
@@ -28,23 +30,23 @@ class ProcessorToken(
         if(newName.contains("."))
         {
             val decimal = WilesDecimal(newName)
-            value = Value(decimal, DecimalType().singletonValueOf(decimal), isVariable = false, isKnown = true)
+            value = Value(decimal, DecimalType().singletonValueOf(decimal), VariableStatus.Val, KnownStatus.Known)
         }
         else{
             val bigInt = newName.toBigInteger()
-            value = Value(bigInt, IntegerType().singletonValueOf(bigInt), isVariable = false, isKnown = true)
+            value = Value(bigInt, IntegerType().singletonValueOf(bigInt), VariableStatus.Val, KnownStatus.Known)
         }
     }
 
     private fun processText(name: String)
     {
         val newName = name.substring(1)
-        value = Value(newName, StringType().singletonValueOf(newName), isVariable = false, isKnown = true)
+        value = Value(newName, StringType().singletonValueOf(newName), VariableStatus.Val, KnownStatus.Known)
     }
 
     private fun processIdentifier(name: String) {
         value = context.values.getOrDefault(name, null) ?:
-            Value(null, InvalidType(), isVariable = false, isKnown = true)
+            Value(null, InvalidType(), VariableStatus.Val, KnownStatus.Known)
         if(!context.values.containsKey(name))
         {
             val exception = IdentifierUnknownException(syntax.getFirstLocation())

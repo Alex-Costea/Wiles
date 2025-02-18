@@ -1,6 +1,7 @@
 package wiles.processor.processors
 
 import wiles.processor.data.InterpreterContext
+import wiles.processor.enums.VariableStatus
 import wiles.processor.errors.IdentifierAlreadyDeclaredException
 import wiles.processor.values.Value
 import wiles.shared.AbstractSyntaxTree
@@ -42,8 +43,9 @@ class ProcessorDeclaration(
             val processorExpression = ProcessorExpression(expression, context)
             processorExpression.process()
             val value = processorExpression.value
+            val variableStatus = if (details.contains(VARIABLE_ID)) VariableStatus.Var else VariableStatus.Val
             val newValue = Value(value.getObj(),
-                value.getType().removeSingleton().clone(), details.contains(VARIABLE_ID), value.isKnown())
+                value.getType().removeSingleton().clone(), variableStatus, value.knownStatus())
             context.values[name] = newValue
         }
     }

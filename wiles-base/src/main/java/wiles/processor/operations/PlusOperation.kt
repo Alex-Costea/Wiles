@@ -1,6 +1,8 @@
 package wiles.processor.operations
 
 import wiles.processor.data.InterpreterContext
+import wiles.processor.enums.KnownStatus
+import wiles.processor.enums.VariableStatus
 import wiles.processor.enums.WilesTypes
 import wiles.processor.types.IntegerType
 import wiles.processor.values.Value
@@ -14,9 +16,9 @@ class PlusOperation(left: Value, right: Value, context: InterpreterContext) : Ab
             {
                 val newInt : BigInteger = leftObj + rightObj
                 val newType = IntegerType().singletonValueOf(newInt)
-                return Value(newInt, newType, false, isKnown = true)
+                return Value(newInt, newType, VariableStatus.Val, KnownStatus.Known)
             }
-            else return Value(null, IntegerType(), false, isKnown = false)
+            else return Value(null, IntegerType(), VariableStatus.Var, KnownStatus.Known)
         }
         else TODO("Non-int addition operation")
     }
