@@ -6,6 +6,7 @@ import wiles.processor.operations.PlusOperation
 import wiles.processor.values.Value
 import wiles.shared.AbstractSyntaxTree
 import wiles.shared.SyntaxType
+import wiles.shared.WilesException
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.PLUS_ID
@@ -36,6 +37,8 @@ class ProcessorExpression(
             val operationType = syntax.components[0].details[0]
             val left = getValue(syntax.components.getOrNull(1))
             val right = getValue(syntax.components.getOrNull(2))
+            if(context.exceptions.isNotEmpty())
+                return
             val operand = when(operationType)
             {
                 PLUS_ID -> PlusOperation(left!!, right!!, context)
@@ -44,14 +47,20 @@ class ProcessorExpression(
                     if(leftComponent.syntaxType == SyntaxType.TOKEN) {
                         val name = leftComponent.details[0]
                         if(IS_IDENTIFIER.test(name))
-                            AssignmentOperation(left!!, right!!, context, name)
+                            AssignmentOperation(left!!, right!!, context, leftComponent)
                         else TODO("Error: must be nr")
                     }
                     else TODO("Handling mutable collections")
                 }
                 else -> TODO("Unknown operation")
             }
-            value = operand.getNewValue()
+            try{
+                value = operand.getNewValue()
+            }
+            catch (ex : WilesException)
+            {
+                context.exceptions.add(ex)
+            }
         }
     }
 

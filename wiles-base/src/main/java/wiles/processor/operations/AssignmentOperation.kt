@@ -3,11 +3,15 @@ package wiles.processor.operations
 import wiles.processor.data.InterpreterContext
 import wiles.processor.types.NothingType
 import wiles.processor.values.Value
+import wiles.shared.AbstractSyntaxTree
 
-class AssignmentOperation(left: Value, right: Value, context: InterpreterContext,val name : String)
+class AssignmentOperation(left: Value, right: Value, context: InterpreterContext,
+                          private val leftToken : AbstractSyntaxTree)
     : AbstractOperation(left, right, context) {
     override fun getNewValue(): Value {
-        val leftValue = context.values.getOrDefault(name,  null) ?: TODO("Name doesn't exist")
+        val name = leftToken.details[0]
+        val location = leftToken.location
+        val leftValue = context.values[name]!!
         if(!leftValue.isVariable()) TODO("Is not variable")
         //TODO: check if type checking works
         val newValue = Value(right.getObj(), right.getType().clone(), true)

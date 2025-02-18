@@ -131,11 +131,16 @@ class ProcessorTests {
             let b := a
             a := 3
         """.trimIndent()). let{(values, exceptions) ->
-            {
-                assert(exceptions.isEmpty())
-                assertValue(values, "!a") {objValueEquals(it, intOf(3))}
-                assertValue(values, "!b") {objValueEquals(it, intOf(2))}
-            }
+            assert(exceptions.isEmpty())
+            assertValue(values, "!a") {objValueEquals(it, intOf(3))}
+            assertValue(values, "!b") {objValueEquals(it, intOf(2))}
+        }
+
+        getResults("a := 123") .let { (values, exceptions) ->
+            assert(exceptions.size == 1)
+            assert(values.isEmpty())
+            assert(exceptions[0] == IdentifierUnknownException(
+                TokenLocation(1, 1, 1, 2)))
         }
     }
 }
