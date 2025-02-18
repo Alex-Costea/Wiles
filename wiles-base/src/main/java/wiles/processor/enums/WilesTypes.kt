@@ -1,5 +1,5 @@
 package wiles.processor.enums
 
 enum class WilesTypes {
-    INT, STRING, DECIMAL, INVALID,
+    INT, STRING, DECIMAL, INVALID, NOTHING,
 }

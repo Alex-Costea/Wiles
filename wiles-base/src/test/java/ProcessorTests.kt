@@ -1,6 +1,7 @@
 
 import org.junit.jupiter.api.Test
 import org.junit.platform.commons.annotation.Testable
+import wiles.parser.Parser
 import wiles.processor.Processor
 import wiles.processor.data.ValuesMap
 import wiles.processor.errors.IdentifierAlreadyDeclaredException
@@ -8,7 +9,6 @@ import wiles.processor.errors.IdentifierUnknownException
 import wiles.processor.types.*
 import wiles.processor.values.Value
 import wiles.processor.values.WilesDecimal
-import wiles.parser.Parser
 import wiles.shared.TokenLocation
 import wiles.shared.WilesExceptionsCollection
 import wiles.shared.constants.Utils
@@ -120,6 +120,22 @@ class ProcessorTests {
             val type = IntegerType().singletonValueOf(value)
             assertValue(values, "!a"){objValueEquals(it, value)}
             assertValue(values, "!a"){objTypeEquals(it, type)}
+        }
+    }
+
+    @Test
+    fun assignmentTest()
+    {
+        getResults("""
+            let var a := 2
+            let b := a
+            a := 3
+        """.trimIndent()). let{(values, exceptions) ->
+            {
+                assert(exceptions.isEmpty())
+                assertValue(values, "!a") {objValueEquals(it, intOf(3))}
+                assertValue(values, "!b") {objValueEquals(it, intOf(2))}
+            }
         }
     }
 }

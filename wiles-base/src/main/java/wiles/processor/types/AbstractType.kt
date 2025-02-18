@@ -58,6 +58,7 @@ abstract class AbstractType {
             WilesTypes.STRING -> StringType()
             WilesTypes.DECIMAL -> DecimalType()
             WilesTypes.INVALID -> InvalidType()
+            WilesTypes.NOTHING -> NothingType()
         }
         newType.singletonValue = this.singletonValue
         return  newType

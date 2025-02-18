@@ -1,10 +1,13 @@
 package wiles.processor.processors
 
 import wiles.processor.data.InterpreterContext
+import wiles.processor.operations.AssignmentOperation
 import wiles.processor.operations.PlusOperation
 import wiles.processor.values.Value
 import wiles.shared.AbstractSyntaxTree
 import wiles.shared.SyntaxType
+import wiles.shared.constants.Predicates.IS_IDENTIFIER
+import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.PLUS_ID
 
 class ProcessorExpression(
@@ -36,6 +39,15 @@ class ProcessorExpression(
             val operand = when(operationType)
             {
                 PLUS_ID -> PlusOperation(left!!, right!!, context)
+                ASSIGN_ID -> {
+                    val leftComponent = syntax.components[1]
+                    if(leftComponent.syntaxType == SyntaxType.TOKEN) {
+                        if(IS_IDENTIFIER.test(leftComponent.details[0]))
+                            AssignmentOperation(left!!, right!!, context)
+                        else TODO("Error: must be nr")
+                    }
+                    else TODO("Handling mutable collections")
+                }
                 else -> TODO("Unknown operation")
             }
             value = operand.getNewValue()
