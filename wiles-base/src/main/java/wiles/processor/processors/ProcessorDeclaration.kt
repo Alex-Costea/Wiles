@@ -38,11 +38,12 @@ class ProcessorDeclaration(
             TODO("Handle no expression body")
 
         // don't process if value already known at compile time
-        if (context.values[name]?.getObj() == null) {
+        if (context.values[name]?.isKnown() != true) {
             val processorExpression = ProcessorExpression(expression, context)
             processorExpression.process()
             val value = processorExpression.value
-            val newValue = Value(value.getObj(), value.getType().clone(), details.contains(VARIABLE_ID))
+            val newValue = Value(value.getObj(),
+                value.getType().removeSingleton().clone(), details.contains(VARIABLE_ID), value.isKnown())
             context.values[name] = newValue
         }
     }

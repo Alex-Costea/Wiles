@@ -20,8 +20,8 @@ class AssignmentOperation(left: Value, right: Value, context: InterpreterContext
             if (!TypeUtils.isFormerSuperTypeOfLatter(leftType, rightType))
                 throw TypeConflictError(leftType, rightType, location)
         }
-        val newValue = Value(right.getObj(), right.getType().clone(), true)
+        val newValue = Value(right.getObj(), right.getType().clone(), true, right.isKnown())
         context.values[name] = newValue
-        return Value(null, NothingType(), false)
+        return Value(null, NothingType(), false, isKnown = true)
     }
 }

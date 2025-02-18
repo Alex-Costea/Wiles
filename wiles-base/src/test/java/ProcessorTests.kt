@@ -166,7 +166,7 @@ class ProcessorTests {
         """.trimIndent()).let{ (values, exceptions) ->
             assertValue(values, "!a") { objValueEquals(it, intOf(1))}
             assert(exceptions.size == 1)
-            assert(exceptions[0] == TypeConflictError( IntegerType(), StringType(),
+            assert(exceptions[0] == TypeConflictError( IntegerType(), StringType().singletonValueOf("text"),
                 TokenLocation(2, 1, 2, 2)))
         }
 

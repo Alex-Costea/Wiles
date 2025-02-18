@@ -13,10 +13,10 @@ class PlusOperation(left: Value, right: Value, context: InterpreterContext) : Ab
             if(leftObj is BigInteger && rightObj is BigInteger)
             {
                 val newInt : BigInteger = leftObj + rightObj
-                val newType = IntegerType()
-                return Value(newInt, newType, false)
+                val newType = IntegerType().singletonValueOf(newInt)
+                return Value(newInt, newType, false, isKnown = true)
             }
-            else return Value(null, IntegerType(), false)
+            else return Value(null, IntegerType(), false, isKnown = false)
         }
         else TODO("Non-int addition operation")
     }

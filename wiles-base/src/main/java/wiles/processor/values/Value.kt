@@ -5,7 +5,8 @@ import wiles.processor.types.AbstractType
 class Value(
     private val obj: Any?,
     private val type: AbstractType,
-    private val isVariable: Boolean
+    private val isVariable: Boolean,
+    private val isKnown : Boolean
 ) {
     fun getObj() : Any?{
         return obj
@@ -19,9 +20,12 @@ class Value(
         return isVariable
     }
 
+    fun isKnown() : Boolean{
+        return isKnown
+    }
+
     override fun toString(): String {
-        val isVar = if(isVariable()) ", isVariable" else ""
-        return "Value(obj=$obj, type=$type$isVar)"
+        return "Value(obj=$obj, type=$type, isVariable=$isVariable, isKnown=$isKnown)"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -33,6 +37,7 @@ class Value(
         if (obj != other.obj) return false
         if (type != other.type) return false
         if (isVariable != other.isVariable()) return false
+        if (isKnown != other.isKnown) return false
 
         return true
     }
@@ -41,6 +46,7 @@ class Value(
         var result = obj?.hashCode() ?: 0
         result = 31 * result + type.hashCode()
         result = 31 * result + isVariable.hashCode()
+        result = 31 * result + isKnown.hashCode()
         return result
     }
 
