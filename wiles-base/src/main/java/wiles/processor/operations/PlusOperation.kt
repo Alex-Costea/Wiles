@@ -12,6 +12,8 @@ import java.math.BigInteger
 class PlusOperation(left: Value, right: Value, context: InterpreterContext) : AbstractOperation(left, right, context) {
     override fun getNewValue(): Value {
 
+        //TODO: use isFormerSuperTypeOfLatter
+
         // addition
         if(leftType.typeName == WilesTypes.INT && rightType.typeName == WilesTypes.INT)
         {
@@ -35,6 +37,6 @@ class PlusOperation(left: Value, right: Value, context: InterpreterContext) : Ab
             }
             else return Value(null, StringType(), VariableStatus.Val, KnownStatus.Known)
         }
-        else TODO("Non-int addition operation")
+        else TODO("Can't add these types")
     }
 }
