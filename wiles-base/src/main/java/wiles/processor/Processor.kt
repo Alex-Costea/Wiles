@@ -2,9 +2,7 @@ package wiles.processor
 
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.ValuesMap
-import wiles.processor.enums.KnownStatus
 import wiles.processor.processors.ProcessorProgram
-import wiles.processor.values.Value
 import wiles.shared.AbstractSyntaxTree
 import wiles.shared.WilesExceptionsCollection
 import java.util.*
@@ -18,12 +16,7 @@ class Processor(scanner: Scanner?, val syntax: AbstractSyntaxTree, private val d
     {
         val compiler = Processor(null, syntax, debug)
         compiler.process()
-        val compilerValues = compiler.values
-        compilerValues.forEach { (key, value) ->
-            val knownStatus = if(value.isVariable()) KnownStatus.Unknown else value.knownStatus()
-            val obj = if(knownStatus == KnownStatus.Known) value.getObj() else null
-            values[key] = Value(obj, value.getType(), value.variableStatus(), knownStatus)
-        }
+        values.putAll(compiler.values.filter{ it.value.isKnown() && !it.value.isVariable()})
         if (compiler.getExceptions().size > 0) {
             exceptions.addAll(compiler.getExceptions())
             return
