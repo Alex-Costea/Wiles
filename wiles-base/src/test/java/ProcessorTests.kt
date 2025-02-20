@@ -120,6 +120,22 @@ class ProcessorTests {
             assertValue(values, "!a"){objValueEquals(it, value)}
             assertValue(values, "!a"){objTypeEquals(it, IntegerType())}
         }
+        getResults("""let a := "hello, " + "world!";""").let { (values, exceptions) ->
+            assert(exceptions.isEmpty())
+            val value = "hello, world!"
+            assertValue(values, "!a"){objValueEquals(it, value)}
+            assertValue(values, "!a"){objTypeEquals(it, StringType())}
+        }
+        getResults("""
+            let a := 1 + "a"
+            let b := "b" + 2
+        """.trimIndent()).let { (values, exceptions) ->
+            assert(exceptions.isEmpty())
+            assertValue(values, "!a"){objValueEquals(it, "1a")}
+            assertValue(values, "!a"){objTypeEquals(it, StringType())}
+            assertValue(values, "!b"){objValueEquals(it, "b2")}
+            assertValue(values, "!b"){objTypeEquals(it, StringType())}
+        }
     }
 
     @Test
