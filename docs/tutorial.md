@@ -484,20 +484,20 @@ end
 A list is a data structure that holds multiple elements. Example:
 
 ```wiles
-let my_list := [1, 2, 3] : Int
+let list := [1, 2, 3] : Int
 ```  
 
 The syntax is `[elem1, elem2, ...] : type`. If all elements are the same type, the type annotation can be skipped:
 
 ```wiles
-let my_list := [1, 2, 3]
+let list := [1, 2, 3]
 ```  
 
 But if the elements have different types, you **must** specify a type.  
 For example, to allow any type of object:
 
 ```wiles
-let my_list := [1, false, "hi!"] : Anything
+let list := [1, false, "hi!"] : Anything
 ```  
 
 ### Accessing List Elements
@@ -505,8 +505,8 @@ let my_list := [1, false, "hi!"] : Anything
 To get an element from a list, use `list[index]`:
 
 ```wiles
-let my_list := [1, 2, 3]
-write_line(my_list[0]) # Outputs 1
+let list := [1, 2, 3]
+write_line(list[0]) # Outputs 1
 ```  
 
 Lists in Wiles (like most languages) are **zero-based**, meaning the first element is at index `0`.
@@ -517,11 +517,11 @@ By default, lists are **immutable**—once created, they can't be changed.
 But if you need a **mutable** list, use the `~` operator:
 
 ```wiles
-let my_list := ~[1, 2, 3]
-my_list[0] := 4
-write_line(my_list) # Outputs [4, 2, 3]
-my_list[3] := 1
-write_line(my_list) # Outputs [4, 2, 3, 1]
+let list := ~[1, 2, 3]
+list[0] := 4
+write_line(list) # Outputs [4, 2, 3]
+list[3] := 1
+write_line(list) # Outputs [4, 2, 3, 1]
 ```  
 
 ### List Functions
@@ -529,9 +529,9 @@ write_line(my_list) # Outputs [4, 2, 3, 1]
 You can remove an element at a specific index like this:
 
 ```wiles
-let my_list := ~[1, 2, 3]
-my_list.remove(1)
-write_line(my_list) # Outputs [1, 3]
+let list := ~[1, 2, 3]
+list.remove(1)
+write_line(list) # Outputs [1, 3]
 ```  
 
 The syntax is `list.remove(index)`. We'll cover the `.` operator in more detail later.
@@ -539,8 +539,8 @@ The syntax is `list.remove(index)`. We'll cover the `.` operator in more detail 
 To get a list's size, use `.size` (works for both mutable and immutable lists):
 
 ```wiles
-let my_list := [1, 2, 3]
-write_line(my_list.size) # Outputs 3
+let list := [1, 2, 3]
+write_line(list.size) # Outputs 3
 ```
 
 ---
@@ -590,10 +590,10 @@ end
 The `while` statement executes a code block as long as a truth value remains true.
 
 ```wiles
-let my_list := [1, 2, 3, 4, 5]
+let list := [1, 2, 3, 4, 5]
 let var i := 0
 let value_to_find := 4
-while my_list[i] =/= value_to_find do
+while list[i] =/= value_to_find do
     i := i + 1
 write_line("Value found at index " + i)
 ```
@@ -637,7 +637,7 @@ let a : Int | Decimal := 123
 
 Here, `a` can be either an `Int` or a `Decimal`, but nothing else.
 
-A common case is `my_type | nothing`, which has a shorthand syntax:
+A common case is `NewType | nothing`, which has a shorthand syntax:
 
 ```wiles
 let a : Int? := 123
@@ -690,7 +690,7 @@ All type expressions are themselves of type `Type()`.
 You can also use `Type(subtype)` to hold all expressions which are a subtype of something. For instance:
 
 ```wiles
-let my_type : Type(Int | Text) := Int
+let NewType : Type(Int | Text) := Int
 ```
 
 ### Subtyping operator
@@ -726,14 +726,14 @@ This is especially useful when a value needs to be known at compile time to appl
 
 ```wiles
 let a : Int := 123  # `int` is known at compile time
-let my_int := Int
-let b : my_int := 456  # `my_int` is also known at compile time here
+let NewInt := Int
+let b : NewInt := 456  # `NewInt` is also known at compile time here
 ```
 
 If you want to **explicitly** ensure a value is known at compile time, you can use `const`:
 
 ```wiles
-let const my_int := Int
+let const NewInt := Int
 ```
 
 This will cause a compile-time error if the value relies on any runtime information. 
@@ -825,8 +825,8 @@ write_line(add(5, 5)) # 10
 If a function does not explicitly return a value, it yields `nothing` by default:
 
 ```wiles
-let my_func := fun() do nothing
-let x := my_func()
+let func := fun() do nothing
+let x := func()
 write_line(x) # Outputs: nothing
 ```
 
@@ -835,7 +835,7 @@ write_line(x) # Outputs: nothing
 To define a function type, write the function signature without a body:
 
 ```wiles
-let my_func : fun(name : Text) := fun(name : Text)
+let func : fun(name : Text) := fun(name : Text)
     do write_line("Hello, " + name)
 ```
 
@@ -944,32 +944,32 @@ Internally, they work like linked hash maps, and as such, the order is guarantee
 Here's how you define one:
 
 ```wiles
-let my_dict := { 1 : "one", 2 : "two" } : Int -> Text
-write_line(my_dict)
+let dict := { 1 : "one", 2 : "two" } : Int -> Text
+write_line(dict)
 ```
 
 The syntax is `{key1 : value1, key2 : value2, ...} : key_type -> value_type`. 
 Note that the key type, value type, or both can be inferred, like so:
 
 ```wiles
-let my_dict := { 1 : "one", 2 : "two" }
-write_line(my_dict)
+let dict := { 1 : "one", 2 : "two" }
+write_line(dict)
 ```
 
 To access a specific element, use `dict[key]`, just like with lists:
 
 ```wiles
-let my_dict := { 1 : "one", 2 : "two" }
-write_line(my_dict[1]) # Outputs: one
+let dict := { 1 : "one", 2 : "two" }
+write_line(dict[1]) # Outputs: one
 ```
 
 You can also grab a dictionary's keys with `dict.keys`. 
 This returns a list of keys, which you can use to iterate over the dictionary:
 
 ```wiles
-let my_dict := { 1 : "one", 2 : "two" }
-for key in my_dict.keys do
-    write_line(my_dict[key])
+let dict := { 1 : "one", 2 : "two" }
+for key in dict.keys do
+    write_line(dict[key])
 ```
 
 ### Mutable Dictionaries
@@ -977,11 +977,11 @@ for key in my_dict.keys do
 By default, dictionaries are immutable, but you can make them mutable with `~`, similar to how lists work.
 
 ```wiles
-let my_dict := ~ { 1 : "one", 2 : "two" }
-my_dict[1] := "one!!!"
-my_dict[3] := "three"
-my_dict.remove(2)
-write_line(my_dict) # Outputs: { 1 : "one!!!", 3 : "three" }
+let dict := ~ { 1 : "one", 2 : "two" }
+dict[1] := "one!!!"
+dict[3] := "three"
+dict.remove(2)
+write_line(dict) # Outputs: { 1 : "one!!!", 3 : "three" }
 ```
 
 ---
@@ -1120,3 +1120,4 @@ The following takes 2 types as parameters: `Dict(type1, type2)`
 This is usually unnecessary, but it can disambiguate some situations.
 - All top level expressions must be of type `nothing`.
 - Function closures are fully supported.
+- By convention, values use `snake_case` and types use `PascalCase`
