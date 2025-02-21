@@ -8,7 +8,7 @@ import wiles.processor.values.Value
 
 class InternalOperation(right: Value, context: InterpreterContext) : AbstractOperation(null, right, context)
 {
-    private val name = (rightObj as String).toString()
+    private val name = (rightObj as String).uppercase()
     override fun getNewValue(): Value {
         return Value(calculateObject(), calculateType(), VariableStatus.Val, KnownStatus.Known)
     }
