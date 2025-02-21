@@ -65,7 +65,6 @@
         + [Data Types](#data-types)
         + [Recursive Data Types](#recursive-data-types)
     * [Standard Library](#standard-library)
-        + [Infinity](#infinity)
         + [Truth values](#truth-values)
         + [Nothing](#nothing)
         + [Write to output](#write-to-output)
@@ -194,13 +193,6 @@ Just use a decimal point:
 
 ```wiles
 write_line(3.1415)
-```
-
-Wiles also supports `Infinity`, which can be negated as usual:
-
-```wiles
-write_line(Infinity)
-write_line(-Infinity)
 ```
 
 Under the hood, rational numbers internally use `BigDecimal` in `DECIMAL128` mode.
@@ -1042,10 +1034,6 @@ where each node contains references to other nodes of the same type.
 ## Standard Library
 
 Here are the functions that come from the standard library, imported by default
-
-### Infinity
-
-The value `Infinity` represents infinity.
 
 ### Truth values
 
