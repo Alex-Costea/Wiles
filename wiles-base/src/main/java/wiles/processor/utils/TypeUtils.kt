@@ -2,6 +2,8 @@ package wiles.processor.utils
 
 import wiles.processor.enums.WilesTypes
 import wiles.processor.types.AbstractType
+import wiles.processor.types.IntegerType
+import wiles.processor.types.StringType
 
 object TypeUtils {
     private fun checkSingletonStatus(former : AbstractType, latter : AbstractType): Boolean {
@@ -12,19 +14,22 @@ object TypeUtils {
         return true
     }
 
-    fun isFormerSuperTypeOfLatter(former : AbstractType, latter : AbstractType): Boolean {
-        if(former.typeName == WilesTypes.INVALID || former.typeName == WilesTypes.INVALID)
+    fun isSuperType(superType : AbstractType, subType : AbstractType): Boolean {
+        if(superType.typeName == WilesTypes.INVALID || superType.typeName == WilesTypes.INVALID)
             return false
-        if(latter.typeName == WilesTypes.NOTHING)
+        if(subType.typeName == WilesTypes.NOTHING)
         {
-            return former.typeName == WilesTypes.NOTHING
+            return superType.typeName == WilesTypes.NOTHING
         }
-        if(former.typeName == latter.typeName)
+        if(superType.typeName == subType.typeName)
         {
-            if(!checkSingletonStatus(former, latter))
+            if(!checkSingletonStatus(superType, subType))
                 return false
             return true
         }
         return false
     }
+
+    val INTEGER_TYPE = IntegerType()
+    val STRING_TYPE = StringType()
 }

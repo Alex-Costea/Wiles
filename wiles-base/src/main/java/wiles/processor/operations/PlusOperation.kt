@@ -3,10 +3,12 @@ package wiles.processor.operations
 import wiles.processor.data.InterpreterContext
 import wiles.processor.enums.KnownStatus
 import wiles.processor.enums.VariableStatus
-import wiles.processor.enums.WilesTypes
 import wiles.processor.types.AbstractType
 import wiles.processor.types.IntegerType
 import wiles.processor.types.StringType
+import wiles.processor.utils.TypeUtils.INTEGER_TYPE
+import wiles.processor.utils.TypeUtils.STRING_TYPE
+import wiles.processor.utils.TypeUtils.isSuperType
 import wiles.processor.values.Value
 import java.math.BigInteger
 
@@ -23,8 +25,8 @@ class PlusOperation(left: Value, right: Value, context: InterpreterContext) : Ab
     override fun calculateType(): AbstractType {
         //TODO: handle sum types
         val newType = when {
-            leftType.typeName == WilesTypes.INT && rightType.typeName == WilesTypes.INT -> IntegerType()
-            leftType.typeName == WilesTypes.STRING || rightType.typeName == WilesTypes.STRING -> StringType()
+            isSuperType(INTEGER_TYPE, leftType) && isSuperType(INTEGER_TYPE, rightType) -> IntegerType()
+            isSuperType(STRING_TYPE, leftType) || isSuperType(STRING_TYPE, rightType) -> StringType()
             else -> TODO("Can't add these types")
         }
         return newType
