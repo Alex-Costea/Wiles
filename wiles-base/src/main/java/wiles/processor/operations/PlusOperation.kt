@@ -4,13 +4,16 @@ import wiles.processor.data.InterpreterContext
 import wiles.processor.enums.KnownStatus
 import wiles.processor.enums.VariableStatus
 import wiles.processor.types.AbstractType
+import wiles.processor.types.DecimalType
 import wiles.processor.types.IntegerType
 import wiles.processor.types.StringType
+import wiles.processor.utils.TypeUtils.DECIMAL_TYPE
 import wiles.processor.utils.TypeUtils.INTEGER_TYPE
 import wiles.processor.utils.TypeUtils.STRING_TYPE
 import wiles.processor.utils.TypeUtils.isSuperType
 import wiles.processor.values.Value
-import java.math.BigInteger
+import wiles.processor.values.WilesDecimal
+import wiles.processor.values.WilesInteger
 
 class PlusOperation(left: Value, right: Value, context: InterpreterContext) : AbstractOperation(left, right, context) {
 
@@ -18,14 +21,26 @@ class PlusOperation(left: Value, right: Value, context: InterpreterContext) : Ab
     {
         if(!bothKnown)
             return null
-        if(leftObj is BigInteger && rightObj is BigInteger) return leftObj + rightObj
-        return leftObj.toString() + rightObj.toString()
+        return when{
+            leftObj is WilesInteger && rightObj is WilesInteger -> leftObj + rightObj
+            leftObj is WilesInteger && rightObj is WilesDecimal -> leftObj + rightObj
+            leftObj is WilesDecimal && rightObj is WilesInteger -> leftObj + rightObj
+            leftObj is WilesDecimal && rightObj is WilesDecimal -> leftObj + rightObj
+            else -> leftObj.toString() + rightObj.toString()
+        }
     }
 
     override fun calculateType(): AbstractType {
         //TODO: handle sum types
+        val leftIsInt = isSuperType(INTEGER_TYPE, leftType)
+        val rightIsInt = isSuperType(INTEGER_TYPE, rightType)
+        val leftIsDecimal = isSuperType(DECIMAL_TYPE, leftType)
+        val rightIsDecimal = isSuperType(DECIMAL_TYPE, rightType)
         val newType = when {
-            isSuperType(INTEGER_TYPE, leftType) && isSuperType(INTEGER_TYPE, rightType) -> IntegerType()
+            leftIsInt && rightIsInt -> IntegerType()
+            leftIsInt && rightIsDecimal -> DecimalType()
+            leftIsDecimal && rightIsInt -> DecimalType()
+            leftIsDecimal && rightIsDecimal -> DecimalType()
             isSuperType(STRING_TYPE, leftType) || isSuperType(STRING_TYPE, rightType) -> StringType()
             else -> TODO("Can't add these types")
         }

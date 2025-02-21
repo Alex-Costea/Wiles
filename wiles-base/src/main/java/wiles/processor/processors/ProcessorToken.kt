@@ -10,6 +10,7 @@ import wiles.processor.types.InvalidType
 import wiles.processor.types.StringType
 import wiles.processor.values.Value
 import wiles.processor.values.WilesDecimal
+import wiles.processor.values.WilesInteger
 import wiles.shared.AbstractSyntaxTree
 import wiles.shared.InternalErrorException
 import wiles.shared.SyntaxType
@@ -33,7 +34,7 @@ class ProcessorToken(
             value = Value(decimal, DecimalType().singletonValueOf(decimal), VariableStatus.Val, KnownStatus.Known)
         }
         else{
-            val bigInt = newName.toBigInteger()
+            val bigInt = WilesInteger(newName)
             value = Value(bigInt, IntegerType().singletonValueOf(bigInt), VariableStatus.Val, KnownStatus.Known)
         }
     }
