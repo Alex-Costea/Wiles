@@ -32,7 +32,7 @@ class PlusOperation(left: Value, right: Value, context: InterpreterContext) : Ab
 
     override fun calculateType(): AbstractType {
         //TODO: handle sum types
-        val leftIsInt = isSuperType(INTEGER_TYPE, leftType)
+        val leftIsInt = isSuperType(INTEGER_TYPE, leftType!!)
         val rightIsInt = isSuperType(INTEGER_TYPE, rightType)
         val leftIsDecimal = isSuperType(DECIMAL_TYPE, leftType)
         val rightIsDecimal = isSuperType(DECIMAL_TYPE, rightType)

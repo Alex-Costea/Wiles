@@ -20,7 +20,7 @@ class AssignmentOperation(left: Value, right: Value, context: InterpreterContext
             val location = leftToken.getFirstLocation()
             val leftValue = context.values[name]!!
             if (!leftValue.isVariable()) throw CantBeModifiedException(location)
-            if (!TypeUtils.isSuperType(leftType, rightType))
+            if (!TypeUtils.isSuperType(leftType!!, rightType))
                 throw TypeConflictError(leftType, rightType, location)
         }
         val newValue = Value(right.getObj(), right.getType().clone(), VariableStatus.Var, right.knownStatus())

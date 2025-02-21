@@ -163,9 +163,8 @@ class ProcessorTests {
             assertValue(values, "!b") {objValueEquals(it, WilesInteger(2))}
         }
 
-        getResults("a := 123") .let { (values, exceptions) ->
+        getResults("a := 123") .let { (_, exceptions) ->
             assert(exceptions.size == 1)
-            assert(values.isEmpty())
             assert(exceptions[0] == IdentifierUnknownException(
                 TokenLocation(1, 1, 1, 2)
             ))
@@ -182,9 +181,8 @@ class ProcessorTests {
 
         getResults("""
             17 := 25
-        """.trimIndent()). let { (values, exceptions) ->
+        """.trimIndent()). let { (_, exceptions) ->
             assert(exceptions.size == 1)
-            assert(values.size == 0)
             assert(exceptions[0] == CantBeModifiedException(TokenLocation(1, 1, 1, 3)))
         }
 
@@ -198,5 +196,30 @@ class ProcessorTests {
                 TokenLocation(2, 1, 2, 2)))
         }
 
+    }
+
+    @Test
+    fun standardLibraryTest()
+    {
+        getResults("").let{ (values, exceptions) ->
+            assert(exceptions.isEmpty())
+            assertValue(values, "!true"){objValueEquals(it, true)}
+            assertValue(values, "!true"){objTypeEquals(it, BooleanType())}
+
+            assertValue(values, "!false"){objValueEquals(it, false)}
+            assertValue(values, "!false"){objTypeEquals(it, BooleanType())}
+
+            assertValue(values, "!nothing"){objValueEquals(it, null)}
+            assertValue(values, "!nothing"){objTypeEquals(it, NothingType())}
+
+            assertValue(values, "!int"){objValueEquals(it, IntegerType())}
+            assertValue(values, "!int"){objTypeEquals(it, TypeType())}
+
+            assertValue(values, "!text"){objValueEquals(it, StringType())}
+            assertValue(values, "!text"){objTypeEquals(it, TypeType())}
+
+            assertValue(values, "!decimal"){objValueEquals(it, DecimalType())}
+            assertValue(values, "!decimal"){objTypeEquals(it, TypeType())}
+        }
     }
 }
