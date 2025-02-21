@@ -8,25 +8,26 @@ import wiles.processor.values.Value
 
 class InternalOperation(right: Value, context: InterpreterContext) : AbstractOperation(null, right, context)
 {
+    private val name = (rightObj as String).toString()
     override fun getNewValue(): Value {
         return Value(calculateObject(), calculateType(), VariableStatus.Val, KnownStatus.Known)
     }
 
     override fun calculateObject(): Any? {
-        return GET_VALUES[rightObj as String]
+        return GET_VALUES[name]
     }
 
     override fun calculateType(): AbstractType {
-        return GET_TYPES[rightObj as String]!!
+        return GET_TYPES[name]!!
     }
 
     companion object{
-        private const val TRUE_ID = "true"
-        private const val FALSE_ID = "false"
-        private const val NOTHING_ID = "nothing"
-        private const val INT_ID = "int"
-        private const val TEXT_ID = "text"
-        private const val DECIMAL_ID = "decimal"
+        private const val TRUE_ID = "TRUE"
+        private const val FALSE_ID = "FALSE"
+        private const val NOTHING_ID = "NOTHING"
+        private const val INT_ID = "INT"
+        private const val TEXT_ID = "TEXT"
+        private const val DECIMAL_ID = "DECIMAL"
 
         val GET_VALUES = mapOf(
             TRUE_ID to true,

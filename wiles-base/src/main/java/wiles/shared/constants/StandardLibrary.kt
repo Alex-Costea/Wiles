@@ -2,11 +2,11 @@ package wiles.shared.constants
 
 object StandardLibrary {
     val STANDARD_LIBRARY_TEXT = """
-        let true := __INTERNAL "true"
-        let false := __INTERNAL "false"
-        let nothing := __INTERNAL "nothing"
-        let Int := __INTERNAL "int"
-        let Text := __INTERNAL "text"
-        let Decimal := __INTERNAL "decimal"
+        let true := __INTERNAL "TRUE"
+        let false := __INTERNAL "FALSE"
+        let nothing := __INTERNAL "NOTHING"
+        let Int := __INTERNAL "INT"
+        let Text := __INTERNAL "TEXT"
+        let Decimal := __INTERNAL "DECIMAL"
     """.trimIndent()
 }
