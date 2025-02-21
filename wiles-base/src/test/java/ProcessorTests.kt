@@ -212,14 +212,14 @@ class ProcessorTests {
             assertValue(values, "!nothing"){objValueEquals(it, null)}
             assertValue(values, "!nothing"){objTypeEquals(it, NothingType())}
 
-            assertValue(values, "!int"){objValueEquals(it, IntegerType())}
-            assertValue(values, "!int"){objTypeEquals(it, TypeType())}
+            assertValue(values, "!Int"){objValueEquals(it, IntegerType())}
+            assertValue(values, "!Int"){objTypeEquals(it, TypeType())}
 
-            assertValue(values, "!text"){objValueEquals(it, StringType())}
-            assertValue(values, "!text"){objTypeEquals(it, TypeType())}
+            assertValue(values, "!Text"){objValueEquals(it, StringType())}
+            assertValue(values, "!Text"){objTypeEquals(it, TypeType())}
 
-            assertValue(values, "!decimal"){objValueEquals(it, DecimalType())}
-            assertValue(values, "!decimal"){objTypeEquals(it, TypeType())}
+            assertValue(values, "!Decimal"){objValueEquals(it, DecimalType())}
+            assertValue(values, "!Decimal"){objTypeEquals(it, TypeType())}
         }
     }
 }

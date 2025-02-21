@@ -297,10 +297,10 @@ In this example, `value` is first assigned to be `123`, and then reassigned to `
 ### Type Inference and Explicit Types
 
 Wiles is a strongly typed language. In the examples above, the type of `value` is inferred 
-automatically. To explicitly declare the type, use `:` followed by the type (in this case, `int`):
+automatically. To explicitly declare the type, use `:` followed by the type (in this case, `Int`):
 
 ```wiles
-let value : int := 123
+let value : Int := 123
 ```
 
 We will go into more detail about types later.
@@ -311,7 +311,7 @@ Note that the identifier doesn't have to be immediately initialized. However, it
 This also means the type cannot be inferred in such cases:
 
 ```wiles
-let value : int
+let value : Int
 write_line("I don't know what value is!")
 value := 123
 write_line("Now I do! It is " + value)
@@ -335,15 +335,15 @@ Note that even when the identifier represents a variable, its type can't be chan
 For example, this won't compile:
 
 ```wiles
-let var value := 123 # value is of type int
-value := "Alex" # Compile Error! value is int, not text
+let var value := 123 # value is of type Int
+value := "Alex" # Compile Error! value is Int, not Text
 ```
 
 To make this code compile, you need to specify that `value` can hold any type of value. 
-You can do this by annotating its type as `anything`:
+You can do this by annotating its type as `Anything`:
 
 ```wiles
-let var value : anything := 123
+let var value : Anything := 123
 value := "Alex"
 write_line("The value is:" + value)
 ```
@@ -352,11 +352,11 @@ write_line("The value is:" + value)
 
 ## Truth Values and Operations
 
-Truth values, also known as Booleans, represent either `true` or `false`. They are of type `truth`.
+Truth values, also known as Booleans, represent either `true` or `false`. They are of type `Truth`.
 
 ```wiles
 let value1 := true
-let value2 : truth := false
+let value2 : Truth := false
 write_line(value1) # Outputs true
 write_line(value2) # Outputs false
 ```
@@ -372,7 +372,7 @@ write_line(1 =/= 1) # outputs false
 write_line(1 =/= 2) # outputs true
 ```
 
-These operations can be used with all object types, including `text` and even `truth` itself:
+These operations can be used with all object types, including `Text` and even `Truth` itself:
 
 ```wiles
 write_line("abc" = "abc") # outputs true
@@ -381,7 +381,7 @@ write_line(true =/= false) # outputs true
 
 ### Comparison Operations
 
-For numbers (whether `int`, `decimal`, or a mix of both),
+For numbers (whether `Int`, `Decimal`, or a mix of both),
 you can also use the comparison operators `>` (greater than), `>=` (greater than or equal to),
 `<` (less than), and `<=` (less than or equal to):
 
@@ -491,7 +491,7 @@ end
 A list is a data structure that holds multiple elements. Example:
 
 ```wiles
-let my_list := [1, 2, 3] : int
+let my_list := [1, 2, 3] : Int
 ```  
 
 The syntax is `[elem1, elem2, ...] : type`. If all elements are the same type, the type annotation can be skipped:
@@ -504,7 +504,7 @@ But if the elements have different types, you **must** specify a type.
 For example, to allow any type of object:
 
 ```wiles
-let my_list := [1, false, "hi!"] : anything
+let my_list := [1, false, "hi!"] : Anything
 ```  
 
 ### Accessing List Elements
@@ -613,13 +613,13 @@ Wiles is a strongly typed language where every object has both a compile-time ty
 type is determined through type inference or explicit annotations. Here are some common types:
 
 ```wiles
-let a : int := 123
-let b : decimal := 123.4
-let c : text := "hello"
-let d : truth := true
-let e : list(int) := [1, 2, 3]
-let f : mutable(list(int)) := ~[1, 2, 3]
-let g : anything := 123 # can hold any compile-time value
+let a : Int := 123
+let b : Decimal := 123.4
+let c : Text := "hello"
+let d : Truth := true
+let e : List(Int) := [1, 2, 3]
+let f : Mutable(List(Int)) := ~[1, 2, 3]
+let g : Anything := 123 # can hold any compile-time value
 ```
 
 ### Type Expressions
@@ -627,8 +627,8 @@ let g : anything := 123 # can hold any compile-time value
 Types in Wiles are first-class values. This means they can be assigned to variables just like any other value:
 
 ```wiles
-let int_synonym : type := int
-let list_of_ints := list(int)
+let Int_synonym : type := Int
+let list_of_ints := List(Int)
 ```
 
 Additionally, `list`, `mutable`, and similar constructs are functions that operate at compile time. Their arguments 
@@ -639,18 +639,18 @@ must also be known at compile time. This will be explored further in the `const`
 Sum types allow a variable to hold multiple possible types, using the `|` operator:
 
 ```wiles
-let a : int | decimal := 123
+let a : Int | Decimal := 123
 ```
 
-Here, `a` can be either an `int` or a `decimal`, but nothing else.
+Here, `a` can be either an `Int` or a `Decimal`, but nothing else.
 
 A common case is `my_type | nothing`, which has a shorthand syntax:
 
 ```wiles
-let a : int? := 123
+let a : Int? := 123
 ```
 
-Note that `anything` accepts any value **except** `nothing`. For a truly universal type, use `anything?`.
+Note that `Anything` accepts any value **except** `nothing`. For a truly universal type, use `Anything?`.
 
 ### Range Types
 
@@ -675,17 +675,17 @@ let statuses := "accepted" | "rejected"
 let status : statuses := "accepted"
 ```
 
-### The `literal` Function
+### The `Literal` Function
 
 In some cases, there may be ambiguity between whether an expression should be interpreted as a type constraint or a 
-literal value. The `literal` function resolves this ambiguity:
+literal value. The `Literal` function resolves this ambiguity:
 
 ```wiles
 let a : 0 ... 100 := 17 # any value between 0 and 100
-let b : literal(0 ... 100) := 0 ... 100 # stores the range itself as a value
+let b : Literal(0 ... 100) := 0 ... 100 # stores the range itself as a value
 
-let c : int := 123 # any integer value
-let d : literal(int) := int # stores the type `int` itself as a value
+let c : Int := 123 # any integer value
+let d : Literal(Int) := Int # stores the type `Int` itself as a value
 ```
 
 The `literal` function ensures that the right-hand side is treated as an explicit value rather than a constraint. This 
@@ -693,11 +693,11 @@ prevents confusion when types and values have similar syntax.
 
 ### The `type` type
 
-All type expressions are themselves of type `type()`. 
-You can also use `type(subtype)` to hold all expressions which are a subtype of something. For instance:
+All type expressions are themselves of type `Type()`. 
+You can also use `Type(subtype)` to hold all expressions which are a subtype of something. For instance:
 
 ```wiles
-let my_type : type(int | text) := int
+let my_type : Type(Int | Text) := Int
 ```
 
 ### Subtyping operator
@@ -705,11 +705,11 @@ let my_type : type(int | text) := int
 You can check whether a type is a subtype of another type using `of`.
 
 ```wiles
-let x : int | text := 123
+let x : Int | Text := 123
 if begin
     # .type checks a value's runtime type
-    x.type of int do write_line("x is int")
-    x.type of text do write_line("x is text")
+    x.type of Int do write_line("x is int")
+    x.type of Text do write_line("x is text")
 end
 ```
 
@@ -721,15 +721,15 @@ Wiles supports compile-time execution, allowing values to be computed before run
 This is especially useful when a value needs to be known at compile time to apply a type annotation.
 
 ```wiles
-let a : int := 123  # `int` is known at compile time
-let my_int := int
+let a : Int := 123  # `int` is known at compile time
+let my_int := Int
 let b : my_int := 456  # `my_int` is also known at compile time here
 ```
 
 If you want to **explicitly** ensure a value is known at compile time, you can use `const`:
 
 ```wiles
-let const my_int := int
+let const my_int := Int
 ```
 
 This will cause a compile-time error if the value relies on any runtime information. 
@@ -753,7 +753,7 @@ conflicting with the compile-time constant requirement.
 In Wiles, functions are first-class values. Let's start with the simplest case, a function that doesn't yield a value:
 
 ```wiles
-let greet := fun(name : text)
+let greet := fun(name : Text)
     do write_line("Hello, " + name)
 greet(name := "Alex")
 ```
@@ -774,7 +774,7 @@ greet(name := "Alex")
 However, when argument order is intuitive, you can opt into unnamed parameters using the `arg` keyword:
 
 ```wiles
-let greet := fun(arg name : text)
+let greet := fun(arg name : Text)
     do write_line("Hello, " + name)
 greet("Alex")
 ```
@@ -805,7 +805,7 @@ Since the type can be inferred from the default value, an explicit type declarat
 Functions can also return values using `yield`:
 
 ```wiles
-let add := fun(arg x : int, arg y : int) -> int
+let add := fun(arg x : Int, arg y : Int) -> Int
     do yield x + y
 write_line(add(5, 5)) # 10
 ```
@@ -813,8 +813,8 @@ write_line(add(5, 5)) # 10
 The `-> type` syntax specifies the return type. If the return type is clear at compile-time, it can be omitted:
 
 ```wiles
-let add := fun(arg x : int, arg y : int)
-    do yield x + y # Can only be `int`
+let add := fun(arg x : Int, arg y : Int)
+    do yield x + y # Can only be `Int`
 write_line(add(5, 5)) # 10
 ```
 
@@ -831,7 +831,7 @@ write_line(x) # Outputs: nothing
 To define a function type, write the function signature without a body:
 
 ```wiles
-let my_func : fun(name : text) := fun(name : text)
+let my_func : fun(name : Text) := fun(name : Text)
     do write_line("Hello, " + name)
 ```
 
@@ -853,11 +853,11 @@ generics-like constructs:
 
 
 ```wiles
-let add(const T : type(int | rational), x : T, y : T) -> T 
+let add(const T : Type(Int | Decimal), x : T, y : T) -> T 
     do yield x + y
     
-let a := add(int, 1, 2)
-let b := add(rational, 1.0, 2.0)
+let a := add(Int, 1, 2)
+let b := add(Decimal, 1.0, 2.0)
 ```
 
 ---
@@ -894,10 +894,10 @@ function's yielded type must be explicitly annotated, including if it's `nothing
 ```wiles
 write_line(factorial(10)) # Outputs 3628800
 
-def factorial(arg x : int) -> int # Explicit annotation required
+def factorial(arg x : Int) -> Int # Explicit annotation required
 begin
     if x <= 0 do yield 1
-    # Wiles knows the factorial function will yield an int
+    # Wiles knows the factorial function will yield an Int
     yield x * factorial(x - 1)
 end
 ```
@@ -924,11 +924,11 @@ Named parameters can be made unnamed by adding `arg`, but not the other way arou
 Function parameters can be marked as `const`, meaning they can only accept values known at compile-time:
 
 ```wiles
-def const mutable_list := fun(const t : type()) -> type()
-    do yield mutable(list(t))
+def const mutable_list := fun(const T : Type()) -> Type()
+    do yield Mutable(List(t))
 
-let a : mutable_list(int) := ~[1, 2, 3]
-let b : mutable_list(text) := ~["hi", "bye"]
+let a : mutable_list(Int) := ~[1, 2, 3]
+let b : mutable_list(Text) := ~["hi", "bye"]
 ```  
 
 ---
@@ -940,7 +940,7 @@ Internally, they work like linked hash maps, and as such, the order is guarantee
 Here's how you define one:
 
 ```wiles
-let my_dict := { 1 : "one", 2 : "two" } : int -> text
+let my_dict := { 1 : "one", 2 : "two" } : Int -> Text
 write_line(my_dict)
 ```
 
@@ -996,7 +996,7 @@ write_line(steve.age) # Outputs: 25
 The syntax is `<< declaration1, declaration2, ... >>`. You can also add type definitions to these declarations:
 
 ```wiles
-let steve := << name : text? := "Steve", age := 25 >>
+let steve := << name : Text? := "Steve", age := 25 >>
 write_line(steve.name) # Outputs: Steve
 write_line(steve.age) # Outputs: 25
 ```
@@ -1007,7 +1007,7 @@ The syntax for defining data types is the same. When an identifier is used as a 
 the values associated with it are considered **default values**, which can be overridden.
 
 ```wiles
-let person_type := <<name : text? := nothing, age : int>>
+let person_type := <<name : Text? := nothing, age : Int>>
 
 let greet_person := fun(person : person_type)
 begin
@@ -1027,10 +1027,10 @@ If any value is missing, it is treated as a type definition only and not as a co
 Data types can be recursive using the `def` keyword. For example:
 
 ```wiles
-def tree := <<
-    value : int,
-    left : tree?,
-    right: tree?
+def Tree := <<
+    value : Int,
+    left : Tree?,
+    right: Tee?
 >>
 ```
 
@@ -1057,17 +1057,17 @@ The value `Infinity` represents infinity.
 
 ### Write to output
 
-The `write` and `write_line` function are of type `fun(arg value : text)`. They write a value to output.
+The `write` and `write_line` function are of type `fun(arg value : Text)`. They write a value to output.
 `write_line` also outputs a newline character at the end.
 
 ### Panic
 
-The `panic` function is of type `fun(arg text := "Interpreter error")`. 
+The `panic` function is of type `fun(arg Text := "Interpreter error")`. 
 It displays an error message and then ends execution.
 
 ### Modulo
 
-The `modulo` function is of type `fun(arg x : int, arg y : int) -> int`. It returns the modulo result.
+The `modulo` function is of type `fun(arg x : Int, arg y : Int) -> Int`. It returns the modulo result.
 
 ### Run
 
@@ -1078,9 +1078,9 @@ Practically speaking, `run(func)` is the same as `func()`.
 
 These functions read a value from the input. They are: 
 
-- `read_line`, of type `fun() -> text`
-- `read_int`, of type `fun() -> int`
-- `read_decimal`, of type `fun() -> decimal`
+- `read_line`, of type `fun() -> Text`
+- `read_int`, of type `fun() -> Int`
+- `read_decimal`, of type `fun() -> Decimal`
 
 ### Members of every object
 
@@ -1103,13 +1103,13 @@ For dictionaries, `.keys` will return a list of the keys
 
 ### Type definition functions
 
-The following are standalone: `int`, `string`, `decimal`, `anything`, `truth`
+The following are standalone: `Int`, `Text`, `Decimal`, `Anything`, `Truth`
 
-The following takes either 0 or 1 types as parameters: `type()`, `type(subtype)`
+The following takes either 0 or 1 types as parameters: `Type()`, `Type(subtype)`
 
-The following take 1 type as parameter: `list(type)`,  `mutable(type)`, `literal(type)`
+The following take 1 type as parameter: `List(type)`, `Mutable(type)`, `Literal(type)`
 
-The following takes 2 types as parameters: `dict(type1, type2)`
+The following takes 2 types as parameters: `Dict(type1, type2)`
 
 ---
 

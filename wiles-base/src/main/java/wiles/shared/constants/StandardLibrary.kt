@@ -5,8 +5,8 @@ object StandardLibrary {
         let true := __INTERNAL "true"
         let false := __INTERNAL "false"
         let nothing := __INTERNAL "nothing"
-        let int := __INTERNAL "int"
-        let text := __INTERNAL "text"
-        let decimal := __INTERNAL "decimal"
+        let Int := __INTERNAL "int"
+        let Text := __INTERNAL "text"
+        let Decimal := __INTERNAL "decimal"
     """.trimIndent()
 }
