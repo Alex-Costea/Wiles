@@ -69,6 +69,7 @@ object Tokens {
     const val CONST_ID = "CONST"
     const val RANGIFY_ID = "RANGIFY"
     const val SUBTYPES_ID = "SUBTYPES"
+    const val AS_ID = "AS"
     const val INTERNAL_ID = "INTERNAL"
 
     private val KEYWORDS: HashMap<String, String> = HashMap()
@@ -79,7 +80,7 @@ object Tokens {
     val INFIX_OPERATORS = setOf(
         PLUS_ID, MINUS_ID, TIMES_ID, DIVIDE_ID, POWER_ID, RANGIFY_ID,
         EQUALS_ID, LARGER_ID, SMALLER_ID, LARGER_EQUALS_ID, SMALLER_EQUALS_ID, NOT_EQUAL_ID,
-        AND_ID, OR_ID, APPLY_ID, ACCESS_ID, UNION_ID, AT_KEY_ID, SUBTYPES_ID
+        AND_ID, OR_ID, APPLY_ID, ACCESS_ID, UNION_ID, AT_KEY_ID, SUBTYPES_ID, AS_ID,
     )
     @JvmField
     val PREFIX_OPERATORS = setOf(UNARY_PLUS_ID, UNARY_MINUS_ID, NOT_ID, MUTIFY_ID, INTERNAL_ID)
@@ -121,6 +122,7 @@ object Tokens {
         KEYWORDS["def"] = GLOBAL_ID
         KEYWORDS["const"] = CONST_ID
         KEYWORDS["of"] = SUBTYPES_ID
+        KEYWORDS["as"] = AS_ID
         KEYWORDS["__INTERNAL"] = INTERNAL_ID
 
         SYMBOLS["+"] = PLUS_ID

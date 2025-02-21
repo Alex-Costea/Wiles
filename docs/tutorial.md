@@ -700,11 +700,12 @@ You can check whether a type is a subtype of another type using `of`.
 ```wiles
 let x : Int | Text := 123
 if begin
-    # .type checks a value's runtime type
     x.type of Int do write_line("x is int")
     x.type of Text do write_line("x is text")
 end
 ```
+
+In this example, `.type` checks a value's runtime type
 
 ### Casting
 

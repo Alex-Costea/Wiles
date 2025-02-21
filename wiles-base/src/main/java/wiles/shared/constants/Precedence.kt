@@ -3,6 +3,7 @@ package wiles.shared.constants
 import wiles.shared.constants.Tokens.ACCESS_ID
 import wiles.shared.constants.Tokens.AND_ID
 import wiles.shared.constants.Tokens.APPLY_ID
+import wiles.shared.constants.Tokens.AS_ID
 import wiles.shared.constants.Tokens.AT_KEY_ID
 import wiles.shared.constants.Tokens.DIVIDE_ID
 import wiles.shared.constants.Tokens.EQUALS_ID
@@ -44,6 +45,7 @@ object Precedence {
         PRECEDENCE[LARGER_EQUALS_ID] = -1
         PRECEDENCE[SMALLER_EQUALS_ID] = -1
         PRECEDENCE[RANGIFY_ID] = -1
+        PRECEDENCE[AS_ID] = -1
         PRECEDENCE[PLUS_ID] = 0
         PRECEDENCE[MINUS_ID] = 0
         PRECEDENCE[UNARY_PLUS_ID] = 1

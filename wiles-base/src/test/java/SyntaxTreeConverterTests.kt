@@ -6,9 +6,9 @@ import wiles.parser.converters.TokensToSyntaxTreeConverter
 import wiles.parser.exceptions.TokenExpectedException
 import wiles.parser.exceptions.UnexpectedEndException
 import wiles.parser.exceptions.UnexpectedTokenException
+import wiles.shared.Token
 import wiles.shared.WilesException
 import wiles.shared.WilesExceptionsCollection
-import wiles.shared.Token
 import wiles.shared.constants.ErrorMessages.CONST_CANT_BE_VAR_ERROR
 import wiles.shared.constants.ErrorMessages.END_OF_STATEMENT_EXPECTED_ERROR
 import wiles.shared.constants.ErrorMessages.EXPECTED_INITIALIZATION_ERROR
@@ -19,6 +19,7 @@ import wiles.shared.constants.ErrorMessages.INVALID_STATEMENT_ERROR
 import wiles.shared.constants.ErrorMessages.TOKEN_EXPECTED_ERROR
 import wiles.shared.constants.Tokens.ANNOTATE_ID
 import wiles.shared.constants.Tokens.ASSIGN_ID
+import wiles.shared.constants.Tokens.AS_ID
 import wiles.shared.constants.Tokens.BRACKET_END_ID
 import wiles.shared.constants.Tokens.BRACKET_START_ID
 import wiles.shared.constants.Tokens.CONST_ID
@@ -1053,6 +1054,32 @@ CODE_BLOCK
                     )
                 )
             )""", "!int", SUBTYPES_ID, "!int", UNION_ID, "!text", OR_ID, "!text", SUBTYPES_ID, "!int", UNION_ID, "!text")
+    }
+
+    @Test
+    fun castingTest()
+    {
+        /*
+            a of Int
+            a as int
+         */
+        assertResults(null,"""
+            CODE_BLOCK
+            (
+                EXPRESSION
+                (
+                    %SUBTYPES [1, 3, 1, 5], 
+                    !a [1, 1, 1, 2], 
+                    !Int [1, 6, 1, 9]
+                ), 
+                EXPRESSION
+                (
+                    %AS [2, 3, 2, 5], 
+                    !a [2, 1, 2, 2], 
+                    !Int [2, 6, 2, 9]
+                )
+            )
+        """, "!a", SUBTYPES_ID, "!Int", NEWLINE_ID, "!a", AS_ID, "!Int")
     }
 
     private class CreateConverter(tokens: List<String>) {
