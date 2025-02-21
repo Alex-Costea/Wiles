@@ -5,6 +5,7 @@ import wiles.processor.enums.KnownStatus
 import wiles.processor.enums.VariableStatus
 import wiles.processor.errors.CantBeModifiedException
 import wiles.processor.errors.TypeConflictError
+import wiles.processor.types.AbstractType
 import wiles.processor.types.NothingType
 import wiles.processor.utils.TypeUtils
 import wiles.processor.values.Value
@@ -24,6 +25,14 @@ class AssignmentOperation(left: Value, right: Value, context: InterpreterContext
         }
         val newValue = Value(right.getObj(), right.getType().clone(), VariableStatus.Var, right.knownStatus())
         context.values[name] = newValue
-        return Value(null, NothingType(), VariableStatus.Val, KnownStatus.Known)
+        return Value(calculateObject(), calculateType(), VariableStatus.Val, KnownStatus.Known)
+    }
+
+    override fun calculateObject(): Any? {
+        return null
+    }
+
+    override fun calculateType(): AbstractType {
+        return NothingType()
     }
 }
