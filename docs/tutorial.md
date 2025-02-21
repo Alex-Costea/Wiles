@@ -47,6 +47,7 @@
         + [The `literal` Function](#the-literal-function)
         + [The `type` type](#the-type-type)
         + [Subtyping operator](#subtyping-operator)
+        + [Casting](#casting)
     * [Compile-Time Execution with `const`](#compile-time-execution-with-const)
     * [Functions](#functions)
         + [Named vs. Unnamed Parameters](#named-vs-unnamed-parameters)
@@ -703,6 +704,16 @@ if begin
     x.type of Int do write_line("x is int")
     x.type of Text do write_line("x is text")
 end
+```
+
+### Casting
+
+You can cast to another type using the `as` operator. This will panic if casting is not possible.
+
+```wiles
+let a : anything := 12
+a as Int #cast a as Int
+write_line(a + 123)
 ```
 
 ---
