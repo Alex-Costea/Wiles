@@ -6,7 +6,7 @@ import wiles.processor.enums.VariableStatus
 import wiles.processor.errors.IdentifierAlreadyDeclaredException
 import wiles.processor.errors.TypeConflictError
 import wiles.processor.types.AbstractType
-import wiles.processor.utils.TypeUtils.TYPE_TYPE
+import wiles.processor.types.AbstractType.Companion.TYPE_TYPE
 import wiles.processor.utils.TypeUtils.isSuperType
 import wiles.processor.values.Value
 import wiles.shared.AbstractSyntaxTree
@@ -59,7 +59,7 @@ class ProcessorDeclaration(
             processorExpression.process()
             val value = processorExpression.value
             val variableStatus = if (details.contains(VARIABLE_ID)) VariableStatus.Var else VariableStatus.Val
-            var newType = value.getType().removeSingleton().clone()
+            var newType = value.getType().removeSingleton()
             if(typeDefType != null)
             {
                 if(isSuperType(typeDefType, newType))

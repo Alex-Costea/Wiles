@@ -24,7 +24,7 @@ class AssignmentOperation(left: Value, right: Value, context: InterpreterContext
             if (!TypeUtils.isSuperType(leftType!!, rightType))
                 throw TypeConflictError(leftType, rightType, location)
         }
-        val newValue = Value(right.getObj(), right.getType().clone(),
+        val newValue = Value(right.getObj(), right.getType(),
             ValueProps(right.getKnownStatus(), VariableStatus.Var))
         context.values[name] = newValue
         return Value(calculateObject(), calculateType(), KNOWN_EXPR)

@@ -2,19 +2,8 @@ package wiles.processor.types
 
 import wiles.processor.enums.WilesTypes
 
-abstract class AbstractType {
-    private var singletonValue : Any? = null
+abstract class AbstractType(val singletonValue : Any?) {
     abstract val typeName : WilesTypes
-
-    fun singletonValueOf(value : Any) : AbstractType{
-        singletonValue = value
-        return this
-    }
-
-    fun removeSingleton(): AbstractType {
-        singletonValue = null
-        return this
-    }
 
     fun isSingleton(): Boolean {
         return singletonValue != null
@@ -49,21 +38,22 @@ abstract class AbstractType {
         return result
     }
 
-    fun clone() : AbstractType
+    protected abstract fun init(singletonValue: Any?) : AbstractType
+
+    fun singletonValueOf(singletonValue: Any?) : AbstractType
     {
-        val newType : AbstractType = when(this.typeName)
-        {
-            WilesTypes.INT -> IntegerType()
-            WilesTypes.TEXT -> TextType()
-            WilesTypes.DECIMAL -> DecimalType()
-            WilesTypes.INVALID -> InvalidType()
-            WilesTypes.NOTHING -> NothingType()
-            WilesTypes.TYPE -> TypeType()
-            WilesTypes.BOOLEAN -> BooleanType()
-            WilesTypes.ANYTHING -> AnythingType()
-        }
-        newType.singletonValue = this.singletonValue
-        return  newType
+        return init(singletonValue)
+    }
+
+    fun removeSingleton(): AbstractType {
+        return init(null)
+    }
+
+    companion object{
+        val INTEGER_TYPE = IntegerType()
+        val DECIMAL_TYPE = DecimalType()
+        val TEXT_TYPE = TextType()
+        val TYPE_TYPE = TypeType()
     }
 
 }

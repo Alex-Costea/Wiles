@@ -4,12 +4,12 @@ import wiles.processor.data.InterpreterContext
 import wiles.processor.data.ValueProps.Companion.KNOWN_EXPR
 import wiles.processor.data.ValueProps.Companion.UNKNOWN_EXPR
 import wiles.processor.types.AbstractType
+import wiles.processor.types.AbstractType.Companion.DECIMAL_TYPE
+import wiles.processor.types.AbstractType.Companion.INTEGER_TYPE
+import wiles.processor.types.AbstractType.Companion.TEXT_TYPE
 import wiles.processor.types.DecimalType
 import wiles.processor.types.IntegerType
 import wiles.processor.types.TextType
-import wiles.processor.utils.TypeUtils.DECIMAL_TYPE
-import wiles.processor.utils.TypeUtils.INTEGER_TYPE
-import wiles.processor.utils.TypeUtils.STRING_TYPE
 import wiles.processor.utils.TypeUtils.isSuperType
 import wiles.processor.values.Value
 import wiles.processor.values.WilesDecimal
@@ -41,7 +41,7 @@ class PlusOperation(left: Value, right: Value, context: InterpreterContext) : Ab
             leftIsInt && rightIsDecimal -> DecimalType()
             leftIsDecimal && rightIsInt -> DecimalType()
             leftIsDecimal && rightIsDecimal -> DecimalType()
-            isSuperType(STRING_TYPE, leftType) || isSuperType(STRING_TYPE, rightType) -> TextType()
+            isSuperType(TEXT_TYPE, leftType) || isSuperType(TEXT_TYPE, rightType) -> TextType()
             else -> TODO("Can't add these types")
         }
         return newType
@@ -49,9 +49,9 @@ class PlusOperation(left: Value, right: Value, context: InterpreterContext) : Ab
 
     override fun getNewValue(): Value {
         val newObject = calculateObject()
-        val newType = calculateType()
+        var newType = calculateType()
         if(bothKnown)
-            newType.singletonValueOf(newObject!!)
+            newType = newType.singletonValueOf(newObject!!)
         return Value(newObject, newType, if(bothKnown) KNOWN_EXPR else UNKNOWN_EXPR)
     }
 }
