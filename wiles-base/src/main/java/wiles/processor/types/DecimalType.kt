@@ -2,11 +2,11 @@ package wiles.processor.types
 
 import wiles.processor.enums.WilesTypes
 
-class DecimalType(singletonValue: Any? = null) : AbstractType(singletonValue) {
+class DecimalType(exactValue: Any? = null) : AbstractType(exactValue) {
     override val typeName: WilesTypes
         get() = WilesTypes.DECIMAL
 
-    override fun init(singletonValue: Any?): AbstractType {
-        return DecimalType(singletonValue)
+    override fun init(exactValue: Any?): AbstractType {
+        return DecimalType(exactValue)
     }
 }

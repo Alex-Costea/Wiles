@@ -51,7 +51,7 @@ class PlusOperation(left: Value, right: Value, context: InterpreterContext) : Ab
         val newObject = calculateObject()
         var newType = calculateType()
         if(bothKnown)
-            newType = newType.singletonValueOf(newObject!!)
+            newType = newType.exactly(newObject!!)
         return Value(newObject, newType, if(bothKnown) KNOWN_EXPR else UNKNOWN_EXPR)
     }
 }

@@ -4,10 +4,10 @@ import wiles.processor.enums.WilesTypes
 import wiles.processor.types.AbstractType
 
 object TypeUtils {
-    private fun checkSingletonStatus(former : AbstractType, latter : AbstractType): Boolean {
-        if(former.isSingleton() && !latter.isSingleton())
+    private fun checkExactStatus(former : AbstractType, latter : AbstractType): Boolean {
+        if(former.isExact() && !latter.isExact())
             return false
-        if(former.isSingleton() && latter.isSingleton())
+        if(former.isExact() && latter.isExact())
             return former.getValue() == latter.getValue()
         return true
     }
@@ -17,7 +17,7 @@ object TypeUtils {
             superType.typeName == WilesTypes.INVALID || superType.typeName == WilesTypes.INVALID -> false
             subType.typeName == WilesTypes.NOTHING -> superType.typeName == WilesTypes.NOTHING
             superType.typeName == WilesTypes.ANYTHING -> true
-            superType.typeName == subType.typeName -> checkSingletonStatus(superType, subType)
+            superType.typeName == subType.typeName -> checkExactStatus(superType, subType)
             else -> false
         }
     }

@@ -2,22 +2,22 @@ package wiles.processor.types
 
 import wiles.processor.enums.WilesTypes
 
-abstract class AbstractType(val singletonValue : Any?) {
+abstract class AbstractType(val exactValue : Any?) {
     abstract val typeName : WilesTypes
 
-    fun isSingleton(): Boolean {
-        return singletonValue != null
+    fun isExact(): Boolean {
+        return exactValue != null
     }
 
     override fun toString(): String {
         var string = "$typeName"
-        if(isSingleton())
-            string += "($singletonValue)"
+        if(isExact())
+            string += "($exactValue)"
         return string
     }
 
     fun getValue(): Any? {
-        return singletonValue
+        return exactValue
     }
 
     override fun equals(other: Any?): Boolean {
@@ -26,26 +26,26 @@ abstract class AbstractType(val singletonValue : Any?) {
 
         other as AbstractType
 
-        if (singletonValue != other.singletonValue) return false
+        if (exactValue != other.exactValue) return false
         if (typeName != other.typeName) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = singletonValue.hashCode()
+        var result = exactValue.hashCode()
         result = 31 * result + typeName.hashCode()
         return result
     }
 
-    protected abstract fun init(singletonValue: Any?) : AbstractType
+    protected abstract fun init(exactValue: Any?) : AbstractType
 
-    fun singletonValueOf(singletonValue: Any?) : AbstractType
+    fun exactly(value: Any?) : AbstractType
     {
-        return init(singletonValue)
+        return init(value)
     }
 
-    fun removeSingleton(): AbstractType {
+    fun removeExact(): AbstractType {
         return init(null)
     }
 

@@ -61,7 +61,7 @@ class ProcessorDeclaration(
             val variableStatus = if (details.contains(VARIABLE_ID)) VariableStatus.Var else VariableStatus.Val
             var newType = value.getType()
             if(variableStatus == VariableStatus.Var)
-                newType = newType.removeSingleton()
+                newType = newType.removeExact()
             if(typeDefType != null)
             {
                 if(isSuperType(typeDefType, newType))

@@ -50,7 +50,7 @@ class Value(
         return getKnownStatus() == KnownStatus.Known
     }
 
-    fun getVariableStatus() : VariableStatus {
+    private fun getVariableStatus() : VariableStatus {
         return props.variableStatus()
     }
 

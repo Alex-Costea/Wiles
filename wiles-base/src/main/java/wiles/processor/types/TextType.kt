@@ -2,11 +2,11 @@ package wiles.processor.types
 
 import wiles.processor.enums.WilesTypes
 
-class TextType(singletonValue: Any? = null) : AbstractType(singletonValue) {
+class TextType(exactValue: Any? = null) : AbstractType(exactValue) {
     override val typeName: WilesTypes
         get() = WilesTypes.TEXT
 
-    override fun init(singletonValue: Any?): AbstractType {
-        return TextType(singletonValue)
+    override fun init(exactValue: Any?): AbstractType {
+        return TextType(exactValue)
     }
 }

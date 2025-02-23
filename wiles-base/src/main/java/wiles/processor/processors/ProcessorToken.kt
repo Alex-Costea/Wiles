@@ -30,18 +30,18 @@ class ProcessorToken(
         if(newName.contains("."))
         {
             val decimal = WilesDecimal(newName)
-            value = Value(decimal, DecimalType().singletonValueOf(decimal), KNOWN_EXPR)
+            value = Value(decimal, DecimalType().exactly(decimal), KNOWN_EXPR)
         }
         else{
             val bigInt = WilesInteger(newName)
-            value = Value(bigInt, IntegerType().singletonValueOf(bigInt), KNOWN_EXPR)
+            value = Value(bigInt, IntegerType().exactly(bigInt), KNOWN_EXPR)
         }
     }
 
     private fun processText(name: String)
     {
         val newName = name.substring(1)
-        value = Value(newName, TextType().singletonValueOf(newName), KNOWN_EXPR)
+        value = Value(newName, TextType().exactly(newName), KNOWN_EXPR)
     }
 
     private fun processIdentifier(name: String) {
