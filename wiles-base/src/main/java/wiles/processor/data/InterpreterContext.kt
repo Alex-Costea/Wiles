@@ -8,6 +8,7 @@ class InterpreterContext(
     val isDebug : Boolean,
     val exceptions : WilesExceptionsCollection
 ){
+    val compileMode = !isRunning
     override fun toString(): String {
         return "InterpreterContext(isRunning=$isRunning, values=$values, isDebug=$isDebug)"
     }

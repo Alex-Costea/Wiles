@@ -18,7 +18,7 @@ class AssignmentOperation(left: Value, right: Value, context: InterpreterContext
     : AbstractOperation(left, right, context) {
     override fun getNewValue(): Value {
         val name = leftToken.details[0]
-        if(!context.isRunning) {
+        if(context.compileMode) {
             val location = leftToken.getFirstLocation()
             val leftValue = context.values[name]!!
             if (!leftValue.isVariable()) throw CantBeModifiedException(location)

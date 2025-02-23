@@ -44,7 +44,7 @@ class ProcessorDeclaration(
             typeDefType = typeDefValue.getObj() as AbstractType
         }
 
-        if(!context.isRunning && context.values.containsKey(name))
+        if(context.compileMode && context.values.containsKey(name))
         {
             context.exceptions.add(IdentifierAlreadyDeclaredException(nameToken.getFirstLocation()))
             return
@@ -64,11 +64,9 @@ class ProcessorDeclaration(
             {
                 if(isSuperType(typeDefType, newType))
                     newType = typeDefType
-                //TODO: get ACTUAL type in interpreting mode
                 else throw TypeConflictError(typeDefType, newType, typeDef!!.getFirstLocation())
             }
-            val newValue = Value(value.getObj(), newType, ValueProps(value.getKnownStatus(), variableStatus)
-            )
+            val newValue = Value(value.getObj(), newType, ValueProps(value.getKnownStatus(), variableStatus))
             context.values[name] = newValue
         }
     }
