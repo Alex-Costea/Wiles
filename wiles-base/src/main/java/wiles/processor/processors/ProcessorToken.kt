@@ -47,6 +47,7 @@ class ProcessorToken(
     private fun processIdentifier(name: String) {
         value = context.values.getOrDefault(name, null) ?:
             Value(null, InvalidType(), KNOWN_EXPR)
+        //TODO: just throw?
         if(!context.values.containsKey(name))
         {
             val exception = IdentifierUnknownException(syntax.getFirstLocation())

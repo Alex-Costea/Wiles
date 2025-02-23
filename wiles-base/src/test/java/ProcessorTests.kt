@@ -110,6 +110,16 @@ class ProcessorTests {
     }
 
     @Test
+    fun typeDefTests(){
+        getResults("let a : Int := 3").let { (values, exceptions) ->
+            val obj = WilesInteger(3)
+            assertValue(values, "!a") { objValueEquals(it, obj) }
+            assertValue(values, "!a") { objTypeEquals(it, IntegerType()) }
+            assert(exceptions.isEmpty())
+        }
+    }
+
+    @Test
     fun expressionsTest()
     {
         getResults("let a := 2 + 3").let { (values, exceptions) ->

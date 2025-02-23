@@ -4,6 +4,8 @@ import wiles.processor.data.InterpreterContext
 import wiles.processor.data.ValueProps
 import wiles.processor.enums.VariableStatus
 import wiles.processor.errors.IdentifierAlreadyDeclaredException
+import wiles.processor.types.AbstractType
+import wiles.processor.utils.TypeUtils
 import wiles.processor.values.Value
 import wiles.shared.AbstractSyntaxTree
 import wiles.shared.SyntaxType
@@ -27,8 +29,17 @@ class ProcessorDeclaration(
         val expression = components.getOrNull(1)
         val name = nameToken.details[0]
 
+        var typeDefType : AbstractType? = null
         if(typeDef != null)
-            TODO("No type checking yet!")
+        {
+            val typeProcessor = ProcessorTypeExpression(typeDef, context)
+            typeProcessor.process()
+            val typeDefValue = typeProcessor.value
+            if(!typeDefValue.isKnown())
+                TODO("MUST BE KNOWN")
+            //TODO: error if it's not of type type
+            typeDefType = typeDefValue.getObj() as AbstractType
+        }
 
         if(!context.isRunning && context.values.containsKey(name))
         {
@@ -45,8 +56,14 @@ class ProcessorDeclaration(
             processorExpression.process()
             val value = processorExpression.value
             val variableStatus = if (details.contains(VARIABLE_ID)) VariableStatus.Var else VariableStatus.Val
-            val newValue = Value(value.getObj(),
-                value.getType().removeSingleton().clone(), ValueProps(variableStatus, value.getKnownStatus())
+            var newType = value.getType().removeSingleton().clone()
+            if(typeDefType != null)
+            {
+                if(TypeUtils.isSuperType(typeDefType, newType))
+                    newType = typeDefType
+                else TODO("Type mismatch")
+            }
+            val newValue = Value(value.getObj(), newType, ValueProps(variableStatus, value.getKnownStatus())
             )
             context.values[name] = newValue
         }

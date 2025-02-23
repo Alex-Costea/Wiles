@@ -38,14 +38,14 @@ import wiles.shared.constants.Tokens.UNARY_MINUS_ID
 import wiles.shared.constants.Tokens.UNARY_PLUS_ID
 import wiles.shared.constants.Tokens.UNION_ID
 
-class ProcessorExpression(
+open class ProcessorExpression(
     syntax : AbstractSyntaxTree,
     context : InterpreterContext
 ): AbstractProcessor(syntax, context){
 
     lateinit var value : Value
 
-    fun getValue(tree : AbstractSyntaxTree?): Value? {
+    private fun getValue(tree : AbstractSyntaxTree?): Value? {
         if(tree == null) return null
         val innerProcessorExpression = ProcessorExpression(tree, context)
         innerProcessorExpression.process()
