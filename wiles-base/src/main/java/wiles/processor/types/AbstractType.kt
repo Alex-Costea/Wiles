@@ -10,10 +10,11 @@ abstract class AbstractType(val exactValue : Any?) {
     }
 
     override fun toString(): String {
-        var string = "$typeName"
-        if(isExact())
-            string += "($exactValue)"
-        return string
+        return when {
+            isExact() && typeName == WilesTypes.Text -> "\"$exactValue\""
+            isExact() -> exactValue.toString()
+            else -> typeName.toString()
+        }
     }
 
     fun getValue(): Any? {

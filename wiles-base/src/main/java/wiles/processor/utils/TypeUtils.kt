@@ -14,9 +14,9 @@ object TypeUtils {
 
     fun isSuperType(superType : AbstractType, subType : AbstractType): Boolean {
         return when {
-            superType.typeName == WilesTypes.INVALID || superType.typeName == WilesTypes.INVALID -> false
-            subType.typeName == WilesTypes.NOTHING -> superType.typeName == WilesTypes.NOTHING
-            superType.typeName == WilesTypes.ANYTHING -> true
+            superType.typeName == WilesTypes.Invalid || superType.typeName == WilesTypes.Invalid -> false
+            subType.typeName == WilesTypes.Nothing -> superType.typeName == WilesTypes.Nothing
+            superType.typeName == WilesTypes.Anything -> true
             superType.typeName == subType.typeName -> checkExactStatus(superType, subType)
             else -> false
         }
