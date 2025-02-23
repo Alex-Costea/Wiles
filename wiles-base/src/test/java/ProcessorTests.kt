@@ -12,6 +12,7 @@ import wiles.processor.types.*
 import wiles.processor.values.Value
 import wiles.processor.values.WilesDecimal
 import wiles.processor.values.WilesInteger
+import wiles.processor.values.WilesNothing
 import wiles.shared.TokenLocation
 import wiles.shared.WilesExceptionsCollection
 import wiles.shared.constants.Utils
@@ -234,7 +235,7 @@ class ProcessorTests {
             assertValue(values, "!false"){objValueEquals(it, false)}
             assertValue(values, "!false"){objTypeEquals(it, BooleanType())}
 
-            assertValue(values, "!nothing"){objValueEquals(it, null)}
+            assertValue(values, "!nothing"){objValueEquals(it, WilesNothing)}
             assertValue(values, "!nothing"){objTypeEquals(it, NothingType())}
 
             assertValue(values, "!Int"){objValueEquals(it, IntegerType())}

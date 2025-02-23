@@ -10,6 +10,7 @@ import wiles.processor.types.AbstractType
 import wiles.processor.types.NothingType
 import wiles.processor.utils.TypeUtils
 import wiles.processor.values.Value
+import wiles.processor.values.WilesNothing
 import wiles.shared.AbstractSyntaxTree
 
 class AssignmentOperation(left: Value, right: Value, context: InterpreterContext,
@@ -30,8 +31,8 @@ class AssignmentOperation(left: Value, right: Value, context: InterpreterContext
         return Value(calculateObject(), calculateType(), KNOWN_EXPR)
     }
 
-    override fun calculateObject(): Any? {
-        return null
+    override fun calculateObject(): Any {
+        return WilesNothing
     }
 
     override fun calculateType(): AbstractType {

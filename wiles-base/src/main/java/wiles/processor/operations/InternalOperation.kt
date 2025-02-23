@@ -4,6 +4,7 @@ import wiles.processor.data.InterpreterContext
 import wiles.processor.data.ValueProps.Companion.KNOWN_EXPR
 import wiles.processor.types.*
 import wiles.processor.values.Value
+import wiles.processor.values.WilesNothing
 
 class InternalOperation(right: Value, context: InterpreterContext) : AbstractOperation(null, right, context)
 {
@@ -32,7 +33,7 @@ class InternalOperation(right: Value, context: InterpreterContext) : AbstractOpe
         val GET_VALUES = mapOf(
             TRUE_ID to true,
             FALSE_ID to false,
-            NOTHING_ID to null,
+            NOTHING_ID to WilesNothing,
             INT_ID to IntegerType(),
             TEXT_ID to TextType(),
             DECIMAL_ID to DecimalType(),
