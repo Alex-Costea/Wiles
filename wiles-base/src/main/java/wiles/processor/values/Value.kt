@@ -1,5 +1,6 @@
 package wiles.processor.values
 
+import wiles.processor.data.ValueProps
 import wiles.processor.enums.KnownStatus
 import wiles.processor.enums.VariableStatus
 import wiles.processor.types.AbstractType
@@ -7,8 +8,7 @@ import wiles.processor.types.AbstractType
 class Value(
     private val obj: Any?,
     private val type: AbstractType,
-    private val variableStatus: VariableStatus,
-    private val knownStatus : KnownStatus
+    private val props : ValueProps
 ) {
     fun getObj() : Any?{
         return obj
@@ -18,24 +18,8 @@ class Value(
         return type
     }
 
-    fun variableStatus() : VariableStatus{
-        return variableStatus
-    }
-
-    fun knownStatus() : KnownStatus {
-        return knownStatus
-    }
-
-    fun isVariable() : Boolean {
-        return variableStatus == VariableStatus.Var
-    }
-
-    fun isKnown() : Boolean{
-        return knownStatus == KnownStatus.Known
-    }
-
     override fun toString(): String {
-        return "Value(obj=$obj, type=$type, isVariable=$variableStatus, isKnown=$knownStatus)"
+        return "Value(obj=$obj, type=$type, props=$props)"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -46,8 +30,7 @@ class Value(
 
         if (obj != other.obj) return false
         if (type != other.type) return false
-        if (variableStatus != other.variableStatus()) return false
-        if (knownStatus != other.knownStatus) return false
+        if (props != other.props) return false
 
         return true
     }
@@ -55,10 +38,24 @@ class Value(
     override fun hashCode(): Int {
         var result = obj?.hashCode() ?: 0
         result = 31 * result + type.hashCode()
-        result = 31 * result + variableStatus.hashCode()
-        result = 31 * result + knownStatus.hashCode()
+        result = 31 * result + props.hashCode()
         return result
     }
 
+    fun isVariable() : Boolean {
+        return getVariableStatus() == VariableStatus.Var
+    }
+
+    fun isKnown() : Boolean {
+        return getKnownStatus() == KnownStatus.Known
+    }
+
+    fun getVariableStatus() : VariableStatus {
+        return props.variableStatus()
+    }
+
+    fun getKnownStatus() : KnownStatus {
+        return props.knownStatus()
+    }
 
 }

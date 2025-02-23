@@ -1,8 +1,8 @@
 package wiles.processor.operations
 
 import wiles.processor.data.InterpreterContext
-import wiles.processor.enums.KnownStatus
-import wiles.processor.enums.VariableStatus
+import wiles.processor.data.ValueProps.Companion.KNOWN_EXPR
+import wiles.processor.data.ValueProps.Companion.UNKNOWN_EXPR
 import wiles.processor.types.AbstractType
 import wiles.processor.types.DecimalType
 import wiles.processor.types.IntegerType
@@ -52,6 +52,6 @@ class PlusOperation(left: Value, right: Value, context: InterpreterContext) : Ab
         val newType = calculateType()
         if(bothKnown)
             newType.singletonValueOf(newObject!!)
-        return Value(newObject, newType, VariableStatus.Val, if(bothKnown) KnownStatus.Known else KnownStatus.Unknown)
+        return Value(newObject, newType, if(bothKnown) KNOWN_EXPR else UNKNOWN_EXPR)
     }
 }
