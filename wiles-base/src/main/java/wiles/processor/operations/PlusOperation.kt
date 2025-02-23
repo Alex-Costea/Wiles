@@ -6,7 +6,7 @@ import wiles.processor.data.ValueProps.Companion.UNKNOWN_EXPR
 import wiles.processor.types.AbstractType
 import wiles.processor.types.DecimalType
 import wiles.processor.types.IntegerType
-import wiles.processor.types.StringType
+import wiles.processor.types.TextType
 import wiles.processor.utils.TypeUtils.DECIMAL_TYPE
 import wiles.processor.utils.TypeUtils.INTEGER_TYPE
 import wiles.processor.utils.TypeUtils.STRING_TYPE
@@ -41,7 +41,7 @@ class PlusOperation(left: Value, right: Value, context: InterpreterContext) : Ab
             leftIsInt && rightIsDecimal -> DecimalType()
             leftIsDecimal && rightIsInt -> DecimalType()
             leftIsDecimal && rightIsDecimal -> DecimalType()
-            isSuperType(STRING_TYPE, leftType) || isSuperType(STRING_TYPE, rightType) -> StringType()
+            isSuperType(STRING_TYPE, leftType) || isSuperType(STRING_TYPE, rightType) -> TextType()
             else -> TODO("Can't add these types")
         }
         return newType

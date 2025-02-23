@@ -54,7 +54,7 @@ abstract class AbstractType {
         val newType : AbstractType = when(this.typeName)
         {
             WilesTypes.INT -> IntegerType()
-            WilesTypes.STRING -> StringType()
+            WilesTypes.TEXT -> TextType()
             WilesTypes.DECIMAL -> DecimalType()
             WilesTypes.INVALID -> InvalidType()
             WilesTypes.NOTHING -> NothingType()

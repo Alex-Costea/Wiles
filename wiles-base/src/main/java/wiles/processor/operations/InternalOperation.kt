@@ -33,7 +33,7 @@ class InternalOperation(right: Value, context: InterpreterContext) : AbstractOpe
             FALSE_ID to false,
             NOTHING_ID to null,
             INT_ID to IntegerType(),
-            TEXT_ID to StringType(),
+            TEXT_ID to TextType(),
             DECIMAL_ID to DecimalType(),
         )
         val GET_TYPES = mapOf(

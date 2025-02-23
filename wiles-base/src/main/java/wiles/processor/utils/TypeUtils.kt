@@ -29,7 +29,7 @@ object TypeUtils {
     }
 
     val INTEGER_TYPE = IntegerType()
-    val STRING_TYPE = StringType()
+    val STRING_TYPE = TextType()
     val DECIMAL_TYPE = DecimalType()
     val TYPE_TYPE = TypeType()
 }

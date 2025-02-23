@@ -2,7 +2,7 @@ package wiles.processor.types
 
 import wiles.processor.enums.WilesTypes
 
-class StringType : AbstractType() {
+class TextType : AbstractType() {
     override val typeName: WilesTypes
-        get() = WilesTypes.STRING
+        get() = WilesTypes.TEXT
 }

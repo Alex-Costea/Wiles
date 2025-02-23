@@ -4,8 +4,8 @@ import wiles.processor.data.InterpreterContext
 import wiles.processor.data.ValueProps
 import wiles.processor.enums.VariableStatus
 import wiles.processor.errors.IdentifierAlreadyDeclaredException
+import wiles.processor.errors.TypeConflictError
 import wiles.processor.types.AbstractType
-import wiles.processor.utils.TypeUtils
 import wiles.processor.utils.TypeUtils.TYPE_TYPE
 import wiles.processor.utils.TypeUtils.isSuperType
 import wiles.processor.values.Value
@@ -62,9 +62,9 @@ class ProcessorDeclaration(
             var newType = value.getType().removeSingleton().clone()
             if(typeDefType != null)
             {
-                if(TypeUtils.isSuperType(typeDefType, newType))
+                if(isSuperType(typeDefType, newType))
                     newType = typeDefType
-                else TODO("Type mismatch")
+                else throw TypeConflictError(typeDefType, newType, typeDef!!.getFirstLocation())
             }
             val newValue = Value(value.getObj(), newType, ValueProps(value.getKnownStatus(), variableStatus)
             )

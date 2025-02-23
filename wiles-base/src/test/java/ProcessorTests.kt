@@ -16,6 +16,7 @@ import wiles.shared.TokenLocation
 import wiles.shared.WilesExceptionsCollection
 import wiles.shared.constants.Utils
 import java.util.function.Predicate
+import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 @Testable
@@ -70,7 +71,7 @@ class ProcessorTests {
         getResults("""let b := "hello!";""").let { (values, exceptions) ->
             val obj = "hello!"
             assertValue(values, "!b") { objValueEquals(it, obj) }
-            assertValue(values, "!b") { objTypeEquals(it, StringType()) }
+            assertValue(values, "!b") { objTypeEquals(it, TextType()) }
             assert(exceptions.isEmpty())
         }
 
@@ -117,6 +118,12 @@ class ProcessorTests {
             assertValue(values, "!a") { objTypeEquals(it, IntegerType()) }
             assert(exceptions.isEmpty())
         }
+
+        getResults("let a : Text := 3").let { (values, exceptions) ->
+            assert(exceptions.size == 1)
+            assertEquals(exceptions[0], TypeConflictError(TextType(),IntegerType(),
+                TokenLocation(1, 9, 1, 13)))
+        }
     }
 
     @Test
@@ -132,7 +139,7 @@ class ProcessorTests {
             assert(exceptions.isEmpty())
             val value = "hello, world!"
             assertValue(values, "!a"){objValueEquals(it, value)}
-            assertValue(values, "!a"){objTypeEquals(it, StringType())}
+            assertValue(values, "!a"){objTypeEquals(it, TextType())}
         }
         getResults("""
             let a := 1 + "a"
@@ -140,9 +147,9 @@ class ProcessorTests {
         """.trimIndent()).let { (values, exceptions) ->
             assert(exceptions.isEmpty())
             assertValue(values, "!a"){objValueEquals(it, "1a")}
-            assertValue(values, "!a"){objTypeEquals(it, StringType())}
+            assertValue(values, "!a"){objTypeEquals(it, TextType())}
             assertValue(values, "!b"){objValueEquals(it, "b2")}
-            assertValue(values, "!b"){objTypeEquals(it, StringType())}
+            assertValue(values, "!b"){objTypeEquals(it, TextType())}
         }
 
         getResults("""
@@ -202,7 +209,7 @@ class ProcessorTests {
         """.trimIndent()).let{ (values, exceptions) ->
             assertValue(values, "!a") { objValueEquals(it, WilesInteger(1))}
             assert(exceptions.size == 1)
-            assert(exceptions[0] == TypeConflictError( IntegerType(), StringType().singletonValueOf("text"),
+            assert(exceptions[0] == TypeConflictError( IntegerType(), TextType().singletonValueOf("text"),
                 TokenLocation(2, 1, 2, 2)))
         }
 
@@ -225,7 +232,7 @@ class ProcessorTests {
             assertValue(values, "!Int"){objValueEquals(it, IntegerType())}
             assertValue(values, "!Int"){objTypeEquals(it, TypeType())}
 
-            assertValue(values, "!Text"){objValueEquals(it, StringType())}
+            assertValue(values, "!Text"){objValueEquals(it, TextType())}
             assertValue(values, "!Text"){objTypeEquals(it, TypeType())}
 
             assertValue(values, "!Decimal"){objValueEquals(it, DecimalType())}

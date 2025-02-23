@@ -6,7 +6,7 @@ import wiles.processor.errors.IdentifierUnknownException
 import wiles.processor.types.DecimalType
 import wiles.processor.types.IntegerType
 import wiles.processor.types.InvalidType
-import wiles.processor.types.StringType
+import wiles.processor.types.TextType
 import wiles.processor.values.Value
 import wiles.processor.values.WilesDecimal
 import wiles.processor.values.WilesInteger
@@ -41,7 +41,7 @@ class ProcessorToken(
     private fun processText(name: String)
     {
         val newName = name.substring(1)
-        value = Value(newName, StringType().singletonValueOf(newName), KNOWN_EXPR)
+        value = Value(newName, TextType().singletonValueOf(newName), KNOWN_EXPR)
     }
 
     private fun processIdentifier(name: String) {
