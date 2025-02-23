@@ -58,7 +58,7 @@ class ProcessorDeclaration(
             val processorExpression = ProcessorExpression(expression, context)
             processorExpression.process()
             val value = processorExpression.value
-            val variableStatus = if (details.contains(VARIABLE_ID)) VariableStatus.Var else VariableStatus.Val
+            val variableStatus = if (details.contains(VARIABLE_ID)) VariableStatus.Var else VariableStatus.Const
             var newType = value.getType()
             if(variableStatus == VariableStatus.Var)
                 newType = newType.removeExact()
@@ -68,8 +68,7 @@ class ProcessorDeclaration(
                     newType = typeDefType
                 else throw TypeConflictError(typeDefType, newType, typeDef!!.getFirstLocation())
             }
-            val knownStatus = value.getKnownStatus()
-            val newValue = Value(value.getObj(), newType, ValueProps(knownStatus, variableStatus))
+            val newValue = Value(value.getObj(), newType, ValueProps(variableStatus))
             context.values[name] = newValue
         }
     }

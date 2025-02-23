@@ -3,7 +3,7 @@ package wiles.processor.values
 object WilesNothing {
 
     override fun toString(): String {
-        return "Nothing"
+        return "nothing"
     }
 
 }

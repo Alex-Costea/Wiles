@@ -1,7 +1,7 @@
 package wiles.processor.operations
 
 import wiles.processor.data.InterpreterContext
-import wiles.processor.data.ValueProps.Companion.KNOWN_EXPR
+import wiles.processor.data.ValueProps.Companion.DEFAULT_EXPR
 import wiles.processor.types.*
 import wiles.processor.values.Value
 import wiles.processor.values.WilesNothing
@@ -10,7 +10,7 @@ class InternalOperation(right: Value, context: InterpreterContext) : AbstractOpe
 {
     private val name = (rightObj as String).uppercase()
     override fun getNewValue(): Value {
-        return Value(calculateObject(), calculateType(), KNOWN_EXPR)
+        return Value(calculateObject(), calculateType(), DEFAULT_EXPR)
     }
 
     override fun calculateObject(): Any? {

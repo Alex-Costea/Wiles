@@ -1,7 +1,6 @@
 package wiles.processor.values
 
 import wiles.processor.data.ValueProps
-import wiles.processor.enums.KnownStatus
 import wiles.processor.enums.VariableStatus
 import wiles.processor.types.AbstractType
 
@@ -47,15 +46,11 @@ class Value(
     }
 
     fun isKnown() : Boolean {
-        return getKnownStatus() == KnownStatus.Known
+        return obj != null
     }
 
     private fun getVariableStatus() : VariableStatus {
         return props.variableStatus()
-    }
-
-    fun getKnownStatus() : KnownStatus {
-        return props.knownStatus()
     }
 
 }
