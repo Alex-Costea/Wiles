@@ -2,7 +2,7 @@ package wiles.processor.operations
 
 import wiles.processor.data.InterpreterContext
 import wiles.processor.types.AbstractType
-import wiles.processor.values.Value
+import wiles.processor.data.Value
 
 abstract class AbstractOperation(val left : Value?, val right : Value, val context: InterpreterContext) {
     val leftType = left?.getType()

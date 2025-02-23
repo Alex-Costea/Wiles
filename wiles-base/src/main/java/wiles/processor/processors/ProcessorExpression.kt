@@ -5,7 +5,7 @@ import wiles.processor.errors.CantBeModifiedException
 import wiles.processor.operations.AssignmentOperation
 import wiles.processor.operations.InternalOperation
 import wiles.processor.operations.PlusOperation
-import wiles.processor.values.Value
+import wiles.processor.data.Value
 import wiles.shared.AbstractSyntaxTree
 import wiles.shared.SyntaxType
 import wiles.shared.WilesException

@@ -8,7 +8,7 @@ import wiles.processor.errors.TypeConflictError
 import wiles.processor.types.AbstractType
 import wiles.processor.types.AbstractType.Companion.TYPE_TYPE
 import wiles.processor.utils.TypeUtils.isSuperType
-import wiles.processor.values.Value
+import wiles.processor.data.Value
 import wiles.shared.AbstractSyntaxTree
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.CONST_ID

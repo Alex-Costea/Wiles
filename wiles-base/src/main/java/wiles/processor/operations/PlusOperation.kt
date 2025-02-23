@@ -10,7 +10,7 @@ import wiles.processor.types.DecimalType
 import wiles.processor.types.IntegerType
 import wiles.processor.types.TextType
 import wiles.processor.utils.TypeUtils.isSuperType
-import wiles.processor.values.Value
+import wiles.processor.data.Value
 import wiles.processor.values.WilesDecimal
 import wiles.processor.values.WilesInteger
 

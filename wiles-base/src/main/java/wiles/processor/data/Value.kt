@@ -1,6 +1,5 @@
-package wiles.processor.values
+package wiles.processor.data
 
-import wiles.processor.data.ValueProps
 import wiles.processor.enums.VariableStatus
 import wiles.processor.types.AbstractType
 

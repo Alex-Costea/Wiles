@@ -12,7 +12,7 @@ import wiles.processor.types.*
 import wiles.processor.types.AbstractType.Companion.DECIMAL_TYPE
 import wiles.processor.types.AbstractType.Companion.INTEGER_TYPE
 import wiles.processor.types.AbstractType.Companion.TEXT_TYPE
-import wiles.processor.values.Value
+import wiles.processor.data.Value
 import wiles.processor.values.WilesDecimal
 import wiles.processor.values.WilesInteger
 import wiles.processor.values.WilesNothing

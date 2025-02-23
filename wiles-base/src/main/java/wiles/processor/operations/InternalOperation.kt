@@ -3,7 +3,7 @@ package wiles.processor.operations
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.ValueProps.Companion.DEFAULT_EXPR
 import wiles.processor.types.*
-import wiles.processor.values.Value
+import wiles.processor.data.Value
 import wiles.processor.values.WilesNothing
 
 class InternalOperation(right: Value, context: InterpreterContext) : AbstractOperation(null, right, context)

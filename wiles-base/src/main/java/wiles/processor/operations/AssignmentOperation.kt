@@ -8,7 +8,7 @@ import wiles.processor.errors.TypeConflictError
 import wiles.processor.types.AbstractType
 import wiles.processor.types.NothingType
 import wiles.processor.utils.TypeUtils
-import wiles.processor.values.Value
+import wiles.processor.data.Value
 import wiles.processor.values.WilesNothing
 import wiles.shared.AbstractSyntaxTree
 

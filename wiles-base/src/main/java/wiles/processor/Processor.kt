@@ -4,7 +4,7 @@ import wiles.parser.Parser
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.ValuesMap
 import wiles.processor.processors.ProcessorProgram
-import wiles.processor.values.Value
+import wiles.processor.data.Value
 import wiles.shared.AbstractSyntaxTree
 import wiles.shared.WilesExceptionsCollection
 import wiles.shared.constants.StandardLibrary.STANDARD_LIBRARY_TEXT
