@@ -8,5 +8,6 @@ object StandardLibrary {
         let Int := __INTERNAL "INT"
         let Text := __INTERNAL "TEXT"
         let Decimal := __INTERNAL "DECIMAL"
+        let Anything := __INTERNAL "ANYTHING"
     """.trimIndent()
 }

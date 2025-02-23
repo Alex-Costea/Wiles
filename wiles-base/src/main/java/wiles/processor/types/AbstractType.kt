@@ -60,6 +60,7 @@ abstract class AbstractType {
             WilesTypes.NOTHING -> NothingType()
             WilesTypes.TYPE -> TypeType()
             WilesTypes.BOOLEAN -> BooleanType()
+            WilesTypes.ANYTHING -> AnythingType()
         }
         newType.singletonValue = this.singletonValue
         return  newType

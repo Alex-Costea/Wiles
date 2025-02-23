@@ -64,6 +64,7 @@ class ProcessorDeclaration(
             {
                 if(isSuperType(typeDefType, newType))
                     newType = typeDefType
+                //TODO: get ACTUAL type in interpreting mode
                 else throw TypeConflictError(typeDefType, newType, typeDef!!.getFirstLocation())
             }
             val newValue = Value(value.getObj(), newType, ValueProps(value.getKnownStatus(), variableStatus)

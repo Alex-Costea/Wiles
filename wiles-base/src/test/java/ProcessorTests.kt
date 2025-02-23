@@ -119,10 +119,18 @@ class ProcessorTests {
             assert(exceptions.isEmpty())
         }
 
-        getResults("let a : Text := 3").let { (values, exceptions) ->
+        getResults("let a : Anything := 3").let { (values, exceptions) ->
+            val obj = WilesInteger(3)
+            assertValue(values, "!a") { objValueEquals(it, obj) }
+            assertValue(values, "!a") { objTypeEquals(it, AnythingType()) }
+            assert(exceptions.isEmpty())
+        }
+
+        getResults("let a : Text := 3").let { (_, exceptions) ->
             assert(exceptions.size == 1)
             assertEquals(exceptions[0], TypeConflictError(TextType(),IntegerType(),
-                TokenLocation(1, 9, 1, 13)))
+                TokenLocation(1, 9, 1, 13)
+            ))
         }
     }
 

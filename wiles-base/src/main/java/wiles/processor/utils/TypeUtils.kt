@@ -13,19 +13,13 @@ object TypeUtils {
     }
 
     fun isSuperType(superType : AbstractType, subType : AbstractType): Boolean {
-        if(superType.typeName == WilesTypes.INVALID || superType.typeName == WilesTypes.INVALID)
-            return false
-        if(subType.typeName == WilesTypes.NOTHING)
-        {
-            return superType.typeName == WilesTypes.NOTHING
+        return when {
+            superType.typeName == WilesTypes.INVALID || superType.typeName == WilesTypes.INVALID -> false
+            subType.typeName == WilesTypes.NOTHING -> superType.typeName == WilesTypes.NOTHING
+            superType.typeName == WilesTypes.ANYTHING -> true
+            superType.typeName == subType.typeName -> checkSingletonStatus(superType, subType)
+            else -> false
         }
-        if(superType.typeName == subType.typeName)
-        {
-            if(!checkSingletonStatus(superType, subType))
-                return false
-            return true
-        }
-        return false
     }
 
     val INTEGER_TYPE = IntegerType()

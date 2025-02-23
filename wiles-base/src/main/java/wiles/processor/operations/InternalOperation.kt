@@ -27,6 +27,7 @@ class InternalOperation(right: Value, context: InterpreterContext) : AbstractOpe
         private const val INT_ID = "INT"
         private const val TEXT_ID = "TEXT"
         private const val DECIMAL_ID = "DECIMAL"
+        private const val ANYTHING_ID = "ANYTHING"
 
         val GET_VALUES = mapOf(
             TRUE_ID to true,
@@ -35,6 +36,7 @@ class InternalOperation(right: Value, context: InterpreterContext) : AbstractOpe
             INT_ID to IntegerType(),
             TEXT_ID to TextType(),
             DECIMAL_ID to DecimalType(),
+            ANYTHING_ID to AnythingType(),
         )
         val GET_TYPES = mapOf(
             TRUE_ID to BooleanType(),
@@ -43,6 +45,7 @@ class InternalOperation(right: Value, context: InterpreterContext) : AbstractOpe
             INT_ID to TypeType(),
             TEXT_ID to TypeType(),
             DECIMAL_ID to TypeType(),
+            ANYTHING_ID to TypeType(),
         )
     }
 }
