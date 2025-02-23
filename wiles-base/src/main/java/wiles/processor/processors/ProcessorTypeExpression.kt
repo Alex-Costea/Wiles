@@ -14,5 +14,6 @@ class ProcessorTypeExpression(syntax: AbstractSyntaxTree, context: InterpreterCo
             processorExpression.process()
             value = processorExpression.value
         }
+        //TODO: process value. e.g: 2 is singleton type of 2
     }
 }

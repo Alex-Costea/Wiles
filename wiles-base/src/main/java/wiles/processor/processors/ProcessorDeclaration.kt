@@ -6,6 +6,8 @@ import wiles.processor.enums.VariableStatus
 import wiles.processor.errors.IdentifierAlreadyDeclaredException
 import wiles.processor.types.AbstractType
 import wiles.processor.utils.TypeUtils
+import wiles.processor.utils.TypeUtils.TYPE_TYPE
+import wiles.processor.utils.TypeUtils.isSuperType
 import wiles.processor.values.Value
 import wiles.shared.AbstractSyntaxTree
 import wiles.shared.SyntaxType
@@ -23,7 +25,7 @@ class ProcessorDeclaration(
         if(details.contains(CONST_ID) || details.contains(GLOBAL_ID))
             TODO("Can't handle these types of declarations yet")
         val typeDef = if(components[0].syntaxType == SyntaxType.TYPEDEF)
-            components.removeFirst()
+            components.removeAt(0)
             else null
         val nameToken = components[0]
         val expression = components.getOrNull(1)
@@ -37,7 +39,8 @@ class ProcessorDeclaration(
             val typeDefValue = typeProcessor.value
             if(!typeDefValue.isKnown())
                 TODO("MUST BE KNOWN")
-            //TODO: error if it's not of type type
+            if(!isSuperType(TYPE_TYPE,typeDefValue.getType()))
+                TODO("Not correct type!")
             typeDefType = typeDefValue.getObj() as AbstractType
         }
 
@@ -63,7 +66,7 @@ class ProcessorDeclaration(
                     newType = typeDefType
                 else TODO("Type mismatch")
             }
-            val newValue = Value(value.getObj(), newType, ValueProps(variableStatus, value.getKnownStatus())
+            val newValue = Value(value.getObj(), newType, ValueProps(value.getKnownStatus(), variableStatus)
             )
             context.values[name] = newValue
         }

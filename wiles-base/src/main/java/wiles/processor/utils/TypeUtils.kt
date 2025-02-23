@@ -1,10 +1,7 @@
 package wiles.processor.utils
 
 import wiles.processor.enums.WilesTypes
-import wiles.processor.types.AbstractType
-import wiles.processor.types.DecimalType
-import wiles.processor.types.IntegerType
-import wiles.processor.types.StringType
+import wiles.processor.types.*
 
 object TypeUtils {
     private fun checkSingletonStatus(former : AbstractType, latter : AbstractType): Boolean {
@@ -34,4 +31,5 @@ object TypeUtils {
     val INTEGER_TYPE = IntegerType()
     val STRING_TYPE = StringType()
     val DECIMAL_TYPE = DecimalType()
+    val TYPE_TYPE = TypeType()
 }

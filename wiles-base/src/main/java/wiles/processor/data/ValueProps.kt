@@ -3,8 +3,8 @@ package wiles.processor.data
 import wiles.processor.enums.KnownStatus
 import wiles.processor.enums.VariableStatus
 
-class ValueProps(private val variableStatus: VariableStatus,
-                 private val knownStatus : KnownStatus
+class ValueProps(private val knownStatus : KnownStatus,
+                 private val variableStatus: VariableStatus = VariableStatus.Val
 ) {
 
     fun variableStatus() : VariableStatus{
@@ -39,7 +39,7 @@ class ValueProps(private val variableStatus: VariableStatus,
 
 
     companion object{
-        val KNOWN_EXPR = ValueProps(VariableStatus.Val, KnownStatus.Known)
-        val UNKNOWN_EXPR = ValueProps(VariableStatus.Val, KnownStatus.Unknown)
+        val KNOWN_EXPR = ValueProps(KnownStatus.Known)
+        val UNKNOWN_EXPR = ValueProps(KnownStatus.Unknown)
     }
 }

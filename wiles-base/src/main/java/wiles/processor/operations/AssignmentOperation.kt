@@ -25,7 +25,7 @@ class AssignmentOperation(left: Value, right: Value, context: InterpreterContext
                 throw TypeConflictError(leftType, rightType, location)
         }
         val newValue = Value(right.getObj(), right.getType().clone(),
-            ValueProps(VariableStatus.Var, right.getKnownStatus()))
+            ValueProps(right.getKnownStatus(), VariableStatus.Var))
         context.values[name] = newValue
         return Value(calculateObject(), calculateType(), KNOWN_EXPR)
     }
