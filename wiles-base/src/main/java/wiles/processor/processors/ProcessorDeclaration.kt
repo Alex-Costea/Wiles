@@ -59,14 +59,17 @@ class ProcessorDeclaration(
             processorExpression.process()
             val value = processorExpression.value
             val variableStatus = if (details.contains(VARIABLE_ID)) VariableStatus.Var else VariableStatus.Val
-            var newType = value.getType().removeSingleton()
+            var newType = value.getType()
+            if(variableStatus == VariableStatus.Var)
+                newType = newType.removeSingleton()
             if(typeDefType != null)
             {
                 if(isSuperType(typeDefType, newType))
                     newType = typeDefType
                 else throw TypeConflictError(typeDefType, newType, typeDef!!.getFirstLocation())
             }
-            val newValue = Value(value.getObj(), newType, ValueProps(value.getKnownStatus(), variableStatus))
+            val knownStatus = value.getKnownStatus()
+            val newValue = Value(value.getObj(), newType, ValueProps(knownStatus, variableStatus))
             context.values[name] = newValue
         }
     }
