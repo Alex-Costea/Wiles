@@ -27,20 +27,22 @@ class Processor(scanner: Scanner?, val syntax: AbstractSyntaxTree, private val d
         return processor.getValues()
     }
 
-    private fun compile(syntax: AbstractSyntaxTree, debug: Boolean)
+    private fun compile(syntax: AbstractSyntaxTree, debug: Boolean) : Boolean
     {
         val compiler = Processor(null, syntax, debug)
         compiler.process()
         values.putAll(compiler.values.filter{ it.value.isKnown() && !it.value.isVariable()})
         if (compiler.getExceptions().size > 0) {
             exceptions.addAll(compiler.getExceptions())
-            return
+            return true
         }
+        return false
     }
 
     fun process() {
         if (isRunning)
-            compile(syntax, debug)
+            if(compile(syntax, debug))
+                return
         if(!processingStandardLibrary)
         {
             val standardLibraryValues = getStandardLibrary()
