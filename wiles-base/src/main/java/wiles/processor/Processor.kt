@@ -2,9 +2,9 @@ package wiles.processor
 
 import wiles.parser.Parser
 import wiles.processor.data.InterpreterContext
+import wiles.processor.data.Value
 import wiles.processor.data.ValuesMap
 import wiles.processor.processors.ProcessorProgram
-import wiles.processor.data.Value
 import wiles.shared.AbstractSyntaxTree
 import wiles.shared.WilesExceptionsCollection
 import wiles.shared.constants.StandardLibrary.STANDARD_LIBRARY_TEXT
@@ -32,6 +32,7 @@ class Processor(scanner: Scanner?, val syntax: AbstractSyntaxTree, private val d
         val compiler = Processor(null, syntax, debug)
         compiler.process()
         values.putAll(compiler.values.filter{ it.value.isKnown() && !it.value.isVariable()})
+        this.standardLibraryNames = compiler.standardLibraryNames
         if (compiler.getExceptions().size > 0) {
             exceptions.addAll(compiler.getExceptions())
             return true
@@ -43,7 +44,7 @@ class Processor(scanner: Scanner?, val syntax: AbstractSyntaxTree, private val d
         if (isRunning)
             if(compile(syntax, debug))
                 return
-        if(!processingStandardLibrary)
+        if(!processingStandardLibrary && !isRunning)
         {
             val standardLibraryValues = getStandardLibrary()
             standardLibraryNames = standardLibraryValues.keys
