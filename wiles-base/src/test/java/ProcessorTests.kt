@@ -135,6 +135,13 @@ class ProcessorTests {
                 TokenLocation(1, 9, 1, 13)
             ))
         }
+
+        getResults("let a : 123 := 123").let { (values, exceptions) ->
+            val obj = WilesInteger(123)
+            assertValue(values, "!a") { objValueEquals(it, obj) }
+            assertValue(values, "!a") { objTypeEquals(it, INTEGER_TYPE.exactly(obj)) }
+            assert(exceptions.isEmpty())
+        }
     }
 
     @Test

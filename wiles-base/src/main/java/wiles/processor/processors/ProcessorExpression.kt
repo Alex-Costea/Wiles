@@ -1,12 +1,13 @@
 package wiles.processor.processors
 
 import wiles.processor.data.InterpreterContext
+import wiles.processor.data.Value
 import wiles.processor.errors.CantBeModifiedException
 import wiles.processor.operations.AssignmentOperation
 import wiles.processor.operations.InternalOperation
 import wiles.processor.operations.PlusOperation
-import wiles.processor.data.Value
 import wiles.shared.AbstractSyntaxTree
+import wiles.shared.InternalErrorException
 import wiles.shared.SyntaxType
 import wiles.shared.WilesException
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
@@ -105,7 +106,7 @@ open class ProcessorExpression(
                         else TODO("Handling mutable collections")
                     }
                     INTERNAL_ID -> InternalOperation(left!!, context)
-                    else -> TODO("Unknown operation")
+                    else -> throw InternalErrorException("Unknown operation")
                 }
                 value = operand.getNewValue()
             }

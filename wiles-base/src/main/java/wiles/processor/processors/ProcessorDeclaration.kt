@@ -1,6 +1,7 @@
 package wiles.processor.processors
 
 import wiles.processor.data.InterpreterContext
+import wiles.processor.data.Value
 import wiles.processor.data.ValueProps
 import wiles.processor.enums.VariableStatus
 import wiles.processor.errors.IdentifierAlreadyDeclaredException
@@ -8,7 +9,6 @@ import wiles.processor.errors.TypeConflictError
 import wiles.processor.types.AbstractType
 import wiles.processor.types.AbstractType.Companion.TYPE_TYPE
 import wiles.processor.utils.TypeUtils.isSuperType
-import wiles.processor.data.Value
 import wiles.shared.AbstractSyntaxTree
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.CONST_ID
@@ -20,6 +20,7 @@ class ProcessorDeclaration(
      context : InterpreterContext
 ) : AbstractProcessor(syntax, context) {
     override fun process() {
+        //TODO: figure out what should only be done compile-time
         val details = syntax.details
         val components = syntax.components.toMutableList()
         if(details.contains(CONST_ID) || details.contains(GLOBAL_ID))
@@ -39,8 +40,7 @@ class ProcessorDeclaration(
             val typeDefValue = typeProcessor.value
             if(!typeDefValue.isKnown())
                 TODO("MUST BE KNOWN")
-            if(!isSuperType(TYPE_TYPE,typeDefValue.getType()))
-                TODO("Not correct type!")
+            assert(isSuperType(TYPE_TYPE,typeDefValue.getType()))
             typeDefType = typeDefValue.getObj() as AbstractType
         }
 

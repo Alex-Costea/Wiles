@@ -55,6 +55,8 @@ abstract class AbstractType(val exactValue : Any?) {
         val DECIMAL_TYPE = DecimalType()
         val TEXT_TYPE = TextType()
         val TYPE_TYPE = TypeType()
+        val NOTHING_TYPE = NothingType()
+        val BOOLEAN_TYPE = BooleanType()
     }
 
 }
