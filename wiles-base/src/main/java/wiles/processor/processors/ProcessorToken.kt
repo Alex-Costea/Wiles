@@ -1,13 +1,13 @@
 package wiles.processor.processors
 
 import wiles.processor.data.InterpreterContext
+import wiles.processor.data.Value
 import wiles.processor.data.ValueProps.Companion.DEFAULT_EXPR
 import wiles.processor.errors.IdentifierUnknownException
 import wiles.processor.types.DecimalType
 import wiles.processor.types.IntegerType
 import wiles.processor.types.InvalidType
 import wiles.processor.types.TextType
-import wiles.processor.data.Value
 import wiles.processor.values.WilesDecimal
 import wiles.processor.values.WilesInteger
 import wiles.shared.AbstractSyntaxTree
@@ -47,11 +47,9 @@ class ProcessorToken(
     private fun processIdentifier(name: String) {
         value = context.values.getOrDefault(name, null) ?:
             Value(null, InvalidType(), DEFAULT_EXPR)
-        //TODO: just throw?
         if(!context.values.containsKey(name))
         {
-            val exception = IdentifierUnknownException(syntax.getFirstLocation())
-            context.exceptions.add(exception)
+            throw IdentifierUnknownException(syntax.getFirstLocation())
         }
     }
 

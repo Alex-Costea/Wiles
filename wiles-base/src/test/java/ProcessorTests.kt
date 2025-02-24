@@ -3,6 +3,7 @@ import org.junit.jupiter.api.Test
 import org.junit.platform.commons.annotation.Testable
 import wiles.parser.Parser
 import wiles.processor.Processor
+import wiles.processor.data.Value
 import wiles.processor.data.ValuesMap
 import wiles.processor.errors.CantBeModifiedException
 import wiles.processor.errors.IdentifierAlreadyDeclaredException
@@ -12,7 +13,6 @@ import wiles.processor.types.*
 import wiles.processor.types.AbstractType.Companion.DECIMAL_TYPE
 import wiles.processor.types.AbstractType.Companion.INTEGER_TYPE
 import wiles.processor.types.AbstractType.Companion.TEXT_TYPE
-import wiles.processor.data.Value
 import wiles.processor.values.WilesDecimal
 import wiles.processor.values.WilesInteger
 import wiles.processor.values.WilesNothing
@@ -79,11 +79,10 @@ class ProcessorTests {
             assert(exceptions.isEmpty())
         }
 
-        getResults("let a := abc").let{ (values, exceptions) ->
+        getResults("let a := abc").let{ (_, exceptions) ->
             assert(exceptions.size == 1)
             assert(exceptions[0] == IdentifierUnknownException(
                 TokenLocation(1, 10, 1, 13)))
-            assertValue(values, "!a") {objTypeEquals(it, InvalidType())}
         }
 
         getResults("""
