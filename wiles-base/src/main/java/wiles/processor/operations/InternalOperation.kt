@@ -1,9 +1,10 @@
 package wiles.processor.operations
 
 import wiles.processor.data.InterpreterContext
-import wiles.processor.data.ValueProps.Companion.DEFAULT_EXPR
-import wiles.processor.types.*
 import wiles.processor.data.Value
+import wiles.processor.data.ValueProps.Companion.DEFAULT_EXPR
+import wiles.processor.functions.RandFunction
+import wiles.processor.types.*
 import wiles.processor.values.WilesNothing
 
 class InternalOperation(right: Value, context: InterpreterContext) : AbstractOperation(null, right, context)
@@ -29,6 +30,9 @@ class InternalOperation(right: Value, context: InterpreterContext) : AbstractOpe
         private const val TEXT_ID = "TEXT"
         private const val DECIMAL_ID = "DECIMAL"
         private const val ANYTHING_ID = "ANYTHING"
+        private const val RAND_ID = "RAND"
+
+        private val RAND_FUNCTION = RandFunction()
 
         val GET_VALUES = mapOf(
             TRUE_ID to true,
@@ -38,6 +42,7 @@ class InternalOperation(right: Value, context: InterpreterContext) : AbstractOpe
             TEXT_ID to TextType(),
             DECIMAL_ID to DecimalType(),
             ANYTHING_ID to AnythingType(),
+            RAND_ID to RandFunction(),
         )
         val GET_TYPES = mapOf(
             TRUE_ID to BooleanType(),
@@ -47,6 +52,7 @@ class InternalOperation(right: Value, context: InterpreterContext) : AbstractOpe
             TEXT_ID to TypeType(),
             DECIMAL_ID to TypeType(),
             ANYTHING_ID to TypeType(),
+            RAND_ID to FunctionType(RAND_FUNCTION, DecimalType())
         )
     }
 }

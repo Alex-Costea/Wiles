@@ -9,5 +9,6 @@ object StandardLibrary {
         let Text := __INTERNAL "TEXT"
         let Decimal := __INTERNAL "DECIMAL"
         let Anything := __INTERNAL "ANYTHING"
+        let rand := __INTERNAL "RAND"
     """.trimIndent()
 }
