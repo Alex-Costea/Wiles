@@ -247,6 +247,13 @@ class ProcessorTests {
     @Test
     fun randTest()
     {
+        getRunningResults("let a := rand()").let { (values, exceptions) ->
+            assert(exceptions.isEmpty())
+            assertValue(values, "!a") {it.getObj() is WilesDecimal}
+            assertValue(values, "!a") {(it.getObj() as WilesDecimal).toString().startsWith("0.")}
+            assertValue(values, "!a") {(it.getType() is DecimalType) && it.getType().getValue() == it.getObj()}
+        }
+
         getCompilationResults("let a := rand() + 4").let { (values, exceptions) ->
             assert(exceptions.isEmpty())
             assertValue(values, "!a") {objValueEquals(it, null)}

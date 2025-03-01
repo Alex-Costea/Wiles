@@ -10,9 +10,13 @@ import wiles.processor.types.FunctionType
 
 class ApplyOperation(left: Value?, right: Value, context: InterpreterContext) : AbstractOperation(left, right, context) {
     override fun getNewValue(): Value {
-        if(context.compileMode)
-            return Value(null, calculateType(), ValueProps.DEFAULT_EXPR)
-        return Value(calculateObject(), calculateType(), ValueProps.DEFAULT_EXPR)
+        //TODO: check if calculable at compile time
+        return if (context.compileMode) {
+            Value(null, calculateType(), ValueProps.DEFAULT_EXPR)
+        } else {
+            val obj = calculateObject()
+            Value(obj, calculateType().exactly(obj), ValueProps.DEFAULT_EXPR)
+        }
     }
 
     override fun calculateObject(): Any {
