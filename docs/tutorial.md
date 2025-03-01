@@ -687,8 +687,8 @@ prevents confusion when types and values have similar syntax.
 
 ### The `type` type
 
-All type expressions are themselves of type `Type()`. 
-You can also use `Type(subtype)` to hold all expressions which are a subtype of something. For instance:
+All type expressions are themselves of type `Type(subtype)`, which holds all expressions which 
+are a subtype of something. For instance:
 
 ```wiles
 let NewType : Type(Int | Text) := Int
@@ -929,11 +929,11 @@ Named parameters can be made unnamed by adding `arg`, but not the other way arou
 Function parameters can be marked as `const`, meaning they can only accept values known at compile-time:
 
 ```wiles
-def const mutable_list := fun(const T : Type()) -> Type()
-    do yield Mutable(List(t))
+def const MutableList := fun(const T : Type(Anything)) -> Type(Mutable(List(Anything)))
+    do yield Mutable(List(T))
 
-let a : mutable_list(Int) := ~[1, 2, 3]
-let b : mutable_list(Text) := ~["hi", "bye"]
+let a : MutableList(Int) := ~[1, 2, 3]
+let b : MutableList(Text) := ~["hi", "bye"]
 ```  
 
 ---
@@ -1105,9 +1105,7 @@ For dictionaries, `.keys` will return a list of the keys
 
 The following are standalone: `Int`, `Text`, `Decimal`, `Anything`, `Truth`
 
-The following takes either 0 or 1 types as parameters: `Type()`, `Type(subtype)`
-
-The following take 1 type as parameter: `List(type)`, `Mutable(type)`, `Literal(type)`
+The following take 1 type as parameter: `List(type)`, `Mutable(type)`, `Literal(type)`, `Type(subtype)`
 
 The following takes 2 types as parameters: `Dict(type1, type2)`
 
