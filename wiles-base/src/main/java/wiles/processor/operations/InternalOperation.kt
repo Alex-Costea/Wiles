@@ -4,7 +4,15 @@ import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
 import wiles.processor.data.ValueProps.Companion.DEFAULT_EXPR
 import wiles.processor.functions.RandFunction
-import wiles.processor.types.*
+import wiles.processor.types.AbstractType
+import wiles.processor.types.AbstractType.Companion.ANYTHING_TYPE
+import wiles.processor.types.AbstractType.Companion.BOOLEAN_TYPE
+import wiles.processor.types.AbstractType.Companion.DECIMAL_TYPE
+import wiles.processor.types.AbstractType.Companion.INTEGER_TYPE
+import wiles.processor.types.AbstractType.Companion.NOTHING_TYPE
+import wiles.processor.types.AbstractType.Companion.TEXT_TYPE
+import wiles.processor.types.AbstractType.Companion.TYPE_TYPE
+import wiles.processor.types.FunctionType
 import wiles.processor.values.WilesNothing
 
 class InternalOperation(right: Value, context: InterpreterContext) : AbstractOperation(null, right, context)
@@ -38,21 +46,21 @@ class InternalOperation(right: Value, context: InterpreterContext) : AbstractOpe
             TRUE_ID to true,
             FALSE_ID to false,
             NOTHING_ID to WilesNothing,
-            INT_ID to IntegerType(),
-            TEXT_ID to TextType(),
-            DECIMAL_ID to DecimalType(),
-            ANYTHING_ID to AnythingType(),
+            INT_ID to INTEGER_TYPE,
+            TEXT_ID to TEXT_TYPE,
+            DECIMAL_ID to DECIMAL_TYPE,
+            ANYTHING_ID to ANYTHING_TYPE,
             RAND_ID to RandFunction(),
         )
         val GET_TYPES = mapOf(
-            TRUE_ID to BooleanType(),
-            FALSE_ID to BooleanType(),
-            NOTHING_ID to NothingType(),
-            INT_ID to TypeType(),
-            TEXT_ID to TypeType(),
-            DECIMAL_ID to TypeType(),
-            ANYTHING_ID to TypeType(),
-            RAND_ID to FunctionType(RAND_FUNCTION, DecimalType())
+            TRUE_ID to BOOLEAN_TYPE,
+            FALSE_ID to BOOLEAN_TYPE,
+            NOTHING_ID to NOTHING_TYPE,
+            INT_ID to TYPE_TYPE,
+            TEXT_ID to TYPE_TYPE,
+            DECIMAL_ID to TYPE_TYPE,
+            ANYTHING_ID to TYPE_TYPE,
+            RAND_ID to FunctionType(RAND_FUNCTION, DECIMAL_TYPE)
         )
     }
 }

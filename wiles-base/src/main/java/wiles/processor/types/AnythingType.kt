@@ -6,7 +6,7 @@ class AnythingType(exactValue: Any? = null) : AbstractType(exactValue) {
     override val typeName: WilesTypes
         get() = WilesTypes.Anything
 
-    override fun init(exactValue: Any?): AbstractType {
-        return AnythingType(exactValue)
+    override fun clone(value: Any?): AbstractType {
+        return AnythingType(value)
     }
 }

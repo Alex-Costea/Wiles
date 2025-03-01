@@ -1,16 +1,13 @@
 package wiles.processor.operations
 
 import wiles.processor.data.InterpreterContext
+import wiles.processor.data.Value
 import wiles.processor.data.ValueProps.Companion.DEFAULT_EXPR
 import wiles.processor.types.AbstractType
 import wiles.processor.types.AbstractType.Companion.DECIMAL_TYPE
 import wiles.processor.types.AbstractType.Companion.INTEGER_TYPE
 import wiles.processor.types.AbstractType.Companion.TEXT_TYPE
-import wiles.processor.types.DecimalType
-import wiles.processor.types.IntegerType
-import wiles.processor.types.TextType
 import wiles.processor.utils.TypeUtils.isSuperType
-import wiles.processor.data.Value
 import wiles.processor.values.WilesDecimal
 import wiles.processor.values.WilesInteger
 
@@ -36,11 +33,11 @@ class PlusOperation(left: Value, right: Value, context: InterpreterContext) : Ab
         val leftIsDecimal = isSuperType(DECIMAL_TYPE, leftType)
         val rightIsDecimal = isSuperType(DECIMAL_TYPE, rightType)
         val newType = when {
-            leftIsInt && rightIsInt -> IntegerType()
-            leftIsInt && rightIsDecimal -> DecimalType()
-            leftIsDecimal && rightIsInt -> DecimalType()
-            leftIsDecimal && rightIsDecimal -> DecimalType()
-            isSuperType(TEXT_TYPE, leftType) || isSuperType(TEXT_TYPE, rightType) -> TextType()
+            leftIsInt && rightIsInt -> INTEGER_TYPE
+            leftIsInt && rightIsDecimal -> DECIMAL_TYPE
+            leftIsDecimal && rightIsInt -> DECIMAL_TYPE
+            leftIsDecimal && rightIsDecimal -> DECIMAL_TYPE
+            isSuperType(TEXT_TYPE, leftType) || isSuperType(TEXT_TYPE, rightType) -> TEXT_TYPE
             else -> TODO("Can't add these types")
         }
         return newType

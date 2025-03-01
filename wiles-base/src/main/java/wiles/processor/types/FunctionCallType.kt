@@ -6,7 +6,7 @@ class FunctionCallType(exactValue: Any? = null) : AbstractType(exactValue) {
     override val typeName: WilesTypes
         get() = WilesTypes.FunctionCall
 
-    override fun init(exactValue: Any?): AbstractType {
-        return FunctionCallType(exactValue)
+    override fun clone(value: Any?): AbstractType {
+        return FunctionCallType(value)
     }
 }

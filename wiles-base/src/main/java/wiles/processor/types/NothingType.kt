@@ -2,11 +2,11 @@ package wiles.processor.types
 
 import wiles.processor.enums.WilesTypes
 
-class NothingType(exaxtValue: Any? = null) : AbstractType(exaxtValue) {
+class NothingType(exactValue: Any? = null) : AbstractType(exactValue) {
     override val typeName: WilesTypes
         get() = WilesTypes.Nothing
 
-    override fun init(exactValue: Any?): AbstractType {
-        return NothingType(exactValue)
+    override fun clone(value: Any?): AbstractType {
+        return NothingType(value)
     }
 }

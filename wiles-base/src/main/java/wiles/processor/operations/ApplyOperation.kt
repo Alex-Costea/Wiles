@@ -3,6 +3,7 @@ package wiles.processor.operations
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
 import wiles.processor.data.ValueProps
+import wiles.processor.data.ValuesMap
 import wiles.processor.functions.WilesFunction
 import wiles.processor.types.AbstractType
 import wiles.processor.types.FunctionType
@@ -16,7 +17,7 @@ class ApplyOperation(left: Value?, right: Value, context: InterpreterContext) : 
 
     override fun calculateObject(): Any {
         assert(leftObj is WilesFunction)
-        return (leftObj as WilesFunction).invoke()
+        return (leftObj as WilesFunction).invoke(ValuesMap())
     }
 
     override fun calculateType(): AbstractType {

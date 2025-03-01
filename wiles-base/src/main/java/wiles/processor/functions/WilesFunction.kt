@@ -1,3 +1,10 @@
 package wiles.processor.functions
 
-abstract class WilesFunction : () -> Any
+import wiles.processor.data.ValuesMap
+
+abstract class WilesFunction : (ValuesMap) -> Any
+{
+    override fun toString(): String {
+        return "WilesFunction"
+    }
+}

@@ -39,15 +39,15 @@ abstract class AbstractType(val exactValue : Any?) {
         return result
     }
 
-    protected abstract fun init(exactValue: Any?) : AbstractType
+    protected abstract fun clone(value: Any?) : AbstractType
 
     fun exactly(value: Any?) : AbstractType
     {
-        return init(value)
+        return clone(value)
     }
 
     fun removeExact(): AbstractType {
-        return init(null)
+        return clone(null)
     }
 
     companion object{
@@ -57,6 +57,7 @@ abstract class AbstractType(val exactValue : Any?) {
         val TYPE_TYPE = TypeType()
         val NOTHING_TYPE = NothingType()
         val BOOLEAN_TYPE = BooleanType()
+        val ANYTHING_TYPE = AnythingType()
     }
 
 }

@@ -6,7 +6,7 @@ class DecimalType(exactValue: Any? = null) : AbstractType(exactValue) {
     override val typeName: WilesTypes
         get() = WilesTypes.Decimal
 
-    override fun init(exactValue: Any?): AbstractType {
-        return DecimalType(exactValue)
+    override fun clone(value: Any?): AbstractType {
+        return DecimalType(value)
     }
 }
