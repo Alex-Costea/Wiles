@@ -1074,11 +1074,6 @@ The `modulo` function is of type `fun(arg x : Int, arg y : Int) -> Int`. It retu
 
 The `rand` function returns a decimal value between 0.0 (inclusive) and 1.0 (exclusive).
 
-### Run
-
-The `run` function executes another function that takes no parameters, and returns its value.
-Practically speaking, `run(func)` is the same as `func()`.
-
 ### Input read functions
 
 These functions read a value from the input. They are: 
