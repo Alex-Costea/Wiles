@@ -120,7 +120,7 @@ class ProcessorTests {
 
         getCompilationResults("let const a := rand()").let { (_, exceptions) ->
             assert(exceptions.size == 1)
-            assert(exceptions[0] == ValueNotConstError(
+            assert(exceptions[0] == ValueNotConstException(
                 TokenLocation(1, 11, 1, 12)
             ))
         }
@@ -154,6 +154,18 @@ class ProcessorTests {
             assertValue(values, "!a") { objValueEquals(it, obj) }
             assertValue(values, "!a") { objTypeEquals(it, INTEGER_TYPE.exactly(obj)) }
             assert(exceptions.isEmpty())
+        }
+
+        getCompilationResults("""
+            let a := rand()
+            let b : a := 0.5
+        """.trimIndent()).let { (_, exceptions) ->
+            {
+                assert(exceptions.size == 1)
+                assertEquals(exceptions[0], ValueNotConstException(
+                    TokenLocation(2, 9, 2, 10)
+                ))
+            }
         }
     }
 

@@ -3,7 +3,7 @@ package wiles.processor.processors
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
 import wiles.processor.data.ValueProps
-import wiles.processor.errors.ComptimeTypeUnknownException
+import wiles.processor.errors.ValueNotConstException
 import wiles.processor.types.AbstractType
 import wiles.processor.types.AbstractType.Companion.BOOLEAN_TYPE
 import wiles.processor.types.AbstractType.Companion.DECIMAL_TYPE
@@ -46,7 +46,7 @@ class ProcessorTypeExpression(syntax: AbstractSyntaxTree, context: InterpreterCo
             value = Value(newValue, TYPE_TYPE, ValueProps.DEFAULT_EXPR)
         }
         else {
-            throw ComptimeTypeUnknownException(syntax.getFirstLocation())
+            throw ValueNotConstException(syntax.getFirstLocation())
         }
     }
 }

@@ -6,7 +6,7 @@ import wiles.processor.data.ValueProps
 import wiles.processor.enums.VariableStatus
 import wiles.processor.errors.IdentifierAlreadyDeclaredException
 import wiles.processor.errors.TypeConflictError
-import wiles.processor.errors.ValueNotConstError
+import wiles.processor.errors.ValueNotConstException
 import wiles.processor.types.AbstractType
 import wiles.processor.types.AbstractType.Companion.TYPE_TYPE
 import wiles.processor.utils.TypeUtils.isSuperType
@@ -40,8 +40,7 @@ class ProcessorDeclaration(
             val typeProcessor = ProcessorTypeExpression(typeDef, context)
             typeProcessor.process()
             val typeDefValue = typeProcessor.value
-            if(!typeDefValue.isKnown())
-                throw ValueNotConstError(nameToken.getFirstLocation())
+            assert(typeDefValue.isKnown())
             assert(isSuperType(TYPE_TYPE,typeDefValue.getType()))
             typeDefType = typeDefValue.getObj() as AbstractType
         }
@@ -74,7 +73,7 @@ class ProcessorDeclaration(
             context.values[name] = newValue
 
             if(context.compileMode && isConst && !newType.isExact())
-                throw ValueNotConstError(nameToken.getFirstLocation())
+                throw ValueNotConstException(nameToken.getFirstLocation())
         }
     }
 }
