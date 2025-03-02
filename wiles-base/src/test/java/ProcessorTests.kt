@@ -5,10 +5,7 @@ import wiles.parser.Parser
 import wiles.processor.Processor
 import wiles.processor.data.Value
 import wiles.processor.data.ValuesMap
-import wiles.processor.errors.CantBeModifiedException
-import wiles.processor.errors.IdentifierAlreadyDeclaredException
-import wiles.processor.errors.IdentifierUnknownException
-import wiles.processor.errors.TypeConflictError
+import wiles.processor.errors.*
 import wiles.processor.types.*
 import wiles.processor.types.AbstractType.Companion.DECIMAL_TYPE
 import wiles.processor.types.AbstractType.Companion.INTEGER_TYPE
@@ -119,6 +116,13 @@ class ProcessorTests {
                 assertValue(values, "!a") {objValueEquals(it, value)}
                 assertValue(values, "!a") { objTypeEquals(it, INTEGER_TYPE)}
             }
+        }
+
+        getCompilationResults("let const a := rand()").let { (_, exceptions) ->
+            assert(exceptions.size == 1)
+            assert(exceptions[0] == ValueNotConstError(
+                TokenLocation(1, 11, 1, 12)
+            ))
         }
     }
 

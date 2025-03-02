@@ -6,6 +6,7 @@ import wiles.processor.data.ValueProps
 import wiles.processor.enums.VariableStatus
 import wiles.processor.errors.IdentifierAlreadyDeclaredException
 import wiles.processor.errors.TypeConflictError
+import wiles.processor.errors.ValueNotConstError
 import wiles.processor.types.AbstractType
 import wiles.processor.types.AbstractType.Companion.TYPE_TYPE
 import wiles.processor.utils.TypeUtils.isSuperType
@@ -23,8 +24,9 @@ class ProcessorDeclaration(
         //TODO: figure out what should only be done compile-time
         val details = syntax.details
         val components = syntax.components.toMutableList()
-        if(details.contains(CONST_ID) || details.contains(GLOBAL_ID))
-            TODO("Can't handle these types of declarations yet")
+        if(details.contains(GLOBAL_ID))
+            TODO("Can't handle global declarations yet")
+        val isConst = details.contains(CONST_ID)
         val typeDef = if(components[0].syntaxType == SyntaxType.TYPEDEF)
             components.removeAt(0)
             else null
@@ -39,7 +41,7 @@ class ProcessorDeclaration(
             typeProcessor.process()
             val typeDefValue = typeProcessor.value
             if(!typeDefValue.isKnown())
-                TODO("MUST BE KNOWN")
+                throw ValueNotConstError(nameToken.getFirstLocation())
             assert(isSuperType(TYPE_TYPE,typeDefValue.getType()))
             typeDefType = typeDefValue.getObj() as AbstractType
         }
@@ -70,6 +72,9 @@ class ProcessorDeclaration(
             }
             val newValue = Value(value.getObj(), newType, ValueProps(variableStatus))
             context.values[name] = newValue
+
+            if(context.compileMode && isConst && !newType.isExact())
+                throw ValueNotConstError(nameToken.getFirstLocation())
         }
     }
 }

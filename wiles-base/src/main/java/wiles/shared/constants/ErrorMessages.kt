@@ -25,6 +25,7 @@ object ErrorMessages {
     const val EXPRESSION_CANT_BE_MODIFIED_ERROR = "This expression is not modifiable."
     const val TYPE_CONFLICT_ERROR = "Type %s is not supertype of %s"
     const val COMPTIME_TYPE_UNKNOWN_ERROR = "This type definition cannot be used as it is not known at compile time."
+    const val VALUE_NOT_CONST_ERROR = "This value is not known at compile time."
 
     // Internal errors
     const val INTERNAL_ERROR = "An internal error has occurred. "
