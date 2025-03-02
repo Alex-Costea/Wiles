@@ -25,6 +25,7 @@ class ApplyOperation(left: Value?, right: Value, context: InterpreterContext) : 
     }
 
     override fun calculateType(): AbstractType {
+        //TODO: handle either function types
         assert(leftType is FunctionType)
         return (leftType as FunctionType).yieldsType
     }
