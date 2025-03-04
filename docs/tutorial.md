@@ -1017,7 +1017,7 @@ Data types can be recursive using the `def` keyword. For example:
 def Tree := <<
     value : Int,
     left : Tree?,
-    right: Tee?
+    right: Tree?
 >>
 ```
 
