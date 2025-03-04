@@ -4,14 +4,22 @@ import wiles.processor.data.InterpreterContext
 import wiles.shared.AbstractSyntaxTree
 import wiles.shared.SyntaxType
 import wiles.shared.WilesException
+import wiles.shared.constants.Tokens.LEVEL_SCOPE_ID
 
-class ProcessorProgram (
+class ProcessorCodeBlock (
     syntax : AbstractSyntaxTree,
     context : InterpreterContext
 ) : AbstractProcessor(syntax, context) {
     override fun process() {
         try {
-            for (component in syntax.components) {
+            val newComponents = mutableListOf<AbstractSyntaxTree>()
+            for (component in syntax.components)
+            {
+                if(component.syntaxType == SyntaxType.DECLARATION && component.details.contains(LEVEL_SCOPE_ID))
+                    ProcessorDeclaration(component, context).process()
+                else newComponents.addLast(component)
+            }
+            for (component in newComponents) {
                 val processor: AbstractProcessor = when (component.syntaxType) {
                     SyntaxType.DECLARATION -> ProcessorDeclaration(component, context)
                     SyntaxType.FUNC -> TODO()

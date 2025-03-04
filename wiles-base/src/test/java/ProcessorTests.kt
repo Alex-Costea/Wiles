@@ -52,12 +52,11 @@ class ProcessorTests {
         assert(predicate.test(value))
     }
 
-    private fun objValueEquals(myValue : Value, compared : Any?): Boolean {
-        val obj = myValue.getObj()
-        return obj == compared
+    private fun valueEquals(myValue : Value, compared : Any?): Boolean {
+        return myValue.getObj() == compared
     }
 
-    private fun objTypeEquals(myValue : Value, compared : AbstractType): Boolean {
+    private fun typeEquals(myValue : Value, compared : AbstractType): Boolean {
         return myValue.getType() == compared
     }
 
@@ -66,22 +65,22 @@ class ProcessorTests {
     {
         getCompilationResults("let a := 3").let { (values, exceptions) ->
             val obj = WilesInteger(3)
-            assertValue(values, "!a") { objValueEquals(it, obj) }
-            assertValue(values, "!a") { objTypeEquals(it, INTEGER_TYPE.exactly(obj)) }
+            assertValue(values, "!a") { valueEquals(it, obj) }
+            assertValue(values, "!a") { typeEquals(it, INTEGER_TYPE.exactly(obj)) }
             assert(exceptions.isEmpty())
         }
 
         getCompilationResults("let c := 3.0").let { (values, exceptions) ->
             val obj = WilesDecimal("3.0")
-            assertValue(values, "!c") { objValueEquals(it, obj) }
-            assertValue(values, "!c") { objTypeEquals(it, DECIMAL_TYPE.exactly(obj)) }
+            assertValue(values, "!c") { valueEquals(it, obj) }
+            assertValue(values, "!c") { typeEquals(it, DECIMAL_TYPE.exactly(obj)) }
             assert(exceptions.isEmpty())
         }
 
         getCompilationResults("""let b := "hello!";""").let { (values, exceptions) ->
             val obj = "hello!"
-            assertValue(values, "!b") { objValueEquals(it, obj) }
-            assertValue(values, "!b") { objTypeEquals(it, TEXT_TYPE.exactly(obj)) }
+            assertValue(values, "!b") { valueEquals(it, obj) }
+            assertValue(values, "!b") { typeEquals(it, TEXT_TYPE.exactly(obj)) }
             assert(exceptions.isEmpty())
         }
 
@@ -97,10 +96,10 @@ class ProcessorTests {
         """.trimIndent()).let { (values, exceptions) ->
             assert(exceptions.isEmpty())
             val obj = WilesInteger(7)
-            assertValue(values, "!a") {objValueEquals(it, obj)}
-            assertValue(values, "!a") {objTypeEquals(it, INTEGER_TYPE.exactly(obj))}
-            assertValue(values, "!b") {objValueEquals(it, obj)}
-            assertValue(values, "!b") {objTypeEquals(it, INTEGER_TYPE.exactly(obj))}
+            assertValue(values, "!a") {valueEquals(it, obj)}
+            assertValue(values, "!a") {typeEquals(it, INTEGER_TYPE.exactly(obj))}
+            assertValue(values, "!b") {valueEquals(it, obj)}
+            assertValue(values, "!b") {typeEquals(it, INTEGER_TYPE.exactly(obj))}
             assert(values["!a"] == values["!b"])
         }
 
@@ -113,8 +112,8 @@ class ProcessorTests {
                 assert(exceptions[0] === IdentifierAlreadyDeclaredException(
                     TokenLocation(1, 4, 1, 5)))
                 val value = WilesInteger(2)
-                assertValue(values, "!a") {objValueEquals(it, value)}
-                assertValue(values, "!a") { objTypeEquals(it, INTEGER_TYPE)}
+                assertValue(values, "!a") {valueEquals(it, value)}
+                assertValue(values, "!a") { typeEquals(it, INTEGER_TYPE)}
             }
         }
 
@@ -130,15 +129,15 @@ class ProcessorTests {
     fun typeDefTests(){
         getCompilationResults("let a : Int := 3").let { (values, exceptions) ->
             val obj = WilesInteger(3)
-            assertValue(values, "!a") { objValueEquals(it, obj) }
-            assertValue(values, "!a") { objTypeEquals(it, INTEGER_TYPE) }
+            assertValue(values, "!a") { valueEquals(it, obj) }
+            assertValue(values, "!a") { typeEquals(it, INTEGER_TYPE) }
             assert(exceptions.isEmpty())
         }
 
         getCompilationResults("let a : Anything := 3").let { (values, exceptions) ->
             val obj = WilesInteger(3)
-            assertValue(values, "!a") { objValueEquals(it, obj) }
-            assertValue(values, "!a") { objTypeEquals(it, AnythingType()) }
+            assertValue(values, "!a") { valueEquals(it, obj) }
+            assertValue(values, "!a") { typeEquals(it, AnythingType()) }
             assert(exceptions.isEmpty())
         }
 
@@ -151,8 +150,8 @@ class ProcessorTests {
 
         getCompilationResults("let a : 123 := 123").let { (values, exceptions) ->
             val obj = WilesInteger(123)
-            assertValue(values, "!a") { objValueEquals(it, obj) }
-            assertValue(values, "!a") { objTypeEquals(it, INTEGER_TYPE.exactly(obj)) }
+            assertValue(values, "!a") { valueEquals(it, obj) }
+            assertValue(values, "!a") { typeEquals(it, INTEGER_TYPE.exactly(obj)) }
             assert(exceptions.isEmpty())
         }
 
@@ -175,24 +174,24 @@ class ProcessorTests {
         getCompilationResults("let a := 2 + 3").let { (values, exceptions) ->
             assert(exceptions.isEmpty())
             val value = WilesInteger(5)
-            assertValue(values, "!a"){objValueEquals(it, value)}
-            assertValue(values, "!a"){objTypeEquals(it, INTEGER_TYPE.exactly(value))}
+            assertValue(values, "!a"){valueEquals(it, value)}
+            assertValue(values, "!a"){typeEquals(it, INTEGER_TYPE.exactly(value))}
         }
         getCompilationResults("""let a := "hello, " + "world!";""").let { (values, exceptions) ->
             assert(exceptions.isEmpty())
             val value = "hello, world!"
-            assertValue(values, "!a"){objValueEquals(it, value)}
-            assertValue(values, "!a"){objTypeEquals(it, TEXT_TYPE.exactly(value))}
+            assertValue(values, "!a"){valueEquals(it, value)}
+            assertValue(values, "!a"){typeEquals(it, TEXT_TYPE.exactly(value))}
         }
         getCompilationResults("""
             let a := 1 + "a"
             let b := "b" + 2
         """.trimIndent()).let { (values, exceptions) ->
             assert(exceptions.isEmpty())
-            assertValue(values, "!a"){objValueEquals(it, "1a")}
-            assertValue(values, "!a"){objTypeEquals(it, TEXT_TYPE.exactly("1a"))}
-            assertValue(values, "!b"){objValueEquals(it, "b2")}
-            assertValue(values, "!b"){objTypeEquals(it, TEXT_TYPE.exactly("b2"))}
+            assertValue(values, "!a"){valueEquals(it, "1a")}
+            assertValue(values, "!a"){typeEquals(it, TEXT_TYPE.exactly("1a"))}
+            assertValue(values, "!b"){valueEquals(it, "b2")}
+            assertValue(values, "!b"){typeEquals(it, TEXT_TYPE.exactly("b2"))}
         }
 
         getCompilationResults("""
@@ -201,12 +200,12 @@ class ProcessorTests {
             let c := 3.0 + 2.0
         """.trimIndent()).let { (values, exceptions) ->
             assert(exceptions.isEmpty())
-            assertValue(values, "!a"){objValueEquals(it, WilesDecimal("3.0"))}
-            assertValue(values, "!a"){objTypeEquals(it, DECIMAL_TYPE.exactly(WilesDecimal("3.0")))}
-            assertValue(values, "!b"){objValueEquals(it, WilesDecimal("4.0"))}
-            assertValue(values, "!b"){objTypeEquals(it, DECIMAL_TYPE.exactly(WilesDecimal("4.0")))}
-            assertValue(values, "!c"){objValueEquals(it, WilesDecimal("5.0"))}
-            assertValue(values, "!c"){objTypeEquals(it, DECIMAL_TYPE.exactly(WilesDecimal("5.0")))}
+            assertValue(values, "!a"){valueEquals(it, WilesDecimal("3.0"))}
+            assertValue(values, "!a"){typeEquals(it, DECIMAL_TYPE.exactly(WilesDecimal("3.0")))}
+            assertValue(values, "!b"){valueEquals(it, WilesDecimal("4.0"))}
+            assertValue(values, "!b"){typeEquals(it, DECIMAL_TYPE.exactly(WilesDecimal("4.0")))}
+            assertValue(values, "!c"){valueEquals(it, WilesDecimal("5.0"))}
+            assertValue(values, "!c"){typeEquals(it, DECIMAL_TYPE.exactly(WilesDecimal("5.0")))}
         }
     }
 
@@ -219,10 +218,10 @@ class ProcessorTests {
             a := 3
         """.trimIndent()). let{(values, exceptions) ->
             assert(exceptions.isEmpty())
-            assertValue(values, "!a") {objValueEquals(it, WilesInteger(3))}
-            assertValue(values, "!a") {objTypeEquals(it, INTEGER_TYPE.exactly(WilesInteger(3)))}
-            assertValue(values, "!b") {objValueEquals(it, WilesInteger(2))}
-            assertValue(values, "!b") {objTypeEquals(it, INTEGER_TYPE)}
+            assertValue(values, "!a") {valueEquals(it, WilesInteger(3))}
+            assertValue(values, "!a") {typeEquals(it, INTEGER_TYPE.exactly(WilesInteger(3)))}
+            assertValue(values, "!b") {valueEquals(it, WilesInteger(2))}
+            assertValue(values, "!b") {typeEquals(it, INTEGER_TYPE)}
         }
 
         getCompilationResults("a := 123") .let { (_, exceptions) ->
@@ -236,7 +235,7 @@ class ProcessorTests {
             let a := 123
             a := 345
         """.trimIndent()). let { (values, exceptions) ->
-            assertValue(values, "!a") {objValueEquals(it, WilesInteger(123))}
+            assertValue(values, "!a") {valueEquals(it, WilesInteger(123))}
             assert(exceptions.size == 1)
             assert(exceptions[0] == CantBeModifiedException(TokenLocation(2, 1, 2, 2)))
         }
@@ -252,7 +251,7 @@ class ProcessorTests {
             let var a := 1
             a := "text"
         """.trimIndent()).let{ (values, exceptions) ->
-            assertValue(values, "!a") { objValueEquals(it, WilesInteger(1))}
+            assertValue(values, "!a") { valueEquals(it, WilesInteger(1))}
             assert(exceptions.size == 1)
             assert(exceptions[0] == TypeConflictError( INTEGER_TYPE, TEXT_TYPE.exactly("text"),
                 TokenLocation(2, 1, 2, 2)))
@@ -272,8 +271,8 @@ class ProcessorTests {
 
         getCompilationResults("let a := rand() + 4").let { (values, exceptions) ->
             assert(exceptions.isEmpty())
-            assertValue(values, "!a") {objValueEquals(it, null)}
-            assertValue(values, "!a") {objTypeEquals(it, DECIMAL_TYPE)}
+            assertValue(values, "!a") {valueEquals(it, null)}
+            assertValue(values, "!a") {typeEquals(it, DECIMAL_TYPE)}
         }
 
         getRunningResults("let a := rand() + 4").let { (values, exceptions) ->
@@ -285,27 +284,44 @@ class ProcessorTests {
     }
 
     @Test
+    fun lazyEvalTest()
+    {
+        getCompilationResults("""
+            let b := a + 5
+            def a : Int := 123
+        """.trimIndent()).let { (values, exceptions) ->
+            assert(exceptions.isEmpty())
+            val value123 = WilesInteger(123)
+            val value128 = WilesInteger(128)
+            assertValue(values, "!a"){valueEquals(it, value123)}
+            assertValue(values, "!a"){typeEquals(it, INTEGER_TYPE)}
+            assertValue(values, "!b"){valueEquals(it, value128)}
+            assertValue(values, "!b"){typeEquals(it, INTEGER_TYPE.exactly(value128))}
+        }
+    }
+
+    @Test
     fun standardLibraryTest()
     {
         getCompilationResults("").let{ (values, exceptions) ->
             assert(exceptions.isEmpty())
-            assertValue(values, "!true"){objValueEquals(it, true)}
-            assertValue(values, "!true"){objTypeEquals(it, BooleanType())}
+            assertValue(values, "!true"){valueEquals(it, true)}
+            assertValue(values, "!true"){typeEquals(it, BooleanType())}
 
-            assertValue(values, "!false"){objValueEquals(it, false)}
-            assertValue(values, "!false"){objTypeEquals(it, BooleanType())}
+            assertValue(values, "!false"){valueEquals(it, false)}
+            assertValue(values, "!false"){typeEquals(it, BooleanType())}
 
-            assertValue(values, "!nothing"){objValueEquals(it, WilesNothing)}
-            assertValue(values, "!nothing"){objTypeEquals(it, NothingType())}
+            assertValue(values, "!nothing"){valueEquals(it, WilesNothing)}
+            assertValue(values, "!nothing"){typeEquals(it, NothingType())}
 
-            assertValue(values, "!Int"){objValueEquals(it, INTEGER_TYPE)}
-            assertValue(values, "!Int"){objTypeEquals(it, TypeType())}
+            assertValue(values, "!Int"){valueEquals(it, INTEGER_TYPE)}
+            assertValue(values, "!Int"){typeEquals(it, TypeType())}
 
-            assertValue(values, "!Text"){objValueEquals(it, TEXT_TYPE)}
-            assertValue(values, "!Text"){objTypeEquals(it, TypeType())}
+            assertValue(values, "!Text"){valueEquals(it, TEXT_TYPE)}
+            assertValue(values, "!Text"){typeEquals(it, TypeType())}
 
-            assertValue(values, "!Decimal"){objValueEquals(it, DECIMAL_TYPE)}
-            assertValue(values, "!Decimal"){objTypeEquals(it, TypeType())}
+            assertValue(values, "!Decimal"){valueEquals(it, DECIMAL_TYPE)}
+            assertValue(values, "!Decimal"){typeEquals(it, TypeType())}
         }
     }
 }

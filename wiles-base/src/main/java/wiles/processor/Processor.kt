@@ -4,7 +4,7 @@ import wiles.parser.Parser
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
 import wiles.processor.data.ValuesMap
-import wiles.processor.processors.ProcessorProgram
+import wiles.processor.processors.ProcessorCodeBlock
 import wiles.shared.AbstractSyntaxTree
 import wiles.shared.WilesExceptionsCollection
 import wiles.shared.constants.StandardLibrary.STANDARD_LIBRARY_TEXT
@@ -38,7 +38,7 @@ class Processor(scanner: Scanner?, val syntax: AbstractSyntaxTree, private val d
             values.putAll(standardLibrary)
         }
         val context = InterpreterContext(isRunning, values, debug, exceptions)
-        val interpretFromProgram = ProcessorProgram(syntax, context)
+        val interpretFromProgram = ProcessorCodeBlock(syntax, context)
         interpretFromProgram.process()
         if (debug) {
             print("After ${if (isRunning) "interpreting" else "compiling"}: ")

@@ -2,6 +2,7 @@ package wiles.processor.data
 
 import wiles.processor.enums.VariableStatus
 import wiles.processor.types.AbstractType
+import wiles.processor.values.WilesLazyObject
 
 class Value(
     private val obj: Any?,
@@ -9,6 +10,8 @@ class Value(
     private val props : ValueProps
 ) {
     fun getObj() : Any?{
+        if(obj is WilesLazyObject)
+            return obj.getObject()
         return obj
     }
 
@@ -17,7 +20,7 @@ class Value(
     }
 
     override fun toString(): String {
-        return "Value(obj=$obj, type=$type, props=$props)"
+        return "Value(obj=${getObj()}, type=$type, props=$props)"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -26,7 +29,7 @@ class Value(
 
         other as Value
 
-        if (obj != other.obj) return false
+        if (getObj() != other.getObj()) return false
         if (type != other.type) return false
         if (props != other.props) return false
 
@@ -34,7 +37,7 @@ class Value(
     }
 
     override fun hashCode(): Int {
-        var result = obj?.hashCode() ?: 0
+        var result = getObj()?.hashCode() ?: 0
         result = 31 * result + type.hashCode()
         result = 31 * result + props.hashCode()
         return result
