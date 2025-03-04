@@ -18,7 +18,7 @@ import wiles.shared.constants.Tokens.ASSIGN_ID
 import wiles.shared.constants.Tokens.CONST_ID
 import wiles.shared.constants.Tokens.DECLARE_ID
 import wiles.shared.constants.Tokens.DEFAULT_ID
-import wiles.shared.constants.Tokens.GLOBAL_ID
+import wiles.shared.constants.Tokens.LEVEL_SCOPE_ID
 import wiles.shared.constants.Tokens.VARIABLE_ID
 
 class DeclarationStatement(
@@ -54,7 +54,7 @@ class DeclarationStatement(
             transmitter.expectMaybe(tokenOf(DECLARE_ID))
             val expectParams = when(isParam){
                 DeclarationType.FUNC_PARAM -> tokenOf(ANON_ARG_ID).or(CONST_ID)
-                DeclarationType.TOP_LEVEL -> tokenOf(VARIABLE_ID).or(CONST_ID).or(GLOBAL_ID)
+                DeclarationType.TOP_LEVEL -> tokenOf(VARIABLE_ID).or(CONST_ID).or(LEVEL_SCOPE_ID)
                 //DeclarationType.DATA_PARAM -> tokenOf(DEFAULT_ID)
                 DeclarationType.DATA_PARAM -> tokenOf(NOTHING)
             }
@@ -80,7 +80,7 @@ class DeclarationStatement(
             if(transmitter.expectMaybe(tokenOf(ANNOTATE_ID)).isPresent) {
                 typeStatement = TypeDefExpression(context)
                 typeStatement!!.process().throwFirstIfExists()
-                if(nameStrings.any{ it == GLOBAL_ID || it == DEFAULT_ID})
+                if(nameStrings.any{ it == LEVEL_SCOPE_ID || it == DEFAULT_ID})
                 {
                     transmitter.expect(tokenOf(ASSIGN_ID).withErrorMessage(EXPECTED_INITIALIZATION_ERROR))
                     readRight()

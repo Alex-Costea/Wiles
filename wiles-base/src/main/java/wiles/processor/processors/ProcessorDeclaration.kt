@@ -13,7 +13,7 @@ import wiles.processor.utils.TypeUtils.isSuperType
 import wiles.shared.AbstractSyntaxTree
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Tokens.CONST_ID
-import wiles.shared.constants.Tokens.GLOBAL_ID
+import wiles.shared.constants.Tokens.LEVEL_SCOPE_ID
 import wiles.shared.constants.Tokens.VARIABLE_ID
 
 class ProcessorDeclaration(
@@ -24,8 +24,8 @@ class ProcessorDeclaration(
         //TODO: figure out what should only be done compile-time
         val details = syntax.details
         val components = syntax.components.toMutableList()
-        if(details.contains(GLOBAL_ID))
-            TODO("Can't handle global declarations yet")
+        if(details.contains(LEVEL_SCOPE_ID))
+            TODO("Can't handle level scope declarations yet")
         val isConst = details.contains(CONST_ID)
         val typeDef = if(components[0].syntaxType == SyntaxType.TYPEDEF)
             components.removeAt(0)

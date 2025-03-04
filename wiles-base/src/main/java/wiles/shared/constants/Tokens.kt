@@ -63,7 +63,7 @@ object Tokens {
     const val WHILE_ID = "WHILE"
     const val ANON_ARG_ID = "ANON_ARG"
     const val MUTIFY_ID = "MUTIFY"
-    const val GLOBAL_ID = "GLOBAL"
+    const val LEVEL_SCOPE_ID = "LEVEL_SCOPE"
     const val UNION_ID = "UNION"
     const val YIELDS_ID = "YIELDS"
     const val CONST_ID = "CONST"
@@ -119,7 +119,7 @@ object Tokens {
         KEYWORDS["begin"] = START_BLOCK_ID
         KEYWORDS["end"] = END_BLOCK_ID
         KEYWORDS["arg"] = ANON_ARG_ID
-        KEYWORDS["def"] = GLOBAL_ID
+        KEYWORDS["def"] = LEVEL_SCOPE_ID
         KEYWORDS["const"] = CONST_ID
         KEYWORDS["of"] = SUBTYPES_ID
         KEYWORDS["as"] = AS_ID

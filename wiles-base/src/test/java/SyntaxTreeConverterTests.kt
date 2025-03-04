@@ -34,10 +34,10 @@ import wiles.shared.constants.Tokens.END_BLOCK_ID
 import wiles.shared.constants.Tokens.EQUALS_ID
 import wiles.shared.constants.Tokens.FOR_ID
 import wiles.shared.constants.Tokens.FUNC_ID
-import wiles.shared.constants.Tokens.GLOBAL_ID
 import wiles.shared.constants.Tokens.IF_ID
 import wiles.shared.constants.Tokens.IN_ID
 import wiles.shared.constants.Tokens.LARGER_ID
+import wiles.shared.constants.Tokens.LEVEL_SCOPE_ID
 import wiles.shared.constants.Tokens.MAYBE_ID
 import wiles.shared.constants.Tokens.MINUS_ID
 import wiles.shared.constants.Tokens.MUTIFY_ID
@@ -595,7 +595,7 @@ CODE_BLOCK
         assertResults(null,"""
             CODE_BLOCK
             (
-                DECLARATION: GLOBAL; CONST
+                DECLARATION: LEVEL_SCOPE; CONST
                 (
                     !truth [1, 15, 1, 20], 
                     EXPRESSION
@@ -606,7 +606,7 @@ CODE_BLOCK
                     )
                 )
             )
-        """, DECLARE_ID, GLOBAL_ID, CONST_ID, "!truth", ASSIGN_ID, "!true", UNION_ID, "!false")
+        """, DECLARE_ID, LEVEL_SCOPE_ID, CONST_ID, "!truth", ASSIGN_ID, "!true", UNION_ID, "!false")
     }
 
     @Test
@@ -638,7 +638,7 @@ CODE_BLOCK
         assertResults(null,"""
             CODE_BLOCK
             (
-                DECLARATION: GLOBAL; CONST 
+                DECLARATION: LEVEL_SCOPE; CONST 
                 (
                     !a [1, 11, 1, 12], 
                     EXPRESSION
@@ -668,37 +668,37 @@ CODE_BLOCK
                     )
                 )
             )
-        """, GLOBAL_ID, CONST_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, CONST_ID, "!a", ANNOTATE_ID, "!type",
+        """, LEVEL_SCOPE_ID, CONST_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, CONST_ID, "!a", ANNOTATE_ID, "!type",
             PAREN_END_ID, YIELDS_ID, "!type", DO_ID, RETURN_ID, "!a")
     }
 
     @Test
-    fun globalDeclarationTest()
+    fun LEVEL_SCOPEDeclarationTest()
     {
         //def a := 234
         assertResults(null,"""
             CODE_BLOCK
             (
-                DECLARATION: GLOBAL
+                DECLARATION: LEVEL_SCOPE
                 (
                     !a [1, 12, 1, 13], 
                     #234 [1, 17, 1, 20]
                 )
             )
-        """, GLOBAL_ID, "!a", ASSIGN_ID, "#234")
+        """, LEVEL_SCOPE_ID, "!a", ASSIGN_ID, "#234")
 
         //let def a : int
         assertResults(createExceptions(TokenExpectedException(EXPECTED_INITIALIZATION_ERROR, NULL_LOCATION)),
             """
                 CODE_BLOCK
                 (
-                    DECLARATION: GLOBAL
+                    DECLARATION: LEVEL_SCOPE
                     (
                         TYPEDEF(!int) [1, 16, 1, 19] , 
                         !a [1, 12, 1, 13]
                     )
                 )
-            """, DECLARE_ID, GLOBAL_ID, "!a", ANNOTATE_ID, "!int")
+            """, DECLARE_ID, LEVEL_SCOPE_ID, "!a", ANNOTATE_ID, "!int")
 
     }
 
