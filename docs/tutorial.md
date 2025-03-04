@@ -994,9 +994,9 @@ The syntax for defining data types is the same. When an identifier is used as a 
 the values associated with it are considered **default values**, which can be overridden.
 
 ```wiles
-let person_type := <<name : Text? := nothing, age : Int>>
+let Person := <<name : Text? := nothing, age : Int>>
 
-let greet_person := fun(person : person_type)
+let greet_person := fun(person : Person)
 begin
     if person.name =/= nothing do
         write("Hi, " + person.name + ". ")
