@@ -910,7 +910,7 @@ function's yielded type must be explicitly annotated, including if it's `nothing
 ```wiles
 write_line(factorial(10)) # Outputs 3628800
 
-def factorial(arg x : Int) -> Int # Explicit annotation required
+def factorial := fun(arg x : Int) -> Int # Explicit annotation required
 begin
     if x <= 0 do yield 1
     # Wiles knows the factorial function will yield an Int
