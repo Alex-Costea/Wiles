@@ -884,9 +884,9 @@ but **not** above it. This is achieved by using `def` instead of `let`.
 These values are also **lazily computed**, being first calculated when necessary.
 
 ```wiles
-def a := 123
+def a : Int := 123
 if 2 > 1 begin
-    def b := 456
+    def b : Int := 456
     # both a and b are accessible here
     write_line(a)
     write_line(b)
@@ -895,11 +895,14 @@ end
 write_line(a)
 ```
 
-Note that, due to lazy computation, this applies even when the declaration appears **after** its usage.
+Note that the type annotation is always necessary when using `def`, 
+except if the declaration body is a function or data literal.
+
+Due to lazy computation, this applies even when the declaration appears **after** its usage.
 
 ```wiles
 write_line(a) # Outputs 123
-def a := 123
+def a : Int := 123
 ```
 
 ### Recursive Functions
@@ -1023,6 +1026,9 @@ def Tree := <<
 
 This allows the creation of complex structures like trees 
 where each node contains references to other nodes of the same type.
+
+Note that when using level scoping with `def`, 
+each field **must** have a type definition, and it can't be inferred from the provided default value.
 
 ### Data subtyping rules
 
