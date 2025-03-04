@@ -55,16 +55,16 @@
         + [Returning Values](#returning-values)
         + [Function Types](#function-types)
         + [No-Parameter Shorthand](#no-parameter-shorthand)
+        + [Const parameters](#const-parameters)
+        + [Function types rules](#function-types-rules)
     * [Level Scope](#level-scope)
         + [Recursive Functions](#recursive-functions)
-        + [Data subtyping rules](#data-subtyping-rules)
-        + [Function types rules](#function-types-rules)
-        + [Compile-time Arguments in Functions](#compile-time-arguments-in-functions)
     * [Dictionaries](#dictionaries)
         + [Mutable Dictionaries](#mutable-dictionaries)
     * [Data Objects and Types](#data-objects-and-types)
         + [Data Types](#data-types)
         + [Recursive Data Types](#recursive-data-types)
+        + [Data subtyping rules](#data-subtyping-rules)
     * [Standard Library](#standard-library)
         + [Truth values](#truth-values)
         + [Nothing](#nothing)
@@ -865,12 +865,23 @@ let a := add(Int, 1, 2)
 let b := add(Decimal, 1.0, 2.0)
 ```
 
+### Function types rules
+
+In order for a function type to be considered a subtype of another, it must adhere to the usual
+Liskov substitution principles. This means that parameter types can be **broader**,
+while the yielding type can be **more specific**.
+
+Additionally, new parameters can be added,
+and existing parameters can be given a default value or have their default value changed.
+Named parameters can be made unnamed by adding `arg`, but not the other way around.
+
 ---
 
 ## Level Scope
 
 Values defined with **level scope** can be accessed from anywhere within the current level or any levels below it,
-but **not** above it. This is achieved by using `def` instead of `let`.
+but **not** above it. This is achieved by using `def` instead of `let`. 
+These values are also **lazily computed**, being first calculated when necessary.
 
 ```wiles
 def a := 123
@@ -884,7 +895,7 @@ end
 write_line(a)
 ```
 
-Note that this applies even when the declaration appears **after** its usage. `def` values are evaluated first.
+Note that, due to lazy computation, this applies even when the declaration appears **after** its usage.
 
 ```wiles
 write_line(a) # Outputs 123
@@ -906,35 +917,6 @@ begin
     yield x * factorial(x - 1)
 end
 ```
-
-### Data subtyping rules
-
-In order for a data type to be a subtype of another data type:
-- The subtype can add new members, but can't remove them
-- Existing values can get a default definition
-- Existing default definitions can be overriden, but not removed
-
-### Function types rules
-
-In order for a function type to be considered a subtype of another, it must adhere to the usual 
-Liskov substitution principles. This means that parameter types can be **broader**, 
-while the yielding type can be **more specific**.
-
-Additionally, new parameters can be added, 
-and existing parameters can be given a default value or have their default value changed. 
-Named parameters can be made unnamed by adding `arg`, but not the other way around.
-
-### Compile-time Arguments in Functions
-
-Function parameters can be marked as `const`, meaning they can only accept values known at compile-time:
-
-```wiles
-def const MutableList := fun(const T : Type(Anything)) -> Type(Mutable(List(Anything)))
-    do yield Mutable(List(T))
-
-let a : MutableList(Int) := ~[1, 2, 3]
-let b : MutableList(Text) := ~["hi", "bye"]
-```  
 
 ---
 
@@ -1041,6 +1023,14 @@ def Tree := <<
 
 This allows the creation of complex structures like trees 
 where each node contains references to other nodes of the same type.
+
+### Data subtyping rules
+
+In order for a data type to be a subtype of another data type:
+- The subtype can add new members, but can't remove them
+- Existing values can get a default definition
+- Existing default definitions can be overridden, but not removed
+
 
 ---
 
