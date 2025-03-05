@@ -436,6 +436,38 @@ class ProcessorTests {
             assertValue(values, "!a"){typeEquals(it,
                 EitherType(INTEGER_TYPE.exactly(WilesInteger(1)), INTEGER_TYPE.exactly(WilesInteger(2))))}
         }
+
+        getCompilationResults("let var a : 1 | 2 := 1; a := 2").let {  (values, exceptions) ->
+            assertEquals(exceptions.size, 0)
+            val myObj = WilesInteger(2)
+            assertValue(values, "!a"){objectEquals(it, myObj)}
+            assertValue(values, "!a"){typeEquals(it,
+                EitherType(INTEGER_TYPE.exactly(WilesInteger(1)), INTEGER_TYPE.exactly(WilesInteger(2))))}
+        }
+
+        getRunningResults("let var a : 1 | 2 := 1; a := 2").let {  (values, exceptions) ->
+            assertEquals(exceptions.size, 0)
+            val myObj = WilesInteger(2)
+            assertValue(values, "!a"){objectEquals(it, myObj)}
+            assertValue(values, "!a"){typeEquals(it, INTEGER_TYPE.exactly(myObj))}
+        }
+
+        getCompilationResults("let var a : 1 | 2; a := 2").let {  (values, exceptions) ->
+            assertEquals(exceptions.size, 0)
+            val myObj = WilesInteger(2)
+            assertValue(values, "!a"){objectEquals(it, myObj)}
+            assertValue(values, "!a"){typeEquals(it,
+                EitherType(INTEGER_TYPE.exactly(WilesInteger(1)), INTEGER_TYPE.exactly(WilesInteger(2))))}
+        }
+
+        getRunningResults("let var a : 1 | 2; a := 2").let {  (values, exceptions) ->
+            assertEquals(exceptions.size, 0)
+            val myObj = WilesInteger(2)
+            assertValue(values, "!a"){objectEquals(it, myObj)}
+            assertValue(values, "!a"){typeEquals(it, INTEGER_TYPE.exactly(myObj))}
+        }
+
+        //TODO: more tests
     }
 
     @Test
