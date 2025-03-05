@@ -13,11 +13,14 @@ class ProcessorCodeBlock (
     override fun process() {
         try {
             val newComponents = mutableListOf<AbstractSyntaxTree>()
+            val topLevelComponents = mutableListOf<AbstractSyntaxTree>()
             for (component in syntax.components)
             {
-                if(component.syntaxType == SyntaxType.DECLARATION && component.details.contains(LEVEL_SCOPE_ID))
+                if(component.syntaxType == SyntaxType.DECLARATION && component.details.contains(LEVEL_SCOPE_ID)) {
                     ProcessorDeclaration(component, context).process()
-                else newComponents.addLast(component)
+                    topLevelComponents.add(component)
+                }
+                else newComponents.add(component)
             }
             for (component in newComponents) {
                 val processor: AbstractProcessor = when (component.syntaxType) {

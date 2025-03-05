@@ -47,7 +47,7 @@ class Processor(scanner: Scanner?, val syntax: AbstractSyntaxTree, private val d
     }
 
     private fun getValuesExceptStandard(): Map<String, Value> {
-        return values.filter { it.key !in standardLibrary }
+        return values.filter {standardLibrary.containsKey(it.key)}
     }
 
     fun getOutput(): String {

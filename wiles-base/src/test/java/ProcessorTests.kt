@@ -47,7 +47,7 @@ class ProcessorTests {
 
     private fun assertValue(map : ValuesMap, name : String, predicate : Predicate<Value>)
     {
-        val value = map.getOrDefault(name, null)
+        val value = map[name]
         assertNotNull(value)
         assert(predicate.test(value))
     }

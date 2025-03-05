@@ -45,7 +45,7 @@ class ProcessorToken(
     }
 
     private fun processIdentifier(name: String) {
-        value = context.values.getOrDefault(name, null) ?:
+        value = context.values[name] ?:
             Value(null, InvalidType(), DEFAULT_EXPR)
         if(!context.values.containsKey(name))
         {
