@@ -134,14 +134,28 @@ class ProcessorTests {
         getCompilationResults("let a : Int := 3").let { (values, exceptions) ->
             val obj = WilesInteger(3)
             assertValue(values, "!a") { objectEquals(it, obj) }
-            assertValue(values, "!a") { typeEquals(it, INTEGER_TYPE) }
+            assertValue(values, "!a") { typeEquals(it, INTEGER_TYPE.exactly(obj)) }
             assertEquals(exceptions.size, 0)
         }
 
         getCompilationResults("let a : Anything := 3").let { (values, exceptions) ->
             val obj = WilesInteger(3)
             assertValue(values, "!a") { objectEquals(it, obj) }
-            assertValue(values, "!a") { typeEquals(it, AnythingType()) }
+            assertValue(values, "!a") { typeEquals(it, INTEGER_TYPE.exactly(obj)) }
+            assertEquals(exceptions.size, 0)
+        }
+
+        getCompilationResults("let var a : Anything := 3").let { (values, exceptions) ->
+            val obj = WilesInteger(3)
+            assertValue(values, "!a") { objectEquals(it, obj) }
+            assertValue(values, "!a") { typeEquals(it, ANYTHING_TYPE) }
+            assertEquals(exceptions.size, 0)
+        }
+
+        getCompilationResults("let var a := 3").let { (values, exceptions) ->
+            val obj = WilesInteger(3)
+            assertValue(values, "!a") { objectEquals(it, obj) }
+            assertValue(values, "!a") { typeEquals(it, INTEGER_TYPE) }
             assertEquals(exceptions.size, 0)
         }
 
@@ -223,9 +237,19 @@ class ProcessorTests {
         """.trimIndent()). let{(values, exceptions) ->
             assertEquals(exceptions.size, 0)
             assertValue(values, "!a") {objectEquals(it, WilesInteger(3))}
-            assertValue(values, "!a") {typeEquals(it, INTEGER_TYPE.exactly(WilesInteger(3)))}
+            assertValue(values, "!a") {typeEquals(it, INTEGER_TYPE)}
             assertValue(values, "!b") {objectEquals(it, WilesInteger(2))}
             assertValue(values, "!b") {typeEquals(it, INTEGER_TYPE)}
+        }
+
+        getCompilationResults("""
+            let var a := 2
+            a := 3
+            a := 4
+        """.trimIndent()). let{(values, exceptions) ->
+            assertEquals(exceptions.size, 0)
+            assertValue(values, "!a") {objectEquals(it, WilesInteger(4))}
+            assertValue(values, "!a") {typeEquals(it, INTEGER_TYPE)}
         }
 
         getCompilationResults("a := 123") .let { (_, exceptions) ->
@@ -301,7 +325,7 @@ class ProcessorTests {
             val value123 = WilesInteger(123)
             val value128 = WilesInteger(128)
             assertValue(values, "!a"){objectEquals(it, value123)}
-            assertValue(values, "!a"){typeEquals(it, INTEGER_TYPE)}
+            assertValue(values, "!a"){typeEquals(it, INTEGER_TYPE.exactly(value123))}
             assertValue(values, "!b"){objectEquals(it, value128)}
             assertValue(values, "!b"){typeEquals(it, INTEGER_TYPE.exactly(value128))}
         }
@@ -379,6 +403,12 @@ class ProcessorTests {
                 TokenLocation(3, 1, 3, 2)
             ))
         }
+    }
+
+    @Test
+    fun eitherTest()
+    {
+        //TODO: tests
     }
 
     @Test

@@ -42,7 +42,8 @@ class IdentifierAssignmentOperation(private val leftComponent: AbstractSyntaxTre
                     throw TypeConflictError(leftType, rightType, location)
             }
 
-            val newValue = Value(rightValue.getObj(), rightType,
+            val newValue = Value(rightValue.getObj(),
+                if(leftIsVariable) rightType.removeExact() else rightType,
                 if(leftIsVariable) VariableStatus.Var else VariableStatus.Const)
             context.values[name] = newValue
             return Value(WilesNothing, AbstractType.NOTHING_TYPE, VariableStatus.Const)

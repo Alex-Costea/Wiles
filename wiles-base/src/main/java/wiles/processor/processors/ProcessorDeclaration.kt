@@ -67,17 +67,18 @@ class ProcessorDeclaration(
             } else {
                 processorExpression.process()
                 val computedValue = processorExpression.value
-                var newType = computedValue.getType()
-                if (variableStatus == VariableStatus.Var)
-                    newType = newType.removeExact()
+                val isVariable = variableStatus == VariableStatus.Var
+                val newType = if (isVariable) computedValue.getType().removeExact()
+                    else computedValue.getType()
                 if (declaredType != null) {
-                    if (context.isRunning || isSuperType(declaredType, newType))
-                        newType = declaredType
-                    else throw TypeConflictError(declaredType, newType, typeDef!!.getFirstLocation())
+                    if (!isSuperType(declaredType, newType))
+                        throw TypeConflictError(declaredType, newType, typeDef!!.getFirstLocation())
                 }
                 if (context.isCompiling && isConst && !newType.isExact())
                     throw ValueNotConstException(nameToken.getFirstLocation())
-                Value(computedValue.getObj(), newType, variableStatus)
+                Value(computedValue.getObj(),
+                    if (isVariable) declaredType?:newType else newType,
+                    variableStatus)
             }
             context.values[name] = newValue
         }

@@ -11,7 +11,7 @@ abstract class AbstractType(val exactValue : Any?) {
         return when {
             isExact() && (this is TextType) -> "\"$exactValue\""
             isExact() -> exactValue.toString()
-            else -> this.javaClass.toString()
+            else -> this.javaClass.simpleName
         }
     }
 
