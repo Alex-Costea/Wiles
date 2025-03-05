@@ -1,8 +1,16 @@
 package wiles.processor.types
 
-class TypeType(exactValue: Any? = null) : AbstractType(exactValue) {
+import wiles.shared.errors.InternalErrorException
+
+class TypeType : AbstractType(null) {
 
     override fun clone(value: Any?): AbstractType {
-        return TypeType(value)
+        if(value != null)
+            throw InternalErrorException()
+        return TypeType()
+    }
+
+    override fun toString(): String {
+        return "Type"
     }
 }

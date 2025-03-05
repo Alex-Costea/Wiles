@@ -10,8 +10,8 @@ abstract class AbstractType(val exactValue : Any?) {
     override fun toString(): String {
         return when {
             isExact() && (this is TextType) -> "\"$exactValue\""
-            isExact() -> exactValue.toString().substringBefore("Type")
-            else -> this.javaClass.simpleName
+            isExact() -> exactValue.toString()
+            else -> this.javaClass.simpleName.substringBefore("Type")
         }
     }
 
@@ -45,7 +45,7 @@ abstract class AbstractType(val exactValue : Any?) {
     }
 
     companion object{
-        val INTEGER_TYPE = IntegerType()
+        val INTEGER_TYPE = IntType()
         val DECIMAL_TYPE = DecimalType()
         val TEXT_TYPE = TextType()
         val TYPE_TYPE = TypeType()

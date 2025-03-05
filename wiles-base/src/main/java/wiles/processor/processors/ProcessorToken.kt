@@ -6,7 +6,7 @@ import wiles.processor.enums.VariableStatus
 import wiles.processor.errors.IdentifierUnknownException
 import wiles.processor.errors.ValueUndefinedException
 import wiles.processor.types.DecimalType
-import wiles.processor.types.IntegerType
+import wiles.processor.types.IntType
 import wiles.processor.types.InvalidType
 import wiles.processor.types.TextType
 import wiles.processor.values.WilesDecimal
@@ -36,7 +36,7 @@ class ProcessorToken(
         }
         else{
             val bigInt = WilesInteger(newName)
-            value = Value(bigInt, IntegerType().exactly(bigInt), VariableStatus.Const)
+            value = Value(bigInt, IntType().exactly(bigInt), VariableStatus.Const)
         }
     }
 
