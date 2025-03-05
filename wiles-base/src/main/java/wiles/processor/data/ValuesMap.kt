@@ -1,18 +1,14 @@
 package wiles.processor.data
 
-class ValuesMap : Map<String, Value>{
-    private val linkedHashMap = linkedMapOf<String, Value>()
-
-    fun putAll(from: Map<out String, Value>) {
-        linkedHashMap.putAll(from)
-    }
+class ValuesMap(map: Map<String, Value>? = null) : Map<String, Value>{
+    private val linkedHashMap = map?.let { LinkedHashMap(it) } ?: linkedMapOf<String, Value>()
 
     fun putAll(map: ValuesMap) {
         linkedHashMap.putAll(map.linkedHashMap)
     }
 
-    fun filter(function: (Map.Entry<String, Value>) -> Boolean): Map<String, Value> {
-        return linkedHashMap.filter(function)
+    fun filter(function: (Map.Entry<String, Value>) -> Boolean): ValuesMap {
+        return ValuesMap(linkedHashMap.filter(function))
     }
 
     override operator fun get(key: String): Value? {
