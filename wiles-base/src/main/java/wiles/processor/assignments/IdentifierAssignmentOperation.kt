@@ -43,7 +43,7 @@ class IdentifierAssignmentOperation(private val leftComponent: AbstractSyntaxTre
             }
 
             val newValue = Value(rightValue.getObj(),
-                if(leftIsVariable) rightType.removeExact() else rightType,
+                if(leftIsVariable && context.isCompiling) rightType.removeExact() else rightType,
                 if(leftIsVariable) VariableStatus.Var else VariableStatus.Const)
             context.values[name] = newValue
             return Value(WilesNothing, AbstractType.NOTHING_TYPE, VariableStatus.Const)

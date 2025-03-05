@@ -68,16 +68,16 @@ class ProcessorDeclaration(
                 processorExpression.process()
                 val computedValue = processorExpression.value
                 val isVariable = variableStatus == VariableStatus.Var
-                val newType = if (isVariable) computedValue.getType().removeExact()
-                    else computedValue.getType()
+                val newType = computedValue.getType()
                 if (declaredType != null) {
                     if (!isSuperType(declaredType, newType))
                         throw TypeConflictError(declaredType, newType, typeDef!!.getFirstLocation())
                 }
                 if (context.isCompiling && isConst && !newType.isExact())
                     throw ValueNotConstException(nameToken.getFirstLocation())
+                val newTypeVague = if(context.isCompiling) newType.removeExact() else newType
                 Value(computedValue.getObj(),
-                    if (isVariable) declaredType?:newType else newType,
+                    if (isVariable) declaredType?:newTypeVague else newType,
                     variableStatus)
             }
             context.values[name] = newValue
