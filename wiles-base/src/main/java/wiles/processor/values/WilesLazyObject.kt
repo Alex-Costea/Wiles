@@ -11,4 +11,9 @@ class WilesLazyObject(private val expression: ProcessorExpression) {
         obj = expression.value.getObj()
         return obj
     }
+
+    fun hasBeenComputed() : Boolean
+    {
+        return obj != null
+    }
 }

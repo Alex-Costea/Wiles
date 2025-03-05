@@ -19,8 +19,18 @@ class Value(
         return type
     }
 
+    private fun getObjString() : String
+    {
+        if(obj is WilesLazyObject)
+        {
+            if(!obj.hasBeenComputed())
+                return "LazyObject"
+        }
+        return obj.toString()
+    }
+
     override fun toString(): String {
-        return "Value(obj=${getObj()}, type=$type, props=$props)"
+        return "Value(obj=${getObjString()}, type=$type, props=$props)"
     }
 
     override fun equals(other: Any?): Boolean {
