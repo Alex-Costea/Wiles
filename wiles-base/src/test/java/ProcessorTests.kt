@@ -7,6 +7,7 @@ import wiles.processor.data.Value
 import wiles.processor.data.ValuesMap
 import wiles.processor.errors.*
 import wiles.processor.types.*
+import wiles.processor.types.AbstractType.Companion.ANYTHING_TYPE
 import wiles.processor.types.AbstractType.Companion.BOOLEAN_TYPE
 import wiles.processor.types.AbstractType.Companion.DECIMAL_TYPE
 import wiles.processor.types.AbstractType.Companion.INTEGER_TYPE
@@ -402,6 +403,9 @@ class ProcessorTests {
 
             assertValue(values, "!Decimal"){objectEquals(it, DECIMAL_TYPE)}
             assertValue(values, "!Decimal"){typeEquals(it, TypeType())}
+
+            assertValue(values, "!Anything"){objectEquals(it, ANYTHING_TYPE)}
+            assertValue(values, "!Anything"){typeEquals(it, TypeType())}
         }
     }
 
