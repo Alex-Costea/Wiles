@@ -1,6 +1,6 @@
 package wiles.processor.data
 
-import wiles.shared.WilesExceptionsCollection
+import wiles.shared.data.WilesExceptionsCollection
 
 class InterpreterContext(
     val isRunning : Boolean,

@@ -2,13 +2,13 @@ package wiles.parser.services
 
 import wiles.parser.builders.ExpectParamsBuilder
 import wiles.shared.constants.ErrorMessages.ERROR_MESSAGE_EXPECTED_ERROR
-import wiles.shared.Token
+import wiles.shared.data.Token
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.exceptions.TokenExpectedException
 import wiles.parser.exceptions.UnexpectedEndException
 import wiles.shared.constants.Tokens
 import wiles.shared.constants.ErrorMessages.INTERNAL_ERROR
-import wiles.shared.TokenLocation
+import wiles.shared.data.TokenLocation
 import wiles.shared.errors.InternalErrorException
 import java.util.*
 

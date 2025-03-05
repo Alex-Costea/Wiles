@@ -6,10 +6,10 @@ import wiles.parser.builders.StatementFactory
 import wiles.parser.enums.StatementFactoryTypes
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.exceptions.UnexpectedEndException
-import wiles.shared.WilesException
-import wiles.shared.AbstractStatement
-import wiles.shared.WilesExceptionsCollection
-import wiles.shared.SyntaxType
+import wiles.shared.errors.WilesException
+import wiles.shared.abstracts.AbstractStatement
+import wiles.shared.data.WilesExceptionsCollection
+import wiles.shared.enums.SyntaxType
 import wiles.shared.constants.Predicates.EXPECT_TERMINATOR
 import wiles.shared.constants.Predicates.EXPECT_TERMINATOR_DONT_REMOVE
 import wiles.shared.constants.Predicates.READ_REST_OF_LINE

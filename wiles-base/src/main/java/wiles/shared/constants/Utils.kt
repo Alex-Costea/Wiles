@@ -1,9 +1,9 @@
 package wiles.shared.constants
 
-import wiles.shared.AbstractStatement
-import wiles.shared.AbstractSyntaxTree
-import wiles.shared.SyntaxType
-import wiles.shared.TokenLocation
+import wiles.shared.abstracts.AbstractStatement
+import wiles.shared.abstracts.AbstractSyntaxTree
+import wiles.shared.enums.SyntaxType
+import wiles.shared.data.TokenLocation
 import wiles.shared.constants.Chars.DIGIT_SEPARATOR
 import wiles.shared.constants.Tokens.IDENTIFIER_START
 import wiles.shared.constants.Tokens.KEYWORD_START
@@ -73,7 +73,7 @@ object Utils {
                         + "\n)"))
     }
 
-    fun convertStatementToSyntaxTree(statement : AbstractStatement) : AbstractSyntaxTree{
+    fun convertStatementToSyntaxTree(statement : AbstractStatement) : AbstractSyntaxTree {
         val components: List<AbstractSyntaxTree> = statement.getComponents().map { convertStatementToSyntaxTree(it) }
         val details = statement.name.split("; ")
         return AbstractSyntaxTree(components, statement.location, statement.syntaxType, details)

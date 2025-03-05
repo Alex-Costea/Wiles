@@ -4,8 +4,8 @@ import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.builders.ParserContext
 import wiles.parser.services.PrecedenceProcessor
 import wiles.parser.statements.TokenStatement
-import wiles.shared.WilesException
-import wiles.shared.Token
+import wiles.shared.errors.WilesException
+import wiles.shared.data.Token
 import wiles.shared.constants.Tokens.ASSIGN_ID
 
 class InsideMethodCallExpression(oldContext: ParserContext) : AbstractExpression(oldContext) {

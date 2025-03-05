@@ -4,8 +4,8 @@ import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.api.Test
 import wiles.parser.converters.InputToTokensConverter
 import wiles.parser.exceptions.StringInvalidException
-import wiles.shared.WilesException
-import wiles.shared.Token
+import wiles.shared.errors.WilesException
+import wiles.shared.data.Token
 import wiles.shared.constants.ErrorMessages.STRING_UNFINISHED_ERROR
 import wiles.shared.constants.Tokens.ACCESS_ID
 import wiles.shared.constants.Tokens.DO_ID

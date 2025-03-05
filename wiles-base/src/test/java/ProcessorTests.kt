@@ -14,8 +14,8 @@ import wiles.processor.types.AbstractType.Companion.TEXT_TYPE
 import wiles.processor.values.WilesDecimal
 import wiles.processor.values.WilesInteger
 import wiles.processor.values.WilesNothing
-import wiles.shared.TokenLocation
-import wiles.shared.WilesExceptionsCollection
+import wiles.shared.data.TokenLocation
+import wiles.shared.data.WilesExceptionsCollection
 import wiles.shared.constants.Utils
 import java.util.*
 import java.util.function.Predicate
@@ -32,14 +32,14 @@ class ProcessorTests {
         return Processor(scanner, syntax, true)
     }
 
-    private fun getCompilationResults(code : String) : Pair<ValuesMap,WilesExceptionsCollection>
+    private fun getCompilationResults(code : String) : Pair<ValuesMap, WilesExceptionsCollection>
     {
         val interpreter = makeInterpreter(code, null)
         interpreter.process()
         return Pair(interpreter.getValues(),interpreter.getExceptions())
     }
 
-    private fun getRunningResults(code : String, input : String = "") : Pair<ValuesMap,WilesExceptionsCollection>
+    private fun getRunningResults(code : String, input : String = "") : Pair<ValuesMap, WilesExceptionsCollection>
     {
         val interpreter = makeInterpreter(code, Scanner(input))
         interpreter.process()
@@ -88,7 +88,8 @@ class ProcessorTests {
         getCompilationResults("let a := abc").let{ (_, exceptions) ->
             assert(exceptions.size == 1)
             assert(exceptions[0] == IdentifierUnknownException(
-                TokenLocation(1, 10, 1, 13)))
+                TokenLocation(1, 10, 1, 13)
+            ))
         }
 
         getCompilationResults("""
@@ -111,7 +112,8 @@ class ProcessorTests {
             {
                 assert(exceptions.size == 1)
                 assert(exceptions[0] === IdentifierAlreadyDeclaredException(
-                    TokenLocation(1, 4, 1, 5)))
+                    TokenLocation(1, 4, 1, 5)
+                ))
                 val value = WilesInteger(2)
                 assertValue(values, "!a") {valueEquals(it, value)}
                 assertValue(values, "!a") { typeEquals(it, INTEGER_TYPE)}
@@ -255,7 +257,8 @@ class ProcessorTests {
             assertValue(values, "!a") { valueEquals(it, WilesInteger(1))}
             assert(exceptions.size == 1)
             assert(exceptions[0] == TypeConflictError( INTEGER_TYPE, TEXT_TYPE.exactly("text"),
-                TokenLocation(2, 1, 2, 2)))
+                TokenLocation(2, 1, 2, 2)
+            ))
         }
 
     }
@@ -329,13 +332,15 @@ class ProcessorTests {
             //TODO: check for exactly 1
             assert(exceptions.isNotEmpty())
             assertEquals(exceptions[0], StackOverflowException(
-                TokenLocation(1, 18, 1, 19)))
+                TokenLocation(1, 18, 1, 19)
+            ))
         }
 
         getCompilationResults("def a := 123").let { (_, exceptions) ->
             assertEquals(exceptions.size, 1)
             assertEquals(exceptions[0], InferenceFailureException(
-                TokenLocation(1,5,1,6)))
+                TokenLocation(1,5,1,6)
+            ))
         }
     }
 

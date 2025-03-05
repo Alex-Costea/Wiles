@@ -1,4 +1,6 @@
-package wiles.shared
+package wiles.shared.data
+
+import wiles.shared.errors.WilesException
 
 class WilesExceptionsCollection : ArrayList<WilesException>() {
 

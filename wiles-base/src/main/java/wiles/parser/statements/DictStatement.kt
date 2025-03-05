@@ -5,10 +5,10 @@ import wiles.parser.builders.ParserContext
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.statements.expressions.DefaultExpression
 import wiles.parser.statements.expressions.TypeDefExpression
-import wiles.shared.WilesException
-import wiles.shared.AbstractStatement
-import wiles.shared.WilesExceptionsCollection
-import wiles.shared.SyntaxType
+import wiles.shared.errors.WilesException
+import wiles.shared.abstracts.AbstractStatement
+import wiles.shared.data.WilesExceptionsCollection
+import wiles.shared.enums.SyntaxType
 import wiles.shared.constants.Tokens.ANNOTATE_ID
 import wiles.shared.constants.Tokens.DICT_END_ID
 import wiles.shared.constants.Tokens.SEPARATOR_ID

@@ -1,9 +1,9 @@
 package wiles.processor.processors
 
 import wiles.processor.data.InterpreterContext
-import wiles.shared.AbstractSyntaxTree
-import wiles.shared.SyntaxType
-import wiles.shared.WilesException
+import wiles.shared.abstracts.AbstractSyntaxTree
+import wiles.shared.enums.SyntaxType
+import wiles.shared.errors.WilesException
 import wiles.shared.constants.Tokens.LEVEL_SCOPE_ID
 
 class ProcessorCodeBlock (

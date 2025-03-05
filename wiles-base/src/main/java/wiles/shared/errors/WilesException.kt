@@ -1,4 +1,6 @@
-package wiles.shared
+package wiles.shared.errors
+
+import wiles.shared.data.TokenLocation
 
 abstract class WilesException(val s: String, @JvmField val tokenLocation: TokenLocation) : Exception(s) {
     @JvmName("getTokenLocationNullable")

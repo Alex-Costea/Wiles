@@ -8,9 +8,9 @@ import wiles.parser.services.TokenTransmitter
 import wiles.parser.statements.*
 import wiles.parser.statements.expressions.DefaultExpression
 import wiles.parser.statements.expressions.TopLevelExpression
-import wiles.shared.WilesException
-import wiles.shared.AbstractStatement
-import wiles.shared.DeclarationType
+import wiles.shared.errors.WilesException
+import wiles.shared.abstracts.AbstractStatement
+import wiles.shared.enums.DeclarationType
 import wiles.shared.errors.InternalErrorException
 import wiles.shared.constants.ErrorMessages.INTERNAL_ERROR
 import wiles.shared.constants.ErrorMessages.INVALID_STATEMENT_ERROR

@@ -1,5 +1,6 @@
-package wiles.shared
+package wiles.shared.abstracts
 
+import wiles.shared.data.TokenLocation
 import wiles.shared.errors.NoTokenLocationException
 
 interface LocationAccessibleInterface {

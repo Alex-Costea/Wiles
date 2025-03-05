@@ -2,9 +2,9 @@ package wiles.parser
 
 import wiles.parser.converters.TokensToSyntaxTreeConverter
 import wiles.parser.statements.CodeBlockStatement
-import wiles.shared.Token
-import wiles.shared.TokenLocation
-import wiles.shared.WilesExceptionsCollection
+import wiles.shared.data.Token
+import wiles.shared.data.TokenLocation
+import wiles.shared.data.WilesExceptionsCollection
 
 class Parser(private val input : String, isDebug : Boolean) {
     private val exceptions: WilesExceptionsCollection = WilesExceptionsCollection()

@@ -2,10 +2,10 @@ package wiles.parser.statements
 
 import wiles.parser.builders.ParserContext
 import wiles.parser.statements.expressions.DefaultExpression
-import wiles.shared.WilesException
-import wiles.shared.AbstractStatement
-import wiles.shared.WilesExceptionsCollection
-import wiles.shared.SyntaxType
+import wiles.shared.errors.WilesException
+import wiles.shared.abstracts.AbstractStatement
+import wiles.shared.data.WilesExceptionsCollection
+import wiles.shared.enums.SyntaxType
 
 class WhileStatement(oldContext: ParserContext) : AbstractStatement(oldContext) {
     private val condition = DefaultExpression(context)

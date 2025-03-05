@@ -10,9 +10,9 @@ import wiles.processor.types.InvalidType
 import wiles.processor.types.TextType
 import wiles.processor.values.WilesDecimal
 import wiles.processor.values.WilesInteger
-import wiles.shared.AbstractSyntaxTree
+import wiles.shared.abstracts.AbstractSyntaxTree
 import wiles.shared.errors.InternalErrorException
-import wiles.shared.SyntaxType
+import wiles.shared.enums.SyntaxType
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Predicates.IS_LITERAL
 import wiles.shared.constants.Predicates.IS_NUMBER_LITERAL

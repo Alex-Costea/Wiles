@@ -14,7 +14,7 @@ import wiles.processor.types.AbstractType.Companion.TYPE_TYPE
 import wiles.processor.values.WilesDecimal
 import wiles.processor.values.WilesInteger
 import wiles.processor.values.WilesNothing
-import wiles.shared.AbstractSyntaxTree
+import wiles.shared.abstracts.AbstractSyntaxTree
 
 class ProcessorTypeExpression(syntax: AbstractSyntaxTree, context: InterpreterContext)
     : ProcessorExpression(syntax, context)

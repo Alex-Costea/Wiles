@@ -1,4 +1,7 @@
-package wiles.shared
+package wiles.shared.abstracts
+
+import wiles.shared.data.TokenLocation
+import wiles.shared.enums.SyntaxType
 
 @Suppress("DuplicatedCode")
 class AbstractSyntaxTree(
@@ -6,7 +9,7 @@ class AbstractSyntaxTree(
     override val location: TokenLocation?,
     val syntaxType: SyntaxType,
     val details : List<String>,
-    ) : LocationAccessibleInterface{
+    ) : LocationAccessibleInterface {
     override fun getComponents(): List<AbstractSyntaxTree> {
         return components
     }

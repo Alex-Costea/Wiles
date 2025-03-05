@@ -6,7 +6,7 @@ import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.exceptions.UnexpectedTokenException
 import wiles.parser.statements.expressions.DefaultExpression
 import wiles.parser.statements.expressions.TypeDefExpression
-import wiles.shared.*
+import wiles.shared.abstracts.AbstractStatement
 import wiles.shared.constants.ErrorMessages.CANT_BE_VAR_ERROR
 import wiles.shared.constants.ErrorMessages.EXPECTED_INITIALIZATION_ERROR
 import wiles.shared.constants.ErrorMessages.IDENTIFIER_EXPECTED_ERROR
@@ -20,6 +20,11 @@ import wiles.shared.constants.Tokens.DECLARE_ID
 import wiles.shared.constants.Tokens.DEFAULT_ID
 import wiles.shared.constants.Tokens.LEVEL_SCOPE_ID
 import wiles.shared.constants.Tokens.VARIABLE_ID
+import wiles.shared.data.Token
+import wiles.shared.data.WilesExceptionsCollection
+import wiles.shared.enums.DeclarationType
+import wiles.shared.enums.SyntaxType
+import wiles.shared.errors.WilesException
 
 class DeclarationStatement(
     context: ParserContext,

@@ -4,9 +4,9 @@ import wiles.parser.builders.ParserContext
 import wiles.parser.services.TokenTransmitter
 import wiles.parser.statements.CodeBlockStatement
 import wiles.parser.statements.ProgramStatement
-import wiles.shared.WilesExceptionsCollection
-import wiles.shared.Token
-import wiles.shared.TokenLocation
+import wiles.shared.data.WilesExceptionsCollection
+import wiles.shared.data.Token
+import wiles.shared.data.TokenLocation
 
 class TokensToSyntaxTreeConverter(tokens: List<Token>, lastLocation : TokenLocation) {
     val exceptions = WilesExceptionsCollection()

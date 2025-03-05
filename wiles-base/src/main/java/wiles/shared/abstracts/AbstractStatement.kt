@@ -1,7 +1,10 @@
-package wiles.shared
+package wiles.shared.abstracts
 
 import wiles.parser.builders.ParserContext
+import wiles.shared.data.TokenLocation
+import wiles.shared.data.WilesExceptionsCollection
 import wiles.shared.constants.Utils
+import wiles.shared.enums.SyntaxType
 
 abstract class AbstractStatement(val context: ParserContext) : StatementInterface
 {

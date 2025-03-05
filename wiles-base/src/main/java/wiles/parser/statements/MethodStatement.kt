@@ -4,7 +4,7 @@ import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.builders.ParserContext
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.statements.expressions.TypeDefExpression
-import wiles.shared.*
+import wiles.shared.abstracts.AbstractStatement
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.ANON_ARG_ID
 import wiles.shared.constants.Tokens.CONST_ID
@@ -15,6 +15,10 @@ import wiles.shared.constants.Tokens.PAREN_START_ID
 import wiles.shared.constants.Tokens.SEPARATOR_ID
 import wiles.shared.constants.Tokens.START_BLOCK_ID
 import wiles.shared.constants.Tokens.YIELDS_ID
+import wiles.shared.data.WilesExceptionsCollection
+import wiles.shared.enums.DeclarationType
+import wiles.shared.enums.SyntaxType
+import wiles.shared.errors.WilesException
 
 class MethodStatement(oldContext : ParserContext)
     : AbstractStatement(oldContext.setWithinMethod(true)) {

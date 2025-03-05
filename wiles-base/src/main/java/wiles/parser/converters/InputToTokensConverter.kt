@@ -2,10 +2,10 @@ package wiles.parser.converters
 
 import org.unbescape.html.HtmlEscape
 import wiles.parser.exceptions.StringInvalidException
-import wiles.shared.WilesException
-import wiles.shared.WilesExceptionsCollection
-import wiles.shared.Token
-import wiles.shared.TokenLocation
+import wiles.shared.errors.WilesException
+import wiles.shared.data.WilesExceptionsCollection
+import wiles.shared.data.Token
+import wiles.shared.data.TokenLocation
 import wiles.shared.constants.Chars.COMMENT_START
 import wiles.shared.constants.Chars.DECIMAL_DELIMITER
 import wiles.shared.constants.Chars.STRING_DELIMITER

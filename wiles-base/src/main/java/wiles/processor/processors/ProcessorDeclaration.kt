@@ -13,8 +13,8 @@ import wiles.processor.types.AbstractType
 import wiles.processor.types.AbstractType.Companion.TYPE_TYPE
 import wiles.processor.utils.TypeUtils.isSuperType
 import wiles.processor.values.WilesLazyObject
-import wiles.shared.AbstractSyntaxTree
-import wiles.shared.SyntaxType
+import wiles.shared.abstracts.AbstractSyntaxTree
+import wiles.shared.enums.SyntaxType
 import wiles.shared.constants.Tokens.CONST_ID
 import wiles.shared.constants.Tokens.LEVEL_SCOPE_ID
 import wiles.shared.constants.Tokens.VARIABLE_ID

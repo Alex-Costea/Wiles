@@ -3,10 +3,10 @@ package wiles.parser.statements
 import wiles.parser.builders.ParserContext
 import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.statements.expressions.DefaultExpression
-import wiles.shared.WilesException
-import wiles.shared.AbstractStatement
-import wiles.shared.WilesExceptionsCollection
-import wiles.shared.SyntaxType
+import wiles.shared.errors.WilesException
+import wiles.shared.abstracts.AbstractStatement
+import wiles.shared.data.WilesExceptionsCollection
+import wiles.shared.enums.SyntaxType
 import wiles.shared.constants.Tokens
 import wiles.shared.constants.Tokens.DEFAULT_ID
 import wiles.shared.constants.Tokens.END_BLOCK_ID

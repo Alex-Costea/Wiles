@@ -1,4 +1,4 @@
-package wiles.shared
+package wiles.shared.data
 
 data class OutputData(
     val output : String,

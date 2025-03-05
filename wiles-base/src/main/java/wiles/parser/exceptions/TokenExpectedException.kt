@@ -1,6 +1,6 @@
 package wiles.parser.exceptions
 
-import wiles.shared.TokenLocation
-import wiles.shared.WilesException
+import wiles.shared.data.TokenLocation
+import wiles.shared.errors.WilesException
 
 class TokenExpectedException(s: String, tokenLocation: TokenLocation) : WilesException(s, tokenLocation)

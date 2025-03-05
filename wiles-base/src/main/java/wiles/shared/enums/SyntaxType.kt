@@ -1,4 +1,4 @@
-package wiles.shared
+package wiles.shared.enums
 
 enum class SyntaxType {
     FUNC, EXPRESSION, CODE_BLOCK, TOKEN, TYPEDEF, IF, DICT, DATA,

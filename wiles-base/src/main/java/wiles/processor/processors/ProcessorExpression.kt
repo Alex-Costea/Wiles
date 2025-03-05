@@ -12,9 +12,9 @@ import wiles.processor.operations.PlusOperation
 import wiles.processor.types.FunctionCallType
 import wiles.processor.types.InvalidType
 import wiles.processor.values.WilesFunctionCall
-import wiles.shared.AbstractSyntaxTree
-import wiles.shared.SyntaxType
-import wiles.shared.WilesException
+import wiles.shared.abstracts.AbstractSyntaxTree
+import wiles.shared.enums.SyntaxType
+import wiles.shared.errors.WilesException
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.ACCESS_ID
 import wiles.shared.constants.Tokens.AND_ID

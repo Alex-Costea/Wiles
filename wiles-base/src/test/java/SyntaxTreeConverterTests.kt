@@ -6,9 +6,9 @@ import wiles.parser.converters.TokensToSyntaxTreeConverter
 import wiles.parser.exceptions.TokenExpectedException
 import wiles.parser.exceptions.UnexpectedEndException
 import wiles.parser.exceptions.UnexpectedTokenException
-import wiles.shared.Token
-import wiles.shared.WilesException
-import wiles.shared.WilesExceptionsCollection
+import wiles.shared.data.Token
+import wiles.shared.errors.WilesException
+import wiles.shared.data.WilesExceptionsCollection
 import wiles.shared.constants.ErrorMessages.CANT_BE_VAR_ERROR
 import wiles.shared.constants.ErrorMessages.END_OF_STATEMENT_EXPECTED_ERROR
 import wiles.shared.constants.ErrorMessages.EXPECTED_INITIALIZATION_ERROR

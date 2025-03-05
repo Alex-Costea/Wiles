@@ -4,10 +4,10 @@ import wiles.parser.builders.ExpectParamsBuilder.Companion.tokenOf
 import wiles.parser.builders.ParserContext
 import wiles.parser.enums.WhenRemoveToken
 import wiles.parser.statements.expressions.InsideMethodCallExpression
-import wiles.shared.AbstractStatement
-import wiles.shared.SyntaxType
-import wiles.shared.WilesException
-import wiles.shared.WilesExceptionsCollection
+import wiles.shared.abstracts.AbstractStatement
+import wiles.shared.enums.SyntaxType
+import wiles.shared.errors.WilesException
+import wiles.shared.data.WilesExceptionsCollection
 import wiles.shared.constants.Tokens.PAREN_END_ID
 import wiles.shared.constants.Tokens.SEPARATOR_ID
 

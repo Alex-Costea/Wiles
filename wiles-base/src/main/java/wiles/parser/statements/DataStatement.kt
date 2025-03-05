@@ -3,8 +3,12 @@ package wiles.parser.statements
 import wiles.parser.builders.ExpectParamsBuilder
 import wiles.parser.builders.ParserContext
 import wiles.parser.enums.WhenRemoveToken
-import wiles.shared.*
+import wiles.shared.abstracts.AbstractStatement
 import wiles.shared.constants.Tokens
+import wiles.shared.data.WilesExceptionsCollection
+import wiles.shared.enums.DeclarationType
+import wiles.shared.enums.SyntaxType
+import wiles.shared.errors.WilesException
 
 class DataStatement(context: ParserContext) : AbstractStatement(context) {
     override val syntaxType = SyntaxType.DATA

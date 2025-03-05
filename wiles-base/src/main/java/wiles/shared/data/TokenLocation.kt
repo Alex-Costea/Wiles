@@ -1,4 +1,4 @@
-package wiles.shared
+package wiles.shared.data
 
 import wiles.shared.constants.ErrorMessages.LINE_SYMBOL
 import kotlin.math.min

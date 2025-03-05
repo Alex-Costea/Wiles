@@ -10,10 +10,11 @@ import wiles.processor.types.NothingType
 import wiles.processor.utils.TypeUtils
 import wiles.processor.data.Value
 import wiles.processor.values.WilesNothing
-import wiles.shared.AbstractSyntaxTree
+import wiles.shared.abstracts.AbstractSyntaxTree
 
 class AssignmentOperation(left: Value, right: Value, context: InterpreterContext,
-                          private val leftToken : AbstractSyntaxTree)
+                          private val leftToken : AbstractSyntaxTree
+)
     : AbstractOperation(left, right, context) {
     override fun getNewValue(): Value {
         val name = leftToken.details[0]

@@ -5,8 +5,8 @@ import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
 import wiles.processor.data.ValuesMap
 import wiles.processor.processors.ProcessorCodeBlock
-import wiles.shared.AbstractSyntaxTree
-import wiles.shared.WilesExceptionsCollection
+import wiles.shared.abstracts.AbstractSyntaxTree
+import wiles.shared.data.WilesExceptionsCollection
 import wiles.shared.constants.StandardLibrary.STANDARD_LIBRARY_TEXT
 import wiles.shared.constants.Utils.convertStatementToSyntaxTree
 import java.util.*
