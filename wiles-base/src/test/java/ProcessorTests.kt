@@ -326,6 +326,31 @@ class ProcessorTests {
             assertValue(values, "!a") {(it.getObj() as WilesDecimal).toString()[0] == '4'}
             assertValue(values, "!a") {(it.getType() is DecimalType) && it.getType().getValue() == it.getObj()}
         }
+
+        getCompilationResults("""
+            let var a := rand()
+            let b := a
+            a := 1.2
+        """.trimIndent()).let { (values, exceptions) ->
+            assertEquals(exceptions.size, 0)
+            assertValue(values, "!a") {objectEquals(it, WilesDecimal("1.2"))}
+            assertValue(values, "!a") {it.getType() == DECIMAL_TYPE}
+            assertValue(values, "!b") {it.getObj() == null}
+            assertValue(values, "!b") {it.getType() == DECIMAL_TYPE}
+        }
+
+        getRunningResults("""
+            let var a := rand()
+            let b := a
+            a := 1.2
+        """.trimIndent()).let { (values, exceptions) ->
+            assertEquals(exceptions.size, 0)
+            val obj1 = WilesDecimal("1.2")
+            assertValue(values, "!a") {objectEquals(it, WilesDecimal("1.2"))}
+            assertValue(values, "!a") {it.getType() == DECIMAL_TYPE.exactly(obj1)}
+            assertValue(values, "!b") {it.getObj() is WilesDecimal}
+            assertValue(values, "!a") {(it.getType() is DecimalType) && it.getType().getValue() == it.getObj()}
+        }
     }
 
     @Test
