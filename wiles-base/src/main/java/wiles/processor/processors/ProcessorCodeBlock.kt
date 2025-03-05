@@ -13,11 +13,13 @@ class ProcessorCodeBlock (
 
     override fun process() {
         try {
-            for (component in syntax.components)
-            {
-                if(component.syntaxType == SyntaxType.DECLARATION && component.details.contains(LEVEL_SCOPE_ID)) {
-                    val processor = ProcessorDeclaration(component, context)
-                    processor.process()
+            if(context.compileMode){
+                for (component in syntax.components)
+                {
+                    if(component.syntaxType == SyntaxType.DECLARATION && component.details.contains(LEVEL_SCOPE_ID)) {
+                        val processor = ProcessorDeclaration(component, context)
+                        processor.process()
+                    }
                 }
             }
             for (component in syntax.components) {

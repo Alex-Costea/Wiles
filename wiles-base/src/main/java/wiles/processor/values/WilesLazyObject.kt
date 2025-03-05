@@ -7,15 +7,9 @@ class WilesLazyObject(private val expression: ProcessorExpression) {
     fun getObject(): Any? {
         if(obj != null)
             return obj
-        try{
-            expression.process()
-            obj = expression.value.getObj()
-            return obj
-        }
-        catch (ex : StackOverflowError)
-        {
-            TODO("Stack overflow while reading lazy object!")
-        }
+        expression.process()
+        obj = expression.value.getObj()
+        return obj
     }
 
     fun hasBeenComputed() : Boolean

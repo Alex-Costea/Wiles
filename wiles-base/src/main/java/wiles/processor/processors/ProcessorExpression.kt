@@ -4,11 +4,13 @@ import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
 import wiles.processor.data.ValueProps
 import wiles.processor.errors.CantBeModifiedException
+import wiles.processor.errors.StackOverflowException
 import wiles.processor.operations.ApplyOperation
 import wiles.processor.operations.AssignmentOperation
 import wiles.processor.operations.InternalOperation
 import wiles.processor.operations.PlusOperation
 import wiles.processor.types.FunctionCallType
+import wiles.processor.types.InvalidType
 import wiles.processor.values.WilesFunctionCall
 import wiles.shared.AbstractSyntaxTree
 import wiles.shared.InternalErrorException
@@ -122,6 +124,12 @@ open class ProcessorExpression(
                 {
                     context.exceptions.add(ex)
                 }
+                catch(ex : StackOverflowError)
+                {
+                    value = Value(null, InvalidType(), ValueProps.DEFAULT_EXPR)
+                    throw StackOverflowException(syntax.getFirstLocation())
+                }
+
             }
         }
     }

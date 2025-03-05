@@ -25,6 +25,7 @@ object ErrorMessages {
     const val EXPRESSION_CANT_BE_MODIFIED_ERROR = "This expression is not modifiable."
     const val TYPE_CONFLICT_ERROR = "Type %s is not supertype of %s"
     const val VALUE_NOT_CONST_ERROR = "This value cannot be used as it is not known at compile time."
+    const val STACK_OVERFLOW_ERROR = "Stack overflow reached while trying to compute this value."
 
     // Internal errors
     const val INTERNAL_ERROR = "An internal error has occurred. "

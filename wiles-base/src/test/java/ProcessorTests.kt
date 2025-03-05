@@ -310,16 +310,27 @@ class ProcessorTests {
         getCompilationResults("""
             let a := 2
             def b : Int := a + 2
-        """.trimIndent()). let { (values, exceptions) ->{
-            assert(exceptions.isEmpty())
-            val two = WilesInteger(2)
-            val four = WilesInteger(4)
-            assertValue(values, "!a"){valueEquals(it, two)}
-            assertValue(values, "!a"){typeEquals(it, INTEGER_TYPE.exactly(two))}
-            assertValue(values, "!b"){valueEquals(it, four)}
-            assertValue(values, "!b"){typeEquals(it, INTEGER_TYPE)}
+        """.trimIndent()). let { (values, exceptions) ->
+            {
+                assert(exceptions.isEmpty())
+                val two = WilesInteger(2)
+                val four = WilesInteger(4)
+                assertValue(values, "!a") { valueEquals(it, two) }
+                assertValue(values, "!a") { typeEquals(it, INTEGER_TYPE.exactly(two)) }
+                assertValue(values, "!b") { valueEquals(it, four) }
+                assertValue(values, "!b") { typeEquals(it, INTEGER_TYPE) }
+            }
+        }
 
-        } }
+        getRunningResults("""
+            def a : Int := a + 1
+            let b := a
+        """.trimIndent()).let { (_, exceptions) ->
+            //TODO: check for exactly 1
+            assert(exceptions.isNotEmpty())
+            assertEquals(exceptions[0], StackOverflowException(
+                TokenLocation(1, 18, 1, 19)))
+        }
     }
 
     @Test

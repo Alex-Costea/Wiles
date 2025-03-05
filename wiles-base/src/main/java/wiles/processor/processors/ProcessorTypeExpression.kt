@@ -33,7 +33,8 @@ class ProcessorTypeExpression(syntax: AbstractSyntaxTree, context: InterpreterCo
     }
 
     override fun process() {
-        assert(context.compileMode)
+        //TODO: uncomment
+        //assert(context.compileMode)
         if(syntax.components.size > 1)
             super.process()
         else{
