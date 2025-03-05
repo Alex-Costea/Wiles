@@ -35,7 +35,7 @@ class IdentifierAssignmentOperation(private val leftComponent: AbstractSyntaxTre
             val leftIsUndefined = leftValue.getObj() is WilesUndefined
             val leftIsVariable = leftValue.isVariable()
 
-            if(context.compileMode) {
+            if(context.isCompiling) {
                 val location = leftComponent.getFirstLocation()
                 if (!leftIsVariable && !leftIsUndefined) throw CantBeModifiedException(location)
                 if (!TypeUtils.isSuperType(leftType, rightType))

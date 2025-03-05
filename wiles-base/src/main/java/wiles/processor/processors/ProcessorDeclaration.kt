@@ -35,7 +35,7 @@ class ProcessorDeclaration(
         val details = syntax.details
         val variableStatus = if (details.contains(VARIABLE_ID)) VariableStatus.Var else VariableStatus.Const
 
-        if(newContext.compileMode && newContext.values.containsKey(name) && !isCheckingLevelScope)
+        if(newContext.isCompiling && newContext.values.containsKey(name) && !isCheckingLevelScope)
         {
             throw IdentifierAlreadyDeclaredException(nameToken.getFirstLocation())
         }
@@ -56,7 +56,7 @@ class ProcessorDeclaration(
                 !isCheckingLevelScope
             } else false
 
-            if((context.compileMode || isLevelScoped) && typeDef != null)
+            if((context.isCompiling || isLevelScoped) && typeDef != null)
             {
                 declaredType = getDeclaredType(typeDef, context)
             }
@@ -75,7 +75,7 @@ class ProcessorDeclaration(
                         newType = declaredType
                     else throw TypeConflictError(declaredType, newType, typeDef!!.getFirstLocation())
                 }
-                if (context.compileMode && isConst && !newType.isExact())
+                if (context.isCompiling && isConst && !newType.isExact())
                     throw ValueNotConstException(nameToken.getFirstLocation())
                 Value(computedValue.getObj(), newType, variableStatus)
             }
@@ -93,7 +93,7 @@ class ProcessorDeclaration(
     }
 
     private fun getIsCheckingLevelScope(name : String): Boolean {
-        return context.compileMode && context.values[name]?.isLazy() == true
+        return context.isCompiling && context.values[name]?.isLazy() == true
     }
 
     private fun createContext() : InterpreterContext

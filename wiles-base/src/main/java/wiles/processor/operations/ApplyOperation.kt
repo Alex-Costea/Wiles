@@ -11,7 +11,7 @@ import wiles.processor.types.FunctionType
 class ApplyOperation(left: Value?, right: Value, context: InterpreterContext) : AbstractOperation(left, right, context) {
     override fun getNewValue(): Value {
         //TODO: check if calculable at compile time
-        return if (context.compileMode) {
+        return if (context.isCompiling) {
             Value(null, calculateType(), VariableStatus.Const)
         } else {
             val obj = calculateObject()
