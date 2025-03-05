@@ -402,16 +402,17 @@ class ProcessorTests {
             assertValue(values, "!Decimal"){objectEquals(it, DECIMAL_TYPE)}
             assertValue(values, "!Decimal"){typeEquals(it, TypeType())}
         }
+    }
 
-        @Test
-        fun unusedValueTest()
-        {
-            getCompilationResults("1+2").let { (_, exceptions) ->
-                assert(exceptions.size == 1)
-                assertEquals(exceptions[0], ValueUnusedException(
-                    TokenLocation(1,2,1,3)
-                ))
-            }
+    @Test
+    fun unusedValueTest()
+    {
+        getCompilationResults("1+2").let { (_, exceptions) ->
+            assert(exceptions.size == 1)
+            assertEquals(exceptions[0], ValueUnusedException(
+                TokenLocation(1,2,1,3)
+            ))
         }
     }
+
 }
