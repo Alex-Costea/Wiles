@@ -6,9 +6,9 @@ import wiles.processor.data.Value
 import wiles.processor.data.ValuesMap
 import wiles.processor.processors.ProcessorCodeBlock
 import wiles.shared.abstracts.AbstractSyntaxTree
-import wiles.shared.data.WilesExceptionsCollection
 import wiles.shared.constants.StandardLibrary.STANDARD_LIBRARY_TEXT
 import wiles.shared.constants.Utils.convertStatementToSyntaxTree
+import wiles.shared.data.WilesExceptionsCollection
 import java.util.*
 
 class Processor(scanner: Scanner?, val syntax: AbstractSyntaxTree, private val debug: Boolean,
@@ -44,6 +44,9 @@ class Processor(scanner: Scanner?, val syntax: AbstractSyntaxTree, private val d
             print("After ${if (isRunning) "interpreting" else "compiling"}: ")
             println(getValuesExceptStandard())
         }
+        val distinctExceptions = exceptions.distinct()
+        exceptions.clear()
+        exceptions.addAll(distinctExceptions)
     }
 
     private fun getValuesExceptStandard(): Map<String, Value> {
