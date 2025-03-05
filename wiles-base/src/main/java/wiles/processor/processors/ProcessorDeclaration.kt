@@ -17,10 +17,11 @@ import wiles.shared.constants.Tokens.CONST_ID
 import wiles.shared.constants.Tokens.LEVEL_SCOPE_ID
 import wiles.shared.constants.Tokens.VARIABLE_ID
 
-class ProcessorDeclaration(
+open class ProcessorDeclaration(
      syntax : AbstractSyntaxTree,
      context : InterpreterContext
 ) : AbstractProcessor(syntax, context) {
+    protected open val isCheckingLevelScope = false
     override fun process() {
         //TODO: figure out what should only be done compile-time
         val details = syntax.details
@@ -44,10 +45,9 @@ class ProcessorDeclaration(
             typeDefType = typeDefValue.getObj() as AbstractType
         }
 
-        if(context.compileMode && context.values.containsKey(name))
+        if(context.compileMode && context.values.containsKey(name) && !isCheckingLevelScope)
         {
-            context.exceptions.add(IdentifierAlreadyDeclaredException(nameToken.getFirstLocation()))
-            return
+            throw IdentifierAlreadyDeclaredException(nameToken.getFirstLocation())
         }
 
         if(expression == null)
@@ -56,7 +56,7 @@ class ProcessorDeclaration(
         val isLazy = if(details.contains(LEVEL_SCOPE_ID)) {
             if(typeDef == null)
                 TODO("This level scope declaration requires a type definition.")
-            true
+            !isCheckingLevelScope
         } else false
 
         // don't process if value already known at compile time

@@ -15,17 +15,23 @@ class Value(
         return obj
     }
 
+    fun getProps() : ValueProps{
+        return props
+    }
+
     fun getType() : AbstractType{
         return type
     }
 
+    fun isUncomputedAndLazy() : Boolean{
+        if(obj !is WilesLazyObject)
+            return false
+        return !obj.hasBeenComputed()
+    }
+
     private fun getObjString() : String
     {
-        if(obj is WilesLazyObject)
-        {
-            if(!obj.hasBeenComputed())
-                return "LazyObject"
-        }
+        if(isUncomputedAndLazy()) return "LazyObject"
         return obj.toString()
     }
 

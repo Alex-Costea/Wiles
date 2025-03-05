@@ -7,6 +7,7 @@ import wiles.processor.data.Value
 import wiles.processor.data.ValuesMap
 import wiles.processor.errors.*
 import wiles.processor.types.*
+import wiles.processor.types.AbstractType.Companion.BOOLEAN_TYPE
 import wiles.processor.types.AbstractType.Companion.DECIMAL_TYPE
 import wiles.processor.types.AbstractType.Companion.INTEGER_TYPE
 import wiles.processor.types.AbstractType.Companion.TEXT_TYPE
@@ -297,6 +298,12 @@ class ProcessorTests {
             assertValue(values, "!a"){typeEquals(it, INTEGER_TYPE)}
             assertValue(values, "!b"){valueEquals(it, value128)}
             assertValue(values, "!b"){typeEquals(it, INTEGER_TYPE.exactly(value128))}
+        }
+
+        getCompilationResults("def a : Int := true"). let{ (_, exceptions) ->
+            assert(exceptions.size == 1)
+            assertEquals(exceptions[0], TypeConflictError(INTEGER_TYPE, BOOLEAN_TYPE,
+                TokenLocation(1, 9, 1, 12)))
         }
     }
 

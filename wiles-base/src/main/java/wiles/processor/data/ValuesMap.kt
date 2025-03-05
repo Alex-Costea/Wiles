@@ -3,6 +3,10 @@ package wiles.processor.data
 class ValuesMap(map: Map<String, Value>? = null) : Map<String, Value>{
     private val linkedHashMap = map?.let { LinkedHashMap(it) } ?: linkedMapOf<String, Value>()
 
+    override fun toString(): String {
+        return linkedHashMap.toString()
+    }
+
     fun putAll(map: ValuesMap) {
         linkedHashMap.putAll(map.linkedHashMap)
     }

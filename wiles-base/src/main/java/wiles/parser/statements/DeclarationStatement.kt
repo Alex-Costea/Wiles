@@ -66,6 +66,7 @@ class DeclarationStatement(
             }
 
             val nameStrings = nameTokens.map { it.content }
+            //TODO: def cant be var either
             if(nameStrings.containsAll(contradictory))
             {
                 throw UnexpectedTokenException(CONST_CANT_BE_VAR_ERROR,
