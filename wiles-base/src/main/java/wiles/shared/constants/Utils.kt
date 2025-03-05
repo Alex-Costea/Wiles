@@ -76,6 +76,6 @@ object Utils {
     fun convertStatementToSyntaxTree(statement : AbstractStatement) : AbstractSyntaxTree{
         val components: List<AbstractSyntaxTree> = statement.getComponents().map { convertStatementToSyntaxTree(it) }
         val details = statement.name.split("; ")
-        return AbstractSyntaxTree(details, statement.syntaxType, statement.location, components)
+        return AbstractSyntaxTree(components, statement.location, statement.syntaxType, details)
     }
 }

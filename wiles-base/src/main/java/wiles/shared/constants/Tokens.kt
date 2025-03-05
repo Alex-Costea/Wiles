@@ -1,6 +1,6 @@
 package wiles.shared.constants
 
-import wiles.shared.InternalErrorException
+import wiles.shared.errors.InternalErrorException
 import wiles.shared.constants.ErrorMessages.MAX_SYMBOL_TOO_LARGE_ERROR
 import java.util.*
 import kotlin.streams.toList

@@ -8,6 +8,7 @@ import wiles.shared.constants.ErrorMessages.COMPILATION_FAILED_ERROR
 import wiles.shared.constants.ErrorMessages.IO_ERROR
 import wiles.shared.constants.ErrorMessages.LINE_SYMBOL
 import wiles.shared.constants.Utils.convertStatementToSyntaxTree
+import wiles.shared.errors.InternalErrorException
 import java.io.*
 import java.util.*
 import java.util.stream.Collectors

@@ -1,0 +1,5 @@
+package wiles.shared.errors
+
+import wiles.shared.constants.ErrorMessages.NO_TOKEN_LOCATIONS_FOUND
+
+class NoTokenLocationException : InternalErrorException(NO_TOKEN_LOCATIONS_FOUND)

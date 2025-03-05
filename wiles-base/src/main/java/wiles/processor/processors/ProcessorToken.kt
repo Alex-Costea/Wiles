@@ -11,7 +11,7 @@ import wiles.processor.types.TextType
 import wiles.processor.values.WilesDecimal
 import wiles.processor.values.WilesInteger
 import wiles.shared.AbstractSyntaxTree
-import wiles.shared.InternalErrorException
+import wiles.shared.errors.InternalErrorException
 import wiles.shared.SyntaxType
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Predicates.IS_LITERAL

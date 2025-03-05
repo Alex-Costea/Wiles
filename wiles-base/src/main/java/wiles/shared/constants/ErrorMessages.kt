@@ -37,4 +37,5 @@ object ErrorMessages {
     const val FROZEN_ERROR = "The object's state cannot be edited after it has been frozen."
     const val ERROR_MESSAGE_EXPECTED_ERROR = "Expected an error message."
     const val WHEN_REMOVE_EXPECTED_ERROR = "When to remove token parameter expected."
+    const val NO_TOKEN_LOCATIONS_FOUND = "No token locations found"
 }

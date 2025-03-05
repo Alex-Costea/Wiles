@@ -33,10 +33,10 @@ class ProcessorTypeExpression(syntax: AbstractSyntaxTree, context: InterpreterCo
     }
 
     override fun process() {
-        if(syntax.components.size > 1)
+        if(syntax.getComponents().size > 1)
             super.process()
         else{
-            val processorExpression = ProcessorExpression(syntax.components[0], context)
+            val processorExpression = ProcessorExpression(syntax.getComponents()[0], context)
             processorExpression.process()
             value = processorExpression.value
         }

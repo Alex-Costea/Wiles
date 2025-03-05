@@ -14,7 +14,7 @@ class ProcessorCodeBlock (
     override fun process() {
         try {
             if(context.compileMode){
-                for (component in syntax.components)
+                for (component in syntax.getComponents())
                 {
                     if(component.syntaxType == SyntaxType.DECLARATION && component.details.contains(LEVEL_SCOPE_ID)) {
                         val processor = ProcessorDeclaration(component, context)
@@ -22,7 +22,7 @@ class ProcessorCodeBlock (
                     }
                 }
             }
-            for (component in syntax.components) {
+            for (component in syntax.getComponents()) {
                 val processor: AbstractProcessor = when (component.syntaxType) {
                     SyntaxType.DECLARATION -> ProcessorDeclaration(component, context)
                     SyntaxType.FUNC -> TODO()

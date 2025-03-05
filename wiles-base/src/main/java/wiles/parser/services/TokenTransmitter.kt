@@ -9,7 +9,7 @@ import wiles.parser.exceptions.UnexpectedEndException
 import wiles.shared.constants.Tokens
 import wiles.shared.constants.ErrorMessages.INTERNAL_ERROR
 import wiles.shared.TokenLocation
-import wiles.shared.InternalErrorException
+import wiles.shared.errors.InternalErrorException
 import java.util.*
 
 class TokenTransmitter(tokens: List<Token>, val lastLocation : TokenLocation) {

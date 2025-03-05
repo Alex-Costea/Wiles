@@ -1,7 +1,7 @@
 package wiles.parser.builders
 
 import wiles.parser.enums.WhenRemoveToken
-import wiles.shared.InternalErrorException
+import wiles.shared.errors.InternalErrorException
 import wiles.shared.constants.ErrorMessages.ERROR_MESSAGE_EXPECTED_ERROR
 import wiles.shared.constants.ErrorMessages.FROZEN_ERROR
 import wiles.shared.constants.ErrorMessages.TOKEN_EXPECTED_ERROR

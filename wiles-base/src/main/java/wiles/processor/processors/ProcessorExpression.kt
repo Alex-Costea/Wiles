@@ -13,7 +13,6 @@ import wiles.processor.types.FunctionCallType
 import wiles.processor.types.InvalidType
 import wiles.processor.values.WilesFunctionCall
 import wiles.shared.AbstractSyntaxTree
-import wiles.shared.InternalErrorException
 import wiles.shared.SyntaxType
 import wiles.shared.WilesException
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
@@ -44,6 +43,7 @@ import wiles.shared.constants.Tokens.TIMES_ID
 import wiles.shared.constants.Tokens.UNARY_MINUS_ID
 import wiles.shared.constants.Tokens.UNARY_PLUS_ID
 import wiles.shared.constants.Tokens.UNION_ID
+import wiles.shared.errors.InternalErrorException
 
 open class ProcessorExpression(
     syntax : AbstractSyntaxTree,
@@ -72,9 +72,9 @@ open class ProcessorExpression(
                 value = Value(WilesFunctionCall(), FunctionCallType(), ValueProps.DEFAULT_EXPR)
             }
             else -> {
-                val operationType = syntax.components[0].details[0]
-                val left = getValue(syntax.components.getOrNull(1))
-                val right = getValue(syntax.components.getOrNull(2))
+                val operationType = syntax.getComponents()[0].details[0]
+                val left = getValue(syntax.getComponents().getOrNull(1))
+                val right = getValue(syntax.getComponents().getOrNull(2))
                 if(context.exceptions.isNotEmpty())
                     return
                 try{
@@ -106,7 +106,7 @@ open class ProcessorExpression(
                         RANGIFY_ID -> TODO("Implement RangifyOperation")
                         AS_ID -> TODO("Implement AsOperation")
                         ASSIGN_ID -> {
-                            val leftComponent = syntax.components[1]
+                            val leftComponent = syntax.getComponents()[1]
                             if(leftComponent.syntaxType == SyntaxType.TOKEN) {
                                 val name = leftComponent.details[0]
                                 if(IS_IDENTIFIER.test(name))

@@ -24,7 +24,7 @@ class ProcessorDeclaration(
     context : InterpreterContext,
 ) : AbstractProcessor(syntax, context) {
     override fun process() {
-        val components = syntax.components.toMutableList()
+        val components = syntax.getComponents().toMutableList()
         val typeDef = if(components[0].syntaxType == SyntaxType.TYPEDEF) components.removeAt(0) else null
         val nameToken = components[0]
         val name = nameToken.details[0]

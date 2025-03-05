@@ -4,7 +4,7 @@ import wiles.parser.builders.ParserContext
 import wiles.shared.AbstractStatement
 import wiles.parser.statements.TokenStatement
 import wiles.parser.statements.expressions.BinaryExpression
-import wiles.shared.InternalErrorException
+import wiles.shared.errors.InternalErrorException
 import wiles.shared.constants.ErrorMessages.OPERATOR_EXPECTED_ERROR
 import wiles.shared.constants.Precedence.PRECEDENCE
 import wiles.shared.constants.Precedence.RIGHT_TO_LEFT

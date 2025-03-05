@@ -11,7 +11,7 @@ import wiles.parser.statements.expressions.TopLevelExpression
 import wiles.shared.WilesException
 import wiles.shared.AbstractStatement
 import wiles.shared.DeclarationType
-import wiles.shared.InternalErrorException
+import wiles.shared.errors.InternalErrorException
 import wiles.shared.constants.ErrorMessages.INTERNAL_ERROR
 import wiles.shared.constants.ErrorMessages.INVALID_STATEMENT_ERROR
 import wiles.shared.constants.ErrorMessages.NOT_YET_IMPLEMENTED_ERROR
