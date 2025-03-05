@@ -9,7 +9,7 @@ import wiles.parser.exceptions.UnexpectedTokenException
 import wiles.shared.Token
 import wiles.shared.WilesException
 import wiles.shared.WilesExceptionsCollection
-import wiles.shared.constants.ErrorMessages.CONST_CANT_BE_VAR_ERROR
+import wiles.shared.constants.ErrorMessages.CANT_BE_VAR_ERROR
 import wiles.shared.constants.ErrorMessages.END_OF_STATEMENT_EXPECTED_ERROR
 import wiles.shared.constants.ErrorMessages.EXPECTED_INITIALIZATION_ERROR
 import wiles.shared.constants.ErrorMessages.EXPRESSION_EXPECTED_ERROR
@@ -626,13 +626,22 @@ CODE_BLOCK
 """, DECLARE_ID, CONST_ID, "!a", ANNOTATE_ID,  "!int", ASSIGN_ID, "#123")
 
         //let const var a : int := 123
-        assertResults(createExceptions(UnexpectedTokenException(CONST_CANT_BE_VAR_ERROR, NULL_LOCATION)),
+        assertResults(createExceptions(UnexpectedTokenException(CANT_BE_VAR_ERROR, NULL_LOCATION)),
             """
                 CODE_BLOCK
                 (
                     DECLARATION
                 )
         """, DECLARE_ID, CONST_ID, VARIABLE_ID, "!a", ANNOTATE_ID, "!int", ASSIGN_ID, "#123")
+
+        //def var a : int := 123
+        assertResults(createExceptions(UnexpectedTokenException(CANT_BE_VAR_ERROR, NULL_LOCATION)),
+            """
+                CODE_BLOCK
+                (
+                    DECLARATION
+                )
+        """, LEVEL_SCOPE_ID, VARIABLE_ID, "!a", ASSIGN_ID, "#123")
 
         //def const a := fun(const a : type) -> type do yield a
         assertResults(null,"""
@@ -673,7 +682,7 @@ CODE_BLOCK
     }
 
     @Test
-    fun LEVEL_SCOPEDeclarationTest()
+    fun LevelScopeDeclarationTest()
     {
         //def a := 234
         assertResults(null,"""

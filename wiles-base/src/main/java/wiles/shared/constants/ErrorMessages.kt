@@ -16,7 +16,7 @@ object ErrorMessages {
     const val STRING_UNFINISHED_ERROR = "The text is unfinished."
     const val END_OF_STATEMENT_EXPECTED_ERROR = "Expected end of statement. " +
             "Please use the `;` symbol or start a new line."
-    const val CONST_CANT_BE_VAR_ERROR = "This value cannot be both constant and variable at the same time."
+    const val CANT_BE_VAR_ERROR = "This value cannot be a variable."
     const val EXPECTED_INITIALIZATION_ERROR = "Expected value initialization."
 
     // Processing errors

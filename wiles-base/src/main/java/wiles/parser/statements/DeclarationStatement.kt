@@ -7,7 +7,7 @@ import wiles.parser.exceptions.UnexpectedTokenException
 import wiles.parser.statements.expressions.DefaultExpression
 import wiles.parser.statements.expressions.TypeDefExpression
 import wiles.shared.*
-import wiles.shared.constants.ErrorMessages.CONST_CANT_BE_VAR_ERROR
+import wiles.shared.constants.ErrorMessages.CANT_BE_VAR_ERROR
 import wiles.shared.constants.ErrorMessages.EXPECTED_INITIALIZATION_ERROR
 import wiles.shared.constants.ErrorMessages.IDENTIFIER_EXPECTED_ERROR
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
@@ -55,7 +55,6 @@ class DeclarationStatement(
             val expectParams = when(isParam){
                 DeclarationType.FUNC_PARAM -> tokenOf(ANON_ARG_ID).or(CONST_ID)
                 DeclarationType.TOP_LEVEL -> tokenOf(VARIABLE_ID).or(CONST_ID).or(LEVEL_SCOPE_ID)
-                //DeclarationType.DATA_PARAM -> tokenOf(DEFAULT_ID)
                 DeclarationType.DATA_PARAM -> tokenOf(NOTHING)
             }
 
@@ -66,11 +65,10 @@ class DeclarationStatement(
             }
 
             val nameStrings = nameTokens.map { it.content }
-            //TODO: def cant be var either
-            if(nameStrings.containsAll(contradictory))
+            if(nameStrings.contains(VARIABLE_ID) && (nameStrings.any { CANT_BE_VAR.contains(it) }))
             {
-                throw UnexpectedTokenException(CONST_CANT_BE_VAR_ERROR,
-                    nameTokens.filter { it.content == CONST_ID || it.content == VARIABLE_ID }[0].location)
+                throw UnexpectedTokenException(CANT_BE_VAR_ERROR,
+                    nameTokens.filter { it.content == VARIABLE_ID }[0].location)
             }
 
             name = nameTokens.joinToString("; ") { it.content }
@@ -101,6 +99,6 @@ class DeclarationStatement(
     }
 
     companion object {
-        val contradictory = listOf(CONST_ID, VARIABLE_ID)
+        val CANT_BE_VAR = listOf(CONST_ID, LEVEL_SCOPE_ID)
     }
 }
