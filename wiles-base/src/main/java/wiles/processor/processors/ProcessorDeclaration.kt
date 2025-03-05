@@ -44,7 +44,13 @@ open class ProcessorDeclaration(
             val isConst = details.contains(CONST_ID)
 
             var declaredType : AbstractType? = null
-            if(typeDef != null)
+            val isLevelScoped = if(details.contains(LEVEL_SCOPE_ID)) {
+                if(typeDef == null)
+                    TODO("This level scope declaration requires a type definition.")
+                !isCheckingLevelScope
+            } else false
+
+            if((context.compileMode || isLevelScoped) && typeDef != null)
             {
                 val typeProcessor = ProcessorTypeExpression(typeDef, newContext)
                 typeProcessor.process()
@@ -53,12 +59,6 @@ open class ProcessorDeclaration(
                 assert(isSuperType(TYPE_TYPE,typeDefValue.getType()))
                 declaredType = typeDefValue.getObj() as AbstractType
             }
-
-            val isLevelScoped = if(details.contains(LEVEL_SCOPE_ID)) {
-                if(typeDef == null)
-                    TODO("This level scope declaration requires a type definition.")
-                !isCheckingLevelScope
-            } else false
 
             val processorExpression = ProcessorExpression(expression, newContext)
             val newValue = if (isLevelScoped) {

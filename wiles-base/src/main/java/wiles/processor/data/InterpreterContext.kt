@@ -10,6 +10,6 @@ class InterpreterContext(
 ){
     val compileMode = !isRunning
     override fun toString(): String {
-        return "InterpreterContext(isRunning=$isRunning, values=$values, isDebug=$isDebug)"
+        return "InterpreterContext(isRunning=$isRunning, values=$values, isDebug=$isDebug, exceptions=$exceptions)"
     }
 }
