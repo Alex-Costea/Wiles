@@ -21,24 +21,31 @@ object TypeUtils {
         return true
     }
 
-    private fun checkEither(superType: EitherType, subType: AbstractType) : Boolean
+    private fun checkEither(superType: AbstractType, subType: AbstractType) : Boolean
     {
-        if(subType is EitherType)
+        val superEither = if(superType is EitherType) superType else EitherType(superType)
+        val subEither = if(subType is EitherType) subType else EitherType(subType)
+        for(type2 in subEither.getSubtypes())
         {
-            for(type in subType.getSubtypes())
+            var hasMatch = false
+            for(type1 in superEither.getSubtypes())
             {
-                if(!superType.contains(type))
-                    return false
+                if(isSuperType(type1, type2))
+                {
+                    hasMatch = true
+                    break
+                }
             }
-            return true
+            if(!hasMatch)
+                return false
         }
-        else return superType.contains(subType)
+        return true
     }
 
     fun isSuperType(superType : AbstractType, subType : AbstractType): Boolean {
         return when {
             superType is InvalidType || subType is InvalidType -> false
-            superType is EitherType -> checkEither(superType, subType)
+            superType is EitherType || subType is EitherType-> checkEither(superType, subType)
             subType is NothingType -> superType is NothingType
             superType is AnythingType -> true
             superType.javaClass == subType.javaClass -> checkExactStatus(superType, subType)

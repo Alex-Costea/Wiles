@@ -253,7 +253,7 @@ class ProcessorTests {
             assertValue(values, "!a") {objectEquals(it, WilesInteger(3))}
             assertValue(values, "!a") {typeEquals(it, INTEGER_TYPE)}
             assertValue(values, "!b") {objectEquals(it, WilesInteger(2))}
-            assertValue(values, "!b") {typeEquals(it, INTEGER_TYPE)}
+            assertValue(values, "!b") {typeEquals(it, INTEGER_TYPE.exactly(WilesInteger(2)))}
         }
 
         getCompilationResults("""
@@ -346,7 +346,7 @@ class ProcessorTests {
 
         getCompilationResults("def a : Int := true"). let{ (_, exceptions) ->
             assertEquals(exceptions.size, 1)
-            assertEquals(exceptions[0], TypeConflictError(INTEGER_TYPE, BOOLEAN_TYPE,
+            assertEquals(exceptions[0], TypeConflictError(INTEGER_TYPE, BOOLEAN_TYPE.exactly(true),
                 TokenLocation(1, 9, 1, 12)
             ))
         }
@@ -366,6 +366,17 @@ class ProcessorTests {
             }
         }
 
+        getCompilationResults("def a := 123").let { (_, exceptions) ->
+            assertEquals(exceptions.size, 1)
+            assertEquals(exceptions[0], InferenceFailureException(
+                TokenLocation(1,5,1,6)
+            ))
+        }
+    }
+
+    @Test
+    fun stackOverflowTest()
+    {
         getRunningResults("""
             def a : Int := a + 1
             let b := a
@@ -376,12 +387,6 @@ class ProcessorTests {
             ))
         }
 
-        getCompilationResults("def a := 123").let { (_, exceptions) ->
-            assertEquals(exceptions.size, 1)
-            assertEquals(exceptions[0], InferenceFailureException(
-                TokenLocation(1,5,1,6)
-            ))
-        }
     }
 
     @Test
@@ -494,7 +499,33 @@ class ProcessorTests {
             assertValue(values, "!a"){typeEquals(it, INTEGER_TYPE.exactly(myObj))}
         }
 
-        //TODO: more tests
+        getCompilationResults("""
+            let var a : 1 | 2 := 1
+            let b : Int := a
+        """.trimIndent()).let { (values, exceptions) ->
+            assertEquals(exceptions.size, 0)
+            val myObj = WilesInteger(1)
+            val myType = EitherType(INTEGER_TYPE.exactly(WilesInteger(1)), INTEGER_TYPE.exactly(WilesInteger(2)))
+            assertValue(values, "!a"){objectEquals(it, myObj)}
+            assertValue(values, "!a"){typeEquals(it, myType)}
+            assertValue(values, "!b"){objectEquals(it, myObj)}
+            assertValue(values, "!b"){typeEquals(it, INTEGER_TYPE.exactly(myObj))}
+        }
+
+        getRunningResults("""
+            let var a : 1 | 2 := 1
+            let b : Int := a
+        """.trimIndent()).let { (values, exceptions) ->
+            assertEquals(exceptions.size, 0)
+            val myObj = WilesInteger(1)
+            val myType = INTEGER_TYPE.exactly(myObj)
+            assertValue(values, "!a"){objectEquals(it, myObj)}
+            assertValue(values, "!a"){typeEquals(it, myType)}
+            assertValue(values, "!b"){objectEquals(it, myObj)}
+            assertValue(values, "!b"){typeEquals(it, myType)}
+        }
+
+        //TODO: more tests, especially failing ones
     }
 
     @Test

@@ -5,12 +5,11 @@ import wiles.processor.data.Value
 import wiles.processor.enums.VariableStatus
 import wiles.processor.errors.IdentifierUnknownException
 import wiles.processor.errors.ValueUndefinedException
-import wiles.processor.types.DecimalType
-import wiles.processor.types.IntType
-import wiles.processor.types.InvalidType
-import wiles.processor.types.TextType
+import wiles.processor.functions.WilesFunction
+import wiles.processor.types.*
 import wiles.processor.values.WilesDecimal
 import wiles.processor.values.WilesInteger
+import wiles.processor.values.WilesNothing
 import wiles.processor.values.WilesUndefined
 import wiles.shared.abstracts.AbstractSyntaxTree
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
@@ -19,6 +18,7 @@ import wiles.shared.constants.Predicates.IS_NUMBER_LITERAL
 import wiles.shared.constants.Predicates.IS_TEXT_LITERAL
 import wiles.shared.enums.SyntaxType
 import wiles.shared.errors.InternalErrorException
+import wiles.shared.errors.WilesException
 
 class ProcessorToken(
     syntax : AbstractSyntaxTree,
@@ -47,15 +47,39 @@ class ProcessorToken(
     }
 
     private fun processIdentifier(syntax: AbstractSyntaxTree) {
-        val name = syntax.details[0]
-        value = context.values[name] ?:
-            Value(null, InvalidType(), VariableStatus.Const)
-        if(!context.values.containsKey(name))
-        {
-            throw IdentifierUnknownException(syntax.getFirstLocation())
+        try {
+            val name = syntax.details[0]
+            if(!context.values.containsKey(name))
+            {
+                value = Value(null, InvalidType(), VariableStatus.Const)
+                throw IdentifierUnknownException(syntax.getFirstLocation())
+            }
+            val newObj = context.values[name]!!.getObj()
+            if(context.values[name]?.getObj() is WilesUndefined)
+                throw ValueUndefinedException(syntax.getFirstLocation())
+            value = Value(newObj, getPracticalType(newObj, context.values[name]!!.getType()), VariableStatus.Const)
+
         }
-        if(context.values[name]?.getObj() is WilesUndefined)
-            throw ValueUndefinedException(syntax.getFirstLocation())
+        catch (ex : WilesException)
+        {
+            value = Value(null, InvalidType(), VariableStatus.Const)
+            throw ex
+        }
+
+    }
+
+    private fun getPracticalType(newObj: Any?, defaultType : AbstractType): AbstractType {
+        return when(newObj){
+            is WilesInteger -> AbstractType.INTEGER_TYPE.exactly(newObj)
+            is WilesDecimal -> AbstractType.DECIMAL_TYPE.exactly(newObj)
+            is String -> AbstractType.TEXT_TYPE.exactly(newObj)
+            is Boolean -> AbstractType.BOOLEAN_TYPE.exactly(newObj)
+            is AbstractType -> AbstractType.TYPE_TYPE
+            is WilesNothing -> AbstractType.NOTHING_TYPE
+            is WilesFunction -> defaultType
+            null -> defaultType
+            else -> throw InternalErrorException()
+        }
     }
 
 

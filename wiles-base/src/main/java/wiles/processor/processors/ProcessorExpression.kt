@@ -128,7 +128,7 @@ open class ProcessorExpression(
                 catch (ex : WilesException)
                 {
                     value = Value(null, InvalidType(), VariableStatus.Const)
-                    context.exceptions.add(ex)
+                    throw ex
                 }
                 catch(ex : StackOverflowError)
                 {
