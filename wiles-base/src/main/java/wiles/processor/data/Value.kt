@@ -23,16 +23,14 @@ class Value(
         return type
     }
 
-    fun isUncomputedAndLazy() : Boolean{
-        if(obj !is WilesLazyObject)
-            return false
-        return !obj.hasBeenComputed()
+    fun isLazy(): Boolean {
+        return obj is WilesLazyObject
     }
 
     private fun getObjString() : String
     {
-        if(isUncomputedAndLazy()) return "LazyObject"
-        return obj.toString()
+        if((obj as? WilesLazyObject)?.hasBeenComputed() == false) return "LazyObject"
+        return getObj().toString()
     }
 
     override fun toString(): String {

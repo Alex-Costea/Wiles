@@ -303,8 +303,23 @@ class ProcessorTests {
         getCompilationResults("def a : Int := true"). let{ (_, exceptions) ->
             assert(exceptions.size == 1)
             assertEquals(exceptions[0], TypeConflictError(INTEGER_TYPE, BOOLEAN_TYPE,
-                TokenLocation(1, 9, 1, 12)))
+                TokenLocation(1, 9, 1, 12)
+            ))
         }
+
+        getCompilationResults("""
+            let a := 2
+            def b : Int := a + 2
+        """.trimIndent()). let { (values, exceptions) ->{
+            assert(exceptions.isEmpty())
+            val two = WilesInteger(2)
+            val four = WilesInteger(4)
+            assertValue(values, "!a"){valueEquals(it, two)}
+            assertValue(values, "!a"){typeEquals(it, INTEGER_TYPE.exactly(two))}
+            assertValue(values, "!b"){valueEquals(it, four)}
+            assertValue(values, "!b"){typeEquals(it, INTEGER_TYPE)}
+
+        } }
     }
 
     @Test

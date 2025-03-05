@@ -16,4 +16,8 @@ class WilesLazyObject(private val expression: ProcessorExpression) {
     {
         return obj != null
     }
+
+    override fun toString(): String {
+        return "Lazy(${obj})"
+    }
 }
