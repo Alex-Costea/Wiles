@@ -1,9 +1,7 @@
 package wiles.processor.types
 
-import wiles.processor.enums.WilesTypes
 
 abstract class AbstractType(val exactValue : Any?) {
-    abstract val typeName : WilesTypes
 
     fun isExact(): Boolean {
         return exactValue != null
@@ -11,9 +9,9 @@ abstract class AbstractType(val exactValue : Any?) {
 
     override fun toString(): String {
         return when {
-            isExact() && typeName == WilesTypes.Text -> "\"$exactValue\""
+            isExact() && (this is TextType) -> "\"$exactValue\""
             isExact() -> exactValue.toString()
-            else -> typeName.toString()
+            else -> this.javaClass.toString()
         }
     }
 
@@ -28,14 +26,12 @@ abstract class AbstractType(val exactValue : Any?) {
         other as AbstractType
 
         if (exactValue != other.exactValue) return false
-        if (typeName != other.typeName) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = exactValue.hashCode()
-        result = 31 * result + typeName.hashCode()
+        val result = exactValue.hashCode()
         return result
     }
 

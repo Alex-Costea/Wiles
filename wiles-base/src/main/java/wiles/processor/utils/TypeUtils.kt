@@ -1,14 +1,12 @@
 package wiles.processor.utils
 
 import wiles.processor.data.Value
-import wiles.processor.enums.WilesTypes
-import wiles.processor.types.AbstractType
+import wiles.processor.types.*
 import wiles.processor.types.AbstractType.Companion.BOOLEAN_TYPE
 import wiles.processor.types.AbstractType.Companion.DECIMAL_TYPE
 import wiles.processor.types.AbstractType.Companion.INTEGER_TYPE
 import wiles.processor.types.AbstractType.Companion.NOTHING_TYPE
 import wiles.processor.types.AbstractType.Companion.TEXT_TYPE
-import wiles.processor.types.EitherType
 import wiles.processor.values.WilesDecimal
 import wiles.processor.values.WilesInteger
 import wiles.processor.values.WilesNothing
@@ -25,9 +23,9 @@ object TypeUtils {
 
     private fun checkEither(superType: EitherType, subType: AbstractType) : Boolean
     {
-        if(subType.typeName == WilesTypes.Either)
+        if(subType is EitherType)
         {
-            for(type in (subType as EitherType).getSubtypes())
+            for(type in subType.getSubtypes())
             {
                 if(!superType.contains(type))
                     return false
@@ -39,11 +37,11 @@ object TypeUtils {
 
     fun isSuperType(superType : AbstractType, subType : AbstractType): Boolean {
         return when {
-            superType.typeName == WilesTypes.Invalid || superType.typeName == WilesTypes.Invalid -> false
-            superType.typeName == WilesTypes.Either -> checkEither(superType as EitherType, subType)
-            subType.typeName == WilesTypes.Nothing -> superType.typeName == WilesTypes.Nothing
-            superType.typeName == WilesTypes.Anything -> true
-            superType.typeName == subType.typeName -> checkExactStatus(superType, subType)
+            superType is InvalidType || subType is InvalidType -> false
+            superType is EitherType -> checkEither(superType, subType)
+            subType is NothingType -> superType is NothingType
+            superType is AnythingType -> true
+            superType.javaClass == subType.javaClass -> checkExactStatus(superType, subType)
             else -> false
         }
     }

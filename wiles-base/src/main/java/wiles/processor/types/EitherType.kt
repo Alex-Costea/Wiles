@@ -1,12 +1,9 @@
 package wiles.processor.types
 
-import wiles.processor.enums.WilesTypes
 import wiles.processor.utils.TypeUtils
 import wiles.shared.errors.InternalErrorException
 
 class EitherType(vararg typeList : AbstractType) : AbstractType(null) {
-    override val typeName: WilesTypes
-        get() = WilesTypes.Either
 
 
     private val subtypes : List<AbstractType>
