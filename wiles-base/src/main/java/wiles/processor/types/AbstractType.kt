@@ -10,7 +10,7 @@ abstract class AbstractType(val exactValue : Any?) {
     override fun toString(): String {
         return when {
             isExact() && (this is TextType) -> "\"$exactValue\""
-            isExact() -> exactValue.toString()
+            isExact() -> exactValue.toString().substringBefore("Type")
             else -> this.javaClass.simpleName
         }
     }
@@ -25,9 +25,7 @@ abstract class AbstractType(val exactValue : Any?) {
 
         other as AbstractType
 
-        if (exactValue != other.exactValue) return false
-
-        return true
+        return exactValue == other.exactValue
     }
 
     override fun hashCode(): Int {
@@ -35,7 +33,7 @@ abstract class AbstractType(val exactValue : Any?) {
         return result
     }
 
-    abstract fun clone(value: Any?) : AbstractType
+    protected abstract fun clone(value: Any?) : AbstractType
 
     fun exactly(value: Any?) : AbstractType
     {

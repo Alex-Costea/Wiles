@@ -29,7 +29,7 @@ class EitherType(vararg typeList : AbstractType) : AbstractType(null) {
     override fun clone(value: Any?): AbstractType {
         if(value != null)
             throw InternalErrorException()
-        val newSubtypes = subtypes.map { it.clone(it.exactValue) }
+        val newSubtypes = subtypes.map { it.exactly(it.exactValue) }
         return EitherType(*newSubtypes.toTypedArray())
     }
 
@@ -45,5 +45,22 @@ class EitherType(vararg typeList : AbstractType) : AbstractType(null) {
         }
         return false
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        if (!super.equals(other)) return false
+
+        other as EitherType
+
+        return subtypes == other.subtypes
+    }
+
+    override fun hashCode(): Int {
+        var result = super.hashCode()
+        result = 31 * result + subtypes.hashCode()
+        return result
+    }
+
 
 }
