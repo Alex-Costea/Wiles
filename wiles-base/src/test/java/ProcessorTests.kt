@@ -285,7 +285,7 @@ class ProcessorTests {
     }
 
     @Test
-    fun lazyEvalTest()
+    fun levelScopeTest()
     {
         getCompilationResults("""
             let b := a + 5
@@ -330,6 +330,12 @@ class ProcessorTests {
             assert(exceptions.isNotEmpty())
             assertEquals(exceptions[0], StackOverflowException(
                 TokenLocation(1, 18, 1, 19)))
+        }
+
+        getCompilationResults("def a := 123").let { (_, exceptions) ->
+            assertEquals(exceptions.size, 1)
+            assertEquals(exceptions[0], InferenceFailureException(
+                TokenLocation(1,5,1,6)))
         }
     }
 

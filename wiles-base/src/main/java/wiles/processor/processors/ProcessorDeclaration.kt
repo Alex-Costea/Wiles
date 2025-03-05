@@ -6,6 +6,7 @@ import wiles.processor.data.ValueProps
 import wiles.processor.data.ValuesMap
 import wiles.processor.enums.VariableStatus
 import wiles.processor.errors.IdentifierAlreadyDeclaredException
+import wiles.processor.errors.InferenceFailureException
 import wiles.processor.errors.TypeConflictError
 import wiles.processor.errors.ValueNotConstException
 import wiles.processor.types.AbstractType
@@ -46,7 +47,7 @@ class ProcessorDeclaration(
             var declaredType : AbstractType? = null
             val isLevelScoped = if(details.contains(LEVEL_SCOPE_ID)) {
                 if(typeDef == null)
-                    TODO("This level scope declaration requires a type definition.")
+                    throw InferenceFailureException(nameToken.getFirstLocation())
                 !isCheckingLevelScope
             } else false
 
