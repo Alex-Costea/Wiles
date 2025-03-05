@@ -39,7 +39,7 @@ abstract class AbstractType(val exactValue : Any?) {
         return result
     }
 
-    protected abstract fun clone(value: Any?) : AbstractType
+    abstract fun clone(value: Any?) : AbstractType
 
     fun exactly(value: Any?) : AbstractType
     {

@@ -8,6 +8,7 @@ import wiles.processor.types.AbstractType.Companion.DECIMAL_TYPE
 import wiles.processor.types.AbstractType.Companion.INTEGER_TYPE
 import wiles.processor.types.AbstractType.Companion.NOTHING_TYPE
 import wiles.processor.types.AbstractType.Companion.TEXT_TYPE
+import wiles.processor.types.EitherType
 import wiles.processor.values.WilesDecimal
 import wiles.processor.values.WilesInteger
 import wiles.processor.values.WilesNothing
@@ -22,9 +23,24 @@ object TypeUtils {
         return true
     }
 
+    private fun checkEither(superType: EitherType, subType: AbstractType) : Boolean
+    {
+        if(subType.typeName == WilesTypes.Either)
+        {
+            for(type in (subType as EitherType).getSubtypes())
+            {
+                if(!superType.contains(type))
+                    return false
+            }
+            return true
+        }
+        else return superType.contains(subType)
+    }
+
     fun isSuperType(superType : AbstractType, subType : AbstractType): Boolean {
         return when {
             superType.typeName == WilesTypes.Invalid || superType.typeName == WilesTypes.Invalid -> false
+            superType.typeName == WilesTypes.Either -> checkEither(superType as EitherType, subType)
             subType.typeName == WilesTypes.Nothing -> superType.typeName == WilesTypes.Nothing
             superType.typeName == WilesTypes.Anything -> true
             superType.typeName == subType.typeName -> checkExactStatus(superType, subType)

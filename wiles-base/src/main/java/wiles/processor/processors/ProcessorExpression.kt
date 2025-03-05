@@ -9,6 +9,7 @@ import wiles.processor.errors.StackOverflowException
 import wiles.processor.operations.ApplyOperation
 import wiles.processor.operations.InternalOperation
 import wiles.processor.operations.PlusOperation
+import wiles.processor.operations.UnionOperation
 import wiles.processor.types.FunctionCallType
 import wiles.processor.types.InvalidType
 import wiles.processor.values.WilesFunctionCall
@@ -110,7 +111,7 @@ open class ProcessorExpression(
                         AND_ID -> TODO("Implement AndOperation")
                         NOT_ID -> TODO("Implement NotOperation")
                         SUBTYPES_ID -> TODO("Implement SubtypesOperation")
-                        UNION_ID -> TODO("Implement UnionOperation")
+                        UNION_ID -> UnionOperation(left!!, right!!, context)
                         EQUALS_ID -> TODO("Implement EqualsOperation")
                         NOT_EQUAL_ID -> TODO("Implement NotEqualOperation")
                         LARGER_ID -> TODO("Implement LargerOperation")
