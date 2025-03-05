@@ -7,16 +7,12 @@ import wiles.processor.values.WilesLazyObject
 class Value(
     private val obj: Any?,
     private val type: AbstractType,
-    private val props : ValueProps
+    private val variableStatus: VariableStatus
 ) {
     fun getObj() : Any?{
         if(obj is WilesLazyObject)
             return obj.getObject()
         return obj
-    }
-
-    fun getProps() : ValueProps{
-        return props
     }
 
     fun getType() : AbstractType{
@@ -34,7 +30,7 @@ class Value(
     }
 
     override fun toString(): String {
-        return "Value(obj=${getObjString()}, type=$type, props=$props)"
+        return "Value(obj=${getObjString()}, type=$type, status=$variableStatus)"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -45,7 +41,7 @@ class Value(
 
         if (getObj() != other.getObj()) return false
         if (type != other.type) return false
-        if (props != other.props) return false
+        if (variableStatus != other.variableStatus) return false
 
         return true
     }
@@ -53,7 +49,7 @@ class Value(
     override fun hashCode(): Int {
         var result = getObj()?.hashCode() ?: 0
         result = 31 * result + type.hashCode()
-        result = 31 * result + props.hashCode()
+        result = 31 * result + variableStatus.hashCode()
         return result
     }
 
@@ -66,7 +62,7 @@ class Value(
     }
 
     private fun getVariableStatus() : VariableStatus {
-        return props.variableStatus()
+        return variableStatus
     }
 
 }

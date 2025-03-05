@@ -2,7 +2,6 @@ package wiles.processor.processors
 
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
-import wiles.processor.data.ValueProps
 import wiles.processor.data.ValuesMap
 import wiles.processor.enums.VariableStatus
 import wiles.processor.errors.IdentifierAlreadyDeclaredException
@@ -13,11 +12,12 @@ import wiles.processor.types.AbstractType
 import wiles.processor.types.AbstractType.Companion.TYPE_TYPE
 import wiles.processor.utils.TypeUtils.isSuperType
 import wiles.processor.values.WilesLazyObject
+import wiles.processor.values.WilesUndefined
 import wiles.shared.abstracts.AbstractSyntaxTree
-import wiles.shared.enums.SyntaxType
 import wiles.shared.constants.Tokens.CONST_ID
 import wiles.shared.constants.Tokens.LEVEL_SCOPE_ID
 import wiles.shared.constants.Tokens.VARIABLE_ID
+import wiles.shared.enums.SyntaxType
 
 class ProcessorDeclaration(
     syntax : AbstractSyntaxTree,
@@ -32,16 +32,21 @@ class ProcessorDeclaration(
         val isCheckingLevelScope = getIsCheckingLevelScope(name)
         val newContext = if(isCheckingLevelScope) createContext() else context
         val valueAlreadyKnown = newContext.values[name]?.isKnown() == true
+        val details = syntax.details
+        val variableStatus = if (details.contains(VARIABLE_ID)) VariableStatus.Var else VariableStatus.Const
 
-        if(expression == null)
-            TODO("Handle no expression body")
+        if(newContext.compileMode && newContext.values.containsKey(name) && !isCheckingLevelScope)
+        {
+            throw IdentifierAlreadyDeclaredException(nameToken.getFirstLocation())
+        }
+
+        if(expression == null) {
+            val declaredType = getDeclaredType(typeDef!!, context)
+            context.values[name] = Value(WilesUndefined, declaredType, variableStatus)
+            return
+        }
 
         if (!valueAlreadyKnown) {
-            if(newContext.compileMode && newContext.values.containsKey(name) && !isCheckingLevelScope)
-            {
-                throw IdentifierAlreadyDeclaredException(nameToken.getFirstLocation())
-            }
-            val details = syntax.details
             val isConst = details.contains(CONST_ID)
 
             var declaredType : AbstractType? = null
@@ -58,11 +63,10 @@ class ProcessorDeclaration(
 
             val processorExpression = ProcessorExpression(expression, newContext)
             val newValue = if (isLevelScoped) {
-                Value(WilesLazyObject(processorExpression), declaredType!!, ValueProps.DEFAULT_EXPR)
+                Value(WilesLazyObject(processorExpression), declaredType!!, VariableStatus.Const)
             } else {
                 processorExpression.process()
                 val computedValue = processorExpression.value
-                val variableStatus = if (details.contains(VARIABLE_ID)) VariableStatus.Var else VariableStatus.Const
                 var newType = computedValue.getType()
                 if (variableStatus == VariableStatus.Var)
                     newType = newType.removeExact()
@@ -73,7 +77,7 @@ class ProcessorDeclaration(
                 }
                 if (context.compileMode && isConst && !newType.isExact())
                     throw ValueNotConstException(nameToken.getFirstLocation())
-                Value(computedValue.getObj(), newType, ValueProps(variableStatus))
+                Value(computedValue.getObj(), newType, variableStatus)
             }
             context.values[name] = newValue
         }
@@ -97,7 +101,7 @@ class ProcessorDeclaration(
         val tempValues = ValuesMap()
         for((key,value) in context.values.entries)
         {
-            val newValue = Value(null, value.getType().removeExact(), value.getProps())
+            val newValue = Value(null, value.getType().removeExact(), VariableStatus.Const)
             tempValues[key] = if(value.isLazy()) newValue else value
         }
         return InterpreterContext(context.isRunning, tempValues, context.isDebug, context.exceptions)

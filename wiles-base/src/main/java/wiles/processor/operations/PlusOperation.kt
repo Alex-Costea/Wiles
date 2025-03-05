@@ -2,7 +2,7 @@ package wiles.processor.operations
 
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
-import wiles.processor.data.ValueProps.Companion.DEFAULT_EXPR
+import wiles.processor.enums.VariableStatus
 import wiles.processor.types.AbstractType
 import wiles.processor.types.AbstractType.Companion.DECIMAL_TYPE
 import wiles.processor.types.AbstractType.Companion.INTEGER_TYPE
@@ -48,6 +48,6 @@ class PlusOperation(left: Value, right: Value, context: InterpreterContext) : Ab
         var newType = calculateType()
         if(bothKnown)
             newType = newType.exactly(newObject!!)
-        return Value(newObject, newType, DEFAULT_EXPR)
+        return Value(newObject, newType, VariableStatus.Const)
     }
 }

@@ -27,6 +27,7 @@ object ErrorMessages {
     const val VALUE_NOT_CONST_ERROR = "This value cannot be used as it is not known at compile time."
     const val STACK_OVERFLOW_ERROR = "Stack overflow reached while trying to compute this value."
     const val INFERENCE_FAILED_ERROR = "Type inference failed, please specify type explicitly."
+    const val VALUE_UNDEFINED_ERROR = "Value cannot be used as it hasn't been initialized."
 
     // Internal errors
     const val INTERNAL_ERROR = "An internal error has occurred. "

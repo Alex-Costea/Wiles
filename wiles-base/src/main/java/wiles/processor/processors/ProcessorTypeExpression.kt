@@ -2,7 +2,7 @@ package wiles.processor.processors
 
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
-import wiles.processor.data.ValueProps
+import wiles.processor.enums.VariableStatus
 import wiles.processor.errors.ValueNotConstException
 import wiles.processor.types.AbstractType
 import wiles.processor.types.AbstractType.Companion.BOOLEAN_TYPE
@@ -42,7 +42,7 @@ class ProcessorTypeExpression(syntax: AbstractSyntaxTree, context: InterpreterCo
         }
         if(value.isKnown()) {
             val newValue = getNewTypeObject(value)
-            value = Value(newValue, TYPE_TYPE, ValueProps.DEFAULT_EXPR)
+            value = Value(newValue, TYPE_TYPE, VariableStatus.Const)
         }
         else {
             throw ValueNotConstException(syntax.getFirstLocation())

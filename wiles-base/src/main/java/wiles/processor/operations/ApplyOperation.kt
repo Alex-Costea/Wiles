@@ -2,8 +2,8 @@ package wiles.processor.operations
 
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
-import wiles.processor.data.ValueProps
 import wiles.processor.data.ValuesMap
+import wiles.processor.enums.VariableStatus
 import wiles.processor.functions.WilesFunction
 import wiles.processor.types.AbstractType
 import wiles.processor.types.FunctionType
@@ -12,10 +12,10 @@ class ApplyOperation(left: Value?, right: Value, context: InterpreterContext) : 
     override fun getNewValue(): Value {
         //TODO: check if calculable at compile time
         return if (context.compileMode) {
-            Value(null, calculateType(), ValueProps.DEFAULT_EXPR)
+            Value(null, calculateType(), VariableStatus.Const)
         } else {
             val obj = calculateObject()
-            Value(obj, calculateType().exactly(obj), ValueProps.DEFAULT_EXPR)
+            Value(obj, calculateType().exactly(obj), VariableStatus.Const)
         }
     }
 
