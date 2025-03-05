@@ -466,6 +466,33 @@ class ProcessorTests {
             assertValue(values, "!a"){objectEquals(it, myObj)}
             assertValue(values, "!a"){typeEquals(it, INTEGER_TYPE.exactly(myObj))}
         }
+        getCompilationResults("""
+            let const MyType := 1 | 2
+            let a : MyType := 2
+        """.trimIndent()).let {  (values, exceptions) ->
+            assertEquals(exceptions.size, 0)
+
+            val myType = EitherType(INTEGER_TYPE.exactly(WilesInteger(1)), INTEGER_TYPE.exactly(WilesInteger(2)))
+            assertValue(values, "!MyType"){objectEquals(it, myType)}
+
+            val myObj = WilesInteger(2)
+            assertValue(values, "!a"){objectEquals(it, myObj)}
+            assertValue(values, "!a"){typeEquals(it, INTEGER_TYPE.exactly(myObj))}
+        }
+
+        getRunningResults("""
+            let const MyType := 1 | 2
+            let a : MyType := 2
+        """.trimIndent()).let {  (values, exceptions) ->
+            assertEquals(exceptions.size, 0)
+
+            val myType = EitherType(INTEGER_TYPE.exactly(WilesInteger(1)), INTEGER_TYPE.exactly(WilesInteger(2)))
+            assertValue(values, "!MyType"){objectEquals(it, myType)}
+
+            val myObj = WilesInteger(2)
+            assertValue(values, "!a"){objectEquals(it, myObj)}
+            assertValue(values, "!a"){typeEquals(it, INTEGER_TYPE.exactly(myObj))}
+        }
 
         //TODO: more tests
     }

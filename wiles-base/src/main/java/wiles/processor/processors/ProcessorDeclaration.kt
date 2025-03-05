@@ -73,7 +73,7 @@ class ProcessorDeclaration(
                     if (!isSuperType(declaredType, newType))
                         throw TypeConflictError(declaredType, newType, typeDef!!.getFirstLocation())
                 }
-                if (context.isCompiling && isConst && !newType.isExact())
+                if (context.isCompiling && isConst && !computedValue.isKnown())
                     throw ValueNotConstException(nameToken.getFirstLocation())
                 val newTypeVague = if(context.isCompiling) newType.removeExact() else newType
                 Value(computedValue.getObj(),
