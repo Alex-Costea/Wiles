@@ -18,7 +18,7 @@ import wiles.shared.constants.Tokens.CONST_ID
 import wiles.shared.constants.Tokens.LEVEL_SCOPE_ID
 import wiles.shared.constants.Tokens.VARIABLE_ID
 
-open class ProcessorDeclaration(
+class ProcessorDeclaration(
     syntax : AbstractSyntaxTree,
     context : InterpreterContext,
 ) : AbstractProcessor(syntax, context) {
@@ -52,12 +52,7 @@ open class ProcessorDeclaration(
 
             if((context.compileMode || isLevelScoped) && typeDef != null)
             {
-                val typeProcessor = ProcessorTypeExpression(typeDef, newContext)
-                typeProcessor.process()
-                val typeDefValue = typeProcessor.value
-                assert(typeDefValue.isKnown())
-                assert(isSuperType(TYPE_TYPE,typeDefValue.getType()))
-                declaredType = typeDefValue.getObj() as AbstractType
+                declaredType = getDeclaredType(typeDef, context)
             }
 
             val processorExpression = ProcessorExpression(expression, newContext)
@@ -81,6 +76,15 @@ open class ProcessorDeclaration(
             }
             context.values[name] = newValue
         }
+    }
+
+    private fun getDeclaredType(typeDef : AbstractSyntaxTree, context : InterpreterContext): AbstractType {
+        val typeProcessor = ProcessorTypeExpression(typeDef, context)
+        typeProcessor.process()
+        val typeDefValue = typeProcessor.value
+        assert(typeDefValue.isKnown())
+        assert(isSuperType(TYPE_TYPE,typeDefValue.getType()))
+        return typeDefValue.getObj() as AbstractType
     }
 
     private fun getIsCheckingLevelScope(name : String): Boolean {
