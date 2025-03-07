@@ -9,4 +9,8 @@ class FalseType : AbstractType(null) {
             throw InternalErrorException()
         return FalseType()
     }
+
+    override fun toString(): String {
+        return "false"
+    }
 }

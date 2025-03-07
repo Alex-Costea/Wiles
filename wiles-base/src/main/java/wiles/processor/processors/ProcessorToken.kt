@@ -5,10 +5,7 @@ import wiles.processor.data.Value
 import wiles.processor.enums.VariableStatus
 import wiles.processor.errors.IdentifierUnknownException
 import wiles.processor.errors.ValueUndefinedException
-import wiles.processor.types.DecimalType
-import wiles.processor.types.IntType
-import wiles.processor.types.InvalidType
-import wiles.processor.types.TextType
+import wiles.processor.types.*
 import wiles.processor.utils.TypeUtils.getNewTypeObject
 import wiles.processor.values.WilesDecimal
 import wiles.processor.values.WilesInteger
@@ -59,7 +56,7 @@ class ProcessorToken(
             val newValue = context.values[name]!!
             if(context.values[name]?.getObj() is WilesUndefined)
                 throw ValueUndefinedException(syntax.getFirstLocation())
-            value = Value(newValue.getObj(), getNewTypeObject(newValue), VariableStatus.Const)
+            value = Value(newValue.getObj(), getType(newValue), VariableStatus.Const)
 
         }
         catch (ex : WilesException)
@@ -68,6 +65,12 @@ class ProcessorToken(
             throw ex
         }
 
+    }
+
+    private fun getType(newValue: Value): AbstractType {
+        if(newValue.getObj() is AbstractType)
+            return AbstractType.TYPE_TYPE
+        return getNewTypeObject(newValue)
     }
 
     override fun process() {

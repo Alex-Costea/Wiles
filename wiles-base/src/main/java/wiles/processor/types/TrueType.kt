@@ -9,4 +9,8 @@ class TrueType : AbstractType(null) {
             throw InternalErrorException()
         return TrueType()
     }
+
+    override fun toString(): String {
+        return "true"
+    }
 }

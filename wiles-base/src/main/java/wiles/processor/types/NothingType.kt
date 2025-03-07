@@ -9,4 +9,8 @@ class NothingType : AbstractType(null) {
             throw InternalErrorException()
         return NothingType()
     }
+
+    override fun toString(): String {
+        return "nothing"
+    }
 }
