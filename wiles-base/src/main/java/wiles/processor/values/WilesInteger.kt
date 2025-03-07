@@ -44,7 +44,7 @@ class WilesInteger(private val value : BigInteger) {
     }
 
     operator fun unaryMinus(): WilesInteger {
-        return -WilesInteger(-value)
+        return WilesInteger(-value)
     }
 
     operator fun unaryPlus(): WilesInteger {
@@ -65,6 +65,14 @@ class WilesInteger(private val value : BigInteger) {
 
     operator fun div(rightObj: WilesDecimal): WilesDecimal {
         return DECIMAL_ONE / rightObj * this
+    }
+
+    infix fun pow(rightObj: WilesInteger): WilesInteger {
+        return WilesInteger(this.value.pow(rightObj.value.intValueExact()))
+    }
+
+    infix fun pow(rightObj: WilesDecimal): WilesDecimal {
+        return WilesDecimal(this.toString()) pow rightObj
     }
 
     companion object{

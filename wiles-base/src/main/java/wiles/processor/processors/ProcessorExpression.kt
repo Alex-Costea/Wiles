@@ -98,7 +98,7 @@ open class ProcessorExpression(
                         UNARY_MINUS_ID -> MinusOperation(null, left!!, context)
                         TIMES_ID -> TimesOperation(left!!, right!!, context)
                         DIVIDE_ID -> DivideOperation(left!!, right!!, context)
-                        POWER_ID -> TODO("Implement PowerOperation")
+                        POWER_ID -> PowerOperation(left!!, right!!, context)
                         MAYBE_ID -> TODO("Implement MaybeOperation")
                         MUTIFY_ID -> TODO("Implement MutifyOperation")
                         ACCESS_ID -> TODO("Implement AccessOperation")

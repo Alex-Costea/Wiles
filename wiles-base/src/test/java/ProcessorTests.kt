@@ -283,6 +283,12 @@ class ProcessorTests {
             assertValue(values, "!a"){objectEquals(it, val1)}
             assertValue(values, "!a"){typeEquals(it, INT_TYPE.exactly(val1))}
         }
+        getCompilationResults("let a := 2.0 ^ 10.0").let { (values, exceptions) ->
+            assertEquals(exceptions.size, 0)
+            val val1 = WilesDecimal("1024")
+            assertValue(values, "!a"){objectEquals(it, val1)}
+            assertValue(values, "!a"){typeEquals(it, DECIMAL_TYPE.exactly(val1))}
+        }
     }
 
     @Test

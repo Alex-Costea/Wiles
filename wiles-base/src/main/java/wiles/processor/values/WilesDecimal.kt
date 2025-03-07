@@ -2,6 +2,8 @@ package wiles.processor.values
 
 import java.math.BigDecimal
 import java.math.MathContext
+import kotlin.math.pow
+
 
 class WilesDecimal(private val value : BigDecimal)  {
 
@@ -64,4 +66,13 @@ class WilesDecimal(private val value : BigDecimal)  {
     operator fun div(wilesInteger: WilesInteger): WilesDecimal {
         return this / WilesDecimal(wilesInteger.toString())
     }
+
+    infix fun pow(rightObj: WilesInteger): WilesDecimal {
+        return this pow WilesDecimal(rightObj.toString())
+    }
+
+    infix fun pow(rightObj: WilesDecimal): WilesDecimal {
+        return WilesDecimal(BigDecimal(this.value.toDouble().pow(rightObj.value.toDouble())))
+    }
+
 }
