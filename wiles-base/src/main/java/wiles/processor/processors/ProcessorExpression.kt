@@ -9,9 +9,7 @@ import wiles.processor.errors.OperationTypeException
 import wiles.processor.errors.StackOverflowException
 import wiles.processor.errors.WilesArithmeticException
 import wiles.processor.operations.*
-import wiles.processor.types.FunctionCallType
 import wiles.processor.types.InvalidType
-import wiles.processor.values.WilesFunctionCall
 import wiles.shared.abstracts.AbstractSyntaxTree
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.ACCESS_ID
@@ -46,109 +44,92 @@ import wiles.shared.errors.InternalErrorException
 import wiles.shared.errors.WilesException
 import wiles.shared.errors.WilesTypeException
 
-open class ProcessorExpression(
-    syntax : AbstractSyntaxTree,
-    context : InterpreterContext
-): AbstractProcessor(syntax, context){
-
-    lateinit var value : Value
+open class ProcessorExpression(syntax: AbstractSyntaxTree, context: InterpreterContext) : AbstractProcessor(syntax, context) {
+    override lateinit var value : Value
 
     private fun getValue(tree : AbstractSyntaxTree?): Value? {
         if(tree == null) return null
-        val innerProcessorExpression = ProcessorExpression(tree, context)
-        innerProcessorExpression.process()
-        return innerProcessorExpression.value
+        val innerProcessor = Processor(tree, context)
+        innerProcessor.process()
+        return innerProcessor.value
     }
+
 
     override fun process() {
-
-        when (syntax.syntaxType) {
-            SyntaxType.TOKEN -> {
-                val processorToken = ProcessorToken(syntax, context)
-                processorToken.process()
-                value = processorToken.value
+        assert(syntax.syntaxType == SyntaxType.EXPRESSION || syntax.syntaxType == SyntaxType.TYPEDEF)
+        val operation = syntax.getComponents()[0]
+        try{
+            val operationType = operation.details[0]
+            val leftComponent = syntax.getComponents().getOrNull(1)
+            val rightComponent = syntax.getComponents().getOrNull(2)
+            if(operationType == ASSIGN_ID)
+            {
+                val newOperation = if(leftComponent!!.syntaxType == SyntaxType.TOKEN) {
+                    val name = leftComponent.details[0]
+                    if(IS_IDENTIFIER.test(name))
+                        IdentifierAssignmentOperation(leftComponent, rightComponent!!, context)
+                    else throw CantBeModifiedException(leftComponent.getFirstLocation())
+                }
+                else TODO("Handling mutable collections")
+                value = newOperation.getNewValue()
+                return
             }
-            SyntaxType.FUNC_CALL -> {
-                //TODO: Handle complex function calls
-                value = Value(WilesFunctionCall(), FunctionCallType(), VariableStatus.Const)
+            val left = getValue(leftComponent)
+            val right = getValue(rightComponent)
+            if(context.exceptions.isNotEmpty())
+                return
+            val operand = when(operationType)
+            {
+                PLUS_ID -> PlusOperation(left!!, right!!, context)
+                MINUS_ID -> MinusOperation(left!!, right!!, context)
+                UNARY_PLUS_ID -> PlusOperation(null, left!!, context)
+                UNARY_MINUS_ID -> MinusOperation(null, left!!, context)
+                TIMES_ID -> TimesOperation(left!!, right!!, context)
+                DIVIDE_ID -> DivideOperation(left!!, right!!, context)
+                POWER_ID -> PowerOperation(left!!, right!!, context)
+                MAYBE_ID -> TODO("Implement MaybeOperation")
+                MUTIFY_ID -> TODO("Implement MutifyOperation")
+                ACCESS_ID -> TODO("Implement AccessOperation")
+                AT_KEY_ID -> TODO("Implement AtKeyOperation")
+                APPLY_ID -> ApplyOperation(left, right!!, context)
+                OR_ID -> TODO("Implement OrOperation")
+                AND_ID -> TODO("Implement AndOperation")
+                NOT_ID -> TODO("Implement NotOperation")
+                SUBTYPES_ID -> TODO("Implement SubtypesOperation")
+                UNION_ID -> UnionOperation(left!!, right!!, context)
+                EQUALS_ID -> TODO("Implement EqualsOperation")
+                NOT_EQUAL_ID -> TODO("Implement NotEqualOperation")
+                LARGER_ID -> TODO("Implement LargerOperation")
+                SMALLER_ID -> TODO("Implement SmallerOperation")
+                LARGER_EQUALS_ID -> TODO("Implement LargerEqualsOperation")
+                SMALLER_EQUALS_ID -> TODO("Implement SmallerEqualsOperation")
+                RANGIFY_ID -> TODO("Implement RangifyOperation")
+                AS_ID -> TODO("Implement AsOperation")
+                INTERNAL_ID -> InternalOperation(left!!, context)
+                else -> throw InternalErrorException("Unknown operation")
             }
-            else -> {
-                val operation = syntax.getComponents()[0]
-                try{
-                    val operationType = operation.details[0]
-                    val leftComponent = syntax.getComponents().getOrNull(1)
-                    val rightComponent = syntax.getComponents().getOrNull(2)
-                    if(operationType == ASSIGN_ID)
-                    {
-                        val newOperation = if(leftComponent!!.syntaxType == SyntaxType.TOKEN) {
-                            val name = leftComponent.details[0]
-                            if(IS_IDENTIFIER.test(name))
-                                IdentifierAssignmentOperation(leftComponent, rightComponent!!, context)
-                            else throw CantBeModifiedException(leftComponent.getFirstLocation())
-                        }
-                        else TODO("Handling mutable collections")
-                        value = newOperation.getNewValue()
-                        return
-                    }
-                    val left = getValue(leftComponent)
-                    val right = getValue(rightComponent)
-                    if(context.exceptions.isNotEmpty())
-                        return
-                    val operand = when(operationType)
-                    {
-                        PLUS_ID -> PlusOperation(left!!, right!!, context)
-                        MINUS_ID -> MinusOperation(left!!, right!!, context)
-                        UNARY_PLUS_ID -> PlusOperation(null, left!!, context)
-                        UNARY_MINUS_ID -> MinusOperation(null, left!!, context)
-                        TIMES_ID -> TimesOperation(left!!, right!!, context)
-                        DIVIDE_ID -> DivideOperation(left!!, right!!, context)
-                        POWER_ID -> PowerOperation(left!!, right!!, context)
-                        MAYBE_ID -> TODO("Implement MaybeOperation")
-                        MUTIFY_ID -> TODO("Implement MutifyOperation")
-                        ACCESS_ID -> TODO("Implement AccessOperation")
-                        AT_KEY_ID -> TODO("Implement AtKeyOperation")
-                        APPLY_ID -> ApplyOperation(left, right!!, context)
-                        OR_ID -> TODO("Implement OrOperation")
-                        AND_ID -> TODO("Implement AndOperation")
-                        NOT_ID -> TODO("Implement NotOperation")
-                        SUBTYPES_ID -> TODO("Implement SubtypesOperation")
-                        UNION_ID -> UnionOperation(left!!, right!!, context)
-                        EQUALS_ID -> TODO("Implement EqualsOperation")
-                        NOT_EQUAL_ID -> TODO("Implement NotEqualOperation")
-                        LARGER_ID -> TODO("Implement LargerOperation")
-                        SMALLER_ID -> TODO("Implement SmallerOperation")
-                        LARGER_EQUALS_ID -> TODO("Implement LargerEqualsOperation")
-                        SMALLER_EQUALS_ID -> TODO("Implement SmallerEqualsOperation")
-                        RANGIFY_ID -> TODO("Implement RangifyOperation")
-                        AS_ID -> TODO("Implement AsOperation")
-                        INTERNAL_ID -> InternalOperation(left!!, context)
-                        else -> throw InternalErrorException("Unknown operation")
-                    }
-                    value = operand.getNewValue()
-                }
-                catch(ex : ArithmeticException)
-                {
-                    value = Value(null, InvalidType(), VariableStatus.Const)
-                    throw WilesArithmeticException(operation.getFirstLocation())
-                }
-                catch(ex : WilesTypeException)
-                {
-                    value = Value(null, InvalidType(), VariableStatus.Const)
-                    throw OperationTypeException(ex.type1, ex.type2, operation.getFirstLocation())
-                }
-                catch (ex : WilesException)
-                {
-                    value = Value(null, InvalidType(), VariableStatus.Const)
-                    throw ex
-                }
-                catch(ex : StackOverflowError)
-                {
-                    value = Value(null, InvalidType(), VariableStatus.Const)
-                    throw StackOverflowException(syntax.getFirstLocation())
-                }
-
-            }
+            value = operand.getNewValue()
         }
-    }
+        catch(ex : ArithmeticException)
+        {
+            value = Value(null, InvalidType(), VariableStatus.Const)
+            throw WilesArithmeticException(operation.getFirstLocation())
+        }
+        catch(ex : WilesTypeException)
+        {
+            value = Value(null, InvalidType(), VariableStatus.Const)
+            throw OperationTypeException(ex.type1, ex.type2, operation.getFirstLocation())
+        }
+        catch (ex : WilesException)
+        {
+            value = Value(null, InvalidType(), VariableStatus.Const)
+            throw ex
+        }
+        catch(ex : StackOverflowError)
+        {
+            value = Value(null, InvalidType(), VariableStatus.Const)
+            throw StackOverflowException(syntax.getFirstLocation())
+        }
 
+    }
 }

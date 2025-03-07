@@ -2,7 +2,7 @@
 import org.junit.jupiter.api.Test
 import org.junit.platform.commons.annotation.Testable
 import wiles.parser.Parser
-import wiles.processor.Processor
+import wiles.processor.Interpreter
 import wiles.processor.data.Value
 import wiles.processor.data.ValuesMap
 import wiles.processor.errors.*
@@ -26,13 +26,13 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 @Testable
-class ProcessorTests {
-    private fun makeInterpreter(code : String, scanner: Scanner?) : Processor
+class InterpreterTests {
+    private fun makeInterpreter(code : String, scanner: Scanner?) : Interpreter
     {
         val parser = Parser(code, true)
         val results = parser.getResults()
         val syntax = Utils.convertStatementToSyntaxTree(results)
-        return Processor(scanner, syntax, true)
+        return Interpreter(scanner, syntax, true)
     }
 
     private fun getCompilationResults(code : String) : Pair<ValuesMap, WilesExceptionsCollection>

@@ -15,9 +15,9 @@ class ProcessorTypeExpression(syntax: AbstractSyntaxTree, context: InterpreterCo
         if(syntax.getComponents().size > 1)
             super.process()
         else{
-            val processorExpression = ProcessorExpression(syntax.getComponents()[0], context)
-            processorExpression.process()
-            value = processorExpression.value
+            val processor = Processor(syntax.getComponents()[0], context)
+            processor.process()
+            value = processor.value
         }
         if(value.isKnown()) {
             val newValue = getNewTypeObject(value)

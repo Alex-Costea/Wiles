@@ -1,8 +1,8 @@
 package wiles.processor.values
 
-import wiles.processor.processors.ProcessorExpression
+import wiles.processor.processors.Processor
 
-class WilesLazyObject(private val expression: ProcessorExpression) {
+class WilesLazyObject(private val expression: Processor) {
     private var obj : Any? = null
     fun getObject(): Any? {
         if(obj != null)

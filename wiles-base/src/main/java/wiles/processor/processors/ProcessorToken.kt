@@ -23,7 +23,7 @@ class ProcessorToken(
     syntax : AbstractSyntaxTree,
     context : InterpreterContext
 ) : AbstractProcessor(syntax, context) {
-    lateinit var value : Value
+    override lateinit var value : Value
 
     private fun processNr(name: String)
     {

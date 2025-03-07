@@ -11,15 +11,15 @@ import wiles.shared.constants.Utils.convertStatementToSyntaxTree
 import wiles.shared.data.WilesExceptionsCollection
 import java.util.*
 
-class Processor(scanner: Scanner?, val syntax: AbstractSyntaxTree, private val debug: Boolean,
-                private val processingStandardLibrary : Boolean = false) {
+class Interpreter(scanner: Scanner?, val syntax: AbstractSyntaxTree, private val debug: Boolean,
+                  private val processingStandardLibrary : Boolean = false) {
     private val isRunning: Boolean = scanner != null
     private val values: ValuesMap = ValuesMap()
     private val exceptions: WilesExceptionsCollection = WilesExceptionsCollection()
 
     private fun compile(syntax: AbstractSyntaxTree, debug: Boolean) : Boolean
     {
-        val compiler = Processor(null, syntax, debug)
+        val compiler = Interpreter(null, syntax, debug)
         compiler.process()
         values.putAll(compiler.values.filter{ it.value.isKnown() && !it.value.isVariable()})
         if (compiler.getExceptions().size > 0) {
@@ -71,9 +71,9 @@ class Processor(scanner: Scanner?, val syntax: AbstractSyntaxTree, private val d
         private val standardLibrary = kotlin.run {
             val parser = Parser(STANDARD_LIBRARY_TEXT, false)
             val syntax = convertStatementToSyntaxTree(parser.getResults())
-            val processor = Processor(null, syntax, debug = false, processingStandardLibrary = true)
-            processor.process()
-            return@run processor.getValues()
+            val interpreter = Interpreter(null, syntax, debug = false, processingStandardLibrary = true)
+            interpreter.process()
+            return@run interpreter.getValues()
         }
     }
 }

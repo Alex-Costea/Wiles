@@ -8,6 +8,7 @@ import wiles.processor.errors.IdentifierAlreadyDeclaredException
 import wiles.processor.errors.InferenceFailureException
 import wiles.processor.errors.TypeConflictError
 import wiles.processor.errors.ValueNotConstException
+import wiles.processor.processors.Processor.Companion.NOTHING_VALUE
 import wiles.processor.types.AbstractType
 import wiles.processor.types.AbstractType.Companion.TYPE_TYPE
 import wiles.processor.utils.TypeUtils.isSuperType
@@ -23,6 +24,7 @@ class ProcessorDeclaration(
     syntax : AbstractSyntaxTree,
     context : InterpreterContext,
 ) : AbstractProcessor(syntax, context) {
+    override var value: Value = NOTHING_VALUE
     override fun process() {
         val components = syntax.getComponents().toMutableList()
         val typeDef = if(components[0].syntaxType == SyntaxType.TYPEDEF) components.removeAt(0) else null
@@ -61,12 +63,12 @@ class ProcessorDeclaration(
                 declaredType = getDeclaredType(typeDef, context)
             }
 
-            val processorExpression = ProcessorExpression(expression, newContext)
+            val processor = Processor(expression, newContext)
             val newValue = if (isLevelScoped) {
-                Value(WilesLazyObject(processorExpression), declaredType!!, VariableStatus.Const)
+                Value(WilesLazyObject(processor), declaredType!!, VariableStatus.Const)
             } else {
-                processorExpression.process()
-                val computedValue = processorExpression.value
+                processor.process()
+                val computedValue = processor.value
                 val isVariable = variableStatus == VariableStatus.Var
                 val newType = computedValue.getType()
                 if (declaredType != null) {

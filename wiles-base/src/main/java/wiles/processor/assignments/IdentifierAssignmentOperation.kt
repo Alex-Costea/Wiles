@@ -6,7 +6,7 @@ import wiles.processor.enums.VariableStatus
 import wiles.processor.errors.CantBeModifiedException
 import wiles.processor.errors.IdentifierUnknownException
 import wiles.processor.errors.TypeConflictError
-import wiles.processor.processors.ProcessorExpression
+import wiles.processor.processors.Processor
 import wiles.processor.types.AbstractType
 import wiles.processor.utils.TypeUtils
 import wiles.processor.values.WilesNothing
@@ -18,9 +18,9 @@ class IdentifierAssignmentOperation(private val leftComponent: AbstractSyntaxTre
                                     private val context: InterpreterContext){
 
         private fun getValue(tree : AbstractSyntaxTree): Value {
-            val innerProcessorExpression = ProcessorExpression(tree, context)
-            innerProcessorExpression.process()
-            return innerProcessorExpression.value
+            val innerProcessor = Processor(tree, context)
+            innerProcessor.process()
+            return innerProcessor.value
         }
 
         fun getNewValue(): Value {
