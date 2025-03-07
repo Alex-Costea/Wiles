@@ -6,10 +6,7 @@ import wiles.processor.data.Value
 import wiles.processor.enums.VariableStatus
 import wiles.processor.errors.CantBeModifiedException
 import wiles.processor.errors.StackOverflowException
-import wiles.processor.operations.ApplyOperation
-import wiles.processor.operations.InternalOperation
-import wiles.processor.operations.PlusOperation
-import wiles.processor.operations.UnionOperation
+import wiles.processor.operations.*
 import wiles.processor.types.FunctionCallType
 import wiles.processor.types.InvalidType
 import wiles.processor.values.WilesFunctionCall
@@ -96,14 +93,14 @@ open class ProcessorExpression(
                     val operand = when(operationType)
                     {
                         PLUS_ID -> PlusOperation(left!!, right!!, context)
-                        MINUS_ID -> TODO("Implement MinusOperation")
-                        UNARY_PLUS_ID -> TODO("Implement UnaryPlusOperation")
-                        UNARY_MINUS_ID -> TODO("Implement UnaryMinusOperation")
-                        MUTIFY_ID -> TODO("Implement MutifyOperation")
+                        MINUS_ID -> MinusOperation(left!!, right!!, context)
+                        UNARY_PLUS_ID -> PlusOperation(null, left!!, context)
+                        UNARY_MINUS_ID -> MinusOperation(null, left!!, context)
                         TIMES_ID -> TODO("Implement TimesOperation")
                         DIVIDE_ID -> TODO("Implement DivideOperation")
                         POWER_ID -> TODO("Implement PowerOperation")
                         MAYBE_ID -> TODO("Implement MaybeOperation")
+                        MUTIFY_ID -> TODO("Implement MutifyOperation")
                         ACCESS_ID -> TODO("Implement AccessOperation")
                         AT_KEY_ID -> TODO("Implement AtKeyOperation")
                         APPLY_ID -> ApplyOperation(left, right!!, context)

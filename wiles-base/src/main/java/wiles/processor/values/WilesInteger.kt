@@ -34,4 +34,20 @@ class WilesInteger(private val value : BigInteger) {
         return secondValue + this
     }
 
+    operator fun minus(rightObj: WilesInteger): WilesInteger {
+        return WilesInteger(this.value - rightObj.value)
+    }
+
+    operator fun minus(rightObj: WilesDecimal): WilesDecimal {
+        return -rightObj + this
+    }
+
+    operator fun unaryMinus(): WilesInteger {
+        return -WilesInteger(-value)
+    }
+
+    operator fun unaryPlus(): WilesInteger {
+        return this
+    }
+
 }

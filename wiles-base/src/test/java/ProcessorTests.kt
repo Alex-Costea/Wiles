@@ -252,6 +252,24 @@ class ProcessorTests {
             assertValue(values, "!b"){typeEquals(it, NUMBER_TYPE)}
             assertValue(values, "!c"){typeEquals(it, DECIMAL_TYPE)}
         }
+
+        getCompilationResults("""
+            let a := 5 - 1.0
+            let b := - 1.0
+            let c := + 1.0
+        """.trimIndent()).let { (values, exceptions) ->
+            assertEquals(exceptions.size, 0)
+            val val1 = WilesDecimal("4.0")
+            val val2 = WilesDecimal("-1.0")
+            val val3 = WilesDecimal("1.0")
+            assertValue(values, "!a"){objectEquals(it, val1)}
+            assertValue(values, "!a"){typeEquals(it, DECIMAL_TYPE.exactly(val1))}
+            assertValue(values, "!b"){objectEquals(it, val2)}
+            assertValue(values, "!b"){typeEquals(it, DECIMAL_TYPE.exactly(val2))}
+            assertValue(values, "!c"){objectEquals(it, val3)}
+            assertValue(values, "!c"){typeEquals(it, DECIMAL_TYPE.exactly(val3))}
+
+        }
     }
 
     @Test
@@ -585,8 +603,6 @@ class ProcessorTests {
             assertValue(values, "!b"){objectEquals(it, null)}
             assertValue(values, "!b"){typeEquals(it, type)}
         }
-
-        //TODO: more tests
     }
 
     @Test
