@@ -18,7 +18,7 @@ open class Processor(
             SyntaxType.DECLARATION -> ProcessorDeclaration(syntax, context)
             SyntaxType.FUNC -> TODO()
             SyntaxType.EXPRESSION -> ProcessorExpression(syntax, context)
-            SyntaxType.CODE_BLOCK -> TODO()
+            SyntaxType.CODE_BLOCK -> ProcessorCodeBlock(syntax, context)
             SyntaxType.TYPEDEF -> ProcessorTypeExpression(syntax, context)
             SyntaxType.IF -> TODO()
             SyntaxType.DICT -> TODO()
