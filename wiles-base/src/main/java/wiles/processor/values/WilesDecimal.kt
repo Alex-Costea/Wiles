@@ -49,4 +49,19 @@ class WilesDecimal(private val value : BigDecimal)  {
         return this
     }
 
+    operator fun times(wilesInteger: WilesInteger): WilesDecimal {
+        return this * WilesDecimal(wilesInteger.toString())
+    }
+
+    operator fun times(wilesDecimal: WilesDecimal): WilesDecimal {
+        return WilesDecimal(this.value * wilesDecimal.value)
+    }
+
+    operator fun div(rightObj: WilesDecimal): WilesDecimal {
+        return WilesDecimal(this.value.divide(rightObj.value, MathContext.DECIMAL128))
+    }
+
+    operator fun div(wilesInteger: WilesInteger): WilesDecimal {
+        return this / WilesDecimal(wilesInteger.toString())
+    }
 }

@@ -31,7 +31,7 @@ class PlusOperation(left: Value?, right: Value, context: InterpreterContext) : A
     }
 
     override fun calculateType(): AbstractType {
-        val newType = when {
+        return when {
             left == null && isSuperType(INT_TYPE, rightType) -> INT_TYPE
             left == null && isSuperType(DECIMAL_TYPE, rightType) -> DECIMAL_TYPE
             left == null -> TODO("Can't add these types")
@@ -41,6 +41,5 @@ class PlusOperation(left: Value?, right: Value, context: InterpreterContext) : A
             isSuperType(ANYTHING_TYPE, leftType) && isSuperType(TEXT_TYPE, rightType) -> TEXT_TYPE
             else -> TODO("Can't add these types")
         }
-        return newType
     }
 }

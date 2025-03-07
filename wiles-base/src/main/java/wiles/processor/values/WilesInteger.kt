@@ -1,5 +1,6 @@
 package wiles.processor.values
 
+import java.math.BigDecimal
 import java.math.BigInteger
 
 class WilesInteger(private val value : BigInteger) {
@@ -48,6 +49,26 @@ class WilesInteger(private val value : BigInteger) {
 
     operator fun unaryPlus(): WilesInteger {
         return this
+    }
+
+    operator fun times(rightObj: WilesInteger): WilesInteger {
+        return WilesInteger(this.value * rightObj.value)
+    }
+
+    operator fun times(rightObj: WilesDecimal): WilesDecimal {
+        return rightObj * this
+    }
+
+    operator fun div(rightObj: WilesInteger): WilesInteger {
+        return WilesInteger(this.value / rightObj.value)
+    }
+
+    operator fun div(rightObj: WilesDecimal): WilesDecimal {
+        return DECIMAL_ONE / rightObj * this
+    }
+
+    companion object{
+        val DECIMAL_ONE = WilesDecimal(BigDecimal.ONE)
     }
 
 }

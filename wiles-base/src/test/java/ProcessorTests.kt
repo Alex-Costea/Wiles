@@ -268,7 +268,20 @@ class ProcessorTests {
             assertValue(values, "!b"){typeEquals(it, DECIMAL_TYPE.exactly(val2))}
             assertValue(values, "!c"){objectEquals(it, val3)}
             assertValue(values, "!c"){typeEquals(it, DECIMAL_TYPE.exactly(val3))}
+        }
 
+        getCompilationResults("let a := 5 * 1.5 / 9").let { (values, exceptions) ->
+            assertEquals(exceptions.size, 0)
+            val val1 = WilesDecimal("0.8333333333333333333333333333333333")
+            assertValue(values, "!a"){objectEquals(it, val1)}
+            assertValue(values, "!a"){typeEquals(it, DECIMAL_TYPE.exactly(val1))}
+        }
+
+        getCompilationResults("let a := 4 / 3").let { (values, exceptions) ->
+            assertEquals(exceptions.size, 0)
+            val val1 = WilesInteger(1)
+            assertValue(values, "!a"){objectEquals(it, val1)}
+            assertValue(values, "!a"){typeEquals(it, INT_TYPE.exactly(val1))}
         }
     }
 
