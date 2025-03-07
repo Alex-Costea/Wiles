@@ -53,6 +53,10 @@ object TypeUtils {
         }
     }
 
+    private fun getBooleanType(boolean: Boolean) =
+        if(boolean) AbstractType.TRUE_TYPE else AbstractType.FALSE_TYPE
+
+
     fun getNewTypeObject(value : Value) : AbstractType{
         val defaultType = value.getType()
         return when(val obj = value.getObj()) {
@@ -60,7 +64,7 @@ object TypeUtils {
             is WilesDecimal -> DECIMAL_TYPE.exactly(obj)
             is WilesNothing -> NOTHING_TYPE
             is String -> TEXT_TYPE.exactly(obj)
-            is Boolean -> if(obj) AbstractType.TRUE_TYPE else AbstractType.FALSE_TYPE
+            is Boolean -> getBooleanType(obj)
             is AbstractType -> obj
             is WilesFunction -> defaultType
             null -> defaultType
