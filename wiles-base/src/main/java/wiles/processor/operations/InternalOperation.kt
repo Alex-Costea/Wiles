@@ -6,11 +6,12 @@ import wiles.processor.enums.VariableStatus
 import wiles.processor.functions.RandFunction
 import wiles.processor.types.AbstractType
 import wiles.processor.types.AbstractType.Companion.ANYTHING_TYPE
-import wiles.processor.types.AbstractType.Companion.BOOLEAN_TYPE
 import wiles.processor.types.AbstractType.Companion.DECIMAL_TYPE
+import wiles.processor.types.AbstractType.Companion.FALSE_TYPE
 import wiles.processor.types.AbstractType.Companion.INT_TYPE
 import wiles.processor.types.AbstractType.Companion.NOTHING_TYPE
 import wiles.processor.types.AbstractType.Companion.TEXT_TYPE
+import wiles.processor.types.AbstractType.Companion.TRUE_TYPE
 import wiles.processor.types.AbstractType.Companion.TYPE_TYPE
 import wiles.processor.types.FunctionType
 import wiles.processor.values.WilesNothing
@@ -53,8 +54,8 @@ class InternalOperation(right: Value, context: InterpreterContext) : AbstractOpe
             RAND_ID to RandFunction(),
         )
         val GET_TYPES = mapOf(
-            TRUE_ID to BOOLEAN_TYPE,
-            FALSE_ID to BOOLEAN_TYPE,
+            TRUE_ID to TRUE_TYPE,
+            FALSE_ID to FALSE_TYPE,
             NOTHING_ID to NOTHING_TYPE,
             INT_ID to TYPE_TYPE,
             TEXT_ID to TYPE_TYPE,

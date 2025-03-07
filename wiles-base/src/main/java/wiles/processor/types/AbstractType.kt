@@ -50,8 +50,10 @@ abstract class AbstractType(val exactValue : Any?) {
         val TEXT_TYPE = TextType()
         val TYPE_TYPE = TypeType()
         val NOTHING_TYPE = NothingType()
-        val BOOLEAN_TYPE = BooleanType()
         val ANYTHING_TYPE = AnythingType()
+        val TRUE_TYPE = TrueType()
+        val FALSE_TYPE = FalseType()
+        val BOOLEAN_TYPE = EitherType(TRUE_TYPE, FALSE_TYPE)
     }
 
 }

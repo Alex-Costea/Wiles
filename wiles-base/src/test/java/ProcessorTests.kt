@@ -8,10 +8,11 @@ import wiles.processor.data.ValuesMap
 import wiles.processor.errors.*
 import wiles.processor.types.*
 import wiles.processor.types.AbstractType.Companion.ANYTHING_TYPE
-import wiles.processor.types.AbstractType.Companion.BOOLEAN_TYPE
 import wiles.processor.types.AbstractType.Companion.DECIMAL_TYPE
+import wiles.processor.types.AbstractType.Companion.FALSE_TYPE
 import wiles.processor.types.AbstractType.Companion.INT_TYPE
 import wiles.processor.types.AbstractType.Companion.TEXT_TYPE
+import wiles.processor.types.AbstractType.Companion.TRUE_TYPE
 import wiles.processor.values.WilesDecimal
 import wiles.processor.values.WilesInteger
 import wiles.processor.values.WilesNothing
@@ -371,7 +372,7 @@ class ProcessorTests {
 
         getCompilationResults("def a : Int := true"). let{ (_, exceptions) ->
             assertEquals(exceptions.size, 1)
-            assertEquals(exceptions[0], TypeConflictError(INT_TYPE, BOOLEAN_TYPE.exactly(true),
+            assertEquals(exceptions[0], TypeConflictError(INT_TYPE, TRUE_TYPE,
                 TokenLocation(1, 9, 1, 12)
             ))
         }
@@ -582,10 +583,10 @@ class ProcessorTests {
         getCompilationResults("").let{ (values, exceptions) ->
             assertEquals(exceptions.size, 0)
             assertValue(values, "!true"){objectEquals(it, true)}
-            assertValue(values, "!true"){typeEquals(it, BooleanType())}
+            assertValue(values, "!true"){typeEquals(it, TRUE_TYPE)}
 
             assertValue(values, "!false"){objectEquals(it, false)}
-            assertValue(values, "!false"){typeEquals(it, BooleanType())}
+            assertValue(values, "!false"){typeEquals(it, FALSE_TYPE)}
 
             assertValue(values, "!nothing"){objectEquals(it, WilesNothing)}
             assertValue(values, "!nothing"){typeEquals(it, NothingType())}

@@ -1,8 +1,8 @@
 package wiles.processor.utils
 
 import wiles.processor.data.Value
+import wiles.processor.functions.WilesFunction
 import wiles.processor.types.*
-import wiles.processor.types.AbstractType.Companion.BOOLEAN_TYPE
 import wiles.processor.types.AbstractType.Companion.DECIMAL_TYPE
 import wiles.processor.types.AbstractType.Companion.INT_TYPE
 import wiles.processor.types.AbstractType.Companion.NOTHING_TYPE
@@ -54,13 +54,16 @@ object TypeUtils {
     }
 
     fun getNewTypeObject(value : Value) : AbstractType{
+        val defaultType = value.getType()
         return when(val obj = value.getObj()) {
             is WilesInteger -> INT_TYPE.exactly(obj)
             is WilesDecimal -> DECIMAL_TYPE.exactly(obj)
             is WilesNothing -> NOTHING_TYPE
             is String -> TEXT_TYPE.exactly(obj)
-            is Boolean -> BOOLEAN_TYPE.exactly(obj)
+            is Boolean -> if(obj) AbstractType.TRUE_TYPE else AbstractType.FALSE_TYPE
             is AbstractType -> obj
+            is WilesFunction -> defaultType
+            null -> defaultType
             else -> throw InternalErrorException()
         }
     }
