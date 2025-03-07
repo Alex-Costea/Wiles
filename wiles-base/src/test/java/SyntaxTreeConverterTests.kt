@@ -6,9 +6,6 @@ import wiles.parser.converters.TokensToSyntaxTreeConverter
 import wiles.parser.exceptions.TokenExpectedException
 import wiles.parser.exceptions.UnexpectedEndException
 import wiles.parser.exceptions.UnexpectedTokenException
-import wiles.shared.data.Token
-import wiles.shared.errors.WilesException
-import wiles.shared.data.WilesExceptionsCollection
 import wiles.shared.constants.ErrorMessages.CANT_BE_VAR_ERROR
 import wiles.shared.constants.ErrorMessages.END_OF_STATEMENT_EXPECTED_ERROR
 import wiles.shared.constants.ErrorMessages.EXPECTED_INITIALIZATION_ERROR
@@ -60,6 +57,9 @@ import wiles.shared.constants.Tokens.VARIABLE_ID
 import wiles.shared.constants.Tokens.WHILE_ID
 import wiles.shared.constants.Tokens.YIELDS_ID
 import wiles.shared.constants.Utils.NULL_LOCATION
+import wiles.shared.data.Token
+import wiles.shared.data.WilesExceptionsCollection
+import wiles.shared.errors.WilesException
 
 @Testable
 class SyntaxTreeConverterTests {
@@ -682,7 +682,7 @@ CODE_BLOCK
     }
 
     @Test
-    fun LevelScopeDeclarationTest()
+    fun levelScopeDeclarationTest()
     {
         //def a := 234
         assertResults(null,"""
