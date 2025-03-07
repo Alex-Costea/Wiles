@@ -6,6 +6,7 @@ import wiles.processor.data.Value
 import wiles.processor.enums.VariableStatus
 import wiles.processor.errors.CantBeModifiedException
 import wiles.processor.errors.StackOverflowException
+import wiles.processor.errors.WilesArithmeticException
 import wiles.processor.operations.*
 import wiles.processor.types.FunctionCallType
 import wiles.processor.types.InvalidType
@@ -70,20 +71,21 @@ open class ProcessorExpression(
                 value = Value(WilesFunctionCall(), FunctionCallType(), VariableStatus.Const)
             }
             else -> {
+                val operation = syntax.getComponents()[0]
                 try{
-                    val operationType = syntax.getComponents()[0].details[0]
+                    val operationType = operation.details[0]
                     val leftComponent = syntax.getComponents().getOrNull(1)
                     val rightComponent = syntax.getComponents().getOrNull(2)
                     if(operationType == ASSIGN_ID)
                     {
-                        val operation = if(leftComponent!!.syntaxType == SyntaxType.TOKEN) {
+                        val newOperation = if(leftComponent!!.syntaxType == SyntaxType.TOKEN) {
                             val name = leftComponent.details[0]
                             if(IS_IDENTIFIER.test(name))
                                 IdentifierAssignmentOperation(leftComponent, rightComponent!!, context)
                             else throw CantBeModifiedException(leftComponent.getFirstLocation())
                         }
                         else TODO("Handling mutable collections")
-                        value = operation.getNewValue()
+                        value = newOperation.getNewValue()
                         return
                     }
                     val left = getValue(leftComponent)
@@ -121,6 +123,11 @@ open class ProcessorExpression(
                         else -> throw InternalErrorException("Unknown operation")
                     }
                     value = operand.getNewValue()
+                }
+                catch(ex : ArithmeticException)
+                {
+                    value = Value(null, InvalidType(), VariableStatus.Const)
+                    throw WilesArithmeticException(operation.getFirstLocation())
                 }
                 catch (ex : WilesException)
                 {
