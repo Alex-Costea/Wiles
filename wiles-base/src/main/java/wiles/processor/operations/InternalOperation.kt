@@ -8,7 +8,7 @@ import wiles.processor.types.AbstractType
 import wiles.processor.types.AbstractType.Companion.ANYTHING_TYPE
 import wiles.processor.types.AbstractType.Companion.BOOLEAN_TYPE
 import wiles.processor.types.AbstractType.Companion.DECIMAL_TYPE
-import wiles.processor.types.AbstractType.Companion.INTEGER_TYPE
+import wiles.processor.types.AbstractType.Companion.INT_TYPE
 import wiles.processor.types.AbstractType.Companion.NOTHING_TYPE
 import wiles.processor.types.AbstractType.Companion.TEXT_TYPE
 import wiles.processor.types.AbstractType.Companion.TYPE_TYPE
@@ -46,7 +46,7 @@ class InternalOperation(right: Value, context: InterpreterContext) : AbstractOpe
             TRUE_ID to true,
             FALSE_ID to false,
             NOTHING_ID to WilesNothing,
-            INT_ID to INTEGER_TYPE,
+            INT_ID to INT_TYPE,
             TEXT_ID to TEXT_TYPE,
             DECIMAL_ID to DECIMAL_TYPE,
             ANYTHING_ID to ANYTHING_TYPE,

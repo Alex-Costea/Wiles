@@ -45,7 +45,7 @@ abstract class AbstractType(val exactValue : Any?) {
     }
 
     companion object{
-        val INTEGER_TYPE = IntType()
+        val INT_TYPE = IntType()
         val DECIMAL_TYPE = DecimalType()
         val TEXT_TYPE = TextType()
         val TYPE_TYPE = TypeType()

@@ -70,7 +70,7 @@ class ProcessorToken(
 
     private fun getPracticalType(newObj: Any?, defaultType : AbstractType): AbstractType {
         return when(newObj){
-            is WilesInteger -> AbstractType.INTEGER_TYPE.exactly(newObj)
+            is WilesInteger -> AbstractType.INT_TYPE.exactly(newObj)
             is WilesDecimal -> AbstractType.DECIMAL_TYPE.exactly(newObj)
             is String -> AbstractType.TEXT_TYPE.exactly(newObj)
             is Boolean -> AbstractType.BOOLEAN_TYPE.exactly(newObj)

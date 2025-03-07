@@ -5,7 +5,7 @@ import wiles.processor.data.Value
 import wiles.processor.enums.VariableStatus
 import wiles.processor.types.AbstractType
 import wiles.processor.types.AbstractType.Companion.DECIMAL_TYPE
-import wiles.processor.types.AbstractType.Companion.INTEGER_TYPE
+import wiles.processor.types.AbstractType.Companion.INT_TYPE
 import wiles.processor.types.AbstractType.Companion.TEXT_TYPE
 import wiles.processor.utils.TypeUtils.isSuperType
 import wiles.processor.values.WilesDecimal
@@ -28,12 +28,12 @@ class PlusOperation(left: Value, right: Value, context: InterpreterContext) : Ab
 
     override fun calculateType(): AbstractType {
         //TODO: handle sum types
-        val leftIsInt = isSuperType(INTEGER_TYPE, leftType!!)
-        val rightIsInt = isSuperType(INTEGER_TYPE, rightType)
+        val leftIsInt = isSuperType(INT_TYPE, leftType!!)
+        val rightIsInt = isSuperType(INT_TYPE, rightType)
         val leftIsDecimal = isSuperType(DECIMAL_TYPE, leftType)
         val rightIsDecimal = isSuperType(DECIMAL_TYPE, rightType)
         val newType = when {
-            leftIsInt && rightIsInt -> INTEGER_TYPE
+            leftIsInt && rightIsInt -> INT_TYPE
             leftIsInt && rightIsDecimal -> DECIMAL_TYPE
             leftIsDecimal && rightIsInt -> DECIMAL_TYPE
             leftIsDecimal && rightIsDecimal -> DECIMAL_TYPE
