@@ -636,7 +636,7 @@ Sum types allow a variable to hold multiple possible types, using the `|` operat
 let a : Int | Decimal := 123
 ```
 
-Here, `a` can be either an `Int` or a `Decimal`, but nothing else.
+Here, `a` can be either an `Int` or a `Decimal`, but nothing else. This appears in the standard library as `Number`.
 
 A common case is `NewType | nothing`, which has a shorthand syntax:
 
@@ -1099,7 +1099,7 @@ For dictionaries, `.keys` will return a list of the keys
 
 ### Type definition functions
 
-The following are standalone: `Int`, `Text`, `Decimal`, `Anything`, `Truth`
+The following are standalone: `Int`, `Text`, `Decimal`, `Anything`, `Truth`, `Number`
 
 The following take 1 type as parameter: `List(type)`, `Mutable(type)`, `Literal(type)`, `Type(subtype)`
 
