@@ -19,8 +19,7 @@ class IdentifierAssignmentOperation(private val leftComponent: AbstractSyntaxTre
 
         private fun getValue(tree : AbstractSyntaxTree): Value {
             val innerProcessor = Processor(tree, context)
-            innerProcessor.process()
-            return innerProcessor.value
+            return innerProcessor.process()
         }
 
         fun getNewValue(): Value {

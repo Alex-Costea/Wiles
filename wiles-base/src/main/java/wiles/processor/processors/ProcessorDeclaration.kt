@@ -24,8 +24,7 @@ class ProcessorDeclaration(
     syntax : AbstractSyntaxTree,
     context : InterpreterContext,
 ) : AbstractProcessor(syntax, context) {
-    override var value: Value = NOTHING_VALUE
-    override fun process() {
+    override fun process(): Value {
         val components = syntax.getComponents().toMutableList()
         val typeDef = if(components[0].syntaxType == SyntaxType.TYPEDEF) components.removeAt(0) else null
         val nameToken = components[0]
@@ -45,7 +44,7 @@ class ProcessorDeclaration(
         if(expression == null) {
             val declaredType = getDeclaredType(typeDef!!, context)
             context.values[name] = Value(WilesUndefined, declaredType, variableStatus)
-            return
+            return NOTHING_VALUE
         }
 
         if (!valueAlreadyKnown) {
@@ -67,8 +66,7 @@ class ProcessorDeclaration(
             val newValue = if (isLevelScoped) {
                 Value(WilesLazyObject(processor), declaredType!!, VariableStatus.Const)
             } else {
-                processor.process()
-                val computedValue = processor.value
+                val computedValue = processor.process()
                 val isVariable = variableStatus == VariableStatus.Var
                 val newType = computedValue.getType()
                 if (declaredType != null) {
@@ -84,12 +82,13 @@ class ProcessorDeclaration(
             }
             context.values[name] = newValue
         }
+        return NOTHING_VALUE
     }
 
     private fun getDeclaredType(typeDef : AbstractSyntaxTree, context : InterpreterContext): AbstractType {
         val typeProcessor = ProcessorTypeExpression(typeDef, context)
         typeProcessor.process()
-        val typeDefValue = typeProcessor.value
+        val typeDefValue = typeProcessor.process()
         assert(typeDefValue.isKnown())
         assert(isSuperType(TYPE_TYPE,typeDefValue.getType()))
         return typeDefValue.getObj() as AbstractType

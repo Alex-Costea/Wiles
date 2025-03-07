@@ -3,13 +3,12 @@ package wiles.processor.processors
 import wiles.processor.assignments.IdentifierAssignmentOperation
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
-import wiles.processor.enums.VariableStatus
 import wiles.processor.errors.CantBeModifiedException
 import wiles.processor.errors.OperationTypeException
 import wiles.processor.errors.StackOverflowException
 import wiles.processor.errors.WilesArithmeticException
 import wiles.processor.operations.*
-import wiles.processor.types.InvalidType
+import wiles.processor.processors.Processor.Companion.NOTHING_VALUE
 import wiles.shared.abstracts.AbstractSyntaxTree
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.ACCESS_ID
@@ -45,17 +44,15 @@ import wiles.shared.errors.WilesException
 import wiles.shared.errors.WilesTypeException
 
 open class ProcessorExpression(syntax: AbstractSyntaxTree, context: InterpreterContext) : AbstractProcessor(syntax, context) {
-    override lateinit var value : Value
 
     private fun getValue(tree : AbstractSyntaxTree?): Value? {
         if(tree == null) return null
         val innerProcessor = Processor(tree, context)
-        innerProcessor.process()
-        return innerProcessor.value
+        return innerProcessor.process()
     }
 
 
-    override fun process() {
+    override fun process(): Value {
         assert(syntax.syntaxType == SyntaxType.EXPRESSION || syntax.syntaxType == SyntaxType.TYPEDEF)
         val operation = syntax.getComponents()[0]
         try{
@@ -71,13 +68,12 @@ open class ProcessorExpression(syntax: AbstractSyntaxTree, context: InterpreterC
                     else throw CantBeModifiedException(leftComponent.getFirstLocation())
                 }
                 else TODO("Handling mutable collections")
-                value = newOperation.getNewValue()
-                return
+                return newOperation.getNewValue()
             }
             val left = getValue(leftComponent)
             val right = getValue(rightComponent)
             if(context.exceptions.isNotEmpty())
-                return
+                return NOTHING_VALUE
             val operand = when(operationType)
             {
                 PLUS_ID -> PlusOperation(left!!, right!!, context)
@@ -108,28 +104,23 @@ open class ProcessorExpression(syntax: AbstractSyntaxTree, context: InterpreterC
                 INTERNAL_ID -> InternalOperation(left!!, context)
                 else -> throw InternalErrorException("Unknown operation")
             }
-            value = operand.getNewValue()
+            return operand.getNewValue()
         }
         catch(ex : ArithmeticException)
         {
-            value = Value(null, InvalidType(), VariableStatus.Const)
             throw WilesArithmeticException(operation.getFirstLocation())
         }
         catch(ex : WilesTypeException)
         {
-            value = Value(null, InvalidType(), VariableStatus.Const)
             throw OperationTypeException(ex.type1, ex.type2, operation.getFirstLocation())
         }
         catch (ex : WilesException)
         {
-            value = Value(null, InvalidType(), VariableStatus.Const)
             throw ex
         }
         catch(ex : StackOverflowError)
         {
-            value = Value(null, InvalidType(), VariableStatus.Const)
             throw StackOverflowException(syntax.getFirstLocation())
         }
-
     }
 }

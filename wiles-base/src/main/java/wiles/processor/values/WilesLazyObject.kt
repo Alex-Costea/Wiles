@@ -7,8 +7,7 @@ class WilesLazyObject(private val expression: Processor) {
     fun getObject(): Any? {
         if(obj != null)
             return obj
-        expression.process()
-        obj = expression.value.getObj()
+        obj = expression.process().getObj()
         return obj
     }
 

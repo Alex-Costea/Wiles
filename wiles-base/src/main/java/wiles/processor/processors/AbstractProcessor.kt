@@ -8,6 +8,5 @@ abstract class AbstractProcessor(
     val syntax : AbstractSyntaxTree,
     val context : InterpreterContext
 ) {
-    abstract var value : Value
-    abstract fun process()
+    abstract fun process() : Value
 }

@@ -13,9 +13,7 @@ open class Processor(
     context : InterpreterContext
 ): AbstractProcessor(syntax, context){
 
-    override lateinit var value : Value
-
-    override fun process() {
+    override fun process() : Value {
         val processor: AbstractProcessor = when (syntax.syntaxType) {
             SyntaxType.DECLARATION -> ProcessorDeclaration(syntax, context)
             SyntaxType.FUNC -> TODO()
@@ -32,8 +30,7 @@ open class Processor(
             SyntaxType.FOR -> TODO()
             SyntaxType.TOKEN -> ProcessorToken(syntax, context)
         }
-        processor.process()
-        value = processor.value
+        return processor.process()
     }
 
     companion object{

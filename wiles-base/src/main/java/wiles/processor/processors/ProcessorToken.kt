@@ -5,7 +5,10 @@ import wiles.processor.data.Value
 import wiles.processor.enums.VariableStatus
 import wiles.processor.errors.IdentifierUnknownException
 import wiles.processor.errors.ValueUndefinedException
-import wiles.processor.types.*
+import wiles.processor.types.AbstractType
+import wiles.processor.types.DecimalType
+import wiles.processor.types.IntType
+import wiles.processor.types.TextType
 import wiles.processor.utils.TypeUtils.getNewTypeObject
 import wiles.processor.values.WilesDecimal
 import wiles.processor.values.WilesInteger
@@ -23,45 +26,40 @@ class ProcessorToken(
     syntax : AbstractSyntaxTree,
     context : InterpreterContext
 ) : AbstractProcessor(syntax, context) {
-    override lateinit var value : Value
 
-    private fun processNr(name: String)
-    {
+    private fun processNr(name: String): Value {
         val newName = name.substring(1).replace("_","")
         if(newName.contains("."))
         {
             val decimal = WilesDecimal(newName)
-            value = Value(decimal, DecimalType().exactly(decimal), VariableStatus.Const)
+            return Value(decimal, DecimalType().exactly(decimal), VariableStatus.Const)
         }
         else{
             val bigInt = WilesInteger(newName)
-            value = Value(bigInt, IntType().exactly(bigInt), VariableStatus.Const)
+            return Value(bigInt, IntType().exactly(bigInt), VariableStatus.Const)
         }
     }
 
-    private fun processText(name: String)
-    {
+    private fun processText(name: String): Value {
         val newName = name.substring(1)
-        value = Value(newName, TextType().exactly(newName), VariableStatus.Const)
+        return Value(newName, TextType().exactly(newName), VariableStatus.Const)
     }
 
-    private fun processIdentifier(syntax: AbstractSyntaxTree) {
+    private fun processIdentifier(syntax: AbstractSyntaxTree): Value {
         try {
             val name = syntax.details[0]
             if(!context.values.containsKey(name))
             {
-                value = Value(null, InvalidType(), VariableStatus.Const)
                 throw IdentifierUnknownException(syntax.getFirstLocation())
             }
             val newValue = context.values[name]!!
             if(context.values[name]?.getObj() is WilesUndefined)
                 throw ValueUndefinedException(syntax.getFirstLocation())
-            value = Value(newValue.getObj(), getType(newValue), VariableStatus.Const)
+            return Value(newValue.getObj(), getType(newValue), VariableStatus.Const)
 
         }
         catch (ex : WilesException)
         {
-            value = Value(null, InvalidType(), VariableStatus.Const)
             throw ex
         }
 
@@ -73,11 +71,11 @@ class ProcessorToken(
         return getNewTypeObject(newValue)
     }
 
-    override fun process() {
+    override fun process(): Value {
         assert(syntax.syntaxType == SyntaxType.TOKEN)
         val name = syntax.details[0]
         assert(IS_LITERAL.test(name))
-        if(IS_NUMBER_LITERAL.test(name))
+        return if(IS_NUMBER_LITERAL.test(name))
             processNr(name)
         else if(IS_TEXT_LITERAL.test(name))
             processText(name)

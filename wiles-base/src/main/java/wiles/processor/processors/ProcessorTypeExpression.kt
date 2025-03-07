@@ -11,13 +11,15 @@ import wiles.shared.abstracts.AbstractSyntaxTree
 class ProcessorTypeExpression(syntax: AbstractSyntaxTree, context: InterpreterContext)
     : ProcessorExpression(syntax, context)
 {
-    override fun process() {
-        if(syntax.getComponents().size > 1)
-            super.process()
+    override fun process() : Value{
+        var value : Value
+        if(syntax.getComponents().size > 1) {
+            return super.process()
+        }
         else{
             val processor = Processor(syntax.getComponents()[0], context)
             processor.process()
-            value = processor.value
+            value = processor.process()
         }
         if(value.isKnown()) {
             val newValue = getNewTypeObject(value)
@@ -26,5 +28,6 @@ class ProcessorTypeExpression(syntax: AbstractSyntaxTree, context: InterpreterCo
         else {
             throw ValueNotConstException(syntax.getFirstLocation())
         }
+        return value
     }
 }
