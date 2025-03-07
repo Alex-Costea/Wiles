@@ -5,6 +5,7 @@ import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
 import wiles.processor.enums.VariableStatus
 import wiles.processor.errors.CantBeModifiedException
+import wiles.processor.errors.OperationTypeException
 import wiles.processor.errors.StackOverflowException
 import wiles.processor.errors.WilesArithmeticException
 import wiles.processor.operations.*
@@ -43,6 +44,7 @@ import wiles.shared.constants.Tokens.UNION_ID
 import wiles.shared.enums.SyntaxType
 import wiles.shared.errors.InternalErrorException
 import wiles.shared.errors.WilesException
+import wiles.shared.errors.WilesTypeException
 
 open class ProcessorExpression(
     syntax : AbstractSyntaxTree,
@@ -128,6 +130,11 @@ open class ProcessorExpression(
                 {
                     value = Value(null, InvalidType(), VariableStatus.Const)
                     throw WilesArithmeticException(operation.getFirstLocation())
+                }
+                catch(ex : WilesTypeException)
+                {
+                    value = Value(null, InvalidType(), VariableStatus.Const)
+                    throw OperationTypeException(ex.type1, ex.type2, operation.getFirstLocation())
                 }
                 catch (ex : WilesException)
                 {

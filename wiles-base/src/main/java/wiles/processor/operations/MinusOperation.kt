@@ -10,6 +10,7 @@ import wiles.processor.utils.TypeUtils.isSuperType
 import wiles.processor.values.WilesDecimal
 import wiles.processor.values.WilesInteger
 import wiles.shared.errors.InternalErrorException
+import wiles.shared.errors.WilesTypeException
 
 class MinusOperation(left: Value?, right: Value, context: InterpreterContext) : AbstractOperation(left, right, context) {
     override fun calculateObject() : Any?
@@ -32,7 +33,7 @@ class MinusOperation(left: Value?, right: Value, context: InterpreterContext) : 
             left == null && isSuperType(DECIMAL_TYPE, rightType) -> DECIMAL_TYPE
             isSuperType(INT_TYPE, leftType!!) && isSuperType(INT_TYPE, rightType) -> INT_TYPE
             isSuperType(NUMBER_TYPE, leftType) && isSuperType(NUMBER_TYPE, rightType) -> DECIMAL_TYPE
-            else -> TODO("Can't add these types")
+            else -> throw WilesTypeException(leftType, rightType)
         }
     }
 }

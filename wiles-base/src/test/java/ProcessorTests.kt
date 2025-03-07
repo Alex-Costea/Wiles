@@ -292,6 +292,12 @@ class ProcessorTests {
         getCompilationResults("let a := 1 / 0").let { (_, exceptions) ->
             assertEquals(exceptions.size, 1)
             assertEquals(exceptions[0], WilesArithmeticException(
+                TokenLocation(1, 12, 1, 13)
+            ))
+        }
+        getCompilationResults("let a := 1 + true").let { (_, exceptions) ->
+            assertEquals(exceptions.size, 1)
+            assertEquals(exceptions[0], OperationTypeException(INT_TYPE.exactly(WilesInteger(1)), TRUE_TYPE,
                 TokenLocation(1, 12, 1, 13)))
         }
     }
