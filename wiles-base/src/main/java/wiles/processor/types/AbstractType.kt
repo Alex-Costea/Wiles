@@ -47,13 +47,13 @@ abstract class AbstractType(val exactValue : Any?) {
     companion object{
         val INT_TYPE = IntType()
         val DECIMAL_TYPE = DecimalType()
+        val NUMBER_TYPE = EitherType(INT_TYPE, DECIMAL_TYPE)
         val TEXT_TYPE = TextType()
         val TYPE_TYPE = TypeType()
         val NOTHING_TYPE = NothingType()
         val ANYTHING_TYPE = AnythingType()
         val TRUE_TYPE = TrueType()
         val FALSE_TYPE = FalseType()
-        val BOOLEAN_TYPE = EitherType(TRUE_TYPE, FALSE_TYPE)
     }
 
 }

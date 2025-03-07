@@ -11,6 +11,7 @@ import wiles.processor.types.AbstractType.Companion.ANYTHING_TYPE
 import wiles.processor.types.AbstractType.Companion.DECIMAL_TYPE
 import wiles.processor.types.AbstractType.Companion.FALSE_TYPE
 import wiles.processor.types.AbstractType.Companion.INT_TYPE
+import wiles.processor.types.AbstractType.Companion.NUMBER_TYPE
 import wiles.processor.types.AbstractType.Companion.TEXT_TYPE
 import wiles.processor.types.AbstractType.Companion.TRUE_TYPE
 import wiles.processor.values.WilesDecimal
@@ -239,6 +240,17 @@ class ProcessorTests {
             assertValue(values, "!b"){typeEquals(it, DECIMAL_TYPE.exactly(WilesDecimal("4.0")))}
             assertValue(values, "!c"){objectEquals(it, WilesDecimal("5.0"))}
             assertValue(values, "!c"){typeEquals(it, DECIMAL_TYPE.exactly(WilesDecimal("5.0")))}
+        }
+
+        getCompilationResults("""
+            let var a : Number := rand()
+            let var b : Number := rand()
+            let c := a + b
+        """.trimIndent()).let{ (values, exceptions) ->
+            assertEquals(exceptions.size, 0)
+            assertValue(values, "!a"){typeEquals(it, NUMBER_TYPE)}
+            assertValue(values, "!b"){typeEquals(it, NUMBER_TYPE)}
+            assertValue(values, "!c"){typeEquals(it, DECIMAL_TYPE)}
         }
     }
 
