@@ -71,7 +71,7 @@
         + [Write to output](#write-to-output)
         + [Panic](#panic)
         + [Modulo](#modulo)
-        + [Rand](#rand)
+        + [Random](#random)
         + [Input read functions](#input-read-functions)
         + [Members of every object](#members-of-every-object)
         + [Size function](#size-function)
@@ -1066,9 +1066,9 @@ It displays an error message and then ends execution.
 
 The `modulo` function is of type `fun(arg x : Int, arg y : Int) -> Int`. It returns the modulo result.
 
-### Rand
+### Random
 
-The `rand` function returns a decimal value between 0.0 (inclusive) and 1.0 (exclusive).
+The `random_decimal` function returns a decimal value between 0.0 (inclusive) and 1.0 (exclusive).
 
 ### Input read functions
 

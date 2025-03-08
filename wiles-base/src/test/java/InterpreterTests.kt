@@ -124,7 +124,7 @@ class InterpreterTests {
             }
         }
 
-        getCompilationResults("let const a := rand()").let { (_, exceptions) ->
+        getCompilationResults("let const a := random_decimal()").let { (_, exceptions) ->
             assertEquals(exceptions.size, 1)
             assertEquals(exceptions[0], ValueNotConstException(
                 TokenLocation(1, 11, 1, 12)
@@ -191,7 +191,7 @@ class InterpreterTests {
         }
 
         getCompilationResults("""
-            let a := rand()
+            let a := random_decimal()
             let b : a := 0.5
         """.trimIndent()).let { (_, exceptions) ->
             {
@@ -244,8 +244,8 @@ class InterpreterTests {
         }
 
         getCompilationResults("""
-            let var a : Number := rand()
-            let var b : Number := rand()
+            let var a : Number := random_decimal()
+            let var b : Number := random_decimal()
             let c := a + b
         """.trimIndent()).let{ (values, exceptions) ->
             assertEquals(exceptions.size, 0)
@@ -369,20 +369,20 @@ class InterpreterTests {
     @Test
     fun randTest()
     {
-        getRunningResults("let a := rand()").let { (values, exceptions) ->
+        getRunningResults("let a := random_decimal()").let { (values, exceptions) ->
             assertEquals(exceptions.size, 0)
             assertValue(values, "!a") {it.getObj() is WilesDecimal}
             assertValue(values, "!a") {(it.getObj() as WilesDecimal).toString().startsWith("0.")}
             assertValue(values, "!a") {(it.getType() is DecimalType) && it.getType().getValue() == it.getObj()}
         }
 
-        getCompilationResults("let a := rand() + 4").let { (values, exceptions) ->
+        getCompilationResults("let a := random_decimal() + 4").let { (values, exceptions) ->
             assertEquals(exceptions.size, 0)
             assertValue(values, "!a") {objectEquals(it, null)}
             assertValue(values, "!a") {typeEquals(it, DECIMAL_TYPE)}
         }
 
-        getRunningResults("let a := rand() + 4").let { (values, exceptions) ->
+        getRunningResults("let a := random_decimal() + 4").let { (values, exceptions) ->
             assertEquals(exceptions.size, 0)
             assertValue(values, "!a") {it.getObj() is WilesDecimal}
             assertValue(values, "!a") {(it.getObj() as WilesDecimal).toString()[0] == '4'}
@@ -390,7 +390,7 @@ class InterpreterTests {
         }
 
         getCompilationResults("""
-            let var a := rand()
+            let var a := random_decimal()
             let b := a
             a := 1.2
         """.trimIndent()).let { (values, exceptions) ->
@@ -402,7 +402,7 @@ class InterpreterTests {
         }
 
         getRunningResults("""
-            let var a := rand()
+            let var a := random_decimal()
             let b := a
             a := 1.2
         """.trimIndent()).let { (values, exceptions) ->
@@ -613,7 +613,7 @@ class InterpreterTests {
         }
 
         getCompilationResults("""
-            let var a : Decimal | Text := rand()
+            let var a : Decimal | Text := random_decimal()
             let b : Int | Text := a
         """.trimIndent()).let { (_, exceptions) ->
             assertEquals(exceptions.size, 1)
@@ -624,7 +624,7 @@ class InterpreterTests {
         }
 
         getCompilationResults("""
-            let var a : Decimal | Text := rand()
+            let var a : Decimal | Text := random_decimal()
             let b : Int | Text | Decimal := a
         """.trimIndent()).let { (values, exceptions) ->
             assertEquals(exceptions.size, 0)

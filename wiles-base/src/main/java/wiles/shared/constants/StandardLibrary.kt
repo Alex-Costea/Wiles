@@ -11,6 +11,6 @@ object StandardLibrary {
         let Anything := __INTERNAL "ANYTHING"
         let Boolean := true | false
         let Number := Int | Decimal
-        let rand := __INTERNAL "RAND"
+        let random_decimal := __INTERNAL "RAND"
     """.trimIndent()
 }
