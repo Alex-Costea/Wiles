@@ -1,6 +1,6 @@
 package wiles.processor.values
 
-import java.math.BigDecimal
+import org.apache.commons.math3.fraction.BigFraction
 import java.math.BigInteger
 
 class WilesInteger(private val value : BigInteger) {
@@ -76,7 +76,7 @@ class WilesInteger(private val value : BigInteger) {
     }
 
     companion object{
-        val DECIMAL_ONE = WilesDecimal(BigDecimal.ONE)
+        val DECIMAL_ONE = WilesDecimal(BigFraction.ONE)
     }
 
 }

@@ -1,4 +1,5 @@
 
+import org.apache.commons.math3.fraction.BigFraction
 import org.junit.jupiter.api.Test
 import org.junit.platform.commons.annotation.Testable
 import wiles.parser.Parser
@@ -272,7 +273,7 @@ class InterpreterTests {
 
         getCompilationResults("let a := 5 * 1.5 / 9").let { (values, exceptions) ->
             assertEquals(exceptions.size, 0)
-            val val1 = WilesDecimal("0.8333333333333333333333333333333333")
+            val val1 = WilesDecimal(BigFraction(5,6))
             assertValue(values, "!a"){objectEquals(it, val1)}
             assertValue(values, "!a"){typeEquals(it, DECIMAL_TYPE.exactly(val1))}
         }

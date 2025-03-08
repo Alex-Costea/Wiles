@@ -197,7 +197,7 @@ Just use a decimal point:
 write_line(3.1415)
 ```
 
-Under the hood, rational numbers internally use `BigDecimal` in `DECIMAL128` mode.
+Under the hood, rational numbers internally use `BigFraction`, so there's no loss in accuracy.
 
 ---
 
@@ -232,8 +232,8 @@ write_line(4 / 3)  # Outputs 1
 To get a rational result, make at least one number a decimal:
 
 ```wiles
-write_line(4 / 3.0)  # Outputs 1.333333333333...
-write_line(4.0 / 3)  # Outputs 1.333333333333...
+write_line(4 / 3.0)  # Outputs 1.3333333333333333
+write_line(4.0 / 3)  # Outputs 1.3333333333333333
 ```
 
 ### Exponentiation
@@ -375,7 +375,7 @@ write_line(true =/= false) # outputs true
 
 ### Comparison Operations
 
-For numbers (whether `Int`, `Decimal`, or a mix of both),
+For numbers (of type `Number`, which includes both `Int` and `Decimal`),
 you can also use the comparison operators `>` (greater than), `>=` (greater than or equal to),
 `<` (less than), and `<=` (less than or equal to):
 
@@ -858,11 +858,11 @@ generics-like constructs:
 
 
 ```wiles
-let add(const T : Type(Int | Decimal), x : T, y : T) -> T 
+let add(const T : Type(Number), x : T, y : T) -> T 
     do yield x + y
     
-let a := add(Int, 1, 2)
-let b := add(Decimal, 1.0, 2.0)
+let a := add(Int, 1, 2) #is Int
+let b := add(Decimal, 1.0, 2.0) #is Decimal
 ```
 
 ### Function types rules

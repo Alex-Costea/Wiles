@@ -1,13 +1,28 @@
 package wiles.processor.values
 
+import org.apache.commons.math3.fraction.BigFraction
 import java.math.BigDecimal
-import java.math.MathContext
-import kotlin.math.pow
+import java.math.BigInteger
 
 
-class WilesDecimal(private val value : BigDecimal)  {
+class WilesDecimal(private val value : BigFraction)  {
 
-    constructor(value : String) : this(BigDecimal(value, MathContext.DECIMAL128))
+
+    companion object{
+        private fun stringToValue(value : String) : BigFraction{
+            if(value.startsWith("-"))
+                return stringToValue(value.substring(1)).multiply(-1)
+            if(!value.contains("."))
+                return stringToValue("$value.0")
+            val (part1, part2) = value.split(".")
+            val numerator = BigInteger(part1 + part2)
+            val denominator = BigInteger("1" + "0".repeat(part2.length))
+            return BigFraction(numerator, denominator)
+        }
+    }
+
+    constructor(value : String) : this(stringToValue(value))
+
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -23,7 +38,7 @@ class WilesDecimal(private val value : BigDecimal)  {
 
     operator fun plus(secondValue : WilesDecimal) : WilesDecimal
     {
-        return WilesDecimal((this.value + secondValue.value).toString())
+        return WilesDecimal((this.value.add(secondValue.value)))
     }
 
     operator fun plus(secondValue : WilesInteger) : WilesDecimal
@@ -32,11 +47,12 @@ class WilesDecimal(private val value : BigDecimal)  {
     }
 
     override fun toString(): String {
-        return value.toString()
+        @Suppress("DEPRECATION")
+        return value.bigDecimalValue(16, BigDecimal.ROUND_HALF_UP).toString()
     }
 
     operator fun unaryMinus(): WilesDecimal {
-        return WilesDecimal(-value)
+        return WilesDecimal(value.multiply(-1))
     }
 
     operator fun minus(rightObj: WilesInteger): WilesDecimal {
@@ -44,7 +60,7 @@ class WilesDecimal(private val value : BigDecimal)  {
     }
 
     operator fun minus(rightObj: WilesDecimal): WilesDecimal {
-        return WilesDecimal(this.value - rightObj.value)
+        return WilesDecimal(this.value.subtract(rightObj.value))
     }
 
     operator fun unaryPlus(): WilesDecimal {
@@ -56,11 +72,11 @@ class WilesDecimal(private val value : BigDecimal)  {
     }
 
     operator fun times(wilesDecimal: WilesDecimal): WilesDecimal {
-        return WilesDecimal(this.value * wilesDecimal.value)
+        return WilesDecimal(this.value.multiply(wilesDecimal.value))
     }
 
     operator fun div(rightObj: WilesDecimal): WilesDecimal {
-        return WilesDecimal(this.value.divide(rightObj.value, MathContext.DECIMAL128))
+        return WilesDecimal(this.value.divide(rightObj.value))
     }
 
     operator fun div(wilesInteger: WilesInteger): WilesDecimal {
@@ -72,7 +88,7 @@ class WilesDecimal(private val value : BigDecimal)  {
     }
 
     infix fun pow(rightObj: WilesDecimal): WilesDecimal {
-        return WilesDecimal(BigDecimal(this.value.toDouble().pow(rightObj.value.toDouble())))
+        return WilesDecimal(this.value.pow(rightObj.value.toDouble()).toString())
     }
 
 }
