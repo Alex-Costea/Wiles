@@ -877,10 +877,16 @@ let a := add(1, 2) #is Int
 let b := add(1.0, 2.0) #is Decimal
 ```
 
-### Const functions
+### Pure functions
 
-By using the `const` keyword, you can declare a const function.
-The function body cannot depend on external variables or any other mutable state. 
+By using the `pure` keyword, you can declare a function that strictly doesn't depend on mutable state.
+External variables as well as other impure functions will not be visible to it.
+Only pure functions can be assigned to a `const` value.
+
+```wiles
+const func := fun pure(arg x : int, arg y : int) do
+    yield x + y
+```
 
 ### Function types rules
 
