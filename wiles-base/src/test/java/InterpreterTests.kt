@@ -744,6 +744,15 @@ class InterpreterTests {
             assertNumberExceptions(exceptions, 0)
             assertValue(values, "!a") {objectEquals(it, WilesInteger(25))}
         }
+
+        getCompilationResults("""
+            let func := fun do let a := 10
+            func()
+            let a := 20
+        """.trimIndent()).let { (values, exceptions) ->
+            assertNumberExceptions(exceptions, 0)
+            assertValue(values, "!a") {objectEquals(it, WilesInteger(20))}
+        }
     }
 
 }

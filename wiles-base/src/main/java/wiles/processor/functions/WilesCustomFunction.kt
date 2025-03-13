@@ -10,9 +10,16 @@ class WilesCustomFunction(
     private val syntaxTree: AbstractSyntaxTree
 ) : WilesFunction() {
     override fun invoke(newValues : ValuesMap, context: InterpreterContext): Any {
-        if(newValues.isNotEmpty()) TODO("parameters")
-        val mergedContext = InterpreterContext(capturedValues, context.isRunning, context.isDebug, context.exceptions)
+        val internalValues = ValuesMap(capturedValues)
+        internalValues.putAll(newValues)
+        val mergedContext = InterpreterContext(internalValues, context.isRunning, context.isDebug, context.exceptions)
         val processor = ProcessorCodeBlock(syntaxTree, mergedContext)
-        return processor.process()
+        val returnValue = processor.process()
+        for((key,value) in internalValues)
+        {
+            if(capturedValues.containsKey(key))
+                capturedValues[key] = value
+        }
+        return returnValue
     }
 }
