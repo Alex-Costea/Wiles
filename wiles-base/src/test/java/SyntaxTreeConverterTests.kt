@@ -655,16 +655,16 @@ CODE_BLOCK
                 )
         """, DECLARE_ID, CONST_ID, VARIABLE_ID, "!a", ANNOTATE_ID, "!int", ASSIGN_ID, "#123")
 
-        //def var a : int := 123
+        //let def var a : int := 123
         assertResults(createExceptions(UnexpectedTokenException(CANT_BE_VAR_ERROR, NULL_LOCATION)),
             """
                 CODE_BLOCK
                 (
                     DECLARATION
                 )
-        """, LEVEL_SCOPE_ID, VARIABLE_ID, "!a", ASSIGN_ID, "#123")
+        """, DECLARE_ID, LEVEL_SCOPE_ID, VARIABLE_ID, "!a", ASSIGN_ID, "#123")
 
-        //def const a := fun(const a : type) -> type do yield a
+        //let def const a := fun(const a : type) -> type do yield a
         assertResults(null,"""
             CODE_BLOCK
             (
@@ -698,14 +698,14 @@ CODE_BLOCK
                     )
                 )
             )
-        """, LEVEL_SCOPE_ID, CONST_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, CONST_ID, "!a", ANNOTATE_ID, "!type",
-            PAREN_END_ID, YIELDS_ID, "!type", DO_ID, RETURN_ID, "!a")
+        """, DECLARE_ID, LEVEL_SCOPE_ID, CONST_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, CONST_ID, "!a",
+            ANNOTATE_ID, "!type", PAREN_END_ID, YIELDS_ID, "!type", DO_ID, RETURN_ID, "!a")
     }
 
     @Test
     fun levelScopeDeclarationTest()
     {
-        //def a := 234
+        //let def a := 234
         assertResults(null,"""
             CODE_BLOCK
             (
@@ -715,7 +715,7 @@ CODE_BLOCK
                     #234 [1, 17, 1, 20]
                 )
             )
-        """, LEVEL_SCOPE_ID, "!a", ASSIGN_ID, "#234")
+        """, DECLARE_ID, LEVEL_SCOPE_ID, "!a", ASSIGN_ID, "#234")
 
         //let def a : int
         assertResults(createExceptions(TokenExpectedException(EXPECTED_INITIALIZATION_ERROR, NULL_LOCATION)),

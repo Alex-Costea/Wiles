@@ -903,13 +903,13 @@ Named parameters can be made unnamed by adding `arg`, but not the other way arou
 ## Level Scope
 
 Values defined with **level scope** can be accessed from anywhere within the current level or any levels below it,
-but **not** above it. This is achieved by using `def` instead of `let`. 
+but **not** above it. This is achieved by using `def` within the declaration.
 These values are also **lazily computed**, being first calculated when necessary.
 
 ```wiles
-def a : Int := 123
+let def a : Int := 123
 if 2 > 1 begin
-    def b : Int := 456
+    let def b : Int := 456
     # both a and b are accessible here
     write_line(a)
     write_line(b)
@@ -925,7 +925,7 @@ Due to lazy computation, this applies even when the declaration appears **after*
 
 ```wiles
 write_line(a) # Outputs 123
-def a : Int := 123
+let def a : Int := 123
 ```
 
 ### Recursive Functions
@@ -937,7 +937,7 @@ function's yielded type must be explicitly annotated, including if it's `nothing
 write_line(factorial(10)) # Outputs 3628800
 
 # Explicit annotation required
-def factorial := fun(arg x : Int) -> Int begin
+let def factorial := fun(arg x : Int) -> Int begin
     if x <= 0 do yield 1
     # Wiles knows the factorial function will yield an Int
     yield x * factorial(x - 1)
@@ -1039,7 +1039,7 @@ If any value is missing, it is treated as a type definition only and not as a co
 Data types can be recursive using the `def` keyword. For example:
 
 ```wiles
-def Tree := <<
+let def Tree := <<
     value : Int,
     left : Tree?,
     right: Tree?

@@ -21,7 +21,6 @@ import wiles.shared.constants.Tokens.DICT_START_ID
 import wiles.shared.constants.Tokens.FOR_ID
 import wiles.shared.constants.Tokens.FUNC_ID
 import wiles.shared.constants.Tokens.IF_ID
-import wiles.shared.constants.Tokens.LEVEL_SCOPE_ID
 import wiles.shared.constants.Tokens.RETURN_ID
 import wiles.shared.constants.Tokens.WHILE_ID
 import wiles.shared.enums.DeclarationType
@@ -69,8 +68,7 @@ class StatementFactory {
 
         init {
             params[StatementFactoryTypes.TOP_LEVEL_EXPRESSION] = START_OF_EXPRESSION
-            params[StatementFactoryTypes.DECLARATION_STATEMENT] = tokenOf(DECLARE_ID).or(LEVEL_SCOPE_ID)
-                .removeWhen(WhenRemoveToken.Never)
+            params[StatementFactoryTypes.DECLARATION_STATEMENT] = tokenOf(DECLARE_ID)
             params[StatementFactoryTypes.FUNC_STATEMENT] = tokenOf(FUNC_ID)
                 .removeWhen(WhenRemoveToken.Never)
             params[StatementFactoryTypes.RETURN_STATEMENT] = tokenOf(RETURN_ID)

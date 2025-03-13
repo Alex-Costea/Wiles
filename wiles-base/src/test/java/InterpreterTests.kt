@@ -477,7 +477,7 @@ class InterpreterTests {
     {
         getCompilationResults("""
             let b := a + 5
-            def a : Int := 123
+            let def a : Int := 123
         """.trimIndent()).let { (values, exceptions) ->
             assertNumberExceptions(exceptions, 0)
             val value123 = WilesInteger(123)
@@ -488,10 +488,10 @@ class InterpreterTests {
             assertValue(values, "!b"){typeEquals(it, INT_TYPE.exactly(value128))}
         }
 
-        getCompilationResults("def a : Int := true"). let{ (_, exceptions) ->
+        getCompilationResults("let def a : Int := true"). let{ (_, exceptions) ->
             assertNumberExceptions(exceptions, 1)
             assertException(exceptions[0], TypeConflictError(INT_TYPE, TRUE_TYPE,
-                TokenLocation(1, 9, 1, 12)
+                TokenLocation(1, 13, 1, 16)
             ))
         }
 
@@ -510,10 +510,10 @@ class InterpreterTests {
             }
         }
 
-        getCompilationResults("def a := 123").let { (_, exceptions) ->
+        getCompilationResults("let def a := 123").let { (_, exceptions) ->
             assertNumberExceptions(exceptions, 1)
             assertException(exceptions[0], InferenceFailureException(
-                TokenLocation(1,5,1,6)
+                TokenLocation(1,9,1,10)
             ))
         }
     }
@@ -522,12 +522,12 @@ class InterpreterTests {
     fun stackOverflowTest()
     {
         getRunningResults("""
-            def a : Int := a + 1
+            let def a : Int := a + 1
             let b := a
         """.trimIndent()).let { (_, exceptions) ->
             assertNumberExceptions(exceptions, 1)
             assertException(exceptions[0], StackOverflowException(
-                TokenLocation(1, 18, 1, 19)
+                TokenLocation(1, 22, 1, 23)
             ))
         }
 
