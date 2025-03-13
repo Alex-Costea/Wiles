@@ -742,7 +742,7 @@ class InterpreterTests {
             func()
         """.trimIndent()).let { (values, exceptions) ->
             assertNumberExceptions(exceptions, 0)
-            assertValue(values, "!a") {objectEquals(it, WilesInteger(10))}
+            assertValue(values, "!a") {objectEquals(it, WilesInteger(25))}
         }
     }
 

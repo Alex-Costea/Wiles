@@ -6,7 +6,9 @@ import wiles.processor.values.WilesDecimal
 import kotlin.random.Random
 
 class RandFunction : WilesFunction() {
-    override fun invoke(values: ValuesMap, context : InterpreterContext): WilesDecimal {
+    override fun invoke(values: ValuesMap, context : InterpreterContext): WilesDecimal? {
+        if(context.isCompiling)
+            return null
         val sb = StringBuilder("0.")
         for(i in 0..15)
             sb.append(Random.nextInt(0,10).digitToChar())

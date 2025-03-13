@@ -10,16 +10,14 @@ import wiles.processor.types.FunctionType
 
 class ApplyOperation(left: Value?, right: Value, context: InterpreterContext) : AbstractOperation(left, right, context) {
     override fun getNewValue(): Value {
+        val obj = calculateObject()
         //TODO: check if calculable at compile time
-        return if (context.isCompiling) {
-            Value(VariableStatus.Const, null, calculateType(), )
-        } else {
-            val obj = calculateObject()
-            Value(VariableStatus.Const, obj, calculateType().exactly(obj), )
-        }
+        return if(context.isCompiling)
+            Value(VariableStatus.Const, obj, calculateType())
+        else Value(VariableStatus.Const, obj, calculateType().exactly(obj))
     }
 
-    override fun calculateObject(): Any {
+    override fun calculateObject(): Any? {
         //TODO: multiple params
         assert(leftObj is WilesFunction)
         return (leftObj as WilesFunction).invoke(ValuesMap(), context)

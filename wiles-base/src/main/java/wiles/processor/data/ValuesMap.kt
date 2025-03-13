@@ -11,6 +11,11 @@ class ValuesMap(map: Map<String, Value>? = null) : Map<String, Value>{
         linkedHashMap.putAll(map.linkedHashMap)
     }
 
+    fun clear()
+    {
+        linkedHashMap.clear()
+    }
+
     fun filter(function: (Map.Entry<String, Value>) -> Boolean): ValuesMap {
         return ValuesMap(linkedHashMap.filter(function))
     }

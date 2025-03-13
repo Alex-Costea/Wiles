@@ -1,7 +1,5 @@
 package wiles.processor.types
 
-import wiles.shared.errors.InternalErrorException
-
 class EitherType(vararg typeList : AbstractType) : AbstractType(null) {
 
 
@@ -26,8 +24,6 @@ class EitherType(vararg typeList : AbstractType) : AbstractType(null) {
     }
 
     override fun clone(value: Any?): AbstractType {
-        if(value != null)
-            throw InternalErrorException()
         val newSubtypes = subtypes.map { it.exactly(it.exactValue) }
         return EitherType(*newSubtypes.toTypedArray())
     }

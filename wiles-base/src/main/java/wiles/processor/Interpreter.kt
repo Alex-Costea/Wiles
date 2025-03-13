@@ -15,22 +15,26 @@ import java.util.*
 class Interpreter(scanner: Scanner?, val syntax: AbstractSyntaxTree, private val isDebug: Boolean,
                   private val processingStandardLibrary : Boolean = false) {
     private val isRunning: Boolean = scanner != null
-    private val values: ValuesMap = ValuesMap()
+    private var values: ValuesMap = ValuesMap()
     private val exceptions: WilesExceptionsCollection = WilesExceptionsCollection()
 
     private fun compile(syntax: AbstractSyntaxTree, debug: Boolean) : Boolean
     {
         val compiler = Interpreter(null, syntax, debug)
         compiler.process()
+        val newValues = ValuesMap()
         for((name, value) in compiler.values)
         {
             if(!value.isKnown())
-                values[name] = Value(if(value.isVariable()) VariableStatus.Var else VariableStatus.Const,
+                newValues[name] = Value(if(value.isVariable()) VariableStatus.Var else VariableStatus.Const,
                     null, value.getComptimeType())
             else if(value.isVariable())
-                values[name] = Value(VariableStatus.Var, null, value.getComptimeType())
-            else values[name] = value
+                newValues[name] = Value(VariableStatus.Var, null, value.getComptimeType())
+            else newValues[name] = value
         }
+        values = compiler.values
+        values.clear()
+        values.putAll(newValues)
         if (compiler.getExceptions().size > 0) {
             exceptions.addAll(compiler.getExceptions())
             return true

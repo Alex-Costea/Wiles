@@ -26,7 +26,7 @@ class ProcessorFunction(syntax: AbstractSyntaxTree, context: InterpreterContext)
             processor.process()
         }
         return Value(VariableStatus.Const,
-            WilesCustomFunction(newContext.values, codeBlock),
+            WilesCustomFunction(context.values, codeBlock),
             FunctionType(null, AbstractType.NOTHING_TYPE))
     }
 
