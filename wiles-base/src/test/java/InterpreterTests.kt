@@ -753,6 +753,17 @@ class InterpreterTests {
             assertNumberExceptions(exceptions, 0)
             assertValue(values, "!a") {objectEquals(it, WilesInteger(20))}
         }
+
+        getCompilationResults("""
+            let var x := 1
+            let const func := fun pure do
+                let y := x
+        """.trimIndent()).let { (_, exceptions) ->
+            assertNumberExceptions(exceptions, 1)
+            assertException(exceptions[0], IdentifierUnknownException(
+                TokenLocation(line=3, lineIndex=14, lineEnd=3, lineEndIndex=15)
+            ))
+        }
     }
 
 }

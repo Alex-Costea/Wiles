@@ -1,6 +1,7 @@
 package wiles.processor.utils
 
 import wiles.processor.data.Value
+import wiles.processor.data.ValuesMap
 import wiles.processor.functions.WilesFunction
 import wiles.processor.types.*
 import wiles.processor.types.AbstractType.Companion.DECIMAL_TYPE
@@ -71,5 +72,23 @@ object TypeUtils {
             else -> throw InternalErrorException()
         }
     }
+    fun filterOutImpure(values : ValuesMap, pure : Boolean): ValuesMap {
+        if(!pure) return ValuesMap(values)
+        val newValues = ValuesMap()
+        for((key, value ) in values)
+        {
+            if(value.isVariable())
+                continue
+            if(!value.isKnown())
+                continue
+            val obj = value.getObj()
+            if(obj is WilesFunction && !obj.pure)
+                continue
+            newValues[key] = value
+        }
+        return newValues
+    }
+
+
 
 }

@@ -7,7 +7,9 @@ import wiles.processor.enums.VariableStatus
 import wiles.processor.functions.WilesCustomFunction
 import wiles.processor.types.AbstractType
 import wiles.processor.types.FunctionType
+import wiles.processor.utils.TypeUtils.filterOutImpure
 import wiles.shared.abstracts.AbstractSyntaxTree
+import wiles.shared.constants.Tokens.PURE_ID
 import wiles.shared.enums.SyntaxType
 
 class ProcessorFunction(syntax: AbstractSyntaxTree, context: InterpreterContext) : AbstractProcessor(syntax, context) {
@@ -19,18 +21,19 @@ class ProcessorFunction(syntax: AbstractSyntaxTree, context: InterpreterContext)
             components.removeAt(components.size-1) else null
         codeBlock ?: TODO("no code block")
         if(components.size > 0) TODO("function declarations")
-        val newContext = getNewContext()
+        val isDeclaredPure = syntax.details.contains(PURE_ID)
+        val newContext = getNewContext(isDeclaredPure)
         if(context.isCompiling)
         {
             val processor = ProcessorCodeBlock(codeBlock, newContext)
             processor.process()
         }
         return Value(VariableStatus.Const,
-            WilesCustomFunction(context.values, codeBlock),
+            WilesCustomFunction(context.values, codeBlock, isDeclaredPure),
             FunctionType(null, AbstractType.NOTHING_TYPE))
     }
 
-    private fun getNewContext(): InterpreterContext {
+    private fun getNewContext(pure : Boolean): InterpreterContext {
         if(context.isRunning)
             return context
         val newValues = ValuesMap()
@@ -41,7 +44,7 @@ class ProcessorFunction(syntax: AbstractSyntaxTree, context: InterpreterContext)
                 newValues[name] = Value(variableStatus, value.getObj(), value.getType(), value.getComptimeType())
             else newValues[name] = Value(variableStatus, null, value.getComptimeType())
         }
-        return InterpreterContext(newValues, false, context.isDebug, context.exceptions)
+        return InterpreterContext(filterOutImpure(newValues, pure), false, context.isDebug, context.exceptions)
     }
 
 }

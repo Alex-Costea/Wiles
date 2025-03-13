@@ -69,7 +69,7 @@ class ProcessorDeclaration(
                     if (!isSuperType(declaredType, newType))
                         throw TypeConflictError(declaredType, newType, typeDef!!.getFirstLocation())
                 }
-                if (context.isCompiling && isConst )
+                if (context.isCompiling && isConst)
                 {
                     if(!computedValue.isKnown())
                         throw ValueNotConstException(nameToken.getFirstLocation())
