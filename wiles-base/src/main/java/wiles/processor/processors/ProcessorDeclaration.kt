@@ -72,7 +72,7 @@ class ProcessorDeclaration(
                 if (context.isCompiling && isConst && !computedValue.isKnown())
                     throw ValueNotConstException(nameToken.getFirstLocation())
                 val vagueNewType = if (context.isCompiling) newType.removeExact() else newType
-                val newDeclaredType = if (variableStatus == VariableStatus.Var) {
+                val newDeclaredType = if (variableStatus == VariableStatus.Var || context.isRunning) {
                     declaredType ?: vagueNewType
                 } else newType
                 Value(variableStatus, computedValue.getObj(), newType, newDeclaredType)

@@ -377,12 +377,12 @@ class InterpreterTests {
         """.trimIndent()).let { (values, exceptions) ->
             assertEquals(exceptions.size, 0)
             val obj = WilesInteger(13)
-            assertValue(values, "!a",) {objectEquals(it, obj)}
-            assertValue(values, "!a",) {typeEquals(it, INT_TYPE.exactly(obj))}
-            assertValue(values, "!a",) {comptimeTypeEquals(it, EitherType(INT_TYPE, DECIMAL_TYPE))}
-            assertValue(values, "!b",) {objectEquals(it, null)}
-            assertValue(values, "!b",) {typeEquals(it, DECIMAL_TYPE)}
-            assertValue(values, "!b",) {comptimeTypeEquals(it, DECIMAL_TYPE)}
+            assertValue(values, "!a") {objectEquals(it, obj)}
+            assertValue(values, "!a") {typeEquals(it, INT_TYPE.exactly(obj))}
+            assertValue(values, "!a") {comptimeTypeEquals(it, EitherType(INT_TYPE, DECIMAL_TYPE))}
+            assertValue(values, "!b") {objectEquals(it, null)}
+            assertValue(values, "!b") {typeEquals(it, DECIMAL_TYPE)}
+            assertValue(values, "!b") {comptimeTypeEquals(it, DECIMAL_TYPE)}
         }
 
         getRunningResults("""
@@ -392,10 +392,15 @@ class InterpreterTests {
         """.trimIndent()).let { (values, exceptions) ->
             assertEquals(exceptions.size, 0)
             val obj = WilesInteger(13)
-            assertValue(values, "!a",) {objectEquals(it, obj)}
-            assertValue(values, "!a",) {typeEquals(it, INT_TYPE.exactly(obj))}
-            assertValue(values, "!a",) {comptimeTypeEquals(it, EitherType(INT_TYPE, DECIMAL_TYPE))}
-            assertValue(values, "!b",) {comptimeTypeEquals(it, DECIMAL_TYPE)}
+            assertValue(values, "!a") {objectEquals(it, obj)}
+            assertValue(values, "!a") {typeEquals(it, INT_TYPE.exactly(obj))}
+            assertValue(values, "!a") {comptimeTypeEquals(it, EitherType(INT_TYPE, DECIMAL_TYPE))}
+            assertValue(values, "!b") {comptimeTypeEquals(it, DECIMAL_TYPE)}
+        }
+
+        getRunningResults("let a := random_decimal()").let { (values, exceptions) ->
+            assertEquals(exceptions.size, 0)
+            assertValue(values, "!a") {comptimeTypeEquals(it, DECIMAL_TYPE)}
         }
 
     }
