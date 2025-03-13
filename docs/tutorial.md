@@ -706,7 +706,7 @@ if begin
 end
 ```
 
-In this example, `.type` checks a value's runtime type
+In this example, `.type` gets a value's runtime type
 
 ### Casting
 
@@ -863,6 +863,16 @@ let add(const T : Type(Number), x : T, y : T) -> T
     
 let a := add(Int, 1, 2) #is Int
 let b := add(Decimal, 1.0, 2.0) #is Decimal
+```
+
+However, you can further simplify the structure by using `typeof`, which gets the **compile time** type of a value:
+
+```wiles
+let add(x : Number, y : Number) -> typeof(x) | typeof(y) 
+    do yield x + y
+    
+let a := add(1, 2) #is Int
+let b := add(1.0, 2.0) #is Decimal
 ```
 
 ### Function types rules
@@ -1077,6 +1087,10 @@ These functions read a value from the input. They are:
 - `read_line`, of type `fun() -> Text`
 - `read_int`, of type `fun() -> Int`
 - `read_decimal`, of type `fun() -> Decimal`
+
+# Compile time type
+
+- `typeof` takes a value and gets its **compile time** type.
 
 ### Members of every object
 
