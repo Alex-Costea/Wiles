@@ -8,6 +8,7 @@ import wiles.processor.functions.WilesCustomFunction
 import wiles.processor.types.AbstractType
 import wiles.processor.types.FunctionType
 import wiles.processor.utils.InterpreterUtils.filterOutImpure
+import wiles.processor.utils.InterpreterUtils.processType
 import wiles.shared.abstracts.AbstractSyntaxTree
 import wiles.shared.constants.Tokens.PURE_ID
 import wiles.shared.enums.SyntaxType
@@ -15,8 +16,13 @@ import wiles.shared.enums.SyntaxType
 class ProcessorFunction(syntax: AbstractSyntaxTree, context: InterpreterContext) : AbstractProcessor(syntax, context) {
     override fun process(): Value {
         val components = syntax.getComponents().toMutableList()
-        val typeDef = if(components[0].syntaxType == SyntaxType.TYPEDEF) components.removeAt(0) else null
-        if(typeDef != null) TODO("type definition")
+        val yieldStatement = if(components[0].syntaxType == SyntaxType.TYPEDEF) components.removeAt(0) else null
+        var yieldType : AbstractType? = null
+        if(context.isCompiling && yieldStatement != null)
+        {
+            yieldType = processType(yieldStatement, context)
+        }
+        if(yieldType != null) TODO("type definition")
         val codeBlock = if(components[components.size-1].syntaxType == SyntaxType.CODE_BLOCK)
             components.removeAt(components.size-1) else null
         codeBlock ?: TODO("no code block")
