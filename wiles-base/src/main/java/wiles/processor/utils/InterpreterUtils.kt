@@ -3,6 +3,7 @@ package wiles.processor.utils
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
 import wiles.processor.data.ValuesMap
+import wiles.processor.enums.VariableStatus
 import wiles.processor.functions.WilesFunction
 import wiles.processor.processors.ProcessorTypeExpression
 import wiles.processor.types.*
@@ -17,7 +18,7 @@ import wiles.processor.values.WilesNothing
 import wiles.shared.abstracts.AbstractSyntaxTree
 import wiles.shared.errors.InternalErrorException
 
-object TypeUtils {
+object InterpreterUtils {
     private fun checkExactStatus(former : AbstractType, latter : AbstractType): Boolean {
         if(former.isExact() && !latter.isExact())
             return false
@@ -102,5 +103,19 @@ object TypeUtils {
         return typeDefValue.getObj() as AbstractType
     }
 
+    fun getCompilerValues(compilerValues: ValuesMap) : ValuesMap
+    {
+        val newValues = ValuesMap()
+        for((name, value) in compilerValues)
+        {
+            if(!value.isKnown())
+                newValues[name] = Value(if(value.isVariable()) VariableStatus.Var else VariableStatus.Const,
+                    null, value.getComptimeType())
+            else if(value.isVariable())
+                newValues[name] = Value(VariableStatus.Var, null, value.getComptimeType())
+            else newValues[name] = value
+        }
+        return newValues
+    }
 
 }

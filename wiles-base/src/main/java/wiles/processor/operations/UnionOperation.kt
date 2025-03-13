@@ -5,7 +5,7 @@ import wiles.processor.data.Value
 import wiles.processor.enums.VariableStatus
 import wiles.processor.types.AbstractType
 import wiles.processor.types.EitherType
-import wiles.processor.utils.TypeUtils.getNewTypeObject
+import wiles.processor.utils.InterpreterUtils.getNewTypeObject
 
 class UnionOperation(left: Value?, right: Value, context: InterpreterContext) : AbstractOperation(left, right, context) {
     override fun getNewValue(): Value {

@@ -8,7 +8,7 @@ import wiles.processor.types.AbstractType.Companion.DECIMAL_TYPE
 import wiles.processor.types.AbstractType.Companion.INT_TYPE
 import wiles.processor.types.AbstractType.Companion.NUMBER_TYPE
 import wiles.processor.types.AbstractType.Companion.TEXT_TYPE
-import wiles.processor.utils.TypeUtils.isSuperType
+import wiles.processor.utils.InterpreterUtils.isSuperType
 import wiles.processor.values.WilesDecimal
 import wiles.processor.values.WilesInteger
 import wiles.shared.errors.InternalErrorException

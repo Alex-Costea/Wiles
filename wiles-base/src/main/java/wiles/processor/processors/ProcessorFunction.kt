@@ -7,7 +7,7 @@ import wiles.processor.enums.VariableStatus
 import wiles.processor.functions.WilesCustomFunction
 import wiles.processor.types.AbstractType
 import wiles.processor.types.FunctionType
-import wiles.processor.utils.TypeUtils.filterOutImpure
+import wiles.processor.utils.InterpreterUtils.filterOutImpure
 import wiles.shared.abstracts.AbstractSyntaxTree
 import wiles.shared.constants.Tokens.PURE_ID
 import wiles.shared.enums.SyntaxType

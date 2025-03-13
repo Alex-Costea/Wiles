@@ -9,7 +9,7 @@ import wiles.processor.types.AbstractType
 import wiles.processor.types.DecimalType
 import wiles.processor.types.IntType
 import wiles.processor.types.TextType
-import wiles.processor.utils.TypeUtils.getNewTypeObject
+import wiles.processor.utils.InterpreterUtils.getNewTypeObject
 import wiles.processor.values.WilesDecimal
 import wiles.processor.values.WilesInteger
 import wiles.processor.values.WilesUndefined

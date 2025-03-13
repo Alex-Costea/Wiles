@@ -11,8 +11,8 @@ import wiles.processor.errors.ValueNotConstException
 import wiles.processor.functions.WilesFunction
 import wiles.processor.processors.Processor.Companion.NOTHING_VALUE
 import wiles.processor.types.AbstractType
-import wiles.processor.utils.TypeUtils
-import wiles.processor.utils.TypeUtils.isSuperType
+import wiles.processor.utils.InterpreterUtils
+import wiles.processor.utils.InterpreterUtils.isSuperType
 import wiles.processor.values.WilesLazyObject
 import wiles.processor.values.WilesUndefined
 import wiles.shared.abstracts.AbstractSyntaxTree
@@ -93,7 +93,7 @@ class ProcessorDeclaration(
             return context.values[name]?.getComptimeType()
 
         typeDef ?: return null
-        return TypeUtils.processType(typeDef, context)
+        return InterpreterUtils.processType(typeDef, context)
     }
 
     private fun getIsCheckingLevelScope(name : String): Boolean {

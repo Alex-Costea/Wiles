@@ -3,7 +3,7 @@ package wiles.processor.functions
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.ValuesMap
 import wiles.processor.processors.ProcessorCodeBlock
-import wiles.processor.utils.TypeUtils.filterOutImpure
+import wiles.processor.utils.InterpreterUtils.filterOutImpure
 import wiles.shared.abstracts.AbstractSyntaxTree
 
 class WilesCustomFunction(

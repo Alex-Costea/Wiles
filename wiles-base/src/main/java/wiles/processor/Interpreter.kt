@@ -4,8 +4,8 @@ import wiles.parser.Parser
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
 import wiles.processor.data.ValuesMap
-import wiles.processor.enums.VariableStatus
 import wiles.processor.processors.ProcessorCodeBlock
+import wiles.processor.utils.InterpreterUtils.getCompilerValues
 import wiles.shared.abstracts.AbstractSyntaxTree
 import wiles.shared.constants.StandardLibrary.STANDARD_LIBRARY_TEXT
 import wiles.shared.constants.Utils.convertStatementToSyntaxTree
@@ -22,17 +22,8 @@ class Interpreter(scanner: Scanner?, val syntax: AbstractSyntaxTree, private val
     {
         val compiler = Interpreter(null, syntax, debug)
         compiler.process()
-        val newValues = ValuesMap()
-        for((name, value) in compiler.values)
-        {
-            if(!value.isKnown())
-                newValues[name] = Value(if(value.isVariable()) VariableStatus.Var else VariableStatus.Const,
-                    null, value.getComptimeType())
-            else if(value.isVariable())
-                newValues[name] = Value(VariableStatus.Var, null, value.getComptimeType())
-            else newValues[name] = value
-        }
         values = compiler.values
+        val newValues = getCompilerValues(values)
         values.clear()
         values.putAll(newValues)
         if (compiler.getExceptions().size > 0) {

@@ -6,7 +6,7 @@ import wiles.processor.errors.ValueUnusedException
 import wiles.processor.processors.Processor.Companion.NOTHING_VALUE
 import wiles.processor.types.AbstractType.Companion.NOTHING_TYPE
 import wiles.processor.types.InvalidType
-import wiles.processor.utils.TypeUtils
+import wiles.processor.utils.InterpreterUtils
 import wiles.shared.abstracts.AbstractSyntaxTree
 import wiles.shared.constants.Tokens.LEVEL_SCOPE_ID
 import wiles.shared.enums.SyntaxType
@@ -34,7 +34,7 @@ class ProcessorCodeBlock (
                 {
                     if(type is InvalidType)
                         continue
-                    if(!TypeUtils.isSuperType(NOTHING_TYPE, type))
+                    if(!InterpreterUtils.isSuperType(NOTHING_TYPE, type))
                         throw ValueUnusedException(component.getFirstLocation())
                 }
             }

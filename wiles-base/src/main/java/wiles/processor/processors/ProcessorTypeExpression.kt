@@ -5,7 +5,7 @@ import wiles.processor.data.Value
 import wiles.processor.enums.VariableStatus
 import wiles.processor.errors.ValueNotConstException
 import wiles.processor.types.AbstractType.Companion.TYPE_TYPE
-import wiles.processor.utils.TypeUtils.getNewTypeObject
+import wiles.processor.utils.InterpreterUtils.getNewTypeObject
 import wiles.shared.abstracts.AbstractSyntaxTree
 
 class ProcessorTypeExpression(syntax: AbstractSyntaxTree, context: InterpreterContext)

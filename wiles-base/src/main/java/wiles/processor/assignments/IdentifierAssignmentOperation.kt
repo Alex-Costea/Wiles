@@ -8,7 +8,7 @@ import wiles.processor.errors.IdentifierUnknownException
 import wiles.processor.errors.TypeConflictError
 import wiles.processor.processors.Processor
 import wiles.processor.types.AbstractType
-import wiles.processor.utils.TypeUtils
+import wiles.processor.utils.InterpreterUtils
 import wiles.processor.values.WilesNothing
 import wiles.processor.values.WilesUndefined
 import wiles.shared.abstracts.AbstractSyntaxTree
@@ -41,7 +41,7 @@ class IdentifierAssignmentOperation(private val leftComponent: AbstractSyntaxTre
             if(context.isCompiling) {
                 val location = leftComponent.getFirstLocation()
                 if (!leftIsVariable && !leftIsUndefined) throw CantBeModifiedException(location)
-                if (!TypeUtils.isSuperType(leftType, rightType))
+                if (!InterpreterUtils.isSuperType(leftType, rightType))
                     throw TypeConflictError(leftType, rightType, location)
             }
 
