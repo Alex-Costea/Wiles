@@ -1,16 +1,20 @@
 package wiles.processor.utils
 
+import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
 import wiles.processor.data.ValuesMap
 import wiles.processor.functions.WilesFunction
+import wiles.processor.processors.ProcessorTypeExpression
 import wiles.processor.types.*
 import wiles.processor.types.AbstractType.Companion.DECIMAL_TYPE
 import wiles.processor.types.AbstractType.Companion.INT_TYPE
 import wiles.processor.types.AbstractType.Companion.NOTHING_TYPE
 import wiles.processor.types.AbstractType.Companion.TEXT_TYPE
+import wiles.processor.types.AbstractType.Companion.TYPE_TYPE
 import wiles.processor.values.WilesDecimal
 import wiles.processor.values.WilesInteger
 import wiles.processor.values.WilesNothing
+import wiles.shared.abstracts.AbstractSyntaxTree
 import wiles.shared.errors.InternalErrorException
 
 object TypeUtils {
@@ -72,6 +76,7 @@ object TypeUtils {
             else -> throw InternalErrorException()
         }
     }
+
     fun filterOutImpure(values : ValuesMap, pure : Boolean): ValuesMap {
         if(!pure) return ValuesMap(values)
         val newValues = ValuesMap()
@@ -89,6 +94,13 @@ object TypeUtils {
         return newValues
     }
 
+    fun processType(typeDef : AbstractSyntaxTree, context : InterpreterContext): AbstractType {
+        val typeProcessor = ProcessorTypeExpression(typeDef, context)
+        val typeDefValue = typeProcessor.process()
+        assert(typeDefValue.isKnown())
+        assert(isSuperType(TYPE_TYPE,typeDefValue.getType()))
+        return typeDefValue.getObj() as AbstractType
+    }
 
 
 }

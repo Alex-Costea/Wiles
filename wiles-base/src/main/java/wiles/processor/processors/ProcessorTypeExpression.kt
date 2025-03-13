@@ -24,7 +24,7 @@ class ProcessorTypeExpression(syntax: AbstractSyntaxTree, context: InterpreterCo
         }
         if(value.isKnown()) {
             val newValue = getNewTypeObject(value)
-            value = Value(VariableStatus.Const, newValue, TYPE_TYPE, )
+            value = Value(VariableStatus.Const, newValue, TYPE_TYPE)
         }
         else {
             throw ValueNotConstException(syntax.getFirstLocation())

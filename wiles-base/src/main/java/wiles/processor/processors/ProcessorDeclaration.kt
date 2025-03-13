@@ -11,7 +11,7 @@ import wiles.processor.errors.ValueNotConstException
 import wiles.processor.functions.WilesFunction
 import wiles.processor.processors.Processor.Companion.NOTHING_VALUE
 import wiles.processor.types.AbstractType
-import wiles.processor.types.AbstractType.Companion.TYPE_TYPE
+import wiles.processor.utils.TypeUtils
 import wiles.processor.utils.TypeUtils.isSuperType
 import wiles.processor.values.WilesLazyObject
 import wiles.processor.values.WilesUndefined
@@ -93,12 +93,7 @@ class ProcessorDeclaration(
             return context.values[name]?.getComptimeType()
 
         typeDef ?: return null
-        val typeProcessor = ProcessorTypeExpression(typeDef, context)
-        typeProcessor.process()
-        val typeDefValue = typeProcessor.process()
-        assert(typeDefValue.isKnown())
-        assert(isSuperType(TYPE_TYPE,typeDefValue.getType()))
-        return typeDefValue.getObj() as AbstractType
+        return TypeUtils.processType(typeDef, context)
     }
 
     private fun getIsCheckingLevelScope(name : String): Boolean {
