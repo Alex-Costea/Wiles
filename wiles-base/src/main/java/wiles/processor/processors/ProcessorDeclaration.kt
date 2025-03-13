@@ -108,7 +108,7 @@ class ProcessorDeclaration(
             val newValue = Value(VariableStatus.Const, null, value.getType().removeExact())
             tempValues[key] = if(value.isLazy()) newValue else value
         }
-        return InterpreterContext(tempValues, context.isRunning, context.isDebug, context.exceptions)
+        return InterpreterContext(tempValues, context.isRunning, context.exceptions)
     }
 
 }

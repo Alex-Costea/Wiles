@@ -15,7 +15,7 @@ class WilesCustomFunction(
     override fun invoke(newValues : ValuesMap, context: InterpreterContext): Any {
         val internalValues = filterOutImpure(capturedValues, pure)
         internalValues.putAll(newValues)
-        val mergedContext = InterpreterContext(internalValues, context.isRunning, context.isDebug, context.exceptions)
+        val mergedContext = InterpreterContext(internalValues, context.isRunning, context.exceptions)
         val processor = ProcessorCodeBlock(syntaxTree, mergedContext)
         val returnValue = processor.process()
         for((key,value) in internalValues)
