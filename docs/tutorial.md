@@ -758,12 +758,13 @@ conflicting with the compile-time constant requirement.
 In Wiles, functions are first-class values. Let's start with the simplest case, a function that doesn't yield a value:
 
 ```wiles
-let greet := fun(name : Text)
-    do write_line("Hello, " + name)
+let greet := fun(name : Text) do 
+    write_line("Hello, " + name)
 greet(name := "Alex")
 ```
 
 The general structure for defining a function is `fun(param1 : type1, param2 : type2, ...) [codeblock]`.
+Note that the code block must start on the same line as the function definition.
 
 To call a function, use the syntax `func_name(param1 := value1, param2 := value2, ...)`.
 
@@ -779,8 +780,8 @@ greet(name := "Alex")
 However, when argument order is intuitive, you can opt into unnamed parameters using the `arg` keyword:
 
 ```wiles
-let greet := fun(arg name : Text)
-    do write_line("Hello, " + name)
+let greet := fun(arg name : Text) do
+    write_line("Hello, " + name)
 greet("Alex")
 ```
 
@@ -797,8 +798,8 @@ Unlike named parameters, unnamed parameters are always matched in order.
 Function parameters can have default values, allowing them to be omitted in function calls:
 
 ```wiles
-let greet := fun(arg name := "Alex")
-    do write_line("Hello, " + name)
+let greet := fun(arg name := "Alex") do
+    write_line("Hello, " + name)
 greet() # Greets Alex
 greet("Cameron") # Greets Cameron
 ```
@@ -810,16 +811,16 @@ Since the type can be inferred from the default value, an explicit type declarat
 Functions can also return values using `yield`:
 
 ```wiles
-let add := fun(arg x : Int, arg y : Int) -> Int
-    do yield x + y
+let add := fun(arg x : Int, arg y : Int) -> Int do
+    yield x + y
 write_line(add(5, 5)) # 10
 ```
 
 The `-> type` syntax specifies the return type. If the return type is clear at compile-time, it can be omitted:
 
 ```wiles
-let add := fun(arg x : Int, arg y : Int)
-    do yield x + y # Can only be `Int`
+let add := fun(arg x : Int, arg y : Int) do
+    yield x + y # Can only be `Int`
 write_line(add(5, 5)) # 10
 ```
 
@@ -836,18 +837,19 @@ write_line(x) # Outputs: nothing
 To define a function type, write the function signature without a body:
 
 ```wiles
-let func : fun(name : Text) := fun(name : Text)
-    do write_line("Hello, " + name)
+let func : fun(name : Text) 
+func := fun(name : Text) do
+    write_line("Hello, " + name)
 ```
 
 Function types also support unnamed parameters, default values, and yielding type definitions.
 
 ### No-Parameter Shorthand
 
-If a function takes no parameters, you can define it using only a code block:
+If a function takes no parameters, you can skip the `()` part of the function declaration.
 
 ```wiles
-let greet := do write_line("Hello, world!")
+let greet := fun do write_line("Hello, world!")
 greet() # Outputs: Hello, world!
 ```
 
@@ -923,8 +925,8 @@ function's yielded type must be explicitly annotated, including if it's `nothing
 ```wiles
 write_line(factorial(10)) # Outputs 3628800
 
-def factorial := fun(arg x : Int) -> Int # Explicit annotation required
-begin
+# Explicit annotation required
+def factorial := fun(arg x : Int) -> Int begin
     if x <= 0 do yield 1
     # Wiles knows the factorial function will yield an Int
     yield x * factorial(x - 1)
@@ -1009,8 +1011,7 @@ the values associated with it are considered **default values**, which can be ov
 ```wiles
 let Person := <<name : Text? := nothing, age : Int>>
 
-let greet_person := fun(person : Person)
-begin
+let greet_person := fun(person : Person) begin
     if person.name =/= nothing do
         write("Hi, " + person.name + ". ")
     write_line("Your age is " + person.age)

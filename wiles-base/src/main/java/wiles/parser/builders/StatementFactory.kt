@@ -8,10 +8,7 @@ import wiles.parser.services.TokenTransmitter
 import wiles.parser.statements.*
 import wiles.parser.statements.expressions.DefaultExpression
 import wiles.parser.statements.expressions.TopLevelExpression
-import wiles.shared.errors.WilesException
 import wiles.shared.abstracts.AbstractStatement
-import wiles.shared.enums.DeclarationType
-import wiles.shared.errors.InternalErrorException
 import wiles.shared.constants.ErrorMessages.INTERNAL_ERROR
 import wiles.shared.constants.ErrorMessages.INVALID_STATEMENT_ERROR
 import wiles.shared.constants.ErrorMessages.NOT_YET_IMPLEMENTED_ERROR
@@ -21,14 +18,15 @@ import wiles.shared.constants.Tokens.BRACKET_START_ID
 import wiles.shared.constants.Tokens.DATA_START_ID
 import wiles.shared.constants.Tokens.DECLARE_ID
 import wiles.shared.constants.Tokens.DICT_START_ID
-import wiles.shared.constants.Tokens.DO_ID
 import wiles.shared.constants.Tokens.FOR_ID
 import wiles.shared.constants.Tokens.FUNC_ID
-import wiles.shared.constants.Tokens.LEVEL_SCOPE_ID
 import wiles.shared.constants.Tokens.IF_ID
+import wiles.shared.constants.Tokens.LEVEL_SCOPE_ID
 import wiles.shared.constants.Tokens.RETURN_ID
-import wiles.shared.constants.Tokens.START_BLOCK_ID
 import wiles.shared.constants.Tokens.WHILE_ID
+import wiles.shared.enums.DeclarationType
+import wiles.shared.errors.InternalErrorException
+import wiles.shared.errors.WilesException
 import java.util.function.Function
 
 class StatementFactory {
@@ -73,7 +71,7 @@ class StatementFactory {
             params[StatementFactoryTypes.TOP_LEVEL_EXPRESSION] = START_OF_EXPRESSION
             params[StatementFactoryTypes.DECLARATION_STATEMENT] = tokenOf(DECLARE_ID).or(LEVEL_SCOPE_ID)
                 .removeWhen(WhenRemoveToken.Never)
-            params[StatementFactoryTypes.FUNC_STATEMENT] = tokenOf(FUNC_ID).or(DO_ID).or(START_BLOCK_ID)
+            params[StatementFactoryTypes.FUNC_STATEMENT] = tokenOf(FUNC_ID)
                 .removeWhen(WhenRemoveToken.Never)
             params[StatementFactoryTypes.RETURN_STATEMENT] = tokenOf(RETURN_ID)
             params[StatementFactoryTypes.IF_STATEMENT] = tokenOf(IF_ID).removeWhen(WhenRemoveToken.Never)

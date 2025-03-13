@@ -57,23 +57,23 @@ class MethodStatement(oldContext : ParserContext)
 
     override fun process(): WilesExceptionsCollection {
         try {
-            val startWithCodeBlock = transmitter.expectMaybe(tokenOf(DO_ID).or(START_BLOCK_ID).removeWhen(WhenRemoveToken.Never))
-            if(startWithCodeBlock.isEmpty) {
-                location = transmitter.expect(tokenOf(FUNC_ID)).location
+            transmitter.expectMaybe(tokenOf(DO_ID).or(START_BLOCK_ID).removeWhen(WhenRemoveToken.Never))
+            location = transmitter.expect(tokenOf(FUNC_ID)).location
 
-                //Params
-                transmitter.expect(tokenOf(PAREN_START_ID))
-                readParams()
+            //Params
+            val parenStart = transmitter.expectMaybe(tokenOf(PAREN_START_ID).dontIgnoreNewLine())
+            if(parenStart.isPresent)
+               readParams()
 
-                //Return type
-                if (transmitter.expectMaybe(tokenOf(YIELDS_ID).dontIgnoreNewLine()).isPresent) {
-                    returnType = TypeDefExpression(context)
-                    exceptions.addAll(returnType!!.process())
-                }
+            //Return type
+            if (transmitter.expectMaybe(tokenOf(YIELDS_ID).dontIgnoreNewLine()).isPresent) {
+                returnType = TypeDefExpression(context)
+                exceptions.addAll(returnType!!.process())
             }
-            else location = startWithCodeBlock.get().location
+
             //Read body
-            if(transmitter.expectMaybe(tokenOf(DO_ID).or(START_BLOCK_ID).removeWhen(WhenRemoveToken.Never)).isPresent)
+            if(transmitter.expectMaybe(tokenOf(DO_ID).or(START_BLOCK_ID).removeWhen(WhenRemoveToken.Never)
+                .dontIgnoreNewLine()).isPresent)
                 exceptions.addAll(methodBody.process())
             else isTypeDefinition = true
         } catch (ex: WilesException) {
