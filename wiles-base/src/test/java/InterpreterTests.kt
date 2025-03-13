@@ -736,7 +736,7 @@ class InterpreterTests {
     fun functionsTest()
     {
         getCompilationResults("""
-            let a := fun() do yield 10
+            let a := fun() -> Int do yield 10
             let b := a()
         """.trimIndent()).let { (values, exceptions) ->
             assertNumberExceptions(exceptions, 0)
