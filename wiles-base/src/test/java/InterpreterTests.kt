@@ -544,6 +544,7 @@ class InterpreterTests {
             val obj = WilesInteger(10)
             assertValue(values, "!a"){objectEquals(it, obj)}
             assertValue(values, "!a"){typeEquals(it, INT_TYPE.exactly(obj))}
+            assertValue(values, "!a"){comptimeTypeEquals(it, INT_TYPE.exactly(obj))}
         }
 
         getCompilationResults("""

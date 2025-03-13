@@ -42,7 +42,8 @@ class IdentifierAssignmentOperation(private val leftComponent: AbstractSyntaxTre
             }
 
             val newValue = Value(if(leftIsVariable) VariableStatus.Var else VariableStatus.Const,
-                rightValue.getObj(), rightType, leftType)
+                rightValue.getObj(), rightType,
+                if(leftIsUndefined && !leftIsVariable) rightType else leftType)
             context.values[name] = newValue
             return Value(VariableStatus.Const, WilesNothing, AbstractType.NOTHING_TYPE)
     }
