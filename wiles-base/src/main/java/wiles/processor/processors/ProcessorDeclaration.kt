@@ -19,6 +19,7 @@ import wiles.shared.constants.Tokens.CONST_ID
 import wiles.shared.constants.Tokens.LEVEL_SCOPE_ID
 import wiles.shared.constants.Tokens.VARIABLE_ID
 import wiles.shared.enums.SyntaxType
+import wiles.shared.errors.InternalErrorException
 
 class ProcessorDeclaration(
     syntax : AbstractSyntaxTree,
@@ -42,8 +43,9 @@ class ProcessorDeclaration(
         }
 
         if(expression == null) {
-            val declaredType = getDeclaredType(name, typeDef!!, context)
-            context.values[name] = Value(variableStatus, WilesUndefined, declaredType!!)
+            val declaredType = getDeclaredType(name, typeDef)
+            context.values[name] = Value(variableStatus, WilesUndefined,
+                declaredType ?: throw InternalErrorException())
             return NOTHING_VALUE
         }
 
@@ -55,7 +57,7 @@ class ProcessorDeclaration(
                 !isCheckingLevelScope
             } else false
 
-            val declaredType = getDeclaredType(name, typeDef, context)
+            val declaredType = getDeclaredType(name, typeDef)
             val processor = Processor(expression, newContext)
             val newValue = if (isLevelScoped) {
                 Value(VariableStatus.Const, WilesLazyObject(processor), declaredType!!)
@@ -79,7 +81,7 @@ class ProcessorDeclaration(
         return NOTHING_VALUE
     }
 
-    private fun getDeclaredType(name : String, typeDef : AbstractSyntaxTree?, context : InterpreterContext): AbstractType? {
+    private fun getDeclaredType(name : String, typeDef : AbstractSyntaxTree?): AbstractType? {
         if(context.isRunning)
             return context.values[name]?.getComptimeType()
 
