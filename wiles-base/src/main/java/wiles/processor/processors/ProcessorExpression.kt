@@ -3,14 +3,12 @@ package wiles.processor.processors
 import wiles.processor.assignments.IdentifierAssignmentOperation
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
-import wiles.processor.errors.CantBeModifiedException
 import wiles.processor.errors.OperationTypeException
 import wiles.processor.errors.StackOverflowException
 import wiles.processor.errors.WilesArithmeticException
 import wiles.processor.operations.*
 import wiles.processor.processors.Processor.Companion.NOTHING_VALUE
 import wiles.shared.abstracts.AbstractSyntaxTree
-import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.ACCESS_ID
 import wiles.shared.constants.Tokens.AND_ID
 import wiles.shared.constants.Tokens.APPLY_ID
@@ -61,12 +59,9 @@ open class ProcessorExpression(syntax: AbstractSyntaxTree, context: InterpreterC
             val rightComponent = syntax.getComponents().getOrNull(2)
             if(operationType == ASSIGN_ID)
             {
-                val newOperation = if(leftComponent!!.syntaxType == SyntaxType.TOKEN) {
-                    val name = leftComponent.details[0]
-                    if(IS_IDENTIFIER.test(name))
-                        IdentifierAssignmentOperation(leftComponent, rightComponent!!, context)
-                    else throw CantBeModifiedException(leftComponent.getFirstLocation())
-                }
+                val syntaxType = leftComponent!!.syntaxType
+                val newOperation = if(syntaxType == SyntaxType.TOKEN)
+                    IdentifierAssignmentOperation(leftComponent, rightComponent!!, context)
                 else TODO("Handling mutable collections")
                 return newOperation.getNewValue()
             }

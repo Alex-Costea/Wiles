@@ -12,6 +12,7 @@ import wiles.processor.utils.TypeUtils
 import wiles.processor.values.WilesNothing
 import wiles.processor.values.WilesUndefined
 import wiles.shared.abstracts.AbstractSyntaxTree
+import wiles.shared.constants.Predicates.IS_IDENTIFIER
 
 class IdentifierAssignmentOperation(private val leftComponent: AbstractSyntaxTree,
                                     private val rightComponent: AbstractSyntaxTree,
@@ -24,6 +25,9 @@ class IdentifierAssignmentOperation(private val leftComponent: AbstractSyntaxTre
 
         fun getNewValue(): Value {
             val name = leftComponent.details[0]
+
+            if(!IS_IDENTIFIER.test(name))
+                throw CantBeModifiedException(leftComponent.getFirstLocation())
 
             val leftValue = context.values[name] ?: throw IdentifierUnknownException(leftComponent.getFirstLocation())
             val rightValue = getValue(rightComponent)
