@@ -89,7 +89,7 @@ class DeclarationStatement(
                     transmitter.expect(tokenOf(ASSIGN_ID).withErrorMessage(EXPECTED_INITIALIZATION_ERROR))
                     readRight()
                 }
-                else if(transmitter.expectMaybe(tokenOf(ASSIGN_ID).dontIgnoreNewLine()).isPresent)
+                else if(transmitter.expectMaybe(tokenOf(ASSIGN_ID).dontskipNewLine()).isPresent)
                     readRight()
             }
             else

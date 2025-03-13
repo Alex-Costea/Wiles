@@ -12,6 +12,7 @@ import wiles.shared.constants.Tokens.DO_ID
 import wiles.shared.constants.Tokens.FUNC_ID
 import wiles.shared.constants.Tokens.PAREN_END_ID
 import wiles.shared.constants.Tokens.PAREN_START_ID
+import wiles.shared.constants.Tokens.PURE_ID
 import wiles.shared.constants.Tokens.SEPARATOR_ID
 import wiles.shared.constants.Tokens.START_BLOCK_ID
 import wiles.shared.constants.Tokens.YIELDS_ID
@@ -60,20 +61,24 @@ class MethodStatement(oldContext : ParserContext)
             transmitter.expectMaybe(tokenOf(DO_ID).or(START_BLOCK_ID).removeWhen(WhenRemoveToken.Never))
             location = transmitter.expect(tokenOf(FUNC_ID)).location
 
+            val isPure = transmitter.expectMaybe(tokenOf(PURE_ID).dontskipNewLine())
+            if(isPure.isPresent)
+                name = PURE_ID
+
             //Params
-            val parenStart = transmitter.expectMaybe(tokenOf(PAREN_START_ID).dontIgnoreNewLine())
+            val parenStart = transmitter.expectMaybe(tokenOf(PAREN_START_ID).dontskipNewLine())
             if(parenStart.isPresent)
                readParams()
 
             //Return type
-            if (transmitter.expectMaybe(tokenOf(YIELDS_ID).dontIgnoreNewLine()).isPresent) {
+            if (transmitter.expectMaybe(tokenOf(YIELDS_ID).dontskipNewLine()).isPresent) {
                 returnType = TypeDefExpression(context)
                 exceptions.addAll(returnType!!.process())
             }
 
             //Read body
             if(transmitter.expectMaybe(tokenOf(DO_ID).or(START_BLOCK_ID).removeWhen(WhenRemoveToken.Never)
-                .dontIgnoreNewLine()).isPresent)
+                .dontskipNewLine()).isPresent)
                 exceptions.addAll(methodBody.process())
             else isTypeDefinition = true
         } catch (ex: WilesException) {

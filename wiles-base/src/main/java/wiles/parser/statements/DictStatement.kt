@@ -44,13 +44,13 @@ class DictStatement(context: ParserContext) : AbstractStatement(context) {
             var typeStatement1 : TypeDefExpression? = null
             var typeStatement2 : TypeDefExpression? = null
 
-            if(transmitter.expectMaybe(tokenOf(ANNOTATE_ID).dontIgnoreNewLine()).isPresent) {
+            if(transmitter.expectMaybe(tokenOf(ANNOTATE_ID).dontskipNewLine()).isPresent) {
                 typeStatement1 = TypeDefExpression(context)
                 typeStatement1.process().throwFirstIfExists()
                 typeStatement1.name = "KEY"
             }
 
-            if(transmitter.expectMaybe(tokenOf(YIELDS_ID).dontIgnoreNewLine()).isPresent) {
+            if(transmitter.expectMaybe(tokenOf(YIELDS_ID).dontskipNewLine()).isPresent) {
                 typeStatement2 = TypeDefExpression(context)
                 typeStatement2.process().throwFirstIfExists()
                 typeStatement2.name = "VALUE"

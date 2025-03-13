@@ -48,11 +48,11 @@ object Predicates {
 
 
     @JvmField
-    val EXPECT_TERMINATOR = tokenOf(IS_CONTAINED_IN(TERMINATORS)).dontIgnoreNewLine()
+    val EXPECT_TERMINATOR = tokenOf(IS_CONTAINED_IN(TERMINATORS)).dontskipNewLine()
         .withErrorMessage(ErrorMessages.END_OF_STATEMENT_EXPECTED_ERROR).removeWhen(WhenRemoveToken.WhenFound).freeze()
 
     @JvmField
-    val EXPECT_TERMINATOR_DONT_REMOVE = tokenOf(IS_CONTAINED_IN(TERMINATORS)).dontIgnoreNewLine()
+    val EXPECT_TERMINATOR_DONT_REMOVE = tokenOf(IS_CONTAINED_IN(TERMINATORS)).dontskipNewLine()
         .withErrorMessage(ErrorMessages.END_OF_STATEMENT_EXPECTED_ERROR).removeWhen(WhenRemoveToken.Never).freeze()
 
 
@@ -63,7 +63,7 @@ object Predicates {
     val NOTHING = Predicate { _: String -> false }
 
     @JvmField
-    val READ_REST_OF_LINE =tokenOf { it != NEWLINE_ID }.dontIgnoreNewLine()
+    val READ_REST_OF_LINE =tokenOf { it != NEWLINE_ID }.dontskipNewLine()
         .withErrorMessage(INTERNAL_ERROR).removeWhen(WhenRemoveToken.WhenFound).freeze()
 
     @JvmField
@@ -73,5 +73,5 @@ object Predicates {
 
     @JvmField
     val FINALIZE_EXPRESSION = tokenOf(IS_CONTAINED_IN.invoke(KEYWORDS_INDICATING_NEW_EXPRESSION))
-            .withErrorMessage(INTERNAL_ERROR).dontIgnoreNewLine().removeWhen(WhenRemoveToken.Never).freeze()
+            .withErrorMessage(INTERNAL_ERROR).dontskipNewLine().removeWhen(WhenRemoveToken.Never).freeze()
 }

@@ -45,6 +45,7 @@ import wiles.shared.constants.Tokens.PAREN_END_ID
 import wiles.shared.constants.Tokens.PAREN_START_ID
 import wiles.shared.constants.Tokens.PLUS_ID
 import wiles.shared.constants.Tokens.POWER_ID
+import wiles.shared.constants.Tokens.PURE_ID
 import wiles.shared.constants.Tokens.RANGIFY_ID
 import wiles.shared.constants.Tokens.RETURN_ID
 import wiles.shared.constants.Tokens.SEPARATOR_ID
@@ -205,6 +206,26 @@ class SyntaxTreeConverterTests {
         assertResults(null,"CODE_BLOCK(DECLARATION(!a, EXPRESSION(FUNC(CODE_BLOCK(DECLARATION(!b, EXPRESSION(FUNC(CODE_BLOCK(!nothing)))))))))",
             DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, START_BLOCK_ID, NEWLINE_ID, NEWLINE_ID, DECLARE_ID,
             "!b", ASSIGN_ID, FUNC_ID, PAREN_START_ID, PAREN_END_ID, DO_ID, "!nothing", NEWLINE_ID, END_BLOCK_ID, NEWLINE_ID, NEWLINE_ID, NEWLINE_ID)
+        //let a := fun pure do nothing
+        assertResults(null,"""CODE_BLOCK
+            (
+                DECLARATION
+                (
+                    !a [1, 5, 1, 6], 
+                    EXPRESSION
+                    (
+                        FUNC: PURE [1, 10, 1, 13] 
+                        (
+                            CODE_BLOCK
+                            (
+                                !nothing [1, 22, 1, 29]
+                            )
+                        )
+                    )
+                )
+            )
+            """, DECLARE_ID, "!a", ASSIGN_ID, FUNC_ID, PURE_ID, DO_ID, "!nothing")
+
     }
 
     @Test

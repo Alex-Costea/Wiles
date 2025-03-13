@@ -1,11 +1,11 @@
 package wiles.parser.builders
 
 import wiles.parser.enums.WhenRemoveToken
-import wiles.shared.errors.InternalErrorException
 import wiles.shared.constants.ErrorMessages.ERROR_MESSAGE_EXPECTED_ERROR
 import wiles.shared.constants.ErrorMessages.FROZEN_ERROR
 import wiles.shared.constants.ErrorMessages.TOKEN_EXPECTED_ERROR
 import wiles.shared.constants.ErrorMessages.WHEN_REMOVE_EXPECTED_ERROR
+import wiles.shared.errors.InternalErrorException
 import java.util.function.Predicate
 
 class ExpectParamsBuilder private constructor(var foundTest: Predicate<String>) {
@@ -29,7 +29,7 @@ class ExpectParamsBuilder private constructor(var foundTest: Predicate<String>) 
         return this
     }
 
-    fun dontIgnoreNewLine(): ExpectParamsBuilder {
+    fun dontskipNewLine(): ExpectParamsBuilder {
         checkFrozen()
         isIgnoringNewLine = false
         return this

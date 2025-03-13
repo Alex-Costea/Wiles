@@ -1,7 +1,7 @@
 package wiles.shared.constants
 
-import wiles.shared.errors.InternalErrorException
 import wiles.shared.constants.ErrorMessages.MAX_SYMBOL_TOO_LARGE_ERROR
+import wiles.shared.errors.InternalErrorException
 import java.util.*
 import kotlin.streams.toList
 
@@ -71,6 +71,7 @@ object Tokens {
     const val SUBTYPES_ID = "SUBTYPES"
     const val AS_ID = "AS"
     const val INTERNAL_ID = "INTERNAL"
+    const val PURE_ID = "PURE"
 
     private val KEYWORDS: HashMap<String, String> = HashMap()
     private val SYMBOLS: HashMap<String, String> = HashMap()
@@ -123,6 +124,7 @@ object Tokens {
         KEYWORDS["const"] = CONST_ID
         KEYWORDS["of"] = SUBTYPES_ID
         KEYWORDS["as"] = AS_ID
+        KEYWORDS["pure"] = PURE_ID
         KEYWORDS["__INTERNAL"] = INTERNAL_ID
 
         SYMBOLS["+"] = PLUS_ID
