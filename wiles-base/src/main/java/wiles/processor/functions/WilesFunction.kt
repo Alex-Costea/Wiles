@@ -5,6 +5,7 @@ import wiles.processor.data.ValuesMap
 
 abstract class WilesFunction : (ValuesMap, InterpreterContext) -> Any?
 {
+    abstract val pure : Boolean
     override fun toString(): String {
         return "WilesFunction"
     }

@@ -9,6 +9,7 @@ class WilesCustomFunction(
     private val capturedValues : ValuesMap,
     private val syntaxTree: AbstractSyntaxTree
 ) : WilesFunction() {
+    override val pure = false
     override fun invoke(newValues : ValuesMap, context: InterpreterContext): Any {
         val internalValues = ValuesMap(capturedValues)
         internalValues.putAll(newValues)

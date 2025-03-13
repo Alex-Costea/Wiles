@@ -6,6 +6,7 @@ import wiles.processor.values.WilesDecimal
 import kotlin.random.Random
 
 class RandFunction : WilesFunction() {
+    override val pure = false
     override fun invoke(values: ValuesMap, context : InterpreterContext): WilesDecimal? {
         if(context.isCompiling)
             return null

@@ -20,7 +20,11 @@ class ApplyOperation(left: Value?, right: Value, context: InterpreterContext) : 
     override fun calculateObject(): Any? {
         //TODO: multiple params
         assert(leftObj is WilesFunction)
-        return (leftObj as WilesFunction).invoke(ValuesMap(), context)
+        val func = leftObj as WilesFunction
+        val result = func.invoke(ValuesMap(), context)
+        return if(context.isCompiling && !func.pure)
+            null
+        else result
     }
 
     override fun calculateType(): AbstractType {
