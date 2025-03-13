@@ -57,6 +57,8 @@ open class ProcessorExpression(syntax: AbstractSyntaxTree, context: InterpreterC
             val operationType = operation.details[0]
             val leftComponent = syntax.getComponents().getOrNull(1)
             val rightComponent = syntax.getComponents().getOrNull(2)
+            if(leftComponent == null && rightComponent == null)
+                return Processor(operation, context).process()
             if(operationType == ASSIGN_ID)
             {
                 val syntaxType = leftComponent!!.syntaxType

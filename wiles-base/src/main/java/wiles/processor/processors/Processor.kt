@@ -16,7 +16,7 @@ open class Processor(
     override fun process() : Value {
         val processor: AbstractProcessor = when (syntax.syntaxType) {
             SyntaxType.DECLARATION -> ProcessorDeclaration(syntax, context)
-            SyntaxType.FUNC -> TODO()
+            SyntaxType.FUNC -> ProcessorFunction(syntax, context)
             SyntaxType.EXPRESSION -> ProcessorExpression(syntax, context)
             SyntaxType.CODE_BLOCK -> ProcessorCodeBlock(syntax, context)
             SyntaxType.TYPEDEF -> ProcessorTypeExpression(syntax, context)
@@ -34,6 +34,6 @@ open class Processor(
     }
 
     companion object{
-        val NOTHING_VALUE = Value(VariableStatus.Const, WilesNothing, AbstractType.NOTHING_TYPE, )
+        val NOTHING_VALUE = Value(VariableStatus.Const, WilesNothing, AbstractType.NOTHING_TYPE)
     }
 }

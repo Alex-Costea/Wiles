@@ -732,4 +732,16 @@ class InterpreterTests {
         }
     }
 
+    @Test
+    fun functionsTest()
+    {
+        getCompilationResults("""
+            let a := fun() do yield 10
+            let b := a()
+        """.trimIndent()).let { (values, exceptions) ->
+            assertNumberExceptions(exceptions, 0)
+            assertValue(values, "!b") {objectEquals(it, WilesInteger(10))}
+        }
+    }
+
 }
