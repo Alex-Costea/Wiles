@@ -736,11 +736,13 @@ class InterpreterTests {
     fun functionsTest()
     {
         getCompilationResults("""
-            let a := fun() -> Int do yield 10
-            let b := a()
+            let var a := 0
+            let func := fun do a := a + 5
+            a := 20
+            func()
         """.trimIndent()).let { (values, exceptions) ->
             assertNumberExceptions(exceptions, 0)
-            assertValue(values, "!b") {objectEquals(it, WilesInteger(10))}
+            assertValue(values, "!a") {objectEquals(it, WilesInteger(10))}
         }
     }
 

@@ -20,8 +20,9 @@ class ApplyOperation(left: Value?, right: Value, context: InterpreterContext) : 
     }
 
     override fun calculateObject(): Any {
+        //TODO: multiple params
         assert(leftObj is WilesFunction)
-        return (leftObj as WilesFunction).invoke(ValuesMap())
+        return (leftObj as WilesFunction).invoke(ValuesMap(), context)
     }
 
     override fun calculateType(): AbstractType {

@@ -16,8 +16,6 @@ class ProcessorCodeBlock (
     syntax : AbstractSyntaxTree,
     context : InterpreterContext
 ) : AbstractProcessor(syntax, context) {
-
-
     override fun process() : Value {
         try {
             if(context.isCompiling){
