@@ -34,6 +34,6 @@ open class Processor(
     }
 
     companion object{
-        val NOTHING_VALUE = Value(WilesNothing, AbstractType.NOTHING_TYPE, VariableStatus.Const)
+        val NOTHING_VALUE = Value(VariableStatus.Const, WilesNothing, AbstractType.NOTHING_TYPE, )
     }
 }

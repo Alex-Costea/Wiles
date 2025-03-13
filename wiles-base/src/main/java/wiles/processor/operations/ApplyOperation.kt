@@ -12,10 +12,10 @@ class ApplyOperation(left: Value?, right: Value, context: InterpreterContext) : 
     override fun getNewValue(): Value {
         //TODO: check if calculable at compile time
         return if (context.isCompiling) {
-            Value(null, calculateType(), VariableStatus.Const)
+            Value(VariableStatus.Const, null, calculateType(), )
         } else {
             val obj = calculateObject()
-            Value(obj, calculateType().exactly(obj), VariableStatus.Const)
+            Value(VariableStatus.Const, obj, calculateType().exactly(obj), )
         }
     }
 

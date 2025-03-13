@@ -28,7 +28,7 @@ class IdentifierAssignmentOperation(private val leftComponent: AbstractSyntaxTre
             val leftValue = context.values[name] ?: throw IdentifierUnknownException(leftComponent.getFirstLocation())
             val rightValue = getValue(rightComponent)
 
-            val leftType = leftValue.getType()
+            val leftType = leftValue.getComptimeType()
             val rightType = rightValue.getType()
 
             val leftIsUndefined = leftValue.getObj() is WilesUndefined
@@ -41,14 +41,9 @@ class IdentifierAssignmentOperation(private val leftComponent: AbstractSyntaxTre
                     throw TypeConflictError(leftType, rightType, location)
             }
 
-            val newValue = Value(rightValue.getObj(),
-                when {
-                    leftIsVariable && context.isCompiling -> leftType
-                    leftIsVariable -> rightType
-                    else -> rightType
-                },
-                if(leftIsVariable) VariableStatus.Var else VariableStatus.Const)
+            val newValue = Value(if(leftIsVariable) VariableStatus.Var else VariableStatus.Const,
+                rightValue.getObj(), rightType, leftType)
             context.values[name] = newValue
-            return Value(WilesNothing, AbstractType.NOTHING_TYPE, VariableStatus.Const)
+            return Value(VariableStatus.Const, WilesNothing, AbstractType.NOTHING_TYPE)
     }
 }

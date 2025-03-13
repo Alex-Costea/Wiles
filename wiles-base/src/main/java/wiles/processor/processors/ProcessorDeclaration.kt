@@ -42,50 +42,54 @@ class ProcessorDeclaration(
         }
 
         if(expression == null) {
-            val declaredType = getDeclaredType(typeDef!!, context)
-            context.values[name] = Value(WilesUndefined, declaredType, variableStatus)
+            val declaredType = getDeclaredType(name, typeDef!!, context)
+            context.values[name] = Value(variableStatus, WilesUndefined, declaredType)
             return NOTHING_VALUE
         }
 
         if (!valueAlreadyKnown) {
             val isConst = details.contains(CONST_ID)
-
-            var declaredType : AbstractType? = null
             val isLevelScoped = if(details.contains(LEVEL_SCOPE_ID)) {
                 if(typeDef == null)
                     throw InferenceFailureException(nameToken.getFirstLocation())
                 !isCheckingLevelScope
             } else false
 
-            if((context.isCompiling || isLevelScoped) && typeDef != null)
-            {
-                declaredType = getDeclaredType(typeDef, context)
-            }
+            val declaredType = if(typeDef != null) {
+                getDeclaredType(name, typeDef, context)
+            } else getCompType(name)
 
             val processor = Processor(expression, newContext)
             val newValue = if (isLevelScoped) {
-                Value(WilesLazyObject(processor), declaredType!!, VariableStatus.Const)
+                Value(VariableStatus.Const, WilesLazyObject(processor), declaredType!!)
             } else {
                 val computedValue = processor.process()
-                val isVariable = variableStatus == VariableStatus.Var
                 val newType = computedValue.getType()
-                if (declaredType != null) {
+                if (context.isCompiling && declaredType != null) {
                     if (!isSuperType(declaredType, newType))
                         throw TypeConflictError(declaredType, newType, typeDef!!.getFirstLocation())
                 }
                 if (context.isCompiling && isConst && !computedValue.isKnown())
                     throw ValueNotConstException(nameToken.getFirstLocation())
-                val newTypeVague = if(context.isCompiling) newType.removeExact() else newType
-                Value(computedValue.getObj(),
-                    if (isVariable) declaredType?:newTypeVague else newType,
-                    variableStatus)
+                val vagueNewType = if (context.isCompiling) newType.removeExact() else newType
+                val newDeclaredType = if (variableStatus == VariableStatus.Var) {
+                    declaredType ?: vagueNewType
+                } else newType
+                Value(variableStatus, computedValue.getObj(), newType, newDeclaredType)
             }
             context.values[name] = newValue
         }
         return NOTHING_VALUE
     }
 
-    private fun getDeclaredType(typeDef : AbstractSyntaxTree, context : InterpreterContext): AbstractType {
+    private fun getCompType(name : String): AbstractType? {
+        return context.values[name]?.getComptimeType()
+    }
+
+    private fun getDeclaredType(name : String, typeDef : AbstractSyntaxTree, context : InterpreterContext): AbstractType {
+        if(context.isRunning)
+            return getCompType(name)!!
+
         val typeProcessor = ProcessorTypeExpression(typeDef, context)
         typeProcessor.process()
         val typeDefValue = typeProcessor.process()
@@ -103,10 +107,10 @@ class ProcessorDeclaration(
         val tempValues = ValuesMap()
         for((key,value) in context.values.entries)
         {
-            val newValue = Value(null, value.getType().removeExact(), VariableStatus.Const)
+            val newValue = Value(VariableStatus.Const, null, value.getType().removeExact())
             tempValues[key] = if(value.isLazy()) newValue else value
         }
-        return InterpreterContext(context.isRunning, tempValues, context.isDebug, context.exceptions)
+        return InterpreterContext(tempValues, context.isRunning, context.isDebug, context.exceptions)
     }
 
 }

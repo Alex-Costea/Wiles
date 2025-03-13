@@ -32,17 +32,17 @@ class ProcessorToken(
         if(newName.contains("."))
         {
             val decimal = WilesDecimal(newName)
-            return Value(decimal, DecimalType().exactly(decimal), VariableStatus.Const)
+            return Value(VariableStatus.Const, decimal, DecimalType().exactly(decimal), )
         }
         else{
             val bigInt = WilesInteger(newName)
-            return Value(bigInt, IntType().exactly(bigInt), VariableStatus.Const)
+            return Value(VariableStatus.Const, bigInt, IntType().exactly(bigInt), )
         }
     }
 
     private fun processText(name: String): Value {
         val newName = name.substring(1)
-        return Value(newName, TextType().exactly(newName), VariableStatus.Const)
+        return Value(VariableStatus.Const, newName, TextType().exactly(newName), )
     }
 
     private fun processIdentifier(syntax: AbstractSyntaxTree): Value {
@@ -55,7 +55,7 @@ class ProcessorToken(
             val newValue = context.values[name]!!
             if(context.values[name]?.getObj() is WilesUndefined)
                 throw ValueUndefinedException(syntax.getFirstLocation())
-            return Value(newValue.getObj(), getType(newValue), VariableStatus.Const)
+            return Value(VariableStatus.Const, newValue.getObj(), getType(newValue), )
 
         }
         catch (ex : WilesException)

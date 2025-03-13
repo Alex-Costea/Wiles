@@ -13,6 +13,7 @@ class ProcessorTypeExpression(syntax: AbstractSyntaxTree, context: InterpreterCo
 {
     override fun process() : Value{
         var value : Value
+        assert(context.isCompiling)
         if(syntax.getComponents().size > 1) {
             return super.process()
         }
@@ -23,7 +24,7 @@ class ProcessorTypeExpression(syntax: AbstractSyntaxTree, context: InterpreterCo
         }
         if(value.isKnown()) {
             val newValue = getNewTypeObject(value)
-            value = Value(newValue, TYPE_TYPE, VariableStatus.Const)
+            value = Value(VariableStatus.Const, newValue, TYPE_TYPE, )
         }
         else {
             throw ValueNotConstException(syntax.getFirstLocation())

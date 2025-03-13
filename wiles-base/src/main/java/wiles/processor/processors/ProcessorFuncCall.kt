@@ -10,6 +10,6 @@ import wiles.shared.abstracts.AbstractSyntaxTree
 class ProcessorFuncCall(syntax: AbstractSyntaxTree, context: InterpreterContext) : AbstractProcessor(syntax, context) {
 
     override fun process(): Value {
-        return Value(WilesFunctionCall(), FunctionCallType(), VariableStatus.Const)
+        return Value(VariableStatus.Const, WilesFunctionCall(), FunctionCallType(), )
     }
 }

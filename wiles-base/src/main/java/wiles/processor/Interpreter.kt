@@ -4,6 +4,7 @@ import wiles.parser.Parser
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
 import wiles.processor.data.ValuesMap
+import wiles.processor.enums.VariableStatus
 import wiles.processor.processors.ProcessorCodeBlock
 import wiles.shared.abstracts.AbstractSyntaxTree
 import wiles.shared.constants.StandardLibrary.STANDARD_LIBRARY_TEXT
@@ -11,7 +12,7 @@ import wiles.shared.constants.Utils.convertStatementToSyntaxTree
 import wiles.shared.data.WilesExceptionsCollection
 import java.util.*
 
-class Interpreter(scanner: Scanner?, val syntax: AbstractSyntaxTree, private val debug: Boolean,
+class Interpreter(scanner: Scanner?, val syntax: AbstractSyntaxTree, private val isDebug: Boolean,
                   private val processingStandardLibrary : Boolean = false) {
     private val isRunning: Boolean = scanner != null
     private val values: ValuesMap = ValuesMap()
@@ -21,7 +22,15 @@ class Interpreter(scanner: Scanner?, val syntax: AbstractSyntaxTree, private val
     {
         val compiler = Interpreter(null, syntax, debug)
         compiler.process()
-        values.putAll(compiler.values.filter{ it.value.isKnown() && !it.value.isVariable()})
+        for((name, value) in compiler.values)
+        {
+            if(!value.isKnown())
+                values[name] = Value(if(value.isVariable()) VariableStatus.Var else VariableStatus.Const,
+                    null, value.getComptimeType())
+            else if(value.isVariable())
+                values[name] = Value(VariableStatus.Var, null, value.getComptimeType())
+            else values[name] = value
+        }
         if (compiler.getExceptions().size > 0) {
             exceptions.addAll(compiler.getExceptions())
             return true
@@ -31,16 +40,16 @@ class Interpreter(scanner: Scanner?, val syntax: AbstractSyntaxTree, private val
 
     fun process() {
         if (isRunning)
-            if(compile(syntax, debug))
+            if(compile(syntax, isDebug))
                 return
         if(!processingStandardLibrary && !isRunning)
         {
             values.putAll(standardLibrary)
         }
-        val context = InterpreterContext(isRunning, values, debug, exceptions)
+        val context = InterpreterContext(values, isRunning, isDebug, exceptions)
         val interpretFromProgram = ProcessorCodeBlock(syntax, context)
         interpretFromProgram.process()
-        if (debug) {
+        if (isDebug) {
             print("After ${if (isRunning) "interpreting" else "compiling"}: ")
             println(getValuesExceptStandard())
         }
@@ -71,7 +80,7 @@ class Interpreter(scanner: Scanner?, val syntax: AbstractSyntaxTree, private val
         private val standardLibrary = kotlin.run {
             val parser = Parser(STANDARD_LIBRARY_TEXT, false)
             val syntax = convertStatementToSyntaxTree(parser.getResults())
-            val interpreter = Interpreter(null, syntax, debug = false, processingStandardLibrary = true)
+            val interpreter = Interpreter(null, syntax, isDebug = false, processingStandardLibrary = true)
             interpreter.process()
             return@run interpreter.getValues()
         }

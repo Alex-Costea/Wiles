@@ -9,7 +9,7 @@ import wiles.processor.utils.TypeUtils.getNewTypeObject
 
 class UnionOperation(left: Value?, right: Value, context: InterpreterContext) : AbstractOperation(left, right, context) {
     override fun getNewValue(): Value {
-        return Value(calculateObject(), calculateType(), VariableStatus.Const)
+        return Value(VariableStatus.Const, calculateObject(), calculateType(), )
     }
 
     override fun calculateObject(): Any? {

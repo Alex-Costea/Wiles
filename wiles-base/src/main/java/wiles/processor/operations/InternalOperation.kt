@@ -20,7 +20,7 @@ class InternalOperation(right: Value, context: InterpreterContext) : AbstractOpe
 {
     private val name = (rightObj as String).uppercase()
     override fun getNewValue(): Value {
-        return Value(calculateObject(), calculateType(), VariableStatus.Const)
+        return Value(VariableStatus.Const, calculateObject(), calculateType(), )
     }
 
     override fun calculateObject(): Any? {

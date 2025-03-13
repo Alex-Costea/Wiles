@@ -17,7 +17,7 @@ abstract class AbstractOperation(val left : Value?, val right : Value, val conte
         var newType = calculateType()
         if(bothKnown)
             newType = newType.exactly(newObject!!)
-        return Value(newObject, newType, VariableStatus.Const)
+        return Value(VariableStatus.Const, newObject, newType, )
     }
     protected abstract fun calculateObject() : Any?
     protected abstract fun calculateType() : AbstractType
