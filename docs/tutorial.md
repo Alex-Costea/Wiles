@@ -713,7 +713,7 @@ In this example, `.type` gets a value's runtime type
 You can cast to another type using the `as` operator. This will panic if casting is not possible.
 
 ```wiles
-let a : anything := 12
+let a : Anything := 12
 a as Int #cast a as Int
 write_line(a + 123)
 ```
