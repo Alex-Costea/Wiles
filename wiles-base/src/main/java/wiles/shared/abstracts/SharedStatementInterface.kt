@@ -1,12 +1,18 @@
 package wiles.shared.abstracts
 
 import wiles.shared.data.TokenLocation
+import wiles.shared.enums.SyntaxType
 import wiles.shared.errors.NoTokenLocationException
 
-interface LocationAccessibleInterface {
+interface SharedStatementInterface {
+
+    val syntaxType: SyntaxType?
+
+    fun getStatementName() : String
+
     val location : TokenLocation?
 
-    fun getComponents(): List<LocationAccessibleInterface>
+    fun getComponents(): List<SharedStatementInterface>
 
     fun getFirstLocation() : TokenLocation
     {

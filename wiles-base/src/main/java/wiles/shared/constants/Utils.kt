@@ -2,13 +2,14 @@ package wiles.shared.constants
 
 import wiles.shared.abstracts.AbstractStatement
 import wiles.shared.abstracts.AbstractSyntaxTree
-import wiles.shared.enums.SyntaxType
-import wiles.shared.data.TokenLocation
+import wiles.shared.abstracts.SharedStatementInterface
 import wiles.shared.constants.Chars.DIGIT_SEPARATOR
 import wiles.shared.constants.Tokens.IDENTIFIER_START
 import wiles.shared.constants.Tokens.KEYWORD_START
 import wiles.shared.constants.Tokens.NUM_START
 import wiles.shared.constants.Tokens.STRING_START
+import wiles.shared.data.TokenLocation
+import wiles.shared.enums.SyntaxType
 
 object Utils {
     @JvmStatic
@@ -54,11 +55,11 @@ object Utils {
         return " [${location.line}, ${location.lineIndex}, ${location.lineEnd}, ${location.lineEndIndex}]"
     }
 
-    fun statementToString(statement: AbstractStatement) : String
+    fun statementToString(statement: SharedStatementInterface) : String
     {
         val components = statement.getComponents()
         val hasComponents = components.isNotEmpty()
-        val name = statement.name
+        val name = statement.getStatementName()
         val type = statement.syntaxType
         val isToken = (type == SyntaxType.TOKEN)
         val hasName = name.isNotEmpty()

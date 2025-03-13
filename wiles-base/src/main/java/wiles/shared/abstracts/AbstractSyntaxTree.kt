@@ -1,5 +1,6 @@
 package wiles.shared.abstracts
 
+import wiles.shared.constants.Utils
 import wiles.shared.data.TokenLocation
 import wiles.shared.enums.SyntaxType
 
@@ -7,16 +8,20 @@ import wiles.shared.enums.SyntaxType
 class AbstractSyntaxTree(
     private val components : List<AbstractSyntaxTree>,
     override val location: TokenLocation?,
-    val syntaxType: SyntaxType,
+    override val syntaxType: SyntaxType,
     val details : List<String>,
-    ) : LocationAccessibleInterface {
+    ) : SharedStatementInterface {
+
+    override fun getStatementName(): String {
+        return details.joinToString("; ")
+    }
+
     override fun getComponents(): List<AbstractSyntaxTree> {
         return components
     }
 
     override fun toString(): String {
-        return "AbstractSyntaxTree(" +
-                "components=$components, location=$location, syntaxType=$syntaxType, details=$details)"
+        return Utils.statementToString(this)
     }
 
     override fun equals(other: Any?): Boolean {
