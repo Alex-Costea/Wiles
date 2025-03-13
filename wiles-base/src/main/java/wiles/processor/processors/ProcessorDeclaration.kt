@@ -8,6 +8,7 @@ import wiles.processor.errors.IdentifierAlreadyDeclaredException
 import wiles.processor.errors.InferenceFailureException
 import wiles.processor.errors.TypeConflictError
 import wiles.processor.errors.ValueNotConstException
+import wiles.processor.functions.WilesFunction
 import wiles.processor.processors.Processor.Companion.NOTHING_VALUE
 import wiles.processor.types.AbstractType
 import wiles.processor.types.AbstractType.Companion.TYPE_TYPE
@@ -68,8 +69,14 @@ class ProcessorDeclaration(
                     if (!isSuperType(declaredType, newType))
                         throw TypeConflictError(declaredType, newType, typeDef!!.getFirstLocation())
                 }
-                if (context.isCompiling && isConst && !computedValue.isKnown())
-                    throw ValueNotConstException(nameToken.getFirstLocation())
+                if (context.isCompiling && isConst )
+                {
+                    if(!computedValue.isKnown())
+                        throw ValueNotConstException(nameToken.getFirstLocation())
+                    val obj = computedValue.getObj()
+                    if(obj is WilesFunction && !obj.pure)
+                        throw ValueNotConstException(nameToken.getFirstLocation())
+                }
                 val vagueNewType = if (context.isCompiling) newType.removeExact() else newType
                 val newDeclaredType = if (variableStatus == VariableStatus.Var || context.isRunning) {
                     declaredType ?: vagueNewType

@@ -726,7 +726,7 @@ Wiles supports compile-time execution, allowing values to be computed before run
 This is especially useful when a value needs to be known at compile time to apply a type annotation.
 
 ```wiles
-let a : Int := 123  # `int` is known at compile time
+let a : Int := 123  # `Int` is known at compile time
 let NewInt := Int
 let b : NewInt := 456  # `NewInt` is also known at compile time here
 ```
@@ -860,22 +860,27 @@ generics-like constructs:
 
 
 ```wiles
-let add(const T : Type(Number), x : T, y : T) -> T 
+let add := fun(const T : Type(Number), x : T, y : T) -> T 
     do yield x + y
     
 let a := add(Int, 1, 2) #is Int
 let b := add(Decimal, 1.0, 2.0) #is Decimal
 ```
 
-However, you can further simplify the structure by using `typeof`, which gets the **compile time** type of a value:
+However, you can further simplify the structure by using `typeof`, which gets the **compile time** type of the value:
 
 ```wiles
-let add(x : Number, y : Number) -> typeof(x) | typeof(y) 
+let add := fun(x : Number, y : Number) -> typeof(x) | typeof(y) 
     do yield x + y
     
 let a := add(1, 2) #is Int
 let b := add(1.0, 2.0) #is Decimal
 ```
+
+### Const functions
+
+By using the `const` keyword, you can declare a const function.
+The function body cannot depend on external variables or any other mutable state. 
 
 ### Function types rules
 
@@ -1047,7 +1052,6 @@ In order for a data type to be a subtype of another data type:
 - The subtype can add new members, but can't remove them
 - Existing values can get a default definition
 - Existing default definitions can be overridden, but not removed
-
 
 ---
 
