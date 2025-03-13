@@ -1085,6 +1085,10 @@ All objects, including `nothing`, have these members, which can be accessed usin
 - `.type` gets an object's **runtime** type
 - `.as_text` gets a textual representation of an object
 
+### Convert to Int
+
+`.as_int` coverts `Text` and `Double` objects to `Int` type.
+
 ### Size function
 
 For lists, dictionaries and texts, `.size` will yield their size as an integer.
