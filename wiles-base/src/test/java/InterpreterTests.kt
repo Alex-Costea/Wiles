@@ -477,7 +477,7 @@ class InterpreterTests {
     {
         getCompilationResults("""
             let b := a + 5
-            let def a : Int := 123
+            let def a := 123
         """.trimIndent()).let { (values, exceptions) ->
             assertNumberExceptions(exceptions, 0)
             val value123 = WilesInteger(123)
@@ -510,7 +510,7 @@ class InterpreterTests {
             }
         }
 
-        getCompilationResults("let def a := 123").let { (_, exceptions) ->
+        getCompilationResults("let def a := 123 + 4").let { (_, exceptions) ->
             assertNumberExceptions(exceptions, 1)
             assertException(exceptions[0], InferenceFailureException(
                 TokenLocation(1,9,1,10)

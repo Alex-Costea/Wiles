@@ -907,9 +907,9 @@ but **not** above it. This is achieved by using `def` within the declaration.
 These values are also **lazily computed**, being first calculated when necessary.
 
 ```wiles
-let def a : Int := 123
+let def a := 123
 if 2 > 1 begin
-    let def b : Int := 456
+    let def b := 456
     # both a and b are accessible here
     write_line(a)
     write_line(b)
@@ -918,14 +918,14 @@ end
 write_line(a)
 ```
 
-Note that the type annotation is always necessary when using `def`, 
-except if the declaration body is a function or data literal.
+Note that the type annotation is often necessary when using `def`, 
+as the type inference algorithm could otherwise get stuck in infinite loops.
 
 Due to lazy computation, this applies even when the declaration appears **after** its usage.
 
 ```wiles
 write_line(a) # Outputs 123
-let def a : Int := 123
+let def a := 123
 ```
 
 ### Recursive Functions

@@ -16,6 +16,7 @@ import wiles.processor.utils.InterpreterUtils.isSuperType
 import wiles.processor.values.WilesLazyObject
 import wiles.processor.values.WilesUndefined
 import wiles.shared.abstracts.AbstractSyntaxTree
+import wiles.shared.constants.Predicates.IS_IDENTIFIER
 import wiles.shared.constants.Tokens.CONST_ID
 import wiles.shared.constants.Tokens.LEVEL_SCOPE_ID
 import wiles.shared.constants.Tokens.VARIABLE_ID
@@ -53,12 +54,15 @@ class ProcessorDeclaration(
         if (!valueAlreadyKnown) {
             val isConst = details.contains(CONST_ID)
             val isLevelScoped = if(details.contains(LEVEL_SCOPE_ID)) {
-                if(typeDef == null)
-                    throw InferenceFailureException(nameToken.getFirstLocation())
                 !isCheckingLevelScope
             } else false
 
-            val declaredType = getDeclaredType(name, typeDef)
+            val declaredType = if(isLevelScoped)
+            {
+                checkLevelScopeTypeDef(typeDef, nameToken, expression, newContext)
+            }
+            else getDeclaredType(name, typeDef)
+
             val processor = Processor(expression, newContext)
             val newValue = if (isLevelScoped) {
                 Value(VariableStatus.Const, WilesLazyObject(processor), declaredType!!)
@@ -86,6 +90,23 @@ class ProcessorDeclaration(
             context.values[name] = newValue
         }
         return NOTHING_VALUE
+    }
+
+    private fun checkLevelScopeTypeDef(
+        typeDef: AbstractSyntaxTree?,
+        nameToken: AbstractSyntaxTree,
+        expression: AbstractSyntaxTree,
+        newContext: InterpreterContext
+    ) : AbstractType?
+    {
+        if(typeDef != null)
+            return getDeclaredType(nameToken.details[0], typeDef)
+        if(expression.syntaxType != SyntaxType.TOKEN)
+            throw InferenceFailureException(nameToken.getFirstLocation())
+        if(IS_IDENTIFIER.test(expression.details[0]))
+            throw InferenceFailureException(nameToken.getFirstLocation())
+        val processor = ProcessorToken(expression, newContext)
+        return processor.process().getType()
     }
 
     private fun getDeclaredType(name : String, typeDef : AbstractSyntaxTree?): AbstractType? {
