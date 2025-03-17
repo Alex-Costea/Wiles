@@ -18,6 +18,7 @@ class EitherType(vararg typeList : AbstractType) : AbstractType(null) {
             }
             else subtypesMutableList.add(type)
         }
+        //TODO: merge types
         subtypes = subtypesMutableList.distinct()
     }
 
@@ -44,6 +45,16 @@ class EitherType(vararg typeList : AbstractType) : AbstractType(null) {
         var result = super.hashCode()
         result = 31 * result + subtypes.hashCode()
         return result
+    }
+
+    override fun isExact(): Boolean {
+        if(subtypes.size != 1) return false
+        return subtypes[0].isExact()
+    }
+
+    override fun getValue(): Any? {
+        if(subtypes.size != 1) return null
+        return subtypes[0].getValue()
     }
 
 

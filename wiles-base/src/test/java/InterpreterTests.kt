@@ -764,6 +764,17 @@ class InterpreterTests {
                 TokenLocation(line=3, lineIndex=14, lineEnd=3, lineEndIndex=15)
             ))
         }
+
+        getCompilationResults("""
+            let func := fun begin
+                yield 10
+            end
+            let b := func()
+        """.trimIndent()).let { (values, exceptions) ->
+            assertNumberExceptions(exceptions, 0)
+            assertValue(values, "!b") {objectEquals(it, WilesInteger(10))}
+        }
+
     }
 
 }

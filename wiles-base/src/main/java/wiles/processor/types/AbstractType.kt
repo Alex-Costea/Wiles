@@ -3,7 +3,7 @@ package wiles.processor.types
 
 abstract class AbstractType(val exactValue : Any?) {
 
-    fun isExact(): Boolean {
+    open fun isExact(): Boolean {
         return exactValue != null
     }
 
@@ -15,7 +15,7 @@ abstract class AbstractType(val exactValue : Any?) {
         }
     }
 
-    fun getValue(): Any? {
+    open fun getValue(): Any? {
         return exactValue
     }
 

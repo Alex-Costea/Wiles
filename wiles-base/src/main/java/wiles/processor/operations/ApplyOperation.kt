@@ -10,7 +10,10 @@ import wiles.processor.types.FunctionType
 
 class ApplyOperation(left: Value?, right: Value, context: InterpreterContext) : AbstractOperation(left, right, context) {
     override fun getNewValue(): Value {
-        return calculateObject() ?: Value(VariableStatus.Const, null, calculateType())
+        val expectedType = calculateType()
+        if(expectedType.isExact())
+            return Value(VariableStatus.Const, expectedType.getValue()!!, expectedType)
+        return calculateObject() ?: Value(VariableStatus.Const, null, expectedType)
     }
 
     override fun calculateObject(): Value? {
