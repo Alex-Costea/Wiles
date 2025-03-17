@@ -45,7 +45,7 @@ class ProcessorFunction(syntax: AbstractSyntaxTree, context: InterpreterContext)
                 newValues[name] = Value(variableStatus, value.getObj(), value.getType(), value.getComptimeType())
             else newValues[name] = Value(variableStatus, null, value.getComptimeType())
         }
-        return InterpreterContext(filterOutImpure(newValues, pure), false, context.exceptions)
+        return InterpreterContext(filterOutImpure(newValues, pure), false, context.exceptions, listOf())
     }
 
 }
