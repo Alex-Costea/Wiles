@@ -41,7 +41,7 @@ class Interpreter(scanner: Scanner?, val syntax: AbstractSyntaxTree, private val
         {
             values.putAll(standardLibrary)
         }
-        val context = InterpreterContext(values, isRunning, exceptions, null)
+        val context = InterpreterContext(values, isRunning, exceptions, mutableListOf())
         val interpretFromProgram = ProcessorCodeBlock(syntax, context)
         interpretFromProgram.process()
         if (isDebug) {
