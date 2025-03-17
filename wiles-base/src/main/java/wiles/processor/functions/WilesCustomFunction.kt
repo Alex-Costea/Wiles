@@ -1,6 +1,7 @@
 package wiles.processor.functions
 
 import wiles.processor.data.InterpreterContext
+import wiles.processor.data.Value
 import wiles.processor.data.ValuesMap
 import wiles.processor.processors.ProcessorCodeBlock
 import wiles.processor.utils.InterpreterUtils.filterOutImpure
@@ -12,11 +13,11 @@ class WilesCustomFunction(
     override val pure : Boolean
 ) : WilesFunction() {
 
-    override fun invoke(newValues : ValuesMap, context: InterpreterContext): Any {
+    override fun invoke(newValues : ValuesMap, context: InterpreterContext): Value {
         val internalValues = filterOutImpure(capturedValues, pure)
         internalValues.putAll(newValues)
         val mergedContext = InterpreterContext(internalValues,
-            context.isRunning, context.exceptions, null)
+            context.isRunning, context.exceptions, mutableListOf())
         val processor = ProcessorCodeBlock(syntaxTree, mergedContext)
         val returnValue = processor.process()
         for((key,value) in internalValues)

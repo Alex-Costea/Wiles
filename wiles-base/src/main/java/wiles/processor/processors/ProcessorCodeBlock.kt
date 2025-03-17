@@ -17,6 +17,7 @@ class ProcessorCodeBlock (
     context : InterpreterContext
 ) : AbstractProcessor(syntax, context) {
     override fun process() : Value {
+        var finalValue : Value? = null
         try {
             if(context.isCompiling){
                 for (component in syntax.getComponents())
@@ -28,10 +29,16 @@ class ProcessorCodeBlock (
                 }
             }
             for (component in syntax.getComponents()) {
+                if(finalValue != null)
+                    TODO("Unreachable code")
                 val processor = Processor(component, context)
-                val type = processor.process().getType()
-                if(context.isCompiling)
+                val value = processor.process()
+                if(component.syntaxType ==  SyntaxType.RETURN) {
+                    finalValue = value
+                }
+                else if(context.isCompiling)
                 {
+                    val type = value.getType()
                     if(type is InvalidType)
                         continue
                     if(!InterpreterUtils.isSuperType(NOTHING_TYPE, type))
@@ -43,6 +50,6 @@ class ProcessorCodeBlock (
         {
             context.exceptions.add(ex)
         }
-        return NOTHING_VALUE
+        return finalValue ?: NOTHING_VALUE
     }
 }

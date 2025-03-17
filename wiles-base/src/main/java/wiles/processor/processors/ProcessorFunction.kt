@@ -5,9 +5,9 @@ import wiles.processor.data.Value
 import wiles.processor.data.ValuesMap
 import wiles.processor.enums.VariableStatus
 import wiles.processor.functions.WilesCustomFunction
-import wiles.processor.types.AbstractType
 import wiles.processor.types.FunctionType
 import wiles.processor.utils.InterpreterUtils.filterOutImpure
+import wiles.processor.utils.InterpreterUtils.getYieldedType
 import wiles.shared.abstracts.AbstractSyntaxTree
 import wiles.shared.constants.Tokens.PURE_ID
 import wiles.shared.enums.SyntaxType
@@ -24,14 +24,11 @@ class ProcessorFunction(syntax: AbstractSyntaxTree, context: InterpreterContext)
         //TODO: type definitions and parameters should be analysed as level scope
         val isDeclaredPure = syntax.details.contains(PURE_ID)
         val newContext = getNewContext(isDeclaredPure)
-        if(context.isCompiling)
-        {
-            val processor = ProcessorCodeBlock(codeBlock, newContext)
-            processor.process()
-        }
+        val processor = ProcessorCodeBlock(codeBlock, newContext)
+        processor.process()
         return Value(VariableStatus.Const,
             WilesCustomFunction(context.values, codeBlock, isDeclaredPure),
-            FunctionType(null, AbstractType.NOTHING_TYPE))
+            FunctionType(null, getYieldedType(newContext.yieldPossibilities)))
     }
 
     private fun getNewContext(pure : Boolean): InterpreterContext {
@@ -45,7 +42,7 @@ class ProcessorFunction(syntax: AbstractSyntaxTree, context: InterpreterContext)
                 newValues[name] = Value(variableStatus, value.getObj(), value.getType(), value.getComptimeType())
             else newValues[name] = Value(variableStatus, null, value.getComptimeType())
         }
-        return InterpreterContext(filterOutImpure(newValues, pure), false, context.exceptions, listOf())
+        return InterpreterContext(filterOutImpure(newValues, pure), false, context.exceptions, mutableListOf())
     }
 
 }

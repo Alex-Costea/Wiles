@@ -23,7 +23,7 @@ open class Processor(
             SyntaxType.IF -> TODO()
             SyntaxType.DICT -> TODO()
             SyntaxType.DATA -> TODO()
-            SyntaxType.RETURN -> TODO()
+            SyntaxType.RETURN -> ProcessorReturn(syntax, context)
             SyntaxType.WHILE -> TODO()
             SyntaxType.FUNC_CALL -> ProcessorFuncCall(syntax, context)
             SyntaxType.LIST -> TODO()

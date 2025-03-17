@@ -6,7 +6,7 @@ class InterpreterContext(
     val values : ValuesMap,
     val isRunning : Boolean,
     val exceptions : WilesExceptionsCollection,
-    val yieldPossibilities: List<YieldPossibility>?
+    val yieldPossibilities: MutableList<YieldPossibility>?
 ){
     val isCompiling = !isRunning
     val expectsYield

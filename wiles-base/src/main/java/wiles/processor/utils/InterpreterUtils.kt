@@ -3,6 +3,7 @@ package wiles.processor.utils
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
 import wiles.processor.data.ValuesMap
+import wiles.processor.data.YieldPossibility
 import wiles.processor.enums.VariableStatus
 import wiles.processor.functions.WilesFunction
 import wiles.processor.processors.ProcessorTypeExpression
@@ -116,6 +117,18 @@ object InterpreterUtils {
             else newValues[name] = value
         }
         return newValues
+    }
+
+    fun getYieldedType(possibilities: List<YieldPossibility>?): AbstractType {
+        if(possibilities == null)
+            return NOTHING_TYPE
+        val types = mutableListOf<AbstractType>()
+        for(possibility in possibilities)
+        {
+            types.add(possibility.type)
+        }
+        val typesArray : Array<AbstractType> = types.toTypedArray()
+        return EitherType(*typesArray)
     }
 
 }
