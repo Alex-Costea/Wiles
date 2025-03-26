@@ -2,7 +2,6 @@ package wiles.processor.processors
 
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
-import wiles.processor.enums.VariableStatus
 import wiles.processor.errors.ValueNotConstException
 import wiles.processor.types.AbstractType.Companion.TYPE_TYPE
 import wiles.processor.utils.InterpreterUtils.getNewTypeObject
@@ -24,7 +23,7 @@ class ProcessorTypeExpression(syntax: AbstractSyntaxTree, context: InterpreterCo
         }
         if(value.isKnown()) {
             val newValue = getNewTypeObject(value)
-            value = Value(VariableStatus.Const, newValue, TYPE_TYPE)
+            value = Value(newValue, TYPE_TYPE)
         }
         else {
             throw ValueNotConstException(syntax.getFirstLocation())

@@ -1,5 +1,6 @@
 package wiles.processor.processors
 
+import wiles.processor.data.ValueData
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
 import wiles.processor.data.ValuesMap
@@ -35,7 +36,7 @@ class ProcessorDeclaration(
         val expression = components.getOrNull(1)
         val isCheckingLevelScope = getIsCheckingLevelScope(name)
         val newContext = if(isCheckingLevelScope) createContext() else context
-        val valueAlreadyKnown = newContext.values[name]?.isKnown() == true
+        val valueAlreadyKnown = newContext.values[name]?.value?.isKnown() == true
         val details = syntax.details
         val variableStatus = if (details.contains(VARIABLE_ID)) VariableStatus.Var else VariableStatus.Const
 
@@ -46,8 +47,8 @@ class ProcessorDeclaration(
 
         if(expression == null) {
             val declaredType = getDeclaredType(name, typeDef)
-            context.values[name] = Value(variableStatus, WilesUndefined,
-                declaredType ?: throw InternalErrorException())
+            context.values[name] = ValueData(Value(WilesUndefined,
+                declaredType ?: throw InternalErrorException()), variableStatus)
             return NOTHING_VALUE
         }
 
@@ -65,7 +66,7 @@ class ProcessorDeclaration(
 
             val processor = Processor(expression, newContext)
             val newValue = if (isLevelScoped) {
-                Value(VariableStatus.Const, WilesLazyObject(processor), declaredType!!)
+                ValueData(Value(WilesLazyObject(processor), declaredType!!), VariableStatus.Const)
             } else {
                 val computedValue = processor.process()
                 val newType = computedValue.getType()
@@ -85,7 +86,7 @@ class ProcessorDeclaration(
                 val newDeclaredType = if (variableStatus == VariableStatus.Var || context.isRunning) {
                     declaredType ?: vagueNewType
                 } else newType
-                Value(variableStatus, computedValue.getObj(), newType, newDeclaredType)
+                ValueData(Value(computedValue.getObj(), newType, newDeclaredType), variableStatus)
             }
             context.values[name] = newValue
         }
@@ -111,14 +112,14 @@ class ProcessorDeclaration(
 
     private fun getDeclaredType(name : String, typeDef : AbstractSyntaxTree?): AbstractType? {
         if(context.isRunning)
-            return context.values[name]?.getComptimeType()
+            return context.values[name]?.value?.getComptimeType()
 
         typeDef ?: return null
         return InterpreterUtils.processType(typeDef, context)
     }
 
     private fun getIsCheckingLevelScope(name : String): Boolean {
-        return context.isCompiling && context.values[name]?.isLazy() == true
+        return context.isCompiling && context.values[name]?.value?.isLazy() == true
     }
 
     private fun createContext() : InterpreterContext
@@ -126,8 +127,8 @@ class ProcessorDeclaration(
         val tempValues = ValuesMap()
         for((key,value) in context.values.entries)
         {
-            val newValue = Value(VariableStatus.Const, null, value.getType().removeExact())
-            tempValues[key] = if(value.isLazy()) newValue else value
+            val newValue = Value(null, value.value.getType().removeExact())
+            tempValues[key] = if(value.value.isLazy()) ValueData(newValue, VariableStatus.Const) else value
         }
         return InterpreterContext(tempValues, context.isRunning, context.exceptions, context.yieldPossibilities)
     }

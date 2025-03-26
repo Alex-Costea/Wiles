@@ -2,7 +2,6 @@ package wiles.processor.operations
 
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
-import wiles.processor.enums.VariableStatus
 import wiles.processor.types.AbstractType
 
 abstract class AbstractOperation(val left : Value?, val right : Value, val context: InterpreterContext) {
@@ -17,7 +16,7 @@ abstract class AbstractOperation(val left : Value?, val right : Value, val conte
         var newType = calculateType()
         if(bothKnown)
             newType = newType.exactly(newObject!!)
-        return Value(VariableStatus.Const, newObject, newType, )
+        return Value(newObject, newType)
     }
     protected abstract fun calculateObject() : Any?
     protected abstract fun calculateType() : AbstractType

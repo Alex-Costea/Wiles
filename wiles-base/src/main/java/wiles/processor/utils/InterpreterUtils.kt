@@ -1,9 +1,6 @@
 package wiles.processor.utils
 
-import wiles.processor.data.InterpreterContext
-import wiles.processor.data.Value
-import wiles.processor.data.ValuesMap
-import wiles.processor.data.YieldPossibility
+import wiles.processor.data.*
 import wiles.processor.enums.VariableStatus
 import wiles.processor.functions.WilesFunction
 import wiles.processor.processors.ProcessorTypeExpression
@@ -82,16 +79,17 @@ object InterpreterUtils {
     fun filterOutImpure(values : ValuesMap, pure : Boolean): ValuesMap {
         if(!pure) return ValuesMap(values)
         val newValues = ValuesMap()
-        for((key, value ) in values)
+        for((key, valueData ) in values)
         {
-            if(value.isVariable())
+            val value = valueData.value
+            if(valueData.isVariable())
                 continue
             if(!value.isKnown())
                 continue
             val obj = value.getObj()
             if(obj is WilesFunction && !obj.pure)
                 continue
-            newValues[key] = value
+            newValues[key] = valueData
         }
         return newValues
     }
@@ -107,14 +105,15 @@ object InterpreterUtils {
     fun getCompilerValues(compilerValues: ValuesMap) : ValuesMap
     {
         val newValues = ValuesMap()
-        for((name, value) in compilerValues)
+        for((name, valueData) in compilerValues)
         {
+            val value = valueData.value
             if(!value.isKnown())
-                newValues[name] = Value(if(value.isVariable()) VariableStatus.Var else VariableStatus.Const,
-                    null, value.getComptimeType())
-            else if(value.isVariable())
-                newValues[name] = Value(VariableStatus.Var, null, value.getComptimeType())
-            else newValues[name] = value
+                newValues[name] = ValueData(Value(null, value.getComptimeType()),
+                    valueData.variableStatus)
+            else if(valueData.isVariable())
+                newValues[name] = ValueData(Value( null, value.getComptimeType()), VariableStatus.Var)
+            else newValues[name] = valueData
         }
         return newValues
     }

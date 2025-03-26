@@ -51,7 +51,7 @@ class InterpreterTests {
 
     private fun assertValue(map : ValuesMap, name : String, predicate : (Value) -> Unit)
     {
-        val value = map[name]
+        val value = map[name]?.value
         assertNotNull(value)
         predicate(value)
     }
@@ -124,7 +124,7 @@ class InterpreterTests {
             assertValue(values, "!a") {typeEquals(it, INT_TYPE.exactly(obj))}
             assertValue(values, "!b") {objectEquals(it, obj)}
             assertValue(values, "!b") {typeEquals(it, INT_TYPE.exactly(obj))}
-            assertValuesEqual(values["!a"], values["!b"])
+            assertValuesEqual(values["!a"]?.value, values["!b"]?.value)
         }
 
         getCompilationResults("""

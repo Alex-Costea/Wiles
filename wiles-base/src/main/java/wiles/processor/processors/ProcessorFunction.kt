@@ -1,5 +1,6 @@
 package wiles.processor.processors
 
+import wiles.processor.data.ValueData
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
 import wiles.processor.data.ValuesMap
@@ -26,8 +27,7 @@ class ProcessorFunction(syntax: AbstractSyntaxTree, context: InterpreterContext)
         val newContext = getNewContext(isDeclaredPure)
         val processor = ProcessorCodeBlock(codeBlock, newContext)
         processor.process()
-        return Value(VariableStatus.Const,
-            WilesCustomFunction(context.values, codeBlock, isDeclaredPure),
+        return Value(WilesCustomFunction(context.values, codeBlock, isDeclaredPure),
             FunctionType(null, getYieldedType(newContext.yieldPossibilities)))
     }
 
@@ -35,12 +35,14 @@ class ProcessorFunction(syntax: AbstractSyntaxTree, context: InterpreterContext)
         if(context.isRunning)
             return context
         val newValues = ValuesMap()
-        for((name, value) in context.values)
+        for((name, valueData) in context.values)
         {
-            val variableStatus = if(value.isVariable()) VariableStatus.Var else VariableStatus.Const
-            if(value.isKnown() && !value.isVariable())
-                newValues[name] = Value(variableStatus, value.getObj(), value.getType(), value.getComptimeType())
-            else newValues[name] = Value(variableStatus, null, value.getComptimeType())
+            val value = valueData.value
+            val variableStatus = if(valueData.isVariable()) VariableStatus.Var else VariableStatus.Const
+            if(value.isKnown() && !valueData.isVariable())
+                newValues[name] = ValueData(Value(value.getObj(), value.getType(), value.getComptimeType()),
+                    variableStatus)
+            else newValues[name] = ValueData(Value(null, value.getComptimeType()), variableStatus)
         }
         return InterpreterContext(filterOutImpure(newValues, pure), false, context.exceptions, mutableListOf())
     }

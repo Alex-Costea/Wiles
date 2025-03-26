@@ -3,7 +3,6 @@ package wiles.processor.operations
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
 import wiles.processor.data.ValuesMap
-import wiles.processor.enums.VariableStatus
 import wiles.processor.functions.WilesFunction
 import wiles.processor.types.AbstractType
 import wiles.processor.types.FunctionType
@@ -12,8 +11,8 @@ class ApplyOperation(left: Value?, right: Value, context: InterpreterContext) : 
     override fun getNewValue(): Value {
         val expectedType = calculateType()
         if(expectedType.isExact())
-            return Value(VariableStatus.Const, expectedType.getValue()!!, expectedType)
-        return calculateObject() ?: Value(VariableStatus.Const, null, expectedType)
+            return Value(expectedType.getValue()!!, expectedType)
+        return calculateObject() ?: Value(null, expectedType)
     }
 
     override fun calculateObject(): Value? {

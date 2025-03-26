@@ -1,8 +1,8 @@
 package wiles.processor.assignments
 
+import wiles.processor.data.ValueData
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
-import wiles.processor.enums.VariableStatus
 import wiles.processor.errors.CantBeModifiedException
 import wiles.processor.errors.IdentifierUnknownException
 import wiles.processor.errors.TypeConflictError
@@ -29,14 +29,16 @@ class IdentifierAssignmentOperation(private val leftComponent: AbstractSyntaxTre
             if(!IS_IDENTIFIER.test(name))
                 throw CantBeModifiedException(leftComponent.getFirstLocation())
 
-            val leftValue = context.values[name] ?: throw IdentifierUnknownException(leftComponent.getFirstLocation())
+            val leftContextualValue = context.values[name] ?:
+                throw IdentifierUnknownException(leftComponent.getFirstLocation())
+            val leftValue = leftContextualValue.value
             val rightValue = getValue(rightComponent)
 
             val leftType = leftValue.getComptimeType()
             val rightType = rightValue.getType()
 
             val leftIsUndefined = leftValue.getObj() is WilesUndefined
-            val leftIsVariable = leftValue.isVariable()
+            val leftIsVariable = leftContextualValue.isVariable()
 
             if(context.isCompiling) {
                 val location = leftComponent.getFirstLocation()
@@ -45,10 +47,10 @@ class IdentifierAssignmentOperation(private val leftComponent: AbstractSyntaxTre
                     throw TypeConflictError(leftType, rightType, location)
             }
 
-            val newValue = Value(if(leftIsVariable) VariableStatus.Var else VariableStatus.Const,
-                rightValue.getObj(), rightType,
-                if(leftIsUndefined && !leftIsVariable) rightType else leftType)
+            val newValue = ValueData(Value(rightValue.getObj(), rightType,
+                if(leftIsUndefined && !leftIsVariable) rightType else leftType),
+                leftContextualValue.variableStatus)
             context.values[name] = newValue
-            return Value(VariableStatus.Const, WilesNothing, AbstractType.NOTHING_TYPE)
+            return Value(WilesNothing, AbstractType.NOTHING_TYPE)
     }
 }

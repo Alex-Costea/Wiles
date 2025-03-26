@@ -2,7 +2,6 @@ package wiles.processor.processors
 
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
-import wiles.processor.enums.VariableStatus
 import wiles.processor.errors.IdentifierUnknownException
 import wiles.processor.errors.ValueUndefinedException
 import wiles.processor.types.AbstractType
@@ -32,17 +31,17 @@ class ProcessorToken(
         if(newName.contains("."))
         {
             val decimal = WilesDecimal(newName)
-            return Value(VariableStatus.Const, decimal, DecimalType().exactly(decimal), )
+            return Value(decimal, DecimalType().exactly(decimal))
         }
         else{
             val bigInt = WilesInteger(newName)
-            return Value(VariableStatus.Const, bigInt, IntType().exactly(bigInt), )
+            return Value(bigInt, IntType().exactly(bigInt))
         }
     }
 
     private fun processText(name: String): Value {
         val newName = name.substring(1)
-        return Value(VariableStatus.Const, newName, TextType().exactly(newName), )
+        return Value(newName, TextType().exactly(newName))
     }
 
     private fun processIdentifier(syntax: AbstractSyntaxTree): Value {
@@ -52,10 +51,10 @@ class ProcessorToken(
             {
                 throw IdentifierUnknownException(syntax.getFirstLocation())
             }
-            val newValue = context.values[name]!!
-            if(context.values[name]?.getObj() is WilesUndefined)
+            val newValue = context.values[name]!!.value
+            if(context.values[name]?.value?.getObj() is WilesUndefined)
                 throw ValueUndefinedException(syntax.getFirstLocation())
-            return Value(VariableStatus.Const, newValue.getObj(), getType(newValue), )
+            return Value(newValue.getObj(), getType(newValue))
 
         }
         catch (ex : WilesException)

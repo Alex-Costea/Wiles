@@ -1,8 +1,8 @@
 package wiles.processor
 
 import wiles.parser.Parser
+import wiles.processor.data.ValueData
 import wiles.processor.data.InterpreterContext
-import wiles.processor.data.Value
 import wiles.processor.data.ValuesMap
 import wiles.processor.processors.ProcessorCodeBlock
 import wiles.processor.utils.InterpreterUtils.getCompilerValues
@@ -53,7 +53,7 @@ class Interpreter(scanner: Scanner?, val syntax: AbstractSyntaxTree, private val
         exceptions.addAll(distinctExceptions)
     }
 
-    private fun getValuesExceptStandard(): Map<String, Value> {
+    private fun getValuesExceptStandard(): Map<String, ValueData> {
         return values.filter {!standardLibrary.containsKey(it.key)}
     }
 

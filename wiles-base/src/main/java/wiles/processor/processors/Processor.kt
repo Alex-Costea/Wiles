@@ -2,7 +2,6 @@ package wiles.processor.processors
 
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
-import wiles.processor.enums.VariableStatus
 import wiles.processor.types.AbstractType
 import wiles.processor.values.WilesNothing
 import wiles.shared.abstracts.AbstractSyntaxTree
@@ -34,6 +33,6 @@ open class Processor(
     }
 
     companion object{
-        val NOTHING_VALUE = Value(VariableStatus.Const, WilesNothing, AbstractType.NOTHING_TYPE)
+        val NOTHING_VALUE = Value(WilesNothing, AbstractType.NOTHING_TYPE)
     }
 }

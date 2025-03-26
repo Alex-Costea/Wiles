@@ -2,7 +2,6 @@ package wiles.processor.operations
 
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
-import wiles.processor.enums.VariableStatus
 import wiles.processor.functions.RandFunction
 import wiles.processor.types.AbstractType
 import wiles.processor.types.AbstractType.Companion.ANYTHING_TYPE
@@ -20,7 +19,7 @@ class InternalOperation(right: Value, context: InterpreterContext) : AbstractOpe
 {
     private val name = (rightObj as String).uppercase()
     override fun getNewValue(): Value {
-        return Value(VariableStatus.Const, calculateObject(), calculateType(), )
+        return Value(calculateObject(), calculateType())
     }
 
     override fun calculateObject(): Any? {
