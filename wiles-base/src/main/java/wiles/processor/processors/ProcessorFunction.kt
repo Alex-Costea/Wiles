@@ -1,8 +1,8 @@
 package wiles.processor.processors
 
-import wiles.processor.data.ValueData
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
+import wiles.processor.data.ValueData
 import wiles.processor.data.ValuesMap
 import wiles.processor.enums.VariableStatus
 import wiles.processor.functions.WilesCustomFunction
@@ -40,9 +40,9 @@ class ProcessorFunction(syntax: AbstractSyntaxTree, context: InterpreterContext)
             val value = valueData.value
             val variableStatus = if(valueData.isVariable()) VariableStatus.Var else VariableStatus.Const
             if(value.isKnown() && !valueData.isVariable())
-                newValues[name] = ValueData(Value(value.getObj(), value.getType(), value.getComptimeType()),
-                    variableStatus)
-            else newValues[name] = ValueData(Value(null, value.getComptimeType()), variableStatus)
+                newValues[name] = ValueData(Value(value.getObj(), value.getType()),
+                    variableStatus, valueData.getComptimeType())
+            else newValues[name] = ValueData(Value(null, valueData.getComptimeType()), variableStatus)
         }
         return InterpreterContext(filterOutImpure(newValues, pure), false, context.exceptions, mutableListOf())
     }

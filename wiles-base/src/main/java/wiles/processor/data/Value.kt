@@ -6,8 +6,8 @@ import wiles.processor.values.WilesLazyObject
 class Value(
     private val obj: Any?,
     private val type: AbstractType,
-    private val comptimeType : AbstractType = type
     ) {
+
     fun getObj() : Any?{
         if(obj is WilesLazyObject)
             return obj.getObject()
@@ -16,10 +16,6 @@ class Value(
 
     fun getType() : AbstractType{
         return type
-    }
-
-    fun getComptimeType() : AbstractType{
-        return comptimeType
     }
 
     fun isLazy(): Boolean {
@@ -33,7 +29,7 @@ class Value(
     }
 
     override fun toString(): String {
-        return "Value(obj=${getObjString()}, type=$type, comptimeType=$comptimeType)"
+        return "Value(obj=${getObjString()}, type=$type)"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -44,7 +40,6 @@ class Value(
 
         if (getObj() != other.getObj()) return false
         if (type != other.type) return false
-        if (comptimeType != other.comptimeType) return false
 
         return true
     }
@@ -52,7 +47,6 @@ class Value(
     override fun hashCode(): Int {
         var result = getObj()?.hashCode() ?: 0
         result = 31 * result + type.hashCode()
-        result = 31 * result + comptimeType.hashCode()
         return result
     }
 

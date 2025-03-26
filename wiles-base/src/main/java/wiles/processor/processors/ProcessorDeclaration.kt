@@ -1,8 +1,8 @@
 package wiles.processor.processors
 
-import wiles.processor.data.ValueData
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
+import wiles.processor.data.ValueData
 import wiles.processor.data.ValuesMap
 import wiles.processor.enums.VariableStatus
 import wiles.processor.errors.IdentifierAlreadyDeclaredException
@@ -86,7 +86,7 @@ class ProcessorDeclaration(
                 val newDeclaredType = if (variableStatus == VariableStatus.Var || context.isRunning) {
                     declaredType ?: vagueNewType
                 } else newType
-                ValueData(Value(computedValue.getObj(), newType, newDeclaredType), variableStatus)
+                ValueData(Value(computedValue.getObj(), newType), variableStatus, newDeclaredType)
             }
             context.values[name] = newValue
         }
@@ -112,7 +112,7 @@ class ProcessorDeclaration(
 
     private fun getDeclaredType(name : String, typeDef : AbstractSyntaxTree?): AbstractType? {
         if(context.isRunning)
-            return context.values[name]?.value?.getComptimeType()
+            return context.values[name]?.getComptimeType()
 
         typeDef ?: return null
         return InterpreterUtils.processType(typeDef, context)

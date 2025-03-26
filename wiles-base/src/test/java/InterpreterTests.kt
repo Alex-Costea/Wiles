@@ -5,6 +5,7 @@ import org.junit.platform.commons.annotation.Testable
 import wiles.parser.Parser
 import wiles.processor.Interpreter
 import wiles.processor.data.Value
+import wiles.processor.data.ValueData
 import wiles.processor.data.ValuesMap
 import wiles.processor.errors.*
 import wiles.processor.types.*
@@ -49,22 +50,22 @@ class InterpreterTests {
         return Pair(interpreter.getValues(),interpreter.getExceptions())
     }
 
-    private fun assertValue(map : ValuesMap, name : String, predicate : (Value) -> Unit)
+    private fun assertValue(map : ValuesMap, name : String, predicate : (ValueData) -> Unit)
     {
-        val value = map[name]?.value
+        val value = map[name]
         assertNotNull(value)
         predicate(value)
     }
 
-    private fun objectEquals(myValue : Value, compared : Any?) {
-        assertEquals(compared, myValue.getObj())
+    private fun objectEquals(myValue : ValueData, compared : Any?) {
+        assertEquals(compared, myValue.value.getObj())
     }
 
-    private fun typeEquals(myValue : Value, compared : AbstractType) {
-        return assertEquals(compared,myValue.getType())
+    private fun typeEquals(myValue : ValueData, compared : AbstractType) {
+        return assertEquals(compared,myValue.value.getType())
     }
     
-    private fun comptimeTypeEquals(myValue : Value, compared : AbstractType) {
+    private fun comptimeTypeEquals(myValue : ValueData, compared : AbstractType) {
         return assertEquals(compared,myValue.getComptimeType())
     }
     
@@ -426,9 +427,10 @@ class InterpreterTests {
     {
         getRunningResults("let a := random_decimal()").let { (values, exceptions) ->
             assertNumberExceptions(exceptions, 0)
-            assertValue(values, "!a") {it.getObj() is WilesDecimal}
-            assertValue(values, "!a") {(it.getObj() as WilesDecimal).toString().startsWith("0.")}
-            assertValue(values, "!a") {assert((it.getType() is DecimalType) && it.getType().getValue() == it.getObj())}
+            assertValue(values, "!a") {it.value.getObj() is WilesDecimal}
+            assertValue(values, "!a") {(it.value.getObj() as WilesDecimal).toString().startsWith("0.")}
+            assertValue(values, "!a") {assert((it.value.getType() is DecimalType) &&
+                    it.value.getType().getValue() == it.value.getObj())}
         }
 
         getCompilationResults("let a := random_decimal() + 4").let { (values, exceptions) ->
@@ -439,9 +441,10 @@ class InterpreterTests {
 
         getRunningResults("let a := random_decimal() + 4").let { (values, exceptions) ->
             assertNumberExceptions(exceptions, 0)
-            assertValue(values, "!a") {it.getObj() is WilesDecimal}
-            assertValue(values, "!a") {assertEquals('4',(it.getObj() as WilesDecimal).toString()[0])}
-            assertValue(values, "!a") {assert((it.getType() is DecimalType) && it.getType().getValue() == it.getObj())}
+            assertValue(values, "!a") {it.value.getObj() is WilesDecimal}
+            assertValue(values, "!a") {assertEquals('4',(it.value.getObj() as WilesDecimal).toString()[0])}
+            assertValue(values, "!a") {assert((it.value.getType() is DecimalType) &&
+                    it.value.getType().getValue() == it.value.getObj())}
         }
 
         getCompilationResults("""
@@ -467,8 +470,8 @@ class InterpreterTests {
             val obj1 = WilesDecimal("1.2")
             assertValue(values, "!a") {objectEquals(it, WilesDecimal("1.2"))}
             assertValue(values, "!a") {typeEquals(it,DECIMAL_TYPE.exactly(obj1))}
-            assertValue(values, "!b") {it.getObj() is WilesDecimal}
-            assertValue(values, "!a") {assert((it.getType() is DecimalType) && it.getType().getValue() == it.getObj())}
+            assertValue(values, "!b") {it.value.getObj() is WilesDecimal}
+            assertValue(values, "!a") {assert((it.value.getType() is DecimalType) && it.value.getType().getValue() == it.value.getObj())}
         }
     }
 
