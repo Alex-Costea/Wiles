@@ -2,6 +2,7 @@ package wiles.processor.processors
 
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
+import wiles.processor.data.YieldedValue
 import wiles.processor.errors.ValueUnusedException
 import wiles.processor.processors.Processor.Companion.NOTHING_VALUE
 import wiles.processor.types.AbstractType.Companion.NOTHING_TYPE
@@ -33,7 +34,7 @@ class ProcessorCodeBlock (
                     TODO("Unreachable code")
                 val processor = Processor(component, context)
                 val value = processor.process()
-                if(component.syntaxType ==  SyntaxType.RETURN) {
+                if(value is YieldedValue) {
                     finalValue = value
                 }
                 else if(context.isCompiling)

@@ -3,7 +3,7 @@ package wiles.processor.data
 import wiles.processor.types.AbstractType
 import wiles.processor.values.WilesLazyObject
 
-class Value(
+open class Value(
     private val obj: Any?,
     private val type: AbstractType,
     ) {
