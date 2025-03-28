@@ -778,6 +778,18 @@ class InterpreterTests {
             assertValue(values, "!b") {objectEquals(it, WilesInteger(10))}
         }
 
+        getCompilationResults("""
+            let a := fun begin
+                yield 10
+                let a := 10
+            end
+        """.trimIndent()).let { (_, exceptions) ->
+        assertNumberExceptions(exceptions, 1)
+        assertException(exceptions[0], UnreachableCodeException(
+            TokenLocation(line=3, lineIndex=9, lineEnd=3, lineEndIndex=10)
+        ))
+    }
+
     }
 
 }

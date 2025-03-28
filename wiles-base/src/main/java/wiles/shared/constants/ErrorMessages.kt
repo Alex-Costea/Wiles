@@ -31,6 +31,7 @@ object ErrorMessages {
     const val VALUE_UNUSED_ERROR = "This value's expression is unused."
     const val ARITHMETIC_EXCEPTION_ERROR = "This expression is not a valid arithmetic operation."
     const val OPERATION_TYPE_ERROR = "This operation cannot be performed with %s."
+    const val UNREACHABLE_CODE_ERROR = "Code starting from here can never be reached."
 
     // Internal errors
     const val INTERNAL_ERROR = "An internal error has occurred. "
