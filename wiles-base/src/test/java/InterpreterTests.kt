@@ -784,11 +784,25 @@ class InterpreterTests {
                 let a := 10
             end
         """.trimIndent()).let { (_, exceptions) ->
+            assertNumberExceptions(exceptions, 1)
+            assertException(
+                exceptions[0], UnreachableCodeException(
+                    TokenLocation(line = 3, lineIndex = 9, lineEnd = 3, lineEndIndex = 10)
+                )
+            )
+        }
+
+        getCompilationResults("""
+            let a := fun -> Text begin
+                yield 10
+            end
+        """.trimIndent()).let { (_, exceptions) ->
         assertNumberExceptions(exceptions, 1)
-        assertException(exceptions[0], UnreachableCodeException(
-            TokenLocation(line=3, lineIndex=9, lineEnd=3, lineEndIndex=10)
+        assertException(exceptions[0], TypeConflictError(
+            TEXT_TYPE, INT_TYPE.exactly(WilesInteger(10)),
+            TokenLocation(line=1, lineIndex=17, lineEnd=1, lineEndIndex=21)
         ))
-    }
+        }
 
     }
 

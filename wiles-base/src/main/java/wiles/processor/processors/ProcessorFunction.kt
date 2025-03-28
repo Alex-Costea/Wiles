@@ -5,10 +5,13 @@ import wiles.processor.data.Value
 import wiles.processor.data.ValueData
 import wiles.processor.data.ValuesMap
 import wiles.processor.enums.VariableStatus
+import wiles.processor.errors.TypeConflictError
 import wiles.processor.functions.WilesCustomFunction
+import wiles.processor.types.AbstractType
 import wiles.processor.types.FunctionType
 import wiles.processor.utils.InterpreterUtils.filterOutImpure
 import wiles.processor.utils.InterpreterUtils.getYieldedType
+import wiles.processor.utils.InterpreterUtils.isSuperType
 import wiles.shared.abstracts.AbstractSyntaxTree
 import wiles.shared.constants.Tokens.PURE_ID
 import wiles.shared.enums.SyntaxType
@@ -17,7 +20,6 @@ class ProcessorFunction(syntax: AbstractSyntaxTree, context: InterpreterContext)
     override fun process(): Value {
         val components = syntax.getComponents().toMutableList()
         val yieldStatement = if(components[0].syntaxType == SyntaxType.TYPEDEF) components.removeAt(0) else null
-        if(yieldStatement != null) TODO("type definition")
         val codeBlock = if(components[components.size-1].syntaxType == SyntaxType.CODE_BLOCK)
             components.removeAt(components.size-1) else null
         codeBlock ?: TODO("no code block")
@@ -27,8 +29,16 @@ class ProcessorFunction(syntax: AbstractSyntaxTree, context: InterpreterContext)
         val newContext = getNewContext(isDeclaredPure)
         val processor = ProcessorCodeBlock(codeBlock, newContext)
         processor.process()
+        val yieldedType = getYieldedType(newContext.yieldPossibilities)
+        if(context.isCompiling && yieldStatement != null)
+        {
+            val definedType = ProcessorTypeExpression(yieldStatement, newContext).process().getObj()
+            assert(definedType is AbstractType)
+            if(!isSuperType(definedType as AbstractType, yieldedType))
+                throw TypeConflictError(definedType, yieldedType, yieldStatement.getFirstLocation())
+        }
         return Value(WilesCustomFunction(context.values, codeBlock, isDeclaredPure),
-            FunctionType(null, getYieldedType(newContext.yieldPossibilities)))
+            FunctionType(null, yieldedType))
     }
 
     private fun getNewContext(pure : Boolean): InterpreterContext {
