@@ -685,7 +685,16 @@ let d : Literal(Int) := Int # stores the type `Int` itself as a value
 The `literal` function ensures that the right-hand side is treated as an explicit value rather than a constraint. This 
 prevents confusion when types and values have similar syntax.
 
-### The `type` type
+### The `Widen` function
+
+The `Widen` function takes a type and removes the literal component, yielding the wider type definition:
+
+```wiles
+let a := 2
+let b := Widen(a) # b is the Int type
+```
+
+### The `Type` type
 
 All type expressions are themselves of type `Type(subtype)`, which holds all expressions which 
 are a subtype of something. For instance:
@@ -867,10 +876,10 @@ let a := add(Int, 1, 2) #is Int
 let b := add(Decimal, 1.0, 2.0) #is Decimal
 ```
 
-However, you can further simplify the structure by using `typeof`, which gets the **compile time** type of the value:
+However, you can further simplify the structure by using `.type` and `Widen`
 
 ```wiles
-let add := fun(x : Number, y : Number) -> typeof(x) | typeof(y) 
+let add := fun(x : Number, y : Number) -> Widen(x.type) | Widen(y.type)
     do yield x + y
     
 let a := add(1, 2) #is Int
@@ -1099,10 +1108,6 @@ These functions read a value from the input. They are:
 - `read_int`, of type `fun() -> Int`
 - `read_decimal`, of type `fun() -> Decimal`
 
-# Compile time type
-
-- `typeof` takes a value and gets its **compile time** type.
-
 ### Members of every object
 
 All objects, including `nothing`, have these members, which can be accessed using the `.` operator
@@ -1130,7 +1135,7 @@ For dictionaries, `.keys` will return a list of the keys
 
 The following are standalone: `Int`, `Text`, `Decimal`, `Anything`, `Truth`, `Number`
 
-The following take 1 type as parameter: `List(type)`, `Mutable(type)`, `Literal(type)`, `Type(subtype)`
+The following take 1 type as parameter: `List(type)`, `Mutable(type)`, `Literal(type)`, `Type(subtype)`, `Widen(Type)`
 
 The following takes 2 types as parameters: `Dict(type1, type2)`
 
