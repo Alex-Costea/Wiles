@@ -320,6 +320,42 @@ class InterpreterTests {
             assertException(exceptions[0], OperationTypeException(INT_TYPE.exactly(WilesInteger(1)), TRUE_TYPE,
                 TokenLocation(1, 12, 1, 13)))
         }
+
+        getCompilationResults("""
+            let v1 := false or false
+            let v2 := false or true
+            let v3 := true or false
+            let v4 := true or true
+            let v5 := false and false
+            let v6 := false and true
+            let v7 := true and false
+            let v8 := true and true
+        """.trimIndent()).let { (values, exceptions) ->
+            assertNumberExceptions(exceptions, 0)
+            assertValue(values, "!v1"){objectEquals(it, false)}
+            assertValue(values, "!v1"){typeEquals(it, FALSE_TYPE)}
+
+            assertValue(values, "!v2"){objectEquals(it, true)}
+            assertValue(values, "!v2"){typeEquals(it, TRUE_TYPE)}
+
+            assertValue(values, "!v3"){objectEquals(it, true)}
+            assertValue(values, "!v3"){typeEquals(it, TRUE_TYPE)}
+
+            assertValue(values, "!v4"){objectEquals(it, true)}
+            assertValue(values, "!v4"){typeEquals(it, TRUE_TYPE)}
+
+            assertValue(values, "!v5"){objectEquals(it, false)}
+            assertValue(values, "!v5"){typeEquals(it, FALSE_TYPE)}
+
+            assertValue(values, "!v6"){objectEquals(it, false)}
+            assertValue(values, "!v6"){typeEquals(it, FALSE_TYPE)}
+
+            assertValue(values, "!v7"){objectEquals(it, false)}
+            assertValue(values, "!v7"){typeEquals(it, FALSE_TYPE)}
+
+            assertValue(values, "!v8"){objectEquals(it, true)}
+            assertValue(values, "!v8"){typeEquals(it, TRUE_TYPE)}
+        }
     }
 
     @Test

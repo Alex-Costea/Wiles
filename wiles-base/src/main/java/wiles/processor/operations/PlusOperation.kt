@@ -11,7 +11,6 @@ import wiles.processor.types.AbstractType.Companion.TEXT_TYPE
 import wiles.processor.utils.InterpreterUtils.isSuperType
 import wiles.processor.values.WilesDecimal
 import wiles.processor.values.WilesInteger
-import wiles.shared.errors.InternalErrorException
 import wiles.shared.errors.WilesTypeException
 
 class PlusOperation(left: Value?, right: Value, context: InterpreterContext) : AbstractOperation(left, right, context) {
@@ -26,7 +25,7 @@ class PlusOperation(left: Value?, right: Value, context: InterpreterContext) : A
             leftObj is WilesInteger && rightObj is WilesDecimal -> leftObj + rightObj
             leftObj is WilesDecimal && rightObj is WilesInteger -> leftObj + rightObj
             leftObj is WilesDecimal && rightObj is WilesDecimal -> leftObj + rightObj
-            leftObj == null || rightObj == null -> InternalErrorException()
+            leftObj == null || rightObj == null -> null
             else -> leftObj.toString() + rightObj.toString()
         }
     }

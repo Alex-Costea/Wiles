@@ -54,6 +54,7 @@ abstract class AbstractType(val exactValue : Any?) {
         val ANYTHING_TYPE = AnythingType()
         val TRUE_TYPE = TrueType()
         val FALSE_TYPE = FalseType()
+        val TRUTH_TYPE = EitherType(TRUE_TYPE, FALSE_TYPE)
     }
 
 }

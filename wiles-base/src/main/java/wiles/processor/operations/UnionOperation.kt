@@ -16,7 +16,8 @@ class UnionOperation(left: Value?, right: Value, context: InterpreterContext) : 
             return null
         val leftSubtype = getNewTypeObject(left!!)
         val rightSubtype = getNewTypeObject(right)
-        return EitherType(leftSubtype, rightSubtype) }
+        return EitherType(leftSubtype, rightSubtype)
+    }
 
     override fun calculateType(): AbstractType {
         return AbstractType.TYPE_TYPE
