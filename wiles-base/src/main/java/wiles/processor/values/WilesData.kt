@@ -1,3 +1,3 @@
 package wiles.processor.values
 
-class WilesFunctionCall
+class WilesData

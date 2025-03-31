@@ -1,7 +1,7 @@
 package wiles.processor.types
 
-class FunctionCallType : AbstractType(null) {
+class DataType : AbstractType(null) {
     override fun ofValue(obj : Any?): AbstractType {
-        return FunctionCallType()
+        return DataType()
     }
 }
