@@ -6,7 +6,7 @@ class FunctionType(exactValue: Any? = null, val yieldsType : WilesType) : Abstra
         return "fun() -> $yieldsType"
     }
 
-    override fun removeExact(): AbstractType {
-        return FunctionType(null, yieldsType)
+    override fun ofValue(obj : Any?): AbstractType {
+        return FunctionType(obj, yieldsType)
     }
 }

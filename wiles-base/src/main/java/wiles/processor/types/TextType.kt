@@ -7,7 +7,7 @@ class TextType(exactValue: Any? = null) : AbstractType(exactValue) {
         return super.toString()
     }
 
-    override fun removeExact(): AbstractType {
-        return TextType()
+    override fun ofValue(obj : Any?): AbstractType {
+        return TextType(obj)
     }
 }

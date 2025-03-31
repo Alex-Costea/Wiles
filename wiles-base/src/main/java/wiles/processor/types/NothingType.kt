@@ -6,7 +6,7 @@ class NothingType : AbstractType(null) {
         return "nothing"
     }
 
-    override fun removeExact(): AbstractType {
+    override fun ofValue(obj : Any?): AbstractType {
         return NothingType()
     }
 }

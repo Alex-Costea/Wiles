@@ -6,7 +6,7 @@ class TrueType : AbstractType(null) {
         return "true"
     }
 
-    override fun removeExact(): AbstractType {
+    override fun ofValue(obj : Any?): AbstractType {
         return TrueType()
     }
 }

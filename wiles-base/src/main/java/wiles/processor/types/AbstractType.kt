@@ -32,7 +32,7 @@ abstract class AbstractType(val exactValue : Any?) {
         return result
     }
 
-    abstract fun removeExact(): AbstractType
+    abstract fun ofValue(obj : Any?): AbstractType
 
     companion object{
         val INT_TYPE = WilesType(IntType())

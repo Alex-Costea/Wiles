@@ -6,7 +6,7 @@ class InfinityType : AbstractType(null) {
         return "infinity"
     }
 
-    override fun removeExact(): AbstractType {
+    override fun ofValue(obj : Any?): AbstractType {
         return InfinityType()
     }
 }

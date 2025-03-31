@@ -27,8 +27,16 @@ class WilesType(vararg typeList : AbstractType){
 
     fun removeExact(): WilesType {
         if(typeList.size == 1)
-            return WilesType(typeList[0].removeExact())
+            return WilesType(typeList[0].ofValue(null))
         return this
+    }
+
+    fun getExactIfExists() : Any?
+    {
+        val expectedValues = getSubtypes().map { it.exactValue }.distinct()
+        if(expectedValues.size == 1 && expectedValues[0] != null)
+            return expectedValues[0]
+        return null
     }
 
 
