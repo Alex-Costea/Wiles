@@ -7,12 +7,14 @@ import wiles.processor.types.AbstractType
 import wiles.processor.types.AbstractType.Companion.ANYTHING_TYPE
 import wiles.processor.types.AbstractType.Companion.DECIMAL_TYPE
 import wiles.processor.types.AbstractType.Companion.FALSE_TYPE
+import wiles.processor.types.AbstractType.Companion.INFINITY_TYPE
 import wiles.processor.types.AbstractType.Companion.INT_TYPE
 import wiles.processor.types.AbstractType.Companion.NOTHING_TYPE
 import wiles.processor.types.AbstractType.Companion.TEXT_TYPE
 import wiles.processor.types.AbstractType.Companion.TRUE_TYPE
 import wiles.processor.types.AbstractType.Companion.TYPE_TYPE
 import wiles.processor.types.FunctionType
+import wiles.processor.values.WilesInfinity
 import wiles.processor.values.WilesNothing
 
 class InternalOperation(right: Value, context: InterpreterContext) : AbstractOperation(null, right, context)
@@ -39,6 +41,7 @@ class InternalOperation(right: Value, context: InterpreterContext) : AbstractOpe
         private const val DECIMAL_ID = "DECIMAL"
         private const val ANYTHING_ID = "ANYTHING"
         private const val RAND_ID = "RAND"
+        private const val INFINITY_ID = "INFINITY"
 
         private val RAND_FUNCTION = RandFunction()
 
@@ -51,6 +54,7 @@ class InternalOperation(right: Value, context: InterpreterContext) : AbstractOpe
             DECIMAL_ID to DECIMAL_TYPE,
             ANYTHING_ID to ANYTHING_TYPE,
             RAND_ID to RandFunction(),
+            INFINITY_ID to WilesInfinity
         )
         val GET_TYPES = mapOf(
             TRUE_ID to TRUE_TYPE,
@@ -60,7 +64,8 @@ class InternalOperation(right: Value, context: InterpreterContext) : AbstractOpe
             TEXT_ID to TYPE_TYPE,
             DECIMAL_ID to TYPE_TYPE,
             ANYTHING_ID to TYPE_TYPE,
-            RAND_ID to FunctionType(RAND_FUNCTION, DECIMAL_TYPE)
+            RAND_ID to FunctionType(RAND_FUNCTION, DECIMAL_TYPE),
+            INFINITY_ID to INFINITY_TYPE
         )
     }
 }

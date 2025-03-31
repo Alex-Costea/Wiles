@@ -12,7 +12,9 @@ import wiles.processor.types.*
 import wiles.processor.types.AbstractType.Companion.ANYTHING_TYPE
 import wiles.processor.types.AbstractType.Companion.DECIMAL_TYPE
 import wiles.processor.types.AbstractType.Companion.FALSE_TYPE
+import wiles.processor.types.AbstractType.Companion.FINITE_NUMBER_TYPE
 import wiles.processor.types.AbstractType.Companion.INT_TYPE
+import wiles.processor.types.AbstractType.Companion.NUMBER_TYPE
 import wiles.processor.types.AbstractType.Companion.TEXT_TYPE
 import wiles.processor.types.AbstractType.Companion.TRUE_TYPE
 import wiles.processor.values.WilesDecimal
@@ -424,7 +426,7 @@ class InterpreterTests {
         }
 
         getCompilationResults("""
-            let var a : Number := random_decimal()
+            let var a : FiniteNumber := random_decimal()
             let var b := a
             a := 13
         """.trimIndent()).let { (values, exceptions) ->
@@ -432,7 +434,7 @@ class InterpreterTests {
             val obj = WilesInteger(13)
             assertValue(values, "!a") {objectEquals(it, obj)}
             assertValue(values, "!a") {typeEquals(it, INT_TYPE.exactly(obj))}
-            assertValue(values, "!a") {comptimeTypeEquals(it, EitherType(INT_TYPE, DECIMAL_TYPE))}
+            assertValue(values, "!a") {comptimeTypeEquals(it, FINITE_NUMBER_TYPE)}
             assertValue(values, "!b") {objectEquals(it, null)}
             assertValue(values, "!b") {typeEquals(it, DECIMAL_TYPE)}
             assertValue(values, "!b") {comptimeTypeEquals(it, DECIMAL_TYPE)}
@@ -447,7 +449,7 @@ class InterpreterTests {
             val obj = WilesInteger(13)
             assertValue(values, "!a") {objectEquals(it, obj)}
             assertValue(values, "!a") {typeEquals(it, INT_TYPE.exactly(obj))}
-            assertValue(values, "!a") {comptimeTypeEquals(it, EitherType(INT_TYPE, DECIMAL_TYPE))}
+            assertValue(values, "!a") {comptimeTypeEquals(it, NUMBER_TYPE)}
             assertValue(values, "!b") {comptimeTypeEquals(it, DECIMAL_TYPE)}
         }
 

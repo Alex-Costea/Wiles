@@ -6,13 +6,13 @@ import wiles.processor.functions.WilesFunction
 import wiles.processor.processors.ProcessorTypeExpression
 import wiles.processor.types.*
 import wiles.processor.types.AbstractType.Companion.DECIMAL_TYPE
+import wiles.processor.types.AbstractType.Companion.INFINITY_TYPE
 import wiles.processor.types.AbstractType.Companion.INT_TYPE
+import wiles.processor.types.AbstractType.Companion.MINUS_INFINITY_TYPE
 import wiles.processor.types.AbstractType.Companion.NOTHING_TYPE
 import wiles.processor.types.AbstractType.Companion.TEXT_TYPE
 import wiles.processor.types.AbstractType.Companion.TYPE_TYPE
-import wiles.processor.values.WilesDecimal
-import wiles.processor.values.WilesInteger
-import wiles.processor.values.WilesNothing
+import wiles.processor.values.*
 import wiles.shared.abstracts.AbstractSyntaxTree
 import wiles.shared.errors.InternalErrorException
 
@@ -71,6 +71,8 @@ object InterpreterUtils {
             is Boolean -> getBooleanType(obj)
             is AbstractType -> obj
             is WilesFunction -> defaultType
+            is WilesInfinity -> INFINITY_TYPE
+            is WilesMinusInfinity -> MINUS_INFINITY_TYPE
             null -> defaultType
             else -> throw InternalErrorException()
         }

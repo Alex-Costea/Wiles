@@ -47,7 +47,6 @@ abstract class AbstractType(val exactValue : Any?) {
     companion object{
         val INT_TYPE = IntType()
         val DECIMAL_TYPE = DecimalType()
-        val NUMBER_TYPE = EitherType(INT_TYPE, DECIMAL_TYPE)
         val TEXT_TYPE = TextType()
         val TYPE_TYPE = TypeType()
         val NOTHING_TYPE = NothingType()
@@ -55,6 +54,11 @@ abstract class AbstractType(val exactValue : Any?) {
         val TRUE_TYPE = TrueType()
         val FALSE_TYPE = FalseType()
         val TRUTH_TYPE = EitherType(TRUE_TYPE, FALSE_TYPE)
+        val INFINITY_TYPE = InfinityType()
+        val MINUS_INFINITY_TYPE = MinusInfinityType()
+        val FINITE_NUMBER_TYPE = EitherType(INT_TYPE, DECIMAL_TYPE)
+        val NUMBER_TYPE = EitherType(INT_TYPE, DECIMAL_TYPE, INFINITY_TYPE, MINUS_INFINITY_TYPE)
+        val INVALID_TYPE = InvalidType()
     }
 
 }
