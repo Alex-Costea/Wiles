@@ -88,7 +88,14 @@ class WilesDecimal(private val value : BigFraction)  {
     }
 
     infix fun pow(rightObj: WilesDecimal): WilesDecimal {
-        return WilesDecimal(this.value.pow(rightObj.value.toDouble()).toString())
+        val value = this.value.pow(rightObj.value.toDouble())
+        if(value.isNaN())
+            throw ArithmeticException()
+        return WilesDecimal(value.toString())
+    }
+
+    operator fun compareTo(wilesDecimal: WilesDecimal): Int {
+        return this.value.compareTo(wilesDecimal.value)
     }
 
 }

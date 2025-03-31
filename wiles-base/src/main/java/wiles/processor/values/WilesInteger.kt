@@ -75,6 +75,10 @@ class WilesInteger(private val value : BigInteger) {
         return WilesDecimal(this.toString()) pow rightObj
     }
 
+    operator fun compareTo(wilesInteger: WilesInteger): Int {
+        return this.value.compareTo(wilesInteger.value)
+    }
+
     companion object{
         val DECIMAL_ONE = WilesDecimal(BigFraction.ONE)
     }

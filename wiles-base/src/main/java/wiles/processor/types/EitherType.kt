@@ -1,6 +1,7 @@
 package wiles.processor.types
 
 class EitherType(vararg typeList : AbstractType) : AbstractType(null) {
+    //TODO: handle exactly
     private val subtypes : List<AbstractType>
 
     fun getSubtypes() : List<AbstractType>

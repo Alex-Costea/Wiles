@@ -134,4 +134,17 @@ object InterpreterUtils {
         return EitherType(*typesArray)
     }
 
+    fun equalsValue(obj: Any?, equals : String): Boolean {
+        if(obj is WilesInteger)
+        {
+            return obj == WilesInteger(equals)
+        }
+        if(obj is WilesDecimal)
+        {
+            return obj == WilesDecimal(equals)
+        }
+        return false
+    }
+
+
 }

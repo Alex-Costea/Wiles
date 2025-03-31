@@ -199,6 +199,15 @@ write_line(3.1415)
 
 Under the hood, rational numbers internally use `BigFraction`, so there's no loss in accuracy.
 
+### Infinity types
+
+Wiles supports infinity and negative infinity as numerical values, but they're neither integers or decimals:
+
+```wiles
+write_line(infinity)
+write_line(-infinity)
+```
+
 ---
 
 ## Basic Operations
@@ -375,7 +384,7 @@ write_line(true =/= false) # outputs true
 
 ### Comparison Operations
 
-For numbers (of type `Number`, which includes both `Int` and `Decimal`),
+For all numbers, integer, decimal and infinities,
 you can also use the comparison operators `>` (greater than), `>=` (greater than or equal to),
 `<` (less than), and `<=` (less than or equal to):
 
@@ -614,6 +623,8 @@ let d : Truth := true
 let e : List(Int) := [1, 2, 3]
 let f : Mutable(List(Int)) := ~[1, 2, 3]
 let g : Anything := 123 # can hold any compile-time value
+let h : infinity := infinity
+let i : -infinity := -infinity
 ```
 
 ### Type Expressions
@@ -636,7 +647,8 @@ Sum types allow a variable to hold multiple possible types, using the `|` operat
 let a : Int | Decimal := 123
 ```
 
-Here, `a` can be either an `Int` or a `Decimal`, but nothing else. This appears in the standard library as `Number`.
+Here, `a` can be either an `Int` or a `Decimal`, but nothing else. 
+This appears in the standard library as `FiniteNumber`, with `Number` also including `infinity` and `-infinity`.
 
 A common case is `NewType | nothing`, which has a shorthand syntax:
 
@@ -1133,7 +1145,7 @@ For dictionaries, `.keys` will return a list of the keys
 
 ### Type definition functions
 
-The following are standalone: `Int`, `Text`, `Decimal`, `Anything`, `Truth`, `Number`
+The following are standalone: `Int`, `Text`, `Decimal`, `Anything`, `Truth`, `FiniteNumber`, `Number`
 
 The following take 1 type as parameter: `List(type)`, `Mutable(type)`, `Literal(type)`, `Type(subtype)`, `Widen(Type)`
 

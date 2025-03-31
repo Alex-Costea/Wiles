@@ -13,11 +13,13 @@ import wiles.processor.types.AbstractType.Companion.ANYTHING_TYPE
 import wiles.processor.types.AbstractType.Companion.DECIMAL_TYPE
 import wiles.processor.types.AbstractType.Companion.FALSE_TYPE
 import wiles.processor.types.AbstractType.Companion.FINITE_NUMBER_TYPE
+import wiles.processor.types.AbstractType.Companion.INFINITY_TYPE
 import wiles.processor.types.AbstractType.Companion.INT_TYPE
 import wiles.processor.types.AbstractType.Companion.NUMBER_TYPE
 import wiles.processor.types.AbstractType.Companion.TEXT_TYPE
 import wiles.processor.types.AbstractType.Companion.TRUE_TYPE
 import wiles.processor.values.WilesDecimal
+import wiles.processor.values.WilesInfinity
 import wiles.processor.values.WilesInteger
 import wiles.processor.values.WilesNothing
 import wiles.shared.constants.Utils
@@ -357,6 +359,25 @@ class InterpreterTests {
 
             assertValue(values, "!v8"){objectEquals(it, true)}
             assertValue(values, "!v8"){typeEquals(it, TRUE_TYPE)}
+        }
+
+        getCompilationResults("""
+            let a := (+infinity - -infinity)
+            let b := 0.5 ^ a
+            let c := 1.5 ^ a
+        """.trimIndent()).let { (values, exceptions) ->
+            assertNumberExceptions(exceptions, 0)
+
+            assertValue(values, "!a") { objectEquals(it, WilesInfinity) }
+            assertValue(values, "!a") { typeEquals(it, INFINITY_TYPE) }
+
+            // b := 0.5 ^ infinity = 0
+            assertValue(values, "!b") { objectEquals(it, WilesInteger(0)) }
+            assertValue(values, "!b") { typeEquals(it, NUMBER_TYPE.exactly(0)) }
+
+            // c := 1.5 ^ infinity = infinity
+            assertValue(values, "!c") { objectEquals(it, WilesInfinity) }
+            assertValue(values, "!c") { typeEquals(it, NUMBER_TYPE.exactly(WilesInfinity)) }
         }
     }
 
