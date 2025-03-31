@@ -79,12 +79,14 @@ object InterpreterUtils {
     fun filterOutImpure(values : ValuesMap, pure : Boolean): ValuesMap {
         if(!pure) return ValuesMap(values)
         val newValues = ValuesMap()
+        //TODO: remove types that have the following as subtypes
+        // List, Dict, Anything
+        // Also check the types recursively to not have a disallowed element
+        // e.g. <<a : Mutable(List(Int)))>>
         for((key, valueData ) in values)
         {
             val value = valueData.value
             if(valueData.isVariable())
-                continue
-            if(!value.isKnown())
                 continue
             val obj = value.getObj()
             if(obj is WilesFunction && !obj.pure)
