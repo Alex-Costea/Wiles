@@ -373,7 +373,7 @@ class InterpreterTests {
 
             // b := 0.5 ^ infinity = 0
             assertValue(values, "!b") { objectEquals(it, WilesInteger(0)) }
-            assertValue(values, "!b") { typeEquals(it, NUMBER_TYPE.exactly(0)) }
+            assertValue(values, "!b") { typeEquals(it, NUMBER_TYPE.exactly(WilesInteger(0))) }
 
             // c := 1.5 ^ infinity = infinity
             assertValue(values, "!c") { objectEquals(it, WilesInfinity) }

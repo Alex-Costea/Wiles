@@ -1,7 +1,6 @@
 package wiles.processor.types
 
-class EitherType(vararg typeList : AbstractType) : AbstractType(null) {
-    //TODO: handle exactly
+class EitherType(vararg typeList : AbstractType, exactly : Any? = null) : AbstractType(exactly) {
     private val subtypes : List<AbstractType>
 
     fun getSubtypes() : List<AbstractType>
@@ -25,30 +24,19 @@ class EitherType(vararg typeList : AbstractType) : AbstractType(null) {
 
     override fun clone(value: Any?): AbstractType {
         val newSubtypes = subtypes.map { it.exactly(it.exactValue) }
-        return EitherType(*newSubtypes.toTypedArray())
+        return EitherType(*newSubtypes.toTypedArray(), exactly = value)
     }
 
     override fun toString(): String {
-        return subtypes.joinToString(" | ")
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-        if (!super.equals(other)) return false
-
-        other as EitherType
-
-        return subtypes == other.subtypes
-    }
-
-    override fun hashCode(): Int {
-        var result = super.hashCode()
-        result = 31 * result + subtypes.hashCode()
-        return result
+        return if(subtypes.size == 1 && subtypes[0].isExact())
+            subtypes[0].toString()
+        else if(exactValue != null)
+            super.toString()
+        else subtypes.joinToString(" | ")
     }
 
     override fun isExact(): Boolean {
+        if(exactValue != null) return true
         if(subtypes.size != 1) return false
         return subtypes[0].isExact()
     }
@@ -58,5 +46,23 @@ class EitherType(vararg typeList : AbstractType) : AbstractType(null) {
         return subtypes[0].getValue()
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        if (!super.equals(other)) return false
 
+        other as EitherType
+
+        if (exactValue != other.exactValue) return false
+        if (subtypes != other.subtypes) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = super.hashCode()
+        result = 31 * result + (exactValue?.hashCode() ?: 0)
+        result = 31 * result + subtypes.hashCode()
+        return result
+    }
 }
