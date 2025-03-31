@@ -7,6 +7,7 @@ import wiles.processor.functions.WilesFunction
 import wiles.processor.types.FunctionType
 import wiles.processor.types.WilesType
 import wiles.shared.errors.InternalErrorException
+import wiles.shared.errors.WilesTypeException
 
 class ApplyOperation(left: Value?, right: Value, context: InterpreterContext) : AbstractOperation(left, right, context) {
     override fun getNewValue(): Value {
@@ -28,7 +29,8 @@ class ApplyOperation(left: Value?, right: Value, context: InterpreterContext) : 
 
     override fun calculateType(): WilesType {
         leftType ?: throw InternalErrorException()
-        assert(leftType.getSubtypes().all { it is FunctionType })
+        if(!leftType.getSubtypes().all { it is FunctionType })
+            throw WilesTypeException(leftType, rightType)
         val subtypes = leftType.getSubtypes().map { (it as FunctionType).yieldsType.getSubtypes() }.flatten()
         return WilesType(*subtypes.toTypedArray())
     }
