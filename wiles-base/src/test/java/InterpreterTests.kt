@@ -82,7 +82,8 @@ class InterpreterTests {
     
     private fun assertException(received: WilesException, expected : WilesException)
     {
-        assertEquals(expected, received)
+        assertEquals(expected.message, received.message)
+        assertEquals(expected.tokenLocation, received.tokenLocation)
     }
 
     private fun assertValuesEqual(value1 : Value?, value2 : Value?)
@@ -740,12 +741,12 @@ class InterpreterTests {
 
         getCompilationResults("""
             let var a : Decimal | Text := random_decimal()
-            let b : Int | Text := a
+            let b : Int | Text | 17 := a
         """.trimIndent()).let { (_, exceptions) ->
             assertNumberExceptions(exceptions, 1)
             val type2 = WilesType(IntType(), TextType())
             assertException(exceptions[0], TypeConflictError(type2, DECIMAL_TYPE,
-                TokenLocation(2, 13, 2, 14)))
+                TokenLocation(2, 20, 2, 21)))
         }
 
         getCompilationResults("""

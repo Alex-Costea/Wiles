@@ -14,14 +14,6 @@ import wiles.shared.abstracts.AbstractSyntaxTree
 import wiles.shared.errors.InternalErrorException
 
 object InterpreterUtils {
-    private fun checkExactStatus(former : AbstractType, latter : AbstractType): Boolean {
-        if(former.isExact() && !latter.isExact())
-            return false
-        if(former.isExact() && latter.isExact())
-            return former.getValue() == latter.getValue()
-        return true
-    }
-
     fun isSuperType(superType: WilesType, subType: WilesType) : Boolean
     {
         for(type2 in subType.getSubtypes())
@@ -41,7 +33,7 @@ object InterpreterUtils {
         return true
     }
 
-    private fun isComponentSuperType(superType : AbstractType, subType : AbstractType): Boolean {
+    fun isComponentSuperType(superType : AbstractType, subType : AbstractType): Boolean {
         return when {
             superType is InvalidType || subType is InvalidType -> false
             subType is NothingType -> superType is NothingType
@@ -49,6 +41,14 @@ object InterpreterUtils {
             superType.javaClass == subType.javaClass -> checkExactStatus(superType, subType)
             else -> false
         }
+    }
+
+    private fun checkExactStatus(former : AbstractType, latter : AbstractType): Boolean {
+        if(former.isExact() && !latter.isExact())
+            return false
+        if(former.isExact() && latter.isExact())
+            return former.getValue() == latter.getValue()
+        return true
     }
 
     private fun getBooleanType(boolean: Boolean) =

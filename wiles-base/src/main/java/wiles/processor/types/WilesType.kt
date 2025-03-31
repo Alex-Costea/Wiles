@@ -1,8 +1,10 @@
 package wiles.processor.types
 
+import wiles.processor.utils.InterpreterUtils.isComponentSuperType
+
 class WilesType(vararg typeList : AbstractType){
 
-    private val typeList = typeList.distinct()
+    private val typeList = minimize(typeList.distinct())
 
     override fun toString(): String {
         return typeList.joinToString(" | ")
@@ -39,5 +41,16 @@ class WilesType(vararg typeList : AbstractType){
         return null
     }
 
+    companion object {
+        fun minimize(list: List<AbstractType>): List<AbstractType> {
+            val result = mutableListOf<AbstractType>()
+            for (candidate in list) {
+                if (result.any { isComponentSuperType(it, candidate) }) continue
+                result.removeIf { isComponentSuperType(candidate, it) }
+                result.add(candidate)
+            }
+            return result
+        }
+    }
 
 }
