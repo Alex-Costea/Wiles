@@ -1,9 +1,8 @@
 package wiles.processor.types
 
 
-class AnythingType(exactValue: Any? = null) : AbstractType(exactValue) {
-
-    override fun clone(value: Any?): AbstractType {
+class AnythingType() : AbstractType(null) {
+    override fun removeExact(): AbstractType {
         return AnythingType()
     }
 }

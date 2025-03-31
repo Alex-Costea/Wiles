@@ -2,13 +2,14 @@ package wiles.processor.operations
 
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
-import wiles.processor.types.AbstractType
 import wiles.processor.types.AbstractType.Companion.DECIMAL_TYPE
 import wiles.processor.types.AbstractType.Companion.FINITE_NUMBER_TYPE
 import wiles.processor.types.AbstractType.Companion.INFINITY_TYPE
 import wiles.processor.types.AbstractType.Companion.INT_TYPE
 import wiles.processor.types.AbstractType.Companion.MINUS_INFINITY_TYPE
 import wiles.processor.types.AbstractType.Companion.NUMBER_TYPE
+import wiles.processor.types.IntType
+import wiles.processor.types.WilesType
 import wiles.processor.utils.InterpreterUtils.isSuperType
 import wiles.processor.values.WilesDecimal
 import wiles.processor.values.WilesInfinity
@@ -35,13 +36,13 @@ class DivideOperation(left: Value?, right: Value, context: InterpreterContext) :
         }
     }
 
-    override fun calculateType(): AbstractType {
+    override fun calculateType(): WilesType {
         return when {
             isSuperType(INT_TYPE, leftType!!) && isSuperType(INT_TYPE, rightType) -> INT_TYPE
             isSuperType(INFINITY_TYPE, leftType) -> INFINITY_TYPE
             isSuperType(MINUS_INFINITY_TYPE, leftType) -> MINUS_INFINITY_TYPE
-            isSuperType(INFINITY_TYPE, rightType) -> INT_TYPE.exactly(0)
-            isSuperType(MINUS_INFINITY_TYPE, rightType) -> INT_TYPE.exactly(0)
+            isSuperType(INFINITY_TYPE, rightType) -> WilesType(IntType(0))
+            isSuperType(MINUS_INFINITY_TYPE, rightType) -> WilesType(IntType(0))
             isSuperType(FINITE_NUMBER_TYPE, leftType) && isSuperType(FINITE_NUMBER_TYPE, rightType) -> DECIMAL_TYPE
             isSuperType(NUMBER_TYPE, leftType) && isSuperType(NUMBER_TYPE, rightType) -> NUMBER_TYPE
             else -> throw WilesTypeException(leftType, rightType)

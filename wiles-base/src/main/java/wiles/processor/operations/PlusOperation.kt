@@ -2,7 +2,6 @@ package wiles.processor.operations
 
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
-import wiles.processor.types.AbstractType
 import wiles.processor.types.AbstractType.Companion.ANYTHING_TYPE
 import wiles.processor.types.AbstractType.Companion.DECIMAL_TYPE
 import wiles.processor.types.AbstractType.Companion.FINITE_NUMBER_TYPE
@@ -11,6 +10,7 @@ import wiles.processor.types.AbstractType.Companion.INT_TYPE
 import wiles.processor.types.AbstractType.Companion.MINUS_INFINITY_TYPE
 import wiles.processor.types.AbstractType.Companion.NUMBER_TYPE
 import wiles.processor.types.AbstractType.Companion.TEXT_TYPE
+import wiles.processor.types.WilesType
 import wiles.processor.utils.InterpreterUtils.isSuperType
 import wiles.processor.values.WilesDecimal
 import wiles.processor.values.WilesInfinity
@@ -43,7 +43,7 @@ class PlusOperation(left: Value?, right: Value, context: InterpreterContext) : A
         }
     }
 
-    override fun calculateType(): AbstractType {
+    override fun calculateType(): WilesType {
         return when {
             left == null && isSuperType(INT_TYPE, rightType) -> INT_TYPE
             left == null && isSuperType(DECIMAL_TYPE, rightType) -> DECIMAL_TYPE

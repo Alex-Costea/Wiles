@@ -2,10 +2,10 @@ package wiles.processor.operations
 
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
-import wiles.processor.types.AbstractType
 import wiles.processor.types.AbstractType.Companion.FALSE_TYPE
 import wiles.processor.types.AbstractType.Companion.TRUE_TYPE
 import wiles.processor.types.AbstractType.Companion.TRUTH_TYPE
+import wiles.processor.types.WilesType
 import wiles.processor.utils.InterpreterUtils.isSuperType
 import wiles.shared.errors.WilesTypeException
 
@@ -23,7 +23,7 @@ class OrOperation(left: Value?, right: Value, context: InterpreterContext) : Abs
         return value
     }
 
-    override fun calculateType(): AbstractType {
+    override fun calculateType(): WilesType {
         return when {
             isSuperType(TRUTH_TYPE, leftType!!) && isSuperType(TRUTH_TYPE, rightType) -> {
                 when (calculateObject()) {

@@ -13,7 +13,10 @@ class ProcessorReturn(syntax: AbstractSyntaxTree, context: InterpreterContext)
         val processor = Processor(syntax.getComponents()[0], context)
         val newValue = processor.process()
         val location = syntax.getFirstLocation()
-        context.yieldPossibilities.add(YieldPossibility(newValue.getType(), location))
+        for(type in newValue.getType().getSubtypes())
+        {
+            context.yieldPossibilities.add(YieldPossibility(type, location))
+        }
         return YieldedValue(newValue.getObj(), newValue.getType())
     }
 }

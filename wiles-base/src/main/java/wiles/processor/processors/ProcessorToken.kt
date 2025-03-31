@@ -4,10 +4,7 @@ import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
 import wiles.processor.errors.IdentifierUnknownException
 import wiles.processor.errors.ValueUndefinedException
-import wiles.processor.types.AbstractType
-import wiles.processor.types.DecimalType
-import wiles.processor.types.IntType
-import wiles.processor.types.TextType
+import wiles.processor.types.*
 import wiles.processor.utils.InterpreterUtils.getNewTypeObject
 import wiles.processor.values.WilesDecimal
 import wiles.processor.values.WilesInteger
@@ -31,17 +28,17 @@ class ProcessorToken(
         if(newName.contains("."))
         {
             val decimal = WilesDecimal(newName)
-            return Value(decimal, DecimalType().exactly(decimal))
+            return Value(decimal, WilesType(DecimalType(decimal)))
         }
         else{
             val bigInt = WilesInteger(newName)
-            return Value(bigInt, IntType().exactly(bigInt))
+            return Value(bigInt, WilesType(IntType(bigInt)))
         }
     }
 
     private fun processText(name: String): Value {
         val newName = name.substring(1)
-        return Value(newName, TextType().exactly(newName))
+        return Value(newName, WilesType(TextType(newName)))
     }
 
     private fun processIdentifier(syntax: AbstractSyntaxTree): Value {
@@ -64,8 +61,8 @@ class ProcessorToken(
 
     }
 
-    private fun getType(newValue: Value): AbstractType {
-        if(newValue.getObj() is AbstractType)
+    private fun getType(newValue: Value): WilesType {
+        if(newValue.getObj() is WilesType)
             return AbstractType.TYPE_TYPE
         return getNewTypeObject(newValue)
     }

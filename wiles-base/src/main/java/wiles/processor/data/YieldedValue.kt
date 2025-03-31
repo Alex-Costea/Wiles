@@ -1,5 +1,5 @@
 package wiles.processor.data
 
-import wiles.processor.types.AbstractType
+import wiles.processor.types.WilesType
 
-class YieldedValue(obj: Any?, type: AbstractType) : Value(obj, type)
+class YieldedValue(obj: Any?, type: WilesType) : Value(obj, type)

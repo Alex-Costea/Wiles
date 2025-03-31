@@ -5,12 +5,9 @@ import wiles.processor.enums.VariableStatus
 import wiles.processor.functions.WilesFunction
 import wiles.processor.processors.ProcessorTypeExpression
 import wiles.processor.types.*
-import wiles.processor.types.AbstractType.Companion.DECIMAL_TYPE
 import wiles.processor.types.AbstractType.Companion.INFINITY_TYPE
-import wiles.processor.types.AbstractType.Companion.INT_TYPE
 import wiles.processor.types.AbstractType.Companion.MINUS_INFINITY_TYPE
 import wiles.processor.types.AbstractType.Companion.NOTHING_TYPE
-import wiles.processor.types.AbstractType.Companion.TEXT_TYPE
 import wiles.processor.types.AbstractType.Companion.TYPE_TYPE
 import wiles.processor.values.*
 import wiles.shared.abstracts.AbstractSyntaxTree
@@ -25,16 +22,14 @@ object InterpreterUtils {
         return true
     }
 
-    private fun checkEither(superType: AbstractType, subType: AbstractType) : Boolean
+    fun isSuperType(superType: WilesType, subType: WilesType) : Boolean
     {
-        val superEither = if(superType is EitherType) superType else EitherType(superType)
-        val subEither = if(subType is EitherType) subType else EitherType(subType)
-        for(type2 in subEither.getSubtypes())
+        for(type2 in subType.getSubtypes())
         {
             var hasMatch = false
-            for(type1 in superEither.getSubtypes())
+            for(type1 in superType.getSubtypes())
             {
-                if(isSuperType(type1, type2))
+                if(isComponentSuperType(type1, type2))
                 {
                     hasMatch = true
                     break
@@ -46,10 +41,9 @@ object InterpreterUtils {
         return true
     }
 
-    fun isSuperType(superType : AbstractType, subType : AbstractType): Boolean {
+    private fun isComponentSuperType(superType : AbstractType, subType : AbstractType): Boolean {
         return when {
             superType is InvalidType || subType is InvalidType -> false
-            superType is EitherType || subType is EitherType-> checkEither(superType, subType)
             subType is NothingType -> superType is NothingType
             superType is AnythingType -> true
             superType.javaClass == subType.javaClass -> checkExactStatus(superType, subType)
@@ -60,16 +54,15 @@ object InterpreterUtils {
     private fun getBooleanType(boolean: Boolean) =
         if(boolean) AbstractType.TRUE_TYPE else AbstractType.FALSE_TYPE
 
-
-    fun getNewTypeObject(value : Value) : AbstractType{
+    fun getNewTypeObject(value : Value) : WilesType{
         val defaultType = value.getType()
         return when(val obj = value.getObj()) {
-            is WilesInteger -> INT_TYPE.exactly(obj)
-            is WilesDecimal -> DECIMAL_TYPE.exactly(obj)
+            is WilesInteger -> WilesType(IntType(obj))
+            is WilesDecimal -> WilesType(DecimalType(obj))
             is WilesNothing -> NOTHING_TYPE
-            is String -> TEXT_TYPE.exactly(obj)
+            is String -> WilesType(TextType(obj))
             is Boolean -> getBooleanType(obj)
-            is AbstractType -> obj
+            is WilesType -> obj
             is WilesFunction -> defaultType
             is WilesInfinity -> INFINITY_TYPE
             is WilesMinusInfinity -> MINUS_INFINITY_TYPE
@@ -98,12 +91,12 @@ object InterpreterUtils {
         return newValues
     }
 
-    fun processType(typeDef : AbstractSyntaxTree, context : InterpreterContext): AbstractType {
+    fun processType(typeDef : AbstractSyntaxTree, context : InterpreterContext): WilesType {
         val typeProcessor = ProcessorTypeExpression(typeDef, context)
         val typeDefValue = typeProcessor.process()
         assert(typeDefValue.isKnown())
         assert(isSuperType(TYPE_TYPE,typeDefValue.getType()))
-        return typeDefValue.getObj() as AbstractType
+        return typeDefValue.getObj() as WilesType
     }
 
     fun getCompilerValues(compilerValues: ValuesMap) : ValuesMap
@@ -122,7 +115,7 @@ object InterpreterUtils {
         return newValues
     }
 
-    fun getYieldedType(possibilities: List<YieldPossibility>?): AbstractType {
+    fun getYieldedType(possibilities: List<YieldPossibility>?): WilesType {
         if(possibilities == null)
             return NOTHING_TYPE
         val types = mutableListOf<AbstractType>()
@@ -131,7 +124,7 @@ object InterpreterUtils {
             types.add(possibility.type)
         }
         val typesArray : Array<AbstractType> = types.toTypedArray()
-        return EitherType(*typesArray)
+        return WilesType(*typesArray)
     }
 
     fun equalsValue(obj: Any?, equals : String): Boolean {

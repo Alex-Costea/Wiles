@@ -15,9 +15,11 @@ import wiles.processor.types.AbstractType.Companion.FALSE_TYPE
 import wiles.processor.types.AbstractType.Companion.FINITE_NUMBER_TYPE
 import wiles.processor.types.AbstractType.Companion.INFINITY_TYPE
 import wiles.processor.types.AbstractType.Companion.INT_TYPE
+import wiles.processor.types.AbstractType.Companion.NOTHING_TYPE
 import wiles.processor.types.AbstractType.Companion.NUMBER_TYPE
 import wiles.processor.types.AbstractType.Companion.TEXT_TYPE
 import wiles.processor.types.AbstractType.Companion.TRUE_TYPE
+import wiles.processor.types.AbstractType.Companion.TYPE_TYPE
 import wiles.processor.values.WilesDecimal
 import wiles.processor.values.WilesInfinity
 import wiles.processor.values.WilesInteger
@@ -65,11 +67,11 @@ class InterpreterTests {
         assertEquals(compared, myValue.value.getObj())
     }
 
-    private fun typeEquals(myValue : ValueData, compared : AbstractType) {
+    private fun typeEquals(myValue : ValueData, compared : WilesType) {
         return assertEquals(compared,myValue.value.getType())
     }
     
-    private fun comptimeTypeEquals(myValue : ValueData, compared : AbstractType) {
+    private fun comptimeTypeEquals(myValue : ValueData, compared : WilesType) {
         return assertEquals(compared,myValue.getComptimeType())
     }
     
@@ -94,21 +96,21 @@ class InterpreterTests {
         getCompilationResults("let a := 3").let { (values, exceptions) ->
             val obj = WilesInteger(3)
             assertValue(values, "!a") { objectEquals(it, obj) }
-            assertValue(values, "!a") { typeEquals(it, INT_TYPE.exactly(obj)) }
+            assertValue(values, "!a") { typeEquals(it, WilesType(IntType(obj))) }
             assertNumberExceptions(exceptions, 0)
         }
 
         getCompilationResults("let c := 3.0").let { (values, exceptions) ->
             val obj = WilesDecimal("3.0")
             assertValue(values, "!c") { objectEquals(it, obj) }
-            assertValue(values, "!c") { typeEquals(it, DECIMAL_TYPE.exactly(obj)) }
+            assertValue(values, "!c") { typeEquals(it, WilesType(DecimalType(obj))) }
             assertNumberExceptions(exceptions, 0)
         }
 
         getCompilationResults("""let b := "hello!";""").let { (values, exceptions) ->
             val obj = "hello!"
             assertValue(values, "!b") { objectEquals(it, obj) }
-            assertValue(values, "!b") { typeEquals(it, TEXT_TYPE.exactly(obj)) }
+            assertValue(values, "!b") { typeEquals(it, WilesType(TextType(obj))) }
             assertNumberExceptions(exceptions, 0)
         }
 
@@ -126,9 +128,9 @@ class InterpreterTests {
             assertNumberExceptions(exceptions, 0)
             val obj = WilesInteger(7)
             assertValue(values, "!a") {objectEquals(it, obj)}
-            assertValue(values, "!a") {typeEquals(it, INT_TYPE.exactly(obj))}
+            assertValue(values, "!a") {typeEquals(it, WilesType(IntType(obj)))}
             assertValue(values, "!b") {objectEquals(it, obj)}
-            assertValue(values, "!b") {typeEquals(it, INT_TYPE.exactly(obj))}
+            assertValue(values, "!b") {typeEquals(it, WilesType(IntType(obj)))}
             assertValuesEqual(values["!a"]?.value, values["!b"]?.value)
         }
 
@@ -160,14 +162,14 @@ class InterpreterTests {
         getCompilationResults("let a : Int := 3").let { (values, exceptions) ->
             val obj = WilesInteger(3)
             assertValue(values, "!a") { objectEquals(it, obj) }
-            assertValue(values, "!a") { typeEquals(it, INT_TYPE.exactly(obj)) }
+            assertValue(values, "!a") { typeEquals(it, WilesType(IntType(obj))) }
             assertNumberExceptions(exceptions, 0)
         }
 
         getCompilationResults("let a : Anything := 3").let { (values, exceptions) ->
             val obj = WilesInteger(3)
             assertValue(values, "!a") { objectEquals(it, obj) }
-            assertValue(values, "!a") { typeEquals(it, INT_TYPE.exactly(obj)) }
+            assertValue(values, "!a") { typeEquals(it, WilesType(IntType(obj))) }
             assertNumberExceptions(exceptions, 0)
         }
 
@@ -188,20 +190,20 @@ class InterpreterTests {
         getRunningResults("let var a := 3").let { (values, exceptions) ->
             val obj = WilesInteger(3)
             assertValue(values, "!a") { objectEquals(it, obj) }
-            assertValue(values, "!a") { typeEquals(it, INT_TYPE.exactly(obj)) }
+            assertValue(values, "!a") { typeEquals(it, WilesType(IntType(obj))) }
             assertNumberExceptions(exceptions, 0)
         }
 
         getRunningResults("let var a : Int; a := 3").let { (values, exceptions) ->
             val obj = WilesInteger(3)
             assertValue(values, "!a") { objectEquals(it, obj) }
-            assertValue(values, "!a") { typeEquals(it, INT_TYPE.exactly(obj)) }
+            assertValue(values, "!a") { typeEquals(it, WilesType(IntType(obj))) }
             assertNumberExceptions(exceptions, 0)
         }
 
         getCompilationResults("let a : Text := 3").let { (_, exceptions) ->
             assertNumberExceptions(exceptions, 1)
-            assertException(exceptions[0], TypeConflictError(TEXT_TYPE,INT_TYPE.exactly(WilesInteger(3)),
+            assertException(exceptions[0], TypeConflictError(TEXT_TYPE,WilesType(IntType(WilesInteger(3))),
                 TokenLocation(1, 9, 1, 13)
             ))
         }
@@ -209,7 +211,7 @@ class InterpreterTests {
         getCompilationResults("let a : 123 := 123").let { (values, exceptions) ->
             val obj = WilesInteger(123)
             assertValue(values, "!a") { objectEquals(it, obj) }
-            assertValue(values, "!a") { typeEquals(it, INT_TYPE.exactly(obj)) }
+            assertValue(values, "!a") { typeEquals(it, WilesType(IntType(obj))) }
             assertNumberExceptions(exceptions, 0)
         }
 
@@ -233,13 +235,13 @@ class InterpreterTests {
             assertNumberExceptions(exceptions, 0)
             val value = WilesInteger(5)
             assertValue(values, "!a"){objectEquals(it, value)}
-            assertValue(values, "!a"){typeEquals(it, INT_TYPE.exactly(value))}
+            assertValue(values, "!a"){typeEquals(it, WilesType(IntType(value)))}
         }
         getCompilationResults("""let a := "hello, " + "world!";""").let { (values, exceptions) ->
             assertNumberExceptions(exceptions, 0)
             val value = "hello, world!"
             assertValue(values, "!a"){objectEquals(it, value)}
-            assertValue(values, "!a"){typeEquals(it, TEXT_TYPE.exactly(value))}
+            assertValue(values, "!a"){typeEquals(it, WilesType(TextType(value)))}
         }
         getCompilationResults("""
             let a := 1 + "a"
@@ -247,9 +249,9 @@ class InterpreterTests {
         """.trimIndent()).let { (values, exceptions) ->
             assertNumberExceptions(exceptions, 0)
             assertValue(values, "!a"){objectEquals(it, "1a")}
-            assertValue(values, "!a"){typeEquals(it, TEXT_TYPE.exactly("1a"))}
+            assertValue(values, "!a"){typeEquals(it, WilesType(TextType("1a")))}
             assertValue(values, "!b"){objectEquals(it, "b2")}
-            assertValue(values, "!b"){typeEquals(it, TEXT_TYPE.exactly("b2"))}
+            assertValue(values, "!b"){typeEquals(it, WilesType(TextType("b2")))}
         }
 
         getCompilationResults("""
@@ -259,11 +261,11 @@ class InterpreterTests {
         """.trimIndent()).let { (values, exceptions) ->
             assertNumberExceptions(exceptions, 0)
             assertValue(values, "!a"){objectEquals(it, WilesDecimal("3.0"))}
-            assertValue(values, "!a"){typeEquals(it, DECIMAL_TYPE.exactly(WilesDecimal("3.0")))}
+            assertValue(values, "!a"){typeEquals(it, WilesType(DecimalType(WilesDecimal("3.0"))))}
             assertValue(values, "!b"){objectEquals(it, WilesDecimal("4.0"))}
-            assertValue(values, "!b"){typeEquals(it, DECIMAL_TYPE.exactly(WilesDecimal("4.0")))}
+            assertValue(values, "!b"){typeEquals(it, WilesType(DecimalType(WilesDecimal("4.0"))))}
             assertValue(values, "!c"){objectEquals(it, WilesDecimal("5.0"))}
-            assertValue(values, "!c"){typeEquals(it, DECIMAL_TYPE.exactly(WilesDecimal("5.0")))}
+            assertValue(values, "!c"){typeEquals(it, WilesType(DecimalType(WilesDecimal("5.0"))))}
         }
 
         getCompilationResults("""
@@ -287,31 +289,31 @@ class InterpreterTests {
             val val2 = WilesDecimal("-1.0")
             val val3 = WilesDecimal("1.0")
             assertValue(values, "!a"){objectEquals(it, val1)}
-            assertValue(values, "!a"){typeEquals(it, DECIMAL_TYPE.exactly(val1))}
+            assertValue(values, "!a"){typeEquals(it, WilesType(DecimalType(val1)))}
             assertValue(values, "!b"){objectEquals(it, val2)}
-            assertValue(values, "!b"){typeEquals(it, DECIMAL_TYPE.exactly(val2))}
+            assertValue(values, "!b"){typeEquals(it, WilesType(DecimalType(val2)))}
             assertValue(values, "!c"){objectEquals(it, val3)}
-            assertValue(values, "!c"){typeEquals(it, DECIMAL_TYPE.exactly(val3))}
+            assertValue(values, "!c"){typeEquals(it, WilesType(DecimalType(val3)))}
         }
 
         getCompilationResults("let a := 5 * 1.5 / 9").let { (values, exceptions) ->
             assertNumberExceptions(exceptions, 0)
             val val1 = WilesDecimal(BigFraction(5,6))
             assertValue(values, "!a"){objectEquals(it, val1)}
-            assertValue(values, "!a"){typeEquals(it, DECIMAL_TYPE.exactly(val1))}
+            assertValue(values, "!a"){typeEquals(it, WilesType(DecimalType(val1)))}
         }
 
         getCompilationResults("let a := 4 / 3").let { (values, exceptions) ->
             assertNumberExceptions(exceptions, 0)
             val val1 = WilesInteger(1)
             assertValue(values, "!a"){objectEquals(it, val1)}
-            assertValue(values, "!a"){typeEquals(it, INT_TYPE.exactly(val1))}
+            assertValue(values, "!a"){typeEquals(it, WilesType(IntType(val1)))}
         }
         getCompilationResults("let a := 2.0 ^ 10.0").let { (values, exceptions) ->
             assertNumberExceptions(exceptions, 0)
             val val1 = WilesDecimal("1024")
             assertValue(values, "!a"){objectEquals(it, val1)}
-            assertValue(values, "!a"){typeEquals(it, DECIMAL_TYPE.exactly(val1))}
+            assertValue(values, "!a"){typeEquals(it, WilesType(DecimalType(val1)))}
         }
         getCompilationResults("let a := 1 / 0").let { (_, exceptions) ->
             assertNumberExceptions(exceptions, 1)
@@ -321,7 +323,7 @@ class InterpreterTests {
         }
         getCompilationResults("let a := 1 + true").let { (_, exceptions) ->
             assertNumberExceptions(exceptions, 1)
-            assertException(exceptions[0], OperationTypeException(INT_TYPE.exactly(WilesInteger(1)), TRUE_TYPE,
+            assertException(exceptions[0], OperationTypeException(WilesType(IntType(WilesInteger(1))), TRUE_TYPE,
                 TokenLocation(1, 12, 1, 13)))
         }
 
@@ -373,11 +375,11 @@ class InterpreterTests {
 
             // b := 0.5 ^ infinity = 0
             assertValue(values, "!b") { objectEquals(it, WilesInteger(0)) }
-            assertValue(values, "!b") { typeEquals(it, NUMBER_TYPE.exactly(WilesInteger(0))) }
+            assertValue(values, "!b") { typeEquals(it, WilesType(IntType(WilesInteger(0)))) }
 
             // c := 1.5 ^ infinity = infinity
             assertValue(values, "!c") { objectEquals(it, WilesInfinity) }
-            assertValue(values, "!c") { typeEquals(it, NUMBER_TYPE.exactly(WilesInfinity)) }
+            assertValue(values, "!c") { typeEquals(it, WilesType(InfinityType())) }
         }
     }
 
@@ -392,10 +394,10 @@ class InterpreterTests {
             assertNumberExceptions(exceptions, 0)
             val obj = WilesInteger(3)
             assertValue(values, "!a") {objectEquals(it, obj)}
-            assertValue(values, "!a") {typeEquals(it, INT_TYPE.exactly(obj))}
+            assertValue(values, "!a") {typeEquals(it, WilesType(IntType(obj)))}
             assertValue(values, "!a") {comptimeTypeEquals(it, INT_TYPE)}
             assertValue(values, "!b") {objectEquals(it, WilesInteger(2))}
-            assertValue(values, "!b") {typeEquals(it, INT_TYPE.exactly(WilesInteger(2)))}
+            assertValue(values, "!b") {typeEquals(it, WilesType(IntType(WilesInteger(2))))}
         }
 
         getCompilationResults("""
@@ -407,7 +409,7 @@ class InterpreterTests {
             val obj = WilesInteger(4)
             assertValue(values, "!a") {objectEquals(it, obj)}
             assertValue(values, "!a") {comptimeTypeEquals(it, INT_TYPE)}
-            assertValue(values, "!a") {typeEquals(it, INT_TYPE.exactly(obj))}
+            assertValue(values, "!a") {typeEquals(it, WilesType(IntType(obj)))}
         }
 
         getCompilationResults("a := 123") .let { (_, exceptions) ->
@@ -441,7 +443,7 @@ class InterpreterTests {
         """.trimIndent()).let{ (values, exceptions) ->
             assertValue(values, "!a") { objectEquals(it, WilesInteger(1))}
             assertNumberExceptions(exceptions, 1)
-            assertException(exceptions[0], TypeConflictError( INT_TYPE, TEXT_TYPE.exactly("text"),
+            assertException(exceptions[0], TypeConflictError( INT_TYPE, WilesType(TextType("text")),
                 TokenLocation(2, 1, 2, 2)
             ))
         }
@@ -454,7 +456,7 @@ class InterpreterTests {
             assertNumberExceptions(exceptions, 0)
             val obj = WilesInteger(13)
             assertValue(values, "!a") {objectEquals(it, obj)}
-            assertValue(values, "!a") {typeEquals(it, INT_TYPE.exactly(obj))}
+            assertValue(values, "!a") {typeEquals(it, WilesType(IntType(obj)))}
             assertValue(values, "!a") {comptimeTypeEquals(it, FINITE_NUMBER_TYPE)}
             assertValue(values, "!b") {objectEquals(it, null)}
             assertValue(values, "!b") {typeEquals(it, DECIMAL_TYPE)}
@@ -469,7 +471,7 @@ class InterpreterTests {
             assertNumberExceptions(exceptions, 0)
             val obj = WilesInteger(13)
             assertValue(values, "!a") {objectEquals(it, obj)}
-            assertValue(values, "!a") {typeEquals(it, INT_TYPE.exactly(obj))}
+            assertValue(values, "!a") {typeEquals(it, WilesType(IntType(obj)))}
             assertValue(values, "!a") {comptimeTypeEquals(it, NUMBER_TYPE)}
             assertValue(values, "!b") {comptimeTypeEquals(it, DECIMAL_TYPE)}
         }
@@ -488,8 +490,8 @@ class InterpreterTests {
             assertNumberExceptions(exceptions, 0)
             assertValue(values, "!a") {it.value.getObj() is WilesDecimal}
             assertValue(values, "!a") {(it.value.getObj() as WilesDecimal).toString().startsWith("0.")}
-            assertValue(values, "!a") {assert((it.value.getType() is DecimalType) &&
-                    it.value.getType().getValue() == it.value.getObj())}
+            assertValue(values, "!a") {assert((it.value.getType().getSubtypes()[0] is DecimalType) &&
+                    it.value.getType().getSubtypes()[0].exactValue == it.value.getObj())}
         }
 
         getCompilationResults("let a := random_decimal() + 4").let { (values, exceptions) ->
@@ -502,8 +504,8 @@ class InterpreterTests {
             assertNumberExceptions(exceptions, 0)
             assertValue(values, "!a") {it.value.getObj() is WilesDecimal}
             assertValue(values, "!a") {assertEquals('4',(it.value.getObj() as WilesDecimal).toString()[0])}
-            assertValue(values, "!a") {assert((it.value.getType() is DecimalType) &&
-                    it.value.getType().getValue() == it.value.getObj())}
+            assertValue(values, "!a") {assert((it.value.getType().getSubtypes()[0] is DecimalType) &&
+                    it.value.getType().getSubtypes()[0].exactValue == it.value.getObj())}
         }
 
         getCompilationResults("""
@@ -515,7 +517,7 @@ class InterpreterTests {
             val obj = WilesDecimal("1.2")
             assertValue(values, "!a") {objectEquals(it, obj)}
             assertValue(values, "!a") {comptimeTypeEquals(it, DECIMAL_TYPE)}
-            assertValue(values, "!a") {typeEquals(it, DECIMAL_TYPE.exactly(obj))}
+            assertValue(values, "!a") {typeEquals(it, WilesType(DecimalType(obj)))}
             assertValue(values, "!b") {objectEquals(it, null)}
             assertValue(values, "!b") {typeEquals(it, DECIMAL_TYPE)}
         }
@@ -528,9 +530,10 @@ class InterpreterTests {
             assertNumberExceptions(exceptions, 0)
             val obj1 = WilesDecimal("1.2")
             assertValue(values, "!a") {objectEquals(it, WilesDecimal("1.2"))}
-            assertValue(values, "!a") {typeEquals(it,DECIMAL_TYPE.exactly(obj1))}
+            assertValue(values, "!a") {typeEquals(it,WilesType(DecimalType(obj1)))}
             assertValue(values, "!b") {it.value.getObj() is WilesDecimal}
-            assertValue(values, "!a") {assert((it.value.getType() is DecimalType) && it.value.getType().getValue() == it.value.getObj())}
+            assertValue(values, "!a") {assert((it.value.getType().getSubtypes()[0] is DecimalType) &&
+                    it.value.getType().getSubtypes()[0].exactValue == it.value.getObj())}
         }
     }
 
@@ -545,9 +548,9 @@ class InterpreterTests {
             val value123 = WilesInteger(123)
             val value128 = WilesInteger(128)
             assertValue(values, "!a"){objectEquals(it, value123)}
-            assertValue(values, "!a"){typeEquals(it, INT_TYPE.exactly(value123))}
+            assertValue(values, "!a"){typeEquals(it, WilesType(IntType(value123)))}
             assertValue(values, "!b"){objectEquals(it, value128)}
-            assertValue(values, "!b"){typeEquals(it, INT_TYPE.exactly(value128))}
+            assertValue(values, "!b"){typeEquals(it, WilesType(IntType(value128)))}
         }
 
         getCompilationResults("let def a : Int := true"). let{ (_, exceptions) ->
@@ -566,7 +569,7 @@ class InterpreterTests {
                 val two = WilesInteger(2)
                 val four = WilesInteger(4)
                 assertValue(values, "!a") { objectEquals(it, two) }
-                assertValue(values, "!a") { typeEquals(it, INT_TYPE.exactly(two)) }
+                assertValue(values, "!a") { typeEquals(it, WilesType(IntType(two))) }
                 assertValue(values, "!b") { objectEquals(it, four) }
                 assertValue(values, "!b") { typeEquals(it, INT_TYPE) }
             }
@@ -605,8 +608,8 @@ class InterpreterTests {
             assertNumberExceptions(exceptions, 0)
             val obj = WilesInteger(10)
             assertValue(values, "!a"){objectEquals(it, obj)}
-            assertValue(values, "!a"){typeEquals(it, INT_TYPE.exactly(obj))}
-            assertValue(values, "!a"){comptimeTypeEquals(it, INT_TYPE.exactly(obj))}
+            assertValue(values, "!a"){typeEquals(it, WilesType(IntType(obj)))}
+            assertValue(values, "!a"){comptimeTypeEquals(it, WilesType(IntType(obj)))}
         }
 
         getCompilationResults("""
@@ -638,7 +641,7 @@ class InterpreterTests {
             assertNumberExceptions(exceptions, 0)
             val myObj = WilesInteger(1)
             assertValue(values, "!a"){objectEquals(it, myObj)}
-            assertValue(values, "!a"){typeEquals(it, INT_TYPE.exactly(myObj))}
+            assertValue(values, "!a"){typeEquals(it, WilesType(IntType(myObj)))}
         }
 
         getCompilationResults("let var a : 1 | 2 := 1").let {  (values, exceptions) ->
@@ -646,7 +649,8 @@ class InterpreterTests {
             val myObj = WilesInteger(1)
             assertValue(values, "!a"){objectEquals(it, myObj)}
             assertValue(values, "!a"){comptimeTypeEquals(it,
-                EitherType(INT_TYPE.exactly(WilesInteger(1)), INT_TYPE.exactly(WilesInteger(2))))}
+                WilesType(IntType(WilesInteger(1)), IntType(WilesInteger(2))))
+            }
         }
 
         getCompilationResults("let var a : 1 | 2 := 1; a := 2").let {  (values, exceptions) ->
@@ -654,14 +658,15 @@ class InterpreterTests {
             val myObj = WilesInteger(2)
             assertValue(values, "!a"){objectEquals(it, myObj)}
             assertValue(values, "!a"){comptimeTypeEquals(it,
-                EitherType(INT_TYPE.exactly(WilesInteger(1)), INT_TYPE.exactly(WilesInteger(2))))}
+                WilesType(IntType(WilesInteger(1)), IntType(WilesInteger(2))))
+            }
         }
 
         getRunningResults("let var a : 1 | 2 := 1; a := 2").let {  (values, exceptions) ->
             assertNumberExceptions(exceptions, 0)
             val myObj = WilesInteger(2)
             assertValue(values, "!a"){objectEquals(it, myObj)}
-            assertValue(values, "!a"){typeEquals(it, INT_TYPE.exactly(myObj))}
+            assertValue(values, "!a"){typeEquals(it, WilesType(IntType(myObj)))}
         }
 
         getCompilationResults("let var a : 1 | 2; a := 2").let {  (values, exceptions) ->
@@ -669,14 +674,15 @@ class InterpreterTests {
             val myObj = WilesInteger(2)
             assertValue(values, "!a"){objectEquals(it, myObj)}
             assertValue(values, "!a"){comptimeTypeEquals(it,
-                EitherType(INT_TYPE.exactly(WilesInteger(1)), INT_TYPE.exactly(WilesInteger(2))))}
+                WilesType(IntType(WilesInteger(1)), IntType(WilesInteger(2))))
+            }
         }
 
         getRunningResults("let var a : 1 | 2; a := 2").let {  (values, exceptions) ->
             assertNumberExceptions(exceptions, 0)
             val myObj = WilesInteger(2)
             assertValue(values, "!a"){objectEquals(it, myObj)}
-            assertValue(values, "!a"){typeEquals(it, INT_TYPE.exactly(myObj))}
+            assertValue(values, "!a"){typeEquals(it, WilesType(IntType(myObj)))}
         }
         getCompilationResults("""
             let const MyType := 1 | 2
@@ -684,12 +690,12 @@ class InterpreterTests {
         """.trimIndent()).let {  (values, exceptions) ->
             assertNumberExceptions(exceptions, 0)
 
-            val myType = EitherType(INT_TYPE.exactly(WilesInteger(1)), INT_TYPE.exactly(WilesInteger(2)))
+            val myType = WilesType(IntType(WilesInteger(1)), IntType(WilesInteger(2)))
             assertValue(values, "!MyType"){objectEquals(it, myType)}
 
             val myObj = WilesInteger(2)
             assertValue(values, "!a"){objectEquals(it, myObj)}
-            assertValue(values, "!a"){typeEquals(it, INT_TYPE.exactly(myObj))}
+            assertValue(values, "!a"){typeEquals(it, WilesType(IntType(myObj)))}
         }
 
         getRunningResults("""
@@ -698,12 +704,12 @@ class InterpreterTests {
         """.trimIndent()).let {  (values, exceptions) ->
             assertNumberExceptions(exceptions, 0)
 
-            val myType = EitherType(INT_TYPE.exactly(WilesInteger(1)), INT_TYPE.exactly(WilesInteger(2)))
+            val myType = WilesType(IntType(WilesInteger(1)), IntType(WilesInteger(2)))
             assertValue(values, "!MyType"){objectEquals(it, myType)}
 
             val myObj = WilesInteger(2)
             assertValue(values, "!a"){objectEquals(it, myObj)}
-            assertValue(values, "!a"){typeEquals(it, INT_TYPE.exactly(myObj))}
+            assertValue(values, "!a"){typeEquals(it, WilesType(IntType(myObj)))}
         }
 
         getCompilationResults("""
@@ -712,11 +718,11 @@ class InterpreterTests {
         """.trimIndent()).let { (values, exceptions) ->
             assertNumberExceptions(exceptions, 0)
             val myObj = WilesInteger(1)
-            val myType = EitherType(INT_TYPE.exactly(WilesInteger(1)), INT_TYPE.exactly(WilesInteger(2)))
+            val myType = WilesType(IntType(WilesInteger(1)), IntType(WilesInteger(2)))
             assertValue(values, "!a"){objectEquals(it, myObj)}
             assertValue(values, "!a"){comptimeTypeEquals(it, myType)}
             assertValue(values, "!b"){objectEquals(it, myObj)}
-            assertValue(values, "!b"){typeEquals(it, INT_TYPE.exactly(myObj))}
+            assertValue(values, "!b"){typeEquals(it, WilesType(IntType(myObj)))}
         }
 
         getRunningResults("""
@@ -725,7 +731,7 @@ class InterpreterTests {
         """.trimIndent()).let { (values, exceptions) ->
             assertNumberExceptions(exceptions, 0)
             val myObj = WilesInteger(1)
-            val myType = INT_TYPE.exactly(myObj)
+            val myType = WilesType(IntType(myObj))
             assertValue(values, "!a"){objectEquals(it, myObj)}
             assertValue(values, "!a"){typeEquals(it, myType)}
             assertValue(values, "!b"){objectEquals(it, myObj)}
@@ -737,7 +743,7 @@ class InterpreterTests {
             let b : Int | Text := a
         """.trimIndent()).let { (_, exceptions) ->
             assertNumberExceptions(exceptions, 1)
-            val type2 = EitherType(INT_TYPE, TEXT_TYPE)
+            val type2 = WilesType(IntType(), TextType())
             assertException(exceptions[0], TypeConflictError(type2, DECIMAL_TYPE,
                 TokenLocation(2, 13, 2, 14)))
         }
@@ -747,7 +753,7 @@ class InterpreterTests {
             let b : Int | Text | Decimal := a
         """.trimIndent()).let { (values, exceptions) ->
             assertNumberExceptions(exceptions, 0)
-            val type = EitherType(DECIMAL_TYPE, TEXT_TYPE)
+            val type = WilesType(DecimalType(), TextType())
             assertValue(values, "!a"){objectEquals(it, null)}
             assertValue(values, "!a"){comptimeTypeEquals(it, type)}
             assertValue(values, "!b"){objectEquals(it, null)}
@@ -767,19 +773,19 @@ class InterpreterTests {
             assertValue(values, "!false"){typeEquals(it, FALSE_TYPE)}
 
             assertValue(values, "!nothing"){objectEquals(it, WilesNothing)}
-            assertValue(values, "!nothing"){typeEquals(it, NothingType())}
+            assertValue(values, "!nothing"){typeEquals(it, NOTHING_TYPE)}
 
             assertValue(values, "!Int"){objectEquals(it, INT_TYPE)}
-            assertValue(values, "!Int"){typeEquals(it, TypeType())}
+            assertValue(values, "!Int"){typeEquals(it, TYPE_TYPE)}
 
             assertValue(values, "!Text"){objectEquals(it, TEXT_TYPE)}
-            assertValue(values, "!Text"){typeEquals(it, TypeType())}
+            assertValue(values, "!Text"){typeEquals(it, TYPE_TYPE)}
 
             assertValue(values, "!Decimal"){objectEquals(it, DECIMAL_TYPE)}
-            assertValue(values, "!Decimal"){typeEquals(it, TypeType())}
+            assertValue(values, "!Decimal"){typeEquals(it, TYPE_TYPE)}
 
             assertValue(values, "!Anything"){objectEquals(it, ANYTHING_TYPE)}
-            assertValue(values, "!Anything"){typeEquals(it, TypeType())}
+            assertValue(values, "!Anything"){typeEquals(it, TYPE_TYPE)}
         }
     }
 
@@ -858,7 +864,7 @@ class InterpreterTests {
         """.trimIndent()).let { (_, exceptions) ->
         assertNumberExceptions(exceptions, 1)
         assertException(exceptions[0], TypeConflictError(
-            TEXT_TYPE, INT_TYPE.exactly(WilesInteger(10)),
+            TEXT_TYPE, WilesType(IntType(WilesInteger(10))),
             TokenLocation(line=1, lineIndex=17, lineEnd=1, lineEndIndex=21)
         ))
         }

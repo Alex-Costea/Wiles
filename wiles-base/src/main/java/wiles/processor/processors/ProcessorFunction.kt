@@ -7,8 +7,8 @@ import wiles.processor.data.ValuesMap
 import wiles.processor.enums.VariableStatus
 import wiles.processor.errors.TypeConflictError
 import wiles.processor.functions.WilesCustomFunction
-import wiles.processor.types.AbstractType
 import wiles.processor.types.FunctionType
+import wiles.processor.types.WilesType
 import wiles.processor.utils.InterpreterUtils.filterOutImpure
 import wiles.processor.utils.InterpreterUtils.getYieldedType
 import wiles.processor.utils.InterpreterUtils.isSuperType
@@ -33,12 +33,12 @@ class ProcessorFunction(syntax: AbstractSyntaxTree, context: InterpreterContext)
         if(context.isCompiling && yieldStatement != null)
         {
             val definedType = ProcessorTypeExpression(yieldStatement, newContext).process().getObj()
-            assert(definedType is AbstractType)
-            if(!isSuperType(definedType as AbstractType, yieldedType))
+            assert(definedType is WilesType)
+            if(!isSuperType(definedType as WilesType, yieldedType))
                 throw TypeConflictError(definedType, yieldedType, yieldStatement.getFirstLocation())
         }
         return Value(WilesCustomFunction(context.values, codeBlock, isDeclaredPure),
-            FunctionType(null, yieldedType))
+            WilesType(FunctionType(null, yieldedType)))
     }
 
     private fun getNewContext(pure : Boolean): InterpreterContext {

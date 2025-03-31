@@ -3,7 +3,6 @@ package wiles.processor.operations
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
 import wiles.processor.functions.RandFunction
-import wiles.processor.types.AbstractType
 import wiles.processor.types.AbstractType.Companion.ANYTHING_TYPE
 import wiles.processor.types.AbstractType.Companion.DECIMAL_TYPE
 import wiles.processor.types.AbstractType.Companion.FALSE_TYPE
@@ -14,6 +13,7 @@ import wiles.processor.types.AbstractType.Companion.TEXT_TYPE
 import wiles.processor.types.AbstractType.Companion.TRUE_TYPE
 import wiles.processor.types.AbstractType.Companion.TYPE_TYPE
 import wiles.processor.types.FunctionType
+import wiles.processor.types.WilesType
 import wiles.processor.values.WilesInfinity
 import wiles.processor.values.WilesNothing
 
@@ -28,7 +28,7 @@ class InternalOperation(right: Value, context: InterpreterContext) : AbstractOpe
         return GET_VALUES[name]
     }
 
-    override fun calculateType(): AbstractType {
+    override fun calculateType(): WilesType {
         return GET_TYPES[name]!!
     }
 
@@ -64,7 +64,7 @@ class InternalOperation(right: Value, context: InterpreterContext) : AbstractOpe
             TEXT_ID to TYPE_TYPE,
             DECIMAL_ID to TYPE_TYPE,
             ANYTHING_ID to TYPE_TYPE,
-            RAND_ID to FunctionType(RAND_FUNCTION, DECIMAL_TYPE),
+            RAND_ID to WilesType(FunctionType(RAND_FUNCTION, DECIMAL_TYPE)),
             INFINITY_ID to INFINITY_TYPE
         )
     }

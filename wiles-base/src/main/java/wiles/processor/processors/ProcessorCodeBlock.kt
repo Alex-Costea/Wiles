@@ -6,9 +6,9 @@ import wiles.processor.data.YieldedValue
 import wiles.processor.errors.UnreachableCodeException
 import wiles.processor.errors.ValueUnusedException
 import wiles.processor.processors.Processor.Companion.NOTHING_VALUE
+import wiles.processor.types.AbstractType.Companion.INVALID_TYPE
 import wiles.processor.types.AbstractType.Companion.NOTHING_TYPE
-import wiles.processor.types.InvalidType
-import wiles.processor.utils.InterpreterUtils
+import wiles.processor.utils.InterpreterUtils.isSuperType
 import wiles.shared.abstracts.AbstractSyntaxTree
 import wiles.shared.constants.Tokens.LEVEL_SCOPE_ID
 import wiles.shared.enums.SyntaxType
@@ -41,9 +41,9 @@ class ProcessorCodeBlock (
                 else if(context.isCompiling)
                 {
                     val type = value.getType()
-                    if(type is InvalidType)
+                    if(isSuperType(INVALID_TYPE, type))
                         continue
-                    if(!InterpreterUtils.isSuperType(NOTHING_TYPE, type))
+                    if(!isSuperType(NOTHING_TYPE, type))
                         throw ValueUnusedException(component.getFirstLocation())
                 }
             }

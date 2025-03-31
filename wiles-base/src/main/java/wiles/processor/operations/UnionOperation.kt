@@ -3,7 +3,7 @@ package wiles.processor.operations
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
 import wiles.processor.types.AbstractType
-import wiles.processor.types.EitherType
+import wiles.processor.types.WilesType
 import wiles.processor.utils.InterpreterUtils.getNewTypeObject
 
 class UnionOperation(left: Value?, right: Value, context: InterpreterContext) : AbstractOperation(left, right, context) {
@@ -16,10 +16,11 @@ class UnionOperation(left: Value?, right: Value, context: InterpreterContext) : 
             return null
         val leftSubtype = getNewTypeObject(left!!)
         val rightSubtype = getNewTypeObject(right)
-        return EitherType(leftSubtype, rightSubtype)
+        val typesArray = leftSubtype.getSubtypes().plus(rightSubtype.getSubtypes()).toTypedArray()
+        return WilesType(*typesArray)
     }
 
-    override fun calculateType(): AbstractType {
+    override fun calculateType(): WilesType {
         return AbstractType.TYPE_TYPE
     }
 }

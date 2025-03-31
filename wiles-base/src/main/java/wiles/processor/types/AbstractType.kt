@@ -9,7 +9,6 @@ abstract class AbstractType(val exactValue : Any?) {
 
     override fun toString(): String {
         return when {
-            isExact() && (this is TextType) -> "\"$exactValue\""
             isExact() -> exactValue.toString()
             else -> this.javaClass.simpleName.substringBefore("Type")
         }
@@ -33,32 +32,23 @@ abstract class AbstractType(val exactValue : Any?) {
         return result
     }
 
-    protected abstract fun clone(value: Any?) : AbstractType
-
-    fun exactly(value: Any?) : AbstractType
-    {
-        return clone(value)
-    }
-
-    fun removeExact(): AbstractType {
-        return clone(null)
-    }
+    abstract fun removeExact(): AbstractType
 
     companion object{
-        val INT_TYPE = IntType()
-        val DECIMAL_TYPE = DecimalType()
-        val TEXT_TYPE = TextType()
-        val TYPE_TYPE = TypeType()
-        val NOTHING_TYPE = NothingType()
-        val ANYTHING_TYPE = AnythingType()
-        val TRUE_TYPE = TrueType()
-        val FALSE_TYPE = FalseType()
-        val TRUTH_TYPE = EitherType(TRUE_TYPE, FALSE_TYPE)
-        val INFINITY_TYPE = InfinityType()
-        val MINUS_INFINITY_TYPE = MinusInfinityType()
-        val FINITE_NUMBER_TYPE = EitherType(INT_TYPE, DECIMAL_TYPE)
-        val NUMBER_TYPE = EitherType(INT_TYPE, DECIMAL_TYPE, INFINITY_TYPE, MINUS_INFINITY_TYPE)
-        val INVALID_TYPE = InvalidType()
+        val INT_TYPE = WilesType(IntType())
+        val DECIMAL_TYPE = WilesType(DecimalType())
+        val TEXT_TYPE = WilesType(TextType())
+        val TYPE_TYPE = WilesType(TypeType())
+        val NOTHING_TYPE = WilesType(NothingType())
+        val ANYTHING_TYPE = WilesType(AnythingType())
+        val TRUE_TYPE = WilesType(TrueType())
+        val FALSE_TYPE = WilesType(FalseType())
+        val TRUTH_TYPE = WilesType(TrueType(), FalseType())
+        val INFINITY_TYPE = WilesType(InfinityType())
+        val MINUS_INFINITY_TYPE = WilesType(MinusInfinityType())
+        val FINITE_NUMBER_TYPE = WilesType(IntType(), DecimalType())
+        val NUMBER_TYPE = WilesType(IntType(), DecimalType(), InfinityType(), MinusInfinityType())
+        val INVALID_TYPE = WilesType(InvalidType())
     }
 
 }

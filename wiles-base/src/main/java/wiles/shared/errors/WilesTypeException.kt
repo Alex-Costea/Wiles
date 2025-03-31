@@ -1,5 +1,5 @@
 package wiles.shared.errors
 
-import wiles.processor.types.AbstractType
+import wiles.processor.types.WilesType
 
-class WilesTypeException(val type1 : AbstractType?, val type2 : AbstractType) : RuntimeException()
+class WilesTypeException(val type1 : WilesType?, val type2 : WilesType) : RuntimeException()

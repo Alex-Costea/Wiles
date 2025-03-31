@@ -11,7 +11,7 @@ import wiles.processor.errors.TypeConflictError
 import wiles.processor.errors.ValueNotConstException
 import wiles.processor.functions.WilesFunction
 import wiles.processor.processors.Processor.Companion.NOTHING_VALUE
-import wiles.processor.types.AbstractType
+import wiles.processor.types.WilesType
 import wiles.processor.utils.InterpreterUtils
 import wiles.processor.utils.InterpreterUtils.isSuperType
 import wiles.processor.values.WilesLazyObject
@@ -58,7 +58,7 @@ class ProcessorDeclaration(
                 !isCheckingLevelScope
             } else false
 
-            val declaredType = if(isLevelScoped)
+            val declaredType : WilesType? = if(isLevelScoped)
             {
                 checkLevelScopeTypeDef(typeDef, nameToken, expression, newContext)
             }
@@ -98,7 +98,7 @@ class ProcessorDeclaration(
         nameToken: AbstractSyntaxTree,
         expression: AbstractSyntaxTree,
         newContext: InterpreterContext
-    ) : AbstractType?
+    ) : WilesType?
     {
         if(typeDef != null)
             return getDeclaredType(nameToken.details[0], typeDef)
@@ -110,7 +110,7 @@ class ProcessorDeclaration(
         return processor.process().getType()
     }
 
-    private fun getDeclaredType(name : String, typeDef : AbstractSyntaxTree?): AbstractType? {
+    private fun getDeclaredType(name : String, typeDef : AbstractSyntaxTree?): WilesType? {
         if(context.isRunning)
             return context.values[name]?.getComptimeType()
 

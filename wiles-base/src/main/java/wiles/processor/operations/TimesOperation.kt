@@ -2,13 +2,13 @@ package wiles.processor.operations
 
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
-import wiles.processor.types.AbstractType
 import wiles.processor.types.AbstractType.Companion.DECIMAL_TYPE
 import wiles.processor.types.AbstractType.Companion.FINITE_NUMBER_TYPE
 import wiles.processor.types.AbstractType.Companion.INFINITY_TYPE
 import wiles.processor.types.AbstractType.Companion.INT_TYPE
 import wiles.processor.types.AbstractType.Companion.MINUS_INFINITY_TYPE
 import wiles.processor.types.AbstractType.Companion.NUMBER_TYPE
+import wiles.processor.types.WilesType
 import wiles.processor.utils.InterpreterUtils.equalsValue
 import wiles.processor.utils.InterpreterUtils.isSuperType
 import wiles.processor.values.WilesDecimal
@@ -40,7 +40,7 @@ class TimesOperation(left: Value?, right: Value, context: InterpreterContext) : 
     }
 
 
-    override fun calculateType(): AbstractType {
+    override fun calculateType(): WilesType {
         return when {
             isSuperType(INT_TYPE, leftType!!) && isSuperType(INT_TYPE, rightType) -> INT_TYPE
             isSuperType(INFINITY_TYPE, rightType) -> INFINITY_TYPE
