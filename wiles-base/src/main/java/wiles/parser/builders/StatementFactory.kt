@@ -7,7 +7,7 @@ import wiles.parser.exceptions.UnexpectedTokenException
 import wiles.parser.services.TokenTransmitter
 import wiles.parser.statements.*
 import wiles.parser.statements.expressions.DefaultExpression
-import wiles.parser.statements.expressions.TopLevelExpression
+import wiles.parser.statements.expressions.AssignableExpression
 import wiles.shared.abstracts.AbstractStatement
 import wiles.shared.constants.ErrorMessages.INTERNAL_ERROR
 import wiles.shared.constants.ErrorMessages.INVALID_STATEMENT_ERROR
@@ -79,7 +79,7 @@ class StatementFactory {
             params[StatementFactoryTypes.DICT_STATEMENT] = tokenOf(DICT_START_ID)
             params[StatementFactoryTypes.DATA_STATEMENT] = tokenOf(DATA_START_ID)
             createObject[StatementFactoryTypes.TOP_LEVEL_EXPRESSION] =
-                Function { context: ParserContext -> TopLevelExpression(context) }
+                Function { context: ParserContext -> AssignableExpression(context) }
             createObject[StatementFactoryTypes.DEFAULT_EXPRESSION_NO_CODE_BLOCK] =
                 Function { context: ParserContext -> DefaultExpression(context) }
             createObject[StatementFactoryTypes.DECLARATION_STATEMENT] =

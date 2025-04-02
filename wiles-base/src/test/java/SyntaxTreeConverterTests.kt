@@ -312,9 +312,9 @@ class SyntaxTreeConverterTests {
     {
         assertResults(null,"CODE_BLOCK(EXPRESSION(%PLUS, !a, EXPRESSION(%APPLY, !b, FUNC_CALL)))",
             "!a", PLUS_ID, "!b", PAREN_START_ID, PAREN_END_ID)
-        assertResults(null,"CODE_BLOCK(EXPRESSION(%APPLY, !min, FUNC_CALL(EXPRESSION(%ASSIGN, EXPRESSION(!my_list), !a))))",
+        assertResults(null,"CODE_BLOCK(EXPRESSION(%APPLY, !min, FUNC_CALL(EXPRESSION(%ASSIGN, !my_list, !a))))",
             "!min", PAREN_START_ID, "!my_list", ASSIGN_ID, "!a", PAREN_END_ID)
-        assertResults(null, "CODE_BLOCK(EXPRESSION(%APPLY, !call, FUNC_CALL(EXPRESSION(%ASSIGN, EXPRESSION(!a), EXPRESSION(%PLUS, !b, !c)), !d, EXPRESSION(%EQUALS, !e, !f))))",
+        assertResults(null, "CODE_BLOCK(EXPRESSION(%APPLY, !call, FUNC_CALL(EXPRESSION(%ASSIGN, !a, EXPRESSION(%PLUS, !b, !c)), !d, EXPRESSION(%EQUALS, !e, !f))))",
             "!call", PAREN_START_ID, "!a", ASSIGN_ID, "!b", PLUS_ID, "!c", SEPARATOR_ID, "!d", SEPARATOR_ID, "!e", EQUALS_ID, "!f", PAREN_END_ID)
     }
 

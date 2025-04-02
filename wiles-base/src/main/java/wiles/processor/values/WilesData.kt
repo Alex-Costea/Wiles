@@ -1,3 +1,5 @@
 package wiles.processor.values
 
-class WilesData
+import wiles.processor.data.ValuesMap
+
+data class WilesData(val values : ValuesMap)
