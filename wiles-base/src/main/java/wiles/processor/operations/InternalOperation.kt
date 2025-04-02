@@ -44,8 +44,6 @@ class InternalOperation(right: Value, context: InterpreterContext) : AbstractOpe
         private const val RAND_ID = "RAND"
         private const val INFINITY_ID = "INFINITY"
 
-        private val RAND_FUNCTION = RandFunction()
-
         val GET_VALUES = mapOf(
             TRUE_ID to true,
             FALSE_ID to false,
@@ -65,7 +63,7 @@ class InternalOperation(right: Value, context: InterpreterContext) : AbstractOpe
             TEXT_ID to TYPE_TYPE,
             DECIMAL_ID to TYPE_TYPE,
             ANYTHING_ID to TYPE_TYPE,
-            RAND_ID to WilesType(FunctionType(RAND_FUNCTION, ValuesMap(), DECIMAL_TYPE)),
+            RAND_ID to WilesType(FunctionType(ValuesMap(), DECIMAL_TYPE)),
             INFINITY_ID to INFINITY_TYPE
         )
     }

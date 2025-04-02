@@ -4,9 +4,8 @@ import wiles.processor.data.ValuesMap
 import wiles.processor.utils.InterpreterUtils.objToStringInternally
 import wiles.processor.values.WilesUndefined
 
-class FunctionType(exactValue: Any? = null,
-                   val params : ValuesMap,
-                   val yieldsType : WilesType) : AbstractType(exactValue) {
+class FunctionType(val params : ValuesMap,
+                   val yieldsType : WilesType) : AbstractType(null) {
 
     override fun toString(): String {
         return "fun(${params.map { 
@@ -19,6 +18,6 @@ class FunctionType(exactValue: Any? = null,
     }
 
     override fun ofValue(obj : Any?): AbstractType {
-        return FunctionType(obj, params, yieldsType)
+        return FunctionType(params, yieldsType)
     }
 }
