@@ -12,6 +12,7 @@ import wiles.processor.types.WilesType
 import wiles.processor.utils.InterpreterUtils.filterOutImpure
 import wiles.processor.utils.InterpreterUtils.getYieldedType
 import wiles.processor.utils.InterpreterUtils.isSuperType
+import wiles.processor.values.WilesUndefined
 import wiles.shared.abstracts.AbstractSyntaxTree
 import wiles.shared.constants.Tokens.PURE_ID
 import wiles.shared.enums.SyntaxType
@@ -25,9 +26,6 @@ class ProcessorFunction(syntax: AbstractSyntaxTree, context: InterpreterContext)
         codeBlock ?: TODO("no code block -> is type expression")
         val isDeclaredPure = syntax.details.contains(PURE_ID)
         val newContext = getNewContext(isDeclaredPure)
-        val processor = ProcessorCodeBlock(codeBlock, newContext)
-        processor.process()
-        val yieldedType = getYieldedType(newContext.yieldPossibilities)
 
         //process parameters
         val oldValues = ValuesMap(newContext.values)
@@ -43,6 +41,20 @@ class ProcessorFunction(syntax: AbstractSyntaxTree, context: InterpreterContext)
             paramProcessor.process()
         }
         val paramValues = newContext.values.filter { !oldValues.containsKey(it.key) }
+
+        for(key in paramValues.keys)
+        {
+            val valueData = newContext.values[key]
+            if(valueData?.value?.getObj() == WilesUndefined)
+            {
+                val value = valueData.value
+                newContext.values[key] = ValueData(Value(null, value.getType()),valueData.variableStatus)
+            }
+        }
+
+        val processorCodeBlock = ProcessorCodeBlock(codeBlock, newContext)
+        processorCodeBlock.process()
+        val yieldedType = getYieldedType(newContext.yieldPossibilities)
 
         if(context.isCompiling && yieldStatement != null)
         {

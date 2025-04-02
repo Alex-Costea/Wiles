@@ -881,6 +881,16 @@ class InterpreterTests {
             assertValue(values, "!a") {typeEquals(it, myType)}
         }
 
+        getCompilationResults("""
+            let add5 := fun(x : Int) do yield x + 5
+        """.trimIndent()).let { (values, exceptions) ->
+            assertNumberExceptions(exceptions, 0)
+            val myType = WilesType(FunctionType(ValuesMap(mapOf(
+                "!x" to ValueData(Value(WilesUndefined, INT_TYPE), VariableStatus.Const),
+            )), INT_TYPE))
+            assertValue(values, "!add5") {typeEquals(it, myType)}
+        }
+
     }
 
 }
