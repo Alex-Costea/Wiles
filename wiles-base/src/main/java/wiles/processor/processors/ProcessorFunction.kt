@@ -64,7 +64,7 @@ class ProcessorFunction(syntax: AbstractSyntaxTree, context: InterpreterContext)
                 throw TypeConflictError(definedType, yieldedType, yieldStatement.getFirstLocation())
         }
         val newFunction = WilesCustomFunction(context.values, codeBlock, isDeclaredPure)
-        return Value(newFunction, WilesType(FunctionType(paramValues, yieldedType)))
+        return Value(newFunction, WilesType(FunctionType(paramValues, yieldedType, isDeclaredPure)))
     }
 
     private fun getNewContext(pure : Boolean): InterpreterContext {

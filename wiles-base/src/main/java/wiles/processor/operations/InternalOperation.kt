@@ -63,7 +63,7 @@ class InternalOperation(right: Value, context: InterpreterContext) : AbstractOpe
             TEXT_ID to TYPE_TYPE,
             DECIMAL_ID to TYPE_TYPE,
             ANYTHING_ID to TYPE_TYPE,
-            RAND_ID to WilesType(FunctionType(ValuesMap(), DECIMAL_TYPE)),
+            RAND_ID to WilesType(FunctionType(ValuesMap(), DECIMAL_TYPE, pure = false)),
             INFINITY_ID to INFINITY_TYPE
         )
     }
