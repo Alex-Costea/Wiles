@@ -41,8 +41,10 @@ class ProcessorDeclaration(
         val shouldCheckLevelScoped = isLevelScoped && context.isCompiling && context.values.containsKey(name)
         val newContext = if(shouldCheckLevelScoped) createContext() else context
         val valueAlreadyKnown = newContext.values[name]?.value?.isKnown() == true
-        val variableStatus = if (details.contains(VARIABLE_ID)) VariableStatus.Var
-            else if(details.contains(ANON_ARG_ID)) VariableStatus.Arg else VariableStatus.Const
+        val isConst = details.contains(CONST_ID)
+        val isVariable = details.contains(VARIABLE_ID)
+        val isAnonArg = details.contains(ANON_ARG_ID)
+        val variableStatus = determineVariableStatus(isVariable, isAnonArg, isConst)
 
         if(newContext.isCompiling && newContext.values.containsKey(name) && !shouldCheckLevelScoped)
         {
@@ -57,7 +59,6 @@ class ProcessorDeclaration(
         }
 
         if (!valueAlreadyKnown) {
-            val isConst = details.contains(CONST_ID)
             val shouldInitForLevelScoped = if(isLevelScoped) !shouldCheckLevelScoped else false
 
             val declaredType : WilesType? = if(shouldInitForLevelScoped)
@@ -68,7 +69,7 @@ class ProcessorDeclaration(
 
             val processor = Processor(expression, newContext)
             val newValue = if (shouldInitForLevelScoped) {
-                ValueData(Value(WilesLazyObject(processor), declaredType!!), VariableStatus.Const)
+                ValueData(Value(WilesLazyObject(processor), declaredType!!), VariableStatus.Val)
             } else {
                 val computedValue = processor.process()
                 val newType = computedValue.getType()
@@ -126,9 +127,20 @@ class ProcessorDeclaration(
         for((key,value) in context.values.entries)
         {
             val newValue = Value(null, value.value.getType().removeExact())
-            tempValues[key] = if(value.value.isLazy()) ValueData(newValue, VariableStatus.Const) else value
+            tempValues[key] = if(value.value.isLazy()) ValueData(newValue, VariableStatus.Val) else value
         }
         return InterpreterContext(tempValues, context.isRunning, context.exceptions, context.yieldPossibilities)
     }
+
+    private fun determineVariableStatus(isVariable: Boolean, isAnonArg: Boolean, isConst: Boolean): VariableStatus {
+        return when {
+            isVariable -> VariableStatus.Var
+            isAnonArg && isConst -> VariableStatus.ComptimeArg
+            isAnonArg -> VariableStatus.Arg
+            isConst -> VariableStatus.Comptime
+            else -> VariableStatus.Val
+        }
+    }
+
 
 }

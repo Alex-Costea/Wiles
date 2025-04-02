@@ -1,5 +1,5 @@
 package wiles.processor.enums
 
 enum class VariableStatus {
-    Var, Const, Arg
+    Var, Val, Arg, Comptime, ComptimeArg
 }

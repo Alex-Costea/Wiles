@@ -30,12 +30,12 @@ class ProcessorFuncCall(syntax: AbstractSyntaxTree, context: InterpreterContext)
                     TODO("Simple assignment required")
                 val leftName = left.details[0]
                 val rightValue = Processor(right, context).process()
-                map[leftName] = ValueData(rightValue, variableStatus = VariableStatus.Const,
+                map[leftName] = ValueData(rightValue, variableStatus = VariableStatus.Val,
                     comptimeType = rightValue.getType())
             }
             else{
                 val value = Processor(component, context).process()
-                map[i.toString()] = ValueData(value, variableStatus = VariableStatus.Const,
+                map[i.toString()] = ValueData(value, variableStatus = VariableStatus.Val,
                     comptimeType = value.getType())
                 i++
             }

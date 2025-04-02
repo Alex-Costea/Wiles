@@ -875,8 +875,8 @@ class InterpreterTests {
             assertNumberExceptions(exceptions, 0)
             val hi = "hi!"
             val myType = WilesType(FunctionType(ValuesMap(mapOf(
-                "!a" to ValueData(Value(WilesUndefined, INT_TYPE), VariableStatus.Const),
-                "!b" to ValueData(Value(hi, WilesType(TextType(hi))), VariableStatus.Const),
+                "!a" to ValueData(Value(WilesUndefined, INT_TYPE), VariableStatus.Val),
+                "!b" to ValueData(Value(hi, WilesType(TextType(hi))), VariableStatus.Val),
             )), NOTHING_TYPE))
             assertValue(values, "!a") {typeEquals(it, myType)}
         }

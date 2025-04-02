@@ -14,7 +14,13 @@ class FunctionType(val params : ValuesMap,
             val paramValue = if(it.value.value.isLazy()) WilesUndefined else it.value.value.getObj()
             val part2 = if(paramValue == null || paramValue == WilesUndefined) " : ${it.value.value.getType()}"
                 else " = ${objToStringInternally(paramValue)}"
-            val part0 = if(it.value.variableStatus == VariableStatus.Arg) "arg " else ""
+            val part0 = when(it.value.variableStatus)
+            {
+                VariableStatus.Comptime -> "const "
+                VariableStatus.ComptimeArg -> "const arg "
+                VariableStatus.Arg -> "arg "
+                else -> ""
+            }
             part0 + part1 + part2
         }.joinToString(", ")}) -> $yieldsType"
     }

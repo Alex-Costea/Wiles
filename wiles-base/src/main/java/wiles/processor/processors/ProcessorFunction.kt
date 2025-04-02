@@ -74,7 +74,7 @@ class ProcessorFunction(syntax: AbstractSyntaxTree, context: InterpreterContext)
         for((name, valueData) in context.values)
         {
             val value = valueData.value
-            val variableStatus = if(valueData.isVariable()) VariableStatus.Var else VariableStatus.Const
+            val variableStatus = if(valueData.isVariable()) VariableStatus.Var else VariableStatus.Val
             if(value.isKnown() && !valueData.isVariable())
                 newValues[name] = ValueData(Value(value.getObj(), value.getType()),
                     variableStatus, valueData.comptimeType)
