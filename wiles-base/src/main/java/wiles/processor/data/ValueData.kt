@@ -6,17 +6,10 @@ import wiles.processor.types.WilesType
 data class ValueData(
     val value: Value,
     val variableStatus: VariableStatus,
-    private val comptimeType : WilesType? = null
+    val comptimeType : WilesType = value.getType(),
 ) {
     fun isVariable(): Boolean {
         return variableStatus == VariableStatus.Var
-    }
-
-    fun getComptimeType() : WilesType
-    {
-        if(comptimeType != null)
-            return comptimeType
-        return value.getType()
     }
 
     override fun equals(other: Any?): Boolean {

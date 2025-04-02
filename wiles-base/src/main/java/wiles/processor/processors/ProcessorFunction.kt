@@ -77,8 +77,8 @@ class ProcessorFunction(syntax: AbstractSyntaxTree, context: InterpreterContext)
             val variableStatus = if(valueData.isVariable()) VariableStatus.Var else VariableStatus.Const
             if(value.isKnown() && !valueData.isVariable())
                 newValues[name] = ValueData(Value(value.getObj(), value.getType()),
-                    variableStatus, valueData.getComptimeType())
-            else newValues[name] = ValueData(Value(null, valueData.getComptimeType()), variableStatus)
+                    variableStatus, valueData.comptimeType)
+            else newValues[name] = ValueData(Value(null, valueData.comptimeType), variableStatus)
         }
         return InterpreterContext(filterOutImpure(newValues, pure), false, context.exceptions, mutableListOf())
     }

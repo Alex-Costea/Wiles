@@ -106,10 +106,10 @@ object InterpreterUtils {
         {
             val value = valueData.value
             if(!value.isKnown())
-                newValues[name] = ValueData(Value(null, valueData.getComptimeType()),
+                newValues[name] = ValueData(Value(null, valueData.comptimeType),
                     valueData.variableStatus)
             else if(valueData.isVariable())
-                newValues[name] = ValueData(Value( null, valueData.getComptimeType()), VariableStatus.Var)
+                newValues[name] = ValueData(Value( null, valueData.comptimeType), VariableStatus.Var)
             else newValues[name] = valueData
         }
         return newValues

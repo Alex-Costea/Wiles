@@ -1,6 +1,7 @@
 package wiles.processor.types
 
 import wiles.processor.data.ValuesMap
+import wiles.processor.enums.VariableStatus
 import wiles.processor.utils.InterpreterUtils.objToStringInternally
 import wiles.processor.values.WilesUndefined
 
@@ -9,11 +10,12 @@ class FunctionType(val params : ValuesMap,
 
     override fun toString(): String {
         return "fun(${params.map { 
-            val paramName = it.key.substring(1)
+            val part1 = it.key.substring(1)
             val paramValue = if(it.value.value.isLazy()) WilesUndefined else it.value.value.getObj()
             val part2 = if(paramValue == null || paramValue == WilesUndefined) " : ${it.value.value.getType()}"
                 else " = ${objToStringInternally(paramValue)}"
-            paramName + part2
+            val part0 = if(it.value.variableStatus == VariableStatus.Arg) "arg " else ""
+            part0 + part1 + part2
         }.joinToString(", ")}) -> $yieldsType"
     }
 

@@ -18,6 +18,7 @@ import wiles.processor.values.WilesLazyObject
 import wiles.processor.values.WilesUndefined
 import wiles.shared.abstracts.AbstractSyntaxTree
 import wiles.shared.constants.Predicates.IS_IDENTIFIER
+import wiles.shared.constants.Tokens.ANON_ARG_ID
 import wiles.shared.constants.Tokens.CONST_ID
 import wiles.shared.constants.Tokens.LEVEL_SCOPE_ID
 import wiles.shared.constants.Tokens.VARIABLE_ID
@@ -40,7 +41,8 @@ class ProcessorDeclaration(
         val shouldCheckLevelScoped = isLevelScoped && context.isCompiling && context.values.containsKey(name)
         val newContext = if(shouldCheckLevelScoped) createContext() else context
         val valueAlreadyKnown = newContext.values[name]?.value?.isKnown() == true
-        val variableStatus = if (details.contains(VARIABLE_ID)) VariableStatus.Var else VariableStatus.Const
+        val variableStatus = if (details.contains(VARIABLE_ID)) VariableStatus.Var
+            else if(details.contains(ANON_ARG_ID)) VariableStatus.Arg else VariableStatus.Const
 
         if(newContext.isCompiling && newContext.values.containsKey(name) && !shouldCheckLevelScoped)
         {
@@ -112,7 +114,7 @@ class ProcessorDeclaration(
 
     private fun getDeclaredType(name : String, typeDef : AbstractSyntaxTree?): WilesType? {
         if(context.isRunning)
-            return context.values[name]?.getComptimeType()
+            return context.values[name]?.comptimeType
 
         typeDef ?: return null
         return InterpreterUtils.processType(typeDef, context)

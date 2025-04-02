@@ -70,7 +70,7 @@ class InterpreterTests {
     }
     
     private fun comptimeTypeEquals(myValue : ValueData, compared : WilesType) {
-        return assertEquals(compared,myValue.getComptimeType())
+        return assertEquals(compared,myValue.comptimeType)
     }
     
     private fun assertNumberExceptions(exceptions : WilesExceptionsCollection, nr : Int)
@@ -882,11 +882,11 @@ class InterpreterTests {
         }
 
         getCompilationResults("""
-            let add5 := fun(x : Int) do yield x + 5
+            let add5 := fun(arg x : Int) do yield x + 5
         """.trimIndent()).let { (values, exceptions) ->
             assertNumberExceptions(exceptions, 0)
             val myType = WilesType(FunctionType(ValuesMap(mapOf(
-                "!x" to ValueData(Value(WilesUndefined, INT_TYPE), VariableStatus.Const),
+                "!x" to ValueData(Value(WilesUndefined, INT_TYPE), VariableStatus.Arg, INT_TYPE),
             )), INT_TYPE))
             assertValue(values, "!add5") {typeEquals(it, myType)}
         }

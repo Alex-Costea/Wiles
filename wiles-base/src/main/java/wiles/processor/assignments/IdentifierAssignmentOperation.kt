@@ -34,7 +34,7 @@ class IdentifierAssignmentOperation(private val leftComponent: AbstractSyntaxTre
             val leftValue = leftValueData.value
             val rightValue = getValue(rightComponent)
 
-            val leftType = leftValueData.getComptimeType()
+            val leftType = leftValueData.comptimeType
             val rightType = rightValue.getType()
 
             val leftIsUndefined = leftValue.getObj() is WilesUndefined
