@@ -22,7 +22,7 @@ class ProcessorFunction(syntax: AbstractSyntaxTree, context: InterpreterContext)
         val yieldStatement = if(components[0].syntaxType == SyntaxType.TYPEDEF) components.removeAt(0) else null
         val codeBlock = if(components[components.size-1].syntaxType == SyntaxType.CODE_BLOCK)
             components.removeAt(components.size-1) else null
-        codeBlock ?: TODO("no code block")
+        codeBlock ?: TODO("no code block -> is type expression")
         if(components.size > 0) TODO("function declarations")
         //TODO: type definitions and parameters should be analysed as level scope
         val isDeclaredPure = syntax.details.contains(PURE_ID)
@@ -37,8 +37,8 @@ class ProcessorFunction(syntax: AbstractSyntaxTree, context: InterpreterContext)
             if(!isSuperType(definedType as WilesType, yieldedType))
                 throw TypeConflictError(definedType, yieldedType, yieldStatement.getFirstLocation())
         }
-        return Value(WilesCustomFunction(context.values, codeBlock, isDeclaredPure),
-            WilesType(FunctionType(null, yieldedType)))
+        val newFunction = WilesCustomFunction(context.values, codeBlock, isDeclaredPure)
+        return Value(newFunction, WilesType(FunctionType(null, ValuesMap(), yieldedType)))
     }
 
     private fun getNewContext(pure : Boolean): InterpreterContext {

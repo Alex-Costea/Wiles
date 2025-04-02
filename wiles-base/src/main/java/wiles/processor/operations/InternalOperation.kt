@@ -2,6 +2,7 @@ package wiles.processor.operations
 
 import wiles.processor.data.InterpreterContext
 import wiles.processor.data.Value
+import wiles.processor.data.ValuesMap
 import wiles.processor.functions.RandFunction
 import wiles.processor.types.AbstractType.Companion.ANYTHING_TYPE
 import wiles.processor.types.AbstractType.Companion.DECIMAL_TYPE
@@ -64,7 +65,7 @@ class InternalOperation(right: Value, context: InterpreterContext) : AbstractOpe
             TEXT_ID to TYPE_TYPE,
             DECIMAL_ID to TYPE_TYPE,
             ANYTHING_ID to TYPE_TYPE,
-            RAND_ID to WilesType(FunctionType(RAND_FUNCTION, DECIMAL_TYPE)),
+            RAND_ID to WilesType(FunctionType(RAND_FUNCTION, ValuesMap(), DECIMAL_TYPE)),
             INFINITY_ID to INFINITY_TYPE
         )
     }
