@@ -23,13 +23,28 @@ class ProcessorFunction(syntax: AbstractSyntaxTree, context: InterpreterContext)
         val codeBlock = if(components[components.size-1].syntaxType == SyntaxType.CODE_BLOCK)
             components.removeAt(components.size-1) else null
         codeBlock ?: TODO("no code block -> is type expression")
-        if(components.size > 0) TODO("function declarations")
         //TODO: type definitions and parameters should be analysed as level scope
         val isDeclaredPure = syntax.details.contains(PURE_ID)
         val newContext = getNewContext(isDeclaredPure)
         val processor = ProcessorCodeBlock(codeBlock, newContext)
         processor.process()
         val yieldedType = getYieldedType(newContext.yieldPossibilities)
+
+        //process parameters
+        val oldValues = ValuesMap(newContext.values)
+        for(component in components) // type check without context
+        {
+            assert(component.syntaxType == SyntaxType.DECLARATION)
+            val paramProcessor = ProcessorDeclaration(component, newContext, forceLevelScope = true)
+            paramProcessor.process()
+        }
+        for(component in components) //actually figure out values
+        {
+            val paramProcessor = ProcessorDeclaration(component, newContext, forceLevelScope = true)
+            paramProcessor.process()
+        }
+        val paramValues = newContext.values.filter { !oldValues.containsKey(it.key) }
+
         if(context.isCompiling && yieldStatement != null)
         {
             val definedType = ProcessorTypeExpression(yieldStatement, newContext).process().getObj()
@@ -38,7 +53,7 @@ class ProcessorFunction(syntax: AbstractSyntaxTree, context: InterpreterContext)
                 throw TypeConflictError(definedType, yieldedType, yieldStatement.getFirstLocation())
         }
         val newFunction = WilesCustomFunction(context.values, codeBlock, isDeclaredPure)
-        return Value(newFunction, WilesType(FunctionType(null, ValuesMap(), yieldedType)))
+        return Value(newFunction, WilesType(FunctionType(null, paramValues, yieldedType)))
     }
 
     private fun getNewContext(pure : Boolean): InterpreterContext {

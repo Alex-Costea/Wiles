@@ -27,6 +27,7 @@ import wiles.shared.errors.InternalErrorException
 class ProcessorDeclaration(
     syntax : AbstractSyntaxTree,
     context : InterpreterContext,
+    private val forceLevelScope : Boolean = false
 ) : AbstractProcessor(syntax, context) {
     override fun process(): Value {
         val components = syntax.getComponents().toMutableList()
@@ -34,13 +35,14 @@ class ProcessorDeclaration(
         val nameToken = components[0]
         val name = nameToken.details[0]
         val expression = components.getOrNull(1)
-        val isCheckingLevelScope = getIsCheckingLevelScope(name)
-        val newContext = if(isCheckingLevelScope) createContext() else context
-        val valueAlreadyKnown = newContext.values[name]?.value?.isKnown() == true
         val details = syntax.details
+        val isLevelScoped = forceLevelScope || details.contains(LEVEL_SCOPE_ID)
+        val shouldCheckLevelScoped = isLevelScoped && context.isCompiling && context.values.containsKey(name)
+        val newContext = if(shouldCheckLevelScoped) createContext() else context
+        val valueAlreadyKnown = newContext.values[name]?.value?.isKnown() == true
         val variableStatus = if (details.contains(VARIABLE_ID)) VariableStatus.Var else VariableStatus.Const
 
-        if(newContext.isCompiling && newContext.values.containsKey(name) && !isCheckingLevelScope)
+        if(newContext.isCompiling && newContext.values.containsKey(name) && !shouldCheckLevelScoped)
         {
             throw IdentifierAlreadyDeclaredException(nameToken.getFirstLocation())
         }
@@ -54,18 +56,16 @@ class ProcessorDeclaration(
 
         if (!valueAlreadyKnown) {
             val isConst = details.contains(CONST_ID)
-            val isLevelScoped = if(details.contains(LEVEL_SCOPE_ID)) {
-                !isCheckingLevelScope
-            } else false
+            val shouldInitForLevelScoped = if(isLevelScoped) !shouldCheckLevelScoped else false
 
-            val declaredType : WilesType? = if(isLevelScoped)
+            val declaredType : WilesType? = if(shouldInitForLevelScoped)
             {
-                checkLevelScopeTypeDef(typeDef, nameToken, expression, newContext)
+                getDeclaredTypeForLevelScope(typeDef, nameToken, expression, newContext)
             }
             else getDeclaredType(name, typeDef)
 
             val processor = Processor(expression, newContext)
-            val newValue = if (isLevelScoped) {
+            val newValue = if (shouldInitForLevelScoped) {
                 ValueData(Value(WilesLazyObject(processor), declaredType!!), VariableStatus.Const)
             } else {
                 val computedValue = processor.process()
@@ -93,7 +93,7 @@ class ProcessorDeclaration(
         return NOTHING_VALUE
     }
 
-    private fun checkLevelScopeTypeDef(
+    private fun getDeclaredTypeForLevelScope(
         typeDef: AbstractSyntaxTree?,
         nameToken: AbstractSyntaxTree,
         expression: AbstractSyntaxTree,
@@ -116,10 +116,6 @@ class ProcessorDeclaration(
 
         typeDef ?: return null
         return InterpreterUtils.processType(typeDef, context)
-    }
-
-    private fun getIsCheckingLevelScope(name : String): Boolean {
-        return context.isCompiling && context.values[name]?.value?.isLazy() == true
     }
 
     private fun createContext() : InterpreterContext

@@ -116,7 +116,7 @@ object InterpreterUtils {
     }
 
     fun getYieldedType(possibilities: List<YieldPossibility>?): WilesType {
-        if(possibilities == null)
+        if(possibilities.isNullOrEmpty())
             return NOTHING_TYPE
         val types = mutableListOf<AbstractType>()
         for(possibility in possibilities)
@@ -139,5 +139,9 @@ object InterpreterUtils {
         return false
     }
 
+    fun objToStringInternally(obj : Any?) : String
+    {
+        return if(obj is String) "\"$obj\"" else obj.toString()
+    }
 
 }
