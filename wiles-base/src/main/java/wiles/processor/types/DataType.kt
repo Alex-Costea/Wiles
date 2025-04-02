@@ -1,7 +1,7 @@
 package wiles.processor.types
 
-class DataType : AbstractType(null) {
+class DataType(obj: Any?) : AbstractType(obj) {
     override fun ofValue(obj : Any?): AbstractType {
-        return DataType()
+        return DataType(obj)
     }
 }
