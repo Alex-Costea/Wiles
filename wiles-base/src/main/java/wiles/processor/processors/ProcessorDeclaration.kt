@@ -105,6 +105,7 @@ class ProcessorDeclaration(
     {
         if(typeDef != null)
             return getDeclaredType(nameToken.details[0], typeDef)
+        //TODO: infer from function
         if(expression.syntaxType != SyntaxType.TOKEN)
             throw InferenceFailureException(nameToken.getFirstLocation())
         if(IS_IDENTIFIER.test(expression.details[0]))
