@@ -18,4 +18,24 @@ data class ValueData(
             return comptimeType
         return value.getType()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as ValueData
+
+        if (value != other.value) return false
+        if (variableStatus != other.variableStatus) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = value.hashCode()
+        result = 31 * result + variableStatus.hashCode()
+        return result
+    }
+
+
 }

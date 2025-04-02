@@ -20,4 +20,25 @@ class FunctionType(val params : ValuesMap,
     override fun ofValue(obj : Any?): AbstractType {
         return FunctionType(params, yieldsType)
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        if (!super.equals(other)) return false
+
+        other as FunctionType
+
+        if (params != other.params) return false
+        if (yieldsType != other.yieldsType) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = super.hashCode()
+        result = 31 * result + params.hashCode()
+        result = 31 * result + yieldsType.hashCode()
+        return result
+    }
+
 }

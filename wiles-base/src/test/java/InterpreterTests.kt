@@ -7,6 +7,7 @@ import wiles.processor.Interpreter
 import wiles.processor.data.Value
 import wiles.processor.data.ValueData
 import wiles.processor.data.ValuesMap
+import wiles.processor.enums.VariableStatus
 import wiles.processor.errors.*
 import wiles.processor.types.*
 import wiles.processor.types.AbstractType.Companion.ANYTHING_TYPE
@@ -20,10 +21,7 @@ import wiles.processor.types.AbstractType.Companion.NUMBER_TYPE
 import wiles.processor.types.AbstractType.Companion.TEXT_TYPE
 import wiles.processor.types.AbstractType.Companion.TRUE_TYPE
 import wiles.processor.types.AbstractType.Companion.TYPE_TYPE
-import wiles.processor.values.WilesDecimal
-import wiles.processor.values.WilesInfinity
-import wiles.processor.values.WilesInteger
-import wiles.processor.values.WilesNothing
+import wiles.processor.values.*
 import wiles.shared.constants.Utils
 import wiles.shared.data.TokenLocation
 import wiles.shared.data.WilesExceptionsCollection
@@ -871,7 +869,18 @@ class InterpreterTests {
         }
 
 
-        //TODO: more testing
+        getCompilationResults("""
+            let a := fun(a : Int, b := "hi!") do nothing
+        """.trimIndent()).let { (values, exceptions) ->
+            assertNumberExceptions(exceptions, 0)
+            val hi = "hi!"
+            val myType = WilesType(FunctionType(ValuesMap(mapOf(
+                "!a" to ValueData(Value(WilesUndefined, INT_TYPE), VariableStatus.Const),
+                "!b" to ValueData(Value(hi, WilesType(TextType(hi))), VariableStatus.Const),
+            )), NOTHING_TYPE))
+            assertValue(values, "!a") {typeEquals(it, myType)}
+        }
+
     }
 
 }

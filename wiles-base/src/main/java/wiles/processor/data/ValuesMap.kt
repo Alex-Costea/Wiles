@@ -48,4 +48,19 @@ class ValuesMap(map: Map<String, ValueData>? = null) : Map<String, ValueData>{
     override fun containsValue(value: ValueData): Boolean {
         return linkedHashMap.containsValue(value)
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as ValuesMap
+
+        return linkedHashMap == other.linkedHashMap
+    }
+
+    override fun hashCode(): Int {
+        return linkedHashMap.hashCode()
+    }
+
+
 }
