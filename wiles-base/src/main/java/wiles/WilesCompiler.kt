@@ -85,7 +85,9 @@ object WilesCompiler {
                 exitProcess(0)
             }
             val debugValue = line.hasOption(debug)
-            val fileValue = line.getParsedOptionValue<String>(file)
+            val fileValue = line.getParsedOptionValue<String?>(file)
+            if(fileValue == null)
+                throw ParseException("No file found.")
             val inputValue = line.getParsedOptionValue<String?>(input)
             val code = loadFile(fileValue)
             return ProgramArgs(isDebug = debugValue, code = code, input = inputValue)
@@ -93,6 +95,7 @@ object WilesCompiler {
         catch (ex : ParseException)
         {
             println("Argument parsing error.")
+            println(ex)
             formatter.printHelp("java -jar Wiles.jar",options)
             exitProcess(0)
         }
